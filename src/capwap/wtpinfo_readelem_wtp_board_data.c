@@ -1,0 +1,63 @@
+
+#include <stdlib.h>
+#include <string.h>
+
+
+#include "wtpinfo.h"
+
+#include "capwap.h"
+
+#include "cw_util.h"
+#include "cw_log.h"
+
+
+
+static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t * msgelem,int len)
+{
+	int i=0;
+	uint32_t val;
+	do {
+		val = ntohl(*((uint32_t*)(msgelem+i)));
+		int subtype= (val>>16)&0xffff;
+		int sublen = val&0xffff;
+		i+=4;
+		if (sublen+i>len)
+			return;
+		switch(subtype){
+			case CWBOARDDATA_MODELNO:
+				cw_setstr(&wtpinfo->model_no,msgelem+i,sublen);
+				break;
+			case CWBOARDDATA_SERIALNO:
+				cw_setstr(&wtpinfo->serial_no,msgelem+i,sublen);
+				break;
+			case CWBOARDDATA_MACADDRESS:
+				wtpinfo->macaddress=realloc(wtpinfo->macaddress,sublen);
+				memcpy(wtpinfo->macaddress,msgelem+i,sublen);
+				wtpinfo->macaddress_len=sublen;
+				break;
+			default:
+				break;
+		}
+		i+=sublen;
+
+	}while(i<len);
+}
+
+
+
+int wtpinfo_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len)
+{
+
+	if (type!=CWMSGELEM_WTP_BOARD_DATA)
+		return 0;
+	if (len<4){
+		cw_log_debug0("Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d\n",type,len);
+		return 1;
+	}
+
+	wtpinfo->vendor_id = ntohl(*((uint32_t*)msgelem));
+	wtpinfo_readsubelems_wtp_board_data(wtpinfo,msgelem+4,len-4);
+	return 1;
+}
+
+
