@@ -1,10 +1,11 @@
 ifndef CC
-	CC=gcc
+        CC=gcc
 endif
 SYSARCH := $(shell uname -m)
 ifndef ARCH
         ARCH=$(SYSARCH)
 endif
+
 
 LDFLAGS = -g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
@@ -44,8 +45,6 @@ AC_NAME = actube
 
 # top-level rule, to compile everything. 
 all: $(AC_NAME) 
-
-#$(WTP_NAME) $(WUA_NAME)
 
 $(AC_NAME): $(AC_OBJS) 
 	$(CC) $(AC_OBJS) $(CC_FLAGS) $(OPENSSL_INCLUDE) -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
