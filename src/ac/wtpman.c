@@ -33,51 +33,6 @@
 ACIPLIST * get_aciplist();
 struct ac_info * get_acinfo();
 
-
-static void process_discovery(struct wtpman * wtpman, struct cwrmsg * cwrmsg)
-//uint8_t * hdr, uint8_t *msg, int len)
-{
-	printf("process_discovery called\n");
-	printf("cwmsg: %p\n",cwrmsg);
-	printf("Message Type: %p\n",&cwrmsg->type);
-	printf("Message Type: %d\n",cwrmsg->type);
-	printf("WBID %d\n",cwrmsg->wbid);
-
-	switch (cwrmsg->type){
-		case CWMSG_DISCOVERY_REQUEST:
-			printf ("got a discovery requesti DISC\n");
-			printf("MSGELEMS: %p\n",cwrmsg->msgelems);
-			printf("Seqnum %d\n",cwrmsg->seqnum);
-			printf("RIIIID: %d\n",cwrmsg->rid);
-			struct radioinfo radioinfo;
-			radioinfo.rid = cwrmsg->rid;
-			radioinfo.rmac = cwrmsg->rmac;
-			struct ac_info acinfo;
-//			capwap_init_acinfo(&acinfo);
-			process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-
-			wtpinfo_print(&wtpman->wtpinfo);
-
-		//	struct radioinfo radioinfo;
-			cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,&acinfo,&wtpman->wtpinfo);			
-			break;
-		case CWMSG_JOIN_REQUEST:
-			printf ("Join message!!!!!!!!!!!!!!!!\n");
-			process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-			wtpinfo_print(&wtpman->wtpinfo);
-
-			exit(1);
-			break;
-		default:
-			printf ("Unknown message\n");
-			exit(1);
-			break;
-
-	}
-
-
-}
-
 static void wtpman_remove(struct wtpman * wtpman)
 {
 	wtplist_lock();
