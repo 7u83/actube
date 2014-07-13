@@ -299,15 +299,6 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 #define AC_DTLS_POLICY_D		4	/* DTLS Data channel support */		
 
 
-//struct capwap_msg * capwap_msg_new();
-//int cwmsg_send(struct cwmsg * cwmsg, );
-// void cwmsg_send(struct cwmsg * cwmsg ,struct conn * conn); //connint8_t * buffer,int msglen)
-//void cwmsg_send(struct cwmsg * cwmsg, int rid, uint32_t * rmac, struct conn * conn) ;
-//void cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * conn);
-
-//extern void cwmsg_init(struct cwmsg * msg, uint8_t *buffer,int flag);
-//extern void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, uint8_t * rmac);
-//void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, struct radioinfo * radioinfo);
 
 extern void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo);
