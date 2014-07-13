@@ -44,11 +44,12 @@ int main (int argc, const char * argv[])
 	read_config("ac.conf");
 	cw_log_debug_level=conf_debug_level;
 
-	test_db();
-
-
-
 	cw_log(LOG_INFO,"Starting AC-Tube");
+
+	db_init();
+
+
+
 
 #ifdef WITH_DTLS
 	dtls_init();
