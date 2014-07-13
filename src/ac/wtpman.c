@@ -89,8 +89,8 @@ static void wtpman_run(void *arg)
 	}
 
 	cw_log_debug0("Establishing DTLS connection");
-#ifdef WITH_DTLS
 
+#ifdef WITH_DTLS
 	if (!conf_dtls_psk){
 		cw_log(LOG_ERR,"Cant' establish DTLS connection, no psk set in config file");
 		wtpman_remove(wtpman);
