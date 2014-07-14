@@ -29,8 +29,16 @@
 #include "cw_log.h"
 #include "cw_util.h"
 
+uint8_t conf_macaddress[12];
+uint8_t conf_macaddress_len=0;
+
+
 char * conf_acname = NULL; 
 int conf_acname_len = 0;
+
+char * conf_acid = NULL;
+
+char * conf_primary_if = NULL;
 
 long conf_max_wtps = CONF_DEFAULT_MAXWTPS;
 char * conf_logfilename=CONF_DEFAULT_LOGFILENAME;
@@ -85,10 +93,49 @@ cfg_bool_t conf_ignore_wtp_source_port = cfg_false;
 static int init_acname()
 {
 	if (conf_acname == NULL){
-		conf_acname=CONF_DEFAULT_ACNAME;
+		conf_acname=malloc(strlen(CONF_DEFAULT_ACNAME)+strlen(conf_acid)+1);
+		sprintf(conf_acname,"%s%s",CONF_DEFAULT_ACNAME,conf_acid);
 	}
 	conf_acname_len=strlen(conf_acname);
 	return 1;
+}
+
+static int init_acid()
+{
+
+	if (conf_acid != NULL)
+		return 1;
+
+
+#ifdef WITH_IPV6
+	conf_primary_if  = sock_get_primary_if(AF_INET6);
+	if (!conf_primary_if)
+		conf_primary_if = sock_get_primary_if(AF_INET);
+#else	
+	conf_primary_if = get_primary_if(AF_INET);
+#endif
+
+	if (!conf_primary_if){
+		cw_log(LOG_ERR,"Fatal: Unable to detect primary interface, needed to set ac_id. Pleas use confiPleas u to set ac_id");
+		return 0;
+	}		
+
+	if (!sock_getifhwaddr(conf_primary_if,conf_macaddress,&conf_macaddress_len)){
+		cw_log(LOG_ERR,"Fatal: Unable to detect link layer address for %s\n",conf_primary_if);
+		return 0;
+	};
+
+	int i;
+
+
+	conf_acid = malloc(2*conf_macaddress_len+1);
+	char *s = conf_acid;
+
+	for (i=0; i<conf_macaddress_len; i++){
+		s+=sprintf(s,"%02X",conf_macaddress[i]);
+	}
+	return 1;
+
 }
 
 static int init_dtls()
@@ -379,6 +426,7 @@ static int conf_read_strings( cfg_t * cfg, char * name, char ***dst,int *len)
 int read_config(const char * filename){
 	int i,n;
 
+
 	cfg_opt_t opts[] = {
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
@@ -460,6 +508,9 @@ int read_config(const char * filename){
 
 
 	cfg_free(cfg);
+
+	if (!init_acid())
+		return 0;
 
 	if (!init_acname() )
 		return 0;
