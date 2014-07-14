@@ -19,7 +19,7 @@ int db_init()
 	int rc = sqlite3_open(filename,&handle);
 	if (rc)
 	{
-		perror ("sqlite");	
+//		perror ("sqlite");	
 		return 0;
 
 	}
@@ -37,9 +37,18 @@ int db_init()
 	return 1;
 }
 
+int db_start()
+{
+	const char * cmd = "REPLACE INTO acs ";
+}
+#include "conf.h"
+
 int db_ping()
 {
-	const char * cmd = "";
+	printf("Pingger\n");
+	const char * cmd = "UPDATE acs SET lastseen=datetime('now') WHERE acid='%s'";
+	printf(cmd,conf_acid);
+	printf("\n");
 
 //	int rc = sqlite3_exec(
 
