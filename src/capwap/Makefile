@@ -21,7 +21,8 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_set_recvtimeout.o \
 	 sock_getbroadcastaddr.o \
 	 sock_addrinit.o \
-	 sock_set_dontfrag.o
+	 sock_set_dontfrag.o \
+	 sock_get_primary_if.o
 
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
