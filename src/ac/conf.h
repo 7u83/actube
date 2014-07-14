@@ -62,6 +62,7 @@
 
 
 extern char * conf_acname;
+extern char * conf_acid;
 extern int conf_acname_len;
 extern long conf_max_wtps;
 extern char * conf_logfilename;
