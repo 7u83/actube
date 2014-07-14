@@ -53,6 +53,9 @@ extern int sock_getbroadcastaddr(const struct sockaddr * addr,struct sockaddr * 
 extern void sock_addrinit(struct sockaddr *addr,int type);
 extern int sock_set_dontfrag(int sock,int val);
 
+
+extern char * sock_get_primary_if(int family);
+
 /*
 enum {
 	SOCK_IFADDR_ADDRESS,
