@@ -5,6 +5,12 @@
 
 static sqlite3 *handle;
 
+
+const char * init_tables = "\
+	CREATE TABLE IF NOT EXISTS acs (acid TEXT PRIMARY KEY, TIMESTAMP lastseen); \
+	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
+	";
+
 int db_init()
 {
 	const char * filename="ac.sqlite3";
@@ -18,17 +24,25 @@ int db_init()
 
 	}
 
-	const char * cmd = "CREATE TABLE IF NOT EXISTS aclist (acid TEXT PRIMARY KEY,pass TEXT NOT NULL,activated INTEGER)";
+	const char * cmd = init_tables;
 	rc = sqlite3_exec(handle,cmd,0,0,0);
 	if (rc)
 	{
 		const char *em = sqlite3_errmsg(handle);
-		cw_log(LOG_ERR,"Error executing sql \"%s\" - Error msg: %s",cmd, em);
+		cw_log(LOG_ERR,"Error executing SQL \"%s\" - Error msg: %s",cmd, em);
 		return 0;
 
 	}
 
 	return 1;
+}
+
+int db_ping()
+{
+	const char * cmd = "";
+
+//	int rc = sqlite3_exec(
+
 }
 
 
