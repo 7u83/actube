@@ -436,6 +436,7 @@ int read_config(const char * filename){
 		CFG_SIMPLE_INT("max_wtps",&conf_max_wtps),
 		CFG_SIMPLE_INT("debug_level",&conf_debug_level),
 		CFG_SIMPLE_INT("vendor_id",&conf_vendor_id),
+		CFG_SIMPLE_STR("ac_id",&conf_acid),
 		CFG_SIMPLE_STR("ac_name",&conf_acname),
 		CFG_SIMPLE_STR("ssl_cert",&conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),
