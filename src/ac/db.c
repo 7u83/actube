@@ -64,7 +64,7 @@ int db_start()
 
 //	rc = sqlite3_prepare_v2(handle, "UPDATE acs SET lastseen=99 WHERE acid=? ;",-1,&ping_stmt,0);
 	printf("RCPin: %d\n",rc);
-
+	return 1;
 
 errX:
 	cw_log(LOG_ERR,"Fatal: Can't start sqlite3 db, error %d",rc);
