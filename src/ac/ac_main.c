@@ -49,6 +49,7 @@ int main (int argc, const char * argv[])
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 
 	db_init();
+	db_start();
 	db_ping();
 	
 
