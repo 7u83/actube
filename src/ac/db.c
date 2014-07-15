@@ -17,11 +17,11 @@ int db_init()
 {
 	const char * filename="ac.sqlite3";
 	
-	cw_log_debug0("Initi sqlite3 db: %s",filename);
+	cw_log_debug0("Init sqlite3 db: %s",filename);
 	int rc = sqlite3_open(filename,&handle);
 	if (rc)
 	{
-//		perror ("sqlite");	
+
 		return 0;
 
 	}
@@ -45,9 +45,12 @@ static sqlite3_stmt * ping_stmt;
 
 int db_start()
 {
+	cw_log_debug0("Start sqlite3 db");
+
 	sqlite3_stmt *stmt;
 	int rc = sqlite3_prepare_v2(handle, "INSERT INTO acs (acid,acname) VALUES (?,?);",-1,&stmt,0);
-	printf ("RC = %d %p\n",rc,stmt);
+	if (rc)
+		goto errX;
 
 	rc = sqlite3_bind_text(stmt,1,conf_acid,-1,SQLITE_STATIC);
 
@@ -63,56 +66,21 @@ int db_start()
 	printf("RCPin: %d\n",rc);
 
 
+errX:
+	cw_log(LOG_ERR,"Fatal: Can't start sqlite3 db, error %d",rc);
+	return 0;
+
+
 }
-#include "conf.h"
 
 
-
-int db_ping()
+void db_ping()
 {
 	int rc = sqlite3_step(ping_stmt);
-
-	printf("Pingger\n");
-
-	//int rc = sqlite3_prepare_v2(handle,cmd,-1,&ping_stmt,0);
-	////printf ("Prepare rc: %d\n",rc);
-
-	//printf(cmd,conf_acid);
-	printf("\n");
-
-//	int rc = sqlite3_exec(
-
-}
-
-
-
-
-void test_db()
-{
-// A prepered statement for fetching tables
-	sqlite3_stmt *stmt;
-//
-// // Create a handle for database connection, create a pointer to sqlite3
-	sqlite3 *handle;
-	int rc = sqlite3_open("ac.sqlite3",&handle);
-
-	if ( rc ) 
-	{
-		perror("sqlite");
-		printf("Database failed\n");
-
+	if (rc){
+		cw_log(LOG_ERR,"Error: Can't ping database, error code %d",rc);
 	}
-
-	printf ("DB RC: %i\n",rc);
-
-	char cmd[100] = "xCREATE TABLE IF NOT EXISTS aclist (uname TEXT PRIMARY KEY,pass TEXT NOT NULL,activated INTEGER)";
-
-	rc = sqlite3_exec(handle,cmd,0,0,0);
-
-	printf("CT RC: %i\n",rc);
-	const char *em = sqlite3_errmsg(handle);
-	printf("ErrMsg: %s\n",em);
-	return ;
-
-
 }
+
+
+
