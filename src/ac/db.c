@@ -54,16 +54,14 @@ int db_start()
 
 	rc = sqlite3_bind_text(stmt,1,conf_acid,-1,SQLITE_STATIC);
 
-	printf ("RC: %d\n",rc);
+	rc = sqlite3_bind_text(stmt,2,conf_acname,-1,SQLITE_STATIC);
 
-	sqlite3_bind_text(stmt,2,conf_acname,-1,SQLITE_STATIC);
 	sqlite3_step(stmt);
 
 	rc = sqlite3_prepare_v2(handle, "UPDATE acs SET lastseen=datetime('now') WHERE acid=?;",-1,&ping_stmt,0);
 	rc = sqlite3_bind_text(ping_stmt,1,conf_acid,-1,SQLITE_STATIC);
 
 //	rc = sqlite3_prepare_v2(handle, "UPDATE acs SET lastseen=99 WHERE acid=? ;",-1,&ping_stmt,0);
-	printf("RCPin: %d\n",rc);
 	return 1;
 
 errX:
@@ -77,7 +75,7 @@ errX:
 void db_ping()
 {
 	int rc = sqlite3_step(ping_stmt);
-	if (rc){
+	if (rc!=SQLITE_DONE){
 		cw_log(LOG_ERR,"Error: Can't ping database, error code %d",rc);
 	}
 }
