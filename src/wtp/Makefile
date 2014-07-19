@@ -47,6 +47,7 @@ OBJS += wtpdrv.o
 OBJS += join.o
 OBJS += run.o
 OBJS += sulking.o
+OBJS += configure.o
 
 ALL=wtp
 
