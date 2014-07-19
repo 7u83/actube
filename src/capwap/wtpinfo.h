@@ -74,6 +74,7 @@ extern int wtpinfo_readelem_wtp_name(struct wtpinfo * wtpinfo, int type, uint8_t
 extern int wtpinfo_readelem_session_id(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len);
 //extern int wtpinfo_readelem_ecn_support(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len);
 extern int wtpinfo_readelem_cw_local_ip_addr(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len);
+extern int wtpinfo_print(char *str, struct wtpinfo * wtpinfo);
 
 #define wtpinfo_readelem_ecn_support(wtpinfo,type,msg,len) cw_readelem_ecn_support(&wtpinfo->ecn_support,type,msg,len)
 
