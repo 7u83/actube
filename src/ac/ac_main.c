@@ -174,7 +174,7 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 #ifdef WITH_CW_LOG_DEBUG
 	char str[100];
 	sock_addrtostr(addr,str,100);
-	cw_log_debug0("Received packet from %s, len = %i, via %s\n",str,len,
+	cw_log_debug1("Received packet from %s, len = %i, via %s\n",str,len,
 			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
 	cw_log_debug2_dump(buffer,len,"Packet data for packet, recevied from %s",str);
 #endif	
@@ -187,7 +187,7 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 #else
 	if (preamble != CAPWAP_PACKET_PREAMBLE ){
 #endif
-		cw_log_debug0("Discarding packet, wrong preamble, preamble = 0x%01X",preamble);
+		cw_log_debug1("Discarding packet, wrong preamble, preamble = 0x%01X",preamble);
 		return;
 	}
 
