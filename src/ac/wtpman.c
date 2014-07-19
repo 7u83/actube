@@ -31,7 +31,7 @@
 
 
 /* macro to convert our client ip to a string */
-#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, wtpman->tmpstr, sizeof(wtpman->tmpstr)))
+#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
 
 
@@ -138,7 +138,7 @@ static void wtpman_run(void *arg)
 	int result_code = 1;
 	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
 
-	cw_log_debug0("WTP joined");
+	cw_log_debug0("WTP joined %s,%s",wtpman->wtpinfo.name,wtpman->wtpinfo.location);
 
 	int msg_counter = 0;
 	while(1){
