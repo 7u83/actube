@@ -46,7 +46,7 @@ int join_state(struct conn * conn)
 
 	struct cwrmsg * cwrmsg = conn_get_message(conn);
 
-	cw_log_debug0("Receiveid message %i",cwrmsg->seqnum);
+	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
 	if (cwrmsg->type != CWMSG_JOIN_RESPONSE || cwrmsg->seqnum != conn->seqnum){
 		printf("Wrong message\n");
