@@ -34,7 +34,6 @@ struct wtpman{
 	int socklistindex;
 	int connected; 
 
-	char tmpstr[64];
 
 };
 
