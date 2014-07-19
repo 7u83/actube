@@ -8,6 +8,7 @@
 #include "wtplist.h"
 
 #include "capwap.h"
+#include "sock.h"
 #include "socklist.h"
 
 #include "conn.h"
@@ -27,6 +28,10 @@
 #include <errno.h>
 
 #include "capwap.h"
+
+
+/* macro to convert our client ip to a string */
+#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, wtpman->tmpstr, sizeof(wtpman->tmpstr)))
 
 
 
@@ -76,6 +81,7 @@ static void wtpman_run_discovery(void *arg)
 }
 
 
+
 static void wtpman_run(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
@@ -83,12 +89,12 @@ static void wtpman_run(void *arg)
 
 
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
-		cw_log_debug0("Dropping connection to non-unicast socket");
+		cw_log_debug0("Dropping connection from %s to non-unicast socket", CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
 
-	cw_log_debug0("Establishing DTLS connection");
+	cw_log_debug0("Establishing DTLS connection from %s",CLIENT_IP);
 
 #ifdef WITH_DTLS
 	if (!conf_dtls_psk){
@@ -101,12 +107,16 @@ static void wtpman_run(void *arg)
 	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
 
 	if ( !dtls_accept(wtpman->conn) ){
-		cw_log_debug0("Error establishing DTLS connection");
+		cw_log_debug0("Error establishing DTLS connection from %s",CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
 #endif	
-	cw_log_debug0("DTLS Session established with");
+//	const struct sockaddr *sa, char *s, size_t maxlen
+
+	cw_log_debug0("DTLS Session established with %s", CLIENT_IP);
+
+
 	cwrmsg = conn_get_message(wtpman->conn);
 //	printf("Seqnum: %i\n",cwrmsg->seqnum);
 
