@@ -22,110 +22,125 @@
 #include "capwap.h"
 #include "sock.h"
 
-void radioinfo_print(struct radioinfo * radioinfo)
+int radioinfo_print(char * str, struct radioinfo * radioinfo)
 {
-	printf("  RID %d\n",radioinfo->rid);
-	printf("  Modes: ");
+	char * s = str;
+
+	s += sprintf(s,"\t  RID %d\n",radioinfo->rid);
+	s += sprintf(s,"\t  Modes: ");
 	if(radioinfo->type & CWRADIO_TYPE_B){
-		printf("B");
+		s+=sprintf(s,"B");
 	}
 	if(radioinfo->type & CWRADIO_TYPE_G){
-		printf("G");
+		s+=sprintf(s,"G");
 	}
 
 	if(radioinfo->type & CWRADIO_TYPE_A){
-		printf("A");
+		s+=printf(s,"A");
 	}
 
 	if(radioinfo->type & CWRADIO_TYPE_N){
-		printf("N");
+		s+=sprintf(s,"N");
 	}
 
-	printf("\n");
+	s+=sprintf(s,"\n");
 
+	return s-str;
 
 }
 
-void wtpinfo_print(struct wtpinfo * wtpinfo)
+int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 {
-	char str[64];
-	printf ("=== WTP Info: %p ===\n",wtpinfo);
-	printf (" Name:\t\t\t%s\n", (!wtpinfo->name ? (uint8_t*)"Not set" : wtpinfo->name) );
-	printf (" Location:\t\t%s\n", (!wtpinfo->location ? (uint8_t*)"Not set" : wtpinfo->location) );
+	char hstr[64];
 
-	printf (" MAC Adress:\t\t");
+	char *s = str;
+
+
+
+
+	s+=sprintf (s,"\tWTP Name: %s\n", (!wtpinfo->name ? (uint8_t*)"Not set" : wtpinfo->name) );
+	s+=sprintf (s,"\tLocation: %s\n", (!wtpinfo->location ? (uint8_t*)"Not set" : wtpinfo->location) );
+
+	s+=sprintf (s,"\tMAC Adress: ");
 	if (wtpinfo->macaddress){
-		sock_hwaddrtostr(wtpinfo->macaddress,wtpinfo->macaddress_len,str);
-		printf("%s\n",str);
+		sock_hwaddrtostr(wtpinfo->macaddress,wtpinfo->macaddress_len,hstr);
+		s+=sprintf(s,"%s\n",hstr);
 
 	}
 	else
-		printf("Not set\n");
+		s+=sprintf(s,"Not set\n");
 
-	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,str,64);
-	printf (" Local IP:\t\t%s\n",str);
-
-
-	printf (" Vendor ID:\t\t%d\n", wtpinfo->vendor_id );
-	printf (" Model No.:\t\t%s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
-	printf (" Serial No.:\t\t%s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
-
-	printf (" Software Version:\t%s\n", (!wtpinfo->software_version ? (uint8_t*)"Not set" : wtpinfo->software_version) );
+	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,hstr,64);
+	s+=sprintf (s,"\tLocal IP: %s\n",hstr);
 
 
-	printf (" Max Radios:\t\t%d\n",wtpinfo->max_radios);
-	printf (" Radios in use:\t\t%d\n",wtpinfo->radios_in_use);
+
+	s+=sprintf (s,"\tVendor ID: %d\n", wtpinfo->vendor_id );
+	s+=sprintf (s,"\tModel No.: %s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
+	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
+
+	s+=sprintf (s,"\tSoftware Version: %s\n", (!wtpinfo->software_version ? (uint8_t*)"Not set" : wtpinfo->software_version) );
 
 
-	printf (" Session ID:\t\t");
+	s+=sprintf (s,"\tMax Radios: %d\n",wtpinfo->max_radios);
+	s+=sprintf (s,"\tRadios in use: %d\n",wtpinfo->radios_in_use);
+
+
+	s+=sprintf (s,"\tSession ID: ");
 	if (wtpinfo->session_id) {
 		int i;
 		for (i=0; i<wtpinfo->session_id_len; i++)
-			printf("%02X",wtpinfo->session_id[i]);
+			s+=sprintf(s,"%02X",wtpinfo->session_id[i]);
 	}
 	else 
-		printf ("Not set");
-		printf("\n");
+		s+=sprintf(s,"Not set");
+		s+=sprintf(s,"\n");
 
-	printf (" MAC Type:\t\t");
+	s+=sprintf (s,"\tMAC Type: ");
 	switch (wtpinfo->mac_type){
 		case WTP_MAC_TYPE_LOCAL:
-			printf("local");
+			s+=sprintf(s,"local");
 			break;
 		case WTP_MAC_TYPE_SPLIT:
-			printf("split");
+			s+=sprintf(s,"split");
 			break;
 		case WTP_MAC_TYPE_BOTH:
-			printf("local, split");
+			s+=sprintf(s,"local, split");
 			break;
 	}
-	printf("\n");
+	s+=sprintf(s,"\n");
 
-	printf (" Frame Tunnel Mode:\t");
-	printf("(%08X)",wtpinfo->frame_tunnel_mode);
+	s+=sprintf (s,"\tFrame Tunnel Mode: ");
+	s+=sprintf(s,"(%08X)",wtpinfo->frame_tunnel_mode);
 	char * c="";
 	if (wtpinfo->frame_tunnel_mode & WTP_FRAME_TUNNEL_MODE_N){
-		printf ("%snative",c);c=", ";
+		s+=printf (s,"%snative",c);c=", ";
 	}
 
 	if (wtpinfo->frame_tunnel_mode & WTP_FRAME_TUNNEL_MODE_E){
-		printf ("%s802.3",c);c=", ";
+		s+=sprintf (s,"%s802.3",c);c=", ";
 	}
 
 	if (wtpinfo->frame_tunnel_mode & WTP_FRAME_TUNNEL_MODE_L){
-		printf ("%sLocal bridging",c);c=", ";
+		s+=sprintf (s,"%sLocal bridging",c);c=", ";
 	}
 	if (wtpinfo->frame_tunnel_mode == 0)
-		printf(" None");
+		s+=sprintf(s," None");
 
-	printf("\n");
+	s+=sprintf(s,"\n");
 
-	printf(" Radios: %d\n",wtpinfo->max_radios);	
+	s+=sprintf(s,"\tRadios: %d\n",wtpinfo->max_radios);	
 	int i;
+
+	char ristr[2048];
+	char *r = ristr;
 	for (i=0; i<wtpinfo->max_radios; i++){
-		radioinfo_print(&wtpinfo->radioinfo[i+1]);
+		r+=radioinfo_print(r,&wtpinfo->radioinfo[i+1]);
 	}
 
+	s+=sprintf(s,"%s",ristr);
+
+	return s-str;
 
 
 }
