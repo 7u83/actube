@@ -11,8 +11,6 @@
 #define WTPMAN_QSIZE 1024
 
 struct wtpman{
-//	struct sockaddr_storage addr;
-//	int sock;
 	pthread_t thread;
 
 	/* packet queue */
@@ -23,8 +21,6 @@ struct wtpman{
 */
 	struct conn * conn;
 
-	/* fragment manager */
-//	FRAGMAN * fragman;
 
 	/* wtp data */
 	uint8_t * wtp_name;
@@ -34,10 +30,11 @@ struct wtpman{
 
 	struct wtpinfo wtpinfo;
 
-//	pthread_mutex_t add_packet_mutex;
 
 	int socklistindex;
 	int connected; 
+
+	char tmpstr[64];
 
 };
 
