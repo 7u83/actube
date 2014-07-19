@@ -140,6 +140,11 @@ static void wtpman_run(void *arg)
 
 	cw_log_debug0("WTP joined %s,%s",wtpman->wtpinfo.name,wtpman->wtpinfo.location);
 
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+
+	cw_log_debug0("WTP joined\n%s",wtpinfostr);
+
 	int msg_counter = 0;
 	while(1){
 		struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
