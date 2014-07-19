@@ -76,9 +76,14 @@ int do_connect(void *priv,void *data)
 	sock_setport(&ip->ip,atoi(conf_control_port));
 //	printf("Would connect to %s\n",str);
 	
-	int rc =join(&ip->ip);
+	int rc;
+	rc = join(&ip->ip);
 	if (!rc)
 		return 1;
+
+	
+	rc = configure();
+
 
 	run (get_conn());
 	return 0;
