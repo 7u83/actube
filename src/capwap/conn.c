@@ -31,12 +31,7 @@
  * @retval 1 Success
  * @retval 0 failure, conslt errno for more details
  */
-struct conn * conn_create(int sock, struct sockaddr * addr,
-//	void (*process_message)(void *arg,uint8_t *hdr,uint8_t *msg, int len), 
-//	void (*process_message)(void *arg,struct cwrmsg *), //uint8_t *hdr,uint8_t *msg, int len), 
-//	void *pmsgarg, 
-	int qsize)
-	
+struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 {
 	struct conn * conn; 
 	conn = malloc(sizeof (struct conn));
@@ -51,8 +46,8 @@ struct conn * conn_create(int sock, struct sockaddr * addr,
 		sock_copyaddr(&conn->addr,addr);
 
 //	printf("AF IN: %i\n",addr->sa_family);
-	char str[200] ;
-	sock_addrtostr((struct sockaddr*)&conn->addr,str,200);
+//	char str[200] ;
+//	sock_addrtostr((struct sockaddr*)&conn->addr,str,200);
 //	printf("CONN CREATOR: %s\n",str);
 
 	conn->fragman = fragman_create();
@@ -99,6 +94,7 @@ struct conn * conn_create(int sock, struct sockaddr * addr,
 }
 
 
+/*
 void conn_destroy(struct conn * conn)
 {
 	if (conn->fragman)
@@ -108,6 +104,7 @@ void conn_destroy(struct conn * conn)
 
 	free(conn);
 }
+*/
 
 /*
 void connn_get_next_seqnum(struct conn * conn)
