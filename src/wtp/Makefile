@@ -1,16 +1,23 @@
 ifndef CC
-CC=gcc
+	CC=gcc
 endif
 
 ifdef INCLUDE_DIR
 	XINCLUDE=-I $(INCLUDE_DIR)
 endif
 
+ifdef LIB_DIR
+	XLIB=-L $(LIB_DIR)
+endif 
+
+WITH_UCI=1 
+
 CFLAGS+=-DWITH_RMAC_SUPPORT 
 CFLAGS+=-DWITH_IPV6
 CFLAGS+=-DWITH_CW_LOG
 CFLAGS+=-DWITH_CW_LOG_DEBUG
 CFLAGS+=-DWITH_DTLS
+CFLAGS+=-DWITH_UCI
 CFLAGS+=$(XINCLUDE)
 
 
@@ -25,6 +32,8 @@ CFLAGS += -O2 -Wall -g
 
 LDFLAGS += -L../../src/capwap/$(ARCH)
 LDFLAGS += -L/usr/local/lib
+LDFLAGS += -luci
+LDFLAGS += $(XLIB)
 #LDFLAGS += -lpthread
 #LDFLAGS += -lrt
 
@@ -32,9 +41,12 @@ LIBS+=-lcapwap
 #LIBS+=-liw
 LIBS+=-lssl
 LIBS+=-lcrypto
-LIBS+=-lpthread
-LIBS+=-lrt
+#LIBS+=-lrt
+ifdef WITH_UCI
+LIBS+=-luci -lubox
+else
 LIBS+=-lconfuse
+endif
 
 
 CFLAGS += -I../src
@@ -42,8 +54,19 @@ CFLAGS += -I../src/utils
 CFLAGS += -I../../src
 CFLAGS += -I/usr/local/include
 
+
+
+CONFOBJS = wtp_conf_vars.o
+ifdef WITH_UCI
+	CONFOBJS += wtp_conf_uci.o 
+else
+	CONFOBJS += wtp_conf_confuse.o
+endif 
+
 OBJS += wtp_main.o
-OBJS += wtp_conf.o
+
+#OBJS += wtp_conf.o
+
 OBJS += discovery.o
 OBJS += wtp_interface.o
 OBJS += wtpdrv.o
@@ -51,6 +74,7 @@ OBJS += join.o
 OBJS += run.o
 OBJS += sulking.o
 OBJS += configure.o
+OBJS += $(CONFOBJS)
 
 ALL=wtp
 
