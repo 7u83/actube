@@ -21,7 +21,6 @@
 #include <errno.h>
 
 #include "conn.h"
-#include "capwap.h"
 #include "sock.h"
 
 #include "cw_log.h"
@@ -74,9 +73,6 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 		conn->recv_packet = conn_recv_packet;
 
 
-//	conn->process_message=process_message;
-//	conn->pmsgarg=pmsgarg;
-
 	conn->last_seqnum_received=-1;
 	conn->mtu=1500;
 
@@ -94,21 +90,3 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 }
 
 
-/*
-void conn_destroy(struct conn * conn)
-{
-	if (conn->fragman)
-		fragman_destroy(conn->fragman);
-	if (conn->q)
-		free (conn->q);
-
-	free(conn);
-}
-*/
-
-/*
-void connn_get_next_seqnum(struct conn * conn)
-{
-	return (++conn->seqnum)&0xff;
-}
-*/
