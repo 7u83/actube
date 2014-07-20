@@ -1,12 +1,18 @@
-#CC = gcc 
-AR = ar
-SYSARCH := $(shell uname -m)
-
-ifndef ARCH
-	ARCH=$(SYSARCH)
+ifndef CC
+	CC=gcc
 endif
 
+ifndef AR
+	AR = ar
+endif
 
+ifndef ARCH
+	ARCH = $(shell $(CC) -dumpmachine)
+endif
+
+ifdef INCLUDE_DIR
+	XINCLUDE = -I $(INCLUDE_DIR)
+endif
 
 
 NAME=libcapwap.a
@@ -31,7 +37,7 @@ LOGOBJS=cw_log.o \
 
 
 WTPINFOOBJS = wtpinfo_set_location.o \
-	       wtpinfo_print.o 
+	wtpinfo_print.o 
 
 UTILOBJS=cw_setstr.o \
 	 cw_rand.o \
@@ -120,6 +126,7 @@ CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
 CFLAGS += -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
 	  -DWITH_DTLS \
+	  $(XINCLUDE)
 
 
 #SRCS = $(OBJS:.o=.c) 
