@@ -74,7 +74,7 @@ static struct conn * conn=0;
 struct conn * get_conn()
 {
 	if (!conn){
-		conn = conn_create(-1,0,0);
+		conn = conn_create_noq(-1,0);
 	}
 	return conn;
 }
