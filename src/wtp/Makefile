@@ -2,12 +2,16 @@ ifndef CC
 CC=gcc
 endif
 
+ifdef INCLUDE_DIR
+	XINCLUDE=-I $(INCLUDE_DIR)
+endif
+
 CFLAGS+=-DWITH_RMAC_SUPPORT 
 CFLAGS+=-DWITH_IPV6
 CFLAGS+=-DWITH_CW_LOG
 CFLAGS+=-DWITH_CW_LOG_DEBUG
 CFLAGS+=-DWITH_DTLS
-CFLAGS+=-I /home/tube/v/openwrt/staging_dir/target-mips_r2_uClibc-0.9.33.2/usr/include
+CFLAGS+=$(XINCLUDE)
 
 
 ifndef ARCH
