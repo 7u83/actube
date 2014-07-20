@@ -192,7 +192,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 			rconn = connlist_get(connlist,(struct sockaddr*)&sa);
 
 			if (!rconn){
-				rconn = conn_create(conn->sock,(struct sockaddr*)&sa,0); //msg_cb,NULL,0);
+				rconn = conn_create_noq(conn->sock,(struct sockaddr*)&sa); //msg_cb,NULL,0);
 	//			rconn->pmsgarg=conn->pmsgarg;
 				rconn->mtu = conn->mtu;
 				rconn->seqnum=conn->seqnum;
