@@ -93,11 +93,8 @@ struct conn{
 
 
 
-struct conn * conn_create(int sock, struct sockaddr * addr,
-//	void (*process_message)(void *arg,uint8_t *hdr,uint8_t *msg, int len), 
-//	void (*process_message)(void *arg,struct cwrmsg *), //uint8_t *hdr,uint8_t *msg, int len), 
-//	void *pmsgarg, 
-	int qsize);
+struct conn * conn_create(int sock, struct sockaddr * addr, int qsize);
+struct conn * conn_create_noq(int sock, struct sockaddr * addr);
 
 
 extern int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg);
