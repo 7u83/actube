@@ -109,6 +109,7 @@ CONNOBJS= conn.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \
 	conn_recv_packet.o \
+	conn_destroy.o \
 	connlist.o
 
 	
