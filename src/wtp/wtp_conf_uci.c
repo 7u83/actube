@@ -18,6 +18,15 @@
 
 
 
+static void * get_un_section(struct uci_package * pkg, const char *type)
+{
+//	struct uci_list * l = pkg->sections;
+
+	
+}
+
+
+
 int read_config(const char * filename){
 
 	struct uci_context * ctx;
@@ -30,6 +39,7 @@ int read_config(const char * filename){
 
 	struct uci_package * pkg;
 
+
 	int rc = uci_load(ctx, "./wtpconf", &pkg );
 	
 	if (rc) {
@@ -37,13 +47,31 @@ int read_config(const char * filename){
 		uci_get_errorstr(ctx, &errstr, "");
 		cw_log(LOG_ERR,"Fatal: Can't read config file: %s",errstr);
 	}
+	printf ("PackagePath: %s\n",pkg->path);
+
+
+	struct uci_package *p;
+	p = uci_lookup_package(ctx,"tobias");
+
+	printf ("Package: %p\n",p);
+
+
+
+
 
 	struct uci_section * section;
-	section = uci_lookup_section(ctx,pkg,"wtp");
+	section = uci_lookup_section(ctx,pkg,NULL);
 	if (!section) {
 		goto errX;		
 	}
- 
+
+	
+	const char  *str;
+	str = uci_lookup_option_string(ctx,section,"name");
+
+
+	printf("Option string: %s\n",str);
+
 
 //	struct uci_ptr * result;
 //	char str[123] = "@wtp[0].name";
