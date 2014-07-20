@@ -3,7 +3,8 @@ ifndef CC
 endif
 SYSARCH := $(shell uname -m)
 ifndef ARCH
-        ARCH=$(SYSARCH)
+#        ARCH=$(SYSARCH)
+	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
 
