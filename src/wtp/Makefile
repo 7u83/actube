@@ -7,14 +7,13 @@ CFLAGS+=-DWITH_IPV6
 CFLAGS+=-DWITH_CW_LOG
 CFLAGS+=-DWITH_CW_LOG_DEBUG
 CFLAGS+=-DWITH_DTLS
+CFLAGS+=-I /home/tube/v/openwrt/staging_dir/target-mips_r2_uClibc-0.9.33.2/usr/include
 
 
-SYSARCH := $(shell uname -m)
 ifndef ARCH
-        ARCH=$(SYSARCH)
+	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
-X=$(shell echo $(ARCH))
 
 #ifndef CFLAGS
 CFLAGS += -O2 -Wall -g
