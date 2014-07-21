@@ -63,10 +63,11 @@ enum {
 };
 */
 
+/*
 #ifndef SOCK_RECBUFFERSIZE
 	#define SOCK_RECBUFFERSIZE 4096
 #endif
-
+*/
 
 
 #endif /* __SOCK_H */
