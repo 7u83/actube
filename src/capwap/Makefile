@@ -18,7 +18,7 @@ endif
 NAME=libcapwap.a
 
 SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addrlen.o \
-	 sock_receive.o sock_mwait.o sock_mreceive.o sock_addrtostr.o \
+	 sock_receive.o sock_mwait.o sock_addrtostr.o \
 	 sock_setport.o \
 	 sock_getport.o \
 	 sock_getifaddr.o \
