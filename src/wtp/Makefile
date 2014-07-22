@@ -56,7 +56,8 @@ CFLAGS += -I/usr/local/include
 
 
 
-CONFOBJS = wtp_conf_vars.o
+CONFOBJS = wtp_conf.o
+
 ifdef WITH_UCI
 	CONFOBJS += wtp_conf_uci.o 
 else
