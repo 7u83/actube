@@ -1,9 +1,10 @@
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include <sys/socket.h>
-#include <confuse.h>
+//#include <confuse.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <ifaddrs.h>
@@ -12,7 +13,12 @@
 
 #include "capwap/capwap.h"
 #include "capwap/cw_log.h"
+#include "capwap/cw_util.h"
+
 #include "wtp_conf.h"
+
+
+#include "capwap/sock.h"
 
 char * conf_primary_if=0;
 char * conf_wtpname=0;
@@ -27,6 +33,7 @@ struct sockaddr_storage * conf_preferred_ac_sa=0;
 char ** conf_ac_list;
 int conf_ac_list_len;
 char * conf_control_port=0;
+
 uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
 
@@ -41,90 +48,61 @@ long conf_retransmit_interval=CONF_DEFAULT_RETRANSMIT_INTERVAL;
 long conf_debug_level=CONF_DEFAULT_DEBUG_LEVEL;
 
 
-int wtpconf_init()
+
+
+
+
+int wtpconf_primary_if()
 {
 
+#ifdef WITH_IPV6
+        conf_primary_if  = sock_get_primary_if(AF_INET6);
+        if (!conf_primary_if)
+                conf_primary_if = sock_get_primary_if(AF_INET);
+#else   
+        conf_primary_if = get_primary_if(AF_INET);
+#endif
 
-	if (conf_preferred_ac){
-		conf_preferred_ac_sa=malloc(sizeof(struct sockaddr_storage));
-		if (sock_strtoaddr(conf_preferred_ac,conf_preferred_ac_sa)!=1)
-		{
-			cw_log(LOG_ERR,"Preferred AC, invalid address: %s",conf_preferred_ac);
-			free(conf_preferred_ac_sa);
-			conf_preferred_ac_sa=0;
-		}
-		else{
-			if (sock_getport(conf_preferred_ac_sa)==0){
-				sock_setport(conf_preferred_ac_sa,conf_control_port);
-			}
-		}
-		if (conf_preferred_ac_sa!=0){
-			char str[100];
-			sock_addrtostr(conf_preferred_ac_sa,str,100);
-			cw_log(LOG_INFO,"Preferred AC: %s\n",str);
-		}
-	}
+        if (!conf_primary_if){
+                cw_log(LOG_ERR,"Fatal: Unable to detect primary interface");
+                return 0;
+        }               
+
+        if (!sock_getifhwaddr(conf_primary_if,conf_macaddress,&conf_macaddress_len)){
+                cw_log(LOG_ERR,"Fatal: Unable to detect link layer address for %s.",conf_primary_if);
+                return 0;
+        };
 	
+	cw_log_debug0("Primary interfac: %s, mac address: %s.",
+			conf_primary_if,
+			hwaddr2str(conf_macaddress,conf_macaddress_len)
+			);
+
+
+	return 1;
+
 }
+
+int wtpconf_name()
+{
+	if (conf_wtpname)
+		return 1;
+	
+	char name[64];
+	sprintf(name,"WTP%s",hwaddr2idstr(conf_macaddress,conf_macaddress_len));
+
+	conf_wtpname = (char*)cw_setstr((uint8_t**)&conf_wtpname,(uint8_t*)name,strlen(name)); 
+	if (!conf_wtpname)
+		return 0;
+
+	cw_log_debug0("Using self assigned wtp name: %s",conf_wtpname);
+
+	return 1;
+}
+
 
 #include <netinet/in.h>
 
-char * get_prim(int family)
-{
-        struct ifaddrs *ifap,*ifa;
-	char * r = 0;
-
-        getifaddrs(&ifap);
-
-        for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
-		if (ifa->ifa_flags & IFF_LOOPBACK){
-			continue;
-		}
-
-		if (ifa->ifa_addr->sa_family != family)
-			continue;
-
-		r = malloc(strlen(ifa->ifa_name)+1);
-		if (r)
-			strcpy(r,ifa->ifa_name);
-		break;
-
-        }
-        freeifaddrs(ifap);
-	return r;
-}
-
-
-wtpconf_primary_if()
-{
-	if (!conf_primary_if){
-
-#ifdef WITH_IPV6
-		conf_primary_if  = get_prim(AF_INET6);
-		if (!conf_primary_if)
-			conf_primary_if = get_prim(AF_INET);
-#else	
-		conf_primary_if = get_prim(AF_INET);
-#endif	
-		if (!conf_primary_if){
-			cw_log(LOG_ERR,"Fatal: Unable to detect primary interface");
-			return 0;
-		}		
-
-	}
-	if (!sock_getifhwaddr(conf_primary_if,conf_macaddress,&conf_macaddress_len)){
-		cw_log(LOG_ERR,"Fatal: Unable to detect link layer address for %s\n",conf_primary_if);
-		return 0;
-	};
-
-#ifdef WITH_CW_LOG_DEBUG
-	char str[128];
-	sock_hwaddrtostr(conf_macaddress,conf_macaddress_len,str);
-	cw_log_debug0("Using primary interface: %s",conf_primary_if);
-	cw_log_debug0("Using primary mac address: %s",str);
-#endif	
-	return 1;
-}
 
 
 
@@ -133,7 +111,7 @@ char * default_ac_list[] = {
 	"224.0.1.140",
 };
 
-wtpconf_ac_list()
+int wtpconf_ac_list()
 {
 	if (conf_ac_list)
 		return 1;
@@ -143,7 +121,7 @@ wtpconf_ac_list()
 	int bcrc;
 	struct sockaddr_storage bcaddr;
 
-	bcrc = sock_getifaddr(conf_primary_if,AF_INET,IFF_BROADCAST,&bcaddr);
+	bcrc = sock_getifaddr(conf_primary_if,AF_INET,IFF_BROADCAST,(struct sockaddr*)&bcaddr);
 	if (bcrc)
 		len++;
 
@@ -162,7 +140,7 @@ wtpconf_ac_list()
 
 	if (bcrc){
 		char bcstr[100];
-		sock_addrtostr(&bcaddr,bcstr,100);
+		sock_addrtostr((struct sockaddr*)&bcaddr,bcstr,100);
 		char * c = strchr(bcstr,':');
 		*c=0;
 		conf_ac_list[i]=strdup(bcstr);
@@ -178,6 +156,70 @@ wtpconf_ac_list()
 	return 1;
 }
 
+
+
+
+
+
+int wtpconf_preinit()
+{
+	conf_control_port=strdup(CAPWAP_CONTROL_PORT_STR);
+	conf_dtls_cipher=strdup(CONF_DEFAULT_DTLS_CIPHER);
+
+}
+
+int wtpconf_init()
+{
+
+	if (!wtpconf_primary_if()){
+		cw_log(LOG_ERR,"Fatal: Error initialing primary interface.");
+		goto errX;
+	}
+
+	if (!wtpconf_ac_list()){
+		cw_log(LOG_ERR,"Fatal: Error initialiing ac list.");
+		goto errX;
+	}
+
+	if (!wtpconf_name()){
+		cw_log(LOG_ERR,"Fatal: Cant't set wtp name.");
+		goto errX;
+	}
+
+	return 1;
+
+errX:
+	return 0;
+
+
+
+/*
+
+
+	if (conf_preferred_ac){
+		conf_preferred_ac_sa=malloc(sizeof(struct sockaddr_storage));
+		if (sock_strtoaddr(conf_preferred_ac,(struct sockaddr*)conf_preferred_ac_sa)!=1)
+		{
+			cw_log(LOG_ERR,"Preferred AC, invalid address: %s",conf_preferred_ac);
+			free(conf_preferred_ac_sa);
+			conf_preferred_ac_sa=0;
+		}
+		else{
+			if (sock_getport((struct sockaddr*)conf_preferred_ac_sa)==0){
+				sock_setport((struct sockaddr*)conf_preferred_ac_sa,conf_control_port);
+			}
+		}
+		if (conf_preferred_ac_sa!=0){
+			char str[100];
+			sock_addrtostr((struct sockaddr*)conf_preferred_ac_sa,str,100);
+			cw_log(LOG_INFO,"Preferred AC: %s\n",str);
+		}
+	}
+*/
+	
+}
+
+/*
 int read_config(const char * filename){
 	int i,n;
 
@@ -252,3 +294,6 @@ errX:
 	return 0;
 
 }
+
+
+*/
