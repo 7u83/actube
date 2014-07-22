@@ -63,7 +63,7 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 
 	s+=sprintf (s,"\tMAC Adress: ");
 	if (wtpinfo->macaddress){
-		sock_hwaddrtostr(wtpinfo->macaddress,wtpinfo->macaddress_len,hstr);
+		sock_hwaddrtostr(wtpinfo->macaddress,wtpinfo->macaddress_len,hstr,":");
 		s+=sprintf(s,"%s\n",hstr);
 
 	}
