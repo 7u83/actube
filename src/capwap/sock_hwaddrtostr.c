@@ -20,14 +20,15 @@
 
 #include "sock.h"
 
-void sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst)
+char * sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst,const char * separator)
 {
 	int i;
+	char * d = dst;
 	for (i=0; i<len-1; i++){
-		sprintf(dst,"%02X:",haddr[i]);
-		dst+=3;
+	 	d+=sprintf(d,"%02X%s",haddr[i],separator);
+//		d+=3;
 	}
-	sprintf(dst,"%02X",haddr[i]);
+	sprintf(d,"%02X",haddr[i]);
+	return dst;
 }
-
 
