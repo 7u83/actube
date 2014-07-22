@@ -42,7 +42,7 @@ extern int sock_receive(int sock,void *buf, size_t len, int flags, struct sockad
 extern int sock_mreceive(int * socklist, int socklistlen, void(*callback) (int * socklist,int index,struct sockaddr*,uint8_t*buf,int len));
 extern int sock_getifaddr(const char * ifname,int family, int type, struct sockaddr * sa);
 extern int sock_getifhwaddr(const char *ifname, uint8_t * hwaddr, uint8_t * addrlen);
-extern void sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst);
+extern char *sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst,const char *separator);
 extern char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen);
 extern int sock_strtoaddr( const char * s,struct sockaddr * saout);
 extern int sock_set_recvtimeout(int sock, int seconds);
@@ -55,6 +55,13 @@ extern int sock_set_dontfrag(int sock,int val);
 
 
 extern char * sock_get_primary_if(int family);
+
+#define sockaddr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64 ) )
+#define hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
+#define hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
+
+
+//#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
 /*
 enum {
