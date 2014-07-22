@@ -91,10 +91,16 @@ int do_connect(void *priv,void *data)
 
 int wtp_main(const char *ad)
 {
+
+	wtpconf_preinit();
+
 	if (!read_config("wtp.conf")){
 		return 1;
 	}
-	cw_log_debug_level=conf_debug_level;
+
+	wtpconf_init();
+
+	cw_log_debug_level=2; //conf_debug_level;
 
 #ifdef WITH_DTLS	
 	dtls_init();

@@ -17,12 +17,23 @@
 #include <uci.h>
 
 
-
-static void * get_un_section(struct uci_package * pkg, const char *type)
+static struct uci_section  * get_anon_section(struct uci_package * pkg, const char *type)
 {
-//	struct uci_list * l = pkg->sections;
 
-	
+	struct uci_element * e;
+	struct uci_list * l = &pkg->sections;
+
+	uci_foreach_element(l,e){
+		struct uci_section *s = (struct uci_section*)e;
+		if (!s->anonymous)
+			continue;
+
+		if (strcmp(s->type,type)==0){
+			return s;
+		}
+	}
+	return NULL;
+
 }
 
 
@@ -39,30 +50,31 @@ int read_config(const char * filename){
 
 	struct uci_package * pkg;
 
+	
+	if (filename == NULL){
+		filename = "wtp";
+	}
 
-	int rc = uci_load(ctx, "./wtpconf", &pkg );
+
+	int rc = uci_load(ctx, filename, &pkg );
+
+	if (rc == UCI_ERR_NOTFOUND){
+		cw_log_debug0("Config file '%s' not found, running without config",filename);
+		return 1;
+	}
 	
 	if (rc) {
 		char * errstr; 
 		uci_get_errorstr(ctx, &errstr, "");
 		cw_log(LOG_ERR,"Fatal: Can't read config file: %s",errstr);
+		return 0;
+		
 	}
-	printf ("PackagePath: %s\n",pkg->path);
 
-
-	struct uci_package *p;
-	p = uci_lookup_package(ctx,"tobias");
-
-	printf ("Package: %p\n",p);
-
-
-
-
-
-	struct uci_section * section;
-	section = uci_lookup_section(ctx,pkg,NULL);
+	struct uci_section * section = get_anon_section(pkg,"wtp");
 	if (!section) {
-		goto errX;		
+		cw_log_debug0("No 'wtp' section found, running withou config");
+		return 1;
 	}
 
 	
@@ -70,26 +82,13 @@ int read_config(const char * filename){
 	str = uci_lookup_option_string(ctx,section,"name");
 
 
+	
+
+
 	printf("Option string: %s\n",str);
 
-
-//	struct uci_ptr * result;
-//	char str[123] = "@wtp[0].name";
-//	rc = uci_lookup_ptr(ctx,&result,str,0);
 	
-
-	printf ("RC = %d\n",rc);
-
-
-//	int rc = uci_load(&ctx, "wtp");
-	char * errstr; 
-	
-	return 0;
-
-errX:
-	uci_get_errorstr(ctx, &errstr, "Can't read config");
-	cw_log(LOG_ERR,"Fatal: %s",errstr);
-	return 0;	
+	return 1;
 
 }
 
