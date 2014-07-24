@@ -111,7 +111,8 @@ CONNOBJS= conn.o \
 	conn_recv_packet.o \
 	conn_destroy.o \
 	connlist.o \
-	conn_create_noq.o
+	conn_create_noq.o \
+	conn_send_response.o
 
 	
 
