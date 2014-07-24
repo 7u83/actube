@@ -13,7 +13,9 @@ static int cwrmsg_init_ctrlhdr(struct cwrmsg * cwrmsg, uint8_t * msg, int len)
 	uint32_t val;
 	val = ntohl(*((uint32_t*)(msg+0)));
 
-	cwrmsg->type = ntohl(*((uint32_t*)(msg)))-CWIANA_ENTERPRISE_NUMBER*256;
+
+	cwrmsg->type = ntohl(*((uint32_t*)(msg))); 
+
 
 	val = ntohl(*((uint32_t*)(msg+4)));
 	cwrmsg->seqnum = CW_GET_DWORD_BITS(val,0,8);
@@ -36,7 +38,6 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 		/* It's a response  message, no further examination required. */
 //		conn->process_message(conn->pmsgarg,cwrmsg);
 		cb(cbarg,cwrmsg);
-
 		return 0;
 	}
 
@@ -85,7 +86,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 	if (len<8){
 		/* packet too short */
-		cw_log_debug0("Discarding packet, packet too short, len=%d",len);
+		cw_log_debug1("Discarding packet, packet too short, len=%d",len);
 		return;
 	}
 
@@ -94,9 +95,11 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	int preamble = val >> 24;
 	if ( (preamble & 0xf0) != CW_VERSION){
 		/* wrong version */
-		cw_log_debug0("Discarding packet, wrong version, version=%d",preamble&0xf0);
+		cw_log_debug1("Discarding packet, wrong version, version=%d",preamble&0xf0);
 		return;
 	}
+
+
 
 	if (preamble & 0xf ) {
 		/* decode dtls */
@@ -105,9 +108,10 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 	int hlen = 4*((val >> 19) & 0x1f);
 
+
 	int payloadlen = len - hlen;
 	if (payloadlen<0){
-		cw_log_debug0("Discarding packet, hlen greater than len, hlen=%d",hlen);
+		cw_log_debug1("Discarding packet, hlen greater than len, hlen=%d",hlen);
 		/* EINVAL */
 		return;
 	}
@@ -126,8 +130,9 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		}
 		cwrmsg.rmac = packet+8;
 	}
-	else
+	else{
 		cwrmsg.rmac=NULL;
+	}
 #endif
 
 
@@ -146,6 +151,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	}
 
 	cwrmsg_init_ctrlhdr(&cwrmsg,packet+hlen,len-hlen); //f+4,*(uint32_t*)f);
+
 	process_message(conn,&cwrmsg,cb,cbarg); //packet,f+4,*(int32_t*)f);
 	return;
 }
