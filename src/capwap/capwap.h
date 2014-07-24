@@ -26,7 +26,7 @@
 
 /* capwap version and iana number */
 #define CW_VERSION 0
-#define CWIANA_ENTERPRISE_NUMBER 13277
+#define CWIANA_ENTERPRISE_NUMBER 0	/* for capwap base the number */
 
 
 /* ports */
@@ -89,10 +89,10 @@ struct capwap_ctrlhdr
 
 /* CAPWAP message types as defined in RFC 5416 */
 
-#define	CWMSG_DISCOVERY_REQUEST			1
-#define CWMSG_DISCOVERY_RESPONSE		2
-#define	CWMSG_JOIN_REQUEST			3
-#define CWMSG_JOIN_RESPONSE			4
+#define	CWMSG_DISCOVERY_REQUEST			1 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_DISCOVERY_RESPONSE		2 + CWIANA_ENTERPRISE_NUMBER*256
+#define	CWMSG_JOIN_REQUEST			3 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_JOIN_RESPONSE			4 + CWIANA_ENTERPRISE_NUMBER*256
 
 /*	Configuration Status Request         5
            Configuration Status Response        6
@@ -103,21 +103,22 @@ struct capwap_ctrlhdr
            Change State Event Request          11
            Change State Event Response         12
 */	   
-#define CWMSG_ECHO_REQUEST			13
-#define CWMSG_ECHO_RESPONSE			14
+#define CWMSG_ECHO_REQUEST			13 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_ECHO_RESPONSE			14 + CWIANA_ENTERPRISE_NUMBER*256
+
 /*          Image Data Request                  15
            Image Data Response                 16
 */
 
-#define CWMSG_RESET_REQUEST			17
-#define CWMSG_RESET_RESPONSE			18
+#define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
 
 /*
            Reset Request                       17
            Reset Response                      18
 */	   
-#define CWMSG_PRIMARY_DISCOVERY_REQUEST		19
-#define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20
+#define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 + CWIANA_ENTERPRISE_NUMBER*256
 
 /*           Data Transfer Request               21
            Data Transfer Response              22
@@ -127,7 +128,7 @@ struct capwap_ctrlhdr
            Station Configuration Response      26
 */
 
-#define CWMSG_MAXMSG				26
+#define CWMSG_MAXMSG				26 + CWIANA_ENTERPRISE_NUMBER*256
 
 
 /*
