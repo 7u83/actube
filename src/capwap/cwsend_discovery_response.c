@@ -17,20 +17,12 @@
 */
 
 
+
 #include <string.h>
 
 #include "capwap.h"
 #include "conn.h"
 #include "cwmsg.h"
-
-int conn_send_response(struct conn * conn,struct cwmsg * cwmsg,int seqnum)
-{
-	conn->last_response = cwmsg;
-//	conn->last_response_seqnum=seqnum;
-//	cwmsg_send(cwmsg,seqnum,rid,conn);
-	conn_send_cwmsg(conn,cwmsg); //,seqnum);
-	return 1;
-}
 
 void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo)
 {
@@ -38,10 +30,11 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 	cwmsg_init(cwmsg,conn->buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,radioinfo);
 	
 	cwmsg_addelem_ac_descriptor(cwmsg,acinfo);
-	cwmsg_addelem(cwmsg,CWMSGELEM_AC_NAME,(uint8_t*)acinfo->ac_name,strlen(acinfo->ac_name));
+	cwmsg_addelem(cwmsg,CWMSGELEM_AC_NAME,(uint8_t*)acinfo->ac_name,strlen((char*)acinfo->ac_name));
 	cwmsg_addelem_wtp_radio_infos(cwmsg,wtpinfo);
 	cwmsg_addelem_ctrl_ip_addrs(cwmsg,acinfo);
 
+	
 	conn_send_response(conn,cwmsg,seqnum);
 }
 
