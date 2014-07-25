@@ -20,4 +20,35 @@
 #define LWAPP_CONTROL_PORT 12223
 #define LWAPP_CONTROL_PORT_STR "12223"
 
+#define LWTH_GET_PREAMBLE(th) (th[0]) 
 
+
+#define LWMSG_DISCOVERY_REQUEST	1
+
+/*
+                  Discovery Response                   2
+                  Join Request                         3
+                  Join Response                        4
+                  Join ACK                             5
+                  Join Confirm                         6
+                  Unused                             7-9
+                  Configure Request                   10
+                  Configure Response                  11
+                  Configuration Update Request        12
+                  Configuration Update Response       13
+                  WTP Event Request                   14
+                  WTP Event Response                  15
+                  Change State Event Request          16
+                  Change State Event Response         17
+                  Unused                           18-21
+                  Echo Request                        22
+                  Echo Response                       23
+                  Image Data Request                  24
+                  Image Data Response                 25
+                  Reset Request                       26
+                  Reset Response                      27
+                  Unused                           28-29
+                  Key Update Request                  30
+                  Key Update Response                 31
+                  Primary Discovery Request           32
+*/
