@@ -79,8 +79,11 @@ extern int conf_ac_ips_len;
 
 
 extern int read_config(const char * filename);
-extern cfg_bool_t conf_ignore_wtp_source_port;
+
 extern char * conf_control_port;
+#ifdef WITH_LWAPP
+extern char * conf_lw_control_port;
+#endif
 
 extern char * conf_dtls_psk;
 
