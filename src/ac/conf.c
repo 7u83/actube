@@ -88,7 +88,19 @@ int conf_ipv6=1;
 
 
 char * conf_control_port=0;
-cfg_bool_t conf_ignore_wtp_source_port = cfg_false;
+char * conf_lw_control_port=0;
+
+
+
+
+
+
+
+
+
+
+
+
 
 static int init_acname()
 {
@@ -433,6 +445,10 @@ int read_config(const char * filename){
 		CFG_STR_LIST("bcast_addrs", "{}", CFGF_NONE),
 		CFG_STR_LIST("ac_ips","{}",CFGF_NONE),
 		CFG_SIMPLE_STR("control_port",&conf_control_port),
+#ifdef WITH_LWAPP
+		CFG_SIMPLE_STR("lw_control_port",&conf_lw_control_port),
+#endif
+
 		CFG_SIMPLE_INT("max_wtps",&conf_max_wtps),
 		CFG_SIMPLE_INT("debug_level",&conf_debug_level),
 		CFG_SIMPLE_INT("vendor_id",&conf_vendor_id),
@@ -441,10 +457,8 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("ssl_cert",&conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),
 		CFG_SIMPLE_STR("dtls_psk",&conf_dtls_psk),
-//		CFG_SIMPLE_BOOL("ignore_wtp_source_port",&conf_ignore_wtp_source_port),
 		CFG_SIMPLE_BOOL("ipv4",&conf_ipv4),
 		CFG_SIMPLE_BOOL("ipv6",&conf_ipv6),
-
 
 		CFG_SIMPLE_STR("db_file",conf_db_file),
 
@@ -465,29 +479,6 @@ int read_config(const char * filename){
 	conf_read_strings(cfg,"bcast_addrs",&conf_bcast_addrs,&conf_bcast_addrs_len);
 
 
-/*
-	n = cfg_size(cfg, "listen");
-	if (! (conf_salist = malloc(sizeof (struct sockaddr_storage)*n)) )
-		return 0;
-
-	if (! (conf_listen_addrs=malloc(sizeof(char *)*n)))
-		return 0;
-
-	memset(conf_listen_addrs,0,sizeof(char*)*n);
-
-	conf_salist_len=n;
-	for (i=0; i<n; i++) {
-		char * str = cfg_getnstr(cfg,"listen",i);
-		if (!(conf_listen_addrs[i]=malloc(strlen(str)+1)))
-				return 0;
-
-		strcpy(conf_listen_addrs[i],str);
-	}
-
-*/
-
-
-	
 
 
 
