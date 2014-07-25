@@ -27,6 +27,7 @@
 
 
 #include "capwap.h"
+#include "lwapp.h"
 
 #ifndef CONF_DEFAULT_ACNAME
 	#define CONF_DEFAULT_ACNAME "AC"
@@ -60,6 +61,10 @@
 	#define	CONF_DEFAULT_CONTROL_PORT CAPWAP_CONTROL_PORT
 #endif
 
+#ifndef CONF_DEFAULT_LW_CONTROL_PORT
+	#define	CONF_DEFAULT_LW_CONTROL_PORT LWAPP_CONTROL_PORT
+#endif
+
 
 extern char * conf_acname;
 extern char * conf_acid;
@@ -83,6 +88,7 @@ extern int read_config(const char * filename);
 extern char * conf_control_port;
 #ifdef WITH_LWAPP
 extern char * conf_lw_control_port;
+extern int conf_lwapp;
 #endif
 
 extern char * conf_dtls_psk;
