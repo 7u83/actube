@@ -87,17 +87,13 @@ int conf_ipv6=1;
 #endif
 
 
-char * conf_control_port=0;
+#ifdef WITH_LWAPP
+int conf_lwapp=1;
 char * conf_lw_control_port=0;
+#endif 
 
 
-
-
-
-
-
-
-
+char * conf_control_port=0;
 
 
 
@@ -192,6 +188,13 @@ static int init_control_port()
 	char str[30];
 	sprintf(str,"%d",CONF_DEFAULT_CONTROL_PORT);
 	conf_control_port=(char*)cw_setstr((uint8_t**)&conf_control_port,(uint8_t*)str,strlen(str));
+
+
+#ifdef WITH_LWAPP
+	sprintf(str,"%d",CONF_DEFAULT_LW_CONTROL_PORT);
+	conf_lw_control_port = strdup(str);
+#endif 
+
 	return 1;
 }
 
@@ -447,6 +450,7 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("control_port",&conf_control_port),
 #ifdef WITH_LWAPP
 		CFG_SIMPLE_STR("lw_control_port",&conf_lw_control_port),
+		CFG_SIMPLE_BOOL("lwapp",&conf_lwapp),
 #endif
 
 		CFG_SIMPLE_INT("max_wtps",&conf_max_wtps),
