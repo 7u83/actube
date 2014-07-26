@@ -31,6 +31,7 @@ extern int dtls_openssl_connect(struct conn * conn);
 
 extern int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt);
 
+extern int dtls_openssl_accept(struct conn * conn);
 
 
 
