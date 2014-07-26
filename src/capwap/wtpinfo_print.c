@@ -80,6 +80,7 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
 
 	s+=sprintf (s,"\tSoftware Version: %s\n", (!wtpinfo->software_version ? (uint8_t*)"Not set" : wtpinfo->software_version) );
+	s+=sprintf (s,"\tHardware Version: %s\n", (!wtpinfo->hardware_version ? (uint8_t*)"Not set" : wtpinfo->hardware_version) );
 
 
 	s+=sprintf (s,"\tMax Radios: %d\n",wtpinfo->max_radios);
