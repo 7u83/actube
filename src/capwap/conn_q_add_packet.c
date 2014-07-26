@@ -31,7 +31,7 @@ void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len)
 
 	if (conn->qrpos==qwpos){
 		/* no buffers, discard packet */
-		cw_log_debug0( "Discarding packet, no queu buffers left");
+		cw_log_debug0( "Discarding packet, no queue buffers left");
 		return;
 	}
 
