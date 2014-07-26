@@ -78,4 +78,9 @@ extern int wtpinfo_print(char *str, struct wtpinfo * wtpinfo);
 
 #define wtpinfo_readelem_ecn_support(wtpinfo,type,msg,len) cw_readelem_ecn_support(&wtpinfo->ecn_support,type,msg,len)
 
+
+
+extern int wtpinfo_lwreadelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len);
+
+
 #endif
