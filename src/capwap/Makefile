@@ -88,6 +88,7 @@ CAPWAPOBJS= \
 	   aciplist.o \
 	   acinfo.o \
 	   acinfo_print.o \
+	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	
 
