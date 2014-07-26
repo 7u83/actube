@@ -41,6 +41,7 @@ int ac_run();
 int main (int argc, const char * argv[]) 
 {
 
+
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");
@@ -71,6 +72,11 @@ errX:
 }
 
 void process_ctrl_packet(int  index, struct sockaddr * addr, uint8_t * buffer, int len);
+#define AC_PROTO_CAPWAP 0
+#define AC_PROTO_LWAPP 1
+
+
+
 
 int ac_run()
 {
@@ -89,7 +95,11 @@ int ac_run()
 
 	int i;
 	for(i=0; i<conf_listen_addrs_len; i++){
-		socklist_add_unicast(conf_listen_addrs[i],conf_control_port);
+		socklist_add_unicast(conf_listen_addrs[i],conf_control_port,AC_PROTO_CAPWAP);
+#ifdef WITH_LWAPP
+		if (conf_lwapp) 
+			socklist_add_unicast(conf_listen_addrs[i],conf_lw_control_port,AC_PROTO_LWAPP);
+#endif 
 	}
 
 	if (socklist_len==0){
@@ -99,12 +109,23 @@ int ac_run()
 
 	/* create multicast sockets */
 	for (i=0; i<conf_mcast_groups_len;i++){
-		socklist_add_multicast(conf_mcast_groups[i],conf_control_port);
+		socklist_add_multicast(conf_mcast_groups[i],conf_control_port,AC_PROTO_CAPWAP);
+#ifdef WITH_LWAPP
+		if (conf_lwapp) 
+			socklist_add_multicast(conf_mcast_groups[i],conf_lw_control_port,AC_PROTO_LWAPP);
+#endif 
+
 	}
 
 	/* broadcast sockety ipv4 only */
 	for (i=0; i<conf_bcast_addrs_len;i++){
-		socklist_add_broadcast(conf_bcast_addrs[i],conf_control_port);
+		socklist_add_broadcast(conf_bcast_addrs[i],conf_control_port,AC_PROTO_CAPWAP);
+#ifdef WITH_LWAPP
+		printf("Adding %d\n",socklist_len);
+		if (conf_lwapp) 
+			socklist_add_broadcast(conf_bcast_addrs[i],conf_lw_control_port,AC_PROTO_LWAPP);
+		printf ("SI %d, PROTO: %d\n",socklist_len-1,socklist[socklist_len-1].ac_proto);
+#endif 
 	}
 
 
@@ -163,21 +184,10 @@ int ac_run()
 }
 
 
-
-
-
-
-void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
+void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
 {
 	int sock = socklist[index].reply_sockfd;
 
-#ifdef WITH_CW_LOG_DEBUG
-	char str[100];
-	sock_addrtostr(addr,str,100);
-	cw_log_debug1("Received packet from %s, len = %i, via %s\n",str,len,
-			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
-	cw_log_debug2_dump(buffer,len,"Packet data for packet, recevied from %s",str);
-#endif	
 
 	/* first of all check preamble */
 	int preamble = CWTH_GET_PREAMBLE(buffer);
@@ -216,6 +226,103 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 
 	wtpman_addpacket(wtpman,buffer,len);
 	wtplist_unlock();
+}
+
+
+
+void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
+{
+	int sock = socklist[index].reply_sockfd;
+
+	uint8_t * m = buffer+6;
+	uint32_t val = ntohl(*((uint32_t*)(m)));
+
+
+	printf ("VAL: %08X\n",val);
+
+	
+
+	/* first of all check preamble */
+	int version = LWTH_GET_VERSION(m);
+
+	if (version != LW_VERSION){
+		cw_log_debug1("Discarding LWAPP packet, wrong verson");
+		return;
+	}
+
+	int l = LWTH_GET_LENGTH(m);
+	printf ("LEN = %d\n",l);
+
+	if (l+12 != len){
+		cw_log_debug1("Discarding LWAPP packet, wrong length");
+		return;
+	}
+
+	wtplist_lock();
+	struct wtpman * wtpman = wtplist_get(addr);
+	if (!wtpman){
+
+		wtpman = wtpman_create(index,addr);
+
+		if (!wtpman ){
+			cw_log(LOG_ERR,"Error creating wtpman: %s",strerror(errno));
+			wtplist_unlock();
+			return;
+		}
+		
+
+		if (!wtplist_add(wtpman)){
+			cw_log(LOG_ERR,"Error adding wtpman: Too many wtp connections");
+			wtpman_destroy(wtpman);
+			wtplist_unlock();
+			return;
+		};
+
+		wtpman_lw_start(wtpman);
+	}
+
+	wtpman_lw_addpacket(wtpman,buffer,len);
+	wtplist_unlock();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
+{
+
+#ifdef WITH_CW_LOG_DEBUG
+	char str[100];
+	sock_addrtostr(addr,str,100);
+	cw_log_debug1("Received packet from %s, len = %i, via %s\n",str,len,
+			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
+	cw_log_debug2_dump(buffer,len,"Packet data for packet, recevied from %s",str);
+#endif	
+	printf("Index is %d\n",index);
+	printf ("AC PROTO %d\n",socklist[index].ac_proto);
+
+	switch (socklist[index].ac_proto){
+		case AC_PROTO_CAPWAP:
+			process_cw_ctrl_packet(index,addr,buffer,len);
+			return;
+		case AC_PROTO_LWAPP:
+			process_lw_ctrl_packet(index,addr,buffer,len);
+			return;
+	}
+
 }
 
 
