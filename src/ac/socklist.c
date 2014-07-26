@@ -46,7 +46,7 @@ int socklist_init()
 
 
 	socklist = malloc(sizeof(struct socklistelem) * SOCKLIST_SIZE);
-	memset(socklist,0,sizeof(struct socklistelem)*SOCKLIST_SIZE);
+	memset(socklist,0,sizeof(struct socklistelem) * SOCKLIST_SIZE);
 	if (!socklist){
 		cw_log(LOG_ERR,"Fatal error while initializing socklist: %s",strerror(errno));
 		return 0;
@@ -82,6 +82,9 @@ void socklist_destroy()
 
 static int find_reply_socket(struct sockaddr *sa,int bc)
 {
+
+	printf("Looking for best sock of: %s\n",sockaddr2str(sa));
+
 	int bestsockfd = -1;
 	int i;
 	for (i=0; i<socklist_len; i++){
@@ -95,6 +98,16 @@ static int find_reply_socket(struct sockaddr *sa,int bc)
 
 		if (sa->sa_family!=sn.ss_family)
 			continue;
+
+		if (sn.ss_family == AF_INET){
+			int p1 = ntohs(((struct sockaddr_in *)sa)->sin_port);
+			int p2 = ntohs(((struct sockaddr_in *)&sn)->sin_port);
+			if (p1 != p2)
+				continue;
+			
+		}
+
+
 
 		if (bestsockfd == -1)
 			bestsockfd = socklist[i].sockfd;
@@ -135,7 +148,7 @@ void socklist_del_connection(int index)
 
 
 
-int socklist_add_multicast(const char * addr, const char * port)
+int socklist_add_multicast(const char * addr, const char * port,int ac_proto)
 {
 
 	struct addrinfo hints;
@@ -217,6 +230,7 @@ int socklist_add_multicast(const char * addr, const char * port)
 		socklist[socklist_len].reply_sockfd=rfd;
 		socklist[socklist_len].type=SOCKLIST_BCASTMCAST_SOCKET;
 		socklist[socklist_len].family=sa->sa_family;
+		socklist[socklist_len].ac_proto=ac_proto;
 
 		socklist_len++;
 
@@ -228,7 +242,7 @@ int socklist_add_multicast(const char * addr, const char * port)
 }
 
 
-int socklist_add_unicast(const char *addr, const char * port) 
+int socklist_add_unicast(const char *addr, const char * port, int ac_proto) 
 {
 	struct addrinfo hints;
 	struct addrinfo * res,*res0;
@@ -265,6 +279,7 @@ int socklist_add_unicast(const char *addr, const char * port)
 		socklist[socklist_len].reply_sockfd=sockfd;
 		socklist[socklist_len].family=sa->sa_family;
 		socklist[socklist_len].type=SOCKLIST_UNICAST_SOCKET;
+		socklist[socklist_len].ac_proto=ac_proto;
 	
 		socklist_len++;
 		cw_log(LOG_INFO,"Bound to: %s (%i)\n",addr,sockfd);
@@ -274,7 +289,7 @@ int socklist_add_unicast(const char *addr, const char * port)
 	return 1;
 }
 
-int socklist_add_broadcast(const char *addr, const char * port)
+int socklist_add_broadcast(const char *addr, const char * port,int ac_proto)
 {
 	struct addrinfo hints;
 	struct addrinfo * res,*res0;
@@ -329,9 +344,12 @@ int socklist_add_broadcast(const char *addr, const char * port)
 		socklist[socklist_len].reply_sockfd=rfd;
 		socklist[socklist_len].type=SOCKLIST_BCASTMCAST_SOCKET;
 		socklist[socklist_len].family=sa->sa_family;
+		socklist[socklist_len].ac_proto=ac_proto;
+		printf ("AC INIT PROTO : %d, i %i\n",ac_proto,socklist_len);
+		printf ("sock proto %d\n",socklist[socklist_len].ac_proto);
 		socklist_len++;
 
-		cw_log(LOG_INFO,"Bound to broadcast: %s (%i) (R:%i)\n",addr,sockfd,rfd);
+		cw_log(LOG_INFO,"Bound to broadcast: %s:%s (%i,R:%i,I:%d)\n",addr,port,sockfd,rfd,socklist_len-1);
 	}
 
 	freeaddrinfo(res0);	
