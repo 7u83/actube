@@ -32,12 +32,13 @@ struct socklistelem{
 	int type;
 	int family;
 	int wtpcount;
+	int ac_proto;
 };
 
 
-extern int socklist_add_multicast(const char * addr, const char * port);
-extern int socklist_add_unicast(const char *addr, const char * port);
-extern int socklist_add_broadcast(const char *addr, const char * port);
+extern int socklist_add_multicast(const char * addr, const char * port, int ac_proto);
+extern int socklist_add_unicast(const char *addr, const char * port, int ac_proto);
+extern int socklist_add_broadcast(const char *addr, const char * port,int ac_proto);
 extern int socklist_init();
 extern void socklist_destroy();
 extern struct socklistelem * socklist;
@@ -46,6 +47,5 @@ extern void socklist_lock();
 extern void socklist_unlock();
 void socklist_add_connection(int index);
 void socklist_del_connection(int index);
-
 
 #endif
