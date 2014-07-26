@@ -64,7 +64,7 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen)
 		case AF_LINK:
 			{
 				struct sockaddr_dl *sl=(struct sockaddr_dl*)sa;
-				sock_hwaddrtostr(((uint8_t*)sl->sdl_data)+sl->sdl_nlen,sl->sdl_alen,s);
+				sock_hwaddrtostr(((uint8_t*)sl->sdl_data)+sl->sdl_nlen,sl->sdl_alen,s,":");
 
 			}
 			break;
