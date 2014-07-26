@@ -325,6 +325,7 @@ extern void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct r
 extern void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
+extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 
 
 #endif
