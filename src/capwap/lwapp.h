@@ -37,6 +37,8 @@
 #define LWTH_GET_FRAGID(th) (th[1])
 #define LWTH_GET_LENGTH(th) (ntohl(*((uint32_t*)(th)))&0xffff)
 
+#define LWTH_SET_VERSION(th,v) (th[0] = (th[0]&0x3f) | (v<<6))
+#define LWTH_SET_C_FLAG(th,v)  (th[0] = (th[0]&0xfd) | (v<<1))
 
 
 #define LWMSG_GET_TYPE(m) (m[0])
