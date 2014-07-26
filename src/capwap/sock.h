@@ -56,9 +56,9 @@ extern int sock_set_dontfrag(int sock,int val);
 
 extern char * sock_get_primary_if(int family);
 
-#define sockaddr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64 ) )
-#define hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
-#define hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
+#define sock_addr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64 ) )
+#define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
+#define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
 
 
 //#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
