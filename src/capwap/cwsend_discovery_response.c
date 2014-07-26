@@ -24,8 +24,12 @@
 #include "conn.h"
 #include "cwmsg.h"
 
+#include "cw_log.h"
+
 void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo)
 {
+	cw_log_debug1("Sending discovery response, seq = %d",seqnum);
+
 	struct cwmsg * cwmsg = &conn->swm;	
 	cwmsg_init(cwmsg,conn->buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,radioinfo);
 	
