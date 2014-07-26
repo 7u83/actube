@@ -16,11 +16,48 @@
 
 */
 
+#include <arpa/inet.h>
+
+
+/* version */
+#define LW_VERSION 0
+
+
 /* ports */
 #define LWAPP_CONTROL_PORT 12223
 #define LWAPP_CONTROL_PORT_STR "12223"
 
-#define LWTH_GET_PREAMBLE(th) (th[0]) 
+
+/* macros to access transport header */
+#define LWTH_GET_VERSION(th) (th[0]>>6)
+#define LWTH_GET_L_FLAG(th) (th[0]&0x1)
+#define LWTH_GET_F_FLAG(th) (th[0]&0x2)
+#define LWTH_GET_C_FLAG(th) (th[0]&0x4)
+#define LWTH_GET_RID(th) ((th[0]&0x38)>>3)
+#define LWTH_GET_FRAGID(th) (th[1])
+#define LWTH_GET_LENGTH(th) (ntohl(*((uint32_t*)(th)))&0xffff)
+
+
+
+#define LWMSG_GET_TYPE(m) (m[0])
+#define LWMSG_GET_SEQNUM(m) (m[1])
+#define LWMSG_GET_LEN(m) ( (ntohl(*((uint32_t*)(m)))&0xffff) )
+#define LWMSG_GET_SESSIONID(m) ( ntohl(*  ( ( (uint32_t*)(m))[1])   ) )
+#define LWMSG_GET_DATA(m) (m+8)
+
+
+#define LWMSGELEM_GET_TYPE(m) (m[0])
+#define LWMSGELEM_GET_LEN(m) (  (ntohl(*((uint32_t*)(m)))>>8)&0xffff )
+#define LWMSGELEM_GET_DATA(m) (m+3)
+
+
+
+
+#define lw_foreach_msgelem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+
+//#define LWAPP_PACKET_PREAMBLE (CW_VERSION<<4)
+//#define LWAPP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
+
 
 
 #define LWMSG_DISCOVERY_REQUEST	1
@@ -52,3 +89,7 @@
                   Key Update Response                 31
                   Primary Discovery Request           32
 */
+
+
+
+#define LWMSGELEM_WTP_DESCRIPTOR 3
