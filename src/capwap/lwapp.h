@@ -62,11 +62,10 @@
 
 
 
-#define LWMSG_DISCOVERY_REQUEST	1
+#define LWMSG_DISCOVERY_REQUEST		1
+#define LWMSG_DISCOVERY_RESPONSE	2
 
-/*
-                  Discovery Response                   2
-                  Join Request                         3
+/*                  Join Request                         3
                   Join Response                        4
                   Join ACK                             5
                   Join Confirm                         6
