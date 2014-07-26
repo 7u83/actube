@@ -22,7 +22,7 @@
 
 #include "conf.h"
 
-
+#include "lwmsg.h"
 
 
 #include <errno.h>
@@ -51,16 +51,23 @@ static void wtpman_run_discovery(void *arg)
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	
 	struct cwrmsg * cwrmsg;
+
+	printf("con get message\n");
+
 //	do {
 		cwrmsg = conn_get_message(wtpman->conn);
 //	}while (!cwrmsg);
 
+	printf("cwrmsg = %p\n",cwrmsg);
 
 	if ( !cwrmsg)
 	{
 		wtpman_remove(wtpman);
 		return;
 	}
+
+
+	printf("cwrmswg type = %08X\n",cwrmsg->type);
 
 	if (cwrmsg->type==CWMSG_DISCOVERY_REQUEST){	
 		process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
@@ -161,7 +168,7 @@ static void wtpman_run(void *arg)
 		msg_counter=0;
 
 
-		if (cwrmsg->type = CWMSG_ECHO_REQUEST){
+		if (cwrmsg->type == CWMSG_ECHO_REQUEST){
 			cwsend_echo_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
 		}
 		printf("Got msg: %i\n",cwrmsg->type);
@@ -246,11 +253,83 @@ void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
 }
 
 
+void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
+{
+	uint8_t * m = packet+12;
+	int l = LWTH_GET_LENGTH(packet+6);
+
+	uint8_t * msg = packet+12;
+
+
+	int msgtype = LWMSG_GET_TYPE(msg);	
+	int msglen = LWMSG_GET_LEN(msg);	
+	printf ("Type is %d, Len is %d\n",msgtype,msglen);
+	
+	uint8_t * msgdata = LWMSG_GET_DATA(msg);
+
+/*
+	int c=0; 
+	while (c < msglen){
+		int eltype = LWMSGELEM_GET_TYPE(data);
+		int ellen = LWMSGELEM_GET_LEN(data);
+		printf ("ELEM TYPE: %d, LEN: %d\n",eltype,ellen);
+		c+=ellen+3;
+		data=data+ellen+3;
+	}	
+
+*/
+
+	uint8_t * data;
+
+	lw_foreach_msgelem(data,msgdata,msglen){
+		int eltype = LWMSGELEM_GET_TYPE(data);
+		int ellen = LWMSGELEM_GET_LEN(data);
+		uint8_t * eldata = LWMSGELEM_GET_DATA(data);
+
+		wtpinfo_lwreadelem_wtp_descriptor(&wtpman->wtpinfo,eltype,eldata,ellen);
+
+		printf ("ELEM TYPE: %d, LEN: %d\n",eltype,ellen);
+
+	}
+
+
+	char wi[4096];
+	wtpinfo_print(wi,&wtpman->wtpinfo);
+	printf ("WTPINFO: \n%s\n",wi);
+
+
+	
+	char buffer[2048];
+	struct lwmsg lwmsg;
+	lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
+	
+	conn_send_packet(wtpman->conn,buffer,60);
+
+	
+
+	
+
+
+
+}
+
 
 void wtpman_start(struct wtpman * wtpman,int dtlsmode)
 {
-	if ( dtlsmode )
+	if ( dtlsmode ){
+		cw_log_debug1("Starting wtpman in dtls mode");
 		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run, (void *) wtpman);
-	else
+	}
+	else{
+		cw_log_debug1("Starting wtpman in non-dtls mode");
 		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run_discovery, (void *) wtpman);
+	}
 }
+
+
+void wtpman_lw_start(struct wtpman * wtpman)
+{
+
+}
+
+
