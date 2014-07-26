@@ -83,7 +83,7 @@ void socklist_destroy()
 static int find_reply_socket(struct sockaddr *sa,int bc)
 {
 
-	printf("Looking for best sock of: %s\n",sockaddr2str(sa));
+	printf("Looking for best sock of: %s\n",sock_addr2str(sa));
 
 	int bestsockfd = -1;
 	int i;
