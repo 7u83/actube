@@ -20,6 +20,8 @@
 #include <stdlib.h>
 
 #include "capwap.h"
+#include "capwap_ieee80211.h"
+
 #include "sock.h"
 
 int radioinfo_print(char * str, struct radioinfo * radioinfo)
@@ -28,18 +30,18 @@ int radioinfo_print(char * str, struct radioinfo * radioinfo)
 
 	s += sprintf(s,"\t  RID %d\n",radioinfo->rid);
 	s += sprintf(s,"\t  Modes: ");
-	if(radioinfo->type & CWRADIO_TYPE_B){
+	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_B){
 		s+=sprintf(s,"B");
 	}
-	if(radioinfo->type & CWRADIO_TYPE_G){
+	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_G){
 		s+=sprintf(s,"G");
 	}
 
-	if(radioinfo->type & CWRADIO_TYPE_A){
+	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_A){
 		s+=printf(s,"A");
 	}
 
-	if(radioinfo->type & CWRADIO_TYPE_N){
+	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_N){
 		s+=sprintf(s,"N");
 	}
 
@@ -136,6 +138,10 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	s+=sprintf (s,"\tVendor ID: %d\n", wtpinfo->vendor_id );
 	s+=sprintf (s,"\tModel No.: %s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
 	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
+
+//	s+=sprintf (s,"\tBoard Id: %s\n", (!wtpinfo->board_id ? (uint8_t*)"Not set" : wtpinfo->board_id) );
+
+
 
 	s+=sprintf (s,"\tSoftware Version: ");
 	s+=version_print(s,wtpinfo->software_version,wtpinfo->software_version_len,wtpinfo->software_vendor_id);
