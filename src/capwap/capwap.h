@@ -266,11 +266,6 @@ extern void wtpinfo_set_location(struct wtpinfo * wtpinfo, uint8_t * str, int le
 extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int len);
 
 
-#define CWRADIO_TYPE_B		1
-#define CWRADIO_TYPE_A		2
-#define CWRADIO_TYPE_G		4
-#define CWRADIO_TYPE_N		8
-
 /* wtp mac types */
 #define WTP_MAC_TYPE_LOCAL	0
 #define WTP_MAC_TYPE_SPLIT	1
@@ -308,7 +303,10 @@ extern void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * 
 extern void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo);
 extern void cwmsg_addelem_wtp_board_data(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn);
-extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
+
+//extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
+extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct radioinfo * radioinfos);
+
 extern void cwmsg_addelem_result_code(struct cwmsg *msg,int rc);
 
 //extern void cwsend_discovery_reponse(struct conn * conn, struct ac_info * acinfo);
