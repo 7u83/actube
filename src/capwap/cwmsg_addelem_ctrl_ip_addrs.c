@@ -20,13 +20,16 @@
 
 #include "capwap.h"
 #include "acinfo.h"
+#include "cw_log.h"
 
 
 #include "sock.h"
 
 //static int cwmsg_addelem_acip(struct cwmsg * msg,ACIP *ip,int ctr)
-static int cwmsg_addelem_acip(void * priv,void *data,int ctr)
+static int cwmsg_addelem_acip(void * priv,void *data) //,int ctr)
 {
+	cw_log_debug2("Adding IP %s",sock_addr2str((struct sockaddr*)data));
+
 	struct cwmsg * msg = (struct cwmsg*)priv;
 	ACIP * acip = (ACIP*)data;
 
@@ -63,14 +66,12 @@ void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo)
 }
 
 
-
+/*
 
 void ucwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo)
 {
 	int i;
 
-//	printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa\n");
-//	printf("add elem %i\n",acinfo->salist_len);
 
 	for (i=0; i<acinfo->salist_len; i++)
 	{
@@ -78,20 +79,18 @@ void ucwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo)
 		switch (acinfo->salist[i].sa_family){
 			case AF_INET:
 			{
-//				printf("v4\n");
 				struct sockaddr_in  * sain = (struct sockaddr_in*)&acinfo->salist[i];
 				memcpy(ipmsg,&sain->sin_addr, sizeof(sain->sin_addr));
-				*((uint16_t*)(ipmsg+4))= htons(0); /* number of wtps */
+				*((uint16_t*)(ipmsg+4))= htons(0); // number of wtps 
 				cwmsg_addelem(msg,CWMSGELEM_CONTROL_IPV4_ADDRESS,ipmsg,6);
 			}
-				break;
+			break;
 #ifdef WITH_IPV6				
 			case AF_INET6:
 			{
-//				printf("v6\n");
 				struct sockaddr_in6  * sain = (struct sockaddr_in6*)&acinfo->salist[i];
 				memcpy(ipmsg,&sain->sin6_addr, sizeof(sain->sin6_addr));
-				*((uint16_t*)(ipmsg+16))= htons(0); /* number of wtps */
+				*((uint16_t*)(ipmsg+16))= htons(0); // number of wtps 
 				cwmsg_addelem(msg,CWMSGELEM_CONTROL_IPV6_ADDRESS,ipmsg,18);
 			}
 			break;
@@ -100,4 +99,4 @@ void ucwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo)
 	}
 }
 
-
+*/
