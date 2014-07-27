@@ -1,7 +1,27 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
 #include "capwap.h"
 #include "wtpinfo.h"
 
 #include "cw_util.h"
+#include "cw_log.h"
 
 int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len)
 {
@@ -15,8 +35,15 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 	wtpinfo->radios_in_use=*(msgelem+1);
 
 	int ncrypt = *(msgelem+2);
-
-	int i=ncrypt*3+3;
+	int i;
+	if (ncrypt == 0){
+		/* non-conform */
+		cw_log_debug1("Non-standard-conform WTP descriptor detected (See RFC 5415)");
+		i=4;
+	}
+	else{
+		i=ncrypt*3+3;
+	}
 
 	do {
 		if (i+8>=len)
@@ -30,11 +57,12 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 		i+=8;
 
 		if (sublen+i>len){
-			//printf("Wrong sublen ba %d\n",sublen);
+			cw_log_debug1("WTP descriptor subelement too long, length = %d",sublen);
 			return -1;
 		}
 
-
+		cw_log_debug2("Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
+	
 		switch(subtype){
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION:
 				wtpinfo->hardware_vendor_id=vendor_id;
@@ -49,7 +77,7 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 				cw_setstr(&wtpinfo->bootloader_version,msgelem+i,sublen);
 				break;
 			default:
-				//printf("unknown !!!\n");
+				cw_log_debug1("Unknown WTP descriptor subelement, type = %d",subtype);
 				break;
 		}
 		i+=sublen;
