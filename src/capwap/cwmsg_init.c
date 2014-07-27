@@ -51,7 +51,7 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 	cwmsg->ctrlhdr=cwmsg->trnsprthdr+hlen; 
 	cwmsg->msgelems=cwmsg->ctrlhdr+8;
 
-	*((uint32_t*)(cwmsg->ctrlhdr))=htonl(type+CWIANA_ENTERPRISE_NUMBER*256);
+	*((uint32_t*)(cwmsg->ctrlhdr))=htonl(type); 
 
 	cwmsg->pos=0;
 	cwmsg->hlen=hlen/4;
