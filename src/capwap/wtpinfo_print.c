@@ -70,6 +70,33 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	else
 		s+=sprintf(s,"Not set\n");
 
+	char disctypestr[32];
+	switch(wtpinfo->discovery_type){
+		case CW_DISCOVERY_TYPE_STATIC:
+			sprintf(disctypestr,"Static");
+			break;
+			
+		case CW_DISCOVERY_TYPE_DHCP:
+			sprintf(disctypestr,"DHCP");
+			break;
+			
+		case CW_DISCOVERY_TYPE_DNS:
+			sprintf(disctypestr,"DNS");
+			break;
+
+		case CW_DISCOVERY_TYPE_AC_REFERRAL:
+			sprintf(disctypestr,"AC Referral");
+			break;
+
+		default:
+			sprintf(disctypestr,"Unknown");
+			break;
+
+	}
+	s+=sprintf (s,"\tDiscovery Type: %s\n",disctypestr);
+
+
+
 	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,hstr,64);
 	s+=sprintf (s,"\tLocal IP: %s\n",hstr);
 
