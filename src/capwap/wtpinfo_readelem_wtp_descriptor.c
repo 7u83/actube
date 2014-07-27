@@ -67,14 +67,17 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION:
 				wtpinfo->hardware_vendor_id=vendor_id;
 				cw_setstr(&wtpinfo->hardware_version,msgelem+i,sublen);
+				wtpinfo->hardware_version_len=sublen;
 				break;
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION:
 				wtpinfo->software_vendor_id=vendor_id;
 				cw_setstr(&wtpinfo->software_version,msgelem+i,sublen);
+				wtpinfo->software_version_len=sublen;
 				break;
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION:
 				wtpinfo->bootloader_vendor_id=vendor_id;
 				cw_setstr(&wtpinfo->bootloader_version,msgelem+i,sublen);
+				wtpinfo->bootloader_version_len=sublen;
 				break;
 			default:
 				cw_log_debug1("Unknown WTP descriptor subelement, type = %d",subtype);
