@@ -74,6 +74,8 @@
 /*
  * control header stuff
  */ 
+
+/*
 struct capwap_ctrlhdr
 {
 	int msgtype;
@@ -82,7 +84,7 @@ struct capwap_ctrlhdr
 	uint8_t * msgelems;
 	int msgelemslen;
 };
-
+*/
 
 //extern int capwap_parse_trnsprthdr(struct capwap_trnsprthdr * cwh,uint8_t *msg, int msglen);
 //extern int capwap_parse_ctrlhdr(struct capwap_ctrlhdr * ch,uint8_t * msg, int len);
@@ -188,9 +190,10 @@ struct capwap_ctrlhdr
 /*   Returned Message Element                             34
 */   
 #define CWMSGELEM_SESSION_ID			35
-/*   Statistics Timer                                     36
-   Vendor Specific Payload                              37
- */
+/*   Statistics Timer                                     36 
+*/
+#define CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD	37
+
 #define CWMSGELEM_WTP_BOARD_DATA		38
    
 #define CWMSGELEM_WTP_DESCRIPTOR		39
@@ -326,6 +329,8 @@ extern void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, i
 extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
+
+extern const char * cw_msgelemtostr(int elem);
 
 
 #endif
