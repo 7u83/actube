@@ -1,3 +1,21 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 
 #include <stdio.h> //tube
 #include <stdlib.h>
@@ -9,11 +27,10 @@
 #include "cw_log.h"
 #include "cw_util.h"
 
-//static int wtpinfo_readelem_discovery_req(struct wtpinfo *wtpinfo,int type,uint8_t* msgelem,int len)
 static int wtpinfo_readelem_discovery_req(void * w,int type,uint8_t* msgelem,int len)
 {
 	struct wtpinfo * wtpinfo = (struct wtpinfo *)w;
-	cw_log_debug1("Process discovery req msgelem, type=%d, len=%d\n",type,len);
+	cw_log_debug1("Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
 
 	if (wtpinfo_readelem_discovery_type(wtpinfo,type,msgelem,len)) 
 		return 1;
@@ -32,7 +49,6 @@ static int wtpinfo_readelem_discovery_req(void * w,int type,uint8_t* msgelem,int
 
 	if (wtpinfo_readelem_wtp_radio_info(wtpinfo,type,msgelem,len))
 		return 1;
-
 	return 0;
 
 }
