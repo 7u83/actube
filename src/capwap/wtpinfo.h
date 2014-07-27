@@ -45,10 +45,13 @@ struct wtpinfo{
 
 
 	uint8_t * hardware_version;
+	int hardware_version_len;
 	uint32_t hardware_vendor_id;
 	uint8_t * software_version;
+	int software_version_len;
 	uint32_t  software_vendor_id;
 	uint8_t * bootloader_version;
+	int bootloader_version_len;
 	uint32_t bootloader_vendor_id;
 
 	uint8_t * macaddress;
