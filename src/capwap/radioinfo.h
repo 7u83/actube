@@ -23,9 +23,11 @@
 struct radioinfo{
 	int rid;
 	uint32_t type;
-#ifdef WITH_RMAC_SUPPORT
+//#ifdef WITH_RMAC_SUPPORT
+
 	uint8_t * rmac;
-#endif	
+
+//#endif	
 
 };
 
