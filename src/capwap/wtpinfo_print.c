@@ -49,6 +49,37 @@ int radioinfo_print(char * str, struct radioinfo * radioinfo)
 
 }
 
+
+static int version_print(char *s, const uint8_t *version, int len, uint32_t vendor)
+{
+	
+	if (!version)
+		return sprintf(s,"Not set\n");
+
+	int rs=0;	
+	int i;
+	for (i=0; i<len && i<20; i++){
+		rs+=sprintf(s+rs,"%02X",version[i]);
+	}
+
+	int dot=0;
+
+	rs+=sprintf(s+rs," (");
+	for (i=0; i<len && i<20; i++){
+		if (dot) 
+			rs+=sprintf(s+rs,".");
+		dot=1;
+		rs+=sprintf(s+rs,"%d",version[i]);
+	}
+	rs+=sprintf(s+rs,")");
+
+
+	rs+=sprintf(s+rs,", Vendor Id: %d",vendor);
+	rs+=sprintf(s+rs,"\n");
+	return rs;	
+	
+}
+
 int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 {
 	char hstr[64];
@@ -106,8 +137,21 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	s+=sprintf (s,"\tModel No.: %s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
 	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
 
-	s+=sprintf (s,"\tSoftware Version: %s\n", (!wtpinfo->software_version ? (uint8_t*)"Not set" : wtpinfo->software_version) );
-	s+=sprintf (s,"\tHardware Version: %s\n", (!wtpinfo->hardware_version ? (uint8_t*)"Not set" : wtpinfo->hardware_version) );
+	s+=sprintf (s,"\tSoftware Version: ");
+	s+=version_print(s,wtpinfo->software_version,wtpinfo->software_version_len,wtpinfo->software_vendor_id);
+	s+=sprintf (s,"\tHardware Version: ");
+	s+=version_print(s,wtpinfo->hardware_version,wtpinfo->hardware_version_len,wtpinfo->hardware_vendor_id);
+	s+=sprintf (s,"\tBootloader Version: ");
+	s+=version_print(s,wtpinfo->bootloader_version,wtpinfo->bootloader_version_len,wtpinfo->bootloader_vendor_id);
+		
+
+
+
+//, (!wtpinfo->software_version ? (uint8_t*)"Not set" : wtpinfo->software_version) );
+
+
+
+//	s+=sprintf (s,"\tHardware Version: %s\n", (!wtpinfo->hardware_version ? (uint8_t*)"Not set" : wtpinfo->hardware_version) );
 
 
 	s+=sprintf (s,"\tMax Radios: %d\n",wtpinfo->max_radios);
