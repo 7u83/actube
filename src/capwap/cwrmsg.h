@@ -9,9 +9,9 @@ struct cwrmsg{
 	int type;
 	int seqnum;
 	int msglen;
-#ifdef WITH_RMAC_SUPPORT
+//#ifdef WITH_RMAC_SUPPORT
 	uint8_t * rmac;
-#endif
+//#endif
 
 };
 
