@@ -22,7 +22,7 @@ int acinfo_print(char *str,const struct ac_info *acinfo)
 	sock_addrtostr((struct sockaddr*)&acinfo->local_ip,help,64);
 	s+=sprintf(s,"\tLocal IP: %s\n",help);
 	s+=sprintf(s,"\tECN support: %s\n",acinfo->ecn_support==0 ? "limited" : "full");
-	s+=sprintf(s,"\tRMAC support: %s\n",acinfo->rmac==2 ? "supported" : "not supported");
+	s+=sprintf(s,"\tRMAC support: %s\n",acinfo->rmac==1 ? "supported" : "not supported");
 
 
 	help[0]=0;
