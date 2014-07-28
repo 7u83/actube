@@ -30,11 +30,20 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 	cwmsg->buffer=buffer;
 	cwmsg->trnsprthdr=buffer;
 
-#ifdef WITH_RMAC_SUPPORT	
+
+
+//#ifdef WITH_RMAC_SUPPORT	
 	int rmaclen;
-	if (radioinfo->rmac){
-		rmaclen=(*radioinfo->rmac)+1;
-		memcpy(buffer+8,radioinfo->rmac,rmaclen);
+	if (radioinfo->rmac[0]){
+		/* we assume the radio mac is already aligned */
+
+		rmaclen=(*radioinfo->rmac);
+
+		printf ("Adding rmac len %d\n",rmaclen);
+		printf ("Real copy woul dbe %d\n",rmaclen/8+8);
+
+
+		memcpy(buffer+8,radioinfo->rmac,rmaclen/8+8);
 		cwmsg->flags=CWTH_FLAGS_M;	
 	}
 	else
@@ -45,7 +54,7 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 	hlen+=rmaclen;
 	if (hlen%4)
 		hlen = (hlen>>2)*4+4;
-#endif	
+//#endif	
 
 	
 	cwmsg->ctrlhdr=cwmsg->trnsprthdr+hlen; 
