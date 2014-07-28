@@ -50,7 +50,7 @@ int __old_cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * co
 
 	while (packetlen>mtu){
 		val = (preamble << 24) | ((hlen/4)<<19) | (rid<<14) |(wbid<<9) | 
-				CWTH_FLAGS_T |
+				/*CWTH_FLAGS_T | */
 				CWTH_FLAGS_F |
 				cwmsg->flags;
 		*((uint32_t*)ptr)=htonl(val);
@@ -71,7 +71,7 @@ int __old_cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * co
 	}
 
 	val = (preamble << 24) | ((hlen/4)<<19) | (rid<<14) |(wbid<<9) | 
-		CWTH_FLAGS_T|cwmsg->flags;
+		/*CWTH_FLAGS_T|*/ cwmsg->flags;
 
 	if (fragoffset)
 		val |= CWTH_FLAGS_F | CWTH_FLAGS_L;
