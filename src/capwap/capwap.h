@@ -230,8 +230,8 @@ struct capwap_ctrlhdr
 
 /* */
 #define CWACSECURITY_FLAGS_R		1	/* Reserved */
-#define CWACSECURITY_FLAGS_S		2	/* DTLS psk */
-#define CWACSECURITY_FLAGS_X		4	/* X.509 */
+#define CWACSECURITY_FLAGS_X		2	/* X.509 */
+#define CWACSECURITY_FLAGS_S		4	/* DTLS psk */
 
 
 #define CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION		0
