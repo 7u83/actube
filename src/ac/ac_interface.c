@@ -11,10 +11,13 @@
 #include "conf.h"
 
 #include "capwap.h"
+#include "capwap_ieee80211.h"
 
 ACIPLIST * get_aciplist()
 {
 	int i=0;
+	printf ("=================================================================\n");
+	printf ("Want add ac ips %d \n",socklist_len);
 
 	ACIPLIST * aciplist = aciplist_create();
 	if(!aciplist)
@@ -37,8 +40,9 @@ ACIPLIST * get_aciplist()
 			continue;
 
 		sock_copyaddr(&acip->ip,(struct sockaddr*)&sa);
-		acip->wtp_count=17;
+		acip->wtp_count=0;
 
+		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
 
 		aciplist_add(aciplist,acip);
 
@@ -49,8 +53,15 @@ ACIPLIST * get_aciplist()
 
 
 
+int pr(void *x,void *y){
+	printf ("Da is was\n");
+}
 
 
+struct radioinfo * get_radioinfo()
+{
+	
+}
 
 struct ac_info * get_acinfo()
 {
@@ -67,7 +78,7 @@ struct ac_info * get_acinfo()
 	acinfo->limit=10000;
 	acinfo->active_wtps=10;
 	acinfo->max_wtps=conf_max_wtps;
-	acinfo->rmac=2; /* radio mac not supported */
+	acinfo->rmac=1; 	/* radio mac supported */
 
 	acinfo->vendor_id=conf_vendor_id;
 	acinfo->hardware_version=(uint8_t*)conf_hardware_version;
@@ -75,8 +86,11 @@ struct ac_info * get_acinfo()
 
 	if (conf_dtls_psk)
 		acinfo->security|=AC_SECURITY_S;
+	if (conf_dtls_psk)
+		acinfo->security|=AC_SECURITY_X;
 
-	acinfo->dtls_policy = AC_DTLS_POLICY_C;
+
+	acinfo->dtls_policy = AC_DTLS_POLICY_C | AC_DTLS_POLICY_D ;
 //	acinfo->ac_ips = conf_ac_ips;
 //	acinfo->ac_ips_len=conf_ac_ips_len;
 
@@ -87,6 +101,21 @@ struct ac_info * get_acinfo()
 //	acinfo->salist_len = conf_ac_ips_len;
 
 	acinfo->aciplist=get_aciplist();
+
+printf("Fertich");
+
+	aciplist_foreach(acinfo->aciplist,pr,NULL);
+
+	int i;
+	for (i=1; i<=31; i++){
+		acinfo->radioinfos[i].type= 
+			CW_IEEE80211_RADIO_TYPE_B |
+			CW_IEEE80211_RADIO_TYPE_A | 
+			CW_IEEE80211_RADIO_TYPE_G | 
+			CW_IEEE80211_RADIO_TYPE_N;
+		acinfo->radioinfos[i].type=0xffffffff; 
+		acinfo->radioinfos[i].rid=i;
+	}
 
 
 	return acinfo;
