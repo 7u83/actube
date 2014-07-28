@@ -59,6 +59,8 @@ static void wtpman_run_discovery(void *arg)
 //	}while (!cwrmsg);
 
 	printf("cwrmsg = %p\n",cwrmsg);
+	printf("RID: %d, WBID %d\n",cwrmsg->rid,cwrmsg->wbid);
+
 
 	if ( !cwrmsg)
 	{
@@ -76,8 +78,26 @@ static void wtpman_run_discovery(void *arg)
 
 		struct radioinfo radioinfo;
 		radioinfo.rid = cwrmsg->rid;
-		radioinfo.rmac = cwrmsg->rmac;
+		memcpy(radioinfo.rmac, cwrmsg->rmac,8);
+//		cwrmsg->rmac[0]=0;
+
+		printf("The RID %d\n",radioinfo.rid);
+		int i;
+		for (i=0; i<8; i++){
+			printf("Rec RMAC: %02x\n",cwrmsg->rmac[i]);
+
+		}
+
+	//	radioinfo.rmac=0;
+
+
 		struct ac_info * acinfo = get_acinfo();
+
+
+
+		char wtpinfostr[8192];
+		wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+		printf("WTP INFO\n%s\n",wtpinfostr);
 
 //		wtpinfo_print(&wtpman->wtpinfo);
 
@@ -94,6 +114,7 @@ static void wtpman_run(void *arg)
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
 
+	printf("Running DTLS\n");
 
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
 		cw_log_debug0("Dropping connection from %s to non-unicast socket", CLIENT_IP);
@@ -112,6 +133,8 @@ static void wtpman_run(void *arg)
 	wtpman->conn->dtls_psk=conf_dtls_psk;
 	wtpman->conn->dtls_psk_len=strlen(conf_dtls_psk);
 	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
+
+	printf ("Goin to dtls accept\n");
 
 	if ( !dtls_accept(wtpman->conn) ){
 		cw_log_debug0("Error establishing DTLS connection from %s",CLIENT_IP);
@@ -137,7 +160,7 @@ static void wtpman_run(void *arg)
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
-	radioinfo.rmac = cwrmsg->rmac;
+	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
 	struct ac_info * acinfo = get_acinfo();
 
 //	printf("ACN: %s\n",acinfo->ac_name);
@@ -249,6 +272,7 @@ struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr)
 
 void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
 {
+	printf("wtpman add packet (con q))}n");
 	conn_q_add_packet(wtpman->conn,packet,len);
 }
 
