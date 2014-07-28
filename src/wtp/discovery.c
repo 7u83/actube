@@ -79,6 +79,10 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 
 	cwread_discovery_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
+	char ai [4096];
+	acinfo_print(ai,&acinfo);
+	printf("AC INFO\n%s",ai);
+
 /*
 	printf("AC NAME %s\n",acinfo.ac_name);
 	printf("AC Software version %s\n",acinfo.software_version);
@@ -126,6 +130,14 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 //	struct timespec tstart,tcur;
 	struct radioinfo ri;
 	memset(&ri,0,sizeof(ri));
+
+	ri.rmac[0]=6;
+	ri.rmac[2]=14;
+	ri.rmac[3]=14;
+	ri.rmac[4]=14;
+	ri.rmac[5]=14;
+	ri.rmac[6]=14;
+	ri.rmac[7]=14;
 
 
 #ifdef WITH_CW_LOG_DEBUG
