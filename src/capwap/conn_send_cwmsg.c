@@ -36,7 +36,8 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	int fragoffset = 0;
 	int hlen = cwmsg->hlen*4;
 
-//	printf("Hlen is %i\n",hlen);
+	printf("Hlen is %i\n",hlen);
+	printf("Msg len is %d\n",msglen);
 
 
 	int preamble = CW_VERSION | 0;
@@ -48,7 +49,7 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 
 	while (packetlen>mtu){
 		val = (preamble << 24) | ((hlen/4)<<19) | (cwmsg->rid<<14) |(wbid<<9) | 
-				CWTH_FLAGS_T |
+				/*CWTH_FLAGS_T |*/
 				CWTH_FLAGS_F |
 				cwmsg->flags;
 		*((uint32_t*)ptr)=htonl(val);
@@ -77,7 +78,7 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	}
 
 	val = (preamble << 24) | ((hlen/4)<<19) | (cwmsg->rid<<14) |(wbid<<9) | 
-		CWTH_FLAGS_T|cwmsg->flags;
+		/*CWTH_FLAGS_T|*/ cwmsg->flags;
 
 	if (fragoffset){
 		val |= CWTH_FLAGS_F | CWTH_FLAGS_L;
