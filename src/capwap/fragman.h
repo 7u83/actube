@@ -43,6 +43,7 @@ struct frag {
 	int bytesreceived;
 	int bytesneeded;
 	struct timespec t;
+	uint8_t * header;
 };
 
 typedef struct frag FRAGMAN;
