@@ -100,7 +100,7 @@ int wtp_main(const char *ad)
 
 	wtpconf_init();
 
-	cw_log_debug_level=2; //conf_debug_level;
+	cw_log_debug_level=6; //conf_debug_level;
 
 #ifdef WITH_DTLS	
 	dtls_init();
