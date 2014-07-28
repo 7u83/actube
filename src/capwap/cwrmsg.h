@@ -10,7 +10,7 @@ struct cwrmsg{
 	int seqnum;
 	int msglen;
 //#ifdef WITH_RMAC_SUPPORT
-	uint8_t * rmac;
+	uint8_t rmac[8];
 //#endif
 
 };
