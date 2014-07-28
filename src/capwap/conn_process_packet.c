@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "capwap.h"
 #include "cw_log.h"
@@ -107,7 +108,8 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	}
 
 	int hlen = 4*((val >> 19) & 0x1f);
-
+	
+	printf ("HHHHHHHHHHHHHHHLEN: %d\n",hlen);
 
 	int payloadlen = len - hlen;
 	if (payloadlen<0){
@@ -121,19 +123,32 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	cwrmsg.wbid=(val>>9) & 0x1f;
 	cwrmsg.rid=(val>>14) & 0x1f;
 
-#ifdef WITH_RMAC_SUPPORT
+printf ("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP\n");
+printf ("WBID: %d\n",cwrmsg.wbid);
+printf ("RID: %d\n",cwrmsg.rid);
+
+
+
+//#ifdef WITH_RMAC_SUPPORT
 	if (val & CWTH_FLAGS_M){
+		
 		if (*(packet+8)+8>hlen){
 			cw_log_debug0("Discarding packet, wrong rmac size, size=%d",*(packet+8));
 			/* wrong rmac size */
 			return;
 		}
-		cwrmsg.rmac = packet+8;
+		memcpy(cwrmsg.rmac, packet+8,8);
+int i;
+for (i=0; i<8; i++){
+	printf (":%02X:",cwrmsg.rmac[i]);
+}
+
+
 	}
 	else{
-		cwrmsg.rmac=NULL;
+		cwrmsg.rmac[0]=0;
 	}
-#endif
+//#endif
 
 
 	if (val & CWTH_FLAGS_F){	/* fragmented */
