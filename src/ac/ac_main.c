@@ -130,6 +130,8 @@ int ac_run()
 
 
 
+	get_acinfo();
+
 
 	while(1){
 
@@ -223,6 +225,9 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 		wtpman_start(wtpman,preamble & 0xf);
 	}
+	else
+		printf("WTPMAN is already there\n");
+
 
 	wtpman_addpacket(wtpman,buffer,len);
 	wtplist_unlock();
