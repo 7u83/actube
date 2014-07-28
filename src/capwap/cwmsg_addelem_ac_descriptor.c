@@ -31,22 +31,23 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	int len = 12;
 	int sublen;
 
-	/* hardware version subelement */
-	*((uint32_t*)(acd+len))=0; 
-	len+=4;
-	sublen=strlen(acinfo->hardware_version);
-	*((uint32_t*)(acd+len))=htonl((4<<16)|sublen);
-	len+=4;
-	memcpy(acd+len,acinfo->hardware_version,sublen);
-	len+=sublen;
 
 	/* software version subelement */
 	*((uint32_t*)(acd+len))=0;
 	len+=4;
-	sublen=strlen(acinfo->software_version);
+	sublen=strlen((const char*)acinfo->software_version);
 	*((uint32_t*)(acd+len))=htonl((5<<16)|sublen);
 	len+=4;
 	memcpy(acd+len,acinfo->software_version,sublen);
+	len+=sublen;
+
+	/* hardware version subelement */
+	*((uint32_t*)(acd+len))=0; 
+	len+=4;
+	sublen=strlen((const char*)acinfo->hardware_version);
+	*((uint32_t*)(acd+len))=htonl((4<<16)|sublen);
+	len+=4;
+	memcpy(acd+len,acinfo->hardware_version,sublen);
 	len+=sublen;
 
 
