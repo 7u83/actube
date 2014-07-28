@@ -32,6 +32,9 @@ struct wtpinfo{
 	uint32_t vendor_id;
 	uint8_t* model_no;
 	uint8_t* serial_no;
+	uint8_t* board_id;
+	uint8_t* board_revision;
+
 
 	int max_radios;
 	int radios_in_use;
@@ -53,6 +56,8 @@ struct wtpinfo{
 	uint8_t * bootloader_version;
 	int bootloader_version_len;
 	uint32_t bootloader_vendor_id;
+
+	
 
 	uint8_t * macaddress;
 	int macaddress_len;
