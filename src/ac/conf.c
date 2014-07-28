@@ -182,9 +182,6 @@ static int init_version()
 
 static int init_control_port()
 {
-	if (conf_control_port != 0)
-		return 1;
-
 	char str[30];
 	sprintf(str,"%d",CONF_DEFAULT_CONTROL_PORT);
 	conf_control_port=(char*)cw_setstr((uint8_t**)&conf_control_port,(uint8_t*)str,strlen(str));
@@ -441,6 +438,8 @@ static int conf_read_strings( cfg_t * cfg, char * name, char ***dst,int *len)
 int read_config(const char * filename){
 	int i,n;
 
+	if (!init_control_port())
+		return 0;
 
 	cfg_opt_t opts[] = {
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
@@ -521,8 +520,6 @@ int read_config(const char * filename){
 		return 0;
 
 
-	if (!init_control_port())
-		return 0;
 
 	init_listen_addrs();
 	init_mcast_groups();
