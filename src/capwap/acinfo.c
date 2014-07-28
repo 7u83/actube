@@ -27,6 +27,9 @@
 
 #include "acinfo.h"
 
+#include "sock.h"
+
+
 int acinfo_readelem_ac_name(struct ac_info * acinfo,int type, uint8_t *msgelem, int len)
 {
 	if (type != CWMSGELEM_AC_NAME)
@@ -127,6 +130,9 @@ int acinfo_readelem_ctrl_ip_addr(struct ac_info * acinfo, int type, uint8_t*msge
 
 			acip->wtp_count = ntohs( * ((uint16_t*)(msgelem+4)));
 			aciplist_add(acinfo->aciplist,acip);
+
+			printf ("Read AC IP Elem %s\n",sock_addr2str(&acip->ip));
+			printf ("WTP COUNT HERE %d\n",acip->wtp_count);
 
 			return 1;
 
