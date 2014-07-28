@@ -35,7 +35,8 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 	
 	cwmsg_addelem_ac_descriptor(cwmsg,acinfo);
 	cwmsg_addelem(cwmsg,CWMSGELEM_AC_NAME,(uint8_t*)acinfo->ac_name,strlen((char*)acinfo->ac_name));
-	cwmsg_addelem_wtp_radio_infos(cwmsg,wtpinfo);
+
+	cwmsg_addelem_wtp_radio_infos(cwmsg,acinfo->radioinfos);
 	cwmsg_addelem_ctrl_ip_addrs(cwmsg,acinfo);
 
 	
