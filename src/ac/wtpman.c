@@ -79,6 +79,7 @@ static void wtpman_run_discovery(void *arg)
 		struct radioinfo radioinfo;
 		radioinfo.rid = cwrmsg->rid;
 		memcpy(radioinfo.rmac, cwrmsg->rmac,8);
+		radioinfo.rmac[0]=0;
 //		cwrmsg->rmac[0]=0;
 
 		printf("The RID %d\n",radioinfo.rid);
