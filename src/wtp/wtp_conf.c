@@ -75,7 +75,7 @@ int wtpconf_primary_if()
 	
 	cw_log_debug0("Primary interfac: %s, mac address: %s.",
 			conf_primary_if,
-			hwaddr2str(conf_macaddress,conf_macaddress_len)
+			sock_hwaddr2str(conf_macaddress,conf_macaddress_len)
 			);
 
 
@@ -89,7 +89,7 @@ int wtpconf_name()
 		return 1;
 	
 	char name[64];
-	sprintf(name,"WTP%s",hwaddr2idstr(conf_macaddress,conf_macaddress_len));
+	sprintf(name,"WTP%s",sock_hwaddr2idstr(conf_macaddress,conf_macaddress_len));
 
 	conf_wtpname = (char*)cw_setstr((uint8_t**)&conf_wtpname,(uint8_t*)name,strlen(name)); 
 	if (!conf_wtpname)
