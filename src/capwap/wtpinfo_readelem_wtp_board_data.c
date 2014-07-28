@@ -21,8 +21,13 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 		int subtype= (val>>16)&0xffff;
 		int sublen = val&0xffff;
 		i+=4;
-		if (sublen+i>len)
+		if (sublen+i>len){
+			cw_log_debug1("WTP Board data sub-element too long, type=%d,len=%d",subtype,sublen);
 			return;
+		}
+		
+		cw_log_debug2("Reading WTP board data sub-element, type=%d, len=%d",subtype,sublen);
+
 		switch(subtype){
 			case CWBOARDDATA_MODELNO:
 				cw_setstr(&wtpinfo->model_no,msgelem+i,sublen);
@@ -35,6 +40,11 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 				memcpy(wtpinfo->macaddress,msgelem+i,sublen);
 				wtpinfo->macaddress_len=sublen;
 				break;
+			case CWBOARDDATA_BOARDID:
+				cw_setstr(&wtpinfo->board_id,msgelem+i,sublen);
+				break;
+			case CWBOARDDATA_REVISION:
+				cw_setstr(&wtpinfo->board_revision,msgelem+i,sublen);
 			default:
 				break;
 		}
