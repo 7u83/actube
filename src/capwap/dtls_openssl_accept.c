@@ -1,3 +1,22 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
 #include <openssl/err.h>
 
 #include "dtls_openssl.h"
@@ -70,22 +89,21 @@ int dtls_openssl_accept(struct conn * conn)
 			}
 
 
+			printf ("UI! error?\n");
 
 			char errstr[256];
 
 			e = ERR_get_error();
 			while (e!=0){
 				ERR_error_string(e,errstr);
-				cw_log(LOG_ERR,"SSL_accept (e) - %s",e,errstr);
+				cw_log(LOG_ERR,"SSL_accept - %s",errstr);
 				e = ERR_get_error();
 			}
-
 
 			continue;
 		}		
 		if (rc == 1)
 		{
-//			printf("Juhu!\n");
 			conn->read = dtls_openssl_read;
 			conn->write = dtls_openssl_write;
 			return 1;
