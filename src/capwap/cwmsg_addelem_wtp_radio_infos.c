@@ -18,15 +18,20 @@
 
 #include "capwap.h"
 #include "capwap_ieee80211.h"
+#include "radioinfo.h"
 
 void cwmsg_addelem_wtp_radio_info(struct cwmsg * msg,struct radioinfo *radioinfo)
 {
+
 	uint8_t ri[5];
 	*ri = radioinfo->rid;
+
 	*((uint32_t*)(ri+1))=htonl(radioinfo->type);
 	cwmsg_addelem(msg,CWMSGELEM_IEEE80211_WTP_RADIO_INFO,ri,5);
 }
 
+
+/*
 void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct wtpinfo * wtpinfo)
 {
 	int i;
@@ -37,3 +42,17 @@ void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct wtpinfo * wtpinfo)
 	}
 
 }
+*/
+
+
+void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct radioinfo * radioinfos)
+{
+	int i;
+	for (i=1; i<=30; i++)
+	{
+		if (radioinfos[i].rid!=0)	
+			cwmsg_addelem_wtp_radio_info(msg,&radioinfos[i]);
+	}
+
+}
+
