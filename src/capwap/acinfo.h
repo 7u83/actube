@@ -7,6 +7,8 @@
 
 #include "avltree.h"
 
+#include "radioinfo.h"
+
 struct acip{
 	struct sockaddr_storage ip;
 	int wtp_count;
@@ -44,6 +46,9 @@ struct ac_info{
 	uint8_t ecn_support;
 
 	struct sockaddr_storage local_ip;
+
+	/* wireless bindings */
+	struct radioinfo radioinfos[32];
 
 };
 
