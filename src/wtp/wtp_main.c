@@ -102,6 +102,7 @@ int wtp_main(const char *ad)
 
 	cw_log_debug_level=6; //conf_debug_level;
 
+	conf_dtls_psk="Tube";
 #ifdef WITH_DTLS	
 	dtls_init();
 #endif	
