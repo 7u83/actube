@@ -86,8 +86,8 @@ struct ac_info * get_acinfo()
 
 	if (conf_dtls_psk)
 		acinfo->security|=AC_SECURITY_S;
-	if (conf_dtls_psk)
-		acinfo->security|=AC_SECURITY_X;
+//	if (conf_dtls_psk)
+//		acinfo->security|=AC_SECURITY_X;
 
 
 	acinfo->dtls_policy = AC_DTLS_POLICY_C | AC_DTLS_POLICY_D ;
