@@ -190,6 +190,11 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 {
 	int sock = socklist[index].reply_sockfd;
 
+	char hdrstr[1024];
+	hdr_print(hdrstr,buffer,len);
+	cw_log_debug2("Header\n%s\n",hdrstr);
+	
+
 
 	/* first of all check preamble */
 	int preamble = CWTH_GET_PREAMBLE(buffer);
