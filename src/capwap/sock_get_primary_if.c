@@ -19,8 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <ifaddrs.h>
 #include <net/if.h>
+#include <ifaddrs.h>
 
 #include "sock.h"
 
