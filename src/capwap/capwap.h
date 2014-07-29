@@ -47,6 +47,18 @@
 #define CWTH_FLAGS_F  0x80	/* bit 7 fragment */
 #define CWTH_FLAGS_T  0x100	/* bit 8 type of payload frame */
 
+
+#define CWTH_GET_FLAG_R1(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_R1 ) ? 1:0)
+#define CWTH_GET_FLAG_R2(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_R2 ) ? 1:0)
+#define CWTH_GET_FLAG_R3(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_R3 ) ? 1:0)
+
+#define CWTH_GET_FLAG_K(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_K ) ? 1:0)
+#define CWTH_GET_FLAG_M(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_M ) ? 1:0)
+#define CWTH_GET_FLAG_W(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_W ) ? 1:0)
+#define CWTH_GET_FLAG_L(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_L ) ? 1:0)
+#define CWTH_GET_FLAG_F(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_F ) ? 1:0)
+#define CWTH_GET_FLAG_T(th) ((ntohl( *((uint32_t*)th)) % CWTH_FLAGS_T ) ? 1:0)
+
 /* wireless binding ids */
 #define CWTH_WBID_RESERVED1	0
 #define CWTH_WBID_IEEE80211	1
@@ -329,6 +341,7 @@ void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 
 extern const char * cw_msgelemtostr(int elem);
+extern int hdr_print(char *str, uint8_t *packet, int len);
 
 
 #endif
