@@ -142,6 +142,8 @@ static void wtpman_run(void *arg)
 		wtpman_remove(wtpman);
 		return;
 	}
+	
+	printf("DTLS Done\n");
 #endif	
 //	const struct sockaddr *sa, char *s, size_t maxlen
 
@@ -273,7 +275,6 @@ struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr)
 
 void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
 {
-	printf("wtpman add packet (con q))}n");
 	conn_q_add_packet(wtpman->conn,packet,len);
 }
 
