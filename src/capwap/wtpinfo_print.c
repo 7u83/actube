@@ -22,6 +22,8 @@
 #include "capwap.h"
 #include "capwap_ieee80211.h"
 
+#include "cw_util.h"
+
 #include "sock.h"
 
 int radioinfo_print(char * str, struct radioinfo * radioinfo)
@@ -58,22 +60,30 @@ static int version_print(char *s, const uint8_t *version, int len, uint32_t vend
 	if (!version)
 		return sprintf(s,"Not set\n");
 
+
 	int rs=0;	
 	int i;
-	for (i=0; i<len && i<20; i++){
-		rs+=sprintf(s+rs,"%02X",version[i]);
-	}
 
-	int dot=0;
 
-	rs+=sprintf(s+rs," (");
-	for (i=0; i<len && i<20; i++){
-		if (dot) 
-			rs+=sprintf(s+rs,".");
-		dot=1;
-		rs+=sprintf(s+rs,"%d",version[i]);
+	if ( cw_is_printable(version,len)  ){
+		rs+=sprintf(s+rs,"%s",version);
 	}
-	rs+=sprintf(s+rs,")");
+	else{
+		for (i=0; i<len && i<20; i++){
+			rs+=sprintf(s+rs,"%02X",version[i]);
+		}
+
+		int dot=0;
+
+		rs+=sprintf(s+rs," (");
+		for (i=0; i<len && i<20; i++){
+			if (dot) 
+				rs+=sprintf(s+rs,".");
+			dot=1;
+			rs+=sprintf(s+rs,"%d",version[i]);
+		}
+		rs+=sprintf(s+rs,")");
+	}
 
 
 	rs+=sprintf(s+rs,", Vendor Id: %d",vendor);
