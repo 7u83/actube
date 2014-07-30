@@ -23,7 +23,10 @@
 #include "cw_util.h"
 #include "cw_log.h"
 
-int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len)
+
+
+
+static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len, int cq)
 {
 	if (type != CWMSGELEM_WTP_DESCRIPTOR)
 		return 0;
@@ -36,10 +39,13 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 
 	int ncrypt = *(msgelem+2);
 	int i;
-	if (ncrypt == 0){
+	if (ncrypt == 0 ){
 		/* non-conform */
 		cw_log_debug1("Non-standard-conform WTP descriptor detected (See RFC 5415)");
-		i=4;
+		if (!cq) 
+			i=3;
+		else
+			i=4;
 	}
 	else{
 		i=ncrypt*3+3;
@@ -90,4 +96,14 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 	return 1;
 }
 
+int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len)
+{
+	int rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,0);
+	if (rc==-1){
+		cw_log_debug2("Bad wtp descriptor, trying cisco hack");
+		rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,1);
+	}
+
+	return rc;
+}
 
