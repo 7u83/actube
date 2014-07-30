@@ -40,6 +40,7 @@ WTPINFOOBJS = wtpinfo_set_location.o \
 	wtpinfo_print.o 
 
 UTILOBJS=cw_setstr.o \
+	 cw_is_printable.o \
 	 cw_rand.o \
 	 cw_pseudo_rand.o \
 	 cw_foreach_msgelem.o \
