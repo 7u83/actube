@@ -31,6 +31,7 @@ static int wtpinfo_readelem_discovery_req(void * w,int type,uint8_t* msgelem,int
 {
 	struct wtpinfo * wtpinfo = (struct wtpinfo *)w;
 	cw_log_debug1("Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
+	cw_log_debug2_dump(msgelem,len,"Dump for msgelem ...");
 
 	if (wtpinfo_readelem_discovery_type(wtpinfo,type,msgelem,len)) 
 		return 1;
