@@ -28,4 +28,4 @@ extern int cw_foreach_msgelem(uint8_t * msgelems,  int len,
 extern int cw_pseudo_rand(uint8_t *dst, int len);
 extern int cw_rand(uint8_t*dst, int len);
 
-
+extern int cw_is_printable(const uint8_t * s,int len);
