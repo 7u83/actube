@@ -52,8 +52,11 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 	}
 
 	do {
-		if (i+8>=len)
+		if (i+8>len)
+		{
+			cw_log_debug1("WTP descriptor subelement to long, length=%d>%d",i+8,len);
 			return -1;
+		}
 
 		uint32_t vendor_id=ntohl(*((uint32_t*)(msgelem+i)));
 
