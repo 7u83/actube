@@ -82,13 +82,13 @@ static void wtpman_run_discovery(void *arg)
 		radioinfo.rmac[0]=0;
 //		cwrmsg->rmac[0]=0;
 
-		printf("The RID %d\n",radioinfo.rid);
-		int i;
+//		printf("The RID %d\n",radioinfo.rid);
+/*		int i;
 		for (i=0; i<8; i++){
 			printf("Rec RMAC: %02x\n",cwrmsg->rmac[i]);
 
 		}
-
+*/
 	//	radioinfo.rmac=0;
 
 
@@ -98,7 +98,7 @@ static void wtpman_run_discovery(void *arg)
 
 		char wtpinfostr[8192];
 		wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-		printf("WTP INFO\n%s\n",wtpinfostr);
+		cw_log_debug2("Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 
 //		wtpinfo_print(&wtpman->wtpinfo);
 
