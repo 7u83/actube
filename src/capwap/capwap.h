@@ -341,6 +341,7 @@ void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 
 extern const char * cw_msgelemtostr(int elem);
+extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
 
