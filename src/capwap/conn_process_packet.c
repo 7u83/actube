@@ -109,7 +109,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 	int hlen = 4*((val >> 19) & 0x1f);
 	
-	printf ("HHHHHHHHHHHHHHHLEN: %d\n",hlen);
+	//printf ("HHHHHHHHHHHHHHHLEN: %d\n",hlen);
 
 	int payloadlen = len - hlen;
 	if (payloadlen<0){
@@ -123,9 +123,6 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	cwrmsg.wbid=(val>>9) & 0x1f;
 	cwrmsg.rid=(val>>14) & 0x1f;
 
-printf ("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP\n");
-printf ("WBID: %d\n",cwrmsg.wbid);
-printf ("RID: %d\n",cwrmsg.rid);
 
 
 
@@ -138,12 +135,14 @@ printf ("RID: %d\n",cwrmsg.rid);
 			return;
 		}
 		memcpy(cwrmsg.rmac, packet+8,8);
+
+/*
 int i;
 for (i=0; i<8; i++){
 	printf (":%02X:",cwrmsg.rmac[i]);
 }
 
-
+*/
 	}
 	else{
 		cwrmsg.rmac[0]=0;
