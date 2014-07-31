@@ -66,7 +66,10 @@ static int version_print(char *s, const uint8_t *version, int len, uint32_t vend
 
 
 	if ( cw_is_printable(version,len)  ){
-		rs+=sprintf(s+rs,"%s",version);
+		if (len != 0 )
+			rs+=sprintf(s+rs,"%s",version);
+		else
+			rs+=sprintf(s+rs,"''");
 	}
 	else{
 		for (i=0; i<len && i<20; i++){
@@ -86,7 +89,7 @@ static int version_print(char *s, const uint8_t *version, int len, uint32_t vend
 	}
 
 
-	rs+=sprintf(s+rs,", Vendor Id: %d",vendor);
+	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_ianavendoridtostr(vendor));
 	rs+=sprintf(s+rs,"\n");
 	return rs;	
 	
