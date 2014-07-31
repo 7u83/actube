@@ -92,7 +92,8 @@ CAPWAPOBJS= \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   cw_msgelemtostr.o \
-	   hdr_print.o
+	   hdr_print.o \
+	   cw_ianavendoridtostr.o
 	
 
 	
