@@ -16,8 +16,6 @@
 ACIPLIST * get_aciplist()
 {
 	int i=0;
-	printf ("=================================================================\n");
-	printf ("Want add ac ips %d \n",socklist_len);
 
 	ACIPLIST * aciplist = aciplist_create();
 	if(!aciplist)
@@ -42,7 +40,7 @@ ACIPLIST * get_aciplist()
 		sock_copyaddr(&acip->ip,(struct sockaddr*)&sa);
 		acip->wtp_count=0;
 
-		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
+//		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
 
 		aciplist_add(aciplist,acip);
 
@@ -54,7 +52,7 @@ ACIPLIST * get_aciplist()
 
 
 int pr(void *x,void *y){
-	printf ("Da is was\n");
+//	printf ("Da is was\n");
 }
 
 
@@ -102,7 +100,6 @@ struct ac_info * get_acinfo()
 
 	acinfo->aciplist=get_aciplist();
 
-printf("Fertich");
 
 	aciplist_foreach(acinfo->aciplist,pr,NULL);
 
