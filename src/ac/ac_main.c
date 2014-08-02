@@ -121,10 +121,10 @@ int ac_run()
 	for (i=0; i<conf_bcast_addrs_len;i++){
 		socklist_add_broadcast(conf_bcast_addrs[i],conf_control_port,AC_PROTO_CAPWAP);
 #ifdef WITH_LWAPP
-		printf("Adding %d\n",socklist_len);
+//		printf("Adding %d\n",socklist_len);
 		if (conf_lwapp) 
 			socklist_add_broadcast(conf_bcast_addrs[i],conf_lw_control_port,AC_PROTO_LWAPP);
-		printf ("SI %d, PROTO: %d\n",socklist_len-1,socklist[socklist_len-1].ac_proto);
+//		printf ("SI %d, PROTO: %d\n",socklist_len-1,socklist[socklist_len-1].ac_proto);
 #endif 
 	}
 
@@ -192,7 +192,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 	char hdrstr[1024];
 	hdr_print(hdrstr,buffer,len);
-	cw_log_debug2("Header\n%s\n",hdrstr);
+	cw_log_debug2("Header for packet from %s\n%s",sock_addr2str(addr),hdrstr);
 	
 
 
@@ -319,8 +319,6 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
 	cw_log_debug2_dump(buffer,len,"Packet data for packet, recevied from %s",str);
 #endif	
-	printf("Index is %d\n",index);
-	printf ("AC PROTO %d\n",socklist[index].ac_proto);
 
 	switch (socklist[index].ac_proto){
 		case AC_PROTO_CAPWAP:
