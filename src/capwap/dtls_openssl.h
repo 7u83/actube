@@ -27,6 +27,7 @@ extern int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned 
 extern int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len);
 extern int dtls_openssl_write(struct conn * conn, const uint8_t *buffer, int len);
 extern int dtls_openssl_connect(struct conn * conn);
+extern const char * dtls_openssl_get_cipher(struct conn * conn);
 
 extern int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt);
 
@@ -42,6 +43,7 @@ extern long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr);
 extern int dtls_openssl_bio_new(BIO *bi);
 extern int dtls_openssl_bio_free(BIO *bio);
 
+extern const char * dtls_openssl_get_currnet_cipher();
 
 extern BIO *bbb;
 
