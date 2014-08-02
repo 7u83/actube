@@ -45,18 +45,7 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 {
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
-
-//	printf("PSK_CB: %s\n",identity);
-//	printf("Conn psk : %s\n",conn->dtls_psk);
-//	printf("Max dtls psk len %i\n",max_psk_len);
-
-
-//	return dtls_openssl_psk_key2bn(conn->dtls_psk, psk, max_psk_len);
-
-
 	int l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
-
-//	printf("PSK return l %d\n",l);
 	memcpy(psk,conn->dtls_psk,l);
 	return l;
 }
@@ -84,12 +73,12 @@ int dtls_openssl_accept(struct conn * conn)
 			e = SSL_get_error(d->ssl,rc);
 			switch (e){
 				case SSL_ERROR_SYSCALL:
-					printf("syscall EOF!\n");
+//					printf("syscall EOF!\n");
 					break;
 			}
 
 
-			printf ("UI! error?\n");
+//			printf ("UI! error?\n");
 
 			char errstr[256];
 
