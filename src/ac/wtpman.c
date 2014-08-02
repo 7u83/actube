@@ -52,14 +52,13 @@ static void wtpman_run_discovery(void *arg)
 	
 	struct cwrmsg * cwrmsg;
 
-	printf("con get message\n");
 
 //	do {
 		cwrmsg = conn_get_message(wtpman->conn);
 //	}while (!cwrmsg);
 
-	printf("cwrmsg = %p\n",cwrmsg);
-	printf("RID: %d, WBID %d\n",cwrmsg->rid,cwrmsg->wbid);
+//	printf("cwrmsg = %p\n",cwrmsg);
+//	printf("RID: %d, WBID %d\n",cwrmsg->rid,cwrmsg->wbid);
 
 
 	if ( !cwrmsg)
@@ -69,7 +68,7 @@ static void wtpman_run_discovery(void *arg)
 	}
 
 
-	printf("cwrmswg type = %08X\n",cwrmsg->type);
+//	printf("cwrmswg type = %08X\n",cwrmsg->type);
 
 	if (cwrmsg->type==CWMSG_DISCOVERY_REQUEST){	
 		process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
@@ -115,7 +114,6 @@ static void wtpman_run(void *arg)
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
 
-	printf("Running DTLS\n");
 
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
 		cw_log_debug0("Dropping connection from %s to non-unicast socket", CLIENT_IP);
@@ -126,16 +124,30 @@ static void wtpman_run(void *arg)
 	cw_log_debug0("Establishing DTLS connection from %s",CLIENT_IP);
 
 #ifdef WITH_DTLS
-	if (!conf_dtls_psk){
-		cw_log(LOG_ERR,"Cant' establish DTLS connection, no psk set in config file");
+
+
+	int dtls_ok=0;
+	if (conf_sslkeyfilename && conf_sslcertfilename){
+		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
+		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
+		wtpman->conn->dtls_key_pass = conf_sslkeypass;
+		wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
+		dtls_ok=1;
+	}
+
+
+	if (conf_dtls_psk){
+		wtpman->conn->dtls_psk=conf_dtls_psk;
+		wtpman->conn->dtls_psk_len=strlen(conf_dtls_psk);
+		wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
+		dtls_ok=1;
+	}
+
+	if (!dtls_ok){
+		cw_log(LOG_ERR,"Cant' establish DTLS connection, neither psk nor certs set in config file");
 		wtpman_remove(wtpman);
 		return;
 	}
-	wtpman->conn->dtls_psk=conf_dtls_psk;
-	wtpman->conn->dtls_psk_len=strlen(conf_dtls_psk);
-	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
-
-	printf ("Goin to dtls accept\n");
 
 	if ( !dtls_accept(wtpman->conn) ){
 		cw_log_debug0("Error establishing DTLS connection from %s",CLIENT_IP);
@@ -143,11 +155,10 @@ static void wtpman_run(void *arg)
 		return;
 	}
 	
-	printf("DTLS Done\n");
 #endif	
 //	const struct sockaddr *sa, char *s, size_t maxlen
 
-	cw_log_debug0("DTLS Session established with %s", CLIENT_IP);
+	cw_log_debug0("DTLS Session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
 
 
 	cwrmsg = conn_get_message(wtpman->conn);
