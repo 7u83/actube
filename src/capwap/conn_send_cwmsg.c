@@ -36,8 +36,8 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	int fragoffset = 0;
 	int hlen = cwmsg->hlen*4;
 
-	printf("Hlen is %i\n",hlen);
-	printf("Msg len is %d\n",msglen);
+//	printf("Hlen is %i\n",hlen);
+//	printf("Msg len is %d\n",msglen);
 
 
 	int preamble = CW_VERSION | 0;
