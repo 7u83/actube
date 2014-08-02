@@ -83,7 +83,7 @@ void socklist_destroy()
 static int find_reply_socket(struct sockaddr *sa,int bc)
 {
 
-	printf("Looking for best sock of: %s\n",sock_addr2str(sa));
+	//printf("Looking for best sock of: %s\n",sock_addr2str(sa));
 
 	int bestsockfd = -1;
 	int i;
@@ -345,8 +345,8 @@ int socklist_add_broadcast(const char *addr, const char * port,int ac_proto)
 		socklist[socklist_len].type=SOCKLIST_BCASTMCAST_SOCKET;
 		socklist[socklist_len].family=sa->sa_family;
 		socklist[socklist_len].ac_proto=ac_proto;
-		printf ("AC INIT PROTO : %d, i %i\n",ac_proto,socklist_len);
-		printf ("sock proto %d\n",socklist[socklist_len].ac_proto);
+//		printf ("AC INIT PROTO : %d, i %i\n",ac_proto,socklist_len);
+//		printf ("sock proto %d\n",socklist[socklist_len].ac_proto);
 		socklist_len++;
 
 		cw_log(LOG_INFO,"Bound to broadcast: %s:%s (%i,R:%i,I:%d)\n",addr,port,sockfd,rfd,socklist_len-1);
