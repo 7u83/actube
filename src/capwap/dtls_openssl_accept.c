@@ -61,19 +61,23 @@ int dtls_openssl_accept(struct conn * conn)
 	if (!d)
 		return 0;
 
-	SSL_set_psk_server_callback( d->ssl, psk_server_cb);
+	if (conn->dtls_psk)
+		SSL_set_psk_server_callback( d->ssl, psk_server_cb);
 
 	int rc; 
 //	do{ 
 	int i;
 	for (i=0; i<5; i++){	
 		rc = SSL_accept(d->ssl);
+
+printf("Accept returns %d\n",rc);
+
 		if (rc==0){
 			int e;
 			e = SSL_get_error(d->ssl,rc);
 			switch (e){
 				case SSL_ERROR_SYSCALL:
-//					printf("syscall EOF!\n");
+					printf("syscall EOF!\n");
 					break;
 			}
 
