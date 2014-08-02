@@ -23,6 +23,11 @@
 char * conf_primary_if=0;
 char * conf_wtpname=0;
 char * conf_dtls_psk=0;
+char * conf_sslkeyfilename=0;
+char * conf_sslcertfilename=0;
+char * conf_sslkeypass=0;
+
+
 char * conf_preferred_ac=0;
 char * conf_dtls_cipher=0;
 
