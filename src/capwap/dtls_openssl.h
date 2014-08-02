@@ -18,8 +18,7 @@ struct dtls_openssl_data{
 };
 
 extern int dtls_openssl_init();
-//extern struct dtls_openssl_data * dtls_openssl_data_create(const SSL_METHOD * method );
-//struct dtls_openssl_data * dtls_openssl_data_create(const SSL_METHOD * method, const BIO_METHOD * bio);
+
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio);
 extern int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned int max_psk_len);
 extern int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
@@ -32,6 +31,7 @@ extern int dtls_openssl_connect(struct conn * conn);
 extern int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt);
 
 extern int dtls_openssl_accept(struct conn * conn);
+extern int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d);
 
 
 
