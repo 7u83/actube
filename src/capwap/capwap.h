@@ -298,7 +298,11 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 #define CAPWAP_SILENT_INTERVAL		30
 #define CAPWAP_ECHO_INTERVAL 		30
 
-#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA"
+
+//#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA:"
+#define CAPWAP_CIPHER	"ALL"
+
+
 
 
 /* AC descriptor security flags */
