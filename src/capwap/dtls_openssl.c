@@ -28,6 +28,20 @@
 #include "conn.h"
 
 
+int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
+{
+         strncpy(buf, (char *)(password), size);
+         buf[size - 1] = '\0';
+         return(strlen(buf));
+}
+
+
+
+
+
+
+
+
 int dtls_openssl_init()
 {
 	cw_log_debug0("Init ssl library");
@@ -61,6 +75,11 @@ int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt)
 
 	int e;
 	e = SSL_get_error(ssl,rc);
+
+	char errstr[256];
+	ERR_error_string(e,errstr);
+	cw_log(LOG_ERR,"%s - %s","SSSSS",errstr);
+
 	switch (e){
 		case SSL_ERROR_ZERO_RETURN:
 			break;
@@ -75,6 +94,7 @@ int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt)
 				cw_log(LOG_ERR,"%s - EOF observed",txt);
 				return 1;
 			}
+			
 
 	}	
 	return 0;
@@ -96,6 +116,10 @@ void dtls_openssl_data_destroy(struct dtls_openssl_data * d){
 }
 
 
+
+
+
+
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
 	struct dtls_openssl_data * d = malloc(sizeof(struct dtls_openssl_data));
@@ -114,19 +138,55 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	
 	//int rc = SSL_CTX_set_cipher_list(d->ctx, "PSiaK-AXES128-C5BC-SaHA");
 	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
-
-	
 	if (!rc){
 		dtls_openssl_log_error(0,rc,"DTLS:");
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}
 
+
+	if (conn->dtls_key_file && conn->dtls_cert_file){
+		SSL_CTX_set_default_passwd_cb_userdata(d->ctx, conn->dtls_key_pass);
+		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
+
+
+		cw_log_debug1("DTLS - Setting key file %s",conn->dtls_key_file);
+		rc = SSL_CTX_use_PrivateKey_file(d->ctx,conn->dtls_key_file,SSL_FILETYPE_PEM);
+		if (!rc){
+
+			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_data_destroy(d);	
+			return 0;
+		}
+
+		cw_log_debug1("DTLS - Setting cert file %s",conn->dtls_cert_file);
+		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);
+		if (!rc){
+
+			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_data_destroy(d);	
+			return 0;
+		}
+
+
+
+	}
+
+
+
+
 	d->ssl = SSL_new(d->ctx);
 	if (!d->ssl){
 		dtls_openssl_data_destroy(d);
 		return 0;
 	}
+
+
+/*
+printf("Checccccccccccccccccccccccccccccc Allllllllllllllllllllllllllllllllllllll is ok!\n");
+
+printf("Allllllllllllllllllllllllllllllllllllll is ok!\n");
+*/
 	
 	d->bio = BIO_new(bio);
 	d->bio->ptr = conn;
@@ -168,7 +228,7 @@ int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned in
 		goto out_err;
 	return psk_len;
 out_err:
-    return 0;
+	return 0;
 }
 
 
@@ -198,12 +258,26 @@ int dtls_openssl_shutdown(struct conn *conn)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int cookie_initialized=0;
 #define COOKIE_SECRET_LENGTH 16
 unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
 
 int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)
-	{
+{
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
 	unsigned int length = 0, resultlength;
 	union {
@@ -214,14 +288,14 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 	/* Initialize a random secret */
 	if (!cookie_initialized)
-		{
+	{
 		if (!RAND_bytes(cookie_secret, COOKIE_SECRET_LENGTH))
 			{
 			printf("error setting random cookie secret\n");
 			return 0;
 			}
 		cookie_initialized = 1;
-		}
+	}
 
 	/* Read peer information */
 	(void) BIO_dgram_get_peer(SSL_get_rbio(ssl), &peer);
@@ -282,8 +356,10 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 }
 
 
+
+
 int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int cookie_len)
-	{
+{
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
 	unsigned int length = 0, resultlength;
 	union {
@@ -315,11 +391,10 @@ int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int coo
 	length += sizeof(in_port_t);
 	buffer = (unsigned char*) OPENSSL_malloc(length);
 
-	if (buffer == NULL)
-		{
+	if (buffer == NULL){
 		printf("out of memory\n");
 		return 0;
-		}
+	}
 
 	switch (peer.ss.ss_family) {
 		case AF_INET:
@@ -354,6 +429,8 @@ int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int coo
 	return 0;
 	}
 
+
+/*
 struct pass_info {
 	union {
 		struct sockaddr_storage ss;
@@ -362,7 +439,7 @@ struct pass_info {
 	} server_addr, client_addr;
 	SSL *ssl;
 };
-
+*/
 
 
 int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len)
