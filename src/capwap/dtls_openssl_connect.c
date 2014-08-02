@@ -50,10 +50,13 @@ int dtls_openssl_connect(struct conn * conn)
 	if (conn->dtls_psk)
 		SSL_set_psk_client_callback( d->ssl, psk_client_cb);
 
+
+	dtls_openssl_set_certs(conn,d);
+
 	if (conn->dtls_cert_file && conn->dtls_key_file){
 	}
 
-	char errstr[256];
+//	char errstr[256];
 	int rc; 
 //	do{ 
 		rc = SSL_connect(d->ssl);
@@ -84,7 +87,8 @@ int dtls_openssl_connect(struct conn * conn)
 		}
 
 
-		rc = dtls_openssl_log_error(d->ssl,rc,"DTLS connect");
+//		rc = dtls_openssl_log_error(d->ssl,rc,"DTLS connect");
+		rc = dtls_openssl_log_error(0,rc,"DTLS connect");
 	       
 //	} while (rc == 0 );
 
