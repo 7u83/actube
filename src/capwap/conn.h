@@ -65,7 +65,7 @@ struct conn{
 	int (*write)(struct conn *, const uint8_t*, int);
 
 	/* optional packet queue */
-	uint8_t ** q; //[WTPMAN_QSIZE];
+	uint8_t ** q; 
 	int qsize;
 	int qrpos;
 	int qwpos;
@@ -74,7 +74,6 @@ struct conn{
 	int cur_packet_len;
 	int cur_packet_pos;
 
-#ifdef WITH_DTLS
 	/* dtls stuff */
 	int (*dtls_start)(struct conn*);
 	int (*dtls_accept)(struct conn*);
@@ -84,9 +83,12 @@ struct conn{
 
 	char * dtls_cert_file;
 	char * dtls_key_file;
+	char * dtls_key_pass;
+
 	void * dtls_data;
 	char * dtls_cipher;
-#endif	
+
+
 	/* used to link the conn obj with other objects */
 	void * data;
 };
