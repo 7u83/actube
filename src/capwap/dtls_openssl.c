@@ -147,6 +147,17 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 }
 
 
+int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
+
+
+	printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX501 verify\n");
+
+	/* This function should ask the user
+	 * if he trusts the received certificate.
+	 * Here we always trust.
+	 */
+	return 1;
+}
 
 
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
@@ -163,15 +174,22 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 	SSL_CTX_set_read_ahead(d->ctx, 1);
-//	int rc = SSL_CTX_set_cipher_list(d->ctx, "PSK-AES128-CBC-SHA");
 	
-	//int rc = SSL_CTX_set_cipher_list(d->ctx, "PSiaK-AXES128-C5BC-SaHA");
 	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
 		dtls_openssl_log_error(0,rc,"DTLS:");
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}
+
+	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_OFF);
+
+	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
+	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
+
+	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
+
+	printf ("Ver cookie rc %d\n",rc);
 
 
 /*
@@ -306,6 +324,10 @@ unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
 
 int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)
 {
+
+printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+
+
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
 	unsigned int length = 0, resultlength;
 	union {
@@ -318,10 +340,10 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 	if (!cookie_initialized)
 	{
 		if (!RAND_bytes(cookie_secret, COOKIE_SECRET_LENGTH))
-			{
+		{
 			printf("error setting random cookie secret\n");
 			return 0;
-			}
+		}
 		cookie_initialized = 1;
 	}
 
@@ -344,11 +366,10 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 	length += sizeof(in_port_t);
 	buffer = (unsigned char*) OPENSSL_malloc(length);
 
-	if (buffer == NULL)
-		{
+	if (buffer == NULL) {
 		printf("out of memory\n");
 		return 0;
-		}
+	}
 
 	switch (peer.ss.ss_family) {
 		case AF_INET:
@@ -388,6 +409,9 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int cookie_len)
 {
+
+printf(" Verify cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
 	unsigned int length = 0, resultlength;
 	union {
