@@ -72,7 +72,6 @@ int dtls_openssl_bio_puts(BIO *b, const char *str)
 
 int dtls_openssl_bio_free(BIO *bio)
 {
-	printf("Bio free\n");
 	if (bio == NULL) 
 		return 0;
 	return 1;
