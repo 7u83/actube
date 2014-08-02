@@ -65,10 +65,11 @@ int conf_ac_ips_len;
 
 char * conf_sslcertfilename=NULL;
 char * conf_sslkeyfilename=NULL;
+char * conf_sslkeypass=NULL;
 char * conf_dtls_psk=NULL;
 
-char * conf_ac_hardware_version=NULL;
-char * conf_ac_software_version=NULL;
+//char * conf_ac_hardware_version=NULL;
+//char * conf_ac_software_version=NULL;
 int conf_security=0;
 long conf_vendor_id=CONF_DEFAULT_VENDOR_ID;
 
@@ -447,6 +448,7 @@ int read_config(const char * filename){
 		CFG_STR_LIST("bcast_addrs", "{}", CFGF_NONE),
 		CFG_STR_LIST("ac_ips","{}",CFGF_NONE),
 		CFG_SIMPLE_STR("control_port",&conf_control_port),
+	
 #ifdef WITH_LWAPP
 		CFG_SIMPLE_STR("lw_control_port",&conf_lw_control_port),
 		CFG_SIMPLE_BOOL("lwapp",&conf_lwapp),
@@ -457,8 +459,12 @@ int read_config(const char * filename){
 		CFG_SIMPLE_INT("vendor_id",&conf_vendor_id),
 		CFG_SIMPLE_STR("ac_id",&conf_acid),
 		CFG_SIMPLE_STR("ac_name",&conf_acname),
+		CFG_SIMPLE_STR("hardware_version",&conf_hardware_version),
+		CFG_SIMPLE_STR("software_version",&conf_software_version),
+
 		CFG_SIMPLE_STR("ssl_cert",&conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),
+		CFG_SIMPLE_STR("ssl_key_pass",&conf_sslkeypass),
 		CFG_SIMPLE_STR("dtls_psk",&conf_dtls_psk),
 		CFG_SIMPLE_BOOL("ipv4",&conf_ipv4),
 		CFG_SIMPLE_BOOL("ipv6",&conf_ipv6),
