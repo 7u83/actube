@@ -115,7 +115,36 @@ void dtls_openssl_data_destroy(struct dtls_openssl_data * d){
 	free(d);
 }
 
+int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
+{
+	int rc;
+	if (conn->dtls_key_file && conn->dtls_cert_file){
+		SSL_CTX_set_default_passwd_cb_userdata(d->ctx, conn->dtls_key_pass);
+		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
 
+
+		cw_log_debug1("DTLS - Setting key file %s",conn->dtls_key_file);
+		rc = SSL_CTX_use_PrivateKey_file(d->ctx,conn->dtls_key_file,SSL_FILETYPE_PEM);
+		if (!rc){
+
+			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_data_destroy(d);	
+			return 0;
+		}
+
+		cw_log_debug1("DTLS - Setting cert file %s",conn->dtls_cert_file);
+		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);
+		if (!rc){
+
+			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_data_destroy(d);	
+			return 0;
+		}
+
+	}
+
+	return 1;
+}
 
 
 
@@ -145,6 +174,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 
+/*
 	if (conn->dtls_key_file && conn->dtls_cert_file){
 		SSL_CTX_set_default_passwd_cb_userdata(d->ctx, conn->dtls_key_pass);
 		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
@@ -172,6 +202,10 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	}
 
+*/
+	rc = dtls_openssl_set_certs(conn,d);
+	if (!rc)
+		return 0;
 
 
 
@@ -181,12 +215,6 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return 0;
 	}
 
-
-/*
-printf("Checccccccccccccccccccccccccccccc Allllllllllllllllllllllllllllllllllllll is ok!\n");
-
-printf("Allllllllllllllllllllllllllllllllllllll is ok!\n");
-*/
 	
 	d->bio = BIO_new(bio);
 	d->bio->ptr = conn;
