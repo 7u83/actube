@@ -25,6 +25,7 @@
 #define dtls_accept dtls_openssl_accept
 #define dtls_connect dtls_openssl_connect
 #define dtls_shutdown dtls_openssl_shutdown
+#define dtls_get_cipher dtls_openssl_get_cipher
 
 #endif
 
