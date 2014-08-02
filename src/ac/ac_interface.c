@@ -84,8 +84,8 @@ struct ac_info * get_acinfo()
 
 	if (conf_dtls_psk)
 		acinfo->security|=AC_SECURITY_S;
-//	if (conf_dtls_psk)
-//		acinfo->security|=AC_SECURITY_X;
+	if (conf_sslkeyfilename && conf_sslcertfilename)
+		acinfo->security|=AC_SECURITY_X;
 
 
 	acinfo->dtls_policy = AC_DTLS_POLICY_C | AC_DTLS_POLICY_D ;
@@ -104,13 +104,13 @@ struct ac_info * get_acinfo()
 	aciplist_foreach(acinfo->aciplist,pr,NULL);
 
 	int i;
-	for (i=1; i<=31; i++){
+	for (i=1; i<=4; i++){
 		acinfo->radioinfos[i].type= 
 			CW_IEEE80211_RADIO_TYPE_B |
 			CW_IEEE80211_RADIO_TYPE_A | 
 			CW_IEEE80211_RADIO_TYPE_G | 
 			CW_IEEE80211_RADIO_TYPE_N;
-		acinfo->radioinfos[i].type=0xffffffff; 
+//		acinfo->radioinfos[i].type=0xffffffff; 
 		acinfo->radioinfos[i].rid=i;
 	}
 
