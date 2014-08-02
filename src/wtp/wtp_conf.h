@@ -8,6 +8,14 @@
 extern int read_config(const char * filename);
 extern char * conf_wtpname;
 extern char * conf_dtls_psk;
+extern char * conf_sslkeyfilename;
+extern char * conf_sslcertfilename;
+extern char * conf_sslkeypass;
+
+
+
+
+
 extern struct sockaddr_storage * conf_preffered_ac_sa;
 extern char * conf_primary_if;
 
