@@ -27,8 +27,17 @@
 
 int hdr_print(char *str, uint8_t *packet, int len)
 {
+	
+
 
 	char *s = str;
+
+	if (CWTH_GET_PREAMBLE(packet)==01){
+		s+=sprintf(s,"\tEncrypted data.");
+		return s-str;
+	}
+
+
 	int hlen = CWTH_GET_HLEN(packet);
 	int rid = CWTH_GET_RID(packet);
 	int wbid = CWTH_GET_WBID(packet);
