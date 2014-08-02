@@ -92,6 +92,13 @@ extern int conf_lwapp;
 #endif
 
 extern char * conf_dtls_psk;
+extern char * conf_sslcertfilename;
+extern char * conf_sslkeyfilename;
+extern char * conf_sslkeypass;
+extern char * conf_dtls_psk;
+
+
+
 
 extern char ** conf_mcast_groups;
 extern int conf_mcast_groups_len;
