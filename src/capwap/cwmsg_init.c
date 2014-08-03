@@ -39,8 +39,8 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 
 		rmaclen=(*radioinfo->rmac);
 
-		printf ("Adding rmac len %d\n",rmaclen);
-		printf ("Real copy woul dbe %d\n",rmaclen/8+8);
+//		printf ("Adding rmac len %d\n",rmaclen);
+//		printf ("Real copy woul dbe %d\n",rmaclen/8+8);
 
 
 		memcpy(buffer+8,radioinfo->rmac,rmaclen/8+8);
