@@ -19,13 +19,24 @@
 #ifndef __DTLS_H
 #define __DTLS_H
 
-#include "dtls_openssl.h"
+#ifdef WITH_GNUTLS
+	#include "dtls_gnutls.h"
+	#define dtls_init dtls_gnutls_init
+	#define dtls_accept dtls_gnutls_accept
+	#define dtls_connect dtls_gnutls_connect
+	#define dtls_shutdown dtls_gnutls_shutdown
+	#define dtls_get_cipher dtls_gnutls_get_cipher
 
-#define dtls_init dtls_openssl_init
-#define dtls_accept dtls_openssl_accept
-#define dtls_connect dtls_openssl_connect
-#define dtls_shutdown dtls_openssl_shutdown
-#define dtls_get_cipher dtls_openssl_get_cipher
+#else
+	#include "dtls_openssl.h"
+	#define dtls_init dtls_openssl_init
+	#define dtls_accept dtls_openssl_accept
+	#define dtls_connect dtls_openssl_connect
+	#define dtls_shutdown dtls_openssl_shutdown
+	#define dtls_get_cipher dtls_openssl_get_cipher
+
+#endif
+
 
 #endif
 
