@@ -70,8 +70,6 @@ int dtls_openssl_accept(struct conn * conn)
 	for (i=0; i<5; i++){	
 		rc = SSL_accept(d->ssl);
 
-printf("Accept returns %d\n",rc);
-		
 		if (rc!=1){
 			int e;
 			e = SSL_get_error(d->ssl,rc);
