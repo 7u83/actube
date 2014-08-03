@@ -10,18 +10,28 @@ endif
 
 LDFLAGS = -g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DCW_NO_DTLS -DIPV6 -I/usr/local/include -I../capwap
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DCW_NO_DTLS -DIPV6 -I/usr/local/include -I../capwap 
+
 
 
 LIBS+=-lcapwap
 LIBS+=-lrt
+ifdef WITH_GNUTLS
+LIBS+=-lgnutls
+else
 LIBS+=-lssl
+endif
+
+
 LIBS+=-lcrypto
 LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
 
 
+ifdef WITH_GNUTLS
+CFLAGS += -DWITH_GNUTLS
+endif
 
 CFLAGS += -DWITH_CW_LOG
 CFLAGS += -DWITH_CW_LOG_DEBUG
