@@ -9,19 +9,6 @@
 #include "cw_log.h"
 
 
-int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len)
-{
-	if (type != CWMSGELEM_ECN_SUPPORT)
-		return 0;
-
-	if (len!=1){
-		cw_log_debug0("Discarding ECN_SUPPORT msgelem, wrong size, type=%d,len=%d",type,len);
-		return 1;
-	}
-	*ecn_support=*msgelem;
-	return 1;
-}
-
 /*
 int wtpinfo_readelem_ecn_support(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len)
 {
