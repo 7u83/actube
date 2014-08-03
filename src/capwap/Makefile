@@ -93,7 +93,8 @@ CAPWAPOBJS= \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   cw_msgelemtostr.o \
 	   hdr_print.o \
-	   cw_ianavendoridtostr.o
+	   cw_ianavendoridtostr.o \
+	   cw_readelem_ecn_support.o 
 	
 
 	
