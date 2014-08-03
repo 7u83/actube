@@ -71,8 +71,8 @@ int dtls_openssl_accept(struct conn * conn)
 		rc = SSL_accept(d->ssl);
 
 printf("Accept returns %d\n",rc);
-
-		if (rc==0){
+		
+		if (rc!=1){
 			int e;
 			e = SSL_get_error(d->ssl,rc);
 			switch (e){
