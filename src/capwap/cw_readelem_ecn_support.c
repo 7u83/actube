@@ -18,6 +18,8 @@
 
 #include "capwap.h"
 
+#include "cw_log.h"
+
 int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len)
 {
 	if (type != CWMSGELEM_ECN_SUPPORT)
