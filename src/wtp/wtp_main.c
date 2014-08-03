@@ -103,6 +103,15 @@ int wtp_main(const char *ad)
 	cw_log_debug_level=6; //conf_debug_level;
 
 	conf_dtls_psk="Tube";
+	conf_dtls_psk=0;
+
+
+	conf_sslkeyfilename="../../ssl/wtp.key";
+	conf_sslcertfilename="../../ssl/wtp.crt";
+	conf_sslkeypass="7u83";
+
+	
+
 #ifdef WITH_DTLS	
 	dtls_init();
 #endif	
