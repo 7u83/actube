@@ -35,8 +35,40 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
          return(strlen(buf));
 }
 
+ /* Set up ephemeral RSA stuff */
+ RSA *rsa_512 = NULL;
+ RSA *rsa_1024 = NULL;
 
 
+
+ RSA *tmp_rsa_callback(SSL *s, int is_export, int keylength)
+ {
+    RSA *rsa_tmp=NULL;
+
+    switch (keylength) {
+    case 512:
+      if (rsa_512)
+        rsa_tmp = rsa_512;
+      else { /* generate on the fly, should not happen in this example */
+        rsa_tmp = RSA_generate_key(keylength,RSA_F4,NULL,NULL);
+        rsa_512 = rsa_tmp; /* Remember for later reuse */
+      }
+      break;
+    case 1024:
+      if (rsa_1024)
+        rsa_tmp=rsa_1024;
+      else
+        exit(0); //should_not_happen_in_this_example();
+      break;
+    default:
+      /* Generating a key on the fly is very costly, so use what is there */
+      if (rsa_1024)
+        rsa_tmp=rsa_1024;
+      else
+        rsa_tmp=rsa_512; /* Use at least a shorter key */
+    }
+    return(rsa_tmp);
+ }
 
 
 
@@ -183,11 +215,24 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_OFF);
+	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE);
 
 	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
 	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
 
 	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
+
+	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
+
+
+ rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
+// if (rsa_512 == NULL)
+//     evaluate_error_queue();
+
+ rsa_1024 = RSA_generate_key(1024,RSA_F4,NULL,NULL);
+// if (rsa_1024 == NULL)
+//   evaluate_error_queue();
+
 
 	printf ("Ver cookie rc %d\n",rc);
 
@@ -324,8 +369,14 @@ unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
 
 int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)
 {
+	
 
 printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+
+	const char * coo = "tube7u83";
+	memcpy(cookie,coo,strlen(coo));
+	*cookie_len=strlen(coo);
+	return 1;
 
 
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
@@ -346,6 +397,9 @@ printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
 		cookie_initialized = 1;
 	}
+
+
+	return 1;
 
 	/* Read peer information */
 	(void) BIO_dgram_get_peer(SSL_get_rbio(ssl), &peer);
@@ -411,6 +465,12 @@ int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int coo
 {
 
 printf(" Verify cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	char t[400];
+	strncpy(t,(char*)cookie,cookie_len);
+	t[cookie_len]=0;
+	printf("TCoo: %s\n",t);
+
+	return 1;
 
 	unsigned char *buffer, result[EVP_MAX_MD_SIZE];
 	unsigned int length = 0, resultlength;
