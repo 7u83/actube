@@ -16,10 +16,36 @@
 
 */
 
+
+#include <gnutls/gnutls.h>
+//#include <gnutls/dtls.h>
+
+
 #include "dtls_gnutls.h"
+
+
+#include "conn.h"
+#include "cw_log.h"
+
+
+struct gnutls_data{
+//	gnutls_session_t session;
+	//gnutls_certificate_credentials_t x509_cred;
+	int x;
+};
+
 
 int dtls_gnutls_accept(struct conn * conn)
 {
+   //    gnutls_certificate_allocate_credentials(&x509_cred);
+
+
+
 	return 1;	
 }
 
+
+const char * dtls_gnutls_get_cipher(struct conn * conn)
+{
+	return "Unknown";
+}
