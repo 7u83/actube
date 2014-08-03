@@ -300,7 +300,7 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 
 
 //#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA:"
-#define CAPWAP_CIPHER	"ALL"
+#define CAPWAP_CIPHER	"AES128-SHA"
 
 
 
@@ -348,5 +348,6 @@ extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
+extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len);
 
 #endif
