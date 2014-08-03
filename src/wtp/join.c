@@ -97,9 +97,22 @@ int join(struct sockaddr *sa)
 	}
 	#endif
 
-	conn->dtls_psk=conf_dtls_psk;
-	conn->dtls_psk_len=strlen(conn->dtls_psk);
-	conn->dtls_cipher=conf_dtls_cipher;
+	if (conf_dtls_psk){
+		conn->dtls_psk=conf_dtls_psk;
+		conn->dtls_psk_len=strlen(conn->dtls_psk);
+		conn->dtls_cipher=conf_dtls_cipher;
+	}
+
+	if (conf_sslkeyfilename && conf_sslcertfilename){
+
+		conn->dtls_key_file = conf_sslkeyfilename;
+		conn->dtls_cert_file = conf_sslcertfilename;
+		conn->dtls_key_pass = conf_sslkeypass;
+		conn->dtls_cipher=conf_dtls_cipher;
+	
+	}
+
+
 
 	rc = dtls_connect(conn);
 	if (rc!=1){
