@@ -38,7 +38,7 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->hardware_vendor_id=909090;
 	
 	wtpinfo->software_version="2.0";
-	wtpinfo->software_vendor_id=109090;
+	wtpinfo->software_vendor_id=11591;
 
 	wtpinfo->macaddress=conf_macaddress;
 	wtpinfo->macaddress_len=conf_macaddress_len;
