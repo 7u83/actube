@@ -179,6 +179,17 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 }
 
 
+int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len)
+{
+	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMagin session id\n");
+	const char * sessid = "7u83sessid";
+	memcpy(id,sessid,strlen(sessid));
+	*id_len=strlen(sessid);
+	return 1;
+}
+
+
+
 int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
 
 
@@ -214,11 +225,13 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return 0;
 	}
 
-	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_OFF);
+	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
 	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE);
 
 	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
 	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
+	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
+
 
 	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
 
