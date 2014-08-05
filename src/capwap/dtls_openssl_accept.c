@@ -67,7 +67,8 @@ int dtls_openssl_accept(struct conn * conn)
 	int rc; 
 //	do{ 
 	int i;
-	for (i=0; i<5; i++){	
+//	for (i=0; i<10; i++){	
+	while(1){
 		rc = SSL_accept(d->ssl);
 
 		if (rc!=1){
@@ -76,6 +77,9 @@ int dtls_openssl_accept(struct conn * conn)
 			switch (e){
 				case SSL_ERROR_SYSCALL:
 					printf("syscall EOF!\n");
+//					continue;
+					break;
+				default:
 					break;
 			}
 
@@ -90,8 +94,8 @@ int dtls_openssl_accept(struct conn * conn)
 				cw_log(LOG_ERR,"SSL_accept - %s",errstr);
 				e = ERR_get_error();
 			}
+			return 0;
 
-			continue;
 		}		
 		if (rc == 1)
 		{
