@@ -18,6 +18,7 @@
 
 
 #include "capwap.h"
+#include "capwap_ieee80211.h"
 
 
 const char * cw_msgelemtostr(int elem)
@@ -124,6 +125,17 @@ const char * cw_msgelemtostr(int elem)
    WTP Reboot Statistics                                48
    WTP Static IP Address Information                    49
 */
+
+
+
+
+		case CWMSGELEM_IEEE80211_WTP_RADIO_INFO:
+			return "802.11: wtp radio info";
+
+
+
+
+
 	}
 
 	return "unknown";
