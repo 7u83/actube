@@ -1,13 +1,8 @@
 #!/bin/sh
-
-rm index.txt
-rm serial
+rm index.*
+rm serial.*
 echo '1000' > serial
 touch index.txt
-
-echo Creating Root CA 
-openssl genrsa -des3 -out root-ca.key 1536 -config openssl.cnf
-openssl req -new -x509 -days 3650 -key root-ca.key -out root-ca.crt -config openssl.cnf
 
 echo Creating AC Req
 openssl req -newkey rsa:1024 -keyout ac.key -config openssl.cnf -out ac.req
