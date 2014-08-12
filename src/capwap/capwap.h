@@ -157,8 +157,11 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_AC_NAME			4
 /*
    AC Name with Priority                                 5
-   AC Timestamp                                          6
-   Add MAC ACL Entry                                     7
+*/
+
+#define CWMSGELEM_AC_TIMESTAMP			6
+
+/*   Add MAC ACL Entry                                     7
    Add Station                                           8
    Reserved                                              9
 */   
@@ -301,6 +304,7 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 
 //#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA:"
 #define CAPWAP_CIPHER	"AES128-SHA"
+//#define CAPWAP_CIPHER	"ALL"
 
 
 
