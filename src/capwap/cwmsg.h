@@ -26,6 +26,7 @@ extern void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqn
 //
 extern void cwmsg_addelem(struct cwmsg *msg,int type, const uint8_t *elem, int len);
 extern void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo);
+extern void cwmsg_addelem_ac_timestamp(struct cwmsg *msg);
 
 
 extern void cwmsg_init_echo_request(struct cwmsg * cwmsg,uint8_t *buffer,struct conn * conn, struct radioinfo * radioinfo);
