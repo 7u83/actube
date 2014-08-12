@@ -14,6 +14,7 @@ ifdef INCLUDE_DIR
 	XINCLUDE = -I $(INCLUDE_DIR)
 endif
 
+OPENSSLINC=../contrib/openssl-1.0.1i/include
 
 NAME=libcapwap.a
 
@@ -64,6 +65,7 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_cw_local_ip_addr.o \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_result_code.o \
+	   cwmsg_addelem_ac_timestamp.o \
 	   cwmsg_send.o \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
@@ -140,6 +142,7 @@ CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
 CFLAGS += -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
 	  -DWITH_DTLS \
+	  -I $(OPENSSLINC)\
 	  $(XINCLUDE)
 
 
