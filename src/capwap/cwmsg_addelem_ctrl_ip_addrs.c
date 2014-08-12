@@ -28,7 +28,7 @@
 //static int cwmsg_addelem_acip(struct cwmsg * msg,ACIP *ip,int ctr)
 static int cwmsg_addelem_acip(void * priv,void *data) //,int ctr)
 {
-//	cw_log_debug2("Adding IP %s",sock_addr2str((struct sockaddr*)data));
+	cw_log_debug2("Adding Ctrl IP %s",sock_addr2str((struct sockaddr*)data));
 
 	struct cwmsg * msg = (struct cwmsg*)priv;
 	ACIP * acip = (ACIP*)data;
