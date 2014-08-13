@@ -214,13 +214,9 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_WTP_DESCRIPTOR		39
 /*   WTP Fallback                                         40
   */
-#define CWMSGELEM_WTP_FRAME_TUNNEL_MODE	41
-/*   
-   Reserved                                             42
+#define CWMSGELEM_WTP_FRAME_TUNNEL_MODE		41
+#define CWMSGELEM_RESERVED_1			42
 
-
-
-*/
 /*
    Reserved                                             43
 */   
