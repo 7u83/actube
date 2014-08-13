@@ -105,12 +105,9 @@ const char * cw_msgelemtostr(int elem)
   */
 		case CWMSGELEM_WTP_FRAME_TUNNEL_MODE:
 			return "frame tunnel mode";
-/*   
-   Reserved                                             42
 
-
-
-*/
+		case CWMSGELEM_RESERVED_1:
+			return "reserved (42)";
 /*
    Reserved                                             43
 */   
