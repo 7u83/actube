@@ -324,6 +324,7 @@ extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct radioinfo * radioinfos);
 
 extern void cwmsg_addelem_result_code(struct cwmsg *msg,int rc);
+extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg,int vendor_id, int type, uint8_t * payload,int len);
 
 //extern void cwsend_discovery_reponse(struct conn * conn, struct ac_info * acinfo);
 //extern int process_msgelems(uint8_t * msgelems,  int len,
