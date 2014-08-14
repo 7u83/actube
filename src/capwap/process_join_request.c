@@ -31,8 +31,8 @@
 static int process_elem(void *w,int type,uint8_t* msgelem,int len)
 {
 	struct wtpinfo * wtpinfo = (struct wtpinfo*)w;
-	cw_log_debug0("Process join req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
-	cw_log_debug1_dump(msgelem,len,"Dump for msgelem ...");
+	cw_dbg(DBG_CW_MSGELEM,"Process join req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
+	cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
 
 
 	if (wtpinfo_readelem_location_data(wtpinfo,type,msgelem,len)) 
