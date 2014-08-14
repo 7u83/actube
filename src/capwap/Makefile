@@ -97,7 +97,8 @@ CAPWAPOBJS= \
 	   cw_msgelemtostr.o \
 	   hdr_print.o \
 	   cw_ianavendoridtostr.o \
-	   cw_readelem_ecn_support.o 
+	   cw_readelem_ecn_support.o \
+   	   cwmsg_addelem_vendor_cisco_ap_timesync.o
 	
 
 	
