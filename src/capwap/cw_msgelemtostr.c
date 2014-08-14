@@ -80,8 +80,10 @@ const char * cw_msgelemtostr(int elem)
 		case CWMSGELEM_MTU_DISCOVERY_PADDING:
 			return "mtu discovery padding";
 
-/*   Radio Administrative State                           31
-   Radio Operational State                              32
+		case CWMSGELEM_RADIO_ADMINISTRATIVE_STATE:
+			return "radio administrative state";
+
+/*   Radio Operational State                              32
 */
 		case CWMSGELEM_RESULT_CODE:
 			return "result code";
@@ -90,8 +92,10 @@ const char * cw_msgelemtostr(int elem)
 */   
 		case CWMSGELEM_SESSION_ID:
 			return "session id";
-/*   Statistics Timer                                     36
-*/
+
+		case CWMSGELEM_STATISTICS_TIMER:
+			return "statistics timer";
+
 		case CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD:
 			return "vendor specific payload";
 
@@ -119,8 +123,13 @@ const char * cw_msgelemtostr(int elem)
 /*   
    Unused/Reserved                                      46
    WTP Radio Statistics                                 47
-   WTP Reboot Statistics                                48
-   WTP Static IP Address Information                    49
+*/
+
+
+		case CWMSGELEM_WTP_REBOOT_STATISTICS:
+			return "wtp reboot statistics";
+ 
+/*   WTP Static IP Address Information                    49
 */
 
 
