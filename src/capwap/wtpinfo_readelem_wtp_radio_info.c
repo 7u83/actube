@@ -1,3 +1,23 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#include <arpa/inet.h>
+
 #include "wtpinfo.h"
 #include "capwap_ieee80211.h"
 
@@ -14,9 +34,15 @@ int wtpinfo_readelem_wtp_radio_info(struct wtpinfo * wtpinfo,int type,uint8_t *m
 		return -1;
 	}
 
+	if (*msgelem <1 || *msgelem>31){
+		cw_dbg(DBG_CW_RFC,"Non-standard conform radio id, val=%d (must be between 1 to 31, See RFC 5415");
+	}
+
+
 	int rid=*msgelem & 0x1f;
+
 	wtpinfo->radioinfo[rid].rid=rid;
-	wtpinfo->radioinfo[rid].type=*(uint32_t*)(msgelem+4);
+	wtpinfo->radioinfo[rid].type=ntohl(*(uint32_t*)(msgelem+1));
 	return 1;
 }
 
