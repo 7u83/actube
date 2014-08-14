@@ -22,6 +22,11 @@
 #include <stdint.h>
 #include <syslog.h>
 
+
+#define DBG_CAPWAP_MSG		0x00000001
+#define DBG_DTLS		0x00000002
+
+
 #ifndef CW_LOG_DUMP_ROW_LEN
 	#define CW_LOG_DUMP_ROW_LEN 32
 #endif
@@ -35,6 +40,7 @@
 #endif
 
 
+extern void cw_log_dbg_(int type,const char * file, int line, const char * fromat, ...);
 
 #ifdef WITH_CW_LOG
 	#define cw_log(level,...) cw_log_cb(level,__VA_ARGS__)
@@ -52,7 +58,13 @@
 	#define cw_log_debug2_dump(str,len,...) cw_log_debug_dump_(2,str,len,__VA_ARGS__)
 	#define cw_log_debug(level,...) cw_log_debug_cbs[level](__VA_ARGS__)
 
+
+	#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
+
 #else
+	#define cw_log_dbg(...)
+
+
 	#define cw_log_debug0(...) 
 	#define cw_log_debug1(...) 
 	#define cw_log_debug2(...) 
@@ -64,12 +76,17 @@
 #endif
 
 extern void (*cw_log_cb)(int level,const char * fromat, ...);
+extern void (*cw_log_debug_cb)(int type, const char *format, ...);
+
 extern void (*cw_log_debug_cbs[])(const char * fromat, ...);
 extern int cw_log_debug_dump_(int level,const uint8_t * data, int len, const char * format, ...);
 extern void cw_vlog_(int level,const char * format, va_list args);
-extern int cw_log_debug_level;
 extern void cw_log_tosyslog(int level,const char *format, ...);
 extern void cw_log_tofile(int level,const char *format, ...);
+
+
+extern int cw_log_debug_level;
+
 
 extern const char * cw_log_name;
 
