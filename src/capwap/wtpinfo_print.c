@@ -225,7 +225,8 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	char ristr[2048];
 	char *r = ristr;
 	for (i=0; i<wtpinfo->max_radios; i++){
-		r+=radioinfo_print(r,&wtpinfo->radioinfo[i+1]);
+		if (wtpinfo->radioinfo[i].set)
+			r+=radioinfo_print(r,&wtpinfo->radioinfo[i]);
 	}
 
 	s+=sprintf(s,"%s",ristr);
