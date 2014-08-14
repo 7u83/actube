@@ -108,9 +108,10 @@ struct capwap_ctrlhdr
 #define	CWMSG_JOIN_REQUEST			3 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_JOIN_RESPONSE			4 + CWIANA_ENTERPRISE_NUMBER*256
 
-/*	Configuration Status Request         5
-           Configuration Status Response        6
-           Configuration Update Request         7
+#define CWMSG_CONFIGURATION_STATUS_REQUEST	5 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_CONFIGURATION_STATUS_RESPONSE	6 + CWIANA_ENTERPRISE_NUMBER*256
+
+/*           Configuration Update Request         7
            Configuration Update Response        8
            WTP Event Request                    9
            WTP Event Response                  10
@@ -342,6 +343,8 @@ extern void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct r
 
 extern void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+extern void process_conf_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+
 void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 
