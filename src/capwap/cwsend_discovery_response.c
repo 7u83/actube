@@ -21,6 +21,8 @@
 #include <string.h>
 
 #include "capwap.h"
+#include "capwap_cisco.h"
+
 #include "conn.h"
 #include "cwmsg.h"
 
@@ -32,6 +34,8 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 
 	struct cwmsg * cwmsg = &conn->swm;	
 	cwmsg_init(cwmsg,conn->buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,radioinfo);
+
+//	cwmsg_addelem_ac_timestamp(cwmsg);
 	
 	cwmsg_addelem_ac_descriptor(cwmsg,acinfo);
 	cwmsg_addelem(cwmsg,CWMSGELEM_AC_NAME,(uint8_t*)acinfo->ac_name,strlen((char*)acinfo->ac_name));
@@ -40,6 +44,8 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 	cwmsg_addelem_wtp_radio_infos(cwmsg,acinfo->radioinfos);
 	cwmsg_addelem_ctrl_ip_addrs(cwmsg,acinfo);
 
+
+	cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
 	
 	conn_send_response(conn,cwmsg,seqnum);
 }
