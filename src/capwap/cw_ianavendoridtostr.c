@@ -8,6 +8,8 @@ const char * cw_ianavendoridtostr(int id){
 			return "ZyXEL Communications Corp.";
 		case 11591:
 			return "Free Software Foundation";
+		case 4232704:
+			return "Cisco";
 		default:
 			return "Unknown";
 	}
