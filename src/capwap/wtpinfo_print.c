@@ -148,7 +148,7 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 
 
 
-	s+=sprintf (s,"\tVendor ID: %d\n", wtpinfo->vendor_id );
+	s+=sprintf (s,"\tVendor ID: %d, %s\n", wtpinfo->vendor_id,cw_ianavendoridtostr(wtpinfo->vendor_id) );
 	s+=sprintf (s,"\tModel No.: %s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
 	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
 
