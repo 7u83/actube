@@ -66,6 +66,7 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_result_code.o \
 	   cwmsg_addelem_ac_timestamp.o \
+	   cwmsg_addelem_vendor_specific_payload.o \
 	   cwmsg_send.o \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
