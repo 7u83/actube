@@ -26,7 +26,8 @@
 #define DBG_CW_MSG			0x00000001
 #define DBG_CW_MSGELEM			0x00000002
 #define DBG_CW_MSGELEM_DMP		0x00000004
-#define DBG_DTLS			0x00000008
+#define DBG_CW_INFO			0x00000008
+#define DBG_DTLS			0x10000000
 
 #define DBG_ALL				0xffffffff
 
