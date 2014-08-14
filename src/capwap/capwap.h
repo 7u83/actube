@@ -350,4 +350,20 @@ extern int hdr_print(char *str, uint8_t *packet, int len);
 
 extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len);
 
+
+
+
+
+#define CW_VENDOR_ID_FSF	11591
+#define CW_VENDOR_ID_ZYXEL	890
+#define CW_VENDOR_ID_CISCO	4232704
+
+
+
+
+
+
+
+
+
 #endif
