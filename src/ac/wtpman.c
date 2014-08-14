@@ -97,7 +97,7 @@ static void wtpman_run_discovery(void *arg)
 
 		char wtpinfostr[8192];
 		wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-		cw_log_debug2("Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
+		cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 
 //		wtpinfo_print(&wtpman->wtpinfo);
 
@@ -116,12 +116,12 @@ static void wtpman_run(void *arg)
 
 
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
-		cw_log_debug0("Dropping connection from %s to non-unicast socket", CLIENT_IP);
+		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket", CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
 
-	cw_log_debug0("Establishing DTLS connection from %s",CLIENT_IP);
+	cw_dbg(DBG_DTLS,"Establishing DTLS connection with %s",CLIENT_IP);
 
 #ifdef WITH_DTLS
 
@@ -150,7 +150,7 @@ static void wtpman_run(void *arg)
 	}
 
 	if ( !dtls_accept(wtpman->conn) ){
-		cw_log_debug0("Error establishing DTLS connection from %s",CLIENT_IP);
+		cw_dbg(DBG_DTLS,"Error establishing DTLS connection with %s",CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
@@ -158,18 +158,26 @@ static void wtpman_run(void *arg)
 #endif	
 //	const struct sockaddr *sa, char *s, size_t maxlen
 
-	cw_log_debug0("DTLS Session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
+	cw_dbg(DBG_DTLS,"DTLS Session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
 
-
-	cwrmsg = conn_get_message(wtpman->conn);
+	do {
+		cwrmsg = conn_get_message(wtpman->conn);
+		if (!cwrmsg) {
+		//	printf("Got no cwrmsg\n");
+		}
+	} while (!cwrmsg);
 //	printf("Seqnum: %i\n",cwrmsg->seqnum);
+			
 
 	if (cwrmsg->type != CWMSG_JOIN_REQUEST){
-		cw_log_debug0("Join request expected but got %i",cwrmsg->type);
+		cw_dbg(DBG_CW_MSG,"Join request expected but got %i",cwrmsg->type);
 		wtpman_remove(wtpman);
 		return;
 
 	}
+
+	cw_dbg(DBG_CW_MSG,"Received join request from %s",CLIENT_IP);
+
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 	struct radioinfo radioinfo;
@@ -179,7 +187,7 @@ static void wtpman_run(void *arg)
 
 //	printf("ACN: %s\n",acinfo->ac_name);
 
-	int result_code = 1;
+	int result_code = 0;
 	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
 
 	cw_log_debug0("WTP joined %s,%s",wtpman->wtpinfo.name,wtpman->wtpinfo.location);
