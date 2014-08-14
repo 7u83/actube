@@ -61,7 +61,7 @@ extern int acinfo_print(char *str,const struct ac_info *acinfo);
 
 #define acinfo_readelem_ecn_support(acinfo,type,msg,len) cw_readelem_ecn_support(&acinfo->ecn_support,type,msg,len)
 #define acinfo_readelem_cw_local_ip_addr(acinfo,type,msg,len) cw_readelem_cw_local_ip_addr(&acinfo->local_ip,type,msg,len)
-
+#define acinfo_readelem_ac_name(acinfo,type,msg,len) cw_readelem_ac_name(&acinfo->ac_name,type,msg,len)
 
 #endif
 
