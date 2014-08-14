@@ -107,6 +107,31 @@ int cw_log_debug_dump_(int level,const uint8_t * data, int len,const char * form
 
 int cw_log_debug_level=0;
 
+static int dbg_opt_line_numbers=1;
+static int dbg_opt_type=DBG_CAPWAP_MSG;
+
+
+
+void cw_log_dbg_(int type, const char * file, int line, const char * format, ...)
+{
+	if (!(type & dbg_opt_type))
+		return;
+
+	char buf[2048];
+
+	va_list args;
+        va_start(args, format);
+	vsprintf(buf,format,args);
+	va_end(args);
+
+	if (dbg_opt_line_numbers)
+		cw_log(LOG_DEBUG,"%s:%d: %s",file,line,buf);
+	else
+		cw_log(LOG_DEBUG,buf);
+}
+
+
+
 void (*cw_log_debug_cbs[])(const char * fromat, ...) = {
 	cw_log_debug0_,
 	cw_log_debug1_,
