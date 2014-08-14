@@ -353,6 +353,7 @@ extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
 extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_ac_name(uint8_t **dst, int type,uint8_t *msgelem, int len);
 
 
 
