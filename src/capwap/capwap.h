@@ -198,16 +198,15 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_MAXIMUM_MESSAGE_LENGTH	29
 #define CWMSGELEM_MTU_DISCOVERY_PADDING		52
 
-/*   Radio Administrative State                           31
-   Radio Operational State                              32
+#define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE	31
+/*   Radio Operational State                              32
 */
 #define CWMSGELEM_RESULT_CODE			33
 
 /*   Returned Message Element                             34
 */   
 #define CWMSGELEM_SESSION_ID			35
-/*   Statistics Timer                                     36 
-*/
+#define CWMSGELEM_STATISTICS_TIMER		36
 #define CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD	37
 
 #define CWMSGELEM_WTP_BOARD_DATA		38
@@ -221,13 +220,14 @@ struct capwap_ctrlhdr
 /*
    Reserved                                             43
 */   
-#define CWMSGELEM_WTP_MAC_TYPE		44
-#define CWMSGELEM_WTP_NAME		45
+#define CWMSGELEM_WTP_MAC_TYPE			44
+#define CWMSGELEM_WTP_NAME			45
 /*   
    Unused/Reserved                                      46
    WTP Radio Statistics                                 47
-   WTP Reboot Statistics                                48
-   WTP Static IP Address Information                    49
+*/
+#define CWMSGELEM_WTP_REBOOT_STATISTICS		48
+/*   WTP Static IP Address Information                    49
 */
 
 
