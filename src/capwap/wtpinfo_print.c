@@ -32,17 +32,16 @@ int radioinfo_print(char * str, struct radioinfo * radioinfo)
 
 	s += sprintf(s,"\t  RID %d\n",radioinfo->rid);
 	s += sprintf(s,"\t  Modes: ");
+
 	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_B){
 		s+=sprintf(s,"B");
 	}
 	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_G){
 		s+=sprintf(s,"G");
 	}
-
 	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_A){
-		s+=printf(s,"A");
+		s+=sprintf(s,"A");
 	}
-
 	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_N){
 		s+=sprintf(s,"N");
 	}
