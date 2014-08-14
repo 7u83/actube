@@ -162,7 +162,7 @@ uint8_t * fragman_add(FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen
 
 	int ti;
 	for (ti=0; ti<16; ti++){
-		printf("%02X ",(f->buffer+4)[ti]);
+//		printf("%02X ",(f->buffer+4)[ti]);
 
 	}
 
@@ -170,7 +170,7 @@ uint8_t * fragman_add(FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen
 	if (f->bytesneeded>0 && f->bytesneeded<=f->bytesreceived){
 		uint8_t * r=f->buffer;
 		f->buffer=0;
-		printf("last bytes need %i\n",f->bytesneeded);
+//		printf("last bytes need %i\n",f->bytesneeded);
 		*((uint32_t*)(r))=f->bytesneeded;
 		return r; 
 	}
