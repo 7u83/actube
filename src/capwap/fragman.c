@@ -157,7 +157,6 @@ uint8_t * fragman_add(FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen
 	}
 
 	if (val0  & CWTH_FLAGS_L){
-		printf("Flags L found!\n");
 		f->bytesneeded=dst+payloadlen;
 	}
 
