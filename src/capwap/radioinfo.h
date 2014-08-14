@@ -21,14 +21,10 @@
 #define __RADIOINFO_H
 
 struct radioinfo{
+	char set;
 	int rid;
 	uint32_t type;
-//#ifdef WITH_RMAC_SUPPORT
-
 	uint8_t rmac[8];
-
-//#endif	
-
 };
 
 #endif
