@@ -40,7 +40,8 @@ int wtpinfo_readelem_wtp_radio_info(struct wtpinfo * wtpinfo,int type,uint8_t *m
 
 
 	int rid=*msgelem & 0x1f;
-
+	
+	wtpinfo->radioinfo[rid].set=1;
 	wtpinfo->radioinfo[rid].rid=rid;
 	wtpinfo->radioinfo[rid].type=ntohl(*(uint32_t*)(msgelem+1));
 	return 1;
