@@ -77,6 +77,7 @@ CAPWAPOBJS= \
 	   cwsend_echo_request.o \
 	   cwsend_echo_response.o \
 	   process_msgelems_discovery_request.o \
+	   process_conf_status_request.o \
 	   process_discovery_request.o \
 	   process_join_request.o \
 	   wtpinfo_readelem_wtp_board_data.o \
@@ -98,6 +99,7 @@ CAPWAPOBJS= \
 	   hdr_print.o \
 	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
+	   cw_readelem_ac_name.o \
    	   cwmsg_addelem_vendor_cisco_ap_timesync.o
 	
 
