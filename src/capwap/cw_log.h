@@ -23,8 +23,19 @@
 #include <syslog.h>
 
 
-#define DBG_CAPWAP_MSG		0x00000001
-#define DBG_DTLS		0x00000002
+#define DBG_CW_MSG			0x00000001
+#define DBG_CW_MSGELEM			0x00000002
+#define DBG_CW_MSGELEM_DMP		0x00000004
+#define DBG_DTLS			0x00000008
+
+#define DBG_ALL				0xffffffff
+
+
+#define DBG_DETAIL_LINE_NUMBERS		0x00000001	
+#define DBG_DETAIL_ASC_DMP		0x00000002
+
+
+#define DBG_DETAIL_ALL			0xffffffff
 
 
 #ifndef CW_LOG_DUMP_ROW_LEN
@@ -41,6 +52,11 @@
 
 
 extern void cw_log_dbg_(int type,const char * file, int line, const char * fromat, ...);
+extern void cw_log_dbg_dmp_(int type,const char * file, int line, const uint8_t * data, int len,const char * format, ...);
+extern int cw_dbg_opt_detail;
+extern int cw_dbg_opt_type;
+
+
 
 #ifdef WITH_CW_LOG
 	#define cw_log(level,...) cw_log_cb(level,__VA_ARGS__)
@@ -60,9 +76,13 @@ extern void cw_log_dbg_(int type,const char * file, int line, const char * froma
 
 
 	#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
+	#define cw_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
+	#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
+	#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
 
 #else
 	#define cw_log_dbg(...)
+	#define cw_dbg(...)
 
 
 	#define cw_log_debug0(...) 
