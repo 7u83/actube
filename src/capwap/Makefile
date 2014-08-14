@@ -100,6 +100,7 @@ CAPWAPOBJS= \
 	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
 	   cw_readelem_ac_name.o \
+	   cw_readelem_wtp_reboot_statistics.o\
    	   cwmsg_addelem_vendor_cisco_ap_timesync.o
 	
 
