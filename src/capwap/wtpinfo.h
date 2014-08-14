@@ -26,6 +26,7 @@
 
 /* structure to hold info about a wtp */
 struct wtpinfo{
+	uint8_t *ac_name;
 	uint8_t *name;
 	uint8_t * location;
 
@@ -89,6 +90,8 @@ extern int wtpinfo_print(char *str, struct wtpinfo * wtpinfo);
 
 
 extern int wtpinfo_lwreadelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len);
+
+#define wtpinfo_readelem_ac_name(wtpinfo,type,msg,len) cw_readelem_ac_name(&wtpinfo->ac_name,type,msg,len)
 
 
 #endif
