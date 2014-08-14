@@ -24,6 +24,20 @@
 
 #include "radioinfo.h"
 
+
+
+struct wtp_reboot_statistics{
+	int reboot_count;
+	int ac_initiated_count;
+	int link_failure_count;
+	int sw_failure_count;
+	int hw_failure_count;
+	int other_failure_count;
+	int unknown_failure_count;
+	int last_failure_type;
+};
+
+
 /* structure to hold info about a wtp */
 struct wtpinfo{
 	uint8_t *ac_name;
