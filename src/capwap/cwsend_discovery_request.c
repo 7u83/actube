@@ -32,7 +32,7 @@ int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioinfo,str
 	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
-	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo);
+	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
 	cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
 
 	return conn_send_cwmsg(conn,&cwmsg);
