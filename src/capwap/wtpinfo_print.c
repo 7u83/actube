@@ -94,6 +94,28 @@ static int version_print(char *s, const uint8_t *version, int len, uint32_t vend
 	
 }
 
+int wtp_reboot_statistics_print(char *str,struct wtp_reboot_statistics * rs)
+{
+	char *s = str;
+	s+=sprintf(s,"\tReboot statistics: ");
+	s+=sprintf(s,"Count:%d,",rs->reboot_count);
+	s+=sprintf(s,"AC:%d,",rs->ac_initiated_count);
+	s+=sprintf(s,"Link:%d,",rs->link_failure_count);
+	s+=sprintf(s,"SW:%d,",rs->sw_failure_count);
+	s+=sprintf(s,"HW:%d,",rs->hw_failure_count);
+	s+=sprintf(s,"Other:%d,",rs->other_failure_count);
+	s+=sprintf(s,"Unkown:%d,",rs->unknown_failure_count);
+	s+=sprintf(s,"LW:%d",rs->last_failure_type);
+
+
+
+	return s-str;
+
+
+//	int last_failure_type;
+
+}
+
 int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 {
 	char hstr[64];
@@ -231,6 +253,7 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 
 	s+=sprintf(s,"%s",ristr);
 
+	s+=wtp_reboot_statistics_print(s,&wtpinfo->reboot_statistics);
 	return s-str;
 
 
