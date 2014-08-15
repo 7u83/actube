@@ -19,11 +19,12 @@
 
 #include <openssl/err.h>
 
-#include "dtls_openssl.h"
 #include "conn.h"
-
+#include "sock.h"
+#include "dtls_openssl.h"
 #include "cw_log.h"
 
+extern int dtls_openssl_log_error_queue(const char *txt);
 
 
 static BIO_METHOD bio_methods = {
@@ -40,7 +41,7 @@ static BIO_METHOD bio_methods = {
 };
 
 
-
+/*
 static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
 {
 	BIO * b = SSL_get_rbio(ssl);
@@ -50,7 +51,7 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 	return l;
 }
 
-
+*/
 
 int dtls_openssl_accept(struct conn * conn)
 {
@@ -61,42 +62,12 @@ int dtls_openssl_accept(struct conn * conn)
 	if (!d)
 		return 0;
 
-	if (conn->dtls_psk)
-		SSL_set_psk_server_callback( d->ssl, psk_server_cb);
+//	if (conn->dtls_psk)
+//		SSL_set_psk_server_callback( d->ssl, psk_server_cb);
 
-	int rc; 
-//	do{ 
-	int i;
-//	for (i=0; i<10; i++){	
-	while(1){
+	int i,rc; 
+	for (i=0; i<conn->dtls_wait_timer; i++){	
 		rc = SSL_accept(d->ssl);
-
-		if (rc!=1){
-			int e;
-			e = SSL_get_error(d->ssl,rc);
-			switch (e){
-				case SSL_ERROR_SYSCALL:
-					printf("syscall EOF!\n");
-//					continue;
-					break;
-				default:
-					break;
-			}
-
-
-//			printf ("UI! error?\n");
-
-			char errstr[256];
-
-			e = ERR_get_error();
-			while (e!=0){
-				ERR_error_string(e,errstr);
-				cw_log(LOG_ERR,"SSL_accept - %s",errstr);
-				e = ERR_get_error();
-			}
-			return 0;
-
-		}		
 		if (rc == 1)
 		{
 			conn->read = dtls_openssl_read;
@@ -104,70 +75,12 @@ int dtls_openssl_accept(struct conn * conn)
 			return 1;
 		}
 
-
+		rc = dtls_openssl_log_error_queue("DTLS Error:");
+		if (rc)
+			return 0;
 	}
-
+	cw_log(LOG_ERR,"DTLS Error: Timout while waiting establishing session with %s.",sock_addr2str(&conn->addr));
 	return 0;
-	       
-//	} while (rc == 0 );
-
-	if (rc != 1){
-		char errstr[256];
-		int e = ERR_get_error();
-		ERR_error_string(e,errstr);
-		cw_log(LOG_ERR,"SSL_accept %s",errstr);
-		return 0;
-	}
-
-
-	return 1;
-
-/*	
-	struct dtls_openssl_data * data = dtls_openssl_data_new();
-	if (!data)
-		return 0;
-
-	SSL_CTX * ctx = dtls_openssl_create_ctx(DTLSv1_server_method());
-	if (!ctx){
-		free (data);
-		return 0;
-	}
-
-
-
-
-
-//	dtls_init(conn,DTLSv1_server_method());
-
-	struct dtls_data * dtls_data = conn->dtls_data;
-	SSL * ssl = dtls_data->ssl;
-
-//i	printf("bio connected\n");
-//	BIO_ctrl(SSL_get_rbio(ssl), BIO_CTRL_DGRAM_SET_CONNECTED, 0, NULLi //&pinfo->client_addr.ss);
-//	printf("bio connected done\n");
-	int rc;
-	printf("doing accepz\n");
-//	do {
-		rc = SSL_accept(ssl);
-		printf("accept again\n");
-//	} while(rc==0);		
-	perror ("ERRP");
-
-	printf("SSL accept rc %i\n",rc);
-	int e = ERR_get_error();
-	printf ("THE E: %i\n",e);
-
-
-	char es[499];
-	ERR_error_string(e,es);
-	printf ("ES: %s\n",es);
-
-
-	rc = SSL_get_error(ssl,rc);
-	printf("ERROR RC: %08X\n",rc);
-
-	exit(9);
-*/
 }
 
 
