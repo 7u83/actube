@@ -79,7 +79,7 @@ int dtls_openssl_accept(struct conn * conn)
 		if (rc)
 			return 0;
 	}
-	cw_log(LOG_ERR,"DTLS Error: Timout while waiting establishing session with %s.",sock_addr2str(&conn->addr));
+	cw_log(LOG_ERR,"DTLS Error: Timeout while establishing session with %s.",sock_addr2str(&conn->addr));
 	return 0;
 }
 
