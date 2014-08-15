@@ -171,8 +171,8 @@ struct capwap_ctrlhdr
    
 #define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS	30
 #define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS	50
-/*   CAPWAP Timers                                        12
-   CAPWAP Transport Protocol                            51
+#define CWMSGELEM_CAPWAP_TIMERS			12
+/*   CAPWAP Transport Protocol                            51
    Data Transfer Data                                   13
    Data Transfer Mode                                   14
    Decryption Error Report                              15
@@ -189,8 +189,10 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_ECN_SUPPORT			53
  /*  Idle Timeout                                         23
    Image Data                                           24
-   Image Identifier                                     25
-   Image Information                                    26
+*/
+
+#define CWMSGELEM_IMAGE_IDENTIFIER		25
+  /* Image Information                                    26
    Initiate Download                                    27
    */
 #define CWMSGELEM_LOCATION_DATA			28
