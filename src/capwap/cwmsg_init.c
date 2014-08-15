@@ -53,7 +53,10 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 
 	cwmsg->pos=0;
 	cwmsg->hlen=hlen/4;
-	cwmsg->rid=radioinfo->rid;
+	if (radioinfo)
+		cwmsg->rid=radioinfo->rid;
+	else	
+		cwmsg->rid=0;
 	cwmsg->seqnum=seqnum;
 	cwmsg->type=type;
 }
