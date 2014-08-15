@@ -87,6 +87,7 @@ struct conn{
 
 	void * dtls_data;
 	char * dtls_cipher;
+	int  dtls_wait_timer;
 
 
 	/* used to link the conn obj with other objects */
