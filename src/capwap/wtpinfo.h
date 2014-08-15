@@ -82,7 +82,7 @@ struct wtpinfo{
 	uint8_t discovery_type;
 
 	struct sockaddr_storage local_ip;
-
+	struct wtp_reboot_statistics reboot_statistics;
 
 };
 
