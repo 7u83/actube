@@ -32,6 +32,7 @@
 #define DBG_CW_PKT_DMP			0x00000040
 
 #define DBG_DTLS			0x10000000
+#define DBG_DTLS_DETAIL			0x20000000
 
 #define DBG_ALL				0xffffffff
 
