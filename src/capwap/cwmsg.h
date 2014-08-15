@@ -30,6 +30,7 @@ extern void cwmsg_addelem_ac_timestamp(struct cwmsg *msg);
 
 
 extern void cwmsg_init_echo_request(struct cwmsg * cwmsg,uint8_t *buffer,struct conn * conn, struct radioinfo * radioinfo);
+extern void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn* conn);
 
 
 #endif
