@@ -40,6 +40,8 @@ static int process_elem(void *w,int type,uint8_t* msgelem,int len)
 	if (wtpinfo_readelem_ac_name(wtpinfo,type,msgelem,len)) 
 		return 1;
 
+	if (cw_readelem_wtp_reboot_statistics(&wtpinfo->reboot_statistics,type,msgelem,len))
+		return 1;
 
 /*
 	if (wtpinfo_readelem_location_data(wtpinfo,type,msgelem,len)) 
