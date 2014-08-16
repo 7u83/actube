@@ -47,7 +47,16 @@ int main (int argc, const char * argv[])
 	read_config("ac.conf");
 	cw_log_debug_level=conf_debug_level;
 
+
+	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
+
+	cw_dbg_opt_type=DBG_ERR | DBG_CW_MSG | DBG_DTLS ; //| DBG_ALL;
+	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
+
+//	cw_log_dbg(DBG_CW_MSG,"Hello %s","World");
+
+
 
 	db_init();
 	db_start();
