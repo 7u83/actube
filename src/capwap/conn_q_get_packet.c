@@ -35,5 +35,4 @@ uint8_t * conn_q_get_packet(struct conn * conn)
 		qrpos=0;
 	conn->qrpos=qrpos;
 	return conn->q[qrpos];
-
 }
