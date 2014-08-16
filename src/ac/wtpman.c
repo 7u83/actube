@@ -48,68 +48,6 @@ static void wtpman_remove(struct wtpman * wtpman)
 	wtpman_destroy(wtpman);
 }
 
-static void wtpman_run_discovery(void *arg)
-{
-	struct wtpman * wtpman = (struct wtpman *)arg;
-	
-	struct cwrmsg * cwrmsg;
-
-
-//	do {
-		cwrmsg = conn_get_message(wtpman->conn);
-//	}while (!cwrmsg);
-
-//	printf("cwrmsg = %p\n",cwrmsg);
-//	printf("RID: %d, WBID %d\n",cwrmsg->rid,cwrmsg->wbid);
-
-
-	if ( !cwrmsg)
-	{
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-//	printf("cwrmswg type = %08X\n",cwrmsg->type);
-
-	if (cwrmsg->type==CWMSG_DISCOVERY_REQUEST){	
-		cw_dbg(DBG_CW_MSG,"Received discovery request from %s, seq = %d",CLIENT_IP,cwrmsg->seqnum);
-		process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-
-
-
-		struct radioinfo radioinfo;
-		radioinfo.rid = cwrmsg->rid;
-		memcpy(radioinfo.rmac, cwrmsg->rmac,8);
-		radioinfo.rmac[0]=0;
-//		cwrmsg->rmac[0]=0;
-
-//		printf("The RID %d\n",radioinfo.rid);
-/*		int i;
-		for (i=0; i<8; i++){
-			printf("Rec RMAC: %02x\n",cwrmsg->rmac[i]);
-
-		}
-*/
-	//	radioinfo.rmac=0;
-
-
-		struct ac_info * acinfo = get_acinfo();
-
-
-
-		char wtpinfostr[8192];
-		wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-		cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
-
-//		wtpinfo_print(&wtpman->wtpinfo);
-
-		cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
-//exit(0);
-	}
-
-	wtpman_remove(wtpman);
-}
 
 /*
  * Waits for a capwap message until message is received or timeout occurs
@@ -123,7 +61,7 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 	do {
 		cwrmsg = conn_get_message(wtpman->conn);
 		if (!cwrmsg && wtpman->conn->dtls_error)
-			return EOF;
+			return (struct cwrmsg*)EOF;
 		if (!cwrmsg && cw_timer_timeout(timer)) 
 			return NULL;
 
@@ -133,6 +71,56 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 		,CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
 
 	return cwrmsg;
+}
+
+
+
+static void wtpman_run_discovery(void *arg)
+{
+	struct wtpman * wtpman = (struct wtpman *)arg;
+	struct cwrmsg * cwrmsg;
+
+
+	time_t timer = cw_timer_start(10);
+	cwrmsg = wtpman_wait_for_message(wtpman, timer);
+
+	if ( !cwrmsg || cwrmsg == EOF )
+	{
+		cw_dbg(DBG_CW_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+	
+	if (cwrmsg->type!=CWMSG_DISCOVERY_REQUEST){
+		cw_dbg(DBG_CW_MSG_ERR,"Invalid message in discovery state from %s, type=%s - %s ",
+			CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+
+
+	struct radioinfo radioinfo;
+	radioinfo.rid = cwrmsg->rid;
+	memcpy(radioinfo.rmac, cwrmsg->rmac,8);
+	radioinfo.rmac[0]=0;
+
+	struct ac_info * acinfo = get_acinfo();
+
+
+
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
+
+
+	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
+
+	wtpman_remove(wtpman);
 }
 
 
@@ -202,7 +190,7 @@ static void wtpman_run(void *arg)
 		return;
 	}	
 
-	if (cwrmsg == EOF){
+	if (cwrmsg == (struct cwrmsg*)EOF){
 		cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
@@ -216,7 +204,7 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
-	cw_dbg(DBG_CW_MSG,"Received join request from %s",CLIENT_IP);
+//	cw_dbg(DBG_CW_MSG,"Received join request from %s",CLIENT_IP);
 
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
@@ -391,7 +379,7 @@ void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
 void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 {
 	uint8_t * m = packet+12;
-	int l = LWTH_GET_LENGTH(packet+6);
+//	int l = LWTH_GET_LENGTH(packet+6);
 
 	uint8_t * msg = packet+12;
 
@@ -440,9 +428,6 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 	
 	conn_send_packet(wtpman->conn,buffer,60);
 
-	
-
-	
 
 
 
