@@ -24,8 +24,6 @@
 #include "dtls_openssl.h"
 #include "cw_log.h"
 
-extern int dtls_openssl_log_error_queue(const char *txt);
-
 
 static BIO_METHOD bio_methods = {
 	BIO_TYPE_DGRAM,
@@ -41,18 +39,6 @@ static BIO_METHOD bio_methods = {
 };
 
 
-/*
-static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
-{
-	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = b->ptr;
-	int l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
-	memcpy(psk,conn->dtls_psk,l);
-	return l;
-}
-
-*/
-
 int dtls_openssl_accept(struct conn * conn)
 {
 	if (!conn->dtls_data)
@@ -61,9 +47,6 @@ int dtls_openssl_accept(struct conn * conn)
 	struct dtls_openssl_data * d = (struct dtls_openssl_data*)conn->dtls_data;
 	if (!d)
 		return 0;
-
-//	if (conn->dtls_psk)
-//		SSL_set_psk_server_callback( d->ssl, psk_server_cb);
 
 	int i,rc; 
 	for (i=0; i<conn->dtls_wait_timer; i++){	
