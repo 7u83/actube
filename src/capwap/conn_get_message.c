@@ -9,7 +9,6 @@
 
 
 
-
 static int pmessage(void *w, struct cwrmsg * cwrmsg)
 {
 	uint8_t * buffer;
@@ -27,24 +26,13 @@ static int pmessage(void *w, struct cwrmsg * cwrmsg)
 struct cwrmsg * conn_get_message(struct conn * conn)
 {
 	struct cwrmsg * cwrmsg=0;
-//	conn->process_message=pmessage;
-//	conn->pmsgarg=&cwrmsg;
 
 	uint8_t buf[2048];
 	int len=2048;
-//	int flags=0;
 
-
-	int n;
-//	do {
-//		n = conn->recv_packet(conn,(char*)buf,len);
-		n = conn->read(conn,buf,len);
-//
-//		printf("GETMPACK %i\n",n);
-		if (n>0) 
-			conn_process_packet(conn,buf,n,pmessage,&cwrmsg);
-
-//	} while (cwrmsg==0);	
+	int n = conn->read(conn,buf,len);
+	if (n>0) 
+		conn_process_packet(conn,buf,n,pmessage,&cwrmsg);
 
 	return cwrmsg;
 }
