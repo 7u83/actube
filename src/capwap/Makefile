@@ -76,6 +76,7 @@ CAPWAPOBJS= \
 	   cwread_join_response.o \
 	   cwsend_echo_request.o \
 	   cwsend_echo_response.o \
+	   cwsend_conf_status_response.o\
 	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
 	   process_discovery_request.o \
@@ -148,8 +149,8 @@ CFLAGS += -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
 	  -DWITH_DTLS \
 	  -I $(OPENSSLINC)\
-	  $(XINCLUDE)
-
+	  $(XINCLUDE)\
+		-Werror 
 
 #SRCS = $(OBJS:.o=.c) 
 
