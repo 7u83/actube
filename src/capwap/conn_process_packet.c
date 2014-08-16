@@ -87,7 +87,7 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 	/* the received request message was retransmitte by our peer,
 	 * let's retransmit our response message if we have one*/
 
-	cw_dbg(DBG_CW_MSG_ERR,"Retransmitted request message from %s etected, seqnum=%d",
+	cw_dbg(DBG_CW_MSG_ERR,"Retransmitted request message from %s detected, seqnum=%d",
 		sock_addr2str(&conn->addr),s2);
 
 	if (!conn->last_response){
