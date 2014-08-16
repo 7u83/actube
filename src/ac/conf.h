@@ -109,5 +109,6 @@ extern int conf_bcast_addrs_len;
 extern long conf_debug_level;
 extern uint8_t conf_macaddress[12];
 extern uint8_t conf_macaddress_len;
+extern int conf_dtls_verify_peer;
 
 #endif
