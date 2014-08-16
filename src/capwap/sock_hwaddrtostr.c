@@ -26,9 +26,7 @@ char * sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst,const char * sepa
 	char * d = dst;
 	for (i=0; i<len-1; i++){
 	 	d+=sprintf(d,"%02X%s",haddr[i],separator);
-//		d+=3;
 	}
 	sprintf(d,"%02X",haddr[i]);
 	return dst;
 }
-
