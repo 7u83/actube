@@ -1,4 +1,4 @@
-
+#include <errno.h>
 #include <arpa/inet.h>
 #include "dtls_openssl.h"
 
@@ -13,6 +13,10 @@ int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 	*((uint32_t*)buffer)=htonl(1<<24);
 	memcpy(buffer+4,data,len);
 	int rc = conn->send_packet(conn,buffer,len+4);
+
+//	printf("Bio wr rc = %d\n",rc);
+
+
 	if (rc<0)
 		return rc;
 	return rc-4;
@@ -21,18 +25,18 @@ int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 
 int dtls_openssl_bio_read(BIO *b, char *out, int maxlen)
 {
-//	printf("READER WHANT: %d\n",maxlen);
-
 	struct conn * conn = b->ptr;
 	struct dtls_openssl_data * dtls_data = conn->dtls_data;
-//	int len;
 	if (dtls_data->len==0){
 		int len  = conn->recv_packet(conn,dtls_data->buffer,2048);
+/*		if (len == -1){
+			printf ("-1 ERRRRRRRRRRRRRRRRR %s\n",strerror(errno));
+		}
+*/
 		if (len<4)
 			return 0;
 		dtls_data->len=len-4;
 		dtls_data->pos=4;
-//		printf("DTLS_DATA_LEN: %d\n",dtls_data->len);
 	}
 
 	if (dtls_data->len > maxlen)
@@ -40,12 +44,9 @@ int dtls_openssl_bio_read(BIO *b, char *out, int maxlen)
 		memcpy(out,dtls_data->buffer+dtls_data->pos,maxlen);
 		dtls_data->len-=maxlen;
 		dtls_data->pos+=maxlen;
-//		printf("Return %d, %d beyes left\n",maxlen,dtls_data->len);
 		return maxlen;
 
 	}
-
-//	printf("Return rest = %d\n",dtls_data->len);
 	memcpy(out,dtls_data->buffer+dtls_data->pos,dtls_data->len);
 	int ret = dtls_data->len;
 	dtls_data->len=0;
@@ -67,6 +68,7 @@ int dtls_openssl_bio_new(BIO *bi)
 
 int dtls_openssl_bio_puts(BIO *b, const char *str)
 {
+//	printf("Bio puts: %s\n",str);
 	return dtls_openssl_bio_write(b, str, strlen(str));
 }
 
@@ -86,7 +88,7 @@ long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr)
 //	unsigned int sockopt_len = 0;
 //	BIO_memory_data* pData = (BIO_memory_data*)b->ptr;
 //
-//	printf("BIO CONTROL \n");
+//	printf("BIO CONTROL cmd=%d,num=%d\n",cmd,num);
 //	exit(1);	
 
 	switch (cmd)
@@ -132,7 +134,7 @@ long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr)
 
 		case BIO_CTRL_DGRAM_QUERY_MTU:
 		{
-			ret = 1000;
+			ret = 1500;
 
 /*         	sockopt_len = sizeof(sockopt_val);
 			if ((ret = getsockopt(pData->sock, IPPROTO_IP, IP_MTU, (void *)&sockopt_val, &sockopt_len)) < 0 || sockopt_val < 0)
@@ -150,7 +152,7 @@ long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr)
 */		}
 
 		case BIO_CTRL_DGRAM_GET_MTU:
-			ret = 1000;
+			ret = 1500;
 //			ret = pData->nMtu;
 			break;
 	
