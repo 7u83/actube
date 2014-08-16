@@ -90,6 +90,7 @@ struct conn{
 	int  dtls_wait_timer;
 	int dtls_error;
 	uint8_t dtls_cookie[8];
+	int dtls_verify_peer;
 
 
 	/* used to link the conn obj with other objects */
