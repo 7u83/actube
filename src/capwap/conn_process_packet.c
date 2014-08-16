@@ -1,9 +1,29 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
 #include <stdlib.h>
 #include <string.h>
 
 #include "capwap.h"
 #include "cw_log.h"
 #include "conn.h"
+#include "sock.h"
 
 
 static int cwrmsg_init_ctrlhdr(struct cwrmsg * cwrmsg, uint8_t * msg, int len)
@@ -37,7 +57,6 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 {
 	if (!(cwrmsg->type & 0x1)) {
 		/* It's a response  message, no further examination required. */
-//		conn->process_message(conn->pmsgarg,cwrmsg);
 		cb(cbarg,cwrmsg);
 		return 0;
 	}
@@ -51,29 +70,33 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 
 	if ((sd>0 && sd<128) || (sd<0 && sd<-128) || s1<0){
 		/* seqnum is ok, normal message processing */
-//		conn->last_seqnum_received=cwrmsg->seqnum;
+		conn->last_seqnum_received=cwrmsg->seqnum;
 		cb(cbarg,cwrmsg);
 		return 0;
 	}
 
 	if (sd != 0)
 	{
-		cw_log_debug0("Discarding message, old seqnum, seqnum = %d, last seqnum=%d",s2,s1);
+		cw_dbg(DBG_CW_MSG_ERR,
+			"Discarding message from %s, old seqnum, seqnum = %d, last seqnum=%d",
+			sock_addr2str(&conn->addr),s2,s1);
+
 		return 1;
 	}
 
 	/* the received request message was retransmitte by our peer,
 	 * let's retransmit our response message if we have one*/
 
-	cw_log_debug0("Retransmitted request message detected, seqnum=%d",s2);
+	cw_dbg(DBG_CW_MSG_ERR,"Retransmitted request message from %s etected, seqnum=%d",
+		sock_addr2str(&conn->addr),s2);
 
 	if (!conn->last_response){
-		cw_log_debug0("No cached response for retransmission, request seqnum=%d",s2);
+		cw_dbg(DBG_CW_MSG_ERR,"No cached response for retransmission, request seqnum=%d",s2);
 		return 0;
 	}
 
-	cw_log_debug0("Retransmitting response message, seqnum=%d",s2);
-//	cwmsg_send(conn->last_response,conn->last_response_seqnum,conn->last_response_rid,conn);
+	cw_dbg(DBG_CW_MSG_ERR,"Retransmitting response message to %s, seqnum=%d",
+		sock_addr2str(&conn->addr),s2);
 	conn_send_cwmsg(conn,conn->last_response);
 	return 1;	
 }
@@ -83,11 +106,11 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(void*,struct cwrmsg*),void *cbarg)
 {
 
-	cw_log_debug2("Process conn Packet received, len=%d",len);
+	cw_dbg(DBG_CW_PKT_DTL,"Processing packet from %s, len=%d",sock_addr2str(&conn->addr),len);
 
 	if (len<8){
 		/* packet too short */
-		cw_log_debug1("Discarding packet, packet too short, len=%d",len);
+		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, packet too short, len=%d",sock_addr2str(&conn->addr),len);
 		return;
 	}
 
@@ -96,7 +119,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	int preamble = val >> 24;
 	if ( (preamble & 0xf0) != CW_VERSION){
 		/* wrong version */
-		cw_log_debug1("Discarding packet, wrong version, version=%d",preamble&0xf0);
+		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, wrong version, version=%d",sock_addr2str(&conn->addr),preamble&0xf0);
 		return;
 	}
 
@@ -109,11 +132,10 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 	int hlen = 4*((val >> 19) & 0x1f);
 	
-	//printf ("HHHHHHHHHHHHHHHLEN: %d\n",hlen);
 
 	int payloadlen = len - hlen;
 	if (payloadlen<0){
-		cw_log_debug1("Discarding packet, hlen greater than len, hlen=%d",hlen);
+		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, hlen greater than len, hlen=%d",sock_addr2str(&conn->addr),hlen);
 		/* EINVAL */
 		return;
 	}
@@ -125,48 +147,35 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 
 
-
-//#ifdef WITH_RMAC_SUPPORT
 	if (val & CWTH_FLAGS_M){
 		
 		if (*(packet+8)+8>hlen){
-			cw_log_debug0("Discarding packet, wrong rmac size, size=%d",*(packet+8));
 			/* wrong rmac size */
+			cw_dbg(DBG_CW_PKT_ERR,"Discarding packet, wrong rmac size, size=%d",*(packet+8));
 			return;
 		}
 		memcpy(cwrmsg.rmac, packet+8,8);
-
-/*
-int i;
-for (i=0; i<8; i++){
-	printf (":%02X:",cwrmsg.rmac[i]);
-}
-
-*/
 	}
 	else{
 		cwrmsg.rmac[0]=0;
 	}
-//#endif
 
 
 	if (val & CWTH_FLAGS_F){	/* fragmented */
 		uint8_t * f;
-//		printf("fragman add\n");
 		f = fragman_add(conn->fragman, packet,hlen,payloadlen);
 		if (f==NULL)
 			return;
-//		printf("complete\n");
-//		printf ("msglen = %i\n",*((uint32_t*)f));
+
 		cwrmsg_init_ctrlhdr(&cwrmsg,f+4,*(uint32_t*)f);
-		process_message(conn,&cwrmsg,cb,cbarg); //packet,f+4,*(int32_t*)f);
+		process_message(conn,&cwrmsg,cb,cbarg); 
 		free (f);
 		return;
 	}
 
-	cwrmsg_init_ctrlhdr(&cwrmsg,packet+hlen,len-hlen); //f+4,*(uint32_t*)f);
+	cwrmsg_init_ctrlhdr(&cwrmsg,packet+hlen,len-hlen); 
 
-	process_message(conn,&cwrmsg,cb,cbarg); //packet,f+4,*(int32_t*)f);
+	process_message(conn,&cwrmsg,cb,cbarg); 
 	return;
 }
 
