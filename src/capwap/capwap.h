@@ -302,8 +302,8 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 
 
 //#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA:"
-#define CAPWAP_CIPHER	"AES128-SHA"
-//#define CAPWAP_CIPHER	"ALL"
+//#define CAPWAP_CIPHER	"AES128-SHA"
+#define CAPWAP_CIPHER	"ALL"
 
 
 
