@@ -28,6 +28,24 @@
 #include "conn.h"
 
 
+
+#ifdef WITH_CW_LOG_DEBUG
+static void dtls_debug_cb(int write_p,int version,int type, const void * buf,size_t len, SSL * ssl, void * arg)
+{
+	char buffer[200];
+	char * s = buffer;
+
+	if (write_p)
+		s += sprintf(s,"SSL MSG out: ");
+	else
+		s += sprintf(s,"SSL MSG in: ");
+	
+	s+=sprintf(s,"type = %d (%02X), version=%08x, len = %d",type,type,version,(int)len);
+	cw_dbg(DBG_DTLS_DETAIL,buffer);
+}
+#endif
+
+
 int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 {
          strncpy(buf, (char *)(password), size);
@@ -181,8 +199,8 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 
 int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len)
 {
-	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMagin session id\n");
-	const char * sessid = "7u83sessid";
+//	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");
+	const char * sessid = "123456789";
 	memcpy(id,sessid,strlen(sessid));
 	*id_len=strlen(sessid);
 	return 1;
@@ -193,7 +211,7 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
 
 
-	printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX501 verify\n");
+//	printf("X509 verify\n");
 
 	/* This function should ask the user
 	 * if he trusts the received certificate.
@@ -216,7 +234,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return 0;
 	}
 
-	SSL_CTX_set_read_ahead(d->ctx, 1);
+	SSL_CTX_set_read_ahead(d->ctx, 0);
 	
 	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
@@ -225,17 +243,29 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return 0;
 	}
 
-	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
-	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE);
+//	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
+	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE|SSL_OP_NO_SSLv2|SSL_OP_NO_SSLv3|SSL_OP_NO_TICKET);
+
+//	SSL_CTX_set_options(d->ctx, SSL_OP_ALL);
 
 	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
 	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
-	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
+//	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
 
 
-	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
+	SSL_CTX_set_timeout(d->ctx,30);
 
-	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
+
+//	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
+	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, dtls_verify_callback);
+
+//	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
+
+#ifdef WITH_CW_LOG_DEBUG
+	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
+#endif
+
+	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
 
 
  rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
@@ -247,7 +277,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 //   evaluate_error_queue();
 
 
-	printf ("Ver cookie rc %d\n",rc);
+//	printf ("Ver cookie rc %d\n",rc);
 
 
 /*
@@ -373,9 +403,6 @@ int dtls_openssl_shutdown(struct conn *conn)
 
 
 
-
-
-
 int cookie_initialized=0;
 #define COOKIE_SECRET_LENGTH 16
 unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
@@ -384,9 +411,9 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 {
 	
 
-printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+//printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 
-	const char * coo = "tube7u83";
+	const char * coo = "1234567890123456";
 	memcpy(cookie,coo,strlen(coo));
 	*cookie_len=strlen(coo);
 	return 1;
@@ -477,11 +504,11 @@ printf(" Gen cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int cookie_len)
 {
 
-printf(" Verify cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+//printf(" Verify cookie!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	char t[400];
 	strncpy(t,(char*)cookie,cookie_len);
 	t[cookie_len]=0;
-	printf("TCoo: %s\n",t);
+//	printf("TCoo: %s\n",t);
 
 	return 1;
 
@@ -570,7 +597,12 @@ struct pass_info {
 int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len)
 {
 	struct dtls_openssl_data * d = conn->dtls_data;
-	return SSL_read(d->ssl,buffer,len);
+	int rc = SSL_read(d->ssl,buffer,len);
+	if (dtls_openssl_log_error_queue("DTLS read error:")){
+		conn->dtls_error=1;
+		return -1;
+	}
+	return rc;
 }
 
 int dtls_openssl_write(struct conn * conn, const uint8_t *buffer, int len)
