@@ -72,6 +72,8 @@ CAPWAPOBJS= \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
+	   cwread_image_data_request.o \
+	   cwsend_image_data_response.o \
 	   cwsend_join_request.o \
 	   cwsend_join_response.o \
 	   cwread_join_response.o \
