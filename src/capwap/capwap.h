@@ -346,8 +346,10 @@ extern void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, i
 extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void process_conf_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 
-void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
+extern void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
+extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len);
+extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
 
 extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_msgtostr(int type);
@@ -370,10 +372,50 @@ extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, ui
 
 
 
+#define CW_RESULT_CODE_SUCCESS					0
+#define CW_RESULT_CODE_FAILURE					1
+#define CW_RESULT_CODE_SUCCESS_NAT				2
+#define CW_RESULT_CODE_JOIN_FAILURE				3
+#define CW_RESULT_CODE_JOIN_RESOURCE_DEPLETION			4
+#define CW_RESULT_CODE_JOIN_UNKNOWN_SOURCE			5
 
+/*
+     6  Join Failure (Incorrect Data)
 
+      7  Join Failure (Session ID Already in Use)
 
+      8  Join Failure (WTP Hardware Not Supported)
 
+      9  Join Failure (Binding Not Supported)
 
+      10 Reset Failure (Unable to Reset)
+
+      11 Reset Failure (Firmware Write Error)
+
+      12 Configuration Failure (Unable to Apply Requested Configuration
+         - Service Provided Anyhow)
+
+      13 Configuration Failure (Unable to Apply Requested Configuration
+         - Service Not Provided)
+
+      14 Image Data Error (Invalid Checksum)
+
+      15 Image Data Error (Invalid Data Length)
+
+      16 Image Data Error (Other Error)
+
+      17 Image Data Error (Image Already Present)
+
+      18 Message Unexpected (Invalid in Current State)
+
+      19 Message Unexpected (Unrecognized Request)
+
+      20 Failure - Missing Mandatory Message Element
+
+      21 Failure - Unrecognized Message Element
+
+      22 Data Transfer Error (No Information to Transfer)
+
+*/
 
 #endif
