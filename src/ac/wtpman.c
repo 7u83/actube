@@ -111,6 +111,29 @@ static void wtpman_run_discovery(void *arg)
 	wtpman_remove(wtpman);
 }
 
+/*
+ * Waits for a capwap message until message is received or timeout occurs
+ * Returns NULL if timeout
+ * Returns pointer to cwrms if message is received
+ * Returns EOF in case of any other error
+ */
+static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t timer)
+{
+	struct cwrmsg * cwrmsg;
+	do {
+		cwrmsg = conn_get_message(wtpman->conn);
+		if (!cwrmsg && wtpman->conn->dtls_error)
+			return EOF;
+		if (!cwrmsg && cw_timer_timeout(timer)) 
+			return NULL;
+
+	}while(!cwrmsg);
+
+	cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+		,CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
+
+	return cwrmsg;
+}
 
 
 static void wtpman_run(void *arg)
@@ -169,30 +192,26 @@ static void wtpman_run(void *arg)
 
 
 	/* In join state, wait for join request */
-	do {
-		cwrmsg = conn_get_message(wtpman->conn);
 
-		if (!cwrmsg && wtpman->conn->dtls_error){
-			cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
+	cwrmsg = wtpman_wait_for_message(wtpman,timer);
+
+	if (!cwrmsg){
+		cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
+			sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
 			wtpman_remove(wtpman);
-			return;
-		}
+		return;
+	}	
 
-		if (!cwrmsg && cw_timer_timeout(timer)) {
-			cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
-				sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
-			wtpman_remove(wtpman);
-			return;
-
-		}
-
-	} while (!cwrmsg);
-
+	if (cwrmsg == EOF){
+		cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
 
 	/* the received message MUST be a join request */	
 
 	if (cwrmsg->type != CWMSG_JOIN_REQUEST){
-		cw_dbg(DBG_CW_MSG_ERR,"Join request expected but got %i",cwrmsg->type);
+		cw_dbg(DBG_CW_MSG_ERR,"Join request expected from %s, but got %i",CLIENT_IP,cwrmsg->type);
 		wtpman_remove(wtpman);
 		return;
 	}
@@ -201,11 +220,11 @@ static void wtpman_run(void *arg)
 
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
-{
+	{
 	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_CW_INFO,"Join request gave us the follwing WTP Info:\n%s",wtpinfostr);
-}
+	}
 
 
 	struct radioinfo radioinfo;
@@ -218,7 +237,27 @@ static void wtpman_run(void *arg)
 	int result_code = 0;
 	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
 	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
-	cw_dbg(DBG_CW_MSG,"WTP joined, Name = %s, Location = %s, IP = %s",wtpman->wtpinfo.name,wtpman->wtpinfo.location,sock_addr2str(&wtpman->conn->addr));
+	cw_log(LOG_INFO,"WTP joined, Name = %s, Location = %s, IP = %s",
+		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
+		sock_addr2str(&wtpman->conn->addr));
+
+
+
+	/* here the WTP has joined */
+	
+	cwrmsg = wtpman_wait_for_message(wtpman,timer);
+	if (!cwrmsg){
+		cw_dbg(DBG_CW_MSG_ERR,"No config or update request from %s after %d seconds, WTP died.",
+			sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
+			wtpman_remove(wtpman);
+		return;
+	}	
+
+	
+	printf("I have got a message of type %d\n",cwrmsg->type);
+	exit(0);
+
+
 
 
 //	char wtpinfostr[8192];
