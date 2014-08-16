@@ -68,8 +68,12 @@ const char * cw_msgelemtostr(int elem)
 			return "ecn support";
  /*  Idle Timeout                                         23
    Image Data                                           24
-   Image Identifier                                     25
-   Image Information                                    26
+*/
+		case CWMSGELEM_IMAGE_IDENTIFIER:
+			return "image identifier";
+
+
+  /* Image Information                                    26
    Initiate Download                                    27
    */
 		case CWMSGELEM_LOCATION_DATA:
