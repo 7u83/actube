@@ -7,10 +7,12 @@ ifndef ARCH
 	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
+OPENSSLLIB=../contrib/openssl-1.0.1i/libssl.a ../contrib/openssl-1.0.1i/libcrypto.a
+OPENSSLINC=../contrib/openssl-1.0.1i/include
 
 LDFLAGS = -g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DCW_NO_DTLS -DIPV6 -I/usr/local/include -I../capwap 
+CFLAGS = -I$(OPENSSLINC) -Wall -g -O0 -D_REENTRANT -DCW_NO_DTLS -DIPV6 -I/usr/local/include -I../capwap 
 
 
 
@@ -19,14 +21,15 @@ LIBS+=-lrt
 ifdef WITH_GNUTLS
 LIBS+=-lgnutls
 else
-LIBS+=-lssl
+LIBS+=$(OPENSSLLIB)
 endif
 
 
-LIBS+=-lcrypto
+#LIBS+=-lcrypto
 LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
+LIBS+=-ldl
 
 
 ifdef WITH_GNUTLS
