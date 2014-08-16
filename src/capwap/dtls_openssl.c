@@ -215,15 +215,8 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 
 
 
-int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
-
-
-//	printf("X509 verify\n");
-
-	/* This function should ask the user
-	 * if he trusts the received certificate.
-	 * Here we always trust.
-	 */
+static int dtls_verify_peer_callback (int ok, X509_STORE_CTX *ctx) 
+{
 	return 1;
 }
 
@@ -268,10 +261,32 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 
-
+	/* setup certificates */
 	rc = dtls_openssl_set_certs(conn,d);
 	if (!rc)
 		return 0;
+
+
+	/* enable or disable peer verfifying */
+	if (!conn->dtls_verify_peer){
+		cw_dbg(DBG_DTLS, "DTLS verify peer is turned off");
+		SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, dtls_verify_peer_callback);
+	}
+	else{
+		/* In case of verify peer is on we let the ssl library do the verificatoin */
+		SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, NULL);
+	}
+
+	/* setup cookie handling */
+	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE); 
+	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
+	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
+
+
+	/* setup debugging */
+#ifdef WITH_CW_LOG_DEBUG
+	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
+#endif
 
 
 
@@ -279,18 +294,13 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 
+
+
+	rc = SSL_CTX_load_verify_locations(d->ctx,"../../ssl/root-ca.pem",NULL);
+
+
 //	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
-	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE); //|SSL_OP_NO_SSLv2|SSL_OP_NO_SSLv3|SSL_OP_NO_TICKET);
-
-
-	rc = SSL_CTX_load_verify_locations(d->ctx,"/home/tube/v/actube/ssl/root-ca.pem",NULL);
-
-
 //	SSL_CTX_set_options(d->ctx, SSL_OP_ALL);
-
-	SSL_CTX_set_cookie_generate_cb(d->ctx, dtls_openssl_generate_cookie);
-	SSL_CTX_set_cookie_verify_cb(d->ctx, dtls_openssl_verify_cookie);
-
 //	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
 
 
@@ -299,13 +309,8 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, dtls_verify_callback);
-	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, NULL);
 
 //	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
-
-#ifdef WITH_CW_LOG_DEBUG
-	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
-#endif
 
 	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
 
