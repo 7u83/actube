@@ -30,6 +30,9 @@
 #define DBG_CW_RFC			0x00000010
 #define DBG_CW_PKT			0x00000020
 #define DBG_CW_PKT_DMP			0x00000040
+#define DBG_CW_PKT_DTL			0x00000080
+#define DBG_CW_PKT_ERR			0x00000100
+#define DBG_CW_MSG_ERR			0x00000200
 
 #define DBG_DTLS			0x10000000
 #define DBG_DTLS_DETAIL			0x20000000
@@ -42,6 +45,7 @@
 
 
 #define DBG_DETAIL_ALL			0xffffffff
+#define DBG_ERR				(DBG_CW_MSG_ERR | DBG_CW_PKT_ERR)
 
 
 #ifndef CW_LOG_DUMP_ROW_LEN
