@@ -121,9 +121,8 @@ struct capwap_ctrlhdr
 #define CWMSG_ECHO_REQUEST			13 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_ECHO_RESPONSE			14 + CWIANA_ENTERPRISE_NUMBER*256
 
-/*          Image Data Request                  15
-           Image Data Response                 16
-*/
+#define CWMSG_IMAGE_DATA_REQUEST		15 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_IMAGE_DATA_RESPONSE		16
 
 #define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
@@ -351,6 +350,8 @@ void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 
 extern const char * cw_msgelemtostr(int elem);
+extern const char * cw_msgtostr(int type);
+
 extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
