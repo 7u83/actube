@@ -175,20 +175,20 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
 
 
-		cw_log_debug1("DTLS - Setting key file %s",conn->dtls_key_file);
+		cw_dbg(DBG_DTLS,"DTLS - Using key file %s",conn->dtls_key_file);
 		rc = SSL_CTX_use_PrivateKey_file(d->ctx,conn->dtls_key_file,SSL_FILETYPE_PEM);
 		if (!rc){
 
-			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_log_error(0,rc,"DTLS certificate errro:");
 			dtls_openssl_data_destroy(d);	
 			return 0;
 		}
 
-		cw_log_debug1("DTLS - Setting cert file %s",conn->dtls_cert_file);
+		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",conn->dtls_cert_file);
 		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);
 		if (!rc){
 
-			dtls_openssl_log_error(0,rc,"DTLS:");
+			dtls_openssl_log_error(0,rc,"DTLS certificate error:");
 			dtls_openssl_data_destroy(d);	
 			return 0;
 		}
@@ -228,6 +228,18 @@ int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
 }
 
 
+
+
+static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
+{
+	BIO * b = SSL_get_rbio(ssl);
+	struct conn * conn = b->ptr;
+	int l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
+	memcpy(psk,conn->dtls_psk,l);
+	return l;
+}
+
+
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
 	struct dtls_openssl_data * d = malloc(sizeof(struct dtls_openssl_data));
@@ -235,20 +247,37 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return 0;
 	memset(d,0,sizeof(struct dtls_openssl_data));
 
+	/* create new SSL ctx. (In future this should not be done for every connection) */
 	d->ctx = SSL_CTX_new(method);
 	if (!d->ctx){
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}
 
-	SSL_CTX_set_read_ahead(d->ctx, 0);
 	
 	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
-		dtls_openssl_log_error(0,rc,"DTLS:");
+		dtls_openssl_log_error(0,rc,"DTLS setup error:");
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}
+
+	/* set dtls psk if exists */
+	if (conn->dtls_psk)
+		SSL_CTX_set_psk_server_callback( d->ctx, psk_server_cb);
+
+
+
+
+	rc = dtls_openssl_set_certs(conn,d);
+	if (!rc)
+		return 0;
+
+
+
+	SSL_CTX_set_read_ahead(d->ctx, 0);
+
+
 
 //	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
 	SSL_CTX_set_options(d->ctx, SSL_OP_COOKIE_EXCHANGE); //|SSL_OP_NO_SSLv2|SSL_OP_NO_SSLv3|SSL_OP_NO_TICKET);
@@ -256,7 +285,6 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	rc = SSL_CTX_load_verify_locations(d->ctx,"/home/tube/v/actube/ssl/root-ca.pem",NULL);
 
-	printf("Locations RC = %d\n",rc);
 
 //	SSL_CTX_set_options(d->ctx, SSL_OP_ALL);
 
@@ -280,6 +308,9 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 #endif
 
 	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
+
+
+
 
 
  rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
@@ -323,10 +354,6 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 */
-	rc = dtls_openssl_set_certs(conn,d);
-	if (!rc)
-		return 0;
-
 
 
 	d->ssl = SSL_new(d->ctx);
