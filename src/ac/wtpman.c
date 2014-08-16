@@ -29,6 +29,8 @@
 
 #include "capwap.h"
 
+#include "cw_util.h"
+
 
 /* macro to convert our client ip to a string */
 #define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
@@ -71,6 +73,7 @@ static void wtpman_run_discovery(void *arg)
 //	printf("cwrmswg type = %08X\n",cwrmsg->type);
 
 	if (cwrmsg->type==CWMSG_DISCOVERY_REQUEST){	
+		cw_dbg(DBG_CW_MSG,"Received discovery request from %s, seq = %d",CLIENT_IP,cwrmsg->seqnum);
 		process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 
@@ -102,6 +105,7 @@ static void wtpman_run_discovery(void *arg)
 //		wtpinfo_print(&wtpman->wtpinfo);
 
 		cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
+//exit(0);
 	}
 
 	wtpman_remove(wtpman);
@@ -121,64 +125,87 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
-	cw_dbg(DBG_DTLS,"Establishing DTLS connection with %s",CLIENT_IP);
+	/* start DTLS handshake */
+	cw_dbg(DBG_DTLS,"Establishing DTLS session with %s",CLIENT_IP);
 
-#ifdef WITH_DTLS
+	wtpman->conn->dtls_wait_timer=15;
+	time_t timer = cw_timer_start(wtpman->conn->dtls_wait_timer);
 
 
+	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
+
+	/* setup DTSL certificates */
 	int dtls_ok=0;
 	if (conf_sslkeyfilename && conf_sslcertfilename){
 		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
 		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
-		wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
 		dtls_ok=1;
 	}
 
-
+	/* setup DTLS psk */
 	if (conf_dtls_psk){
 		wtpman->conn->dtls_psk=conf_dtls_psk;
 		wtpman->conn->dtls_psk_len=strlen(conf_dtls_psk);
-		wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
 		dtls_ok=1;
 	}
 
 	if (!dtls_ok){
-		cw_log(LOG_ERR,"Cant' establish DTLS connection, neither psk nor certs set in config file");
+		cw_log(LOG_ERR,"Can't establish DTLS session, neither psk nor certs set in config file.");
 		wtpman_remove(wtpman);
 		return;
 	}
 
+	/* try to accept the connection */
 	if ( !dtls_accept(wtpman->conn) ){
-		cw_dbg(DBG_DTLS,"Error establishing DTLS connection with %s",CLIENT_IP);
+		cw_dbg(DBG_DTLS,"Error establishing DTLS session with %s",CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
 	
-#endif	
-//	const struct sockaddr *sa, char *s, size_t maxlen
+	cw_dbg(DBG_DTLS,"DTLS session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
+	/* DTLS handshake done */
 
-	cw_dbg(DBG_DTLS,"DTLS Session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
 
+	/* In join state, wait for join request */
 	do {
 		cwrmsg = conn_get_message(wtpman->conn);
-		if (!cwrmsg) {
-		//	printf("Got no cwrmsg\n");
+
+		if (!cwrmsg && wtpman->conn->dtls_error){
+			cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
+			wtpman_remove(wtpman);
+			return;
 		}
+
+		if (!cwrmsg && cw_timer_timeout(timer)) {
+			cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
+				sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
+			wtpman_remove(wtpman);
+			return;
+
+		}
+
 	} while (!cwrmsg);
-//	printf("Seqnum: %i\n",cwrmsg->seqnum);
-			
+
+
+	/* the received message MUST be a join request */	
 
 	if (cwrmsg->type != CWMSG_JOIN_REQUEST){
-		cw_dbg(DBG_CW_MSG,"Join request expected but got %i",cwrmsg->type);
+		cw_dbg(DBG_CW_MSG_ERR,"Join request expected but got %i",cwrmsg->type);
 		wtpman_remove(wtpman);
 		return;
-
 	}
 
 	cw_dbg(DBG_CW_MSG,"Received join request from %s",CLIENT_IP);
 
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+{
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+	cw_dbg(DBG_CW_INFO,"Join request gave us the follwing WTP Info:\n%s",wtpinfostr);
+}
+
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
@@ -188,18 +215,26 @@ static void wtpman_run(void *arg)
 //	printf("ACN: %s\n",acinfo->ac_name);
 
 	int result_code = 0;
+	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
 	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+	cw_dbg(DBG_CW_MSG,"WTP joined, Name = %s, Location = %s, IP = %s",wtpman->wtpinfo.name,wtpman->wtpinfo.location,sock_addr2str(&wtpman->conn->addr));
 
-	cw_log_debug0("WTP joined %s,%s",wtpman->wtpinfo.name,wtpman->wtpinfo.location);
 
-	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+//	char wtpinfostr[8192];
+//	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+//	cw_log_debug0("WTP joined\n%s",wtpinfostr);
 
-	cw_log_debug0("WTP joined\n%s",wtpinfostr);
+//exit(0);
 
 	int msg_counter = 0;
 	while(1){
 		struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
+
+
+
+
+
+
 		if (!cwrmsg) {
 			msg_counter++;
 			if (msg_counter < CAPWAP_ECHO_INTERVAL *2 ) 
@@ -210,13 +245,28 @@ static void wtpman_run(void *arg)
 			return;
 		}
 
+
+
+if (cwrmsg->type = CWMSG_CONFIGURATION_STATUS_REQUEST){
+	process_conf_status_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+{
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+	cw_dbg(DBG_CW_INFO,"Join request gave us the follwing WTP Info:\n%s",wtpinfostr);
+
+	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+}
+
+
+}
+
 		msg_counter=0;
 
 
 		if (cwrmsg->type == CWMSG_ECHO_REQUEST){
 			cwsend_echo_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
 		}
-		printf("Got msg: %i\n",cwrmsg->type);
+//		printf("Got msg: %i\n",cwrmsg->type);
 
 	}
 
