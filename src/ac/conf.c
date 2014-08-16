@@ -97,7 +97,7 @@ char * conf_lw_control_port=0;
 char * conf_control_port=0;
 
 
-
+int conf_dtls_verify_peer=1;
 
 static int init_acname()
 {
@@ -466,6 +466,8 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),
 		CFG_SIMPLE_STR("ssl_key_pass",&conf_sslkeypass),
 		CFG_SIMPLE_STR("dtls_psk",&conf_dtls_psk),
+		CFG_SIMPLE_BOOL("dtls_verify_peer",&conf_dtls_verify_peer),
+
 		CFG_SIMPLE_BOOL("ipv4",&conf_ipv4),
 		CFG_SIMPLE_BOOL("ipv6",&conf_ipv6),
 
