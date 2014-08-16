@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "conn.h"
+#include "sock.h"
 #include "capwap.h"
 
 #include "cw_log.h"
@@ -68,11 +69,11 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 
 
 		{
-		char h[1024];
-		hdr_print(h,ptr,mtu);
-		cw_dbg(DBG_ALL,"Sending packet:\n%s",h);
+			char h[200];
+			hdr_print(h,ptr,mtu);
+			cw_dbg(DBG_CW_PKT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 		}
-		cw_dbg_dmp(DBG_ALL,ptr,mtu,"Sending packet (mtu) ...");
+		cw_dbg_dmp(DBG_CW_PKT_DMP,ptr,mtu,"Sending packet ...");
 		
 
 		if (conn->write(conn,ptr,mtu)<0)
@@ -108,20 +109,16 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	val = conn->fragid<<16 | fragoffset<<3;
 	*((uint32_t*)(ptr+4))=htonl(val);
 
-//int ii;
-//for (ii=0; ii<4; ii++){
-//	printf("%02X ",ptr[ii]);
 
-//}
-//printf("\n");
-		{
+
+	{
 		char h[1024];
 		hdr_print(h,ptr,msglen-fragoffset*8+hlen);
-		cw_dbg(DBG_ALL,"Sending packet (nomutu):\n%s",h);
-		}
+		cw_dbg(DBG_CW_PKT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
+	}
 
 
-	cw_dbg_dmp(DBG_ALL,ptr,msglen-fragoffset*8+hlen,"Sending packet (no mtu) ...");
+	cw_dbg_dmp(DBG_CW_PKT_DMP,ptr,msglen-fragoffset*8+hlen,"Sending packet ...");
 	return conn->write(conn,ptr,msglen-fragoffset*8+hlen);
 }
 
