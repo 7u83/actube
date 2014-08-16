@@ -140,6 +140,7 @@ static void wtpman_run(void *arg)
 		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
 		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
+		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
 		dtls_ok=1;
 	}
 
