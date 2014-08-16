@@ -75,7 +75,7 @@ int dtls_openssl_accept(struct conn * conn)
 			return 1;
 		}
 
-		rc = dtls_openssl_log_error_queue("DTLS Error:");
+		rc = dtls_openssl_log_error_queue("DTLS accept error:");
 		if (rc)
 			return 0;
 	}
