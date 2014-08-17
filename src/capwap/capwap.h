@@ -115,9 +115,12 @@ struct capwap_ctrlhdr
            Configuration Update Response        8
            WTP Event Request                    9
            WTP Event Response                  10
-           Change State Event Request          11
-           Change State Event Response         12
-*/	   
+*/
+
+
+#define CWMSG_CHANGE_STATE_EVENT_REQUEST	11
+#define CWMSG_CHANGE_STATE_EVENT_RESPONSE	12
+
 #define CWMSG_ECHO_REQUEST			13 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_ECHO_RESPONSE			14 + CWIANA_ENTERPRISE_NUMBER*256
 
