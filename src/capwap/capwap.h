@@ -203,8 +203,8 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_MTU_DISCOVERY_PADDING		52
 
 #define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE	31
-/*   Radio Operational State                              32
-*/
+#define CWMSGELEM_RADIO_OPERATIONAL_STATE	32
+
 #define CWMSGELEM_RESULT_CODE			33
 
 /*   Returned Message Element                             34
@@ -370,6 +370,7 @@ extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo *
 extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len);
 extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
+extern int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 
 
 extern const char * cw_msgelemtostr(int elem);
@@ -384,6 +385,7 @@ extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, in
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_radio_administrative_state(struct radioinfo * radioinfo, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_statistics_timer(uint16_t *timer, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_result_code(uint32_t *result_code, int type, uint8_t * msgelem, int len);
 
 
 
