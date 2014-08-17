@@ -37,6 +37,82 @@
 
 
 
+
+static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
+{
+	struct cwrmsg * cwrmsg;
+	do {
+		cwrmsg = conn_get_message(conn);
+		if (cwrmsg){
+			if (cwrmsg->type == CWMSG_ECHO_REQUEST){
+				printf("Echo reponse\n");
+				cwsend_echo_response(conn,cwrmsg->seqnum,0);
+				printf("continue\n");
+				cwrmsg=0;
+				continue;
+			}
+		}
+
+
+		if (!cwrmsg && conn->dtls_error)
+			return (struct cwrmsg*)EOF;
+		if (!cwrmsg && cw_timer_timeout(timer)) 
+			return NULL;
+
+	}while(!cwrmsg);
+
+	printf("Nw here\n");
+	cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+		,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
+
+	return cwrmsg;
+}
+
+
+
+void send_image_file(struct conn * conn,const char * filename)
+{
+	FILE * infile;
+	infile = fopen(filename,"rb");
+	if (!infile){
+		cw_log(LOG_ERR,"Can't open image file %s:%s",filename,strerror(errno));
+		return;
+	}
+
+	cw_log(LOG_INFO,"Sending image file %s to %s",filename,sock_addr2str(&conn->addr));
+
+	struct cwrmsg * cwrmsg;
+	uint8_t  buffer[1024];
+	struct image_data data;
+	data.data = buffer;
+
+
+	do{
+		data.len = fread(buffer,1,sizeof(buffer),infile);
+		if (feof(infile))
+			data.type=2;
+		else	
+			data.type=1;
+		printf("Send img data request\n");
+		cwsend_image_data_request(conn,&data,0);
+		cwrmsg = conn_get_response(conn);
+		if (cwrmsg){
+			printf("Got img data response\n");
+		}
+		else{
+			printf("Respnse Timeout\n");
+		}
+
+
+	}while(!feof(infile));
+
+
+	exit(0);
+
+
+}
+
+
 ACIPLIST * get_aciplist();
 struct ac_info * get_acinfo();
 
@@ -77,6 +153,8 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 
 static void wtpman_run_discovery(void *arg)
 {
+
+
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg;
 
@@ -179,6 +257,7 @@ static void wtpman_run(void *arg)
 	/* DTLS handshake done */
 
 
+wtpman->conn->strict_capwap=1;
 	/* In join state, wait for join request */
 
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
@@ -204,8 +283,6 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
-//	cw_dbg(DBG_CW_MSG,"Received join request from %s",CLIENT_IP);
-
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 	{
@@ -220,7 +297,6 @@ static void wtpman_run(void *arg)
 	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
 	struct ac_info * acinfo = get_acinfo();
 
-//	printf("ACN: %s\n",acinfo->ac_name);
 
 	int result_code = 0;
 	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
@@ -229,9 +305,8 @@ static void wtpman_run(void *arg)
 		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
 		sock_addr2str(&wtpman->conn->addr));
 
-
-
 	/* here the WTP has joined */
+
 	
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
 	if (!cwrmsg){
@@ -241,8 +316,32 @@ static void wtpman_run(void *arg)
 		return;
 	}	
 
+
+	if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
+		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
+	}
+		
+exit(0);
+	printf("Sending image file\n");
+	send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
+	printf("Back from sending image file\n");
+
+
+
+	timer = cw_timer_start(30);
+	cwrmsg = wtpman_wait_for_message(wtpman,timer);
+
+	if (cwrmsg)
+		printf("I have got a message of type %d\n",cwrmsg->type);
+
+	if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
+		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
+	}
 	
-	printf("I have got a message of type %d\n",cwrmsg->type);
+
+
 	exit(0);
 
 
