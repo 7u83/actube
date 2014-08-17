@@ -85,6 +85,10 @@ int hdr_print(char *str, uint8_t *packet, int len)
 
 
 	int bhlen = 4*hlen;
+	if (CWTH_GET_FLAG_F(packet) && frag_offs!=0){
+		s+=sprintf(s,"\tFragment data ...");
+		return s-str;
+	}
 
 	
 	if (len<bhlen+4){
