@@ -48,12 +48,18 @@ struct conn{
 	int last_seqnum_received; 
 	int last_message_id_received;
 
-	struct cwmsg * last_response;
-	struct cwmsg swm;
-	int last_response_seqnum;
-	int last_response_rid;
+//	struct cwmsg * last_response;
+//	struct cwmsg swm;
+//	int last_response_seqnum;
+//	int last_response_rid;
 
-	uint8_t buffer[65536];
+
+	struct cwmsg req_msg;
+	struct cwmsg resp_msg;
+	uint8_t req_buffer[65536];
+	uint8_t resp_buffer[65536];
+
+
 	int mtu;
 
 	/* receive and send methods */
@@ -95,7 +101,13 @@ struct conn{
 
 	/* used to link the conn obj with other objects */
 	void * data;
+
+	int strict_capwap;
 };
+
+
+
+#define conn_is_strict_capwap(conn) (conn->strict_capwap)
 
 
 
