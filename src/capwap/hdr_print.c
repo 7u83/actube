@@ -32,10 +32,29 @@ int hdr_print(char *str, uint8_t *packet, int len)
 
 	char *s = str;
 
-	if (CWTH_GET_PREAMBLE(packet)==01){
+
+	if (len<1){
+		s+=sprintf(s,"\tNo info available.");
+		return s-str;
+	}
+
+	int preamble = CWTH_GET_PREAMBLE(packet);
+	if (preamble==01){
 		s+=sprintf(s,"\tEncrypted data.");
 		return s-str;
 	}
+
+	if (preamble!=00){
+		s+=sprintf(s,"\tWrong CAPWAP version or encryption type.");
+		return s-str;
+	}
+
+
+	if (len < 4){
+		s+=sprintf(s,"\tNo more data. Packet too short.");
+		return s-str;
+	}
+	
 
 
 	int hlen = CWTH_GET_HLEN(packet);
@@ -54,20 +73,38 @@ int hdr_print(char *str, uint8_t *packet, int len)
 				CWTH_GET_FLAG_K(packet)
 		);
 
+
+	if (len < 8){
+		s+=sprintf(s,"\tNo more data. Packet too short.");
+		return s-str;
+	}
+	
 	int frag_id = CWTH_GET_FRAGID(packet);
 	int frag_offs = CWTH_GET_FRAGOFFSET(packet);
+	s+=sprintf(s,"\tFrag Id: %d, Frag Offs:: %d\n",frag_id,frag_offs);
 
 
 	int bhlen = 4*hlen;
+
+	
+	if (len<bhlen+4){
+		s+=sprintf(s,"\tNo more data. Packet too short.");
+		return s-str;
+	}
+
+
 	int msgtype = ntohl(*((uint32_t*)(packet+bhlen)));
+	s+=sprintf(s,"\tMsgType: %d",msgtype);
+
+	if (len<bhlen+8){
+		s+=sprintf(s,"\n\tNo more data. Packet too short.");
+		return s-str;
+	}
+
 	int seqnum = (ntohl(*((uint32_t*)(packet+bhlen+4))))>>24;
 	int msgelemlen = 0xFF & ((ntohl(*((uint32_t*)(packet+bhlen+4))))>>8);
 
-	s+=sprintf(s,"\tFrag Id: %d, Frag Offs:: %d\n",frag_id,frag_offs);
-	s+=sprintf(s,"\tMsgType: %d, SeqNum: %d, MsgelemLen:%d\n",msgtype,seqnum,msgelemlen);
-
-
-
+	s+=sprintf(s,", SeqNum: %d, MsgelemLen:%d\n",seqnum,msgelemlen);
 
 
 	return s-str;
