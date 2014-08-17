@@ -40,9 +40,9 @@ static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 	if (acinfo_readelem_ctrl_ip_addr(acinfo,type,msgelem,len)) 
 		return 1;
 
-	if (acinfo_readelem_cw_local_ip_addr(acinfo,type,msgelem,len))
+/*	if (acinfo_readelem_cw_local_ip_addr(acinfo,type,msgelem,len))
 		return 1;
-
+*/
 	return 0;
 }
 
