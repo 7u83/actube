@@ -20,10 +20,21 @@
 #include <string.h>
 #include <errno.h>
 
+#include "cw_log.h"
 #include "conn.h"
 #include "sock.h"
+#include "capwap.h"
 
-#include "cw_log.h"
+
+void conn_init(struct conn * conn)
+{
+	conn->retransmit_interval=CAPWAP_RETRANSMIT_INTERVAL;
+	conn->max_reatransmit=CAPWAP_MAX_RETRANSMIT;
+	conn->wait_dtls=CAPWAP_WAIT_DTLS;
+	conn->wait_join=CAPWAP_WAIT_JOIN;
+}
+
+
 
 /**
  * function
@@ -36,6 +47,8 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 	conn = malloc(sizeof (struct conn));
 	if (!conn)
 		return NULL;
+
+	conn_init(conn);
 
 	memset(conn,0,sizeof(struct conn));
 
