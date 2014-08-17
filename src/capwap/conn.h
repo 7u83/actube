@@ -98,6 +98,13 @@ struct conn{
 	uint8_t dtls_cookie[8];
 	int dtls_verify_peer;
 
+	/* capwap timers */
+	int retransmit_interval;
+	int max_reatransmit;
+	int wait_dtls;
+	int wait_join;
+	
+
 
 	/* used to link the conn obj with other objects */
 	void * data;
