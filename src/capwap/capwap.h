@@ -298,6 +298,8 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 #define CAPWAP_MAX_RETRANSMIT		5
 #define CAPWAP_SILENT_INTERVAL		30
 #define CAPWAP_ECHO_INTERVAL 		30
+#define CAPWAP_WAIT_DTLS		60
+#define	CAPWAP_WAIT_JOIN		60
 
 
 //#define CAPWAP_CIPHER			"PSK-AES128-CBC-SHA:"
@@ -377,6 +379,8 @@ extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msg
 extern int cw_readelem_ac_name(uint8_t **dst, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_radio_administrative_state(struct radioinfo * radioinfo, int type,uint8_t *msgelem, int len);
+extern int cw_readelem_statistics_timer(uint16_t *timer, int type, uint8_t * msgelem, int len);
 
 
 
@@ -387,11 +391,11 @@ extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, ui
 
 
 
-#define CW_RESULT_SUCCESS					0
-#define CW_RESULT_FAILURE					1
+#define CW_RESULT_SUCCESS				0
+#define CW_RESULT_FAILURE				1
 #define CW_RESULT_SUCCESS_NAT				2
 #define CW_RESULT_JOIN_FAILURE				3
-#define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
+#define CW_RESULT_JOIN_RESOURCE_DEPLETION		4
 #define CW_RESULT_JOIN_UNKNOWN_SOURCE			5
 
 /*
