@@ -18,62 +18,15 @@
 
 #include <stdio.h>
 
+#include "capwap.h"
 #include "cw_log.h"
 #include "cw_util.h"
-
-#include "capwap.h"
-
 
 struct eparm{
 	int * mand;
 	struct wtpinfo * wtpinfo;	
 
 };
-
-static void mand_elem_found(int *l,int type)
-{
-	if (!cw_dbg_is_level(DBG_CW_RFC))
-		return;
-
-	int i;
-	for (i=0; l[i]!=-1; i++){
-		if(l[i]==type){
-			l[i]=0;
-			return;
-		}
-	
-	}
-}
-
-void get_missing_mand_elems(char *dst, int *l)
-{
-	if (!cw_dbg_is_level(DBG_CW_RFC))
-		return;
-
-	char *s = dst;
-	int i;
-	const char * k = "";
-	for (i=0; l[i]!=-1; i++){
-		if(l[i]){
-			s += sprintf(s,"%s[%s]",k,cw_msgelemtostr(l[i]));
-			k=",";
-		}
-	
-	}
-}
-
-int is_missing_mand_elems(int *l)
-{
-	int i;
-	for (i=0; l[i]!=-1; i++){
-		if(l[i]){
-			return 1;
-		}
-	}
-	return 0;
-}
-
-
 
 static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 {
@@ -91,10 +44,9 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 	if (cw_readelem_statistics_timer(&e->wtpinfo->statistics_timer, type,msgelem,len))
 		goto foundX;
 
-
 	return 0;
 foundX:
-	mand_elem_found(e->mand,type);
+	cw_mand_elem_found(e->mand,type);
 	return 1;
 
 }
@@ -115,9 +67,9 @@ void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg
 	cw_dbg(DBG_CW_MSGELEM,"Reading configuration status request, len=%d",len);
 	cw_foreach_msgelem(msg,len,readelem,&eparm);
 
-	if (is_missing_mand_elems(mand)){
+	if (cw_is_missing_mand_elems(mand)){
 		char str[512];
-		get_missing_mand_elems(str,mand);
+		cw_get_missing_mand_elems(str,mand);
 		cw_dbg(DBG_CW_RFC, "Missing msgelems in configuration status request: %s",str);
 	}
 }
