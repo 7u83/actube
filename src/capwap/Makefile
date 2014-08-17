@@ -40,16 +40,18 @@ LOGOBJS=cw_log.o \
 WTPINFOOBJS = wtpinfo_set_location.o \
 	wtpinfo_print.o 
 
-UTILOBJS=cw_setstr.o \
-	 cw_is_printable.o \
-	 cw_rand.o \
-	 cw_pseudo_rand.o \
-	 cw_foreach_msgelem.o \
-	 avltree.o \
-	 avltree_get.o \
-	 avltree_del_all.o \
-	 avltree_foreach.o \
-	 stravltree.o
+UTILOBJS= \
+	cw_setstr.o \
+	cw_is_printable.o \
+	cw_rand.o \
+	cw_pseudo_rand.o \
+	cw_foreach_msgelem.o \
+	avltree.o \
+	avltree_get.o \
+	avltree_del_all.o \
+	avltree_foreach.o \
+	stravltree.o \
+	cw_util.o
 
 # cw_tohex.o\
 #capwap_parse_ctrlhdr.o \
@@ -85,6 +87,7 @@ CAPWAPOBJS= \
 	   cwsend_echo_response.o \
 	   cwsend_conf_status_response.o\
 	   cwread_configuration_status_request.o\
+	cwread_change_state_event_request.o\
 	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
 	   process_discovery_request.o \
@@ -109,6 +112,7 @@ CAPWAPOBJS= \
 	   hdr_print.o \
 	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
+	cw_readelem_result_code.o\
 	   cw_readelem_ac_name.o \
 	cw_readelem_radio_administrative_state.o \
 	cw_readelem_statistics_timer.o \
