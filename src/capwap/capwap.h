@@ -122,7 +122,7 @@ struct capwap_ctrlhdr
 #define CWMSG_ECHO_RESPONSE			14 + CWIANA_ENTERPRISE_NUMBER*256
 
 #define CWMSG_IMAGE_DATA_REQUEST		15 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_IMAGE_DATA_RESPONSE		16
+#define CWMSG_IMAGE_DATA_RESPONSE		16 + CWIANA_ENTERPRISE_NUMBER*256
 
 #define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
@@ -187,8 +187,8 @@ struct capwap_ctrlhdr
 */   
 #define CWMSGELEM_ECN_SUPPORT			53
  /*  Idle Timeout                                         23
-   Image Data                                           24
 */
+#define CWMSGELEM_IMAGE_DATA			24
 
 #define CWMSGELEM_IMAGE_IDENTIFIER		25
   /* Image Information                                    26
@@ -316,6 +316,20 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 #define AC_DTLS_POLICY_D		4	/* DTLS Data channel support */		
 
 
+struct image_data{
+	uint8_t * data;
+	int type;
+	int len;
+};
+
+struct image_identifier{
+	uint32_t vendor_id;
+	char *name;
+};
+
+
+
+
 
 extern void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo);
@@ -350,6 +364,8 @@ extern void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, in
 extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len);
 extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
+extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
+
 
 extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_msgtostr(int type);
@@ -365,19 +381,18 @@ extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, ui
 
 
 
-
 #define CW_VENDOR_ID_FSF	11591
 #define CW_VENDOR_ID_ZYXEL	890
 #define CW_VENDOR_ID_CISCO	4232704
 
 
 
-#define CW_RESULT_CODE_SUCCESS					0
-#define CW_RESULT_CODE_FAILURE					1
-#define CW_RESULT_CODE_SUCCESS_NAT				2
-#define CW_RESULT_CODE_JOIN_FAILURE				3
-#define CW_RESULT_CODE_JOIN_RESOURCE_DEPLETION			4
-#define CW_RESULT_CODE_JOIN_UNKNOWN_SOURCE			5
+#define CW_RESULT_SUCCESS					0
+#define CW_RESULT_FAILURE					1
+#define CW_RESULT_SUCCESS_NAT				2
+#define CW_RESULT_JOIN_FAILURE				3
+#define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
+#define CW_RESULT_JOIN_UNKNOWN_SOURCE			5
 
 /*
      6  Join Failure (Incorrect Data)
