@@ -116,6 +116,7 @@ extern int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len);
 extern int conn_recv_packet(struct conn* conn,uint8_t *buf,int len);
 
 extern int conn_send_response(struct conn * conn,struct cwmsg * cwmsg,int seqnum);
+extern struct cwrmsg * conn_get_response(struct conn * conn);
 
 
 #define conn_get_next_seqnum(conn) (conn->seqnum=((conn->seqnum+1)&0xff))
