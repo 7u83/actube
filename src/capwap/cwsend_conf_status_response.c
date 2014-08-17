@@ -13,8 +13,8 @@ void cwmsg_addelem_capwap_timers(struct cwmsg *msg,int discovery,int echo_reques
 
 void cwsend_conf_status_response(struct conn * conn,int seqnum, int rc, struct radioinfo * radioinfo, struct ac_info * acinfo, struct wtpinfo * wtpinfo)
 {
-	struct cwmsg * cwmsg = &conn->swm;	
-	cwmsg_init(cwmsg,conn->buffer,CWMSG_CONFIGURATION_STATUS_RESPONSE,seqnum,NULL);
+	struct cwmsg * cwmsg = &conn->resp_msg;	
+	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_CONFIGURATION_STATUS_RESPONSE,seqnum,NULL);
 
 	cwmsg_addelem_capwap_timers(cwmsg,120,15);
 /*
