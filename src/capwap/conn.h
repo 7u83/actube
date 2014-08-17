@@ -93,14 +93,13 @@ struct conn{
 
 	void * dtls_data;
 	char * dtls_cipher;
-	int  dtls_wait_timer;
 	int dtls_error;
 	uint8_t dtls_cookie[8];
 	int dtls_verify_peer;
 
 	/* capwap timers */
 	int retransmit_interval;
-	int max_reatransmit;
+	int max_retransmit;
 	int wait_dtls;
 	int wait_join;
 	
