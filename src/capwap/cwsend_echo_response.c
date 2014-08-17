@@ -5,8 +5,8 @@
 int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo) //,struct wtpinfo * wtpinfo)
 {
 	//uint8_t buffer[CWMSG_MAX_SIZE];
-	struct cwmsg * cwmsg = &conn->swm;	
-	cwmsg_init(cwmsg,conn->buffer,CWMSG_ECHO_RESPONSE,seqnum,radioinfo);
+	struct cwmsg * cwmsg = &conn->resp_msg;	
+	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_ECHO_RESPONSE,seqnum,radioinfo);
 
 	conn_send_response(conn,cwmsg,seqnum);
 	return 1;
