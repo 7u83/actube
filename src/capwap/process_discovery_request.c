@@ -16,8 +16,6 @@
 
 */
 
-
-#include <stdio.h> //tube
 #include <stdlib.h>
 #include <string.h>
 
@@ -60,6 +58,4 @@ void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
 	cw_foreach_msgelem(msg,len,wtpinfo_readelem_discovery_req,wtpinfo);
 }
-
-
 
