@@ -104,7 +104,7 @@ int hdr_print(char *str, uint8_t *packet, int len)
 	int seqnum = (ntohl(*((uint32_t*)(packet+bhlen+4))))>>24;
 	int msgelemlen = 0xFF & ((ntohl(*((uint32_t*)(packet+bhlen+4))))>>8);
 
-	s+=sprintf(s,", SeqNum: %d, MsgelemLen:%d\n",seqnum,msgelemlen);
+	s+=sprintf(s,", SeqNum: %d, MsgelemLen:%d",seqnum,msgelemlen);
 
 
 	return s-str;
