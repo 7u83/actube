@@ -28,8 +28,9 @@
 
 void conn_init(struct conn * conn)
 {
+	memset(conn,0,sizeof(struct conn));
 	conn->retransmit_interval=CAPWAP_RETRANSMIT_INTERVAL;
-	conn->max_reatransmit=CAPWAP_MAX_RETRANSMIT;
+	conn->max_retransmit=CAPWAP_MAX_RETRANSMIT;
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;
 	conn->wait_join=CAPWAP_WAIT_JOIN;
 }
@@ -49,8 +50,6 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 		return NULL;
 
 	conn_init(conn);
-
-	memset(conn,0,sizeof(struct conn));
 
 	conn->sock=sock;
 
