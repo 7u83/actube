@@ -24,7 +24,7 @@
 
 int conn_send_response(struct conn * conn,struct cwmsg * cwmsg,int seqnum)
 {
-	conn->last_response = cwmsg;
+//	conn->last_response = cwmsg;
 //	conn->last_response_seqnum=seqnum;
 //	cwmsg_send(cwmsg,seqnum,rid,conn);
 	conn_send_cwmsg(conn,cwmsg); //,seqnum);
