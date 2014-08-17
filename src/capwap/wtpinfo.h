@@ -50,6 +50,7 @@ struct wtpinfo{
 	uint8_t* board_id;
 	uint8_t* board_revision;
 
+	uint16_t statistics_timer;
 
 	int max_radios;
 	int radios_in_use;
