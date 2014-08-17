@@ -58,6 +58,7 @@ CAPWAPOBJS= \
 	   cwmsg_init.o \
 	   cwmsg_init_echo_request.o \
 	   cwmsg_addelem.o \
+	   cwmsg_vaddelem.o \
 	   cwmsg_addelem_ac_descriptor.o \
 	   cwmsg_addelem_wtp_descriptor.o \
 	   cwmsg_addelem_ctrl_ip_addrs.o \
@@ -67,12 +68,15 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_result_code.o \
 	   cwmsg_addelem_ac_timestamp.o \
-	   cwmsg_addelem_vendor_specific_payload.o \
+	cwmsg_addelem_vendor_specific_payload.o \
+	cwmsg_addelem_maximum_message_length.o \
+	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
 	   cwread_image_data_request.o \
+	   cwsend_image_data_request.o \
 	   cwsend_image_data_response.o \
 	   cwsend_join_request.o \
 	   cwsend_join_response.o \
@@ -127,7 +131,6 @@ CONNOBJS= conn.o \
 	conn_send_packet.o \
 	conn_send_cwmsg.o \
 	conn_process_packet.o \
-	conn_get_message.o  \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \
@@ -135,7 +138,9 @@ CONNOBJS= conn.o \
 	conn_destroy.o \
 	connlist.o \
 	conn_create_noq.o \
-	conn_send_response.o
+	conn_send_response.o \
+	conn_get_message.o  \
+	conn_get_response.o
 
 	
 
