@@ -66,7 +66,7 @@ static int imgdata_request(void * a,int type,uint8_t* msgelem,int len)
 
 void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len)
 {
-	cw_log_debug1("Reading join response");
+/*	cw_log_debug1("Reading join response");*/
 	cw_foreach_msgelem(msg,len,imgdata_request,NULL);
 }
 
