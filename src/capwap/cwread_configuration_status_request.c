@@ -45,7 +45,7 @@ static void mand_elem_found(int *l,int type)
 	}
 }
 
-static void get_missing_mand_elems(char *dst, int *l)
+void get_missing_mand_elems(char *dst, int *l)
 {
 	if (!cw_dbg_is_level(DBG_CW_RFC))
 		return;
@@ -86,6 +86,11 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 		goto foundX;
 	if (cw_readelem_wtp_reboot_statistics(&e->wtpinfo->reboot_statistics,type,msgelem,len))
 		goto foundX;
+	if (cw_readelem_radio_administrative_state(e->wtpinfo->radioinfo, type,msgelem,len))
+		goto foundX;
+	if (cw_readelem_statistics_timer(&e->wtpinfo->statistics_timer, type,msgelem,len))
+		goto foundX;
+
 
 	return 0;
 foundX:
@@ -96,7 +101,12 @@ foundX:
 
 void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
-	int mand[] = {CWMSGELEM_AC_NAME,CWMSGELEM_WTP_REBOOT_STATISTICS,CWMSGELEM_WTP_NAME,-1};
+	int mand[] = {
+		CWMSGELEM_AC_NAME,
+		CWMSGELEM_WTP_REBOOT_STATISTICS,
+		CWMSGELEM_RADIO_ADMINISTRATIVE_STATE,
+		CWMSGELEM_STATISTICS_TIMER,
+		-1};
 
 	struct eparm eparm;
 	eparm.wtpinfo = wtpinfo;
@@ -109,8 +119,6 @@ void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg
 		char str[512];
 		get_missing_mand_elems(str,mand);
 		cw_dbg(DBG_CW_RFC, "Missing msgelems in configuration status request: %s",str);
-
 	}
-
 }
 
