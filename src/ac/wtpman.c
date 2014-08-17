@@ -101,6 +101,7 @@ void send_image_file(struct conn * conn,const char * filename)
 		}
 		else{
 			printf("Respnse Timeout\n");
+			exit(0);
 		}
 
 
@@ -217,8 +218,7 @@ static void wtpman_run(void *arg)
 	/* start DTLS handshake */
 	cw_dbg(DBG_DTLS,"Establishing DTLS session with %s",CLIENT_IP);
 
-	wtpman->conn->dtls_wait_timer=15;
-	time_t timer = cw_timer_start(wtpman->conn->dtls_wait_timer);
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
 
 
 	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
@@ -257,14 +257,14 @@ static void wtpman_run(void *arg)
 	/* DTLS handshake done */
 
 
-wtpman->conn->strict_capwap=1;
-	/* In join state, wait for join request */
+	timer = cw_timer_start(wtpman->conn->wait_join);
 
+	/* In join state, wait for join request */
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
 
 	if (!cwrmsg){
 		cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
-			sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
+			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
 			wtpman_remove(wtpman);
 		return;
 	}	
@@ -311,22 +311,49 @@ wtpman->conn->strict_capwap=1;
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
 	if (!cwrmsg){
 		cw_dbg(DBG_CW_MSG_ERR,"No config or update request from %s after %d seconds, WTP died.",
-			sock_addr2str(&wtpman->conn->addr),wtpman->conn->dtls_wait_timer);
+			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
 			wtpman_remove(wtpman);
 		return;
 	}	
 
+	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
+	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+	cw_dbg(DBG_ALL,"WTP conf_status\n%s",wtpinfostr);
+
+
+
+	cwrmsg = wtpman_wait_for_message(wtpman,timer);
+
+	if (cwrmsg){
+		if (cwrmsg->type == CWMSG_CHANGE_STATE_EVENT_REQUEST){
+			int rc = cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+			printf("Change state RC: %d\n",rc);
+
+		}
+	}
+
+exit(0);
+
 
 	if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
 		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
-		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
+		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
 	}
-		
-exit(0);
+
+
+
+
+
+
+/*		
 	printf("Sending image file\n");
 	send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
 	printf("Back from sending image file\n");
-
+*/
+exit(0);
 
 
 	timer = cw_timer_start(30);
@@ -458,7 +485,6 @@ struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr)
 
 	int sockfd = socklist[socklistindex].reply_sockfd;
 
-//	wtpman->conn=conn_create(sockfd,srcaddr,process_discovery,wtpman,100);
 	wtpman->conn=conn_create(sockfd,srcaddr,100);
 	if (!wtpman->conn){
 		wtpman_destroy(wtpman);
