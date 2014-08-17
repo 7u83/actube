@@ -46,6 +46,10 @@ int radioinfo_print(char * str, struct radioinfo * radioinfo)
 		s+=sprintf(s,"N");
 	}
 
+	if (radioinfo->admin_state){
+		s+=sprintf(s," - Admin state %d",radioinfo->admin_state);
+	}
+
 	s+=sprintf(s,"\n");
 
 	return s-str;
