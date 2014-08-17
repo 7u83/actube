@@ -49,7 +49,7 @@ int dtls_openssl_accept(struct conn * conn)
 		return 0;
 
 	int i,rc; 
-	for (i=0; i<conn->dtls_wait_timer; i++){	
+	for (i=0; i<conn->wait_dtls; i++){	
 		rc = SSL_accept(d->ssl);
 		if (rc == 1)
 		{
