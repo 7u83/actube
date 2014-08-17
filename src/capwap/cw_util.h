@@ -34,3 +34,9 @@ extern int cw_is_printable(const uint8_t * s,int len);
 
 #define cw_timer_start(t) (time(NULL)+t)
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
+
+
+/* generic macroto to isolate bits from a dword */
+#define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
+
+
