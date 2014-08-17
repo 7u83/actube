@@ -26,8 +26,8 @@ int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, i
 		return 0;
 
 	if (len!=1){
-		cw_log_debug0("Discarding ECN_SUPPORT msgelem, wrong size, type=%d,len=%d",type,len);
-		return 1;
+		cw_dbg(DBG_CW_RFC,"Discarding ECN_SUPPORT msgelem, wrong size, type=%d,len=%d",type,len);
+		return 0;
 	}
 	*ecn_support=*msgelem;
 	return 1;
