@@ -67,7 +67,7 @@ extern int cw_dbg_opt_detail;
 extern int cw_dbg_opt_level;
 
 
-#define cw_dbg_is_level(type) (cw_dbg_opt_type & level)
+#define cw_dbg_is_level(level) (cw_dbg_opt_level & level)
 
 
 
