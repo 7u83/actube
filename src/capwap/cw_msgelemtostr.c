@@ -67,8 +67,10 @@ const char * cw_msgelemtostr(int elem)
 		case CWMSGELEM_ECN_SUPPORT:
 			return "ecn support";
  /*  Idle Timeout                                         23
-   Image Data                                           24
 */
+		case CWMSGELEM_IMAGE_DATA:
+			return "image data";
+
 		case CWMSGELEM_IMAGE_IDENTIFIER:
 			return "image identifier";
 
