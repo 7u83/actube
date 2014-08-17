@@ -51,7 +51,7 @@ int main (int argc, const char * argv[])
 	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 
-	cw_dbg_opt_level=  DBG_CW_MSGELEM_DMP|DBG_CW_MSGELEM |  DBG_CW_RFC | DBG_ERR | DBG_CW_MSG | DBG_DTLS ; //| DBG_ALL;
+	cw_dbg_opt_level=   DBG_CW_MSGELEM_DMP|DBG_CW_MSGELEM | DBG_CW_PKT| DBG_CW_RFC | DBG_ERR | DBG_CW_MSG | DBG_DTLS ; //| DBG_ALL;
 
 
 	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
