@@ -40,3 +40,8 @@ extern int cw_is_printable(const uint8_t * s,int len);
 #define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
 
 
+/* functions used to "rfc-verify" message elements */
+void cw_mand_elem_found(int *l,int type);
+int cw_is_missing_mand_elems(int *l);
+void cw_get_missing_mand_elems(char *dst, int *l);
+
