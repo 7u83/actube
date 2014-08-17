@@ -64,7 +64,10 @@
 extern void cw_log_dbg_(int type,const char * file, int line, const char * fromat, ...);
 extern void cw_log_dbg_dmp_(int type,const char * file, int line, const uint8_t * data, int len,const char * format, ...);
 extern int cw_dbg_opt_detail;
-extern int cw_dbg_opt_type;
+extern int cw_dbg_opt_level;
+
+
+#define cw_dbg_is_level(type) (cw_dbg_opt_type & type)
 
 
 
