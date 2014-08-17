@@ -24,6 +24,7 @@ struct radioinfo{
 	char set;
 	int rid;
 	uint32_t type;
+	int admin_state;
 	uint8_t rmac[8];
 };
 
