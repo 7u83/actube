@@ -33,8 +33,8 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 {
 	cw_dbg(DBG_CW_MSG,"Sending discovery response to %s, seq = %d",sock_addr2str(&conn->addr),seqnum);
 
-	struct cwmsg * cwmsg = &conn->swm;	
-	cwmsg_init(cwmsg,conn->buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,radioinfo);
+	struct cwmsg * cwmsg = &conn->resp_msg;	
+	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,NULL);
 
 //	cwmsg_addelem_ac_timestamp(cwmsg);
 	
@@ -47,6 +47,10 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 
 
 	cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
+
+
+//	uint8_t buffer[]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO, 149, buffer,sizeof(buffer));
 	
 	conn_send_response(conn,cwmsg,seqnum);
 }
