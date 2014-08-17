@@ -84,6 +84,7 @@ CAPWAPOBJS= \
 	   cwsend_echo_request.o \
 	   cwsend_echo_response.o \
 	   cwsend_conf_status_response.o\
+	   cwread_configuration_status_request.o\
 	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
 	   process_discovery_request.o \
@@ -109,6 +110,8 @@ CAPWAPOBJS= \
 	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
 	   cw_readelem_ac_name.o \
+	cw_readelem_radio_administrative_state.o \
+	cw_readelem_statistics_timer.o \
 	   cw_readelem_wtp_reboot_statistics.o\
    	   cwmsg_addelem_vendor_cisco_ap_timesync.o
 	
