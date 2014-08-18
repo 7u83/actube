@@ -1,7 +1,7 @@
 Create ssl certificates to test AC-Tube and it's WTP
 ====================================================
 
-1. Creeate a root CA by executing: 
+1. Create a root CA by executing: 
 
    ./mkrootca
 
@@ -23,7 +23,7 @@ Create ssl certificates to test AC-Tube and it's WTP
    ssl_key_pass=your password 
    ssl_cert=../../ssl/ac.crt
 
-   For WTP the certiciate's config entries for moment are hard-coded.
+   For WTP the certiciate's config entries for now are hard-coded.
    Now you can play around joining WTP to AC...
 
 4. If you want to connect a Cisco 1130 series LAP to  AC-Tube you 
