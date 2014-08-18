@@ -7,15 +7,17 @@
 #include "conn.h"
 
 
+#include <stdio.h>
+
 int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
 {
-//	printf("Conn recv packet called\n");
+	printf("THHHHHHHHHHHHHHHHHHHHHHHHHe  Conn recv packet called\n");
 	int n;
 	int flags=0;
 	while( (n = recv(conn->sock,(char*)buf,len,flags)) < 0 ){
 		if (errno!=EINTR)
 		{
-/*			if (errno == EWOULDBLOCK)
+			if (errno == EWOULDBLOCK)
 			{
 				printf("would block\n");
 			}
@@ -24,8 +26,8 @@ int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
 				printf("again\n");
 			}
 			perror("recv");
-*/			
-			return n;
+			
+		return n;
 		}
 	}
 	return n;

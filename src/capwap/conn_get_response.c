@@ -9,8 +9,6 @@
 struct cwrmsg * conn_get_response(struct conn * conn)
 {
 
-	printf("Starting timer 120\n");
-	time_t timer = cw_timer_start(160);
 
 	struct cwmsg * cwmsg = &conn->req_msg;
 
@@ -23,36 +21,31 @@ struct cwrmsg * conn_get_response(struct conn * conn)
 
 	struct cwrmsg * cwrmsg;
 
-	time_t rpt_timer = cw_timer_start(5);
-        do {
-                cwrmsg = conn_get_message(conn);
+	int i;
+        for (i=0; i<conn->max_retransmit; i++) {
 
+		time_t r_timer = cw_timer_start(conn->retransmit_interval);
 
-                if (cwrmsg){
-		        cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
-               			 ,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
-                        if (cwrmsg->type == type){
-				printf("Jea!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11\n");
-                        	return cwrmsg;        
-                        }
-			
-                }
+		while(!cw_timer_timeout(r_timer)){
+	                cwrmsg = conn_get_message(conn);
+	                if (cwrmsg){
+			        cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+	               			 ,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
+	                        if (cwrmsg->type == type){
+					printf("Jea!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11\n");
+	                        	return cwrmsg;        
+               			 }
+				
+        	        }
 
-		if (cw_timer_timeout(rpt_timer)){
-			rpt_timer = cw_timer_start(5);
-			printf("Retransmitting request\n");
-			conn_send_cwmsg(conn,&conn->req_msg);
+			if (conn->dtls_error)
+	                        return 0;
 		}
+		cw_dbg(DBG_CW_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+		conn_send_cwmsg(conn,&conn->req_msg);
 
-
-
-                if (conn->dtls_error)
-                        return 0;
-
-        }while(!cw_timer_timeout(timer));
-
-	printf("Timeout!!!!!\n");
-
+        }
+	cw_dbg(DBG_CW_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 	return 0;
 
 }
