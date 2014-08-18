@@ -13,6 +13,7 @@ static int pmessage(void *w, struct cwrmsg * cwrmsg)
 {
 	uint8_t * buffer;
 	buffer = malloc( sizeof (struct cwrmsg) + cwrmsg->msgelems_len);
+
 	memcpy(buffer,cwrmsg,sizeof(struct cwrmsg));
 	memcpy(buffer+sizeof(struct cwrmsg),cwrmsg->msgelems,cwrmsg->msgelems_len);
 	((struct cwrmsg*)(buffer))->msgelems=buffer+sizeof(struct cwrmsg);

@@ -19,6 +19,7 @@
 
 
 
+
 struct wtpinfo wtpinfo;
 
 //int conf_rids[2];
@@ -100,17 +101,16 @@ int wtp_main(const char *ad)
 
 	wtpconf_init();
 
-	cw_log_debug_level=6; //conf_debug_level;
+//	cw_log_debug_level=6; //conf_debug_level;
 
 	conf_dtls_psk="Tube";
-	conf_dtls_psk=0;
+//	conf_dtls_psk=0;
+//	conf_sslkeyfilename="../../ssl/wtp.key";
+//	conf_sslcertfilename="../../ssl/wtp.crt";
+//	conf_sslkeypass="7u83";
 
 
-	conf_sslkeyfilename="../../ssl/wtp.key";
-	conf_sslcertfilename="../../ssl/wtp.crt";
-	conf_sslkeypass="7u83";
-
-	
+	cw_dbg_opt_type = DBG_DTLS;	
 
 #ifdef WITH_DTLS	
 	dtls_init();

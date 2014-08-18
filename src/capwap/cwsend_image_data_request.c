@@ -32,10 +32,21 @@ int cwsend_image_data_request(struct conn * conn, struct image_data * data, stru
 	if (data){
 //		cwmsg_addelem(&cwmsg,CWMSGELEM_IMAGE_DATA,(uint8_t*)&data->type,sizeof(data->type));
 
+
+		uint8_t type=3;
+		uint16_t checksum=0;
 		cwmsg_vaddelem(cwmsg,CWMSGELEM_IMAGE_DATA, 2,
+			&type, 1,
+			&checksum,2,	
+			data->data, data->len
+		);
+
+
+/*		cwmsg_vaddelem(cwmsg,CWMSGELEM_IMAGE_DATA, 2,
 			&data->type, sizeof(data->type),
 			data->data, data->len
 		);
+*/
 
 	}
 	return conn_send_cwmsg(conn,cwmsg);

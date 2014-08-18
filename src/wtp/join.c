@@ -89,6 +89,9 @@ int join(struct sockaddr *sa)
 
 	
 #ifdef WITH_DTLS
+	cw_dbg (DBG_DTLS,"Establishing DTLS session with %s",sock_addr2str(sa)); 
+
+/*
 	#ifdef WITH_CW_LOG_DEBUG
 	{
 		char str[100];
@@ -96,7 +99,7 @@ int join(struct sockaddr *sa)
 		cw_log_debug0("Establishing DTLS connection to %s",str);
 	}
 	#endif
-
+*/
 	if (conf_dtls_psk){
 		conn->dtls_psk=conf_dtls_psk;
 		conn->dtls_psk_len=strlen(conn->dtls_psk);
@@ -125,6 +128,9 @@ int join(struct sockaddr *sa)
 	}
 
 #endif	
+	cw_dbg (DBG_DTLS,"DTLS session established with %s, cipher=%s",sock_addr2str(sa),dtls_get_cipher(conn)); 
+exit(0);
+
 
 	#ifdef WITH_CW_LOG_DEBUG
 	{

@@ -26,6 +26,7 @@ int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len)
 {
 	if ( !conn->cur_packet)
 	{
+/*		while ((conn->cur_packet = conn_q_get_packet(conn)) == 0){*/
 		if ((conn->cur_packet = conn_q_get_packet(conn)) == 0){
 			errno = EAGAIN;
 			return -1;
