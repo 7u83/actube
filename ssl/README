@@ -1,1 +1,48 @@
-Create ssl certificates to test AC-Tube and WTP
+Create ssl certificates to test AC-Tube and it's WTP
+====================================================
+
+1. Creeate a root CA by executing: 
+
+   ./mkrootca
+
+   This creates the files root-ca.crt and root-ca.key.
+
+
+2. Create client certificates for AC and WTP
+
+   ./mkcerts
+
+   This will create the files ac.key, ac.crt and  wtp.crt, wtp.key. 
+   All .key files are protected with  the password you have chosen 
+   in the certificate creation process. 
+
+3. Put these entries into  ac.conf  located in  the    ac directory, 
+   so AC-Tube wilil use the certificates:
+
+   ssl_key=../../ssl/ac.key
+   ssl_key_pass=your password 
+   ssl_cert=../../ssl/ac.crt
+
+   For WTP the certiciate's config entries for moment are hard-coded.
+   Now you can play around joining WTP to AC...
+
+4. If you want to connect a Cisco 1130 series LAP to  AC-Tube you 
+   have to install the CA file on the LAP. Therofore you can create 
+   a terminal script by  executing:
+
+   ./mkciscoimport.sh 	
+
+   Paste the result into a terminal session when in enabled mode. 
+
+   To ac.conf add the following entry:
+   
+   dtls_verify_peer = no
+
+   Now your Cisco 1130 LAP will join to AC-Tube. Remember that the 
+   Cisco LAP will lose the installed  certificate after rebooting. 
+
+
+If you experience with other Cisco LAPs (e.g. 1141), please tell me.
+7u83@mail.ru.
+
+   
