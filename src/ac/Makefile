@@ -1,3 +1,6 @@
+
+include ../Config.mak
+
 ifndef CC
         CC=gcc
 endif
@@ -7,8 +10,12 @@ ifndef ARCH
 	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
-OPENSSLLIB=../contrib/openssl-1.0.1i/libssl.a ../contrib/openssl-1.0.1i/libcrypto.a
+ifdef USE_CONTRIB_OPENSSL
+OPENSSLLIB=../contrib/openssl-1.0.1i/libssl.a ../contrib/openssl-1.0.1i/libcrypto.a -ldl
 OPENSSLINC=../contrib/openssl-1.0.1i/include
+else
+OPENSSLLIB=-lssl
+endif
 
 LDFLAGS = -g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
