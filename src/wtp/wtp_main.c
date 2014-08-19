@@ -110,7 +110,7 @@ int wtp_main(const char *ad)
 //	conf_sslkeypass="7u83";
 
 
-	cw_dbg_opt_type = DBG_DTLS;	
+	cw_dbg_opt_level = DBG_DTLS;	
 
 #ifdef WITH_DTLS	
 	dtls_init();
