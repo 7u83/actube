@@ -1,0 +1,20 @@
+pre-requisites
+--------------
+
+libcapwap:
+	
+gnutls (http://www.gnutls.org/)
+openssl (https://www.openssl.org/)
+
+ac:
+libconfuse (http://www.nongnu.org/confuse/)
+libsqlite3 (http://www.sqlite.org/)
+
+wtp:
+libuci (http://wiki.openwrt.org/doc/techref/uci)
+
+to build conten of contrib directory:
+cmake (http://www.cmake.org)
+lua (http://www.lua.org/)
+
+
