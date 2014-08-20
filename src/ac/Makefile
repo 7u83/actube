@@ -1,5 +1,6 @@
 
 include ../Config.mak
+include ../Macros.mak
 
 ifndef CC
         CC=gcc
@@ -10,25 +11,17 @@ ifndef ARCH
 	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
-ifdef USE_CONTRIB_OPENSSL
-OPENSSLLIB=../contrib/openssl-1.0.1i/libssl.a ../contrib/openssl-1.0.1i/libcrypto.a -ldl
-OPENSSLINC=../contrib/openssl-1.0.1i/include
-else
-OPENSSLLIB=-lssl
-endif
+LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
-LDFLAGS = -g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
-
-CFLAGS = -I$(OPENSSLINC) -Wall -g -O0 -D_REENTRANT -DCW_NO_DTLS -DIPV6 -I/usr/local/include -I../capwap 
+CFLAGS += -I$(OPENSSLINC) -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../capwap 
 
 
 
 LIBS+=-lcapwap
 LIBS+=-lrt
 ifdef WITH_GNUTLS
-LIBS+=-lgnutls
+
 else
-LIBS+=$(OPENSSLLIB)
 endif
 
 
@@ -39,8 +32,12 @@ LIBS+=-lsqlite3
 LIBS+=-ldl
 
 
-ifdef WITH_GNUTLS
-CFLAGS += -DWITH_GNUTLS
+ifeq ($(SSL_LIBRARY),GNUTLS)
+CFLAGS+=-DWITH_GNUTLS
+LIBS+=-lgnutls
+else
+CFLAGS+=-DWITH_OPENSSL
+LIBS+=$(OPENSSLLIB)
 endif
 
 CFLAGS += -DWITH_CW_LOG
