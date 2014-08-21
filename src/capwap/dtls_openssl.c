@@ -312,7 +312,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 //	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
 
-	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
+//	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
 
 
 

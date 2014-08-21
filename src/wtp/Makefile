@@ -9,6 +9,13 @@ endif
 ifdef LIB_DIR
 	XLIB=-L $(LIB_DIR)
 endif 
+include ../Config.mak
+
+
+ifeq ($(USE_CONTRIB_UCI),1)
+CFLAGS+=-I../contrib/uci
+endif
+
 
 WITH_UCI=1 
 
@@ -81,7 +88,7 @@ ALL=wtp
 
 all: $(ALL)
 
-Q=@
+Q=
 E=echo
 ifeq ($(V), 1)
 Q=
