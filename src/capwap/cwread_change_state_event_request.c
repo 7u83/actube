@@ -39,6 +39,9 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 	if (cw_readelem_result_code(&e->result_code,type,msgelem,len))
 		goto foundX;
 
+	if (cw_readelem_radio_operational_state(e->wtpinfo->radioinfo,type,msgelem,len))
+		goto foundX;
+
 	return 0;
 
 foundX:
