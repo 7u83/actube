@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include "cw_log.h"
-
+#include "capwap.h"
 
 
 static void cw_log_debug0_(const char *format, ...) 
@@ -230,23 +230,46 @@ void cw_log_dbg_dmp_(int level,const char * file, int line, const uint8_t * data
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void (*cw_log_debug_cbs[])(const char * fromat, ...) = {
 	cw_log_debug0_,
 	cw_log_debug1_,
 	cw_log_debug2_
 };
+
+
+
+
+void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t *msgbuf,int len)
+{
+	if (!cw_dbg_is_level(DBG_CW_MSGELEM))
+		return;
+	/*	
+	char buf[250];
+	sprintf(buf,"Reading %s msgelem, type=%d (%d), len=%d",
+		cw_msgtostr(msg),
+		msgelem,
+		cw_msgelemtostr(msg));
+*/
+	if (!cw_dbg_is_level(DBG_CW_MSGELEM_DMP))
+		cw_dbg(DBG_CW_MSGELEM,"Reading %s msgelem, type=%d (%s), len=%d",
+	                cw_msgtostr(msg),
+	                msgelem,
+        	        cw_msgelemtostr(msgelem),
+			len);
+
+	else
+		cw_dbg_dmp(DBG_CW_MSGELEM,msgbuf,len,"Reading %s msgelem, type=%d (%s), len=%d\n\t Dump ...",
+	                cw_msgtostr(msg),
+	                msgelem,
+        	        cw_msgelemtostr(msgelem),
+			len);
+	
+		
+
+
+}
+
+//cw_dbg(DBG_CW_MSGELEM,"Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
+//cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
 
 
