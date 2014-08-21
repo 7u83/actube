@@ -93,6 +93,7 @@ extern int cw_dbg_opt_level;
 	#define cw_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
 	#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
 	#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
+	#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
 
 #else
 	#define cw_log_dbg(...)
@@ -117,6 +118,10 @@ extern int cw_log_debug_dump_(int level,const uint8_t * data, int len, const cha
 extern void cw_vlog_(int level,const char * format, va_list args);
 extern void cw_log_tosyslog(int level,const char *format, ...);
 extern void cw_log_tofile(int level,const char *format, ...);
+
+
+extern void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t *msgbuf,int len);
+
 
 
 extern int cw_log_debug_level;
