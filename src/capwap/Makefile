@@ -115,6 +115,7 @@ CAPWAPOBJS= \
 	cw_readelem_result_code.o\
 	   cw_readelem_ac_name.o \
 	cw_readelem_radio_administrative_state.o \
+	cw_readelem_radio_operational_state.o \
 	cw_readelem_statistics_timer.o \
 	   cw_readelem_wtp_reboot_statistics.o\
    	   cwmsg_addelem_vendor_cisco_ap_timesync.o

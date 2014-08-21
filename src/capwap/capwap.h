@@ -384,6 +384,8 @@ extern int cw_readelem_ac_name(uint8_t **dst, int type,uint8_t *msgelem, int len
 extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_radio_administrative_state(struct radioinfo * radioinfo, int type,uint8_t *msgelem, int len);
+extern int cw_readelem_radio_operational_state(struct radioinfo * radioinfo, int type,uint8_t *msgelem, int len);
+
 extern int cw_readelem_statistics_timer(uint16_t *timer, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_result_code(uint32_t *result_code, int type, uint8_t * msgelem, int len);
 
