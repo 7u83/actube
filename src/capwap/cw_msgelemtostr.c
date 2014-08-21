@@ -89,6 +89,9 @@ const char * cw_msgelemtostr(int elem)
 		case CWMSGELEM_RADIO_ADMINISTRATIVE_STATE:
 			return "radio administrative state";
 
+		case CWMSGELEM_RADIO_OPERATIONAL_STATE:
+			return "radio operational state";
+
 /*   Radio Operational State                              32
 */
 		case CWMSGELEM_RESULT_CODE:
