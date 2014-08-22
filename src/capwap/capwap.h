@@ -113,10 +113,9 @@ struct capwap_ctrlhdr
 
 /*           Configuration Update Request         7
            Configuration Update Response        8
-           WTP Event Request                    9
-           WTP Event Response                  10
 */
-
+#define CWMSG_WTP_EVENT_REQUEST			9
+#define CWMSG_WTP_EVENT_RESPONSE		10
 
 #define CWMSG_CHANGE_STATE_EVENT_REQUEST	11
 #define CWMSG_CHANGE_STATE_EVENT_RESPONSE	12
@@ -371,6 +370,7 @@ extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, in
 extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
 extern int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+extern void cwsend_change_state_event_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo);
 
 
 extern const char * cw_msgelemtostr(int elem);
