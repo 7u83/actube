@@ -36,6 +36,11 @@
 #define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
 
+void conn_handle_echo_request(struct conn * conn)
+{
+	struct cwrmsg * cwrmsg = &conn->cwrmsg;
+	cwsend_echo_response(conn,cwrmsg->seqnum,0);
+}
 
 
 static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
@@ -45,10 +50,7 @@ static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 		cwrmsg = conn_get_message(conn);
 		if (cwrmsg){
 			if (cwrmsg->type == CWMSG_ECHO_REQUEST){
-				printf("Echo reponse\n");
-				cwsend_echo_response(conn,cwrmsg->seqnum,0);
-				printf("continue\n");
-				cwrmsg=0;
+				conn_handle_echo_request(conn);
 				continue;
 			}
 		}
@@ -61,7 +63,6 @@ static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 
 	}while(!cwrmsg);
 
-	printf("Nw here\n");
 	cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
 		,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
 
@@ -203,6 +204,19 @@ static void wtpman_run_discovery(void *arg)
 }
 
 
+static void wtpman_run_run(void *arg)
+{
+	struct wtpman * wtpman = (struct wtpman *)arg;
+
+	while(1){
+		time_t t = cw_timer_start(10);
+		conn_wait_for_message(wtpman->conn,t);
+
+	}
+
+}
+
+
 static void wtpman_run(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
@@ -330,10 +344,11 @@ static void wtpman_run(void *arg)
 	if (cwrmsg){
 		if (cwrmsg->type == CWMSG_CHANGE_STATE_EVENT_REQUEST){
 			int rc = cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-			printf("Change state RC: %d\n",rc);
 
 		}
 	}
+
+	wtpman_run_run(wtpman);
 
 exit(0);
 

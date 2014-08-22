@@ -4,7 +4,6 @@
 #include "sock.h"
 #include "cw_util.h"
 
-#include <stdio.h>
 
 struct cwrmsg * conn_get_response(struct conn * conn)
 {
@@ -13,11 +12,6 @@ struct cwrmsg * conn_get_response(struct conn * conn)
 	struct cwmsg * cwmsg = &conn->req_msg;
 
 	int type = cwmsg->type+1;
-
-
-	printf ("Awaiting response message for type=%d\n",type);
-
-
 
 	struct cwrmsg * cwrmsg;
 
@@ -32,7 +26,6 @@ struct cwrmsg * conn_get_response(struct conn * conn)
 			        cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
 	               			 ,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
 	                        if (cwrmsg->type == type){
-					printf("Jea!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11\n");
 	                        	return cwrmsg;        
                			 }
 				
