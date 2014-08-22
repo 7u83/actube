@@ -7,17 +7,22 @@
 #include "conn.h"
 #include "cwrmsg.h"
 
+struct args{
+	struct conn * conn;
+	struct cwrmsg * cwrmsg;
+};
 
-
-static int pmessage(void *w, struct cwrmsg * cwrmsg)
+static int pmessage(void *p, struct cwrmsg * cwrmsg)
 {
-	uint8_t * buffer;
-	buffer = malloc( sizeof (struct cwrmsg) + cwrmsg->msgelems_len);
+	struct args * args = (struct args*)p;
+	struct conn * conn = args->conn;
 
-	memcpy(buffer,cwrmsg,sizeof(struct cwrmsg));
-	memcpy(buffer+sizeof(struct cwrmsg),cwrmsg->msgelems,cwrmsg->msgelems_len);
-	((struct cwrmsg*)(buffer))->msgelems=buffer+sizeof(struct cwrmsg);
-	*((void**)w) = (void*)buffer;
+
+
+	memcpy(&conn->cwrmsg,cwrmsg,sizeof(struct cwrmsg));
+	memcpy(conn->cwrmsg_buffer,cwrmsg->msgelems,cwrmsg->msgelems_len);
+	conn->cwrmsg.msgelems=conn->cwrmsg_buffer;
+	args->cwrmsg = &conn->cwrmsg;
 	return 0;
 }
 
@@ -26,15 +31,16 @@ static int pmessage(void *w, struct cwrmsg * cwrmsg)
 
 struct cwrmsg * conn_get_message(struct conn * conn)
 {
-	struct cwrmsg * cwrmsg=0;
-
-	uint8_t buf[2048];
-	int len=2048;
+	struct args args;
+	args.cwrmsg=0;
+	args.conn=conn;
+	uint8_t buf[2024];
+	int len=2024;
 
 	int n = conn->read(conn,buf,len);
 	if (n>0) 
-		conn_process_packet(conn,buf,n,pmessage,&cwrmsg);
+		conn_process_packet(conn,buf,n,pmessage,&args);
 
-	return cwrmsg;
+	return args.cwrmsg;
 }
 

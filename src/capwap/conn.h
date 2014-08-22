@@ -53,6 +53,9 @@ struct conn{
 //	int last_response_seqnum;
 //	int last_response_rid;
 
+	struct cwrmsg cwrmsg;
+	uint8_t cwrmsg_buffer[65536];
+
 
 	struct cwmsg req_msg;
 	struct cwmsg resp_msg;
