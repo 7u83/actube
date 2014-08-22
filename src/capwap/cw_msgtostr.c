@@ -41,9 +41,12 @@ const char * cw_msgtostr(int type)
 
 /*           Configuration Update Request         7
            Configuration Update Response        8
-           WTP Event Request                    9
-           WTP Event Response                  10
 */
+		case CWMSG_WTP_EVENT_REQUEST:
+			return "wtp event request";
+		case CWMSG_WTP_EVENT_RESPONSE:
+			return "wtp event response";
+
 
 		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
 			return "change state event request";
