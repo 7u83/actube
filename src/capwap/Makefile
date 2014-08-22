@@ -73,7 +73,9 @@ CAPWAPOBJS= \
 	cwmsg_addelem_vendor_specific_payload.o \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
+	cwmsg_addelem_radio_operational_state.o \
 	   cwmsg_send.o \
+	cwsend_change_state_event_response.o \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
