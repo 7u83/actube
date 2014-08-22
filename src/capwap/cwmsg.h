@@ -35,5 +35,6 @@ extern void cwmsg_init_echo_request(struct cwmsg * cwmsg,uint8_t *buffer,struct 
 extern void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn* conn);
 extern void cwmsg_addelem_image_identifier(struct cwmsg *msg,uint32_t vendor_id,uint8_t *img, int len);
 
+extern void cwmsg_addelem_radio_operational_state(struct cwmsg * cwmsg, struct radioinfo * ri);
 
 #endif
