@@ -129,10 +129,6 @@ struct capwap_ctrlhdr
 #define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
 
-/*
-           Reset Request                       17
-           Reset Response                      18
-*/	   
 #define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 + CWIANA_ENTERPRISE_NUMBER*256
 
