@@ -531,36 +531,36 @@ static int conf_read_dbg_level(cfg_t *cfg)
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
 		if (!strcmp(str,"msg")){
-			cw_dbg_opt_level=DBG_CW_MSG;
+			cw_dbg_opt_level|=DBG_CW_MSG;
 			continue;
 		}
 		if (!strcmp(str,"msgelem")){
-			cw_dbg_opt_level=DBG_CW_MSGELEM;
+			cw_dbg_opt_level|=DBG_CW_MSGELEM;
 			continue;
 		}
 		if (!strcmp(str,"msgelem_dmp")){
-			cw_dbg_opt_level=DBG_CW_MSGELEM_DMP;
+			cw_dbg_opt_level|=DBG_CW_MSGELEM_DMP;
 			continue;
 		}
 		if (!strcmp(str,"rfc")){
-			cw_dbg_opt_level=DBG_CW_RFC;
+			cw_dbg_opt_level|=DBG_CW_RFC;
 			continue;
 		}
 		if (!strcmp(str,"pkt")){
-			cw_dbg_opt_level=DBG_CW_PKT;
+			cw_dbg_opt_level|=DBG_CW_PKT;
 			continue;
 		}
 		if (!strcmp(str,"pkt_dmp")){
-			cw_dbg_opt_level=DBG_CW_PKT_DMP;
+			cw_dbg_opt_level|=DBG_CW_PKT_DMP;
 			continue;
 		}
 
 		if (!strcmp(str,"pkt_err")){
-			cw_dbg_opt_level=DBG_CW_PKT_ERR;
+			cw_dbg_opt_level|=DBG_CW_PKT_ERR;
 			continue;
 		}
 		if (!strcmp(str,"msg_err")){
-			cw_dbg_opt_level=DBG_CW_MSG_ERR;
+			cw_dbg_opt_level|=DBG_CW_MSG_ERR;
 			continue;
 		}
 
