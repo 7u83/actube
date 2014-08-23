@@ -1,12 +1,12 @@
 /*
-    This file is part of ac.
+    This file is part of AC-Tube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    AC-Tube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    libcapwap is distributed in the hope that it will be useful,
+    AC-Tube is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef CONF_DEFAULT_VENDOR_ID
-	#define CONF_DEFAULT_VENDOR_ID 11591	/* Free Software Foundation */
+	#define CONF_DEFAULT_VENDOR_ID CW_VENDOR_ID_FSF
 #endif
 
 #ifndef CONF_DEFAULT_SOFTWARE_VERSION
@@ -54,7 +54,7 @@
 #endif
 
 #ifndef CONF_DEFAULT_HARDWARE_VERSION
-	#define CONF_DEFAULT_HARDWARE_VERSION "Linux/X86"
+	#define CONF_DEFAULT_HARDWARE_VERSION "Unknown"
 #endif
 
 #ifndef CONF_DEFAULT_CONTROL_PORT
@@ -66,16 +66,22 @@
 #endif
 
 
-extern char * conf_acname;
+extern const char * conf_acname;
 extern char * conf_acid;
 extern int conf_acname_len;
 extern long conf_max_wtps;
 extern char * conf_logfilename;
 extern struct sockaddr_storage * conf_salist;
 extern int conf_salist_len;
+
 extern long conf_vendor_id;
 extern char * conf_hardware_version;
+extern int conf_hardware_version_len;
 extern char * conf_software_version;
+extern int conf_software_version_len;
+
+
+
 extern char ** conf_listen_addrs;
 extern int conf_listen_addrs_len;
 
