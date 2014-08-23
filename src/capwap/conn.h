@@ -112,6 +112,10 @@ struct conn{
 	void * data;
 
 	int strict_capwap;
+
+
+	void (*request_handler) (void*);
+	void * request_handler_param;
 };
 
 
@@ -163,6 +167,7 @@ struct conn * connlist_get(struct connlist * cl, const struct sockaddr * addr);
 struct conn * connlist_add(struct connlist * cl, struct conn * conn);
 void connlist_remove(struct connlist *cl,struct conn * conn);
 void connlist_destroy(struct connlist * cl);
+void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len);
 
 
 
