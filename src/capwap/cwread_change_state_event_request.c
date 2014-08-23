@@ -16,7 +16,6 @@
 
 */
 
-
 #include <stdio.h>
 
 #include "capwap.h"
@@ -47,8 +46,6 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 foundX:
 	cw_mand_elem_found(e->mand,type);
 	return 1;
-
-
 }
 
 
