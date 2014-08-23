@@ -109,7 +109,7 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 struct wtpman * wtplist_add(struct wtpman * wtpman)
 {
 	wtpman->conn->data=wtpman;	
-	return connlist_add(connlist,wtpman->conn);
+	return (struct wtpman*)connlist_add(connlist,wtpman->conn);
 
 
 /*
