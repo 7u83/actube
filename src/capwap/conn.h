@@ -171,6 +171,7 @@ void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len);
 
 
 
+extern void conn_prepare_request(struct conn * conn, int type);
 
 
 
