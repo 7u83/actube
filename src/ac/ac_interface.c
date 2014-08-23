@@ -52,7 +52,6 @@ ACIPLIST * get_aciplist()
 
 
 int pr(void *x,void *y){
-//	printf ("Da is was\n");
 }
 
 
@@ -79,8 +78,12 @@ struct ac_info * get_acinfo()
 	acinfo->rmac=1; 	/* radio mac supported */
 
 	acinfo->vendor_id=conf_vendor_id;
+
 	acinfo->hardware_version=(uint8_t*)conf_hardware_version;
+	acinfo->hardware_version_len=conf_hardware_version_len;
+
 	acinfo->software_version=(uint8_t*)conf_software_version;
+	acinfo->software_version_len=conf_software_version_len;
 
 	if (conf_dtls_psk)
 		acinfo->security|=AC_SECURITY_S;
