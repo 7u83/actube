@@ -39,9 +39,12 @@ const char * cw_msgtostr(int type)
 		case CWMSG_CONFIGURATION_STATUS_RESPONSE:
 			return "configuration status response";
 
-/*           Configuration Update Request         7
-           Configuration Update Response        8
-*/
+		case CWMSG_CONFIGURATION_UPDATE_REQUEST:
+			return "configuration update request";
+
+		case CWMSG_CONFIGURATION_UPDATE_RESPONSE:
+			return "configuration update response";
+			
 		case CWMSG_WTP_EVENT_REQUEST:
 			return "wtp event request";
 		case CWMSG_WTP_EVENT_RESPONSE:
