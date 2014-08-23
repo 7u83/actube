@@ -371,7 +371,11 @@ extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
 extern int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void cwsend_change_state_event_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo);
+extern int cwread_wtp_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+extern void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+extern void cwsend_conf_status_response(struct conn * conn,int seqnum, int rc, struct radioinfo * radioinfo, struct ac_info * acinfo, struct wtpinfo * wtpinfo);
 
+extern void cwsend_unknown_response(struct conn * conn,int seqnum, int unknow_request);
 
 extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_msgtostr(int type);
