@@ -76,6 +76,7 @@ CAPWAPOBJS= \
 	cwmsg_addelem_radio_operational_state.o \
 	   cwmsg_send.o \
 	cwsend_change_state_event_response.o \
+	cwsend_unknow_response.o \
 	   cwsend_discovery_response.o \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
@@ -90,6 +91,7 @@ CAPWAPOBJS= \
 	   cwsend_conf_status_response.o\
 	   cwread_configuration_status_request.o\
 	cwread_change_state_event_request.o\
+	cwread_wtp_event_request.o \
 	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
 	   process_discovery_request.o \
