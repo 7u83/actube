@@ -36,7 +36,10 @@ struct ac_info{
 	int dtls_policy;
 	int vendor_id;
 	uint8_t * hardware_version;
+	int hardware_version_len;
 	uint8_t * software_version;
+	int software_version_len;
+
 //	const char * acname;
 
 	struct sockaddr * salist;
