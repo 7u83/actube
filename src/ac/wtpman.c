@@ -28,6 +28,7 @@
 #include <errno.h>
 
 #include "capwap.h"
+#include "capwap_cisco.h"
 
 #include "cw_util.h"
 
@@ -43,32 +44,95 @@ void conn_handle_echo_request(struct conn * conn)
 }
 
 
+void conn_handle_change_state_event_request(struct conn * conn)
+{
+}
+
+
 static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 {
 	struct cwrmsg * cwrmsg;
-	do {
+
+
+	while (!cw_timer_timeout(timer)){
 		cwrmsg = conn_get_message(conn);
-		if (cwrmsg){
-			if (cwrmsg->type == CWMSG_ECHO_REQUEST){
-				conn_handle_echo_request(conn);
+		if (!cwrmsg)
+			continue;
+
+		cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+			,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
+
+
+		if (cwrmsg->type & 1){
+			if (conn->request_handler){
+				conn->request_handler(conn->request_handler_param);
 				continue;
 			}
+
+			
 		}
 
+		return cwrmsg;
 
-		if (!cwrmsg && conn->dtls_error)
-			return (struct cwrmsg*)EOF;
-		if (!cwrmsg && cw_timer_timeout(timer)) 
-			return NULL;
+	}
 
-	}while(!cwrmsg);
-
-	cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
-		,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
-
-	return cwrmsg;
+	return 0;
 }
 
+struct cwrmsg * conn_send_request(struct conn * conn)
+{
+	int i;
+
+	struct cwrmsg * cwrmsg;
+	struct cwmsg * cwmsg = &conn->req_msg;
+	
+
+
+        for (i=0; i<conn->max_retransmit; i++) {
+
+                time_t r_timer = cw_timer_start(conn->retransmit_interval);
+		if (i!=0)
+	                cw_dbg(DBG_CW_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+
+		conn_send_cwmsg(conn,&conn->req_msg);
+		cwrmsg = conn_wait_for_message(conn,r_timer);
+		if (cwrmsg){
+			if (cwrmsg->type == conn->req_msg.type+1){
+				printf("YeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA!!!!!\n");
+				return cwrmsg;        
+			}
+
+//                	cw_dbg(DBG_CW_MSG_ERR,"Wrong message blablub, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+			printf("Pnunf\n");
+			
+                                
+		}
+
+        }
+        cw_dbg(DBG_CW_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+        return 0;
+
+}
+
+void wtpman_handle_request(void *p)
+{
+	struct wtpman * wtpman = (struct wtpman *)p;
+	struct conn * conn = wtpman->conn;
+	struct cwrmsg * cwrmsg = &conn->cwrmsg;
+	switch(conn->cwrmsg.type){
+		case CWMSG_ECHO_REQUEST:
+			conn_handle_echo_request(conn);
+			break;
+		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
+			break;
+		default:
+			printf("Unhandeleed  message %d!!!!!!!!!!!!\n",cwrmsg->type);
+			cwsend_unknown_response(conn,cwrmsg->seqnum,cwrmsg->type);
+
+	}
+}
 
 
 void send_image_file(struct conn * conn,const char * filename)
@@ -115,7 +179,7 @@ void send_image_file(struct conn * conn,const char * filename)
 }
 
 
-ACIPLIST * get_aciplist();
+//ACIPLIST * get_aciplist();
 struct ac_info * get_acinfo();
 
 static void wtpman_remove(struct wtpman * wtpman)
@@ -164,7 +228,7 @@ static void wtpman_run_discovery(void *arg)
 	time_t timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
-	if ( !cwrmsg || cwrmsg == EOF )
+	if ( !cwrmsg || cwrmsg == (struct cwrmsg *)EOF )
 	{
 		cw_dbg(DBG_CW_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
 		wtpman_remove(wtpman);
@@ -207,12 +271,44 @@ static void wtpman_run_discovery(void *arg)
 static void wtpman_run_run(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
+	struct conn * conn = wtpman->conn;
 
-	while(1){
-		time_t t = cw_timer_start(10);
-		conn_wait_for_message(wtpman->conn,t);
+	struct cwrmsg * cwrmsg;
 
+
+	conn->request_handler=wtpman_handle_request;
+	conn->request_handler_param=wtpman;
+
+	
+	int i;
+	for (i=0; i<20; i++){
+		time_t t = cw_timer_start(1);
+		printf("Wait...\n");
+		conn_wait_for_message(conn,t);
 	}
+
+	printf("Update now?\n");
+
+
+	conn->seqnum=1;
+
+	conn_prepare_request(conn,CWMSG_CONFIGURATION_UPDATE_REQUEST);
+//	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
+
+	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"AC-Tube-Client",strlen("AC-Tube-Aclinet"));
+
+	cwrmsg = conn_send_request(conn);
+
+
+	for (i=0; i<20; i++){
+		time_t t = cw_timer_start(1);
+		printf("Wait...\n");
+		conn_wait_for_message(conn,t);
+	}
+
+	printf("Set name?\n");
+	exit(0);	
+
 
 }
 
@@ -337,16 +433,23 @@ static void wtpman_run(void *arg)
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_ALL,"WTP conf_status\n%s",wtpinfostr);
 
+	printf("Run run run run run\n");
+	wtpman_run_run(wtpman);
+	exit(0);
 
 
+int ii;
+for (ii=0; ii<3; ii++){
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
-
 	if (cwrmsg){
 		if (cwrmsg->type == CWMSG_CHANGE_STATE_EVENT_REQUEST){
-			int rc = cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
 
 		}
 	}
+}
+
 
 	wtpman_run_run(wtpman);
 
@@ -416,7 +519,7 @@ exit(0);
 
 
 
-if (cwrmsg->type = CWMSG_CONFIGURATION_STATUS_REQUEST){
+if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 	process_conf_status_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 {
 	char wtpinfostr[8192];
@@ -473,7 +576,7 @@ if (cwrmsg->type = CWMSG_CONFIGURATION_STATUS_REQUEST){
 		int len = *( (uint32_t*)(wtpman->q[qrpos]));
 */
 		uint8_t * packet = conn_q_get_packet(wtpman->conn);
-		int len = *( (uint32_t*)(packet));
+//		int len = *( (uint32_t*)(packet));
 
 
 //		conn_process_packet(wtpman->conn,packet+4,len);
@@ -518,7 +621,7 @@ void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
 
 void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 {
-	uint8_t * m = packet+12;
+//	uint8_t * m = packet+12;
 //	int l = LWTH_GET_LENGTH(packet+6);
 
 	uint8_t * msg = packet+12;
@@ -562,11 +665,11 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 
 
 	
-	char buffer[2048];
-	struct lwmsg lwmsg;
-	lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
+//	char buffer[2048];
+//	struct lwmsg lwmsg;
+//	lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
 	
-	conn_send_packet(wtpman->conn,buffer,60);
+//	conn_send_packet(wtpman->conn,buffer,60);
 
 
 
