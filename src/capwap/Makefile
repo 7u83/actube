@@ -152,7 +152,9 @@ CONNOBJS= conn.o \
 	conn_create_noq.o \
 	conn_send_response.o \
 	conn_get_message.o  \
-	conn_get_response.o
+	conn_get_response.o \
+	conn_prepare_configuration_update_request.o \
+	conn_prepare_request.o 
 
 	
 
