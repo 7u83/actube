@@ -33,7 +33,7 @@ uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
 
 
-char * conf_acname = NULL; 
+const const char * conf_acname = NULL; 
 int conf_acname_len = 0;
 
 char * conf_acid = NULL;
@@ -73,8 +73,12 @@ char * conf_dtls_psk=NULL;
 int conf_security=0;
 long conf_vendor_id=CONF_DEFAULT_VENDOR_ID;
 
-char * conf_hardware_version;
-char * conf_software_version;
+char * conf_hardware_version=NULL;
+int conf_hardware_version_len=0;
+
+char * conf_software_version=NULL;
+int conf_software_version_len=0;
+
 
 int conf_use_loopback = 0;
 
@@ -102,8 +106,9 @@ int conf_dtls_verify_peer=1;
 static int init_acname()
 {
 	if (conf_acname == NULL){
-		conf_acname=malloc(strlen(CONF_DEFAULT_ACNAME)+strlen(conf_acid)+1);
-		sprintf(conf_acname,"%s%s",CONF_DEFAULT_ACNAME,conf_acid);
+		char *s=malloc(strlen(CONF_DEFAULT_ACNAME)+strlen(conf_acid)+1);
+		sprintf(s,"%s%s",CONF_DEFAULT_ACNAME,conf_acid);
+		conf_acname=s;
 	}
 	conf_acname_len=strlen(conf_acname);
 	return 1;
@@ -162,6 +167,71 @@ static int init_vendor_id()
 	return 1;
 }
 
+
+static int convert_version_string(char * si[], int *l)
+{
+	char * s = *si;	
+
+	if (*l<=1)
+		return 1;
+
+	if (s[0]!='.'){
+		return 1;
+	}
+
+	if (*l<=2)
+		return 1;
+
+	if (s[1]=='.'){
+		char * ns = malloc(*l-1);
+		strcpy (ns,s+1);
+		free(*si);
+		*si=ns;
+		*l-=1;
+		return 1;
+	}
+
+	if (s[1]=='x'){
+		char * ns=0;
+		int len=0;
+		int ch,cl;
+		char *ss = s+2;
+		int rc ;
+		do {
+			rc = sscanf(ss,"%01X",&ch);
+			if (rc!=1)
+				break;
+			ss++;
+			rc = sscanf(ss,"%01X",&cl);
+			if (!rc)
+				cl=0;
+			ss++;
+			int c=(ch<<4) | cl;
+			
+			len++;
+			ns = realloc(ns,len);
+			ns[len-1]=c;
+
+
+		}while (rc==1);
+		free(*si);
+		*si=ns;
+		return 1;
+
+	}
+
+	if (strcmp(s,".reflect")==0){
+		free(*si);
+		*si=0;
+		*l=0;
+		return 1;
+	}
+
+	return 1;
+}
+
+
+
 static int init_version()
 {
 	if (!conf_hardware_version)
@@ -175,9 +245,16 @@ static int init_version()
 			sprintf(str,"%s / %s %s",u.machine,u.sysname,u.release);
 			conf_hardware_version=strdup(str);
 		}
+
 	}
+	conf_hardware_version_len=strlen(conf_hardware_version);
+	convert_version_string(&conf_hardware_version,&conf_hardware_version_len);
+
 	if (!conf_software_version)
 		conf_software_version=CONF_DEFAULT_SOFTWARE_VERSION;
+	conf_software_version_len=strlen(conf_software_version);
+	
+	convert_version_string(&conf_software_version,&conf_software_version_len);
 	return 1;
 }
 
@@ -436,6 +513,75 @@ static int conf_read_strings( cfg_t * cfg, char * name, char ***dst,int *len)
 }
 
 
+struct conf_dbg_level_names{
+	const char *name;
+	int level;
+};
+
+
+
+
+static int conf_read_dbg_level(cfg_t *cfg)
+{
+	const char * name = "dbg";
+	int n,i;
+	n = cfg_size(cfg, name);
+
+
+	for (i=0; i<n; i++) {
+		char * str = cfg_getnstr(cfg,name,i);
+		if (!strcmp(str,"msg")){
+			cw_dbg_opt_level=DBG_CW_MSG;
+			continue;
+		}
+		if (!strcmp(str,"msgelem")){
+			cw_dbg_opt_level=DBG_CW_MSGELEM;
+			continue;
+		}
+		if (!strcmp(str,"msgelem_dmp")){
+			cw_dbg_opt_level=DBG_CW_MSGELEM_DMP;
+			continue;
+		}
+		if (!strcmp(str,"rfc")){
+			cw_dbg_opt_level=DBG_CW_RFC;
+			continue;
+		}
+		if (!strcmp(str,"pkt")){
+			cw_dbg_opt_level=DBG_CW_PKT;
+			continue;
+		}
+		if (!strcmp(str,"pkt_dmp")){
+			cw_dbg_opt_level=DBG_CW_PKT_DMP;
+			continue;
+		}
+
+		if (!strcmp(str,"pkt_err")){
+			cw_dbg_opt_level=DBG_CW_PKT_ERR;
+			continue;
+		}
+		if (!strcmp(str,"msg_err")){
+			cw_dbg_opt_level=DBG_CW_MSG_ERR;
+			continue;
+		}
+
+
+		if (!strcmp(str,"dtls")){
+			cw_dbg_opt_level=DBG_DTLS;
+			continue;
+		}
+
+		if (!strcmp(str,"all")){
+			cw_dbg_opt_level=DBG_ALL;
+			continue;
+		}
+
+
+
+	}
+	return 1;
+}
+
+
 int read_config(const char * filename){
 	int i,n;
 
@@ -443,6 +589,7 @@ int read_config(const char * filename){
 		return 0;
 
 	cfg_opt_t opts[] = {
+		CFG_STR_LIST("dbg", "{}", CFGF_NONE),
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
 		CFG_STR_LIST("bcast_addrs", "{}", CFGF_NONE),
@@ -456,6 +603,8 @@ int read_config(const char * filename){
 
 		CFG_SIMPLE_INT("max_wtps",&conf_max_wtps),
 		CFG_SIMPLE_INT("debug_level",&conf_debug_level),
+
+
 		CFG_SIMPLE_INT("vendor_id",&conf_vendor_id),
 		CFG_SIMPLE_STR("ac_id",&conf_acid),
 		CFG_SIMPLE_STR("ac_name",&conf_acname),
@@ -479,6 +628,9 @@ int read_config(const char * filename){
 	cfg = cfg_init(opts, 0);
 
 	cfg_parse(cfg, filename);
+	
+	/* read debug options */
+	conf_read_dbg_level(cfg);
 
 	/* read the listen addresses */
 	conf_read_strings(cfg,"listen",&conf_listen_addrs,&conf_listen_addrs_len);
@@ -488,6 +640,7 @@ int read_config(const char * filename){
 
 	/* read ipv4 broadcast addresses */
 	conf_read_strings(cfg,"bcast_addrs",&conf_bcast_addrs,&conf_bcast_addrs_len);
+
 
 
 
@@ -520,6 +673,7 @@ int read_config(const char * filename){
 
 	if (!init_version())
 		return 0;
+
 
 	if (!init_vendor_id())
 		return 0;
