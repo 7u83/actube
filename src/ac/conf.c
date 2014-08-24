@@ -566,12 +566,17 @@ static int conf_read_dbg_level(cfg_t *cfg)
 
 
 		if (!strcmp(str,"dtls")){
-			cw_dbg_opt_level=DBG_DTLS;
+			cw_dbg_opt_level|=DBG_DTLS;
 			continue;
 		}
 
 		if (!strcmp(str,"all")){
-			cw_dbg_opt_level=DBG_ALL;
+			cw_dbg_opt_level|=DBG_ALL;
+			continue;
+		}
+
+		if (!strcmp(str,"err")){
+			cw_dbg_opt_level|=DBG_ERR;
 			continue;
 		}
 
