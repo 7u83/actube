@@ -13,7 +13,7 @@ endif
 
 LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib -L../capwap/$(ARCH) 
 
-CFLAGS += -I$(OPENSSLINC) -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../capwap 
+CFLAGS += -I$(OPENSSLINC) -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../capwap  
 
 
 
@@ -45,7 +45,7 @@ CFLAGS += -DWITH_CW_LOG_DEBUG
 CFLAGS += -DWITH_RMAC_SUPPORT
 CFLAGS += -DWITH_DTLS
 CFLAGS += -DWITH_IPV6
-CFLAGS += -DWITH_LWAPP
+#CFLAGS += -DWITH_LWAPP
 
 RM = /bin/rm -f 
 
