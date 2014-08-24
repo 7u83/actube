@@ -94,3 +94,17 @@
 
 
 #define LWMSGELEM_WTP_DESCRIPTOR 3
+
+
+
+
+/* function proto types */
+
+uint16_t lw_checksum(uint8_t *d,int len);
+
+
+
+
+
+
+
