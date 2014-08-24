@@ -404,7 +404,7 @@ int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned in
 	psk_len = BN_bn2bin(bn, psk);
 	BN_free(bn);
 
-	if (psk_len < 0)	
+	if (psk_len <= 0)	
 		goto out_err;
 	return psk_len;
 out_err:
