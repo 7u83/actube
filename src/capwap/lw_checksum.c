@@ -19,13 +19,13 @@
 #include "lwapp.h"
 
 /**
- * Calculate the 16-bit checksum for LWAPP image data  message 
+ * Calculate the 16-bit checksum for LWAPP image data message 
  * elements with opcode 3 - used by Cisco also in CAPWAP
  */
 uint16_t lw_checksum(uint8_t * d, int len)
 {
 	int i;
-	uint32_t cs = 0;
+	uint32_t cs = 0xffff;
 	for (i = 0; i < len; i += 2) {
 		uint16_t w = d[i] << 8;
 
