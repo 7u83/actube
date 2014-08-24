@@ -79,6 +79,19 @@ static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 	return 0;
 }
 
+
+
+/*
+static struct conn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
+{
+	struct cwrmsg * cwrmsg;
+
+}
+
+*/
+
+
+
 struct cwrmsg * conn_send_request(struct conn * conn)
 {
 	int i;
@@ -103,7 +116,6 @@ struct cwrmsg * conn_send_request(struct conn * conn)
 			}
 
 //                	cw_dbg(DBG_CW_MSG_ERR,"Wrong message blablub, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
-			printf("Pnunf\n");
 			
                                 
 		}
@@ -281,7 +293,7 @@ static void wtpman_run_run(void *arg)
 
 	
 	int i;
-	for (i=0; i<20; i++){
+	for (i=0; i<10; i++){
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
 		conn_wait_for_message(conn,t);
@@ -293,18 +305,24 @@ static void wtpman_run_run(void *arg)
 	conn->seqnum=1;
 
 	conn_prepare_request(conn,CWMSG_CONFIGURATION_UPDATE_REQUEST);
-//	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
+	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
+	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
-	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"AC-Tube-Client",strlen("AC-Tube-Aclinet"));
+	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"CiscoClient",strlen("CiscoClient"));
 
 	cwrmsg = conn_send_request(conn);
 
 
-	for (i=0; i<20; i++){
+	for (i=0; i<10; i++){
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
 		conn_wait_for_message(conn,t);
 	}
+
+/*	conn_prepare_request(conn,CWMSG_RESET_REQUEST);
+	cwmsg_addelem_image_identifier(&conn->req_msg,CW_VENDOR_ID_CISCO,"image00",strlen("image00"));
+	cwrmsg = conn_send_request(conn);
+*/	
 
 	printf("Set name?\n");
 	exit(0);	
@@ -313,24 +331,12 @@ static void wtpman_run_run(void *arg)
 }
 
 
-static void wtpman_run(void *arg)
+
+static int wtpman_establish_dtls(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
-
-
-	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
-		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket", CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
-	}
-
-	/* start DTLS handshake */
-	cw_dbg(DBG_DTLS,"Establishing DTLS session with %s",CLIENT_IP);
-
-	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
-
-
+	
+	/* setup cipher */
 	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
 
 	/* setup DTSL certificates */
@@ -352,20 +358,44 @@ static void wtpman_run(void *arg)
 
 	if (!dtls_ok){
 		cw_log(LOG_ERR,"Can't establish DTLS session, neither psk nor certs set in config file.");
-		wtpman_remove(wtpman);
-		return;
+		return 0;
 	}
 
 	/* try to accept the connection */
 	if ( !dtls_accept(wtpman->conn) ){
 		cw_dbg(DBG_DTLS,"Error establishing DTLS session with %s",CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
+		return 0;
 	}
 	
 	cw_dbg(DBG_DTLS,"DTLS session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
 	/* DTLS handshake done */
 
+	return 1;
+}
+
+static void wtpman_run(void *arg)
+{
+	struct wtpman * wtpman = (struct wtpman *)arg;
+	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
+
+
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
+		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket", CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+	/* establish dtls session*/
+	if (!wtpman_establish_dtls(wtpman)){
+		wtpman_remove(wtpman);
+		return;
+	}
+
+	printf("DTLS ready\n");
+	exit(0);
 
 	timer = cw_timer_start(wtpman->conn->wait_join);
 
@@ -425,6 +455,11 @@ static void wtpman_run(void *arg)
 			wtpman_remove(wtpman);
 		return;
 	}	
+
+	printf("CWR TYPE %d\n",cwrmsg->type);
+	exit(0);
+
+
 
 	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
 	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
