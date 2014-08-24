@@ -114,7 +114,7 @@ struct conn{
 	int strict_capwap;
 
 
-	void (*request_handler) (void*);
+	int (*request_handler) (void*);
 	void * request_handler_param;
 };
 
@@ -173,7 +173,7 @@ void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len);
 
 extern void conn_prepare_request(struct conn * conn, int type);
 
-
+#define conn_is_error(conn) (conn->dtls_error)
 
 
 
