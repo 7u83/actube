@@ -238,30 +238,43 @@ void (*cw_log_debug_cbs[])(const char * fromat, ...) = {
 
 
 
+/**
+ * print debug info
+ */ 
 
 void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t *msgbuf,int len)
 {
 	if (!cw_dbg_is_level(DBG_CW_MSGELEM))
 		return;
-	/*	
-	char buf[250];
-	sprintf(buf,"Reading %s msgelem, type=%d (%d), len=%d",
-		cw_msgtostr(msg),
-		msgelem,
-		cw_msgelemtostr(msg));
-*/
+
+	const char * elemname;
+	char vendorname[256];
+	if (msgelem==CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD){
+		int vendor = ntohl(*((uint32_t*)msgbuf));
+		int type = ntohs( * ((uint16_t*)(msgbuf+4)) );
+		sprintf(vendorname,"%s/%s/%d",
+				(char*)cw_msgelemtostr(msgelem),
+				(char*)cw_ianavendoridtostr(vendor),
+				type);
+		elemname=vendorname;
+	}
+	else{
+		elemname=cw_msgelemtostr(msgelem);
+	}
+
+
 	if (!cw_dbg_is_level(DBG_CW_MSGELEM_DMP))
 		cw_dbg(DBG_CW_MSGELEM,"Reading %s msgelem, type=%d (%s), len=%d",
 	                cw_msgtostr(msg),
 	                msgelem,
-        	        cw_msgelemtostr(msgelem),
+        	        elemname,
 			len);
 
 	else
 		cw_dbg_dmp(DBG_CW_MSGELEM,msgbuf,len,"Reading %s msgelem, type=%d (%s), len=%d\n\t Dump ...",
 	                cw_msgtostr(msg),
 	                msgelem,
-        	        cw_msgelemtostr(msgelem),
+        	        elemname,
 			len);
 	
 		
