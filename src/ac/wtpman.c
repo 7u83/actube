@@ -56,17 +56,18 @@ static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 
 	while (!cw_timer_timeout(timer)){
 		cwrmsg = conn_get_message(conn);
-		if (!cwrmsg)
-			continue;
 
-		cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
-			,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
+		if (!cwrmsg){
+			if (!conn_is_error(conn))
+				continue;
 
+			return 0;
+		}
 
 		if (cwrmsg->type & 1){
 			if (conn->request_handler){
-				conn->request_handler(conn->request_handler_param);
-				continue;
+				if (conn->request_handler(conn->request_handler_param))
+					continue;
 			}
 
 			
@@ -80,15 +81,73 @@ static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
 }
 
 
+struct rh_param{
+	struct conn * conn;
+	int *msglist;
 
-/*
-static struct conn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
+};
+
+static int conn_rh(void *param)
 {
-	struct cwrmsg * cwrmsg;
+	struct rh_param * p = (struct rh_param*)param;
+	int i;
+	int *msglist=p->msglist; 
 
+	for (i=0; msglist[i]!=-1; i++){
+		if (msglist[i] == p->conn->cwrmsg.type )
+			return 0;
+
+	}
+	/* unexpected response here */
+	cw_log(LOG_ERR,"Unexpected message from %s",sock_addr2str(&p->conn->addr));
+	cwsend_unknown_response(p->conn,p->conn->cwrmsg.seqnum,p->conn->cwrmsg.type);
+	return 1;	
 }
 
-*/
+static struct cwrmsg * conn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
+{
+	int (*request_handler_save) (void*);
+	void * request_handler_param_save;
+
+	struct rh_param rh_param;
+	
+
+	if (msglist){
+		request_handler_save=conn->request_handler;
+		request_handler_param_save=conn->request_handler_param;
+		rh_param.conn=conn;
+		rh_param.msglist=msglist;
+		conn->request_handler=conn_rh;
+		conn->request_handler_param=&rh_param;
+	}
+
+
+	struct cwrmsg * cwrmsg;
+	while (!cw_timer_timeout(timer)){
+		cwrmsg = conn_wait_for_message(conn,timer);
+		if (!cwrmsg){
+			if (!conn_is_error(conn))
+				continue;
+			break;
+		}
+
+		/* response message?  no action*/
+		if (! (cwrmsg->type & 1) )
+			continue;		
+
+		/* it's a request message */
+		break;
+	}
+
+	if (msglist){
+		conn->request_handler=request_handler_save;
+		conn->request_handler_param=request_handler_param_save;
+	}
+
+	return cwrmsg;
+}
+
+
 
 
 
@@ -126,7 +185,7 @@ struct cwrmsg * conn_send_request(struct conn * conn)
 
 }
 
-void wtpman_handle_request(void *p)
+int wtpman_handle_request(void *p)
 {
 	struct wtpman * wtpman = (struct wtpman *)p;
 	struct conn * conn = wtpman->conn;
@@ -142,8 +201,8 @@ void wtpman_handle_request(void *p)
 		default:
 			printf("Unhandeleed  message %d!!!!!!!!!!!!\n",cwrmsg->type);
 			cwsend_unknown_response(conn,cwrmsg->seqnum,cwrmsg->type);
-
 	}
+	return 1;
 }
 
 
@@ -373,56 +432,26 @@ static int wtpman_establish_dtls(void *arg)
 	return 1;
 }
 
-static void wtpman_run(void *arg)
+static int wtpman_join(void *arg,time_t timer)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
 
+	/* timer = cw_timer_start(wtpman->conn->wait_join); */
 
-	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
-		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket", CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
-
-	/* establish dtls session*/
-	if (!wtpman_establish_dtls(wtpman)){
-		wtpman_remove(wtpman);
-		return;
-	}
-
-	printf("DTLS ready\n");
-	exit(0);
-
-	timer = cw_timer_start(wtpman->conn->wait_join);
-
-	/* In join state, wait for join request */
-	cwrmsg = wtpman_wait_for_message(wtpman,timer);
-
+	int join_msgs[] = { CWMSG_JOIN_REQUEST, -1 };
+	struct cwrmsg * cwrmsg;	
+	cwrmsg =  conn_wait_for_request(wtpman->conn, join_msgs, timer);
 	if (!cwrmsg){
+		if (conn_is_error(wtpman->conn)){
+			cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
+			return 0;
+		}
+			
 		cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
-			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
-			wtpman_remove(wtpman);
-		return;
-	}	
-
-	if (cwrmsg == (struct cwrmsg*)EOF){
-		cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
+		sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_dtls);
+		return 0;
+	
 	}
-
-	/* the received message MUST be a join request */	
-
-	if (cwrmsg->type != CWMSG_JOIN_REQUEST){
-		cw_dbg(DBG_CW_MSG_ERR,"Join request expected from %s, but got %i",CLIENT_IP,cwrmsg->type);
-		wtpman_remove(wtpman);
-		return;
-	}
-
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 	{
@@ -445,7 +474,48 @@ static void wtpman_run(void *arg)
 		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
 		sock_addr2str(&wtpman->conn->addr));
 
+
+	return 1;
+	
+}
+
+static void wtpman_run(void *arg)
+{
+	struct wtpman * wtpman = (struct wtpman *)arg;
+	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
+
+	/* reject connections to our multi- or broadcast sockets */
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
+		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket.", CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+	/* establish dtls session*/
+	if (!wtpman_establish_dtls(wtpman)){
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	/* dtls is established, goto join state */
+	if (!wtpman_join(wtpman,timer)){
+		wtpman_remove(wtpman);
+		return;
+	}
+
 	/* here the WTP has joined */
+
+	
+	printf("WTP is joined now\n");
+	exit(0);
+
+	int result_code = 0;
+	struct radioinfo * radioinfo;
+
 
 	
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
@@ -461,8 +531,8 @@ static void wtpman_run(void *arg)
 
 
 
-	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
-	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+//	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
+//	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
 
 	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
@@ -553,7 +623,7 @@ exit(0);
 		}
 
 
-
+/*
 if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 	process_conf_status_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 {
@@ -566,7 +636,7 @@ if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 
 
 }
-
+*/
 		msg_counter=0;
 
 
