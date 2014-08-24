@@ -28,8 +28,9 @@
 static int wtpinfo_readelem_discovery_req(void * w,int type,uint8_t* msgelem,int len)
 {
 	struct wtpinfo * wtpinfo = (struct wtpinfo *)w;
-	cw_dbg(DBG_CW_MSGELEM,"Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
-	cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
+//	cw_dbg(DBG_CW_MSGELEM,"Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
+//	cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
+	cw_dbg_msgelem(CWMSG_DISCOVERY_REQUEST, type, msgelem,len);
 
 	if (wtpinfo_readelem_discovery_type(wtpinfo,type,msgelem,len)) 
 		return 1;
