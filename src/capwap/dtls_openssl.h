@@ -1,4 +1,4 @@
-#ifndef __DTLS_OPENSLL_H
+#ifndef __DTLS_OPENSSL_H
 #define __DTLS_OPENSSL_H
 
 #include <stdint.h>
