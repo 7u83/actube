@@ -23,7 +23,9 @@ ACIPLIST * aciplist_create();
 #define aciplist_foreach(l,callback,cbpriv) avltree_foreach(l,callback,cbpriv,1)
 
 
-/* structure to hold info about an ac */
+/**
+ * Structure to hold info about an AC 
+ */
 struct ac_info{
 	int stations;		
 	int limit;
