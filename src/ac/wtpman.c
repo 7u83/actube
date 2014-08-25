@@ -23,6 +23,7 @@
 #include "conf.h"
 
 #include "lwmsg.h"
+#include "lwapp.h"
 
 
 #include <errno.h>
@@ -158,6 +159,8 @@ struct cwrmsg * conn_send_request(struct conn * conn)
 	struct cwrmsg * cwrmsg;
 	struct cwmsg * cwmsg = &conn->req_msg;
 	
+printf("Retrans interval = %d\n",conn->retransmit_interval);
+printf("Current Seqnum = %d\n",conn->seqnum);
 
 
         for (i=0; i<conn->max_retransmit; i++) {
@@ -215,6 +218,11 @@ void send_image_file(struct conn * conn,const char * filename)
 		return;
 	}
 
+
+	
+
+
+
 	cw_log(LOG_INFO,"Sending image file %s to %s",filename,sock_addr2str(&conn->addr));
 
 	struct cwrmsg * cwrmsg;
@@ -223,15 +231,47 @@ void send_image_file(struct conn * conn,const char * filename)
 	data.data = buffer;
 
 
+	conn->request_handler = conn_handle_echo_request;
+	conn->request_handler_param = conn;
+
+int bl=0;
+
+//fseek(infile,2703*1024,SEEK_SET);
 	do{
+
+
+
+int ai;
+for (ai=0; ai<1024; ai++){
+	printf("%02X ",buffer[ai]);
+
+}
+
 		data.len = fread(buffer,1,sizeof(buffer),infile);
+//data.len=0;
+
+
+
+
 		if (feof(infile))
 			data.type=2;
 		else	
 			data.type=1;
-		printf("Send img data request\n");
-		cwsend_image_data_request(conn,&data,0);
-		cwrmsg = conn_get_response(conn);
+
+		if (data.len==0){
+			printf("*******************************************len0************************************\n");
+		}
+
+		printf("Send img data request, block=%d, len=%d, ch=%d\n",bl,data.len,lw_checksum(data.data,data.len));
+
+//exit(0);
+
+		bl++;
+
+		conn_prepare_image_data_request(conn,&data,0);
+		cwrmsg = conn_send_request(conn);
+
+
 		if (cwrmsg){
 			printf("Got img data response\n");
 		}
@@ -361,7 +401,6 @@ static void wtpman_run_run(void *arg)
 	printf("Update now?\n");
 
 
-	conn->seqnum=1;
 
 	conn_prepare_request(conn,CWMSG_CONFIGURATION_UPDATE_REQUEST);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
@@ -441,6 +480,7 @@ static int wtpman_join(void *arg,time_t timer)
 	int join_msgs[] = { CWMSG_JOIN_REQUEST, -1 };
 	struct cwrmsg * cwrmsg;	
 	cwrmsg =  conn_wait_for_request(wtpman->conn, join_msgs, timer);
+
 	if (!cwrmsg){
 		if (conn_is_error(wtpman->conn)){
 			cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
@@ -482,7 +522,9 @@ static int wtpman_join(void *arg,time_t timer)
 static void wtpman_run(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
+	struct cwrmsg * cwrmsg; // = conn_get_message(wtpman->conn);
+
+	wtpman->conn->seqnum=0;
 
 	/* reject connections to our multi- or broadcast sockets */
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
@@ -507,7 +549,31 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
-	/* here the WTP has joined */
+	/* here the WTP has joined, now image update or change state event */
+
+	int msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	cwrmsg =  conn_wait_for_request(wtpman->conn, msgs, timer);
+
+	if (!cwrmsg){
+		wtpman_remove(wtpman);	
+		return;
+	}
+
+
+	switch (cwrmsg->type){
+		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+			printf("Change state event\n!");
+			break;
+		case CWMSG_IMAGE_DATA_REQUEST:
+			printf("Image update\n!");
+			cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
+	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
+//			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");
+			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
+		
+			break;
+	}
+
 
 	
 	printf("WTP is joined now\n");

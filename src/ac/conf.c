@@ -530,6 +530,11 @@ static int conf_read_dbg_level(cfg_t *cfg)
 
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
+		if (!strcmp(str,"info")){
+			cw_dbg_opt_level|=DBG_CW_INFO;
+			continue;
+		}
+
 		if (!strcmp(str,"msg")){
 			cw_dbg_opt_level|=DBG_CW_MSG;
 			continue;

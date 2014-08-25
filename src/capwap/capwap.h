@@ -318,7 +318,7 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 
 struct image_data{
 	uint8_t * data;
-	int type;
+	uint8_t type;
 	int len;
 };
 
