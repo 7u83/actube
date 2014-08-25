@@ -61,6 +61,11 @@ static int wtpinfo_readelem_discovery_req(void *eparm, int type,
 	    (e->wtpinfo, type, msgelem, len))
 		goto foundX;
 
+	/* non-mandatory mesage lements */
+	if (cw_readelem_mtu_discovery_padding(type,msgelem,len))
+		return 1;
+	
+
 	return 0;
       foundX:
 	cw_mand_elem_found(e->mand, type);
