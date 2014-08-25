@@ -356,7 +356,7 @@ extern int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioi
 extern void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinfo * radioinfo, struct ac_info * acinfo, struct wtpinfo * wtpinfo);
 
 
-extern void process_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
+extern void cwread_discovery_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void process_conf_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 
