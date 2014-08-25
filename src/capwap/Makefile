@@ -90,11 +90,11 @@ CAPWAPOBJS= \
 	   cwsend_echo_response.o \
 	   cwsend_conf_status_response.o\
 	   cwread_configuration_status_request.o\
+	cwread_discovery_request.o\
 	cwread_change_state_event_request.o\
 	cwread_wtp_event_request.o \
 	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
-	   process_discovery_request.o \
 	   process_join_request.o \
 	   wtpinfo_readelem_wtp_board_data.o \
 	   wtpinfo_readelem_wtp_mac_type.o \
@@ -207,6 +207,7 @@ all: $(ARCH)/$(NAME)
 clean: 
 	$(RM) $(OBJS)
 	$(RM) $(DEPS)
+	$(RM) $(ARCH)/$(NAME) 
 	
 
 clean_deps:
