@@ -32,7 +32,8 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 {
 
 	struct eparm * e = (struct eparm*)eparm;
-	cw_dbg(DBG_CW_MSGELEM,"Reading conf staus req msgelem, type=%d - %s ,len=%d\n",type,cw_msgelemtostr(type),len);
+//	cw_dbg(DBG_CW_MSGELEM,"Reading conf staus req msgelem, type=%d - %s ,len=%d\n",type,cw_msgelemtostr(type),len);
+	cw_dbg_msgelem(CWMSG_CONFIGURATION_STATUS_REQUEST, type, msgelem,len);
 
 	/* mandatory elements */
 	if (cw_readelem_ac_name(&e->wtpinfo->ac_name,type,msgelem,len))

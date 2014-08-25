@@ -1,3 +1,4 @@
+CC=clang
 ifndef CC
 	CC=gcc
 endif
@@ -81,7 +82,6 @@ CAPWAPOBJS= \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
 	   cwread_image_data_request.o \
-	   cwsend_image_data_request.o \
 	   cwsend_image_data_response.o \
 	   cwsend_join_request.o \
 	   cwsend_join_response.o \
@@ -122,8 +122,10 @@ CAPWAPOBJS= \
 	cw_readelem_radio_operational_state.o \
 	cw_readelem_statistics_timer.o \
 	   cw_readelem_wtp_reboot_statistics.o\
-   	   cwmsg_addelem_vendor_cisco_ap_timesync.o
+   	   cwmsg_addelem_vendor_cisco_ap_timesync.o \
+	lw_checksum.o
 	
+	  # cwsend_image_data_request.o 
 
 	
 #	   cwmsg_set_control_header.o 
@@ -154,7 +156,8 @@ CONNOBJS= conn.o \
 	conn_get_message.o  \
 	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
-	conn_prepare_request.o 
+	conn_prepare_request.o \
+	conn_prepare_image_data_request.o
 
 	
 

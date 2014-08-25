@@ -169,9 +169,11 @@ void connlist_remove(struct connlist *cl,struct conn * conn);
 void connlist_destroy(struct connlist * cl);
 void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len);
 
-
+struct image_identifier;
+struct image_data;
 
 extern void conn_prepare_request(struct conn * conn, int type);
+extern int conn_prepare_image_data_request(struct conn * conn, struct image_data *, struct image_identifier *id );
 
 #define conn_is_error(conn) (conn->dtls_error)
 

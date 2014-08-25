@@ -21,11 +21,16 @@
 /**
  * Calculate the 16-bit checksum for LWAPP image data message 
  * elements with opcode 3 - used by Cisco also in CAPWAP
+ * (But it's not always correct, the real algo might be another)
  */
 uint16_t lw_checksum(uint8_t * d, int len)
 {
 	int i;
-	uint32_t cs = 0xffff;
+//	uint32_t cs = 0xffff;
+	if (len==0)
+		return 0xffff;
+
+	uint32_t cs = 0;
 	for (i = 0; i < len; i += 2) {
 		uint16_t w = d[i] << 8;
 
@@ -36,5 +41,9 @@ uint16_t lw_checksum(uint8_t * d, int len)
 		cs += cs >> 16;
 		cs &= 0xffff;
 	}
-	return (uint16_t) cs;
+	return (uint16_t) cs&0xffff;
 }
+
+
+
+

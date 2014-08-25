@@ -28,9 +28,9 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	*((uint32_t*)(acd+4))=htonl((acinfo->active_wtps<<16) | acinfo->max_wtps);
 	*((uint32_t*)(acd+8))=htonl((acinfo->security<<24) | (acinfo->rmac<<16) | acinfo->dtls_policy );
 
+
 	int len = 12;
 	int sublen;
-
 
 	sublen = 4;
 		
@@ -39,18 +39,36 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
 	len+=4;
 	*(acd+len)=7; len++;
-	*(acd+len)=3; len++;
+	*(acd+len)=4; len++;
 	*(acd+len)=1; len++;
 	*(acd+len)=72; len++;
-/*	*(acd+len)=5; len++;
+	*(acd+len)=5; len++;
 	*(acd+len)=6; len++;
 	*(acd+len)=7; len++;
 	*(acd+len)=8; len++;
-*/
+
+
+	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
+	len+=4;
+	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
+	len+=4;
+	*(acd+len)=7; len++;
+	*(acd+len)=3; len++;
+	*(acd+len)=1; len++;
+	*(acd+len)=72; len++;
+	*(acd+len)=5; len++;
+	*(acd+len)=6; len++;
+	*(acd+len)=7; len++;
+	*(acd+len)=8; len++;
+
+
+
+
+goto b;
 
 	/* software version subelement */
 
-/*	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
+	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
 	len+=4;
 	sublen=strlen((const char*)acinfo->software_version);
 	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
@@ -58,16 +76,16 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	memcpy(acd+len,acinfo->software_version,sublen);
 	len+=sublen;
 
-*/
+
 	/* hardware version subelement */
-/*	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO); 
+	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO); 
 	len+=4;
 	sublen=strlen((const char*)acinfo->hardware_version);
 	*((uint32_t*)(acd+len))=htonl((4<<16)|sublen);
 	len+=4;
 	memcpy(acd+len,acinfo->hardware_version,sublen);
 	len+=sublen;
-*/
+b:
 	cwmsg_addelem(msg,CWMSGELEM_AC_DESCRIPTOR,acd,len);
 
 }

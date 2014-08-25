@@ -40,6 +40,7 @@ int ac_run();
 
 int main (int argc, const char * argv[]) 
 {
+//	send_image_file(0,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
 
 
 	cw_log_name="AC-Tube";

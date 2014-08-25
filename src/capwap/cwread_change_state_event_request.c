@@ -16,6 +16,13 @@
 
 */
 
+/** 
+ * @file 
+ * @brief  Defines cwread_change_state_even_request function. 
+ * 
+ * Full text
+ */
+
 #include <stdio.h>
 
 #include "capwap.h"
@@ -48,7 +55,9 @@ foundX:
 	return 1;
 }
 
-
+/**
+ * @brief Read elements of a Change State Event Request message.
+ */
 int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
 	int mand[] = {
