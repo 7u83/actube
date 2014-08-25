@@ -122,6 +122,7 @@ CAPWAPOBJS= \
 	cw_readelem_radio_operational_state.o \
 	cw_readelem_statistics_timer.o \
 	cw_readelem_mtu_discovery_padding.o \
+	cw_readelem_vendor_specific_payload.o \
 	   cw_readelem_wtp_reboot_statistics.o\
    	   cwmsg_addelem_vendor_cisco_ap_timesync.o \
 	lw_checksum.o

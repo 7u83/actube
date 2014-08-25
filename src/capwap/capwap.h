@@ -373,6 +373,7 @@ extern void cwsend_conf_status_response(struct conn * conn,int seqnum, int rc, s
 
 extern void cwsend_unknown_response(struct conn * conn,int seqnum, int unknow_request);
 
+
 extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_msgtostr(int type);
 
@@ -388,6 +389,8 @@ extern int cw_readelem_radio_operational_state(struct radioinfo * radioinfo, int
 
 extern int cw_readelem_statistics_timer(uint16_t *timer, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_result_code(uint32_t *result_code, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_mtu_discovery_padding(int type,uint8_t *msgelem, int len);
+extern int cw_readelem_vendor_specific_payload(void * data, int msgtype, int elemtype,uint8_t *msgelem, int len);
 
 
 
