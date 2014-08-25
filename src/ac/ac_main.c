@@ -34,9 +34,18 @@
 
 #include "socklist.h"
 
-
+#include "db.h"
 
 int ac_run();
+
+void alive_thread(void *data)
+{
+	while(1){
+		sleep(5);
+		db_ping();
+	}
+}
+
 
 int main (int argc, const char * argv[]) 
 {
@@ -65,6 +74,9 @@ int main (int argc, const char * argv[])
 	db_init();
 	db_start();
 	db_ping();
+
+	pthread_t alth;
+	pthread_create (&alth, NULL, alive_thread, (void *)0);
 	
 
 #ifdef WITH_DTLS
