@@ -239,17 +239,27 @@ int bl=0;
 //fseek(infile,2703*1024,SEEK_SET);
 	do{
 
+		data.len = fread(buffer,1,sizeof(buffer),infile);
+//data.len=0;
 
+/*
+memset(buffer,0xff,1024);
+memset(buffer+100,7,77);
+memset(buffer+300,251,77);
+buffer[1000]=99;
+buffer[777]=99;
+buffer[778]=199;
+buffer[178]=199;
+buffer[179]=199;
+buffer[279]=199;
+buffer[319]=219;
 
+*/
 int ai;
 for (ai=0; ai<1024; ai++){
 	printf("%02X ",buffer[ai]);
 
 }
-
-		data.len = fread(buffer,1,sizeof(buffer),infile);
-//data.len=0;
-
 
 
 
@@ -339,7 +349,7 @@ static void wtpman_run_discovery(void *arg)
 	time_t timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
-	if ( !cwrmsg || cwrmsg == (struct cwrmsg *)EOF )
+	if ( !cwrmsg  )
 	{
 		cw_dbg(DBG_CW_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
 		wtpman_remove(wtpman);
@@ -355,8 +365,13 @@ static void wtpman_run_discovery(void *arg)
 	}
 
 
-	process_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+	cwread_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
+	char wtpinfostr[8192];
+	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
+
+exit(0);
 
 
 	struct radioinfo radioinfo;
@@ -368,10 +383,10 @@ static void wtpman_run_discovery(void *arg)
 
 
 
-	char wtpinfostr[8192];
+/*	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
-
+*/
 
 	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
 
