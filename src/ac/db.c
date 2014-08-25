@@ -11,6 +11,7 @@ static sqlite3 *handle;
 const char * init_tables = "\
 	CREATE TABLE IF NOT EXISTS acs (acid TEXT PRIMARY KEY, acname TEXT, lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
+	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT, wtp_name TEXT); \
 	";
 
 int db_init()
