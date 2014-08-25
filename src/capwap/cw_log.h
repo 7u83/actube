@@ -94,6 +94,7 @@ extern int cw_dbg_opt_level;
 	#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
 	#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
 	#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
+	#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand) cw_dbg_missing_mand_elems_(conn, msgtyoe, mand)
 
 #else
 	#define cw_log_dbg(...)
@@ -108,6 +109,9 @@ extern int cw_dbg_opt_level;
 	#define cw_log_debug0_dump(level,str,len)
 	#define cw_log_debug1_dump(level,str,len) 
 	#define cw_log_debug2_dump(level,str,len) 
+
+	#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
+
 #endif
 
 extern void (*cw_log_cb)(int level,const char * fromat, ...);
@@ -121,6 +125,8 @@ extern void cw_log_tofile(int level,const char *format, ...);
 
 
 extern void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t *msgbuf,int len);
+struct conn;
+extern void cw_dbg_missing_mand_elems_(struct conn * conn,int msgtyoe, int * mand);
 
 
 
