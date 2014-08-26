@@ -1,5 +1,5 @@
 #ifndef __WTPLIST_H
-#define __WPTLIST_H
+#define __WTPLIST_H
 
 #include <sys/socket.h>
 

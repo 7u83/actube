@@ -18,6 +18,9 @@
 
 #include "capwap.h"
 #include "lwapp.h"
+
+
+#include "string.h" //tube
 /*
 static void cwmsg_addelem_image_data(struct cwmsg *cwmsg, struct image_data *data)
 {
@@ -36,7 +39,8 @@ int conn_prepare_image_data_request(struct conn * conn, struct image_data * data
 
 
 		
-
+//uint8_t buf[1024];
+//memset(buf,0xff,1024);
 
 
 		uint8_t type=3;
@@ -51,6 +55,7 @@ int conn_prepare_image_data_request(struct conn * conn, struct image_data * data
 			&checksum,2,
 //			d, sizeof(d)
 			data->data, data->len
+//			buf,1024
 		);
 
 

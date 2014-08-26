@@ -38,10 +38,10 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	len+=4;
 	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
 	len+=4;
-	*(acd+len)=7; len++;
-	*(acd+len)=4; len++;
-	*(acd+len)=1; len++;
+	*(acd+len)=5; len++;
+	*(acd+len)=0; len++;
 	*(acd+len)=72; len++;
+	*(acd+len)=71; len++;
 	*(acd+len)=5; len++;
 	*(acd+len)=6; len++;
 	*(acd+len)=7; len++;
