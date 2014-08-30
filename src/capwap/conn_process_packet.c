@@ -58,8 +58,9 @@ static int cwrmsg_init_ctrlhdr(struct conn * conn, struct cwrmsg * cwrmsg, uint8
 			return 0;
 		}
 		if (8+cwrmsg->msgelems_len < len){
-			cw_dbg(DBG_CW_RFC,"Packet from from %s has %d bytes extra data, ignoring.",
+			cw_dbg(DBG_CW_RFC,"Packet from from %s has %d bytes extra data.",
 				sock_addr2str(&conn->addr),len-8-cwrmsg->msgelems_len);
+			cwrmsg->msgelems_len=len-8;
 		}
 
 		if (8+cwrmsg->msgelems_len > len){
