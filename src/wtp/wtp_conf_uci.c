@@ -9,12 +9,13 @@
 #include <net/if.h>
 
 
+#include <uci.h>
+
 #include "capwap/capwap.h"
 #include "capwap/cw_log.h"
 #include "wtp_conf.h"
 
-
-#include <uci.h>
+#include "capwap/cw_log.h"
 
 
 static struct uci_section  * get_anon_section(struct uci_package * pkg, const char *type)
@@ -59,7 +60,7 @@ int read_config(const char * filename){
 	int rc = uci_load(ctx, filename, &pkg );
 
 	if (rc == UCI_ERR_NOTFOUND){
-		cw_log_debug0("Config file '%s' not found, running without config",filename);
+		cw_dbg(DBG_CW_INFO,"Config file '%s' not found, running without config",filename);
 		return 1;
 	}
 	
@@ -73,7 +74,7 @@ int read_config(const char * filename){
 
 	struct uci_section * section = get_anon_section(pkg,"wtp");
 	if (!section) {
-		cw_log_debug0("No 'wtp' section found, running withou config");
+		cw_dbg(DBG_CW_INFO,"No 'wtp' section found, running withou config");
 		return 1;
 	}
 
