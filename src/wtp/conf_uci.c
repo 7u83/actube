@@ -41,6 +41,7 @@ static struct uci_section  * get_anon_section(struct uci_package * pkg, const ch
 
 int read_config(const char * filename){
 
+
 	struct uci_context * ctx;
 
 	ctx = uci_alloc_context();
@@ -50,11 +51,11 @@ int read_config(const char * filename){
 	}
 
 	struct uci_package * pkg;
-
 	
 	if (filename == NULL){
 		filename = "wtp";
 	}
+	cw_dbg(DBG_ALL,"Reading config file %s",filename);
 
 
 	int rc = uci_load(ctx, filename, &pkg );
