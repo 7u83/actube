@@ -14,5 +14,7 @@ export CC=mips-openwrt-linux-uclibc-gcc
 export LD=mips-openwrt-linux-uclibc-ld
 export AR=mips-openwrt-linux-uclibc-ar
 
-/bin/bash
 
+#bash --rcfile <(cat ~/.bashrc; echo 'PS1="OpenWrtEnv:\w\$"')
+echo 'export PS1="OpenWrtEnv:\w\$ "' > /tmp/brc
+bash --rcfile /tmp/brc
