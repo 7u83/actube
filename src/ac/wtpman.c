@@ -371,7 +371,7 @@ static void wtpman_run_discovery(void *arg)
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 
-exit(0);
+//exit(0);
 
 
 	struct radioinfo radioinfo;

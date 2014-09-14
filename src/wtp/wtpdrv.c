@@ -1,4 +1,5 @@
 #include "wtpdrv.h"
+#include "nlt.h"
 
 
 wpa_printf()
@@ -68,7 +69,7 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 	struct nlattr *nla;
 	nla_for_each_attr(nla,head,alen,rem){
 
-		printf("ATR Type: %d\n",nla->nla_type);
+		printf("ATR Type: %d - %s\n",nla->nla_type,nlt_get_attrname(nla->nla_type));
 
 
 	}
@@ -98,6 +99,72 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 }
 
 
+void make_if(struct nl_sock * sk)
+{
+	/* allocate a message */
+	struct nl_msg *msg = nlmsg_alloc();
+	if (!msg) 
+		return;
+	
+	/* init message */
+	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
+		    NL80211_CMD_NEW_INTERFACE, 0);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_WIPHY, 0);
+	NLA_PUT_U32(msg, NL80211_ATTR_IFTYPE,NL80211_IFTYPE_AP);
+	NLA_PUT_STRING(msg, NL80211_ATTR_IFNAME,"wulan0");
+	
+	int ret = nl_send_auto_complete(sk, msg);
+	printf("IF Send ret %d\n",ret);
+
+	int nlr = nl_recvmsgs_default(sk);
+	printf("NLR = %d\n",nlr);
+
+
+
+      nla_put_failure:
+	nlmsg_free(msg);
+	return 1;
+}
+
+
+void start_ap(struct nl_sock * sk)
+{
+	/* allocate a message */
+	struct nl_msg *msg = nlmsg_alloc();
+	if (!msg) 
+		return;
+		/* init message */
+	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
+		    NL80211_CMD_START_AP, 0);
+
+printf("Set bi\n");
+
+	NLA_PUT_U16(msg, NL80211_ATTR_BEACON_INTERVAL, 500);
+
+printf("Sot biu\n");
+
+	const char *ssid = "HelloWorld";
+	NLA_PUT(msg,NL80211_ATTR_SSID,strlen(ssid),ssid);
+//	nla_put(msg,NL80211_ATTR_SSID,ssid,strlen(ssid));
+printf("Sot ssid\n");
+
+	
+	int ret = nl_send_auto_complete(sk, msg);
+	printf("AP IF Send ret %d\n",ret);
+
+	int nlr = nl_recvmsgs_default(sk);
+	printf("AP NLR = %d\n",nlr);
+
+      nla_put_failure:
+printf("Bau\n");
+	nlmsg_free(msg);
+	return 1;
+
+	
+}
+
+
 void gr()
 {
 
@@ -112,6 +179,19 @@ void gr()
 	//attach a callback
 	nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, nlCallback,
 			    NULL);
+
+
+printf("Mak If\n");
+make_if(sk);
+printf("made if\n");
+start_ap(sk);
+
+
+sleep(100);
+
+
+return;
+
 
 	//allocate a message
 	struct nl_msg *msg = nlmsg_alloc();

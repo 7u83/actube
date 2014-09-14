@@ -46,7 +46,7 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 	cwmsg_addelem_ctrl_ip_addrs(cwmsg,acinfo);
 
 
-	cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
+	//cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
 
 
 //	uint8_t buffer[]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

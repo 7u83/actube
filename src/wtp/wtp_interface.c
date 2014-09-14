@@ -31,26 +31,26 @@ struct wtpinfo * get_wtpinfo()
 
 	wtpinfo->model_no="WNDR 3700";
 
-	wtpinfo->bootloader_version="1.0";
-	wtpinfo->bootloader_vendor_id=12345;
+	wtpinfo->bootloader_version="";
+	wtpinfo->bootloader_vendor_id=890;
 
-	wtpinfo->hardware_version="2.5";
-	wtpinfo->hardware_vendor_id=909090;
+	wtpinfo->hardware_version="\0\0";
+	wtpinfo->hardware_vendor_id=890;
 	
-	wtpinfo->software_version="2.0";
-	wtpinfo->software_vendor_id=11591;
+	wtpinfo->software_version="2.23(UJA.6)";
+	wtpinfo->software_vendor_id=890;
 
 	wtpinfo->macaddress=conf_macaddress;
 	wtpinfo->macaddress_len=conf_macaddress_len;
 
-	wtpinfo->mac_type=1;
+	wtpinfo->mac_type=0;
 
 
 	wtpinfo->session_id = malloc(8);
 	wtpinfo->session_id_len = cw_rand(wtpinfo->session_id,8);
 
 
-	wtpinfo->frame_tunnel_mode=0;
+	wtpinfo->frame_tunnel_mode=1;
 	return wtpinfo;
 }
 

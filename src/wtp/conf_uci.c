@@ -82,12 +82,7 @@ int read_config(const char * filename){
 	
 	const char  *str;
 	str = uci_lookup_option_string(ctx,section,"name");
-
-
-	
-
-
-	printf("Option string: %s\n",str);
+	conf_wtpname = strdup(str);
 
 	
 	return 1;
