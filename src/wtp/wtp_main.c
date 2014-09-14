@@ -19,7 +19,6 @@
 
 
 
-
 struct wtpinfo wtpinfo;
 
 //int conf_rids[2];
@@ -58,6 +57,8 @@ const char * interfaces[]={
 
 int main()
 {
+	gr();
+	exit(0);
 	wtp_main();
 }
 
@@ -92,14 +93,18 @@ int do_connect(void *priv,void *data)
 
 int wtp_main(const char *ad)
 {
+	cw_dbg_opt_level = DBG_DTLS | DBG_CW_INFO | DBG_ALL;	
 
 	wtpconf_preinit();
 
-	if (!read_config("wtp.conf")){
+	if (!read_config("./wtpconf")){
 		return 1;
 	}
 
 	wtpconf_init();
+
+
+	
 
 //	cw_log_debug_level=6; //conf_debug_level;
 
@@ -110,7 +115,6 @@ int wtp_main(const char *ad)
 //	conf_sslkeypass="7u83";
 
 
-	cw_dbg_opt_level = DBG_DTLS;	
 
 #ifdef WITH_DTLS	
 	dtls_init();
@@ -123,7 +127,7 @@ int wtp_main(const char *ad)
 		ACIPLIST * aciplist=0;
 		int i;
 
-		cw_log_debug0("Entering discovery state");
+		cw_dbg(DBG_CW_INFO,"Entering discovery state");
 
 		do {
 			for (i=0; i<conf_ac_list_len; i++){

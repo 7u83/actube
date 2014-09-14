@@ -28,7 +28,9 @@ int __old_cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * co
 	uint32_t val;
 
 	/* second dword of message control header */
-	val = (seqnum<<24)|((cwmsg->pos+3)<<8);
+//orig	val = (seqnum<<24)|((cwmsg->pos+3)<<8);
+val = (seqnum<<24)|((cwmsg->pos)<<8);
+
 	*((uint32_t*)(cwmsg->ctrlhdr+4))=htonl(val);
 
 

@@ -24,7 +24,7 @@
 void cwmsg_addelem_ac_timestamp(struct cwmsg *msg)
 {
 	time_t t = time(NULL);
-	uint32_t ntpt = t+2398291200;
+	uint32_t ntpt = t+(uint32_t)2398291200LL;
 	uint8_t c[4];
        	*((uint32_t*)c)= htonl(ntpt);
 	cwmsg_addelem(msg,CWMSGELEM_AC_TIMESTAMP,c,4);

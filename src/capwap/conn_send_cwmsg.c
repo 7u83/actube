@@ -28,7 +28,8 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	uint32_t val;
 
 	/* second dword of message control header */
-	val = (cwmsg->seqnum<<24)|((cwmsg->pos+3)<<8);
+//orig	val = (cwmsg->seqnum<<24)|((cwmsg->pos+3)<<8);
+	val = (cwmsg->seqnum<<24)|((cwmsg->pos)<<8);
 	*((uint32_t*)(cwmsg->ctrlhdr+4))=htonl(val);
 
 	

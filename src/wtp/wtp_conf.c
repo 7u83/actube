@@ -19,6 +19,8 @@
 
 
 #include "capwap/sock.h"
+#include "capwap/cw_log.h"
+
 
 char * conf_primary_if=0;
 char * conf_wtpname=0;
@@ -78,7 +80,7 @@ int wtpconf_primary_if()
                 return 0;
         };
 	
-	cw_log_debug0("Primary interfac: %s, mac address: %s.",
+	cw_dbg(DBG_CW_INFO, "Primary interface: %s, mac address: %s.",
 			conf_primary_if,
 			sock_hwaddr2str(conf_macaddress,conf_macaddress_len)
 			);
@@ -100,7 +102,7 @@ int wtpconf_name()
 	if (!conf_wtpname)
 		return 0;
 
-	cw_log_debug0("Using self assigned wtp name: %s",conf_wtpname);
+	cw_dbg(DBG_CW_INFO,"Using self assigned wtp name: %s",conf_wtpname);
 
 	return 1;
 }
@@ -112,8 +114,9 @@ int wtpconf_name()
 
 
 char * default_ac_list[] = {
-	"255.255.255.255",
-	"224.0.1.140",
+	"192.168.0.255",
+//	"255.255.255.255",
+//	"224.0.1.140",
 };
 
 int wtpconf_ac_list()

@@ -1,3 +1,5 @@
+include ../WtpConfig.mak
+
 ifndef CC
 	CC=gcc
 endif
@@ -38,14 +40,17 @@ CFLAGS += -O2 -Wall -g
 #endif
 
 LDFLAGS += -L../../src/capwap/$(ARCH)
-LDFLAGS += -L/usr/local/lib
+#LDFLAGS += -L/usr/local/lib
 LDFLAGS += -luci
+#LDFLAGS += -L../capwap
 LDFLAGS += $(XLIB)
+
 #LDFLAGS += -lpthread
 #LDFLAGS += -lrt
 
 LIBS+=-lcapwap
-#LIBS+=-liw
+LIBS+=-liw
+LIBS+=-lnl-tiny
 LIBS+=-lssl
 LIBS+=-lcrypto
 #LIBS+=-lrt
@@ -55,11 +60,20 @@ else
 LIBS+=-lconfuse
 endif
 
+#HA_FILES += ../contrib/hostap/src/drivers/driver_nl80211.o
 
-CFLAGS += -I../src
-CFLAGS += -I../src/utils
+HA_INCS += -I$(INCLUDE_DIR)/libnl-tiny
+HA_INCS += -I../contrib/hostap/src/utils
+HA_INCS += -I../contrib/hostap/src
+
+CFLAGS += $(HA_INCS)
+
+
+#CFLAGS += -I../src
+#CFLAGS += -I../src/utils
 CFLAGS += -I../../src
-CFLAGS += -I/usr/local/include
+
+#CFLAGS += -I/usr/local/include
 
 
 
@@ -75,6 +89,7 @@ OBJS += wtp_main.o
 
 #OBJS += wtp_conf.o
 
+
 OBJS += discovery.o
 OBJS += wtp_interface.o
 OBJS += wtpdrv.o
@@ -83,6 +98,11 @@ OBJS += run.o
 OBJS += sulking.o
 OBJS += configure.o
 OBJS += $(CONFOBJS)
+
+
+OBJS += nlt_attrnames.o
+
+#OBJS += $(HA_FILES)
 
 ALL=wtp
 

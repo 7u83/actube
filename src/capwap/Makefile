@@ -1,4 +1,3 @@
-CC=clang
 ifndef CC
 	CC=gcc
 endif
@@ -139,8 +138,8 @@ DTLSOBJS= dtls_openssl.o	 \
 	 dtls_openssl_connect.o \
 	 dtls_openssl_get_cipher.o \
 	 dtls_openssl_bio.o \
-	 dtls_gnutls.o \
-	 dtls_gnutls_accept.o \
+#	 dtls_gnutls.o \
+#	 dtls_gnutls_accept.o \
 	
 
 CONNOBJS= conn.o \

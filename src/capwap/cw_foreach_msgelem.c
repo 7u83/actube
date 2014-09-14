@@ -18,29 +18,35 @@
 
 #include "capwap.h"
 
+#include <stdio.h>
+
 /*
  * for each capwap message element in msgelems call the callback function
  */
-int cw_foreach_msgelem(uint8_t * msgelems,  int len,
-		int (*callback)(void*,int,uint8_t*,int),void *arg )
+int cw_foreach_msgelem(uint8_t * msgelems, int len,
+		       int (*callback) (void *, int, uint8_t *, int),
+		       void *arg)
 {
 	uint32_t val;
 	int type;
 	int elen;
-	int i=0;
+	int i = 0;
 	do {
-		val = ntohl(*(uint32_t*)(msgelems+i));
-		type=(val>>16) & 0xFFFF;
+		val = ntohl(*(uint32_t *) (msgelems + i));
+		type = (val >> 16) & 0xFFFF;
 		elen = val & 0xffff;
-		if (i+elen+4>len) {
+		if (i + elen + 4 > len) {
+
+printf("***************************************************************************\n");
+printf("Type: %d\n",type);
+printf("Bumm %d %d\n",i+elen+4,len);
+
 			return 0;
 		}
-			
-		callback(arg,type,msgelems+i+4,elen);
-		i+=elen+4;
 
-	} while (i<len);
+		callback(arg, type, msgelems + i + 4, elen);
+		i += elen + 4;
+
+	} while (i < len);
 	return 1;
 }
-
-
