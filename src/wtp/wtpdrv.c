@@ -141,6 +141,8 @@ void start_ap(struct nl_sock * sk)
 printf("Set bi\n");
 
 	NLA_PUT_U16(msg, NL80211_ATTR_BEACON_INTERVAL, 500);
+	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, 0);
+	NLA_PUT_U32(msg, NL80211_ATTR_DTIM_PERIOD, 1);
 
 printf("Sot biu\n");
 
