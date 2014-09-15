@@ -69,7 +69,14 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 	struct nlattr *nla;
 	nla_for_each_attr(nla,head,alen,rem){
 
-		printf("ATR Type: %d - %s\n",nla->nla_type,nlt_get_attrname(nla->nla_type));
+		//printf("ATR Type: %d - %s\n",nla->nla_type,nlt_get_attrname(nla->nla_type));
+
+		if (nla->nla_type==NL80211_ATTR_SUPPORTED_COMMANDS){
+			printf("Supported commands found, len = %d\n",nla->nla_len);
+
+					
+		}
+
 
 
 	}
@@ -182,7 +189,7 @@ void gr()
 	nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, nlCallback,
 			    NULL);
 
-
+/*
 printf("Mak If\n");
 make_if(sk);
 printf("made if\n");
@@ -193,7 +200,7 @@ sleep(100);
 
 
 return;
-
+*/
 
 	//allocate a message
 	struct nl_msg *msg = nlmsg_alloc();
