@@ -37,6 +37,7 @@
 
 /* drive specific debugs */
 #define DBG_DRV				0x00010000
+#define DBG_DRV_ERR			0x00020000
 
 /* DTLS debugs */
 #define DBG_DTLS			0x10000000
