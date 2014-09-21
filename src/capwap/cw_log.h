@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include <syslog.h>
 
-
+/* CAPWAP specific debugs */
 #define DBG_CW_MSG			0x00000001
 #define DBG_CW_MSGELEM			0x00000002
 #define DBG_CW_MSGELEM_DMP		0x00000004
@@ -35,6 +35,10 @@
 #define DBG_CW_PKT_ERR			0x00000100
 #define DBG_CW_MSG_ERR			0x00000200
 
+/* drive specific debugs */
+#define DBG_DRV				0x00010000
+
+/* DTLS debugs */
 #define DBG_DTLS			0x10000000
 #define DBG_DTLS_DETAIL			0x20000000
 
