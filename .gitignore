@@ -22,5 +22,16 @@
 *.x86_64
 *.hex
 
-# Vim Backups
+# Vim backups and swaps
 *~ 
+
+
+# SSL stuff
+*.pem
+*.crt
+*.key
+*.req
+
+# Archives
+*.gz
+*.tgz
