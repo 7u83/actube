@@ -101,6 +101,7 @@ OBJS += $(CONFOBJS)
 
 
 OBJS += nlt_attrnames.o
+OBJS += nlt_cmdnames.o
 
 #OBJS += $(HA_FILES)
 
