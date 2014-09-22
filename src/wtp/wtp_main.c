@@ -57,8 +57,6 @@ const char * interfaces[]={
 
 int main()
 {
-	gr();
-	exit(0);
 	wtp_main();
 }
 
@@ -93,7 +91,9 @@ int do_connect(void *priv,void *data)
 
 int wtp_main(const char *ad)
 {
-	cw_dbg_opt_level = DBG_DTLS | DBG_CW_INFO | DBG_ALL;	
+	cw_dbg_opt_level = DBG_DTLS | DBG_CW_INFO | DBG_ALL;
+	gr();
+	exit(0);
 
 	wtpconf_preinit();
 
