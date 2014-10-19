@@ -9,11 +9,11 @@
 #include "capwap/cw_log.h"
 #include "capwap/radioinfo.h"
 
-wpa_printf()
+int wpa_printf()
 {
 }
 
-wpa_hexdump()
+int wpa_hexdump()
 {
 }
 
@@ -50,6 +50,16 @@ typedef __le16 le16
 
 struct radioinfo radioinfos[31];
 static struct nl_sock * sk;
+
+struct rd {
+	int phy;
+	uint32_t idx;
+	uint8_t mac[6];
+};
+
+
+static struct rd rd;
+
 
 
 int interface_up(const char * ifname)
@@ -192,37 +202,97 @@ nla_put_failure:
 
 static int family_id;
 
+static int add_interface_data(struct nlattr* msgattribs[NL80211_ATTR_MAX+1])
+{
+	printf("Add interface_data\n");
+	printf("--------------------------------------------------------------------------\n");
+	int i;
+	for (i=0; i<NL80211_ATTR_MAX; i++){
+	
+
+
+		if (msgattribs[i]){
+			printf("Attrib %d, %s\n",i,nlt_get_attrname(i));
+
+
+
+
+		}
+	}
+
+
+	if (msgattribs[NL80211_ATTR_IFINDEX]){
+		int idx  = nla_get_u32( msgattribs[NL80211_ATTR_IFINDEX] );
+		printf("IF index =  %d\n",idx);
+
+		rd.idx=idx;
+
+		
+	}
+
+	if (msgattribs[NL80211_ATTR_MAC]){
+
+		uint8_t * d = nla_data( msgattribs[NL80211_ATTR_MAC] );
+		memcpy (rd.mac,d,6);
+		
+	}
+
+
+	return 1;
+}
 
 
 static int add_wiphy_data(struct nlattr* msgattribs[NL80211_ATTR_MAX+1])
 {
-	const char * name;
+//	const char * name;
 	if (!msgattribs[NL80211_ATTR_WIPHY]){
 		printf("Error, on index\n");
 		return 0;
 	}
-	int index = nla_get_u32( msgattribs[NL80211_ATTR_WIPHY] );
-	printf("Index is %d\n",index);
+	//int index = nla_get_u32( msgattribs[NL80211_ATTR_WIPHY] );
 
 
 	if (msgattribs[NL80211_ATTR_WIPHY_BANDS]){
 		printf("Yea band\n");	
-		struct nlattr *nla=msgattribs[NL80211_ATTR_WIPHY_BANDS];
-		struct nla_attr * cnla;
-		int rem_nla;
+//		struct nlattr *nla=msgattribs[NL80211_ATTR_WIPHY_BANDS];
+//		struct nla_attr * cnla;
+//		int rem_nla;
 
 		/* TODO parse bands */
 /*		nla_for_each_nested(cnla, nla, rem_nla) {
 			int band = nla_get_u16(cnla);
 			printf("Band found: %d\n",band);
 		}
-
 */
+
 
 
 	
 
 	}
+
+	if (msgattribs[NL80211_ATTR_WIPHY_FRAG_THRESHOLD]){
+		int tr  = nla_get_u32( msgattribs[NL80211_ATTR_WIPHY_FRAG_THRESHOLD] );
+		printf("Frag threshold: %d\n",tr);
+		
+	}
+
+	if (msgattribs[NL80211_ATTR_SUPPORTED_IFTYPES]){
+		printf("IFTYPES -.\n");
+
+//		struct nlattr *nla=msgattribs[NL80211_ATTR_SUPPORTED_IFTYPES];
+//		struct nla_attr * cnla;
+//		int rem_nla;
+
+		/* TODO parse bands */
+/*		nla_for_each_nested(cnla, nla, rem_nla) {
+			int t = nla_type(cnla);
+			printf("IFTYPE: %d\n",t);
+		}
+*/
+		
+	}
+
 
 
 	int i;
@@ -260,6 +330,9 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 		case NL80211_CMD_NEW_WIPHY:
 			add_wiphy_data(msgattribs);
 			break;
+		case NL80211_CMD_NEW_INTERFACE:
+			add_interface_data(msgattribs);
+
 		default:
 			printf("Default\n");
 
@@ -395,14 +468,14 @@ static int xnlCallback(struct nl_msg *msg, void *arg)
 }
 
 
-void make_if()
+int make_if()
 {
-	const char * ifname = "moni";
+	const char * ifname = "www";
 	
 	/* allocate a message */
 	struct nl_msg *msg = nlmsg_alloc();
 	if (!msg)
-		return;
+		return 0;
 
 	/* init message */
 	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
@@ -413,11 +486,11 @@ void make_if()
 	NLA_PUT_U32(msg, NL80211_ATTR_IFTYPE, NL80211_IFTYPE_AP);
 	NLA_PUT_STRING(msg, NL80211_ATTR_IFNAME, ifname);
 
-	int rc = nl_send_auto_complete(sk, msg);
+	nl_send_auto_complete(sk, msg);
 
 
 	int nlr = nl_recvmsgs_default(sk);
-	printf("NLR = %d\n", nlr);
+	printf("Make IF NLR = %d\n", nlr);
 
 	interface_up(ifname);
 
@@ -440,31 +513,63 @@ void start_ap(struct nl_sock *sk)
 	/* init message */
 	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST,
 		    NL80211_CMD_START_AP, 0);
+//	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
+//		    NL80211_CMD_SET_BEACON, 0);
 
 
 	struct dot11_mgmt *head = NULL;
 
-
-
-
 	head = malloc(256);
 	uint8_t * tail;
-	tail = malloc(512);
 
 	head->frame_control = htons (DOT11_FTYPE_MGMT | DOT11_STYPE_BEACON) ; 
 
-//			 = IEEE80211_FC(WLAN_FC_TYPE_MGMT,
-//					   WLAN_FC_STYPE_BEACON);
 	head->duration = htons(0);
 	/* destination address */
 	memset(head->da, 0xff, sizeof(head->da));
+	memcpy (head->sa , rd.mac,6);
+	memcpy (head->bssid , rd.mac,6);
+
+	head->u.beacon.beacon_int=htons(100);
+	head->u.beacon.capab_info=0;
+	memset (head->u.beacon.timestamp,0,8);
+
 	
-	
+
+	int hs = sizeof(struct dot11_mgmt_head);
+	printf("HEAD SIZE: %d\n",hs);
+
+	hs += sizeof( head->u.beacon);
+	printf("Head size is now %d\n",hs);
+
+
+	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, hs, head);
+
+	tail = head+hs;
+	uint8_t * pos = tail;
+
+	const char *ssid = "HelloWorld";
+	*pos++ = WLAN_EID_SSID;
+	*pos++ = strlen(ssid);
+	memcpy(pos,ssid,strlen(ssid));
+	pos+=strlen(ssid);
+
+	int tl = pos-tail;
+	printf ("Tail len %d\n",tl);
 
 
 
-	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, 8);
+
+	NLA_PUT(msg, NL80211_ATTR_BEACON_TAIL, tl, tail);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, rd.idx);
 	NLA_PUT_U16(msg, NL80211_ATTR_BEACON_INTERVAL, 100);
+	NLA_PUT_U32(msg, NL80211_ATTR_HIDDEN_SSID, NL80211_HIDDEN_SSID_NOT_IN_USE);
+	NLA_PUT(msg, NL80211_ATTR_SSID, strlen(ssid), ssid);
+
+//	NLA_PUT(msg, NL80211_ATTR_MAC_ADDRESS,6,rd.mac);
+
+
 	NLA_PUT_U32(msg, NL80211_ATTR_DTIM_PERIOD, 1);
 	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITES_PAIRWISE, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITE_GROUP, 0);
@@ -472,12 +577,11 @@ void start_ap(struct nl_sock *sk)
 	NLA_PUT_U32(msg, NL80211_ATTR_AUTH_TYPE, NL80211_AUTHTYPE_OPEN_SYSTEM);
 
 
-	NLA_PUT_U32(msg, NL80211_ATTR_WPA_VERSIONS, NL80211_WPA_VERSION_2);
+	NLA_PUT_U32(msg, NL80211_ATTR_WPA_VERSIONS, 0); //NL80211_WPA_VERSION_2);
+//	NLA_PUT_FLAG(msg, NL80211_ATTR_PRIVACY, 0);
 
+        NLA_PUT_U32(msg, NL80211_ATTR_WIPHY_FREQ, 2412);
 
-	const char *ssid = "HelloWorld";
-	NLA_PUT_U32(msg, NL80211_ATTR_HIDDEN_SSID, NL80211_HIDDEN_SSID_NOT_IN_USE);
-	NLA_PUT(msg, NL80211_ATTR_SSID, strlen(ssid), ssid);
 //      nla_put(msg,NL80211_ATTR_SSID,ssid,strlen(ssid));
 	printf("Sot ssid\n");
 
@@ -488,10 +592,9 @@ void start_ap(struct nl_sock *sk)
 	int nlr = nl_recvmsgs_default(sk);
 	printf("Start AP NLR = %d\n", nlr);
 
-
+/*
 	msg = nlmsg_alloc();
 
-	/* init message */
 	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST,
 		    NL80211_CMD_SET_CHANNEL, 0);
 
@@ -505,6 +608,7 @@ void start_ap(struct nl_sock *sk)
 	printf("Start Channel AP NLR = %d\n", nlr);
 
 
+*/
 
 
 
@@ -589,11 +693,15 @@ void gr()
 	if (!init())
 		return;
 	init_radios();
+
+
 	make_if();
-
 	start_ap(sk);
-
 	sleep(1000);
+
+return;
+
+
 	return;
 
 
