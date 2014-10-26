@@ -49,8 +49,9 @@ LDFLAGS += $(XLIB)
 #LDFLAGS += -lrt
 
 LIBS+=-lcapwap
-LIBS+=-liw
-LIBS+=-lnl-tiny
+#LIBS+=-liw
+LIBS+=-lnl-3
+LIBS+=-lnl-genl-3
 LIBS+=-lssl
 LIBS+=-lcrypto
 #LIBS+=-lrt
