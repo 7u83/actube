@@ -557,9 +557,6 @@ void start_ap(struct nl_sock *sk)
 	int tl = pos-tail;
 	printf ("Tail len %d\n",tl);
 
-
-
-
 	NLA_PUT(msg, NL80211_ATTR_BEACON_TAIL, tl, tail);
 
 	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, rd.idx);
