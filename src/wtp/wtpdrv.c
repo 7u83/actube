@@ -65,7 +65,7 @@ static struct rd rd;
 
 
 struct wiphydata {
-
+	const char * name;
 
 };
 
@@ -292,7 +292,28 @@ static int add_wiphy_data(struct nlattr* msgattribs[NL80211_ATTR_MAX+1])
 		printf("Error, on index\n");
 		return 0;
 	}
-	//int index = nla_get_u32( msgattribs[NL80211_ATTR_WIPHY] );
+
+
+	int index = nla_get_u32( msgattribs[NL80211_ATTR_WIPHY] );
+
+
+	struct wiphydata * w = wiphydata[index];
+
+	if (!w) {
+		w = malloc (sizeof(struct wiphydata));
+		memset(w,0,sizeof(struct wiphydata));
+		wiphydata[index]=w;
+	}
+
+
+	if (msgattribs[NL80211_ATTR_WIPHY_NAME] && !w->name){
+		w->name = strdup( nla_get_string(msgattribs[NL80211_ATTR_WIPHY_NAME]));
+	}
+
+
+
+	printf ("Got data for wiphy index %d\n",index);
+	return 0;	
 
 
 	if (msgattribs[NL80211_ATTR_WIPHY_BANDS]){
@@ -511,9 +532,133 @@ static int xnlCallback(struct nl_msg *msg, void *arg)
 }
 
 
-int make_if()
+struct ifindex_cb_data{
+	const char * ifname;
+	int index;
+};
+
+static int get_ifindex_cb(struct nl_msg *msg, void *arg)
 {
-	const char * ifname = "wtpdrv7";
+	struct ifindex_cb_data * cb_data = (struct ifindex_cb_data *)arg;
+
+	printf("Yeaaaaaaaaaa! The ifindex callback is here\n");
+	struct nlmsghdr *msghdr = nlmsg_hdr(msg);
+	struct nlattr *msgattribs[NL80211_ATTR_MAX + 1];
+
+	struct genlmsghdr *ghdr =
+	    (struct genlmsghdr *) nlmsg_data(msghdr);
+
+	int rc;
+	rc = nla_parse(msgattribs, NL80211_ATTR_MAX, genlmsg_attrdata(ghdr, 0),
+		  genlmsg_attrlen(ghdr, 0), NULL);
+
+	if (rc<0){
+		cw_dbg(DBG_DRV_ERR,"nla_parse failed: %d %d",rc,nl_geterror(rc));
+		return NL_SKIP;
+	}
+
+	int cmd = ghdr->cmd;
+	cw_dbg(DBG_DRV,"NL Callback, cmd=%d - %s",cmd,nlt_get_cmdname(cmd));
+
+	if (cmd == NL80211_CMD_NEW_INTERFACE){
+		if (msgattribs[NL80211_ATTR_IFNAME]){
+			printf ("IFNAME = %s\n",nla_get_string(msgattribs[NL80211_ATTR_IFNAME]));
+
+			cb_data->index = nla_get_u32(msgattribs[NL80211_ATTR_IFINDEX]);
+
+		}
+
+	}
+
+
+
+}
+
+int get_ifindex(const char *ifname)
+{
+	int index = -1;
+	struct nl_msg *msg = nlmsg_alloc();
+	if (!msg)
+		return -1;
+
+	int flags = NLM_F_DUMP;
+
+
+	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, flags,
+		    NL80211_CMD_GET_INTERFACE, 0);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_WIPHY, 0);
+	int rc = nl_send_auto_complete(sk, msg);
+
+
+	printf ("AC C %d\n",rc);
+	
+
+	struct ifindex_cb_data cb_data;
+
+	cb_data.ifname=ifname;
+	cb_data.index=-1;
+
+
+
+	struct nl_bc * nl_cb = nl_cb_alloc(NL_CB_CUSTOM);
+	nl_cb_set(nl_cb,NL_CB_VALID,NL_CB_CUSTOM, get_ifindex_cb,&cb_data);
+
+	
+
+	int nlr = nl_recvmsgs(sk,nl_cb);
+	//int nlr = nl_recvmsgs_default(sk);
+	cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
+
+
+	if (cb_data.index!=-1){
+		index=cb_data.index;
+	}
+
+      nla_put_failure:
+	nlmsg_free(msg);
+	return index;
+
+}
+
+int del_if(const char * name)
+{
+	int index = get_ifindex(name);
+	if (index==-1)
+		return 0;
+
+	struct nl_msg *msg = nlmsg_alloc();
+	if (!msg)
+		return 0;
+
+	/* init message */
+	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
+		    NL80211_CMD_DEL_INTERFACE, 0);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, index);
+
+	nl_send_auto_complete(sk, msg);
+
+
+	int nlr = nl_recvmsgs_default(sk);
+	printf("Make IF NLR = %d\n", nlr);
+
+	cw_log(LOG_ERR,"Fatal: Del if %d - %s",nlr,nl_geterror(nlr));
+	
+
+//	interface_up(ifname);
+
+
+      nla_put_failure:
+	nlmsg_free(msg);
+	return 1;
+	
+
+}
+
+int make_if(const char * ifname)
+{
+//	const char * ifname = "wtpdrv7";
 	
 	/* allocate a message */
 	struct nl_msg *msg = nlmsg_alloc();
@@ -729,50 +874,49 @@ int init_radios()
 	}
 	int flags = NLM_F_DUMP;
 
-	/* setup the message */
+	/* setup message to enumerate wiphy */
 	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, flags,
 		    NL80211_CMD_GET_WIPHY, 0);
 
 	int rc = nl_send_auto_complete(sk, msg);
 	if (rc<0){
-		cw_log(LOG_ERR,"Fatal: Can't send nl msg");
-		return 0;
+		cw_log(LOG_ERR,"Fatal: Can't send nl msg %d %s",rc,nl_geterror(rc));
+		goto nla_put_failure;
+	}
+
+	rc = nl_recvmsgs_default(sk);
+	if (rc){
+
+		cw_log(LOG_ERR,"Error enumerating wiphy: %d %s",rc,nl_geterror(rc));
+		goto nla_put_failure;
 	}
 
 
-//	struct nl_cb bl_cb;	
-
-
-	rc = nl_recvmsgs_default(sk);
-	printf("IR RC: %d %s\n",rc,nl_geterror(rc));
+      nla_put_failure:
+	nlmsg_free(msg);
+	return 1;
 
 }
 
 
 int gr()
 {
-	init_radios();
-	return 0;
-
-
-
-
-	uint8_t buf[64];
-
-	get_ifhwaddr("tabbe",buf);
-
-
-	printf ("HWADDR: %s\n",sock_hwaddr2str(buf,6));
-	return 0;
-
 
 	if (!init())
 		return 0;
  
 	init_radios();
 
+	int index = get_ifindex("wlan0");
 
-	make_if();
+	printf("Index is: %d\n",index);
+
+
+	del_if("wlan0");
+	make_if("wlan0");
+
+return 0;
+
 	start_ap(sk);
 	sleep(1000);
 
@@ -785,7 +929,6 @@ return 0;
 
 
 	printf("Mak If\n");
-	make_if();
 
 
 
