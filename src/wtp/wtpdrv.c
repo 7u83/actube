@@ -8,6 +8,7 @@
 
 #include "capwap/cw_log.h"
 #include "capwap/radioinfo.h"
+#include "capwap/sock.h"
 
 int wpa_printf()
 {
@@ -43,6 +44,8 @@ typedef __le16 le16
 
 
 #include <sys/ioctl.h>
+#include <net/if_arp.h>
+
 
 #include "dot11.h"
 //#include "ieee802_11_defs.h"
@@ -61,6 +64,15 @@ struct rd {
 static struct rd rd;
 
 
+struct wiphydata {
+
+
+};
+
+
+static struct wiphydata * wiphydata[31];
+
+
 
 int interface_up(const char * ifname)
 {
@@ -68,7 +80,6 @@ int interface_up(const char * ifname)
 	struct ifreq ifr;
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-
 	if (sockfd < 0)
 		return 0;
 
@@ -79,6 +90,31 @@ int interface_up(const char * ifname)
 	ifr.ifr_flags |= IFF_UP;
 	ioctl(sockfd, SIOCSIFFLAGS, &ifr);
 }
+
+
+int get_ifhwaddr(const char *ifname, uint8_t *addr)
+{
+        struct ifreq ifr;
+
+	int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (sockfd < 0)
+		return 0;
+
+
+        memset(&ifr, 0, sizeof(ifr));
+        strcpy(ifr.ifr_name, ifname); //, IFNAMSIZ);
+        if (ioctl(sockfd, SIOCGIFHWADDR, &ifr)) {
+                return -1;
+        }
+
+        if (ifr.ifr_hwaddr.sa_family != ARPHRD_ETHER) {
+                return -1;
+        }
+        memcpy(addr, ifr.ifr_hwaddr.sa_data, ETH_ALEN);
+        return 0;
+}
+
+
 
 
 struct hostapd_freq_params {
@@ -234,7 +270,14 @@ static int add_interface_data(struct nlattr* msgattribs[NL80211_ATTR_MAX+1])
 
 		uint8_t * d = nla_data( msgattribs[NL80211_ATTR_MAC] );
 		memcpy (rd.mac,d,6);
+
+		printf("Mac is: %s\n", sock_hwaddr2str(rd.mac,6));
 		
+	}
+
+
+	if (msgattribs[NL80211_ATTR_IFNAME]){
+		printf("IFNAME = %s\n",(uint8_t*)nla_data(msgattribs[NL80211_ATTR_IFNAME]));
 	}
 
 
@@ -470,7 +513,7 @@ static int xnlCallback(struct nl_msg *msg, void *arg)
 
 int make_if()
 {
-	const char * ifname = "www";
+	const char * ifname = "wtpdrv7";
 	
 	/* allocate a message */
 	struct nl_msg *msg = nlmsg_alloc();
@@ -492,7 +535,10 @@ int make_if()
 	int nlr = nl_recvmsgs_default(sk);
 	printf("Make IF NLR = %d\n", nlr);
 
-	interface_up(ifname);
+	cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
+	
+
+//	interface_up(ifname);
 
 
       nla_put_failure:
@@ -501,12 +547,20 @@ int make_if()
 }
 
 
-void start_ap(struct nl_sock *sk)
+int start_ap(struct nl_sock *sk)
 {
+
+
+
+
+
+
+
+
 	/* allocate a message */
 	struct nl_msg *msg = nlmsg_alloc();
 	if (!msg)
-		return;
+		return 0;
 
 
 
@@ -545,13 +599,23 @@ void start_ap(struct nl_sock *sk)
 
 	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, hs, head);
 
-	tail = head+hs;
+printf("Put message 1\n");
+
+	tail = (uint8_t*)(head)+hs;
 	uint8_t * pos = tail;
+printf("Put message 1 posss\n");
 
 	const char *ssid = "HelloWorld";
-	*pos++ = WLAN_EID_SSID;
-	*pos++ = strlen(ssid);
+	*pos = WLAN_EID_SSID;
+	pos++;
+
+	*pos = strlen(ssid);
+	pos++;
+
+printf ("Memcpy %d %d %d\n",(void*)pos,(void*)head,(void*)pos-(void*)head);
 	memcpy(pos,ssid,strlen(ssid));
+printf ("Memcoy done\n");
+
 	pos+=strlen(ssid);
 
 	int tl = pos-tail;
@@ -656,6 +720,8 @@ int init()
 
 int init_radios()
 {
+	memset (wiphydata,0,sizeof(wiphydata));
+
 	struct nl_msg *msg = nlmsg_alloc();
 	if (!msg){
 		cw_log(LOG_ERR,"Fatal: No memory while initializing radios");
@@ -674,21 +740,35 @@ int init_radios()
 	}
 
 
-	struct nl_cb bl_cb;	
+//	struct nl_cb bl_cb;	
 
 
 	rc = nl_recvmsgs_default(sk);
 	printf("IR RC: %d %s\n",rc,nl_geterror(rc));
 
-
-
 }
 
 
-void gr()
+int gr()
 {
+	init_radios();
+	return 0;
+
+
+
+
+	uint8_t buf[64];
+
+	get_ifhwaddr("tabbe",buf);
+
+
+	printf ("HWADDR: %s\n",sock_hwaddr2str(buf,6));
+	return 0;
+
+
 	if (!init())
-		return;
+		return 0;
+ 
 	init_radios();
 
 
@@ -696,10 +776,10 @@ void gr()
 	start_ap(sk);
 	sleep(1000);
 
-return;
+return 0;
 
 
-	return;
+	return 0 ;
 
 
 
@@ -714,7 +794,7 @@ return;
 
 
 
-	return;
+	return 0 ;
 
 
 	int ret;

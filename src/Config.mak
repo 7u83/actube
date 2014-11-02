@@ -9,7 +9,7 @@ USE_CONTRIB_OPENSSL=1
 CONF_LIBRARY=UCI
 USE_CONTRIB_UCI=0
 
-#CC=clang
+CC=clang
 
 
 #CC=mips-openwrt-linux-uclibc-gcc
