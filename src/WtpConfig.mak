@@ -1,5 +1,7 @@
 #
 
+CC=clang
+
 CFLAGS += -I/usr/include/libnl3
 CFLAGS += -I../contrib/uci
 LDFLAGS += -L../contrib/uci/build

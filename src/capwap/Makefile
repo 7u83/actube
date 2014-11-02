@@ -1,3 +1,5 @@
+include ../Config.mak
+
 ifndef CC
 	CC=gcc
 endif
