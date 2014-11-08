@@ -1,5 +1,7 @@
 #include <errno.h>
 
+#include <endian.h>
+
 
 
 #include "wtpdrv.h"
@@ -721,7 +723,7 @@ int start_ap(struct nl_sock *sk)
 	head = malloc(256);
 	uint8_t * tail;
 
-	head->frame_control = htons (DOT11_FTYPE_MGMT | DOT11_STYPE_BEACON) ; 
+	head->frame_control = htole16 (DOT11_FTYPE_MGMT | DOT11_STYPE_BEACON) ; 
 
 	head->duration = htons(0);
 	/* destination address */
@@ -729,7 +731,7 @@ int start_ap(struct nl_sock *sk)
 	memcpy (head->sa , rd.mac,6);
 	memcpy (head->bssid , rd.mac,6);
 
-	head->u.beacon.beacon_int=htons(100);
+	head->u.beacon.beacon_int=htole16(100);
 	head->u.beacon.capab_info=0;
 	memset (head->u.beacon.timestamp,0,8);
 
@@ -914,10 +916,8 @@ int gr()
 
 	del_if("wlan0");
 	make_if("wlan0");
-
-return 0;
-
 	start_ap(sk);
+
 	sleep(1000);
 
 return 0;
