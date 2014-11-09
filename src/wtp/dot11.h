@@ -1,3 +1,10 @@
+#ifndef __DOT11_H
+#define __DOT11_H
+
+
+#include <stdint.h>
+
+
 struct dot11_mgmt_head {
 	uint16_t frame_control;
 	uint16_t duration;
@@ -5,6 +12,13 @@ struct dot11_mgmt_head {
 	uint8_t sa[6];
 	uint8_t bssid[6];
 	uint16_t seq_ctrl;
+};
+
+
+struct dot11_mgmt_beacon{
+	uint8_t timestamp[8];
+	uint16_t beacon_int;
+	uint16_t capab_info;
 };
 
 #define ETH_ALEN 6
@@ -262,3 +276,52 @@ struct dot11_mgmt {
 #define WLAN_EID_IBSS_DFS 41
 /* EIDs defined by IEEE 802.11h - END */
 
+
+
+
+
+
+/* capability bits */
+#define WLAN_CAPAB_ESS			0x001
+#define WLAN_CAPAB_IBSS			0x002
+#define WLAN_CAPAB_CF_POLLABLE 		0x004
+#define WLAN_CAPAB_CF_POLL_REQUEST	0x008
+#define WLAN_CAPAB_PRIVACY 		0x010
+#define WLAN_CAPAB_SHORT_PREAMBLE	0x020
+#define WLAN_CAPAB_PBCC 		0x040
+#define WLAN_CAPAB_CHANNEL_AGILITY 	0x080
+#define WLAN_CAPAB_SPECTRUM_MGMT BIT	0x100
+#define WLAN_CAPAB_SHORT_SLOT_TIME BIT	0x200
+#define WLAN_CAPAB_DSSS_OFDM 		0x400
+
+
+
+
+
+
+
+
+
+struct apdata {
+	int phy;
+	uint32_t idx;
+	uint8_t mac[6];
+	const char * ssid;
+};
+
+
+struct beacon_data{
+	uint8_t * head;
+	int head_len;
+	uint8_t * tail;
+	int tail_len;
+
+};
+
+
+dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd);
+
+
+
+
+#endif
