@@ -94,6 +94,7 @@ OBJS += wtp_main.o
 OBJS += discovery.o
 OBJS += wtp_interface.o
 OBJS += wtpdrv.o
+OBJS += dot11.o
 OBJS += join.o
 OBJS += run.o
 OBJS += sulking.o

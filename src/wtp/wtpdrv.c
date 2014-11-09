@@ -56,14 +56,8 @@ typedef __le16 le16
 struct radioinfo radioinfos[31];
 static struct nl_sock * sk;
 
-struct rd {
-	int phy;
-	uint32_t idx;
-	uint8_t mac[6];
-};
 
-
-static struct rd rd;
+static struct apdata rd;
 
 
 struct wiphydata {
@@ -137,6 +131,10 @@ struct hostapd_freq_params {
         int center_freq1, center_freq2;
         int bandwidth;
 };
+
+
+
+
 
 
 
@@ -718,6 +716,8 @@ int start_ap(struct nl_sock *sk)
 //		    NL80211_CMD_SET_BEACON, 0);
 
 
+
+/*
 	struct dot11_mgmt *head = NULL;
 
 	head = malloc(256);
@@ -725,8 +725,8 @@ int start_ap(struct nl_sock *sk)
 
 	head->frame_control = htole16 (DOT11_FTYPE_MGMT | DOT11_STYPE_BEACON) ; 
 
-	head->duration = htons(0);
-	/* destination address */
+	head->duration = htole16(0);
+
 	memset(head->da, 0xff, sizeof(head->da));
 	memcpy (head->sa , rd.mac,6);
 	memcpy (head->bssid , rd.mac,6);
@@ -742,17 +742,28 @@ int start_ap(struct nl_sock *sk)
 
 	hs += sizeof( head->u.beacon);
 	printf("Head size is now %d\n",hs);
+*/
 
+	struct beacon_data bd;
 
-	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, hs, head);
+	const char *ssid = "HelloWorld";
+
+	struct apdata * ap  = &rd;
+	ap->ssid=ssid;
+
+printf("Get Beacon Data \n");
+	dot11_get_beacon_data(ap,&bd);
+printf("Got Beaqcon Fata\n");
+
+	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
 
 printf("Put message 1\n");
 
+/*
 	tail = (uint8_t*)(head)+hs;
 	uint8_t * pos = tail;
 printf("Put message 1 posss\n");
 
-	const char *ssid = "HelloWorld";
 	*pos = WLAN_EID_SSID;
 	pos++;
 
@@ -769,7 +780,7 @@ printf ("Memcoy done\n");
 	printf ("Tail len %d\n",tl);
 
 	NLA_PUT(msg, NL80211_ATTR_BEACON_TAIL, tl, tail);
-
+*/
 	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, rd.idx);
 	NLA_PUT_U16(msg, NL80211_ATTR_BEACON_INTERVAL, 100);
 	NLA_PUT_U32(msg, NL80211_ATTR_HIDDEN_SSID, NL80211_HIDDEN_SSID_NOT_IN_USE);
@@ -916,7 +927,12 @@ int gr()
 
 	del_if("wlan0");
 	make_if("wlan0");
+
+	printf("Now starting the AP\n");
+
 	start_ap(sk);
+
+	printf("Started the AP\n");
 
 	sleep(1000);
 
