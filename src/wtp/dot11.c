@@ -102,14 +102,64 @@ printf("t6\n");
 
 	b+= add_ds_ie(b);
 printf("return ay<aa\n");
+
+
+int rates[] = {
+	2000, 2500, 11000
+};
+
 	
+	b+= add_supp_rates_ie(b,rates,3);
+
+	*len = b-buffer;	
+
 	return b-buffer;	
 }
+
+
+
+
+add_supp_rates_ie(uint8_t *buf,uint32_t * rates, int num_rates)
+{
+	uint8_t *b = buf;
+	int len = num_rates;
+
+	*b++ = WLAN_EID_SUPP_RATES;
+	*b++ = len;
+	
+	int i;
+	for (i=0; i<len; i++)
+	{
+		uint8_t r = rates[i]/500;
+		r|=0x80;
+
+		*b++ = r;
+	}
+
+	return b-buf;
+
+}
+
 
 dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd)
 {
 	bd->head = malloc(256);
-	dot11_get_beacon_head(ap,bd->head,&bd->head_len);
+//	dot11_get_beacon_head(ap,bd->head,&bd->head_len);
+
+uint8_t hf[] = {
+0x80, 0x00, 0x00, 0x00, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xF0,0x7B,
+0xCB, 0xA4, 0xF2, 0x50, 0xF0, 0x7B, 0xCB, 0xA4, 0xF2, 0x50, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x00, 0x21, 0x04, 
+0x00, 0x09, 0x58, 0x54, 0x61, 0x74, 0x6F, 0x72, 0x74, 0x37, 0x37, 0x01, 
+0x08, 0x82, 0x84, 0x8B, 0x96, 0x0C, 0x12, 0x18, 0x24
+
+};
+
+printf ("memcpy head %d\n",sizeof(hf));
+	memcpy(bd->head,hf,sizeof(hf));
+printf(" memcpyed\n");
+	bd->head_len=sizeof(hf);
+printf ("done\n");
 	return 0;
 	
 }
