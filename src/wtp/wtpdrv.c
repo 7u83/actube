@@ -754,8 +754,19 @@ int start_ap(struct nl_sock *sk)
 printf("Get Beacon Data \n");
 	dot11_get_beacon_data(ap,&bd);
 printf("Got Beaqcon Fata\n");
+printf("headlen %d\n",bd.head_len);
 
 	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
+
+
+printf ("Coter\n");
+	{
+		for (int i=0; i<bd.head_len; i++){
+			printf("%02X ",bd.head[i]);
+		}
+	
+	}
+
 
 printf("Put message 1\n");
 
@@ -789,7 +800,7 @@ printf ("Memcoy done\n");
 //	NLA_PUT(msg, NL80211_ATTR_MAC_ADDRESS,6,rd.mac);
 
 
-	NLA_PUT_U32(msg, NL80211_ATTR_DTIM_PERIOD, 1);
+	NLA_PUT_U32(msg, NL80211_ATTR_DTIM_PERIOD, 2);
 	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITES_PAIRWISE, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITE_GROUP, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_AKM_SUITES, 0);
