@@ -683,7 +683,7 @@ int make_if(const char * ifname)
 	cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
 	
 
-//	interface_up(ifname);
+	interface_up(ifname);
 
 
       nla_put_failure:
@@ -746,7 +746,7 @@ int start_ap(struct nl_sock *sk)
 
 	struct beacon_data bd;
 
-	const char *ssid = "HelloWorld";
+	const char *ssid = "xTatort77";
 
 	struct apdata * ap  = &rd;
 	ap->ssid=ssid;
@@ -756,7 +756,7 @@ printf("Get Beacon Data \n");
 printf("Got Beaqcon Fata\n");
 printf("headlen %d\n",bd.head_len);
 
-	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
+//	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
 
 
 printf ("Coter\n");
@@ -821,6 +821,7 @@ printf ("Memcoy done\n");
 
 	int nlr = nl_recvmsgs_default(sk);
 	printf("Start AP NLR = %d\n", nlr);
+	cw_log(LOG_ERR,"Fatal: Setup AP  %d - %s",nlr,nl_geterror(nlr));
 
 /*
 	msg = nlmsg_alloc();
@@ -936,8 +937,8 @@ int gr()
 	printf("Index is: %d\n",index);
 
 
-	del_if("wlan0");
-	make_if("wlan0");
+//	del_if("wlan0");
+//	make_if("wlan0");
 
 	printf("Now starting the AP\n");
 
