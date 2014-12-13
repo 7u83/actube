@@ -9,6 +9,12 @@ extern const char * nlt_cmdnames[];
 #define nlt_get_attrname(type) nlt_attrnames[type]
 #define nlt_get_cmdname(cmd) (cmd>NL80211_CMD_MAX? "Unknown": nlt_cmdnames[cmd])
 
+struct nlt_ifinfo {
+	const char *ifname;
+	int ifindex;
+	int iftype;
+};
+
 
 #endif
 
