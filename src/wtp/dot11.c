@@ -93,6 +93,7 @@ printf("t4\n");
 	struct dot11_mgmt_beacon beacon;
 	memset (&beacon,0,sizeof(beacon));
 	beacon.capab_info=htole16(get_capab_info(ap));
+	beacon.beacon_int=htole16(0);
 	b += add_bytes(b,&beacon,sizeof(beacon));
 
 printf("t5 ss %s\n",ap->ssid);
@@ -144,7 +145,8 @@ add_supp_rates_ie(uint8_t *buf,uint32_t * rates, int num_rates)
 dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd)
 {
 	bd->head = malloc(256);
-//	dot11_get_beacon_head(ap,bd->head,&bd->head_len);
+
+	dot11_get_beacon_head(ap,bd->head,&bd->head_len);
 
 uint8_t hf[] = {
 0x80, 0x00, 0x00, 0x00, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xF0,0x7B,
