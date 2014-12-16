@@ -68,6 +68,76 @@ struct wiphydata {
 
 static struct wiphydata * wiphydata[31];
 
+static int ack_handler(struct nl_msg *msg, void *arg)
+{
+printf ("Ack handler ------lllllllllllllllllllllllllllllllllllllllllllllllllllllll\n");
+        int *err = arg;
+        *err = 0;
+        return NL_STOP;
+}
+
+static int finish_handler(struct nl_msg *msg, void *arg)
+{
+printf ("Finish handler ------lllllllllllllllllllllllllllllllllllllllllllllllllllllll\n");
+        int *ret = arg;
+        *ret = 0;
+        return NL_SKIP;
+}
+
+static int error_handler(struct sockaddr_nl *nla, struct nlmsgerr *err,
+                         void *arg)
+{
+
+printf ("Error handler ------lllllllllllllllllllllllllllllllllllllllllllllllllllllll\n");
+        int *ret = arg;
+        *ret = err->error;
+printf("Err: %d\n",*ret);
+        return NL_SKIP;
+}
+
+
+
+
+int nlt_send_and_recvmsg(struct nl_sock *sk, struct nl_msg *msg)
+{
+	volatile int err=NLE_NOMEM;
+		
+
+	struct nl_cb * cb = nl_socket_get_cb(sk);
+	if (!cb)
+		goto errX;
+
+	cb = nl_cb_clone(cb);
+	if (!cb)
+		goto errX;
+
+	
+        err = nl_send_auto_complete(sk, msg);
+        if (err < 0)
+                goto errX;
+	
+
+        nl_cb_err(cb, NL_CB_CUSTOM, error_handler, &err);
+        nl_cb_set(cb, NL_CB_FINISH, NL_CB_CUSTOM, finish_handler, &err);
+        nl_cb_set(cb, NL_CB_ACK, NL_CB_CUSTOM, ack_handler, &err);
+	
+	err=1;
+
+        while (err==1) {
+                int rc = nl_recvmsgs(sk, cb);
+		printf("Weil rc %d\n",rc);
+                if (rc < 0) {
+			cw_log(LOG_ERR,"nl_recvmsg failed: %d %d",rc,nl_geterror(rc));
+                }
+        }
+
+
+errX:
+	printf ("Returning Err XXX %d\n",err);
+
+	return err;
+}
+
 
 
 int interface_up(const char * ifname)
@@ -86,6 +156,9 @@ int interface_up(const char * ifname)
 	ifr.ifr_flags |= IFF_UP;
 	ioctl(sockfd, SIOCSIFFLAGS, &ifr);
 }
+
+
+
 
 
 int get_ifhwaddr(const char *ifname, uint8_t *addr)
@@ -278,6 +351,10 @@ static int add_interface_data(struct nlattr* msgattribs[NL80211_ATTR_MAX+1])
 
 	if (msgattribs[NL80211_ATTR_IFNAME]){
 		printf("IFNAME = %s\n",(uint8_t*)nla_data(msgattribs[NL80211_ATTR_IFNAME]));
+	}
+
+	if (msgattribs[NL80211_ATTR_IFTYPE]){
+		printf("TYPECHEN = %d\n",(uint8_t*)nla_get_u32(msgattribs[NL80211_ATTR_IFTYPE]));
 	}
 
 
@@ -535,6 +612,7 @@ static int xnlCallback(struct nl_msg *msg, void *arg)
 struct ifindex_cb_data{
 	const char * ifname;
 	int index;
+	int type;
 };
 
 static int get_ifindex_cb(struct nl_msg *msg, void *arg)
@@ -562,15 +640,16 @@ static int get_ifindex_cb(struct nl_msg *msg, void *arg)
 
 	if (cmd == NL80211_CMD_NEW_INTERFACE){
 		if (msgattribs[NL80211_ATTR_IFNAME]){
+
 			printf ("IFNAME = %s\n",nla_get_string(msgattribs[NL80211_ATTR_IFNAME]));
 
 			cb_data->index = nla_get_u32(msgattribs[NL80211_ATTR_IFINDEX]);
+			cb_data->type = nla_get_u32(msgattribs[NL80211_ATTR_IFTYPE]);
+			
 
 		}
 
 	}
-
-
 
 }
 
@@ -600,21 +679,29 @@ int get_ifindex(const char *ifname)
 	cb_data.index=-1;
 
 
+	int err;
 
 	struct nl_bc * nl_cb = nl_cb_alloc(NL_CB_CUSTOM);
 	nl_cb_set(nl_cb,NL_CB_VALID,NL_CB_CUSTOM, get_ifindex_cb,&cb_data);
-
+        nl_cb_err(nl_cb,NL_CB_CUSTOM, error_handler, &err);
 	
 
-	int nlr = nl_recvmsgs(sk,nl_cb);
+	int nlr;
+	do {
+		nl_recvmsgs(sk,nl_cb);
+	}while(cb_data.index==-1);
+
 	//int nlr = nl_recvmsgs_default(sk);
-	cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
+	cw_log(LOG_ERR,"iGet if index: Make if %d - %s",nlr,nl_geterror(nlr));
 
 
 	if (cb_data.index!=-1){
 		index=cb_data.index;
 	}
 
+	printf("The mode %d\n",cb_data.type);
+
+printf ("TTTTTTTTTTTTTTTHe index: %d\n",index);
       nla_put_failure:
 	nlmsg_free(msg);
 	return index;
@@ -625,48 +712,40 @@ int del_if(const char * name)
 {
 	int index = get_ifindex(name);
 	if (index==-1)
-		return 0;
+		return -1;
 
 	struct nl_msg *msg = nlmsg_alloc();
 	if (!msg)
 		return 0;
 
-	/* init message */
 	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
 		    NL80211_CMD_DEL_INTERFACE, 0);
 
 	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, index);
 
-	nl_send_auto_complete(sk, msg);
+	int nlr = nl_send_sync(sk, msg);
+	if (nlr){
+		cw_log(LOG_ERR,"Error deleting interface %s(%d): %d - %s",name,index,nlr,nl_geterror(nlr));
+		return nlr;
+	}
 
-
-	int nlr = nl_recvmsgs_default(sk);
-	printf("Make IF NLR = %d\n", nlr);
-
-	cw_log(LOG_ERR,"Fatal: Del if %d - %s",nlr,nl_geterror(nlr));
-	
-
-//	interface_up(ifname);
+	return 0;	
 
 
       nla_put_failure:
 	nlmsg_free(msg);
 	return 1;
-	
 
 }
 
-int make_if(const char * ifname)
+
+int create_interface(const char * ifname)
 {
-//	const char * ifname = "wtpdrv7";
-	
-	/* allocate a message */
 	struct nl_msg *msg = nlmsg_alloc();
 	if (!msg)
 		return 0;
 
-	/* init message */
-	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
+	genlmsg_put(msg, NL_AUTO_PORT, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST | NLM_F_REPLACE,
 		    NL80211_CMD_NEW_INTERFACE, 0);
 
 
@@ -674,17 +753,13 @@ int make_if(const char * ifname)
 	NLA_PUT_U32(msg, NL80211_ATTR_IFTYPE, NL80211_IFTYPE_AP);
 	NLA_PUT_STRING(msg, NL80211_ATTR_IFNAME, ifname);
 
-	nl_send_auto_complete(sk, msg);
+	int nlr = nl_send_sync(sk,msg);
+	if (nlr){
+		cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
+	}
 
-
-	int nlr = nl_recvmsgs_default(sk);
-	printf("Make IF NLR = %d\n", nlr);
-
-	cw_log(LOG_ERR,"Fatal: Make if %d - %s",nlr,nl_geterror(nlr));
-	
-
-	interface_up(ifname);
-
+	sleep(1);
+	return 0;
 
       nla_put_failure:
 	nlmsg_free(msg);
@@ -710,7 +785,7 @@ int start_ap(struct nl_sock *sk)
 
 
 	/* init message */
-	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST,
+	genlmsg_put(msg, NL_AUTO_PORT, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST,
 		    NL80211_CMD_START_AP, 0);
 //	genlmsg_put(msg, 0, NL_AUTO_SEQ, family_id, 0, 0,
 //		    NL80211_CMD_SET_BEACON, 0);
@@ -746,7 +821,7 @@ int start_ap(struct nl_sock *sk)
 
 	struct beacon_data bd;
 
-	const char *ssid = "xTatort77";
+	const char *ssid = "xTatort88";
 
 	struct apdata * ap  = &rd;
 	ap->ssid=ssid;
@@ -756,7 +831,7 @@ printf("Get Beacon Data \n");
 printf("Got Beaqcon Fata\n");
 printf("headlen %d\n",bd.head_len);
 
-//	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
+	NLA_PUT(msg, NL80211_ATTR_BEACON_HEAD, bd.head_len, bd.head);
 
 
 printf ("Coter\n");
@@ -792,34 +867,48 @@ printf ("Memcoy done\n");
 
 	NLA_PUT(msg, NL80211_ATTR_BEACON_TAIL, tl, tail);
 */
-	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, rd.idx);
-	NLA_PUT_U16(msg, NL80211_ATTR_BEACON_INTERVAL, 100);
-	NLA_PUT_U32(msg, NL80211_ATTR_HIDDEN_SSID, NL80211_HIDDEN_SSID_NOT_IN_USE);
-	NLA_PUT(msg, NL80211_ATTR_SSID, strlen(ssid), ssid);
+
+
+printf ("The index: %d\n",rd.idx);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, 6);//rd.idx);
+	NLA_PUT_U32(msg, NL80211_ATTR_BEACON_INTERVAL, 100);
+//	NLA_PUT_U32(msg, NL80211_ATTR_HIDDEN_SSID, NL80211_HIDDEN_SSID_NOT_IN_USE);
+
+
+printf("The SSID: %s\n",ssid);
+
+//	NLA_PUT(msg, NL80211_ATTR_SSID, strlen(ssid), ssid);
 
 //	NLA_PUT(msg, NL80211_ATTR_MAC_ADDRESS,6,rd.mac);
 
 
 	NLA_PUT_U32(msg, NL80211_ATTR_DTIM_PERIOD, 2);
-	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITES_PAIRWISE, 0);
+
+/*	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITES_PAIRWISE, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_CIPHER_SUITE_GROUP, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_AKM_SUITES, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_AUTH_TYPE, NL80211_AUTHTYPE_OPEN_SYSTEM);
+*/
 
-
-	NLA_PUT_U32(msg, NL80211_ATTR_WPA_VERSIONS, 0); //NL80211_WPA_VERSION_2);
+//	NLA_PUT_U32(msg, NL80211_ATTR_WPA_VERSIONS, 0); //NL80211_WPA_VERSION_2);
 //	NLA_PUT_FLAG(msg, NL80211_ATTR_PRIVACY, 0);
 
-        NLA_PUT_U32(msg, NL80211_ATTR_WIPHY_FREQ, 2412);
+        NLA_PUT_U32(msg, NL80211_ATTR_WIPHY_FREQ, 2462);
 
 //      nla_put(msg,NL80211_ATTR_SSID,ssid,strlen(ssid));
 	printf("Sot ssid\n");
 
 
-	int ret = nl_send_auto_complete(sk, msg);
-	printf("AP IF Send ret %d\n", ret);
+////	int ret = nl_send_auto_complete(sk, msg);
+//	printf("AP IF Send ret %d\n", ret);
 
-	int nlr = nl_recvmsgs_default(sk);
+//	int nlr = nl_recvmsgs_default(sk);
+
+
+//	int nlr = nlt_send_and_recvmsg(sk,msg);
+	int nlr = nl_send_sync(sk,msg);
+
 	printf("Start AP NLR = %d\n", nlr);
 	cw_log(LOG_ERR,"Fatal: Setup AP  %d - %s",nlr,nl_geterror(nlr));
 
@@ -880,8 +969,8 @@ int init()
 	}
 
 	//attach a callback
-	nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, nlCallback,
-			    NULL);
+//	nl_socket_modify_cb(sk, NL_CB_VALID, NL_CB_CUSTOM, nlCallback,
+//			    NULL);
 
 	return 1;
 }
@@ -924,22 +1013,108 @@ int init_radios()
 }
 
 
+int set_iftype(int ifindex)
+{
+	struct nl_msg *msg = nlmsg_alloc();
+
+	if (!msg) {
+		return 0;
+	}
+
+	genlmsg_put(msg, NL_AUTO_PORT, NL_AUTO_SEQ, family_id, 0, NLM_F_REQUEST,
+		    NL80211_CMD_SET_INTERFACE, 0);
+
+
+
+	NLA_PUT_U32(msg, NL80211_ATTR_IFTYPE, NL80211_IFTYPE_AP);
+
+	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, ifindex);
+
+	int nlr = nl_send_sync(sk,msg);
+
+	if (nlr){
+		cw_log(LOG_ERR,"Fatal: Set Mode %d - %s",nlr,nl_geterror(nlr));
+	}
+
+	return 0;
+
+
+      nla_put_failure:
+	nlmsg_free(msg);
+	return 1;
+
+}
+
+
 int gr()
 {
 
 	if (!init())
 		return 0;
+
+printf("Calling get wiphy info\n");
+nlt_get_wiphy_list(sk);
+
+exit(0);
+
+printf("Calling get info\n");
+
+struct nlt_ifinfo ifinfo;
+nlt_init_ifinfo(&ifinfo);
+ifinfo.ifname="wlan0";
+
+nlt_get_ifinfo(sk,&ifinfo);
+
+printf("Have ifinfo\n");
+
+
+exit(0);
+
+
+	const char * ifname = "wtpi1";
+	
+	int ifindex = get_ifindex(ifname);
+	if (ifindex == -1){
+		printf("Must create\n");
+		create_interface(ifname);
+
+	}
+
+	ifindex = get_ifindex(ifname);
+	if (ifindex < 0 ){
+		cw_log("Error getting interface %s\n",ifname);
+		return 0;
+	}
+		
+	set_iftype(ifindex);
+	exit(0);
+
+
  
-	init_radios();
+//	init_radios();
 
-	int index = get_ifindex("wlan0");
+//	int index = get_ifindex("wlan1");
 
-	printf("Index is: %d\n",index);
+//	printf("Index is: %d\n",index);
 
 
-//	del_if("wlan0");
-//	make_if("wlan0");
+	printf("--- del ---\n");
+	del_if("tube");
+	printf("--- make ---\n");
+//	make_if("tube");
+	printf("--- get ---\n");
 
+	int id = get_ifindex("tube");
+
+sleep(1);	
+	printf ("ID = %d\n",id);
+	//interface_up("tube");
+
+//	set_mode(id);
+	printf("setted mode\n");
+
+
+exit(0);
 	printf("Now starting the AP\n");
 
 	start_ap(sk);
