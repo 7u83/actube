@@ -16,5 +16,20 @@ struct nlt_ifinfo {
 };
 
 
+struct nlt_wiphyinfo {
+	const char * name;
+	int index;
+};
+
+
+
+int nlt_get_ifinfo(struct nl_sock *sk, struct nlt_ifinfo *ifinfo);
+int nlt_init_ifinfo(struct nlt_ifinfo * ifinfo);
+//int nlt_get_wiphy_list(struct nlt_ifinfo * ifinfo);
+int nlt_get_wiphy_list(struct nl_sock *sk);
+
+
+#define NLT_MAX_WIPHYINDEX	8
+
 #endif
 
