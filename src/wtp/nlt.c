@@ -4,7 +4,11 @@
 #include <netlink/msg.h>
 
 #include "capwap/cw_log.h"
+#include "capwap/avltree.h"
+
 #include "nlt.h"
+
+
 
 
 static int error_handler(struct sockaddr_nl *nla, struct nlmsgerr *err, void *arg)
@@ -18,6 +22,31 @@ static int error_handler(struct sockaddr_nl *nla, struct nlmsgerr *err, void *ar
 }
 
 
+static int wiphylist_cmp(const void * d1,const void *d2)
+{
+	struct nlt_wiphyinfo * c1=(struct nlt_wiphy *) d1;
+	struct nlt_wiphyinfo * c2=(struct nlt_wiphy *) d2;
+
+	return c1->index - c2->index;
+}
+
+
+struct avltree * wiphylist_create()
+{
+	return avltree_create(wiphylist_cmp,0);
+}
+
+
+struct nlt_wiphyinfo * wiphylist_get( struct avltree * l,int idx)
+{
+	//return avltree_get(l);
+}
+
+
+struct nlt_wiphyinfo * nlt_wiphylist_add(struct avltree * t, struct nlt_wiphyinfo * wi)
+{
+	return avltree_add(t,wi);
+}
 
 
 
@@ -268,16 +297,38 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 
 static int get_wiphy_info_cb(struct nl_msg * msg,void * arg)
 {
-	printf("hui\n");
 	struct nlt_msg m;
 	nlt_parse(msg, &m);
-
-	printf ("CMD: %d - %s\n",m.cmd,nlt_get_cmdname(m.cmd));
 
 	if (m.cmd != NL80211_CMD_NEW_WIPHY)
 		return NL_SKIP;
 
-	printf("New wiphy\n");
+	if (!m.attribs[NL80211_ATTR_WIPHY])
+		return NL_SKIP;
+
+	
+	int index =  nla_get_u32(m.attribs[NL80211_ATTR_WIPHY]);
+	if (index > NLT_MAX_WIPHYINDEX)
+		return NL_SKIP;
+
+	struct nlt_wiphyinfo ** wi = (struct nlt_wiphyinfo**)arg;
+
+	if (wi[index]==0){
+		wi[index]=malloc( sizeof(struct nlt_wiphyinfo));
+		if (wi[index]==0)
+			return NL_SKIP;
+		memset(wi[index],0,sizeof(struct nlt_wiphyinfo));
+	}
+
+
+
+	if (m.attribs[NL80211_ATTR_WIPHY_NAME]){
+		if (wi[index]->name)	
+			free(wi[index]->name);
+		char * name = nla_get_string(m.attribs[NL80211_ATTR_WIPHY_NAME]);
+		wi[index]->name=strdup(name);
+	}
+		
 
 }
 
@@ -285,11 +336,28 @@ static int get_wiphy_info_cb(struct nl_msg * msg,void * arg)
 
 int nlt_get_wiphy_list(struct nl_sock *sk)
 {
+
+	struct nlt_wiphyinfo ** wi = malloc (sizeof(struct nlt_wiphyinfo *)*NLT_MAX_WIPHYINDEX);
+	if (wi==0)
+		return 0;
+	memset (wi,0,sizeof(struct nlt_wiphyinfo *)*NLT_MAX_WIPHYINDEX);
+
+
 	struct nl_msg * msg = nlt_nl_msg_new(sk,NL80211_CMD_GET_WIPHY,NLM_F_DUMP);
 	nl_send_auto(sk, msg);
-	struct nl_cb *nl_cb = get_nl_cb(get_wiphy_info_cb,0);
+	struct nl_cb *nl_cb = get_nl_cb(get_wiphy_info_cb,wi);
 //	while(1){
 		int nlr = nl_recvmsgs(sk, nl_cb);
 //	}
+
+
+	int i;
+	for(i=0; i< NLT_MAX_WIPHYINDEX; i++){
+		if ( wi[i] ){
+			printf("Found wiphy on %d with name %s\n",i,wi[i]->name);
+		}
+
+
+	}
 
 }
