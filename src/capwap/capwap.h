@@ -35,6 +35,11 @@
 
 
 
+enum capwapmodes {
+	CWMODE_STD = 0,
+	CWMODE_CISCO
+	
+};
 
 /* transport header flags */
 #define CWTH_FLAGS_R1 0x01	/* bit 0 reserved 1 */
