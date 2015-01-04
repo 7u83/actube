@@ -111,6 +111,9 @@ struct conn{
 	/* used to link the conn obj with other objects */
 	void * data;
 
+	/* misc */
+	int capwap_mode;
+
 	int strict_capwap;
 
 
