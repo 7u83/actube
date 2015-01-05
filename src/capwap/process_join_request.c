@@ -28,54 +28,99 @@
 #include "cw_util.h"
 #include "cw_log.h"
 
-static int process_elem(void *w,int type,uint8_t* msgelem,int len)
+struct eparm {
+	int *mand;
+	struct wtpinfo *wtpinfo;
+};
+
+
+static int process_elem(void *eparm,int type,uint8_t* msgelem,int len)
 {
-	struct wtpinfo * wtpinfo = (struct wtpinfo*)w;
+
+	struct eparm *e = (struct eparm *) eparm;
+
+	struct wtpinfo * wtpinfo = e->wtpinfo;
 
 
 	cw_dbg_msgelem(CWMSG_JOIN_REQUEST, type, msgelem, len);
 
-//	cw_dbg(DBG_CW_MSGELEM,"Process join req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
-//	cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
 
-
+	/* mandatory elements */
 	if (wtpinfo_readelem_location_data(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_wtp_board_data(wtpinfo,type,msgelem,len))
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_wtp_descriptor(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_wtp_name(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_session_id(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 	
 	if (wtpinfo_readelem_wtp_frame_tunnel_mode(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_wtp_mac_type(wtpinfo,type,msgelem,len)) 
-		return 1;
-
-	if (wtpinfo_readelem_wtp_radio_info(wtpinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (wtpinfo_readelem_ecn_support(wtpinfo,type,msgelem,len))
-		return 1;
+		goto foundX;
 
-	if (wtpinfo_readelem_cw_local_ip_addr(wtpinfo,type,msgelem,len))
+	if (wtpinfo_readelem_cw_local_ip_addr(wtpinfo,type,msgelem,len)){
+		cw_mand_elem_found(e->mand, XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS);
 		return 1;
+	}
+
+	/* understood capwap bindings */
+	if (wtpinfo_readelem_wtp_radio_info(wtpinfo,type,msgelem,len)){
+		cw_mand_elem_found(e->mand, XCWMSGELEM_CAPWAP_RADIO_INFO);
+		return 1;
+	}
+
 
 
 	return 0;
+
+      foundX:
+	cw_mand_elem_found(e->mand, type);
+	return 1;
 }
 
 
 void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
-	cw_foreach_msgelem(msg,len,process_elem,(void*)wtpinfo);
+	int mand[] = {
+		CWMSGELEM_LOCATION_DATA,
+		CWMSGELEM_WTP_BOARD_DATA,
+		CWMSGELEM_WTP_DESCRIPTOR,
+		CWMSGELEM_WTP_NAME,
+		CWMSGELEM_WTP_FRAME_TUNNEL_MODE,
+		CWMSGELEM_WTP_MAC_TYPE,
+		CWMSGELEM_ECN_SUPPORT,
+		XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS,
+		XCWMSGELEM_CAPWAP_RADIO_INFO,
+		-1
+	};
+
+
+
+
+
+//	cw_foreach_msgelem(msg,len,process_elem,(void*)wtpinfo);
+
+
+	struct eparm eparm;
+	eparm.wtpinfo = wtpinfo;
+	eparm.mand = mand;
+
+	cw_foreach_msgelem(msg, len, process_elem,
+			   &eparm);
+
+	cw_dbg_missing_mand_elems_(0, CWMSG_DISCOVERY_REQUEST, eparm.mand);
+
 }
 
