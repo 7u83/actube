@@ -173,6 +173,9 @@ struct capwap_ctrlhdr
    
 #define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS	30
 #define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS	50
+
+
+
 #define CWMSGELEM_CAPWAP_TIMERS			12
 /*   CAPWAP Transport Protocol                            51
    Data Transfer Data                                   13
@@ -233,6 +236,13 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_WTP_REBOOT_STATISTICS		48
 /*   WTP Static IP Address Information                    49
 */
+
+
+/* pseudo message elements, defined for libcapwap */
+
+#define XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS	0x10000	/* means LOCAL_IPV4 or IPV6 ADRESS */
+#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x20000	/* a radio info element  */
+
 
 
 
