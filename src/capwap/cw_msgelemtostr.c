@@ -149,6 +149,11 @@ const char * cw_msgelemtostr(int elem)
 
 
 
+		case XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS:
+			return "local ip v4/v6 address";
+
+		case XCWMSGELEM_CAPWAP_RADIO_INFO:
+			return "radio info";
 
 
 	}
