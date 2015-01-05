@@ -33,7 +33,7 @@ uint16_t lw_checksum(uint8_t * d, int len)
 		len -= 2;
 	}
 
-	if (len == 1)
+	if (len)
 		sum += (*(uint8_t *) w) << 8;
 
 	sum = (sum >> 16) + (sum & 0xffff);
