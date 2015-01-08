@@ -117,6 +117,7 @@ CAPWAPOBJS= \
 	   hdr_print.o \
 	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
+	cw_readelem_maximum_message_length.o \
 	cw_readelem_result_code.o\
 	   cw_readelem_ac_name.o \
 	cw_readelem_radio_administrative_state.o \
