@@ -38,7 +38,6 @@
 enum capwapmodes {
 	CWMODE_STD = 0,
 	CWMODE_CISCO
-	
 };
 
 /* transport header flags */
