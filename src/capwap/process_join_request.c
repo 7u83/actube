@@ -81,7 +81,15 @@ static int process_elem(void *eparm,int type,uint8_t* msgelem,int len)
 		return 1;
 	}
 
+	/* non-mandatory messages */
+	
+	uint16_t ml;
+	if (cw_readelem_maximum_message_length(&ml,type,msgelem,len)){
+		return 1;
+	}
 
+	if (cw_readelem_wtp_reboot_statistics(&e->wtpinfo->reboot_statistics,type,msgelem,len))
+		goto foundX;
 
 	return 0;
 
@@ -105,12 +113,6 @@ void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 		XCWMSGELEM_CAPWAP_RADIO_INFO,
 		-1
 	};
-
-
-
-
-
-//	cw_foreach_msgelem(msg,len,process_elem,(void*)wtpinfo);
 
 
 	struct eparm eparm;
