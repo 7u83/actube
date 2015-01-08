@@ -396,6 +396,7 @@ extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
 extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_maximum_message_length(uint16_t *dst, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_ac_name(uint8_t **dst, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,uint8_t *msgelem, int len);
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
