@@ -146,6 +146,7 @@ DTLSOBJS= dtls_openssl.o	 \
 	
 
 CONNOBJS= conn.o \
+	conn_detect_capwap.o \
 	conn_send_packet.o \
 	conn_send_cwmsg.o \
 	conn_process_packet.o \
