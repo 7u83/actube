@@ -240,7 +240,8 @@ struct capwap_ctrlhdr
 /* pseudo message elements, defined for libcapwap */
 
 #define XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS	0x10000	/* means LOCAL_IPV4 or IPV6 ADRESS */
-#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x20000	/* a radio info element  */
+#define XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS	0x20000	/* means LOCAL_IPV4 or IPV6 ADRESS */
+#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x30000	/* a radio info element  */
 
 
 
