@@ -42,4 +42,6 @@
 #define CW_IEEE80211_RADIO_TYPE_N		(8)
 
 
+extern int cw_readelem_ieee80211_wtp_radio_info(void *dst,int type,uint8_t *msgelem, int len);
+
 
