@@ -30,31 +30,61 @@
 #include <netinet/in.h>
 
 
+struct eparm {
+	int *mand;
+	struct ac_info *acinfo;
+};
 
 
-static int acinfo_readelem_discovery_resp(void * a,int type,uint8_t* msgelem,int len)
+
+static int acinfo_readelem_discovery_resp(void * eparm,int type,uint8_t* msgelem,int len)
 {
-
-	struct ac_info * acinfo = (struct ac_info *)a;
-	cw_log_debug1("Process discovery resp msgelem, type=%d, len=%d\n",type,len);
-
-	if (acinfo_readelem_ac_descriptor(acinfo,type,msgelem,len)) 
-		return 1;
-
-	if (acinfo_readelem_ac_name(acinfo,type,msgelem,len)) 
-		return 1;
+	cw_dbg_msgelem(CWMSG_DISCOVERY_RESPONSE, type, msgelem, len);
 	
-	if (acinfo_readelem_ctrl_ip_addr(acinfo,type,msgelem,len)) 
+	struct eparm *e = (struct eparm *) eparm;
+
+
+	if (acinfo_readelem_ac_descriptor(e->acinfo,type,msgelem,len))
+		goto foundX;
+
+	if (acinfo_readelem_ac_name(e->acinfo,type,msgelem,len)) 
+		goto foundX;
+	
+	if (acinfo_readelem_ctrl_ip_addr(e->acinfo,type,msgelem,len)){
+		cw_mand_elem_found(e->mand, XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS);
 		return 1;
+	}
 
 	return 0;
+
+      foundX:
+	cw_mand_elem_found(e->mand, type);
+	return 1;
+
 }
 
 
 
 void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len)
 {
-	cw_foreach_msgelem(msg,len,acinfo_readelem_discovery_resp,acinfo);
+	int mand[] = {
+		CWMSGELEM_AC_DESCRIPTOR,
+		CWMSGELEM_AC_NAME,
+		XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS,
+		XCWMSGELEM_CAPWAP_RADIO_INFO,
+
+		-1
+	};
+
+	
+	struct eparm eparm;
+	eparm.acinfo = acinfo;
+	eparm.mand = mand;
+
+
+	cw_foreach_msgelem(msg,len,acinfo_readelem_discovery_resp,&eparm);
+
+	cw_dbg_missing_mand_elems_(0, CWMSG_DISCOVERY_RESPONSE, eparm.mand);
 }
 
 
