@@ -185,7 +185,9 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 		}
 
 		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",conn->dtls_cert_file);
-		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);
+
+/*		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);*/
+		rc = SSL_CTX_use_certificate_chain_file(d->ctx,conn->dtls_cert_file);
 		if (!rc){
 
 			dtls_openssl_log_error(0,rc,"DTLS certificate error:");
