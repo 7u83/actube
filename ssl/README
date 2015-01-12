@@ -1,5 +1,7 @@
-Create ssl certificates to test AC-Tube and it's WTP
-====================================================
+
+
+Creating ssl certificates to test AC-Tube and it's WTP
+======================================================
 
 1. Create a root CA by executing: 
 
@@ -40,6 +42,58 @@ Create ssl certificates to test AC-Tube and it's WTP
 
    Now your Cisco 1130 LAP will join to AC-Tube. Remember that the 
    Cisco LAP will lose the installed  certificate after rebooting. 
+
+   If you want to use a Cisco LAP without installing on it your own
+   ca certificate, which is lost after each reboot, you can sign your 
+   certificate with a Cisco intermediate ca certificate as explained 
+   in the next section.	
+   
+
+
+
+Get a Cisco AP out of the box connected to AC-Tube
+==================================================
+
+If you want to use a Cisco AP without installing your own CA 
+certificate on it, which is lost after each reboot, you have to 
+use a certificate with AC-Tube, that is signed by a CA, where the 
+CA certificate is already installed on the AP.
+
+To create such a certificate a Cisco WLC uses an intermediate CA 
+certificate, witch is signed by this root CA certificate, installed 
+on the AP. 
+
+If you have both, the intermediate CA certificate with an 
+appropriate private key and the CA certificate, which is installed 
+on the AP, you can create such a certificate like a Cisco WLC does, 
+by icopying them to the ./cisco  sub-directory, using the 
+following names:
+
+cisco-root-ca.crt: the CA certificate,
+cisco-ca.crt: intermediate CA certificate
+cisco-ca.key: private key.
+
+All files have to be in PEM format.
+
+Now run the script
+
+./mkcert_cisco.sh
+
+witch creates two files: 
+
+ac_cisco.pem 
+ac_cisco.key
+
+When you get asked for a password, use always the same. The chosen
+password is not imported. You don't need it later.
+
+Now you can modify ac.conf to use the certificate and and key:
+
+ssl_key=../../ssl/ac_cisco.key
+ssl_cert=../../ssl/ac_cisco.pem
+
+And a Cisco AP will now join AC-Tube without any modifications!
+
 
 
 If you experience with other Cisco LAPs (e.g. 1141), please tell me.
