@@ -23,13 +23,21 @@
 
 #include "cw_log.h"
 
+
 int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg) 
 {
 	uint32_t val;
 
-	/* second dword of message control header */
-//orig	val = (cwmsg->seqnum<<24)|((cwmsg->pos+3)<<8);
-	val = (cwmsg->seqnum<<24)|((cwmsg->pos)<<8);
+	/* second dword of message control header -
+	   msg length and seqnum */
+	val = (cwmsg->seqnum<<24)|((cwmsg->pos+3)<<8);
+
+	/* Zyxel doesn't count msg element length from
+	   behind seqnum */
+	if (conn->capwap_mode == CWMODE_ZYXEL){
+		val-=3;
+	}
+
 	*((uint32_t*)(cwmsg->ctrlhdr+4))=htonl(val);
 
 	
@@ -49,6 +57,7 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 
 	int wbid=CWTH_WBID_IEEE80211;
 	int packetlen = msglen+hlen;	
+
 	int mtu = conn->mtu;
 
 	while (packetlen>mtu){
