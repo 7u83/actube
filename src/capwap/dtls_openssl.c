@@ -50,9 +50,14 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 
 int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 {
-         strncpy(buf, (char *)(password), size);
-         buf[size - 1] = '\0';
-         return(strlen(buf));
+	if (!password){
+		cw_dbg(DBG_DTLS, "DTLS - No password given to decrypt privat key");
+		return 0;
+	}
+			
+	strncpy(buf, (char *)(password), size);
+	buf[size - 1] = '\0';
+	return(strlen(buf));
 }
 
  /* Set up ephemeral RSA stuff */
