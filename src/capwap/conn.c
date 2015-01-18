@@ -33,6 +33,7 @@ void conn_init(struct conn * conn)
 	conn->max_retransmit=CAPWAP_MAX_RETRANSMIT;
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;
 	conn->wait_join=CAPWAP_WAIT_JOIN;
+	conn->mtu_discovery=1;
 }
 
 
