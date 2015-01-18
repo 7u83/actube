@@ -62,8 +62,9 @@ struct conn{
 	uint8_t req_buffer[65536];
 	uint8_t resp_buffer[65536];
 
-
-	int mtu;
+	
+	int mtu;		/* max mtu, could be changed during discovery */
+	int mtu_discovery;	/* 0 mtu discovery turned off, 1 discovery tuned on */
 
 	/* receive and send methods */
 
