@@ -29,15 +29,19 @@ int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioinfo,str
 	
 	cwmsg_addelem(&cwmsg,CWMSGELEM_DISCOVERY_TYPE,&wtpinfo->discovery_type,sizeof(uint8_t));
 //	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
-	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
+//	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
 
 //cwmsg_addelem(&cwmsg,CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS);
-cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
+//cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
 
-//	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
-//	cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
+	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
+
+	if (conn->mtu_discovery)
+		cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
+
+
 
 
 //uint8_t zven[] = {0xBF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,0x66,0x69,0x73,0x68,0x00,0x02,0xFC,0xF5,0x28,0xCA,0xAE,0xE4,0x00,0x03,0x10,0x10,
@@ -45,6 +49,7 @@ cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
 //0xC4,0x2E,0xC4,0x2E,0xC4,0x2E,0xC4,0x2E };
 
 
+/*
 uint8_t zven [] = {
       // 0x00, 00 03 7A 00 02 
 	0x22, 0xE0, 00, 00, 00, 00, 00, 00, 00, 0x01, 0x66, 0x69, 0x73,0x68,0x00,0x02,0xFC,0xF5,0x28,0xCA,0xAE,0xE4,0x00,0x03,0x10,0x10 ,
@@ -52,10 +57,10 @@ uint8_t zven [] = {
         00, 0x07, 00, 00, 0x27,0x11,0x00,0x08,0x00,0x00  };
 
 
+*/
 
 
-
-	cwmsg_addelem_vendor_specific_payload(&cwmsg,890,2,zven,sizeof(zven));
+//	cwmsg_addelem_vendor_specific_payload(&cwmsg,890,2,zven,sizeof(zven));
 
 
 	return conn_send_cwmsg(conn,&cwmsg);
