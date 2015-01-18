@@ -82,8 +82,14 @@ int read_config(const char * filename){
 	
 	const char  *str;
 	str = uci_lookup_option_string(ctx,section,"name");
-	conf_wtpname = strdup(str);
+	if (str)
+		conf_wtpname = strdup(str);
 
+
+	str = uci_lookup_option_string(ctx,section,"mtu");
+	if (str){
+		conf_mtu = atoi(str);
+	}
 	
 	return 1;
 
