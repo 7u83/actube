@@ -32,13 +32,13 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->model_no="WNDR 3700";
 
 	wtpinfo->bootloader_version="";
-	wtpinfo->bootloader_vendor_id=890;
+	wtpinfo->bootloader_vendor_id=CW_VENDOR_ID_CISCO;
 
 	wtpinfo->hardware_version="\0\0";
-	wtpinfo->hardware_vendor_id=890;
+	wtpinfo->hardware_vendor_id=CW_VENDOR_ID_CISCO;
 	
 	wtpinfo->software_version="2.23(UJA.6)";
-	wtpinfo->software_vendor_id=890;
+	wtpinfo->software_vendor_id=CW_VENDOR_ID_CISCO;
 
 	wtpinfo->macaddress=conf_macaddress;
 	wtpinfo->macaddress_len=conf_macaddress_len;
@@ -75,6 +75,9 @@ struct conn * get_conn()
 {
 	if (!conn){
 		conn = conn_create_noq(-1,0);
+		if (conf_mtu){
+			conn->mtu=conf_mtu;
+		}
 	}
 	return conn;
 }
