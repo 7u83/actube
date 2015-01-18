@@ -53,7 +53,7 @@ int read_config(const char * filename){
 	struct uci_package * pkg;
 	
 	if (filename == NULL){
-		filename = "wtp";
+		filename = "wtp_uci.conf";
 	}
 	cw_dbg(DBG_ALL,"Reading config file %s",filename);
 
@@ -87,9 +87,14 @@ int read_config(const char * filename){
 
 
 	str = uci_lookup_option_string(ctx,section,"mtu");
-	if (str){
+	if (str)
 		conf_mtu = atoi(str);
-	}
+
+	str = uci_lookup_option_string(ctx,section,"mtu_discovery");
+	printf("MTU Disco = %s\n",str);
+	if (str)
+		conf_mtu_discovery = atoi(str);
+	
 	
 	return 1;
 
