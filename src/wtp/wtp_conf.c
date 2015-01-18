@@ -56,6 +56,9 @@ long conf_debug_level=CONF_DEFAULT_DEBUG_LEVEL;
 
 
 
+int conf_mtu_discovery=CONF_DEFAULT_MTU_DISCOVERY;
+int conf_mtu=0;
+
 
 
 
@@ -115,7 +118,7 @@ int wtpconf_name()
 
 char * default_ac_list[] = {
 	"192.168.0.255",
-//	"255.255.255.255",
+	"255.255.255.255",
 //	"224.0.1.140",
 };
 
