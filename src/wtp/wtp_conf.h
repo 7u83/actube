@@ -55,7 +55,7 @@ extern uint8_t conf_macaddress_len;
 
 #define CONF_DEFAULT_DEBUG_LEVEL -1
 
-#define CONF_DEFAULT_MTU_DISCOVERY 0
+#define CONF_DEFAULT_MTU_DISCOVERY 1
 
 extern long conf_max_discovery_interval;
 extern long conf_discovery_interval;
