@@ -91,7 +91,6 @@ int read_config(const char * filename){
 		conf_mtu = atoi(str);
 
 	str = uci_lookup_option_string(ctx,section,"mtu_discovery");
-	printf("MTU Disco = %s\n",str);
 	if (str)
 		conf_mtu_discovery = atoi(str);
 	
