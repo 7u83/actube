@@ -78,6 +78,7 @@ struct conn * get_conn()
 		if (conf_mtu){
 			conn->mtu=conf_mtu;
 		}
+		conn->mtu_discovery=conf_mtu_discovery;	
 	}
 	return conn;
 }
