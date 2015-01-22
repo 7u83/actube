@@ -1,8 +1,4 @@
 #!/bin/sh
-rm index.txt*
-rm *.pem
-rm *.key
-rm *.crt
-rm *.req
-rm serial*
-
+rm -rf root-ca
+rm -rf intermediate-ca
+rm -rf certs
