@@ -39,7 +39,7 @@ default_ca	= CA_default		# The default ca section
 ####################################################################
 [ CA_default ]
 
-dir		= .			# Where everything is kept
+dir		= ./root-ca		# Where everything is kept
 certs		= $dir/certs		# Where the issued certs are kept
 crl_dir		= $dir/crl		# Where the issued crl are kept
 database	= $dir/index.txt	# database index file.
@@ -201,7 +201,7 @@ authorityKeyIdentifier=keyid,issuer
 
 # This stuff is for subjectAltName and issuerAltname.
 # Import the email address.
-# subjectAltName=email:copy
+subjectAltName=email:copy
 # An alternative to produce certificates that aren't
 # deprecated according to PKIX.
 # subjectAltName=email:move
@@ -234,9 +234,8 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 
 # PKIX recommendation.
 
-subjectKeyIdentifier=hash
-
-authorityKeyIdentifier=keyid:always,issuer
+subjectKeyIdentifier= hash
+authorityKeyIdentifier=keyid:always,issuer:always
 
 # This is what PKIX recommends but some broken software chokes on critical
 # extensions.
