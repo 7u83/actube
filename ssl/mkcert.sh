@@ -46,17 +46,21 @@ openssl ca -config openssl-simple.cnf  \
 	   -batch \
 	   -out $DIR/$NAME.crt -infiles $DIR/$NAME.req 
 
+openssl x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
+
 else
 openssl ca -config openssl-int.cnf  \
 	   -keyfile $INT_CA_DIR/${PREF}int-ca.key \
 	   -cert $INT_CA_DIR/${PREF}int-ca.crt \
 	   -batch \
 	   -out $DIR/$NAME.crt -infiles $DIR/$NAME.req 
+
+
+openssl x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
 cat $INT_CA_DIR/${PREF}int-ca.crt >> $DIR/$NAME.pem
 cat $ROOT_CA_DIR/${PREF}root-ca.crt >> $DIR/$NAME.pem
 fi	
 
-openssl x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
 
 
 
