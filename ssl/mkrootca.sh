@@ -66,6 +66,10 @@ mkrootca()
 ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
 mkrootca "$ROOT_SUBJ" 
 
+ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
+mkrootca "$ROOT_SUBJ" simple
+
+
 ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=CA-vWLC-AIR-CTVM-K9-080027949DE0/emailAddress=support@vwlc.com"
 mkrootca "$ROOT_SUBJ" cisco
 
