@@ -54,22 +54,18 @@ mkrootca()
 	openssl req -sha1 -new -key $INT_CA_DIR/${PREF}int-ca.key -out $INT_CA_DIR/${PREF}int-ca.csr \
 		-subj "$INT_SUBJ"
 
-	openssl ca -config openssl.cnf -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
+	openssl ca -config openssl.cnf -batch -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
 		   -cert $ROOT_CA_DIR/${PREF}root-ca.crt \
 		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
 		   -out $INT_CA_DIR/${PREF}int-ca.crt
 
-#	openssl ca -config openssl.cnf -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
-#		   -cert $ROOT_CA_DIR/${PREF}root-ca.crt \
-#		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
-#		   -out $INT_CA_DIR/${PREF}int-ca.crt
 
 }
 
 
-#ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
-ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=CA-vWLC-AIR-CTVM-K9-080027949DE0/emailAddress=support@vwlc.com"
+ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
 mkrootca "$ROOT_SUBJ" 
 
-#mkrootca "$ROOT_SUBJ" cisco
+ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=CA-vWLC-AIR-CTVM-K9-080027949DE0/emailAddress=support@vwlc.com"
+mkrootca "$ROOT_SUBJ" cisco
 
