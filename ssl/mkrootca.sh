@@ -59,6 +59,11 @@ mkrootca()
 		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
 		   -out $INT_CA_DIR/${PREF}int-ca.crt
 
+#	openssl ca -config openssl.cnf -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
+#		   -cert $ROOT_CA_DIR/${PREF}root-ca.crt \
+#		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
+#		   -out $INT_CA_DIR/${PREF}int-ca.crt
+
 }
 
 
