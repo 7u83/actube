@@ -1,99 +1,66 @@
 
 
-Creating ssl certificates to test AC-Tube and it's WTP
-======================================================
+Creating SSL certificates to test AC-Tube and it's WTP's
+========================================================
 
 1. Create a root CA by executing: 
 
-   ./mkrootca
+   ./mkrootca.sh
 
-   This creates the files root-ca.crt and root-ca.key.
+   This creates some root CAs and intermediate CAs in the
+   subdirectories ./root-ca and ./intermediate-ca to sign
+   certificates.
 
 
-2. Create client certificates for AC and WTP
+2. Create client certificates as needed
 
-   ./mkcerts
+   To create a client certificate, execute the script
 
-   This will create the files ac.key, ac.crt and  wtp.crt, wtp.key. 
-   All .key files are protected with  the password you have chosen 
-   in the certificate creation process. 
+   ./mkcert.sh <cert-name> [type]
+
+   where cert-name is the name of the certificate to be created
+   without extension and the optional parameter type specifies
+   the type of the certificate, which could be only 'cisco'
+   for now.
+   The created certificatte and key is found in the 
+   folder ./certs
+   named cert-name.pem and cert-name.key.
+   
+   If you chose 'cisco' as type, the certificate will be
+   accepted by a Cisco WTP when used in AC-Tube. The firmare
+   on Cisco's AP must be at least 7.3.
+
+   EXAMPLE:
+     ./mkcert ac-cisco cisco
+     will create the files ./certs/ac-cisco.pem and and ./certs/ac-cisco.key
+    
 
 3. Put these entries into  ac.conf  located in  the    ac directory, 
-   so AC-Tube wilil use the certificates:
+   so AC-Tube wilil use the certificates. If you have named your certificate
+   just 'ac', put the following into config:
 
-   ssl_key=../../ssl/ac.key
-   ssl_key_pass=your password 
-   ssl_cert=../../ssl/ac.crt
+   ssl_key=../../ssl/certs/ac.key
+   ssl_cert=../../ssl/certs/ac.crt
 
-   For WTP the certiciate's config entries for now are hard-coded.
-   Now you can play around joining WTP to AC...
 
-4. If you want to connect a Cisco 1130 series LAP to  AC-Tube you 
-   have to install the CA file on the LAP. Therofore you can create 
-   a terminal script by  executing:
+Installing your own root ca an a Cisco WTP
+==========================================
 
-   ./mkciscoimport.sh 	
+If you want to connect a Cisco 1130 series LAP to  AC-Tube
+using a certificate signed by a root ca of your choice, you
+have to install the CA file on the WTP. Therofore you can 
+create a terminal script by  executing:
 
-   Paste the result into a terminal session when in enabled mode. 
+./mkciscoimport.sh 	
 
-   To ac.conf add the following entry:
+Paste the result into a terminal session when in enabled mode. 
+
+To ac.conf add the following entry:
    
-   dtls_verify_peer = no
+dtls_verify_peer = no
 
-   Now your Cisco 1130 LAP will join to AC-Tube. Remember that the 
-   Cisco LAP will lose the installed  certificate after rebooting. 
-
-   If you want to use a Cisco LAP without installing on it your own
-   ca certificate, which is lost after each reboot, you can sign your 
-   certificate with a Cisco intermediate ca certificate as explained 
-   in the next section.	
-   
-
-
-
-Get a Cisco AP out of the box connected to AC-Tube
-==================================================
-
-If you want to use a Cisco AP without installing your own CA 
-certificate on it, which is lost after each reboot, you have to 
-use a certificate with AC-Tube, that is signed by a CA, where the 
-CA certificate is already installed on the AP.
-
-To create such a certificate a Cisco WLC uses an intermediate CA 
-certificate, witch is signed by this root CA certificate, installed 
-on the AP. 
-
-If you have both, the intermediate CA certificate with an 
-appropriate private key and the CA certificate, which is installed 
-on the AP, you can create such a certificate like a Cisco WLC does, 
-by icopying them to the ./cisco  sub-directory, using the 
-following names:
-
-cisco-root-ca.crt: the CA certificate,
-cisco-ca.crt: intermediate CA certificate
-cisco-ca.key: private key.
-
-All files have to be in PEM format.
-
-Now run the script
-
-./mkcert_cisco.sh
-
-witch creates two files: 
-
-ac_cisco.pem 
-ac_cisco.key
-
-When you get asked for a password, use always the same. The chosen
-password is not imported. You don't need it later.
-
-Now you can modify ac.conf to use the certificate and and key:
-
-ssl_key=../../ssl/ac_cisco.key
-ssl_cert=../../ssl/ac_cisco.pem
-
-And a Cisco AP will now join AC-Tube without any modifications!
-
+But remember, if you reboot the WTP the installed CA will be lost.
+Currently there is no way to make the installation permanent.
 
 
 If you experience with other Cisco LAPs (e.g. 1141), please tell me.
