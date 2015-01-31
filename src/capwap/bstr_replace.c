@@ -2,11 +2,11 @@
 
 #include "bstr.h"
 
-uint8_t * bstr_replace( uint8_t ** str, uint8_t * data, int len)
+uint8_t * bstr_replace( uint8_t ** dst, uint8_t * bstr)
 {
-	if (str)
-		free(str);
-	
-	*str = bstr_create(data,len);	
-	return *str;
+	if (*dst)
+		free(*dst);
+
+	*dst = bstr;
+	return *dst;
 }
