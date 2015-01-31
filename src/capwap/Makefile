@@ -165,11 +165,12 @@ CONNOBJS= conn.o \
 	conn_prepare_request.o \
 	conn_prepare_image_data_request.o
 
+BSTROBJS= bstr_create.o
 	
 
 FRAGOBJS=fragman.o
 
-OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) $(LOGOBJS) $(UTILOBJS) $(DTLSOBJS)
+OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) $(LOGOBJS) $(UTILOBJS) $(DTLSOBJS) $(BSTROBJS)
 O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
