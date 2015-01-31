@@ -165,7 +165,9 @@ CONNOBJS= conn.o \
 	conn_prepare_request.o \
 	conn_prepare_image_data_request.o
 
-BSTROBJS= bstr_create.o
+BSTROBJS= bstr_create.o \
+	bstr_create_from_cfgstr.o \
+	bstr_replace.o
 	
 
 FRAGOBJS=fragman.o
