@@ -19,6 +19,7 @@
 #include <string.h>
 #include "capwap.h"
 
+
 void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 {
 	uint8_t buffer[12+2048];
@@ -26,11 +27,14 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 
 	*((uint32_t*)(acd))=htonl((acinfo->stations<<16) | (acinfo->limit));
 	*((uint32_t*)(acd+4))=htonl((acinfo->active_wtps<<16) | acinfo->max_wtps);
+
+//printf("(((((((((((((((((((((((((((((((((((((((((((((((((((((((( %d\n",acinfo->dtls_policy);
 	*((uint32_t*)(acd+8))=htonl((acinfo->security<<24) | (acinfo->rmac<<16) | acinfo->dtls_policy );
 
 
 	int len = 12;
 	int sublen;
+//goto u;
 
 	sublen = 4;
 		
@@ -40,14 +44,14 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	len+=4;
 	*(acd+len)=5; len++;
 	*(acd+len)=0; len++;
-	*(acd+len)=72; len++;
-	*(acd+len)=71; len++;
+	*(acd+len)=19; len++;
+	*(acd+len)=2; len++;
 	*(acd+len)=5; len++;
 	*(acd+len)=6; len++;
 	*(acd+len)=7; len++;
 	*(acd+len)=8; len++;
 
-
+/*
 	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
 	len+=4;
 	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
@@ -61,17 +65,18 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 	*(acd+len)=7; len++;
 	*(acd+len)=8; len++;
 
-
+*/
 
 
 goto b;
+//u:
 
 	/* software version subelement */
 
 	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
 	len+=4;
 	sublen=strlen((const char*)acinfo->software_version);
-	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
+	*((uint32_t*)(acd+len))=htonl((5<<16)|sublen);
 	len+=4;
 	memcpy(acd+len,acinfo->software_version,sublen);
 	len+=sublen;

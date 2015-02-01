@@ -51,7 +51,7 @@ int dtls_openssl_connect(struct conn * conn)
 		SSL_set_psk_client_callback( d->ssl, psk_client_cb);
 
 
-	dtls_openssl_set_certs(conn,d);
+//	dtls_openssl_set_certs(conn,d);
 
 	if (conn->dtls_cert_file && conn->dtls_key_file){
 	}
@@ -60,9 +60,9 @@ int dtls_openssl_connect(struct conn * conn)
 	int rc; 
 //	do{ 
 		rc = SSL_connect(d->ssl);
+/*
 
-
-/*		if (rc <= 0){
+		if (rc <= 0){
 			int e;
 			e = SSL_get_error(d->ssl,rc);
 			printf("Get Err %i\n",e);

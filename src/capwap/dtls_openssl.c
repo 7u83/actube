@@ -192,6 +192,7 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",conn->dtls_cert_file);
 
 /*		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);*/
+
 		rc = SSL_CTX_use_certificate_chain_file(d->ctx,conn->dtls_cert_file);
 		if (!rc){
 
@@ -214,7 +215,7 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 
 
 //	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");
-	const char * sessid = "123456789";
+	const char * sessid = "9123456789";
 	memcpy(id,sessid,strlen(sessid));
 	*id_len=strlen(sessid);
 	return 1;
@@ -224,6 +225,21 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 
 static int dtls_verify_peer_callback (int ok, X509_STORE_CTX *ctx) 
 {
+	printf ("Verify callback called with ok = %d\n",ok);
+
+	SSL *ssl;
+	ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+
+	char buf[1024];
+	X509   *err_cert;
+
+	err_cert = X509_STORE_CTX_get_current_cert(ctx);
+	X509_NAME_oneline(X509_get_subject_name(err_cert), buf, 256);
+
+	printf("Err cert: %s\n",buf);
+
+return 1;
+	exit(0);
 	return 1;
 }
 

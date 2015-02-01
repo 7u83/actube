@@ -20,13 +20,15 @@ int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
 			if (errno == EWOULDBLOCK)
 			{
 				printf("would block\n");
+				
+//				continue;
 			}
 			if ( errno==EAGAIN )
 			{
 				printf("again\n");
 			}
 			perror("recv");
-			
+		printf("Return n %d\n",n);	
 		return n;
 		}
 	}

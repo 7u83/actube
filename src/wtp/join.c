@@ -100,6 +100,10 @@ int join(struct sockaddr *sa)
 	}
 	#endif
 */
+
+
+printf("conf_dtls_cipher  %s\n",conf_dtls_cipher);
+
 	if (conf_dtls_psk){
 		conn->dtls_psk=conf_dtls_psk;
 		conn->dtls_psk_len=strlen(conn->dtls_psk);

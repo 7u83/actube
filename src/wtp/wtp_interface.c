@@ -27,9 +27,9 @@ struct wtpinfo * get_wtpinfo()
 	}
 */
 	wtpinfo->serial_no="123456789";
-	wtpinfo->vendor_id=909090;
+	wtpinfo->vendor_id=conf_vendor_id;
 
-	wtpinfo->model_no="WNDR 3700";
+	wtpinfo->model_no=conf_model_no;
 
 	wtpinfo->bootloader_version="";
 	wtpinfo->bootloader_vendor_id=CW_VENDOR_ID_CISCO;
@@ -37,7 +37,7 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->hardware_version="\0\0";
 	wtpinfo->hardware_vendor_id=CW_VENDOR_ID_CISCO;
 	
-	wtpinfo->software_version="2.23(UJA.6)";
+	wtpinfo->software_version=conf_software_version;
 	wtpinfo->software_vendor_id=CW_VENDOR_ID_CISCO;
 
 	wtpinfo->macaddress=conf_macaddress;

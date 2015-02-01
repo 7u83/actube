@@ -17,6 +17,8 @@
 
 #include "capwap/cw_log.h"
 
+#include "capwap/bstr.h"
+
 
 static struct uci_section  * get_anon_section(struct uci_package * pkg, const char *type)
 {
@@ -75,7 +77,7 @@ int read_config(const char * filename){
 
 	struct uci_section * section = get_anon_section(pkg,"wtp");
 	if (!section) {
-		cw_dbg(DBG_CW_INFO,"No 'wtp' section found, running withou config");
+		cw_dbg(DBG_CW_INFO,"No 'wtp' section found, running without config");
 		return 1;
 	}
 
@@ -85,7 +87,6 @@ int read_config(const char * filename){
 	if (str)
 		conf_wtpname = strdup(str);
 
-
 	str = uci_lookup_option_string(ctx,section,"mtu");
 	if (str)
 		conf_mtu = atoi(str);
@@ -93,7 +94,31 @@ int read_config(const char * filename){
 	str = uci_lookup_option_string(ctx,section,"mtu_discovery");
 	if (str)
 		conf_mtu_discovery = atoi(str);
-	
+
+	str = uci_lookup_option_string(ctx,section,"ssl_key");
+	if (str) 
+		conf_sslkeyfilename=strdup(str);
+
+	str = uci_lookup_option_string(ctx,section,"ssl_cert");
+	if (str) 
+		conf_sslcertfilename=strdup(str);
+
+	str = uci_lookup_option_string(ctx,section,"vendor_id");
+	if (str) 
+		conf_vendor_id=atoi(str);
+
+	str = uci_lookup_option_string(ctx,section,"software_version");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_software_version,s);
+	}
+
+	str = uci_lookup_option_string(ctx,section,"model_no");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_model_no,s);
+	}
+
 	
 	return 1;
 

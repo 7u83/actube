@@ -60,6 +60,19 @@ int conf_mtu_discovery=CONF_DEFAULT_MTU_DISCOVERY;
 int conf_mtu=0;
 
 
+uint32_t conf_vendor_id;
+uint32_t * conf_bootloader_vendor_id;
+uint8_t * conf_bootloader_version;
+uint32_t * conf_software_vendor_id;
+uint8_t * conf_software_version;
+uint32_t * conf_hardware_vendor_id;
+uint8_t * conf_hardware_version;
+
+uint8_t * conf_model_no;
+uint8_t * cont_serial_no;
+
+
+
 
 
 int wtpconf_primary_if()
@@ -176,6 +189,11 @@ int wtpconf_preinit()
 {
 	conf_control_port=strdup(CAPWAP_CONTROL_PORT_STR);
 	conf_dtls_cipher=strdup(CONF_DEFAULT_DTLS_CIPHER);
+
+
+	conf_vendor_id = CONF_DEFAULT_VENDOR_ID;
+	conf_software_version = bstr_create(CONF_DEFAULT_SOFTWARE_VERSION);
+
 
 }
 

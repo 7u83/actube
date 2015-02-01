@@ -21,7 +21,7 @@ void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinf
 
 
 	/* */
-	cwmsg_addelem_image_identifier(cwmsg,CW_VENDOR_ID_CISCO,(uint8_t*)"tobias",strlen("tobias"));
+	cwmsg_addelem_image_identifier(cwmsg,CW_VENDOR_ID_CISCO,(uint8_t*)"/tobias",strlen("/tobias"));
 
 
 
@@ -35,7 +35,7 @@ void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinf
 	buffer[5]=5;	/* s/w version */
 	buffer[6]=0;	/* s/w Release */
 	buffer[7]=19;	/* s/w Maint */
-	buffer[8]=3;	/* s/w Build */
+	buffer[8]=2;	/* s/w Build */
 
 	*((uint16_t*)(buffer+9))=htons(13); /* Active MS */
 	*((uint16_t*)(buffer+9+2))=htons(23); /* Supported MS */

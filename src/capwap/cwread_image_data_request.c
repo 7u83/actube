@@ -43,6 +43,8 @@ int cw_readelem_image_identifier(uint8_t **dst, int type,uint8_t *msgelem, int l
 
 static int imgdata_request(void * a,int type,uint8_t* msgelem,int len)
 {
+printf("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH oioioioioi here\n");
+	cw_dbg_msgelem(CWMSG_DISCOVERY_REQUEST, type, msgelem, len);
 
 //	struct ac_info * acinfo = (struct ac_info *)a;
 	cw_dbg(DBG_ALL,"Reading image data req msgelem, type=%d - %s ,len=%d\n",type,cw_msgelemtostr(type),len);
@@ -66,7 +68,11 @@ static int imgdata_request(void * a,int type,uint8_t* msgelem,int len)
 
 void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len)
 {
-/*	cw_log_debug1("Reading join response");*/
+	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
+	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
+	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
+	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
+	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
 	cw_foreach_msgelem(msg,len,imgdata_request,NULL);
 }
 

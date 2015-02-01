@@ -1,9 +1,9 @@
 #!/bin/sh
 
-VERSION="1.0.1i"
-#VERSION="1.0.2"
+#VERSION="1.0.1i"
+VERSION="1.0.2"
 
-if [ !-e openssl-${VERSION} ]
+if [ ! -e openssl-${VERSION} ]
 then
 wget https://www.openssl.org/source/openssl-${VERSION}.tar.gz
 fi

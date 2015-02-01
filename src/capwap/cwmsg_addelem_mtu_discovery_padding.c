@@ -22,9 +22,13 @@
 #include "conn.h"
 #include "cwmsg.h"
 
+#include <stdio.h> //Tube
+
 void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn* conn)
 {
 	int len = conn->mtu - (msg->msgelems-msg->buffer+msg->pos)-4;
+
+printf("MTU discovery len %d %d and pos %d:\n",conn->mtu,len,msg->pos);
 
 	if (len < 0 )
 		return;
@@ -33,5 +37,7 @@ void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn* conn)
 	*((uint32_t*)(msg->msgelems+msg->pos))=htonl(val);
 	memset(msg->msgelems+4+msg->pos,0xff,len);	
 	msg->pos+=4+len;
+
+printf("Nenpos = %d\n",msg->pos);
 }
 
