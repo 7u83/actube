@@ -1,9 +1,12 @@
 
+OPENSSL_VERSION=openssl-1.0.1i
+
 ifeq ($(USE_CONTRIB_OPENSSL),1)
-OPENSSLLIB=../contrib/openssl-1.0.1i/libssl.a ../contrib/openssl-1.0.1i/libcrypto.a -ldl
-OPENSSLINC=../contrib/openssl-1.0.1i/include
+OPENSSLLIB=../contrib/$(OPENSSL_VERSION)/libssl.a ../contrib/$(OPENSSL_VERSION)/libcrypto.a -ldl
+OPENSSLINC=../contrib/$(OPENSSL_VERSION)/include/openssl
 else
 OPENSSLLIB=-lssl
+OPENSSLINC=openssl
 endif
 
 
