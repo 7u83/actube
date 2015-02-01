@@ -66,10 +66,19 @@ mkrootca()
 ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
 mkrootca "$ROOT_SUBJ" 
 
-ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
+ROOT_SUBJ="/C=DE/ST=Berlin/O=Cauwersin/CN=SCEP-CN=C1130-908d43460000/emailAddress=7u83@mail.ru"
 mkrootca "$ROOT_SUBJ" simple
 
 
 ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=CA-vWLC-AIR-CTVM-K9-080027949DE0/emailAddress=support@vwlc.com"
 mkrootca "$ROOT_SUBJ" cisco
+
+
+#ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=airespace Inc/CN=C1130-f866f2a342fc/emailAddress=support@airespace.com"
+#ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-f866f2a342fc/emailAddress=support@cisco.com"
+#ROOT_SUBJ="/ST=California/L=San Jose/C=US/O=Cisco Systems/CN=C1130-f866f2a342fc/emailAddress=support@cisco.com"
+#ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1200-c80aa9cd7fa4/emailAddress=support@cisco.com"
+ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
+mkrootca "$ROOT_SUBJ" cisco-ap
+
 
