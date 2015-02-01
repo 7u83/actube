@@ -6,7 +6,7 @@
 
 int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 {
-//	printf("bio_write %p %d",data,len);
+	printf("bio_write %p %d",data,len);
 
 	struct conn * conn = b->ptr;
 	uint8_t buffer[2048];
@@ -14,7 +14,7 @@ int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 	memcpy(buffer+4,data,len);
 	int rc = conn->send_packet(conn,buffer,len+4);
 
-//	printf("Bio wr rc = %d\n",rc);
+	printf("Bio wr rc = %d\n",rc);
 
 
 	if (rc<0)
@@ -134,7 +134,8 @@ long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr)
 
 		case BIO_CTRL_DGRAM_QUERY_MTU:
 		{
-			ret = 1500;
+			ret = 1300;
+			break;
 
 /*         	sockopt_len = sizeof(sockopt_val);
 			if ((ret = getsockopt(pData->sock, IPPROTO_IP, IP_MTU, (void *)&sockopt_val, &sockopt_len)) < 0 || sockopt_val < 0)

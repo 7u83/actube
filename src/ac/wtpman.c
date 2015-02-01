@@ -364,14 +364,15 @@ static void wtpman_run_discovery(void *arg)
 		return;
 	}
 
-
 	cwread_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+
+	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
 
 	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 
-//exit(0);
 
 
 	struct radioinfo radioinfo;
@@ -508,6 +509,7 @@ static int wtpman_join(void *arg,time_t timer)
 	
 	}
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
 
 	{
 	char wtpinfostr[8192];
@@ -581,10 +583,16 @@ static void wtpman_run(void *arg)
 			break;
 		case CWMSG_IMAGE_DATA_REQUEST:
 			printf("Image update\n!");
+			cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+
 			cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
-	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
+
+			send_image_file(wtpman->conn,"/tftpboot/c1130-k9w7-tar.default");
+		
+	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w7-tar.123-8.JEA3.tar");
 //			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");
-			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
+	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
 		
 			break;
 	}

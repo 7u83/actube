@@ -89,15 +89,21 @@ int do_connect(void *priv,void *data)
 	return 0;
 }
 
+
+#include "capwap/bstr.h"
+
 int wtp_main(const char *ad)
 {
+	
+
+
 	cw_dbg_opt_level = DBG_DTLS | DBG_CW_INFO | DBG_ALL;
-	gr();
-	exit(0);
+//	gr();
+//	exit(0);
 
 	wtpconf_preinit();
 
-	if (!read_config("./wtpconf")){
+	if (!read_config("./wtp_uci.conf")){
 		return 1;
 	}
 
@@ -108,11 +114,14 @@ int wtp_main(const char *ad)
 
 //	cw_log_debug_level=6; //conf_debug_level;
 
-	conf_dtls_psk="Tube";
-//	conf_dtls_psk=0;
+//	conf_dtls_psk="Tube";
 //	conf_sslkeyfilename="../../ssl/wtp.key";
 //	conf_sslcertfilename="../../ssl/wtp.crt";
-//	conf_sslkeypass="7u83";
+//	conf_dtls_psk=0;
+
+//	conf_sslkeyfilename="../../ssl/ac_cisco.key";
+//	conf_sslcertfilename="../../ssl/ac_cisco.pem";
+	conf_sslkeypass="Tube";
 
 
 

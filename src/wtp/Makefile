@@ -1,4 +1,5 @@
 include ../WtpConfig.mak
+include ../Macros.mak
 
 ifndef CC
 	CC=gcc
@@ -52,8 +53,8 @@ LIBS+=-lcapwap
 #LIBS+=-liw
 LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
-LIBS+=-lssl
-LIBS+=-lcrypto
+LIBS+=$(OPENSSLLIB)
+#LIBS+=-lcrypto
 #LIBS+=-lrt
 ifdef WITH_UCI
 LIBS+=-luci -lubox
@@ -73,6 +74,7 @@ CFLAGS += $(HA_INCS)
 #CFLAGS += -I../src
 #CFLAGS += -I../src/utils
 CFLAGS += -I../../src
+CFLAGS += -I$(OPENSSLINC)
 
 #CFLAGS += -I/usr/local/include
 

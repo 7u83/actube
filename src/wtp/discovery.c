@@ -67,10 +67,13 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 
 	struct discovery_info * di = (struct discovery_info*)priv;
 
+/*
 	if (di->conn->seqnum != cwrmsg->seqnum){
 		cw_log_debug0("Ignoring discovery respone, seqnum=%i, expected seqnum %i",cwrmsg->seqnum,di->conn->seqnum);
 		return 1;
 	}
+*/
+
 
 	struct ac_info acinfo;
 	memset(&acinfo,0,sizeof(acinfo));

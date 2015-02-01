@@ -13,6 +13,16 @@ extern char * conf_sslcertfilename;
 extern char * conf_sslkeypass;
 
 
+extern uint32_t conf_vendor_id;
+extern uint32_t * conf_bootloader_vendor_id;
+extern uint8_t * conf_bootloader_version;
+extern uint32_t * conf_software_vendor_id;
+extern uint8_t * conf_software_version;
+extern uint32_t * conf_hardware_vendor_id;
+extern uint8_t * conf_hardware_version;
+
+extern uint8_t * conf_model_no;
+extern uint8_t * cont_serial_no;
 
 
 
@@ -26,6 +36,42 @@ extern char * conf_control_port;
 
 extern uint8_t conf_macaddress[12];
 extern uint8_t conf_macaddress_len;
+
+
+#ifndef CONF_DEFAULT_VENDOR_ID
+	#define CONF_DEFAULT_VENDOR_ID CW_VENDOR_ID_FSF
+#endif
+
+#ifndef CONF_DEFAULT_HARDWARE_VENDOR_ID
+	#define CONF_DEFAULT_HARDWARE_VENDOR_ID CW_VENDOR_ID_FSF
+#endif
+
+#ifndef CONF_DEFAULT_SOFTWARE_VENDOR_ID
+	#define CONF_DEFAULT_SOFTWARE_VENDOR_ID CW_VENDOR_ID_FSF
+#endif
+
+#ifndef CONF_DEFAULT_BOOTLOADER_VENDOR_ID
+	#define CONF_DEFAULT_BOOTLOADER_VENDOR_ID CW_VENDOR_ID_FSF
+#endif
+
+#ifndef CONF_DEFAULT_MODEL_NO
+	#define CONF_DEFAULT_MODEL_NO "W-FAT"
+#endif
+
+#ifndef CONF_DEFAULT_SERIAL_NO
+	#define CONF_DEFAULT_SERIAL_NO "0000"
+#endif
+
+#ifndef CONF_DEFAULT_SOFTWARE_VERSION
+	#define CONF_DEFAULT_SOFTWARE_VERSION "0.1"
+#endif
+
+#ifndef CONF_DEFAULT_HARDWARE_VERSION
+	#define CONF_DEFAULT_HARDWARE_VERSION "0.1"
+#endif
+
+
+
 
 
 

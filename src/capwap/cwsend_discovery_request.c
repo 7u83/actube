@@ -28,7 +28,7 @@ int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioinfo,str
 	cwmsg_init(&cwmsg,buffer,CWMSG_DISCOVERY_REQUEST,conn_get_next_seqnum(conn),NULL /*radioinfo*/);
 	
 	cwmsg_addelem(&cwmsg,CWMSGELEM_DISCOVERY_TYPE,&wtpinfo->discovery_type,sizeof(uint8_t));
-//	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
+	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
 //	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));

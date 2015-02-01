@@ -50,21 +50,22 @@ void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo
 	hww[0]=0x1c;
 	hww[1]=0;
 
-	/* hardware subelem*/
-//	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION,
-//			wtpinfo->hardware_vendor_id,wtpinfo->hardware_version,2);
-	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION,
-			wtpinfo->hardware_vendor_id,hww,2);
-
-
 	/* software subelem*/
 	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION,
 			wtpinfo->software_vendor_id,wtpinfo->software_version,-1);
 
+	/* hardware subelem*/
+//	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION,
+//			wtpinfo->hardware_vendor_id,wtpinfo->hardware_version,2);
+
+/*	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION,
+			wtpinfo->hardware_vendor_id,hww,2);
+*/
+
 	/* bootloader subelem*/
-	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION,
+/*	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION,
 			wtpinfo->bootloader_vendor_id,wtpinfo->bootloader_version,-1);
 
-
+*/
 	cwmsg_addelem(cwmsg,CWMSGELEM_WTP_DESCRIPTOR,d,len);
 }
