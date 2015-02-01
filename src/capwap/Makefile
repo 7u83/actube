@@ -1,4 +1,5 @@
 include ../Config.mak
+include ../Macros.mak
 
 ifndef CC
 	CC=gcc
@@ -16,7 +17,8 @@ ifdef INCLUDE_DIR
 	XINCLUDE = -I $(INCLUDE_DIR)
 endif
 
-OPENSSLINC=../contrib/openssl-1.0.1i/include
+#OPENSSLINC=$(OPENSSLINC) 
+#../contrib/openssl-1.0.1i/include
 
 NAME=libcapwap.a
 
@@ -183,9 +185,10 @@ CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
 CFLAGS += -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
 	  -DWITH_DTLS \
-	  -I $(OPENSSLINC)\
 	  $(XINCLUDE)\
-		-Werror 
+	  -I $(OPENSSLINC)\
+	-Werror 
+
 
 #SRCS = $(OBJS:.o=.c) 
 
