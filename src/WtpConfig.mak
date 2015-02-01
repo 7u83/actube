@@ -1,5 +1,5 @@
 #
-
+USE_CONTRIB_OPENSSL=1
 CC=clang
 
 CFLAGS += -I/usr/include/libnl3
