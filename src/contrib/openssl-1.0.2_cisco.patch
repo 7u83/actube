@@ -1,0 +1,11 @@
+--- openssl-1.0.2/ssl/d1_lib.c.orig	2015-02-01 15:45:32.976093317 +0100
++++ openssl-1.0.2/ssl/d1_lib.c	2015-02-01 15:46:07.244260845 +0100
+@@ -369,7 +369,7 @@
+ 
+     /* If timer is not set, initialize duration with 1 second */
+     if (s->d1->next_timeout.tv_sec == 0 && s->d1->next_timeout.tv_usec == 0) {
+-        s->d1->timeout_duration = 1;
++        s->d1->timeout_duration = 3;
+     }
+ 
+     /* Set timeout to current time */
