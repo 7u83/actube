@@ -1,5 +1,5 @@
 
-#Define SSL Library: OPENSSL or GNUTLS
+#Define SSL Library: OPENSSL or GNUTLS (GNUTLS not supported for now)
 SSL_LIBRARY=OPENSSL
 
 # use openssl library in ../contrib/
