@@ -33,7 +33,12 @@ Creating SSL certificates to test AC-Tube and it's WTP's
    EXAMPLE:
      ./mkcert ac-cisco cisco
      will create the files ./certs/ac-cisco.pem and and ./certs/ac-cisco.key
-    
+
+   On a Cisco AP you might have to reset the config over terminal,
+   before it will connet. Therefor do in enabeled mode:
+     clear capwap private-config
+     reload
+
 
 3. Put these entries into  ac.conf  located in  the    ac directory, 
    so AC-Tube wilil use the certificates. If you have named your certificate
