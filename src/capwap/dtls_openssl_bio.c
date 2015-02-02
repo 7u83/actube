@@ -3,10 +3,10 @@
 #include "dtls_openssl.h"
 
 #include "conn.h"
+#include "cw_log.h"
 
 int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 {
-	printf("bio_write %p %d",data,len);
 
 	struct conn * conn = b->ptr;
 	uint8_t buffer[2048];
@@ -14,8 +14,7 @@ int dtls_openssl_bio_write(BIO *b, const char *data, int len)
 	memcpy(buffer+4,data,len);
 	int rc = conn->send_packet(conn,buffer,len+4);
 
-	printf("Bio wr rc = %d\n",rc);
-
+	cw_dbg(DBG_DTLS_BIO,"SSL BIO write: %d bytes, rc=%d, ptr: %p",len, rc, data);
 
 	if (rc<0)
 		return rc;
@@ -134,7 +133,7 @@ long dtls_openssl_bio_ctrl(BIO *b, int cmd, long num, void *ptr)
 
 		case BIO_CTRL_DGRAM_QUERY_MTU:
 		{
-			ret = 1300;
+			ret = 1400;
 			break;
 
 /*         	sockopt_len = sizeof(sockopt_val);
