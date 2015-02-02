@@ -42,6 +42,7 @@
 /* DTLS debugs */
 #define DBG_DTLS			0x10000000
 #define DBG_DTLS_DETAIL			0x20000000
+#define DBG_DTLS_BIO			0x40000000
 
 #define DBG_ALL				0xffffffff
 
