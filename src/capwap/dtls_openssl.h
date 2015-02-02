@@ -46,6 +46,7 @@ extern int dtls_openssl_bio_free(BIO *bio);
 extern const char * dtls_openssl_get_currnet_cipher();
 extern int dtls_openssl_log_error_queue(const char *txt);
 
+extern BIO_METHOD * dtls_openssl_bio_method();
 
 
 #endif
