@@ -32,17 +32,35 @@
 
 
 #ifdef WITH_CW_LOG_DEBUG
+static const char * ssl_version2str(int version)
+{
+	switch(version){
+		case SSL2_VERSION:
+			return "SSLv2";
+		case SSL3_VERSION:
+			return "SSLv3";
+		case TLS1_VERSION:
+			return "TLSv1";
+		case DTLS1_VERSION:
+			return "DTLSv1";
+//		case DTLS1_2_VERSION:
+//			return "DTLSv1.2";
+		
+	}
+	return "Version unknown";
+}
+
 static void dtls_debug_cb(int write_p,int version,int type, const void * buf,size_t len, SSL * ssl, void * arg)
 {
 	char buffer[200];
 	char * s = buffer;
 
 	if (write_p)
-		s += sprintf(s,"SSL MSG out: ");
+		s += sprintf(s,"SSL msg out: ");
 	else
-		s += sprintf(s,"SSL MSG in: ");
+		s += sprintf(s,"SSL msg in: ");
 	
-	s+=sprintf(s,"type = %d (%02X), version=%08x, len = %d",type,type,version,(int)len);
+	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
 	cw_dbg(DBG_DTLS_DETAIL,buffer);
 }
 #endif
@@ -101,7 +119,8 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 
 int dtls_openssl_init()
 {
-	cw_log_debug0("Init ssl library");
+	cw_dbg(DBG_CW_INFO,"Init ssl library");
+//	cw_log_debug0("Init ssl library");
 	SSL_load_error_strings();
 	return SSL_library_init();
 }
@@ -292,7 +311,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	/* enable or disable peer verfifying */
 	if (!conn->dtls_verify_peer){
-		cw_dbg(DBG_DTLS, "DTLS verify peer is turned off");
+		cw_dbg(DBG_DTLS, "DTLS - verify peer is turned off");
 		SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, dtls_verify_peer_callback);
 	}
 	else{
@@ -341,11 +360,11 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 
- rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
+// rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
 // if (rsa_512 == NULL)
 //     evaluate_error_queue();
 
- rsa_1024 = RSA_generate_key(1024,RSA_F4,NULL,NULL);
+// rsa_1024 = RSA_generate_key(1024,RSA_F4,NULL,NULL);
 // if (rsa_1024 == NULL)
 //   evaluate_error_queue();
 
