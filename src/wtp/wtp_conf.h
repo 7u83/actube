@@ -99,7 +99,7 @@ extern uint8_t conf_macaddress_len;
 #define CONF_DEFAULT_MAX_RETRANSMIT CAPWAP_MAX_RETRANSMIT
 #define CONF_DEFAULT_RETRANSMIT_INTERVAL CAPWAP_RETRANSMIT_INTERVAL
 
-#define CONF_DEFAULT_DEBUG_LEVEL -1
+#define CONF_DEFAULT_DEBUG_LEVEL 0
 
 #define CONF_DEFAULT_MTU_DISCOVERY 1
 
@@ -112,7 +112,7 @@ extern long conf_echo_interval;
 extern long conf_max_retransmit;
 extern long conf_retransmit_interval;
 
-extern long conf_debug_level;
+extern long conf_dbg_level;
 extern int conf_mtu_discovery;
 extern int conf_mtu;
 
