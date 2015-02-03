@@ -9,7 +9,6 @@ INT_CA_DIR=./intermediate-ca
 
 
 
-
 if [ ! -e $ROOT_CA_DIR ] 
 then
 	echo "Initializing root-ca"
@@ -30,15 +29,17 @@ fi
 mkrootca() 
 {
 	ROOT_SUBJ=$1
+	INT_SUBJ=$2
+	NAME=$3
 
-	INT_SUBJ=$ROOT_SUBJ
 
-	if [ ! -z $2 ] 
+	if [ ! -z $NAME ] 
 	then
-		PREF="$2-"
+		PREF="$NAME-"
 	fi
 
 
+	# Create a self-signed root CA
 	openssl req -nodes -new -x509 \
 		-sha1 \
 		-extensions v3_ca \
@@ -49,36 +50,41 @@ mkrootca()
 		-x509 \
 		-subj "$ROOT_SUBJ"
 
+	# Create a key for intermediate CA
 	openssl genrsa -out $INT_CA_DIR/${PREF}int-ca.key $KEYSIZE
 
+	# Create req for intermediate CA
 	openssl req -sha1 -new -key $INT_CA_DIR/${PREF}int-ca.key -out $INT_CA_DIR/${PREF}int-ca.csr \
 		-subj "$INT_SUBJ"
 
+	# Sign intermediate CA cert using previously created root CA
 	openssl ca -config openssl.cnf -batch -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
 		   -cert $ROOT_CA_DIR/${PREF}root-ca.crt \
 		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
 		   -out $INT_CA_DIR/${PREF}int-ca.crt
 
 
+
 }
 
 
 ROOT_SUBJ="/C=DE/ST=Berlin/L=Berlin/O=Cauwersin/CN=7u83.cauwersin.com/emailAddress=7u83@mail.ru"
-mkrootca "$ROOT_SUBJ" 
-
-ROOT_SUBJ="/C=DE/ST=Berlin/O=Cauwersin/CN=SCEP-CN=C1130-908d43460000/emailAddress=7u83@mail.ru"
-mkrootca "$ROOT_SUBJ" simple
+INT_SUBJ="$ROOT_SUBJ"
+mkrootca "$ROOT_SUBJ" "$INT_SUBJ"
 
 
 ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=CA-vWLC-AIR-CTVM-K9-080027949DE0/emailAddress=support@vwlc.com"
-mkrootca "$ROOT_SUBJ" cisco
-
+INT_SUBJ="$ROOT_SUBJ"
+mkrootca "$ROOT_SUBJ" "$INT_SUBJ" cisco-ac
 
 #ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=airespace Inc/CN=C1130-f866f2a342fc/emailAddress=support@airespace.com"
 #ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-f866f2a342fc/emailAddress=support@cisco.com"
 #ROOT_SUBJ="/ST=California/L=San Jose/C=US/O=Cisco Systems/CN=C1130-f866f2a342fc/emailAddress=support@cisco.com"
 #ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1200-c80aa9cd7fa4/emailAddress=support@cisco.com"
+#ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=Cisrot/emailAddress=support@cisco.com"
+
 ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
-mkrootca "$ROOT_SUBJ" cisco-ap
+INT_SUBJ="$ROOT_SUBJ"
+mkrootca "$ROOT_SUBJ" "$INT_SUBJ" cisco-ap
 
 
