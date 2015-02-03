@@ -107,7 +107,12 @@ int wtp_main(const char *ad)
 		return 1;
 	}
 
+	cw_dbg_opt_level = conf_dbg_level;
+
+
 	wtpconf_init();
+	
+	
 
 
 	
