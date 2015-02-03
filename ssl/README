@@ -26,12 +26,12 @@ Creating SSL certificates to test AC-Tube and it's WTP's
    folder ./certs
    named cert-name.pem and cert-name.key.
    
-   If you chose 'cisco' as type, the certificate will be
+   If you chose 'cisco-ap' as type, the certificate will be
    accepted by a Cisco WTP when used in AC-Tube. The firmare
    on Cisco's AP must be at least 7.3.
 
    EXAMPLE:
-     ./mkcert ac-cisco cisco
+     ./mkcert ac-cisco cisco-ap
      will create the files ./certs/ac-cisco.pem and and ./certs/ac-cisco.key
 
    On a Cisco AP you might have to reset the config over terminal,
