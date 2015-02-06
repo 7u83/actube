@@ -203,7 +203,7 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 		rc = SSL_CTX_use_PrivateKey_file(d->ctx,conn->dtls_key_file,SSL_FILETYPE_PEM);
 		if (!rc){
 
-			dtls_openssl_log_error(0,rc,"DTLS certificate errro:");
+			dtls_openssl_log_error(0,rc,"DTLS certificate error:");
 			dtls_openssl_data_destroy(d);	
 			return 0;
 		}
