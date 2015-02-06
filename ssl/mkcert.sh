@@ -62,7 +62,7 @@ fi
 if [ "$TYPE" = "cisco-ac" ] 
 then
 	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=DEVICE-AC-TUBE/emailAddress=7u83@mail.ru"
-	createcert $SUBJ
+	createcert "$SUBJ"
 fi
 
 
