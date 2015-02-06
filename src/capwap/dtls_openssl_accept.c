@@ -16,7 +16,6 @@
 
 */
 
-
 #include <openssl/err.h>
 
 #include "conn.h"
@@ -24,35 +23,21 @@
 #include "dtls_openssl.h"
 #include "cw_log.h"
 
-
-static BIO_METHOD bio_methods = {
-	BIO_TYPE_DGRAM,
-	"cw packet",
-	dtls_openssl_bio_write,
-	dtls_openssl_bio_read,
-	dtls_openssl_bio_puts,
-	NULL, 			// dgram_gets
-	dtls_openssl_bio_ctrl,
-	dtls_openssl_bio_new,
-	dtls_openssl_bio_free,
-	NULL,
-};
-
-
-int dtls_openssl_accept(struct conn * conn)
+int dtls_openssl_accept(struct conn *conn)
 {
 	if (!conn->dtls_data)
-		conn->dtls_data = dtls_openssl_data_create(conn,DTLSv1_server_method(),&bio_methods);
+		conn->dtls_data =
+		    dtls_openssl_data_create(conn, DTLSv1_server_method(),
+					     dtls_openssl_bio_method());
 
-	struct dtls_openssl_data * d = (struct dtls_openssl_data*)conn->dtls_data;
+	struct dtls_openssl_data *d = (struct dtls_openssl_data *) conn->dtls_data;
 	if (!d)
 		return 0;
 
-	int i,rc; 
-	for (i=0; i<conn->wait_dtls; i++){	
+	int i, rc;
+	for (i = 0; i < conn->wait_dtls; i++) {
 		rc = SSL_accept(d->ssl);
-		if (rc == 1)
-		{
+		if (rc == 1) {
 			conn->read = dtls_openssl_read;
 			conn->write = dtls_openssl_write;
 			return 1;
@@ -62,8 +47,7 @@ int dtls_openssl_accept(struct conn * conn)
 		if (rc)
 			return 0;
 	}
-	cw_log(LOG_ERR,"DTLS Error: Timeout while establishing session with %s.",sock_addr2str(&conn->addr));
+	cw_log(LOG_ERR, "DTLS Error: Timeout while establishing session with %s.",
+	       sock_addr2str(&conn->addr));
 	return 0;
 }
-
-
