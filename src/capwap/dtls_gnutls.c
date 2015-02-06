@@ -19,9 +19,11 @@
 
 #include <gnutls/gnutls.h>
 
+#include "cw_log.h"
 
 int dtls_gnutls_init()
 {
+	cw_dbg(DBG_CW_INFO,"Init SSL library - using GnuTLS");
 	gnutls_global_init();
 	return 1;
 }
