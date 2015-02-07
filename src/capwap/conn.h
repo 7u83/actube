@@ -28,7 +28,7 @@
 #include "fragman.h"
 #include "cwmsg.h"
 #include "cwrmsg.h"
-
+#include "wtpinfo.h"
 
 struct conn{
 	int sock;
@@ -182,6 +182,7 @@ struct image_data;
 
 extern void conn_prepare_request(struct conn * conn, int type);
 extern int conn_prepare_image_data_request(struct conn * conn, struct image_data *, struct image_identifier *id );
+extern void conn_detect_capwap(struct conn * conn, struct wtpinfo * wtpinfo);
 
 #define conn_is_error(conn) (conn->dtls_error)
 

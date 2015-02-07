@@ -41,7 +41,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 	int i;
 	if (ncrypt == 0 ){
 		/* non-conform */
-		cw_log_debug1("Non-standard-conform WTP descriptor detected (See RFC 5415)");
+		cw_dbg(DBG_CW_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
 		if (!cq) 
 			i=3;
 		else
@@ -54,7 +54,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 	do {
 		if (i+8>len)
 		{
-			cw_log_debug1("WTP descriptor subelement to long, length=%d>%d",i+8,len);
+			cw_dbg(DBG_CW_MSG_ERR,"WTP descriptor subelement to long, length=%d>%d",i+8,len);
 			return -1;
 		}
 
@@ -66,11 +66,11 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 		i+=8;
 
 		if (sublen+i>len){
-			cw_log_debug1("WTP descriptor subelement too long, length = %d",sublen);
+			cw_dbg(DBG_CW_MSG_ERR,"WTP descriptor subelement too long, length = %d",sublen);
 			return -1;
 		}
 
-		cw_log_debug2("Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
+		cw_dbg(DBG_CW_MSG,"Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
 	
 		switch(subtype){
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION:
@@ -89,7 +89,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 				wtpinfo->bootloader_version_len=sublen;
 				break;
 			default:
-				cw_log_debug1("Unknown WTP descriptor subelement, type = %d",subtype);
+				cw_dbg(DBG_CW_MSG_ERR,"Unknown WTP descriptor subelement, type = %d",subtype);
 				break;
 		}
 		i+=sublen;
@@ -103,7 +103,7 @@ int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t 
 {
 	int rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,0);
 	if (rc==-1){
-		cw_log_debug2("Bad wtp descriptor, trying cisco hack");
+		cw_dbg(DBG_CW_RFC,"Bad wtp descriptor, trying cisco hack");
 		rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,1);
 	}
 

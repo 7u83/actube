@@ -30,7 +30,7 @@ int cw_readelem_ieee80211_wtp_radio_info(void *dst,int type,uint8_t *msgelem, in
 		return 0;
 
 	if (len!=5){
-		cw_log_debug0("Discarding msgelem IEEE80211_WTP_RADIO_INFO, wrong size, len=%d\n",len);
+		cw_dbg(DBG_CW_MSG_ERR,"Discarding msgelem IEEE80211_WTP_RADIO_INFO, wrong size, len=%d\n",len);
 		return 0;
 	}
 
