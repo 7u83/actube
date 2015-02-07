@@ -22,11 +22,10 @@
 
 #include "conn.h"
 
-int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len)
+static int conn_q_recv_packet_(struct conn * conn, uint8_t * buffer,int len,int peek)
 {
 	if ( !conn->cur_packet)
 	{
-/*		while ((conn->cur_packet = conn_q_get_packet(conn)) == 0){*/
 		if ((conn->cur_packet = conn_q_get_packet(conn)) == 0){
 			errno = EAGAIN;
 			return -1;
@@ -38,14 +37,35 @@ int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len)
 	if (conn->cur_packet_len > len )
 	{
 		memcpy(buffer,conn->cur_packet+conn->cur_packet_pos,len);
+		if (peek)
+			return len;
+
 		conn->cur_packet_pos+=len;
 		conn->cur_packet_len-=len;
+		if (conn->cur_packet_len==0){
+			free(conn->cur_packet);
+			conn->cur_packet=0;
+		}	
 		return len;
-
 	}
 
 	memcpy(buffer,conn->cur_packet+conn->cur_packet_pos,conn->cur_packet_len);
+	if (peek)
+		return conn->cur_packet_len;
+
 	free (conn->cur_packet);
 	conn->cur_packet=0;
 	return conn->cur_packet_len;	
 }
+
+int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len)
+{
+	return conn_q_recv_packet_(conn,buffer,len,0);
+}
+
+int conn_q_recv_packet_peek(struct conn * conn, uint8_t * buffer,int len)
+{
+	return conn_q_recv_packet_(conn,buffer,len,1);
+}
+
+
