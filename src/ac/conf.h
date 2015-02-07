@@ -102,6 +102,8 @@ extern char * conf_sslcertfilename;
 extern char * conf_sslkeyfilename;
 extern char * conf_sslkeypass;
 extern char * conf_dtls_psk;
+extern int conf_dtls_verify_peer;
+char * conf_sslcipher;
 
 
 
@@ -115,6 +117,7 @@ extern int conf_bcast_addrs_len;
 extern long conf_debug_level;
 extern uint8_t conf_macaddress[12];
 extern uint8_t conf_macaddress_len;
-extern int conf_dtls_verify_peer;
+
+
 
 #endif
