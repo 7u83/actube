@@ -139,13 +139,15 @@ CAPWAPOBJS= \
 #	   process_msgelems.o \
 
 
-DTLSOBJS= dtls_openssl.o	 \
-	 dtls_openssl_accept.o \
-	 dtls_openssl_connect.o \
-	 dtls_openssl_get_cipher.o \
-	 dtls_openssl_bio.o \
-	 dtls_gnutls.o \
-#	 dtls_gnutls_accept.o \
+DTLSOBJS= \
+	dtls_openssl.o	 \
+	dtls_openssl_accept.o \
+	dtls_openssl_connect.o \
+	dtls_openssl_get_cipher.o \
+	dtls_openssl_bio.o \
+	dtls_gnutls.o \
+	dtls_gnutls_accept.o \
+	dtls_bio.o 
 	
 
 CONNOBJS= conn.o \
