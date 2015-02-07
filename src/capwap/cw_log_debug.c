@@ -60,6 +60,8 @@ static void cw_log_debug2_(const char *format, ...)
 	closelog();
 }
 
+
+
 int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 		       const char *format, ...)
 {

@@ -127,7 +127,7 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 
 static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 {
-	if (!cw_dbg_is_level(DBG_CW_PKT))
+	if (!cw_dbg_is_level(DBG_CW_PKT_OUT))
 		return;
 
 	/* print the header */
@@ -136,7 +136,7 @@ static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 
 
 	if (!cw_dbg_is_level(DBG_CW_PKT_DMP)){
-		cw_dbg(DBG_CW_PKT,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
+		cw_dbg(DBG_CW_PKT_OUT,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
 		return;
 
 	}

@@ -1,6 +1,7 @@
 
 #Define SSL Library: OPENSSL or GNUTLS (GNUTLS not supported for now)
-SSL_LIBRARY=OPENSSL
+SSL_LIBRARY=GNUTLS
+#SSL_LIBRARY=OPENSSL
 
 # use openssl library in ../contrib/
 USE_CONTRIB_OPENSSL=1
