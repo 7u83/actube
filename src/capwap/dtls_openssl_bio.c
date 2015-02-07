@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include "dtls_openssl.h"
+#include "dtls.h"
 
 #include "conn.h"
 #include "cw_log.h"
@@ -28,18 +29,7 @@ int dtls_openssl_bio_write(BIO * b, const char *data, int len)
 {
 
 	struct conn *conn = b->ptr;
-	uint8_t buffer[2048];
-	*((uint32_t *) buffer) = htonl(1 << 24);
-	memcpy(buffer + 4, data, len);
-	int rc = conn->send_packet(conn, buffer, len + 4);
-
-
-	cw_dbg(DBG_DTLS_BIO, "SSL BIO write: %d bytes, rc=%d, ptr: %p", len, rc, data);
-	cw_dbg_dmp(DBG_DTLS_BIO_DMP,(uint8_t*)data,len,"Dump ...");
-
-	if (rc < 0)
-		return rc;
-	return rc - 4;
+	return dtls_bio_write(conn,data,len);
 }
 
 
@@ -47,35 +37,7 @@ int dtls_openssl_bio_read(BIO * b, char *out, int maxlen)
 {
 
 	struct conn *conn = b->ptr;
-	struct dtls_openssl_data *dtls_data = conn->dtls_data;
-	if (dtls_data->len == 0) {
-		int len = conn->recv_packet(conn, dtls_data->buffer, 2048);
-/*		if (len == -1){
-			printf ("-1 ERRRRRRRRRRRRRRRRR %s\n",strerror(errno));
-		}
-*/
-		if (len < 4)
-			return 0;
-		dtls_data->len = len - 4;
-		dtls_data->pos = 4;
-	}
-
-	if (dtls_data->len > maxlen) {
-		memcpy(out, dtls_data->buffer + dtls_data->pos, maxlen);
-		dtls_data->len -= maxlen;
-		dtls_data->pos += maxlen;
-		cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), remain %d", maxlen,dtls_data->len);
-		cw_dbg_dmp(DBG_DTLS_BIO_DMP,(uint8_t*)out,maxlen,"Dump...");
-
-		return maxlen;
-
-	}
-	memcpy(out, dtls_data->buffer + dtls_data->pos, dtls_data->len);
-	int ret = dtls_data->len;
-	dtls_data->len = 0;
-	cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), remain %d", ret,dtls_data->len);
-	cw_dbg_dmp(DBG_DTLS_BIO_DMP,(uint8_t*)out,ret,"Dump...");
-	return ret;
+	return dtls_bio_read(conn,out,maxlen);
 }
 
 
