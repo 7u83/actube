@@ -280,7 +280,7 @@ void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 	int version = LWTH_GET_VERSION(m);
 
 	if (version != LW_VERSION){
-		cw_log_debug1("Discarding LWAPP packet, wrong verson");
+//		cw_log_debug1("Discarding LWAPP packet, wrong verson");
 		return;
 	}
 
@@ -288,7 +288,7 @@ void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 	printf ("LEN = %d\n",l);
 
 	if (l+12 != len){
-		cw_log_debug1("Discarding LWAPP packet, wrong length");
+	//	cw_log_debug1("Discarding LWAPP packet, wrong length");
 		return;
 	}
 
@@ -341,9 +341,11 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 #ifdef WITH_CW_LOG_DEBUG
 	char str[100];
 	sock_addrtostr(addr,str,100);
-	cw_dbg(DBG_CW_PKT_IN,"Received packet from %s, len = %i, via %s\n",str,len,
+	cw_dbg(DBG_CW_PKT_IN,"Received packet from %s, len = %i, via %s\n",sock_addr2str(addr),len,
 			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
-	cw_log_debug2_dump(buffer,len,"Packet data for packet, recevied from %s",str);
+
+	cw_dbg_dmp(DBG_CW_PKT_DMP,buffer,len,"Dump ...");
+//	cw_dbg_dmp(buffer,len,"Packet data for packet, recevied from %s",str);
 #endif	
 
 	switch (socklist[index].ac_proto){

@@ -11,7 +11,7 @@ int wtpinfo_readelem_discovery_type(struct wtpinfo * wtpinfo, int type, uint8_t 
 		return 0;
 
 	if (len!=1){
-		cw_log_debug0("Discarding WTP_DISCOVERY_TYPE msgelem, wrong size, type=%d,len=%d",type,len);
+		cw_dbg(DBG_CW_MSG_ERR,"Discarding WTP_DISCOVERY_TYPE msgelem, wrong size, type=%d,len=%d",type,len);
 		return 1;
 	}
 

@@ -29,14 +29,14 @@
 
 int conn_send_packet(struct conn * conn, const uint8_t * buffer, int len)
 {
-
+/*
 #ifdef WITH_CW_LOG_DEBUG
 	char addrstr[64];
 	sock_addrtostr((struct sockaddr*)&conn->addr,addrstr,64);
 	cw_log_debug1("Sending packet to %s, len=%d",addrstr,len);
 	cw_log_debug2_dump(buffer,len,"Packet data for packet, sent to %s",addrstr);
 #endif
-	
+*/	
 	int n;
 	while((n=sendto( conn->sock, buffer, len, 0, 
 				(struct sockaddr*)&conn->addr, 

@@ -88,6 +88,7 @@ extern int cw_dbg_opt_level;
 #endif
 
 #ifdef WITH_CW_LOG_DEBUG
+/*
 	#define cw_log_debug0(...) cw_log_debug_cbs[0](__VA_ARGS__)
 	#define cw_log_debug1(...) cw_log_debug_cbs[1](__VA_ARGS__)
 	#define cw_log_debug2(...) cw_log_debug_cbs[2](__VA_ARGS__)
@@ -96,7 +97,7 @@ extern int cw_dbg_opt_level;
 	#define cw_log_debug1_dump(str,len,...) cw_log_debug_dump_(1,str,len,__VA_ARGS__)
 	#define cw_log_debug2_dump(str,len,...) cw_log_debug_dump_(2,str,len,__VA_ARGS__)
 	#define cw_log_debug(level,...) cw_log_debug_cbs[level](__VA_ARGS__)
-
+*/
 
 	#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
 	#define cw_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
@@ -110,7 +111,7 @@ extern int cw_dbg_opt_level;
 	#define cw_dbg(...)
 
 
-	#define cw_log_debug0(...) 
+/*	#define cw_log_debug0(...) 
 	#define cw_log_debug1(...) 
 	#define cw_log_debug2(...) 
 	#define cw_log_debug(...)
@@ -118,7 +119,7 @@ extern int cw_dbg_opt_level;
 	#define cw_log_debug0_dump(level,str,len)
 	#define cw_log_debug1_dump(level,str,len) 
 	#define cw_log_debug2_dump(level,str,len) 
-
+*/
 	#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
 
 #endif

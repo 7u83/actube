@@ -26,7 +26,7 @@ static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 {
 
 	struct ac_info * acinfo = (struct ac_info *)a;
-	cw_log_debug1("Process join resp msgelem, type=%d, len=%d\n",type,len);
+//	cw_log_debug1("Process join resp msgelem, type=%d, len=%d\n",type,len);
 
 	if (acinfo_readelem_ecn_support(acinfo,type,msgelem,len))
 		return 1;
@@ -50,7 +50,7 @@ static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 
 void cwread_join_response(struct ac_info * acinfo, uint8_t * msg, int len)
 {
-	cw_log_debug1("Reading join response");
+//	cw_log_debug1("Reading join response");
 	cw_foreach_msgelem(msg,len,acinfo_readelem_join_resp,acinfo);
 }
 

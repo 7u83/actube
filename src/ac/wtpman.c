@@ -38,10 +38,12 @@
 #define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
 
-void conn_handle_echo_request(struct conn * conn)
+int conn_handle_echo_request(void * d)
 {
+	struct conn * conn = (struct conn *)d;
 	struct cwrmsg * cwrmsg = &conn->cwrmsg;
 	cwsend_echo_response(conn,cwrmsg->seqnum,0);
+	return 0;
 }
 
 
@@ -710,7 +712,7 @@ exit(0);
 			if (msg_counter < CAPWAP_ECHO_INTERVAL *2 ) 
 				continue;
 			
-			cw_log_debug0("WTP died");
+		//	cw_log_debug0("WTP died");
 			wtpman_remove(wtpman);
 			return;
 		}

@@ -53,7 +53,7 @@ int cw_rand(uint8_t*dst, int len)
 	}
 
 	if (l<len){
-		cw_log_debug2("Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
+		cw_dbg(DBG_CW_INFO,"Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
 		return cw_pseudo_rand(dst,len);
 	}
 	

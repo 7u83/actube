@@ -30,7 +30,7 @@ int wtpinfo_readelem_wtp_radio_info(struct wtpinfo * wtpinfo,int type,uint8_t *m
 		return 0;
 
 	if (len!=5){
-		cw_log_debug0("Discarding msgelem WTP_RADIO_INFO, wrong size, len=%d\n",len);
+		cw_dbg(DBG_CW_MSG_ERR,"Discarding msgelem WTP_RADIO_INFO, wrong size, len=%d\n",len);
 		return -1;
 	}
 
