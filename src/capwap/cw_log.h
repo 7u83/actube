@@ -47,7 +47,7 @@
 #define DBG_DTLS_BIO_DMP		0x80000000
 
 #define DBG_ALL				0xffffffff
-#define DBG_CW_PKT			(DBG_CW_PKT_IN | DBG_CW_PKT_OUT)
+#define DBG_CW_PKT_INOUT		(DBG_CW_PKT_IN | DBG_CW_PKT_OUT)
 
 
 #define DBG_DETAIL_LINE_NUMBERS		0x00000001	
