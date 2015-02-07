@@ -19,12 +19,17 @@
 #ifndef __DTLS_GNUTLS_H
 #define __DTLS_GNUTLS_H
 
+#include <gnutls/gnutls.h>
+
 #include "conn.h"
+
 
 extern int dtls_gnutls_init();
 extern int dtls_gnutls_accept(struct conn * conn);
 extern const char * dtls_gnutls_get_cipher(struct conn * conn);
 
+extern ssize_t dtls_gnutls_bio_read(gnutls_transport_ptr_t b, void *out, size_t maxlen);
+extern ssize_t dtls_gnutls_bio_write(gnutls_transport_ptr_t b, const void *data, size_t len);
 
 #endif
 
