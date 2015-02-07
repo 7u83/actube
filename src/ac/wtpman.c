@@ -451,15 +451,19 @@ static int wtpman_establish_dtls(void *arg)
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	
 	/* setup cipher */
-	wtpman->conn->dtls_cipher=CAPWAP_CIPHER;
+	wtpman->conn->dtls_cipher=conf_sslcipher;
 
 	/* setup DTSL certificates */
 	int dtls_ok=0;
 	if (conf_sslkeyfilename && conf_sslcertfilename){
+
+
 		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
 		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
 		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
+		cw_dbg(DBG_DTLS,"DTLS - Using key file %s",wtpman->conn->dtls_key_file);
+		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",wtpman->conn->dtls_cert_file);
 		dtls_ok=1;
 	}
 
