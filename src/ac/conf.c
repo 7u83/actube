@@ -33,7 +33,7 @@ uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
 
 
-const const char * conf_acname = NULL; 
+const char * conf_acname = NULL; 
 int conf_acname_len = 0;
 
 char * conf_acid = NULL;
@@ -531,62 +531,8 @@ static int conf_read_dbg_level(cfg_t *cfg)
 
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
-		if (!strcmp(str,"info")){
-			cw_dbg_opt_level|=DBG_CW_INFO;
-			continue;
-		}
 
-		if (!strcmp(str,"msg")){
-			cw_dbg_opt_level|=DBG_CW_MSG;
-			continue;
-		}
-		if (!strcmp(str,"msgelem")){
-			cw_dbg_opt_level|=DBG_CW_MSGELEM;
-			continue;
-		}
-		if (!strcmp(str,"msgelem_dmp")){
-			cw_dbg_opt_level|=DBG_CW_MSGELEM_DMP;
-			continue;
-		}
-		if (!strcmp(str,"rfc")){
-			cw_dbg_opt_level|=DBG_CW_RFC;
-			continue;
-		}
-		if (!strcmp(str,"pkt")){
-			cw_dbg_opt_level|=DBG_CW_PKT;
-			continue;
-		}
-		if (!strcmp(str,"pkt_dmp")){
-			cw_dbg_opt_level|=DBG_CW_PKT_DMP;
-			continue;
-		}
-
-		if (!strcmp(str,"pkt_err")){
-			cw_dbg_opt_level|=DBG_CW_PKT_ERR;
-			continue;
-		}
-		if (!strcmp(str,"msg_err")){
-			cw_dbg_opt_level|=DBG_CW_MSG_ERR;
-			continue;
-		}
-
-
-		if (!strcmp(str,"dtls")){
-			cw_dbg_opt_level|=DBG_DTLS;
-			continue;
-		}
-
-		if (!strcmp(str,"all")){
-			cw_dbg_opt_level|=DBG_ALL;
-			continue;
-		}
-
-		if (!strcmp(str,"err")){
-			cw_dbg_opt_level|=DBG_ERR;
-			continue;
-		}
-
-
+		cw_dbg_opt_level|=cw_log_str2dbglevel(str);
 
 	}
 	return 1;

@@ -878,11 +878,11 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 void wtpman_start(struct wtpman * wtpman,int dtlsmode)
 {
 	if ( dtlsmode ){
-		cw_log_debug1("Starting wtpman in dtls mode");
+		cw_dbg(DBG_CW_INFO,"Starting wtpman in dtls mode");
 		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run, (void *) wtpman);
 	}
 	else{
-		cw_log_debug1("Starting wtpman in non-dtls mode");
+		cw_dbg(DBG_CW_INFO,"Starting wtpman in non-dtls mode");
 		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run_discovery, (void *) wtpman);
 	}
 }
