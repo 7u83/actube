@@ -145,6 +145,8 @@ extern void conn_destroy(struct conn * conn);
 
 uint8_t * conn_q_get_packet(struct conn * conn);
 extern int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len);
+extern int conn_q_recv_packet_peek(struct conn * conn, uint8_t * buffer,int len);
+
 
 extern int conn_recv_packet(struct conn* conn,uint8_t *buf,int len);
 
