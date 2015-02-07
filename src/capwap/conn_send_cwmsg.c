@@ -81,7 +81,7 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 		{
 			char h[200];
 			hdr_print(h,ptr,mtu);
-			cw_dbg(DBG_CW_PKT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
+			cw_dbg(DBG_CW_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 		}
 		cw_dbg_dmp(DBG_CW_PKT_DMP,ptr,mtu,"Sending packet ...");
 		
@@ -124,7 +124,7 @@ int conn_send_cwmsg(struct conn * conn, struct cwmsg * cwmsg)
 	{
 		char h[1024];
 		hdr_print(h,ptr,msglen-fragoffset*8+hlen);
-		cw_dbg(DBG_CW_PKT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
+		cw_dbg(DBG_CW_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 	}
 
 
