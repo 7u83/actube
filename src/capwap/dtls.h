@@ -37,6 +37,9 @@
 
 #endif
 
+extern int dtls_bio_read(struct conn *conn, char *out, int maxlen);
+extern int dtls_bio_write(struct conn * conn, const char *data, int len);
+
 
 #endif
 
