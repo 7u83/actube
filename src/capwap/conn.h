@@ -101,6 +101,10 @@ struct conn{
 	uint8_t dtls_cookie[8];
 	int dtls_verify_peer;
 
+	uint8_t dtls_buffer[2048];
+	int dtls_buffer_len;
+	int dtls_buffer_pos;
+
 	/* capwap timers */
 	int retransmit_interval;
 	int max_retransmit;
