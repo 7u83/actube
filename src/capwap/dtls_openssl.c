@@ -199,7 +199,7 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
 
 
-		cw_dbg(DBG_DTLS,"DTLS - Using key file %s",conn->dtls_key_file);
+	/*	cw_dbg(DBG_DTLS,"DTLS - Using key file %s",conn->dtls_key_file); */
 		rc = SSL_CTX_use_PrivateKey_file(d->ctx,conn->dtls_key_file,SSL_FILETYPE_PEM);
 		if (!rc){
 
@@ -208,7 +208,7 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 			return 0;
 		}
 
-		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",conn->dtls_cert_file);
+	/*	cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",conn->dtls_cert_file); */
 
 /*		rc = SSL_CTX_use_certificate_file(d->ctx,conn->dtls_cert_file,SSL_FILETYPE_PEM);*/
 
