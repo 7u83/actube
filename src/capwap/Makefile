@@ -38,7 +38,8 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
 	cw_log_tofile.o \
-        cw_log_tosyslog.o 	
+        cw_log_tosyslog.o \
+	cw_log_str2dbglevel.o
 
 
 WTPINFOOBJS = wtpinfo_set_location.o \
@@ -147,7 +148,8 @@ DTLSOBJS= \
 	dtls_openssl_bio.o \
 	dtls_gnutls.o \
 	dtls_gnutls_accept.o \
-	dtls_bio.o 
+	dtls_bio.o \
+	dtls_gnutls_bio.o
 	
 
 CONNOBJS= conn.o \
