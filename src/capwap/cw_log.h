@@ -29,11 +29,12 @@
 #define DBG_CW_INFO			0x00000008
 #define DBG_CW_RFC			0x00000010
 #define DBG_CW_STRICT			0x00000010
-#define DBG_CW_PKT			0x00000020
-#define DBG_CW_PKT_DMP			0x00000040
-#define DBG_CW_PKT_DTL			0x00000080
-#define DBG_CW_PKT_ERR			0x00000100
-#define DBG_CW_MSG_ERR			0x00000200
+#define DBG_CW_PKT_IN			0x00000020
+#define DBG_CW_PKT_OUT			0x00000040
+#define DBG_CW_PKT_DMP			0x00000080
+#define DBG_CW_PKT_DTL			0x00000100
+#define DBG_CW_PKT_ERR			0x00000200
+#define DBG_CW_MSG_ERR			0x00000400
 
 /* drive specific debugs */
 #define DBG_DRV				0x00010000
@@ -46,6 +47,7 @@
 #define DBG_DTLS_BIO_DMP		0x80000000
 
 #define DBG_ALL				0xffffffff
+#define DBG_CW_PKT			(DBG_CW_PKT_IN | DBG_CW_PKT_OUT)
 
 
 #define DBG_DETAIL_LINE_NUMBERS		0x00000001	
@@ -138,6 +140,7 @@ extern void cw_dbg_missing_mand_elems_(struct conn * conn,int msgtyoe, int * man
 
 
 extern int cw_log_debug_level;
+extern int cw_log_str2dbglevel(const char * str);
 
 
 extern const char * cw_log_name;
