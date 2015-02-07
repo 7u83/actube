@@ -66,6 +66,7 @@ int conf_ac_ips_len;
 char * conf_sslcertfilename=NULL;
 char * conf_sslkeyfilename=NULL;
 char * conf_sslkeypass=NULL;
+char * conf_sslcipher=NULL;
 char * conf_dtls_psk=NULL;
 
 //char * conf_ac_hardware_version=NULL;
@@ -624,7 +625,9 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("ssl_cert",&conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),
 		CFG_SIMPLE_STR("ssl_key_pass",&conf_sslkeypass),
+		CFG_SIMPLE_STR("ssl_cipher",&conf_sslcipher),
 		CFG_SIMPLE_STR("dtls_psk",&conf_dtls_psk),
+		
 		CFG_SIMPLE_BOOL("dtls_verify_peer",&conf_dtls_verify_peer),
 
 		CFG_SIMPLE_BOOL("ipv4",&conf_ipv4),
@@ -691,6 +694,8 @@ int read_config(const char * filename){
 	if (!init_dtls())
 		return 0;
 
+	if (!conf_sslcipher)
+		conf_sslcipher=CAPWAP_CIPHER;
 
 
 	init_listen_addrs();
