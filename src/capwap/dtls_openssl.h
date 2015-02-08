@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include <ssl.h>
+#include <openssl/ssl.h>
 
 #include "conn.h"
 

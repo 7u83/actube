@@ -22,11 +22,20 @@
 #include "dtls.h"
 #include "dtls_gnutls.h"
 
+
+#include <stdio.h>
+#include <errno.h>
+
 ssize_t dtls_gnutls_bio_read(gnutls_transport_ptr_t b, void *out, size_t maxlen)
 {
-
 	struct conn *conn = (struct conn *)b;
-	return dtls_bio_read(conn,out,maxlen);
+	int rc = dtls_bio_read(conn,out,maxlen);
+	if (rc<=0){
+		errno = EAGAIN;
+		return -1;
+	}
+	errno=0;
+	return rc;
 }
 
 ssize_t dtls_gnutls_bio_write(gnutls_transport_ptr_t b, const void *data, size_t len)

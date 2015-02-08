@@ -1,14 +1,21 @@
 
-OPENSSL_VERSION=openssl-1.0.1i
-#OPENSSL_VERSION=openssl-1.0.1l
-#OPENSSL_VERSION=openssl-1.0.2
-
 ifeq ($(USE_CONTRIB_OPENSSL),1)
-OPENSSLLIB=../contrib/$(OPENSSL_VERSION)/libssl.a ../contrib/$(OPENSSL_VERSION)/libcrypto.a -ldl
-OPENSSLINC=../contrib/$(OPENSSL_VERSION)/include/openssl
+OPENSSL_LIBS=../contrib/$(OPENSSL_VERSION)/libssl.a ../contrib/$(OPENSSL_VERSION)/libcrypto.a -ldl
+OPENSSL_CFLAGS=../contrib/$(OPENSSL_VERSION)/include/
 else
-OPENSSLLIB=-lssl
-OPENSSLINC=openssl
+OPENSSL_LDFLAGS=-lssl -lcrypto -ldl
+OPENSSL_CFLAGS=
 endif
 
+ifeq ($(USE_CONTRIB_GNUTLS),1)
+GNUTLS_CFLAGS=-I../contrib/gnutls-${GNUTLS_VERSION}/lib/includes
+#GNUTLS_LIBS=-lnettle -lgmp ../contrib/gnutls-${GNUTLS_VERSION}/lib/.libs/libgnutls.a 
+GNUTLS_LIBS=-lgmp -lgnutls -lnettle
 
+GNUTLS_LDFLAGS=-L../contrib/gnutls-${GNUTLS_VERSION}/lib/.libs/ 
+else
+GNUTLS_CFLAGS=
+GNUTLS_LIBS=
+GNUTLS_LDFLAGS=-lgnutls -nettle -lgmp
+
+endif

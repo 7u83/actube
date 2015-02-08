@@ -46,10 +46,10 @@ void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo
 	len+=3;
 */
 
-	uint8_t hww[2];
+/*	uint8_t hww[2];
 	hww[0]=0x1c;
 	hww[1]=0;
-
+*/
 	/* software subelem*/
 	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION,
 			wtpinfo->software_vendor_id,wtpinfo->software_version,-1);

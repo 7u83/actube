@@ -23,7 +23,8 @@
 
 int dtls_gnutls_init()
 {
-	cw_dbg(DBG_CW_INFO,"Init SSL library - using GnuTLS");
+	cw_dbg(DBG_CW_INFO,"Init SSL library - using GnuTLS %s",gnutls_check_version(NULL));
 	gnutls_global_init();
+
 	return 1;
 }

@@ -55,8 +55,7 @@ int main (int argc, const char * argv[])
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");
-	cw_log_debug_level=conf_debug_level;
-
+//	cw_log_debug_level=conf_debug_level;
 
 	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);

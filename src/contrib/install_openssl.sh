@@ -5,7 +5,7 @@ VERSION="1.0.1i"
 #VERSION="1.0.1l"
 #VERSION="1.0.2"
 
-if [ ! -e openssl-${VERSION} ]
+if [ ! -e openssl-${VERSION}.tar.gz ]
 then
 wget https://www.openssl.org/source/openssl-${VERSION}.tar.gz
 fi
