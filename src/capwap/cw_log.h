@@ -146,4 +146,15 @@ extern int cw_log_str2dbglevel(const char * str);
 
 extern const char * cw_log_name;
 
+struct cw_dbg_cfgstrs
+{
+	const char *name;
+	int level;
+}; 
+
+extern struct cw_dbg_cfgstrs cw_dbg_cfgstrs[];
+
+
+
+
 #endif 

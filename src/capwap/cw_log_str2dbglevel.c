@@ -22,12 +22,6 @@
 #include "cw_log.h"
 
 
-struct cw_dbg_cfgstrs
-{
-	const char *name;
-	int level;
-}; 
-
 struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 
 	{"info",DBG_CW_INFO},
