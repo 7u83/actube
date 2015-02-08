@@ -58,10 +58,22 @@ static void set_dbg_opt(struct uci_context *ctx,struct uci_section * section,int
 static void read_dbg_options(struct uci_context *ctx, struct uci_section *section)
 {
 
-	set_dbg_opt(ctx,section,DBG_DTLS,"dtls");
+        int i;
+        for (i=0; cw_dbg_cfgstrs[i].name; i++) {
+
+		set_dbg_opt(ctx,section,cw_dbg_cfgstrs[i].level,cw_dbg_cfgstrs[i].name);
+
+               // if (!strcmp(str,cw_dbg_cfgstrs[i].name))
+                 //       return cw_dbg_cfgstrs[i].level;
+        }
+       // return 0;
+
+
+/*	set_dbg_opt(ctx,section,DBG_DTLS,"dtls");
 	set_dbg_opt(ctx,section,DBG_DTLS_DETAIL,"dtls_detail");
 	set_dbg_opt(ctx,section,DBG_DTLS_BIO,"dtls_bio");
 	set_dbg_opt(ctx,section,DBG_DTLS_BIO_DMP,"dtls_bio_dmp");
+*/
 }
 
 int read_config(const char * filename){
