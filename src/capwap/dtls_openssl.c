@@ -119,10 +119,11 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 
 int dtls_openssl_init()
 {
-	cw_dbg(DBG_CW_INFO,"Init ssl library");
-//	cw_log_debug0("Init ssl library");
+	const char * version = SSLeay_version(SSLEAY_VERSION);
+	cw_dbg(DBG_CW_INFO,"Init SSL library - %s",version);
 	SSL_load_error_strings();
-	return SSL_library_init();
+	int rc = SSL_library_init();
+	return rc;
 }
 
 
