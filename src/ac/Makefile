@@ -1,5 +1,5 @@
 
-include ../Config.mak
+include ../ACConfig.mak
 include ../Macros.mak
 
 ifndef CC
