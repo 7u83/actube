@@ -15,16 +15,17 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#include <stdio.h>
+#include <errno.h>
 
 
 #include <gnutls/gnutls.h>
 
 #include "dtls.h"
 #include "dtls_gnutls.h"
+#include "cw_util.h"
 
 
-#include <stdio.h>
-#include <errno.h>
 
 ssize_t dtls_gnutls_bio_read(gnutls_transport_ptr_t b, void *out, size_t maxlen)
 {
@@ -43,6 +44,30 @@ ssize_t dtls_gnutls_bio_write(gnutls_transport_ptr_t b, const void *data, size_t
 
 	struct conn *conn = (struct conn*)b;
 	return dtls_bio_write(conn,data,len);
+}
+
+/*
+ * wait for an incoming packet, used by gnutls to determine if
+ * data is available on "asynchropnous" connections.
+ * 
+ * Attention! This function only works for struct conn objects where
+ * queueing is enabled. Used by AC-Tube. 
+ */
+int dtls_gnutls_bio_wait(gnutls_transport_ptr_t ptr, unsigned int ms)
+{
+	struct conn * conn = (struct conn*)ptr;
+	time_t timer = cw_timer_start(ms/1000);
+	int rc;
+
+	uint8_t buffer[5];
+
+	do {
+		rc = conn_q_recv_packet_peek(conn,buffer,sizeof(buffer));
+
+	}while(!cw_timer_timeout(timer) && rc==GNUTLS_E_AGAIN);
+
+	return rc;
+
 }
 
 

@@ -154,10 +154,11 @@ CFLAGS+=$(GNUTLS_CFLAGS)
 CFLAGS+=-DWITH_GNUTLS
 DTLSOBJS+= dtls_gnutls.o \
 	dtls_gnutls_accept.o \
-	dtls_bio.o \
-	dtls_gnutls_bio.o
+	dtls_gnutls_bio.o \
+	dtls_gnutls_get_cipher.o
 endif
 
+DTLSOBJS+=dtls_bio.o 
 
 CONNOBJS= conn.o \
 	conn_detect_capwap.o \
