@@ -1,4 +1,4 @@
-include ../Config.mak
+include ../CapwapConfig.mak
 include ../Macros.mak
 
 ifndef CC
@@ -13,9 +13,7 @@ ifndef ARCH
 	ARCH = $(shell $(CC) -dumpmachine)
 endif
 
-ifdef INCLUDE_DIR
-	XINCLUDE = -I $(INCLUDE_DIR)
-endif
+
 
 #OPENSSLINC=$(OPENSSLINC) 
 #../contrib/openssl-1.0.1i/include
@@ -134,23 +132,32 @@ CAPWAPOBJS= \
 	lw_checksum.o
 	
 	  # cwsend_image_data_request.o 
-
-	
 #	   cwmsg_set_control_header.o 
 #	   process_msgelems.o \
 
+#
+# SSL objects
+#
 
-DTLSOBJS= \
-	dtls_openssl.o	 \
+ifeq ($(WITH_OPENSSL),1)
+CFLAGS+=$(OPENSSL_CFLAGS)
+CFLAGS+=-DWITH_OPENSSL
+DTLSOBJS += dtls_openssl.o \
 	dtls_openssl_accept.o \
 	dtls_openssl_connect.o \
 	dtls_openssl_get_cipher.o \
-	dtls_openssl_bio.o \
-	dtls_gnutls.o \
+	dtls_openssl_bio.o 
+endif
+
+ifeq ($(WITH_GNUTLS),1)
+CFLAGS+=$(GNUTLS_CFLAGS)
+CFLAGS+=-DWITH_GNUTLS
+DTLSOBJS+= dtls_gnutls.o \
 	dtls_gnutls_accept.o \
 	dtls_bio.o \
 	dtls_gnutls_bio.o
-	
+endif
+
 
 CONNOBJS= conn.o \
 	conn_detect_capwap.o \
