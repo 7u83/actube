@@ -40,13 +40,13 @@ struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
 
 #ifdef WITH_CW_LOG_DEBUG
 		if (i>0){
-			cw_log_debug1("Retransmitting request, type=%i,seqnum=%i",cwmsg->type,cwmsg->seqnum);
+//			cw_log_debug1("Retransmitting request, type=%i,seqnum=%i",cwmsg->type,cwmsg->seqnum);
 		}
 #endif
 
 		int rc = conn_send_cwmsg(conn,cwmsg);
 		if (rc<0){
-			cw_log_debug1("Error sending request, type=%i, seqnum %i, %s",cwmsg->type,cwmsg->seqnum,strerror(errno));
+		//	cw_log_debug1("Error sending request, type=%i, seqnum %i, %s",cwmsg->type,cwmsg->seqnum,strerror(errno));
 			return 0;
 		}
 		struct cwrmsg * r = get_response(conn,cwmsg->type+1,cwmsg->seqnum);
@@ -74,7 +74,7 @@ int run(struct conn * conn)
 
 		//	cwsend_echo_request(conn,&radioinfo);
 
-			cw_log_debug1("Sending echo request");
+//			cw_log_debug1("Sending echo request");
 			cwmsg_init_echo_request(&cwmsg,buffer,conn,&radioinfo);
 			struct cwrmsg * rc = send_request(conn,&cwmsg);
 
@@ -83,7 +83,7 @@ int run(struct conn * conn)
 			if (rc==0){
 
 				dtls_shutdown(conn);	
-				cw_log_debug1("Connection lost, no echo response");
+		//		cw_log_debug1("Connection lost, no echo response");
 				return 0;
 			}
 			echo_interval_timer=time(NULL);

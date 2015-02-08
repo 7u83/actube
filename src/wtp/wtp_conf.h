@@ -117,4 +117,15 @@ extern int conf_mtu_discovery;
 extern int conf_mtu;
 
 
+
+
+typedef struct {
+	const char *name;
+	long *value;	
+}LONGSTRS;
+extern LONGSTRS conf_timer_cfgstrs[];
+
+
+
+
 #endif

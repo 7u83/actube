@@ -61,7 +61,7 @@ static int acprint(void *p,void*d) //,int ctr)
 static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 {
 	if (cwrmsg->type != CWMSG_DISCOVERY_RESPONSE){
-		cw_log_debug0("Expected discovery response, but received %i",cwrmsg->type);
+		cw_dbg(DBG_ERR,"Expected discovery response, but received %i",cwrmsg->type);
 		return 1;
 	}
 
@@ -115,7 +115,7 @@ static void rand_sleep(int seconds)
 	cw_rand((uint8_t*)&rnd,sizeof(rnd));
 	uint16_t max = 0-1; 
 	int r = (rnd * usecs) / max;
-	cw_log_debug0("Sleeping for %u milliseconds\n",r);
+	cw_dbg(DBG_CW_INFO,"Sleeping for %u milliseconds\n",r);
 	usleep(r*1000);
 }
 
@@ -146,7 +146,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 #ifdef WITH_CW_LOG_DEBUG
 	char str[100];
 	sock_addrtostr((struct sockaddr*)&conn->addr,str,100);
-	cw_log_debug0("Sending discovery request to %s",str);
+//	cw_log_debug0("Sending discovery request to %s",str);
 #endif
 
 	int rc;
@@ -158,7 +158,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 				continue;
 			if (errno == EMSGSIZE){
 				conn->mtu-=4;
-				cw_log_debug2("Setting mtu to %i",conn->mtu);
+//				cw_log_debug2("Setting mtu to %i",conn->mtu);
 				continue;
 			}
 		}
@@ -200,7 +200,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 #ifdef WITH_CW_LOG_DEBUG
 			char str[100];
 			sock_addrtostr((struct sockaddr*)&sa,str,100);
-			cw_log_debug0("Received packet from %s",str);
+//			cw_log_debug0("Received packet from %s",str);
 #endif
 
 			struct conn * rconn; 
@@ -279,7 +279,7 @@ ACIPLIST * do_discovery(const char *acaddr)
 		if ( discovery_count >= conf_max_discoveries){
 			sulking_state();
 			discovery_count=0;
-			cw_log_debug0("Entering discovery state");
+	//		cw_log_debug0("Entering discovery state");
 		}
 		discovery_count++;
 
@@ -318,7 +318,7 @@ ACIPLIST * do_discovery(const char *acaddr)
 	freeaddrinfo(res0);
 
 	if (di.aciplist->count){
-		cw_log_debug2("Discover responses received: %i\n",di.response_count);
+//		cw_log_debug2("Discover responses received: %i\n",di.response_count);
 		return di.aciplist;
 
 	}

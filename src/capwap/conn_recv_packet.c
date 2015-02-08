@@ -24,10 +24,9 @@
 
 #include "conn.h"
 
-int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
+int conn_recv_packet_(struct conn* conn,uint8_t *buf,int len,int flags)
 {
 	int n;
-	int flags=0;
 	while( (n = recv(conn->sock,(char*)buf,len,flags)) < 0 ){
 		if (errno!=EINTR)
 		{
@@ -39,4 +38,18 @@ int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
 	return n;
 }
 
+
+/* yes, these functions could be better defined as macros in a .h file */
+
+int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
+{
+	return conn_recv_packet_(conn,buf,len,0);
+}
+
+int conn_recv_packet_peek(struct conn* conn,uint8_t *buf,int len)
+{
+	int rc = conn_recv_packet_(conn,buf,len,MSG_PEEK);
+	return rc;
+	
+}
 

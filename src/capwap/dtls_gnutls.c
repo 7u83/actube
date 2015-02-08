@@ -33,6 +33,11 @@ int dtls_gnutls_init()
 	return 1;
 }
 
+int dtls_gnutls_shutdown(struct conn *conn)
+{
+	/* implement it */
+	return 1;
+}
 
 void dtls_gnutls_data_destroy(struct dtls_gnutls_data *d)
 {
@@ -74,7 +79,7 @@ int dtls_gnutls_read(struct conn * conn, uint8_t *buffer, int len)
 }
 
 
-struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn)
+struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 {
 	struct dtls_gnutls_data *d = malloc(sizeof(struct dtls_gnutls_data));
 	if (!d)
@@ -106,7 +111,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn)
 	}
 
 
-	rc = gnutls_init(&d->session, GNUTLS_SERVER | GNUTLS_DATAGRAM);
+	rc = gnutls_init(&d->session, config); 
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS - Can't init session: %s", gnutls_strerror(rc));
 		dtls_gnutls_data_destroy(d);
@@ -132,10 +137,10 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn)
 		return 0;
 	}
 
-	gnutls_certificate_server_set_request(d->session,GNUTLS_CERT_REQUEST);
 
 	gnutls_transport_set_pull_function(d->session, dtls_gnutls_bio_read);
 	gnutls_transport_set_push_function(d->session, dtls_gnutls_bio_write);
+	gnutls_transport_set_pull_timeout_function(d->session, dtls_gnutls_bio_wait);
 
 	return d;
 }

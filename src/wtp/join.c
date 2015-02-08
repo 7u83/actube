@@ -20,7 +20,7 @@ void acinfo_log_(int level,const struct ac_info *acinfo,const char * xstr)
 {
 	char str[8192];
 	acinfo_print(str,acinfo);
-	cw_log_debug(level,"%s\n%s",xstr,str);
+//	cw_log_debug(level,"%s\n%s",xstr,str);
 	return;
 }
 
@@ -38,7 +38,7 @@ int join_state(struct conn * conn)
 #ifdef WITH_CW_LOG_DEBUG	
 	char str[64];
 	sock_addrtostr(&conn->addr,str,64);
-	cw_log_debug0("Sending join request to %s",str);
+//	cw_log_debug0("Sending join request to %s",str);
 #endif	
 	printf("Seqnum before = %i\n",conn->seqnum);
 	rc = cwsend_join_request(conn,&ri,wtpinfo);
@@ -46,7 +46,7 @@ int join_state(struct conn * conn)
 
 	struct cwrmsg * cwrmsg = conn_get_message(conn);
 
-	cw_log_debug0("Received message %i",cwrmsg->seqnum);
+//	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
 	if (cwrmsg->type != CWMSG_JOIN_RESPONSE || cwrmsg->seqnum != conn->seqnum){
 		printf("Wrong message\n");
@@ -91,18 +91,7 @@ int join(struct sockaddr *sa)
 #ifdef WITH_DTLS
 	cw_dbg (DBG_DTLS,"Establishing DTLS session with %s",sock_addr2str(sa)); 
 
-/*
-	#ifdef WITH_CW_LOG_DEBUG
-	{
-		char str[100];
-		sock_addrtostr(sa,str,100);
-		cw_log_debug0("Establishing DTLS connection to %s",str);
-	}
-	#endif
-*/
 
-
-printf("conf_dtls_cipher  %s\n",conf_dtls_cipher);
 
 	if (conf_dtls_psk){
 		conn->dtls_psk=conf_dtls_psk;
@@ -126,10 +115,13 @@ printf("conf_dtls_cipher  %s\n",conf_dtls_cipher);
 		dtls_shutdown(conn);
 		char str[100];
 		sock_addrtostr(sa,str,100);
-		cw_log(LOG_ERR,"Cant establish DTLS connection to %s",str);
+		cw_log(LOG_ERR,"Can't establish DTLS connection to %s",str);
 		close(sockfd);
+exit(0);
 		return 0;
 	}
+
+exit(0);
 
 #endif	
 	cw_dbg (DBG_DTLS,"DTLS session established with %s, cipher=%s",sock_addr2str(sa),dtls_get_cipher(conn)); 
@@ -140,7 +132,7 @@ exit(0);
 	{
 		char str[100];
 		sock_addrtostr(sa,str,100);
-		cw_log_debug0("DTLS connection to %s established",str);
+//		cw_log_debug0("DTLS connection to %s established",str);
 	}
 	#endif
 

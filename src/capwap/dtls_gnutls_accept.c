@@ -65,7 +65,7 @@ int dtls_gnutls_accept(struct conn *conn)
 		if (tlen <0 && errno == EAGAIN)
 			continue;
 		if (tlen < 0 ){
-			/* something went wrong, log a message */
+			/* something went wrong, iwe should log a message */
 			continue;
 		}
 		
@@ -78,7 +78,7 @@ int dtls_gnutls_accept(struct conn *conn)
 			continue;
 		}
 
-		dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
+	//	dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
 		break;
 
 	}
@@ -92,11 +92,11 @@ int dtls_gnutls_accept(struct conn *conn)
 	cw_dbg(DBG_DTLS, "DTLS - Cookie verified! Starting handshake ...");
 
 
-	d = dtls_gnutls_data_create(conn);
+	d = dtls_gnutls_data_create(conn,GNUTLS_SERVER | GNUTLS_DATAGRAM);
 	if (!d)
 		return 0;
 
-	gnutls_transport_set_pull_timeout_function(d->session, dtls_gnutls_bio_wait);
+	gnutls_certificate_server_set_request(d->session,GNUTLS_CERT_REQUEST);
 	gnutls_dtls_prestate_set(d->session, &prestate);
 
 	c_timer = cw_timer_start(10);

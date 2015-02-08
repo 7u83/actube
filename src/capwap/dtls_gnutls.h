@@ -48,7 +48,7 @@ struct dtls_gnutls_data {
 	gnutls_priority_t priority_cache;
 };
 
-struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn);
+struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config);
 
 #endif
 

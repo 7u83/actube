@@ -69,6 +69,7 @@ struct conn{
 	/* receive and send methods */
 
 	int (*recv_packet)(struct conn  *, uint8_t *,int);
+	int (*recv_packet_peek)(struct conn  *, uint8_t *,int);
 	int (*send_packet)(struct conn *, const uint8_t *, int);
 
 	int (*read)(struct conn *, uint8_t*, int);
@@ -147,8 +148,8 @@ uint8_t * conn_q_get_packet(struct conn * conn);
 extern int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len);
 extern int conn_q_recv_packet_peek(struct conn * conn, uint8_t * buffer,int len);
 
-
 extern int conn_recv_packet(struct conn* conn,uint8_t *buf,int len);
+extern int conn_recv_packet_peek(struct conn* conn,uint8_t *buf,int len);
 
 extern int conn_send_response(struct conn * conn,struct cwmsg * cwmsg,int seqnum);
 extern struct cwrmsg * conn_get_response(struct conn * conn);
