@@ -60,20 +60,24 @@ static void read_dbg_options(struct uci_context *ctx, struct uci_section *sectio
 
         int i;
         for (i=0; cw_dbg_cfgstrs[i].name; i++) {
-
 		set_dbg_opt(ctx,section,cw_dbg_cfgstrs[i].level,cw_dbg_cfgstrs[i].name);
 
-               // if (!strcmp(str,cw_dbg_cfgstrs[i].name))
-                 //       return cw_dbg_cfgstrs[i].level;
         }
-       // return 0;
+}
 
+static void read_timers(struct uci_context *ctx,struct uci_section *section)
+{
+        int i;
+        for (i=0; conf_timer_cfgstrs[i].name; i++) {
+		
+		const char *str = uci_lookup_option_string(ctx,section,conf_timer_cfgstrs[i].name);
+		if ( str ) {
+			*(conf_timer_cfgstrs[i].value)=atol(str);
 
-/*	set_dbg_opt(ctx,section,DBG_DTLS,"dtls");
-	set_dbg_opt(ctx,section,DBG_DTLS_DETAIL,"dtls_detail");
-	set_dbg_opt(ctx,section,DBG_DTLS_BIO,"dtls_bio");
-	set_dbg_opt(ctx,section,DBG_DTLS_BIO_DMP,"dtls_bio_dmp");
-*/
+		}
+	
+        }
+
 }
 
 int read_config(const char * filename){
@@ -126,6 +130,7 @@ int read_config(const char * filename){
 		return 1;
 	}
 
+	read_timers(ctx,section);
 	
 	const char  *str;
 	str = uci_lookup_option_string(ctx,section,"name");

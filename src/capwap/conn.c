@@ -57,10 +57,6 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 	if (addr)
 		sock_copyaddr(&conn->addr,addr);
 
-//	printf("AF IN: %i\n",addr->sa_family);
-//	char str[200] ;
-//	sock_addrtostr((struct sockaddr*)&conn->addr,str,200);
-//	printf("CONN CREATOR: %s\n",str);
 
 	conn->fragman = fragman_create();
 	if (conn->fragman==NULL){
@@ -81,15 +77,18 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 			return NULL;
 		};
 		conn->recv_packet=conn_q_recv_packet;
+		conn->recv_packet_peek=conn_q_recv_packet_peek;
 	}
-	else
+	else{
 		conn->recv_packet = conn_recv_packet;
+		conn->recv_packet_peek = conn_recv_packet_peek;
+	}
 
+	conn->send_packet = conn_send_packet;
 
 	conn->last_seqnum_received=-1;
 	conn->mtu=1500;
 
-	conn->send_packet = conn_send_packet;
 
 	conn->cur_packet=0;
 	conn->recv_timeout=1;

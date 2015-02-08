@@ -94,13 +94,6 @@ int do_connect(void *priv,void *data)
 
 int wtp_main(const char *ad)
 {
-	
-
-
-	cw_dbg_opt_level = DBG_DTLS | DBG_CW_INFO | DBG_ALL;
-//	gr();
-//	exit(0);
-
 	wtpconf_preinit();
 
 	if (!read_config("./wtp_uci.conf")){
@@ -108,7 +101,6 @@ int wtp_main(const char *ad)
 	}
 
 	cw_dbg_opt_level = conf_dbg_level;
-
 
 	wtpconf_init();
 	
@@ -150,9 +142,9 @@ int wtp_main(const char *ad)
 			}
 		}while (!aciplist);		
 
-		cw_log_debug0("Entering join state");
+//		cw_log_debug0("Entering join state");
 		if (!aciplist){
-			cw_log_debug0("Don't got any discovery response");
+//			cw_log_debug0("Don't got any discovery response");
 			exit(0);
 		}
 

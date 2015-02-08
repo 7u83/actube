@@ -5,30 +5,14 @@ ifndef CC
 	CC=gcc
 endif
 
-ifdef INCLUDE_DIR
-	XINCLUDE=-I $(INCLUDE_DIR)
-endif
-
-ifdef LIB_DIR
-	XLIB=-L $(LIB_DIR)
-endif 
-include ../Config.mak
 
 
-ifeq ($(USE_CONTRIB_UCI),1)
-CFLAGS+=-I../contrib/uci
-endif
-
-
-WITH_UCI=1 
 
 CFLAGS+=-DWITH_RMAC_SUPPORT 
 CFLAGS+=-DWITH_IPV6
 CFLAGS+=-DWITH_CW_LOG
 CFLAGS+=-DWITH_CW_LOG_DEBUG
 CFLAGS+=-DWITH_DTLS
-CFLAGS+=-DWITH_UCI
-CFLAGS+=$(XINCLUDE)
 
 
 ifndef ARCH
@@ -36,31 +20,44 @@ ifndef ARCH
 endif
 
 
-#ifndef CFLAGS
 CFLAGS += -O2 -Wall -g
-#endif
-
 LDFLAGS += -L../../src/capwap/$(ARCH)
-#LDFLAGS += -L/usr/local/lib
-LDFLAGS += -luci
-#LDFLAGS += -L../capwap
-LDFLAGS += $(XLIB)
 
-#LDFLAGS += -lpthread
-#LDFLAGS += -lrt
 
 LIBS+=-lcapwap
-#LIBS+=-liw
 LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
-LIBS+=$(OPENSSLLIB)
-#LIBS+=-lcrypto
-#LIBS+=-lrt
-ifdef WITH_UCI
+
+CONFOBJS = wtp_conf.o
+
+ifeq ($(CONF_LIBRARY),UCI)
+CFLAGS+=-DWITH_UCI
 LIBS+=-luci -lubox
+CONFOBJS += conf_uci.o 
 else
 LIBS+=-lconfuse
+CONFOBJS += wtp_conf_confuse.o
 endif
+
+
+
+
+ifeq ($(SSL_LIBRARY),GNUTLS)
+CFLAGS+=-DWITH_GNUTLS
+CFLAGS+=$(GNUTLS_CFLAGS)
+LIBS+=$(GNUTLS_LIBS)
+LDFLAGS+=$(GNUTLS_LDFLAGS)
+endif
+
+ifeq ($(SSL_LIBRARY),OPENSSL)
+CFLAGS+=-DWITH_OPENSSL
+CFLAGS+=$(OPESSL_CFLAGS)
+LDFLAGS+=$(OPENSSL_LDFLAGS)
+LIBS+=$(OPENSSL_LIBS)
+endif
+
+
+
 
 #HA_FILES += ../contrib/hostap/src/drivers/driver_nl80211.o
 
@@ -74,19 +71,11 @@ CFLAGS += $(HA_INCS)
 #CFLAGS += -I../src
 #CFLAGS += -I../src/utils
 CFLAGS += -I../../src
-CFLAGS += -I$(OPENSSLINC)
 
 #CFLAGS += -I/usr/local/include
 
 
 
-CONFOBJS = wtp_conf.o
-
-ifdef WITH_UCI
-	CONFOBJS += conf_uci.o 
-else
-	CONFOBJS += wtp_conf_confuse.o
-endif 
 
 OBJS += wtp_main.o
 
@@ -127,8 +116,7 @@ endif
 
 
 wtp: $(BCHECK) $(OBJS)
-	$(Q)$(CC) $(LDFLAGS) -o wtp $(OBJS) $(LIBS)
-	
+	$(Q)$(CC) $(OBJS) -o wtp $(LDFLAGS) $(LIBS)
 	@$(E) "  LD " $@
 
 clean:

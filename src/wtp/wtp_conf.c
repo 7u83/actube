@@ -72,7 +72,13 @@ uint8_t * conf_model_no;
 uint8_t * cont_serial_no;
 
 
-
+LONGSTRS conf_timer_cfgstrs[] = {
+	"max_discovery_interval",&conf_max_discovery_interval,
+	"discovery_interval",&conf_discovery_interval,
+	"max_discoveries",&conf_max_discoveries,
+	"silent_interval",&conf_silent_interval,
+	0,0
+};
 
 
 int wtpconf_primary_if()
@@ -173,7 +179,7 @@ int wtpconf_ac_list()
 	conf_ac_list_len=len;
 #ifdef WITH_CW_LOG_DEBUG
 	for (i=0; i<conf_ac_list_len; i++){
-		cw_log_debug0("Using AC: %s\n",conf_ac_list[i]);
+		cw_dbg(DBG_CW_INFO,"Using AC: %s\n",conf_ac_list[i]);
 	}
 #endif
 

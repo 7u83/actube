@@ -44,24 +44,24 @@ struct conn * conn_create_noq(int sock, struct sockaddr * addr)
 	if (addr)
 		sock_copyaddr(&conn->addr,addr);
 
-//	printf("AF IN: %i\n",addr->sa_family);
-//	char str[200] ;
-//	sock_addrtostr((struct sockaddr*)&conn->addr,str,200);
-//	printf("CONN CREATOR: %s\n",str);
 
+	/* create the CAPWAP framentation manager */
 	conn->fragman = fragman_create();
 	if (conn->fragman==NULL){
 		conn_destroy(conn);
 		return NULL;
 	}
 
+	/* set packet recieve and send methods */
 	conn->recv_packet = conn_recv_packet;
+	conn->recv_packet_peek = conn_recv_packet_peek;
+	conn->send_packet = conn_send_packet;
 
 
+	/* misc settings */
 	conn->last_seqnum_received=-1;
 	conn->mtu=1500;
 
-	conn->send_packet = conn_send_packet;
 
 	conn->cur_packet=0;
 	conn->recv_timeout=1;
@@ -69,7 +69,6 @@ struct conn * conn_create_noq(int sock, struct sockaddr * addr)
 	conn->seqnum=-1;
 	conn->write = conn->send_packet;
 	conn->read = conn->recv_packet;
-
 
 	return conn;
 }

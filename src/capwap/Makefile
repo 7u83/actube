@@ -154,6 +154,7 @@ CFLAGS+=$(GNUTLS_CFLAGS)
 CFLAGS+=-DWITH_GNUTLS
 DTLSOBJS+= dtls_gnutls.o \
 	dtls_gnutls_accept.o \
+	dtls_gnutls_connect.o \
 	dtls_gnutls_bio.o \
 	dtls_gnutls_get_cipher.o
 endif
