@@ -246,8 +246,8 @@ static int dtls_verify_peer_callback (int ok, X509_STORE_CTX *ctx)
 {
 	printf ("Verify callback called with ok = %d\n",ok);
 
-	SSL *ssl;
-	ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
+//	SSL *ssl;
+//	ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 
 	char buf[1024];
 	X509   *err_cert;
@@ -292,7 +292,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	
 	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
-		dtls_openssl_log_error(0,rc,"DTLS setup error:");
+		dtls_openssl_log_error(0,rc,"DTLS setup cipher error:");
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}

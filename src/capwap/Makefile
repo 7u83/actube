@@ -186,7 +186,8 @@ OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 #CFLAGS = -Wall -g -O3 -D_REENTRANT -DWITH_IPV6
 CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT 
 
-CFLAGS += -DWITH_CW_LOG \
+CFLAGS += $(GNUTLS_CFLAGS) \
+	  -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
 	  -DWITH_DTLS \
 	  $(XINCLUDE)\
@@ -205,10 +206,7 @@ $(ARCH)/%.o:%.c
 $(ARCH)/$(NAME) : $(OBJS)
 	@echo "  AR $(ARCH)/$(NAME)"
 	@$(AR) rcs $(ARCH)/$(NAME) $(OBJS)
-#$(OBJS)
 
-#.c.o:
-#	$(CC) -c $(CFLAGS) $<
 
 SRCS = $(OBJS:.o=.c) 
 DEPS := $(OBJS:.o=.d)

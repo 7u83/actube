@@ -531,7 +531,7 @@ static int conf_read_dbg_level(cfg_t *cfg)
 
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
-
+int u = cw_log_str2dbglevel(str);
 		cw_dbg_opt_level|=cw_log_str2dbglevel(str);
 
 	}

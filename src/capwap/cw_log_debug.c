@@ -121,6 +121,7 @@ int cw_dbg_opt_level = 0;
 void cw_log_dbg_(int level, const char *file, int line, const char *format,
 		 ...)
 {
+
 	if (!(level & cw_dbg_opt_level))
 		return;
 
