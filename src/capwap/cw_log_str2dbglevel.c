@@ -22,11 +22,13 @@
 #include "cw_log.h"
 
 
-struct 
+struct cw_dbg_cfgstrs
 {
 	const char *name;
 	int level;
-} dbg_strs[] = {
+}; 
+
+struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 
 	{"info",DBG_CW_INFO},
 	{"msg",DBG_CW_MSG},
@@ -55,9 +57,9 @@ struct
 int cw_log_str2dbglevel(const char * str)
 {
 	int i;
-	for (i=0; dbg_strs[i].name; i++) {
-		if (!strcmp(str,dbg_strs[i].name))
-			return dbg_strs[i].level;
+	for (i=0; cw_dbg_cfgstrs[i].name; i++) {
+		if (!strcmp(str,cw_dbg_cfgstrs[i].name))
+			return cw_dbg_cfgstrs[i].level;
 	}
 	return 0;
 }
