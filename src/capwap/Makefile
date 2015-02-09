@@ -156,7 +156,8 @@ DTLSOBJS+= dtls_gnutls.o \
 	dtls_gnutls_accept.o \
 	dtls_gnutls_connect.o \
 	dtls_gnutls_bio.o \
-	dtls_gnutls_get_cipher.o
+	dtls_gnutls_get_cipher.o \
+	dtls_gnutls_get_peers_cert.o
 endif
 
 DTLSOBJS+=dtls_bio.o 

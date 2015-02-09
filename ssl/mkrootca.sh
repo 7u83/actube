@@ -83,7 +83,8 @@ mkrootca "$ROOT_SUBJ" "$INT_SUBJ" cisco-ac
 #ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1200-c80aa9cd7fa4/emailAddress=support@cisco.com"
 #ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=Cisrot/emailAddress=support@cisco.com"
 
-ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
+#ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
+ROOT_SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-0019dbe09327/emailAddress=support@cisco.com"
 INT_SUBJ="$ROOT_SUBJ"
 mkrootca "$ROOT_SUBJ" "$INT_SUBJ" cisco-ap
 
