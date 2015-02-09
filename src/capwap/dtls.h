@@ -19,6 +19,19 @@
 #ifndef __DTLS_H
 #define __DTLS_H
 
+struct dtls_ssl_cert 
+{
+	int size;
+	int type;
+	uint8_t * data;
+};
+
+extern int dtls_bio_read(struct conn *conn, char *out, int maxlen);
+extern int dtls_bio_write(struct conn * conn, const char *data, int len);
+
+
+
+
 #ifdef WITH_GNUTLS
 	#include "dtls_gnutls.h"
 	#define dtls_init dtls_gnutls_init
@@ -26,6 +39,7 @@
 	#define dtls_connect dtls_gnutls_connect
 	#define dtls_shutdown dtls_gnutls_shutdown
 	#define dtls_get_cipher dtls_gnutls_get_cipher
+	#define dtls_get_peers_cert dtls_gnutls_get_peers_cert
 
 #else
 	#include "dtls_openssl.h"
@@ -37,8 +51,6 @@
 
 #endif
 
-extern int dtls_bio_read(struct conn *conn, char *out, int maxlen);
-extern int dtls_bio_write(struct conn * conn, const char *data, int len);
 
 
 #endif

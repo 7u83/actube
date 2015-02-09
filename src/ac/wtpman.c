@@ -490,6 +490,25 @@ static int wtpman_establish_dtls(void *arg)
 	cw_dbg(DBG_DTLS,"DTLS session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
 	/* DTLS handshake done */
 
+
+	int cert_len;
+	struct dtls_ssl_cert cert;
+
+	FILE *f;
+	f = fopen ("pcert.der","wb");
+
+	printf("Calling peers cert\n");
+	cert = dtls_get_peers_cert(wtpman->conn,0);
+	printf("Back from peers cert\n");
+	
+	printf("Have Peers Cert: %p, %d\n",cert.data,cert.size);
+	fwrite(cert.data,1,cert.size,f);
+	
+
+	exit(0);
+
+//	dtls_get_peers_cert(cert_len,&cert_len);
+
 	return 1;
 }
 

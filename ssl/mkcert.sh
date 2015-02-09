@@ -38,7 +38,7 @@ createcert()
        		 -subj "$SUBJ"
 
 
-	$OPENSSL ca -config openssl-int.cnf  \
+	$OPENSSL ca -config openssl-crt.cnf  \
 		   -keyfile $INT_CA_DIR/${PREF}int-ca.key \
 		   -cert $INT_CA_DIR/${PREF}int-ca.crt \
 		   -batch \
@@ -48,7 +48,12 @@ createcert()
 	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
 	cat $INT_CA_DIR/${PREF}int-ca.crt >> $DIR/$NAME.pem
 	cat $ROOT_CA_DIR/${PREF}root-ca.crt >> $DIR/$NAME.pem
+	echo "Root finger print:"
+	$OPENSSL x509 -in $ROOT_CA_DIR/${PREF}root-ca.crt -noout -sha1 -fingerprint
+	echo "Int finger print:"
 	$OPENSSL x509 -in $INT_CA_DIR/${PREF}int-ca.crt -noout -sha1 -fingerprint
+	echo "Cert finger print:"
+	$OPENSSL x509 -in $DIR/${NAME}.crt -noout -sha1 -fingerprint
 
 }
 
@@ -76,7 +81,8 @@ then
 	#SUBJ="/ST=California/L=San Jose/C=US/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
 #	SUBJ="/C=US/ST=California/L=San Jose/O=airespace Inc/CN=C1130-f866f2a342fc/emailAddress=support@airespace.com"
 #	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1200-c80aa9cd7fa4/emailAddress=support@cisco.com"
-	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
+#	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
+	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-0019dbe09327/emailAddress=support@cisco.com"
 	createcert "$SUBJ"
 
 
