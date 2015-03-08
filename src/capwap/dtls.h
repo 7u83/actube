@@ -15,6 +15,8 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#include <stdint.h>
+#include "conn.h"
 
 #ifndef __DTLS_H
 #define __DTLS_H
