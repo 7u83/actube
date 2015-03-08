@@ -16,6 +16,7 @@
 
 */
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +32,7 @@
 
 char * cw_rand_dev = "/dev/random";
 
-int cw_rand(uint8_t*dst, int len)
+int cw_rand_r(uint8_t*dst, int len)
 {
 	int rf;
 	int l;
@@ -40,7 +41,7 @@ int cw_rand(uint8_t*dst, int len)
 	if (rf<0){
 
 		cw_log(LOG_ERR,"Can't open %s: %s",cw_rand_dev,strerror(errno));
-		return cw_pseudo_rand(dst,len);
+		return 0;
 	}
 
 
@@ -49,13 +50,40 @@ int cw_rand(uint8_t*dst, int len)
 
 	if ((l<0) && (errno != EAGAIN)){
 		cw_log(LOG_ERR,"Cant read from %s: %s",cw_rand_dev,strerror(errno));
-		return cw_pseudo_rand(dst,len);
+		return 0;
 	}
 
-	if (l<len){
+/*	if (l<len){
 		cw_dbg(DBG_CW_INFO,"Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
 		return cw_pseudo_rand(dst,len);
 	}
-	
+	*/
 	return l;
 }
+
+
+
+
+int cw_rand(uint8_t *dst, int len)
+{
+	static int init = 1;
+	if (init){
+		uint32_t rinit=time(NULL);
+
+		int l = cw_rand_r((uint8_t*)(&rinit),sizeof(uint32_t));
+		if (l<sizeof(uint32_t))
+			cw_dbg(DBG_CW_INFO,"Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
+	
+
+
+		srand(rinit);
+		init =0;
+	}
+	int i;
+	for (i=0; i<len; i++){
+		dst[i]=rand();
+	}
+	return len;
+}
+
+
