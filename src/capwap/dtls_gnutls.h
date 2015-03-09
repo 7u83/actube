@@ -47,6 +47,7 @@ struct dtls_gnutls_data {
 	gnutls_session_t session;
 	gnutls_certificate_credentials_t x509_cred;
 	gnutls_priority_t priority_cache;
+	gnutls_dh_params_t dh_params;
 };
 
 struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config);
