@@ -63,8 +63,10 @@ int dtls_gnutls_write(struct conn * conn, const uint8_t *buffer, int len)
 
 int dtls_gnutls_read(struct conn * conn, uint8_t *buffer, int len)
 {
+	uint8_t seq[8];
+	
 	struct dtls_gnutls_data * d = conn->dtls_data;
-	int rc = gnutls_record_recv(d->session,buffer,len);
+	int rc = gnutls_record_recv_seq(d->session,buffer,len,seq);
 
 	if ( rc == GNUTLS_E_AGAIN )
 		return 0;
@@ -99,6 +101,21 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 		dtls_gnutls_data_destroy(d);
 		return 0;
 	}
+
+
+
+	int bits;
+	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_INSECURE);
+        /* Generate Diffie-Hellman parameters - for use with DHE
+         * kx algorithms. When short bit length is used, it might
+         * be wise to regenerate parameters often.
+         */
+        gnutls_dh_params_init(&d->dh_params);
+        gnutls_dh_params_generate2(d->dh_params, bits);
+        gnutls_certificate_set_dh_params(d->x509_cred, d->dh_params);
+
+
+
 
 	/* Set ciphers */
 	const char *errpos;
