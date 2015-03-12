@@ -38,6 +38,7 @@
 enum capwapmodes {
 	CWMODE_STD = 0,
 	CWMODE_CISCO,
+	CWMODE_CIPWAP,
 	CWMODE_ZYXEL
 };
 
@@ -234,8 +235,16 @@ struct capwap_ctrlhdr
    WTP Radio Statistics                                 47
 */
 #define CWMSGELEM_WTP_REBOOT_STATISTICS		48
+
+#define CWMSGELEM_WTP_STATIC_IP_ADDRESS_INFO	49
+
 /*   WTP Static IP Address Information                    49
 */
+
+/* Cisco's CAPWAP definitions (CAPWAP draft 7)*/
+#define	CWMSGELEM_WTP_IPV4_IP_ADDR		42
+#define	CWMSGELEM_WTP_IPV6_IP_ADDR		43
+ 
 
 
 /* pseudo message elements, defined for libcapwap */

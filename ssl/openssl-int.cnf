@@ -237,6 +237,7 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 
 subjectKeyIdentifier= hash
 authorityKeyIdentifier=keyid:always,issuer:always
+authorityInfoAccess=caIssuers;URI:http://my.ca/ca.html
 
 # This is what PKIX recommends but some broken software chokes on critical
 # extensions.

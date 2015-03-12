@@ -34,7 +34,7 @@ createcert()
 		PREF="$TYPE-"
 	fi
 	$OPENSSL genrsa -out $DIR/$NAME.key $KEYSIZE
-	$OPENSSL req -sha1 -new -key $DIR/$NAME.key -out $DIR/$NAME.req   \
+	$OPENSSL req -sha256 -new -key $DIR/$NAME.key -out $DIR/$NAME.req   \
        		 -subj "$SUBJ"
 
 
@@ -74,16 +74,22 @@ fi
 if [ "$TYPE" = "cisco-ap" ]
 then
 	PREF="$2-"
-#	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-f866f2a342fc/emailAddress=support@cisco.com"
-#	SUBJ="/C=US/ST=California/L=San Jose/O=airespace Inc/CN=C1130-f866f2a342fc/emailAddress=support@airespace.com"
-
-#	SUBJ="/ST=California/L=San Jose/C=US/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
-	#SUBJ="/ST=California/L=San Jose/C=US/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
-#	SUBJ="/C=US/ST=California/L=San Jose/O=airespace Inc/CN=C1130-f866f2a342fc/emailAddress=support@airespace.com"
-#	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1200-c80aa9cd7fa4/emailAddress=support@cisco.com"
-#	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-c80aa9cd7fa4/emailAddress=support@cisco.com"
 	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-0019dbe09327/emailAddress=support@cisco.com"
-	createcert "$SUBJ"
+
+       openssl req -nodes -new -x509 \
+                -sha1 \
+                -extensions v3_ca \
+                -days 3650 \
+                -newkey rsa:2048 \
+                -keyout certs/${NAME}.key -out certs/${NAME}.crt \
+                -config openssl.cnf \
+                -x509 \
+                -subj "$SUBJ"
+
+	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
+
+
+#	createcert "$SUBJ"
 
 
 fi

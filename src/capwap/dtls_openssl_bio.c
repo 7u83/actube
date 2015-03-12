@@ -121,7 +121,7 @@ long dtls_openssl_bio_ctrl(BIO * b, int cmd, long num, void *ptr)
 
 		case BIO_CTRL_DGRAM_QUERY_MTU:
 			{
-				ret = 1400;
+				ret = 1300;
 				break;
 
 /*         	sockopt_len = sizeof(sockopt_val);

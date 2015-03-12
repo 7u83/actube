@@ -13,9 +13,12 @@
 struct wtpinfo * get_wtpinfo()
 {
 	struct wtpinfo * wtpinfo;
+
+
 	wtpinfo=malloc(sizeof(struct wtpinfo));
 	memset(wtpinfo,0,sizeof(struct wtpinfo));
 
+	wtpinfo->capwap_mode=CWMODE_CISCO;
 	wtpinfo->name = (uint8_t*)"wtp";
 	wtpinfo->location = (uint8_t*)"Unknown";
 
@@ -26,7 +29,7 @@ struct wtpinfo * get_wtpinfo()
 
 	}
 */
-	wtpinfo->serial_no="123456789";
+	wtpinfo->serial_no=conf_serial_no;
 	wtpinfo->vendor_id=conf_vendor_id;
 
 	wtpinfo->model_no=conf_model_no;

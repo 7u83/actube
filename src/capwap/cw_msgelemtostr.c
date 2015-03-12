@@ -119,8 +119,12 @@ const char * cw_msgelemtostr(int elem)
 		case CWMSGELEM_WTP_FRAME_TUNNEL_MODE:
 			return "frame tunnel mode";
 
-		case CWMSGELEM_RESERVED_1:
+/*		case CWMSGELEM_RESERVED_1:
 			return "reserved (42)";
+*/
+		case CWMSGELEM_WTP_IPV4_IP_ADDR:
+			return "WTP IPv4 IP address";
+
 /*
    Reserved                                             43
 */   

@@ -21,6 +21,8 @@
 #include "capwap/sock.h"
 #include "capwap/cw_log.h"
 
+#include "capwap/bstr.h"
+
 
 char * conf_primary_if=0;
 char * conf_wtpname=0;
@@ -69,7 +71,7 @@ uint32_t * conf_hardware_vendor_id;
 uint8_t * conf_hardware_version;
 
 uint8_t * conf_model_no;
-uint8_t * cont_serial_no;
+uint8_t * conf_serial_no;
 
 
 LONGSTRS conf_timer_cfgstrs[] = {
@@ -136,9 +138,10 @@ int wtpconf_name()
 
 
 char * default_ac_list[] = {
-	"192.168.0.255",
+//	"192.168.0.255",
 	"255.255.255.255",
 //	"224.0.1.140",
+//	"192.168.0.12"
 };
 
 int wtpconf_ac_list()
@@ -198,7 +201,8 @@ int wtpconf_preinit()
 
 
 	conf_vendor_id = CONF_DEFAULT_VENDOR_ID;
-	conf_software_version = bstr_create(CONF_DEFAULT_SOFTWARE_VERSION);
+	conf_software_version = bstr_create_from_cfgstr(CONF_DEFAULT_SOFTWARE_VERSION);
+	conf_serial_no = bstr_create_from_cfgstr(CONF_DEFAULT_SERIAL_NO);
 
 
 }

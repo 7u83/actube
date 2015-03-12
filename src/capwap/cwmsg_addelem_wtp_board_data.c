@@ -8,12 +8,15 @@
 
 void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo)
 {
-	uint8_t msg[1030];
+	uint8_t msg[512];
+
+	/* vendor identifier */
 	*((uint32_t *) msg) = htonl(wtpinfo->vendor_id);
 
 	int l;
 	int len = 4;
 
+	/* mandatory sub-elements */
 	if (wtpinfo->model_no) {
 		l = bstr_len(wtpinfo->model_no);
 		*((uint32_t *) (msg + len)) = htonl(CWBOARDDATA_MODELNO << 16 | l);
@@ -22,12 +25,13 @@ void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo)
 	}
 
 	if (wtpinfo->serial_no) {
-		l = strlen((char *) wtpinfo->serial_no);
+		l = bstr_len( wtpinfo->serial_no);
 		*((uint32_t *) (msg + len)) = htonl(CWBOARDDATA_SERIALNO << 16 | l);
-		memcpy(msg + len + 4, wtpinfo->serial_no, l);
+		memcpy(msg + len + 4, bstr_data(wtpinfo->serial_no), l);
 		len += l + 4;
 	}
 
+	/* other sub-elements */
 	if (wtpinfo->macaddress) {
 		*((uint32_t *) (msg + len)) =
 		    htonl(CWBOARDDATA_MACADDRESS << 16 | wtpinfo->macaddress_len);
