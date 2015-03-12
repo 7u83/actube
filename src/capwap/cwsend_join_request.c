@@ -42,8 +42,11 @@ int cwsend_join_request(struct conn * conn,struct radioinfo * radioinfo,struct w
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
 	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
 
-	cwmsg_addelem(&cwmsg,CWMSGELEM_ECN_SUPPORT,&wtpinfo->ecn_support,sizeof(uint8_t));
-	cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
+	if (wtpinfo->capwap_mode != CWMODE_CISCO){
+		cwmsg_addelem(&cwmsg,CWMSGELEM_ECN_SUPPORT,&wtpinfo->ecn_support,sizeof(uint8_t));
+		cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
+	}
+
 
 	uint16_t l = htons(wtpinfo->max_msg_len);
 	cwmsg_addelem(&cwmsg,CWMSGELEM_MAXIMUM_MESSAGE_LENGTH,(uint8_t*)&l,sizeof(l));

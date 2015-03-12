@@ -22,7 +22,7 @@ extern uint32_t * conf_hardware_vendor_id;
 extern uint8_t * conf_hardware_version;
 
 extern uint8_t * conf_model_no;
-extern uint8_t * cont_serial_no;
+extern uint8_t * conf_serial_no;
 
 
 

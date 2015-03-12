@@ -40,6 +40,10 @@ struct wtp_reboot_statistics{
 
 /* structure to hold info about a wtp */
 struct wtpinfo{
+	
+	int capwap_mode;
+
+
 	uint8_t *ac_name;
 	uint8_t *name;
 	uint8_t * location;

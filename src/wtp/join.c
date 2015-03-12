@@ -46,6 +46,8 @@ int join_state(struct conn * conn)
 
 	struct cwrmsg * cwrmsg = conn_get_message(conn);
 
+	printf("Received %08p\n",cwrmsg);
+
 //	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
 	if (cwrmsg->type != CWMSG_JOIN_RESPONSE || cwrmsg->seqnum != conn->seqnum){
@@ -117,15 +119,12 @@ int join(struct sockaddr *sa)
 		sock_addrtostr(sa,str,100);
 		cw_log(LOG_ERR,"Can't establish DTLS connection to %s",str);
 		close(sockfd);
-exit(0);
 		return 0;
 	}
 
-exit(0);
 
 #endif	
 	cw_dbg (DBG_DTLS,"DTLS session established with %s, cipher=%s",sock_addr2str(sa),dtls_get_cipher(conn)); 
-exit(0);
 
 
 	#ifdef WITH_CW_LOG_DEBUG

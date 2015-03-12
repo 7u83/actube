@@ -153,6 +153,12 @@ int read_config(const char * filename){
 	if (str) 
 		conf_sslcertfilename=strdup(str);
 
+
+	str = uci_lookup_option_string(ctx,section,"ssl_cipher");
+	if (str) 
+		conf_dtls_cipher=strdup(str);
+
+
 	str = uci_lookup_option_string(ctx,section,"vendor_id");
 	if (str) 
 		conf_vendor_id=atoi(str);
@@ -162,6 +168,13 @@ int read_config(const char * filename){
 		uint8_t * s = bstr_create_from_cfgstr(str);
 		bstr_replace(&conf_software_version,s);
 	}
+
+	str = uci_lookup_option_string(ctx,section,"serial_no");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_serial_no,s);
+	}
+
 
 	str = uci_lookup_option_string(ctx,section,"model_no");
 	if (str){

@@ -505,9 +505,6 @@ static int wtpman_establish_dtls(void *arg)
 	fwrite(cert.data,1,cert.size,f);
 	
 
-	exit(0);
-
-//	dtls_get_peers_cert(cert_len,&cert_len);
 
 	return 1;
 }
@@ -601,6 +598,7 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
+exit(0);
 
 	switch (cwrmsg->type){
 		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
