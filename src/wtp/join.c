@@ -44,9 +44,16 @@ int join_state(struct conn * conn)
 	rc = cwsend_join_request(conn,&ri,wtpinfo);
 	printf("Seqnum after = %i\n",conn->seqnum);
 
-	struct cwrmsg * cwrmsg = conn_get_message(conn);
-
+	
+	struct cwrmsg * cwrmsg;
+//	do {
+		cwrmsg = conn_get_message(conn);
 	printf("Received %08p\n",cwrmsg);
+//	}while(cwrmsg==0);
+
+
+exit(0);
+
 
 //	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
@@ -86,6 +93,10 @@ int join(struct sockaddr *sa)
 	}
 
 	struct conn * conn = get_conn();
+
+conn->capwap_mode = CWMODE_CISCO;
+
+
 	conn->sock=sockfd;
 	sock_copyaddr(&conn->addr,sa);
 

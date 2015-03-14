@@ -5,6 +5,7 @@
 #include "capwap/wtpinfo.h"
 #include "capwap/acinfo.h"
 #include "capwap/conn.h"
+#include "capwap/capwap_ieee80211.h"
 
 #include "wtp_conf.h"
 #include "wtp_interface.h"
@@ -18,17 +19,16 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo=malloc(sizeof(struct wtpinfo));
 	memset(wtpinfo,0,sizeof(struct wtpinfo));
 
-	wtpinfo->capwap_mode=CWMODE_CISCO;
-	wtpinfo->name = (uint8_t*)"wtp";
-	wtpinfo->location = (uint8_t*)"Unknown";
+	wtpinfo->name = (uint8_t*)"wtpXY";
+	wtpinfo->location = (uint8_t*)"default location";
 
 	wtpinfo->max_radios=wtpdrv_get_num_radios();
-/*	int i;
+	int i;
 	for (i=0; i<wtpdrv_get_num_radios(); i++){
-		wtpdrv_get_radioinfo(i+1,&wtpinfo.radioinfo[i+1]);
+		wtpdrv_get_radioinfo(i,&(wtpinfo->radioinfo[i]));
 
 	}
-*/
+
 	wtpinfo->serial_no=conf_serial_no;
 	wtpinfo->vendor_id=conf_vendor_id;
 
@@ -41,6 +41,11 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->hardware_vendor_id=CW_VENDOR_ID_CISCO;
 	
 	wtpinfo->software_version=conf_software_version;
+	wtpinfo->hardware_version=conf_hardware_version;
+	wtpinfo->bootloader_version=conf_bootloader_version;
+
+
+
 	wtpinfo->software_vendor_id=CW_VENDOR_ID_CISCO;
 
 	wtpinfo->macaddress=conf_macaddress;
@@ -49,9 +54,12 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->mac_type=0;
 
 
-	wtpinfo->session_id = malloc(8);
-	wtpinfo->session_id_len = cw_rand(wtpinfo->session_id,8);
+//	wtpinfo->session_id = malloc(8);
+//	wtpinfo->session_id_len = cw_rand(wtpinfo->session_id,8);
 
+	uint8_t sessid[4];
+	int sidl = cw_rand(sessid,4);
+	wtpinfo->session_id = bstr_create(sessid,sidl);
 
 	wtpinfo->frame_tunnel_mode=1;
 	return wtpinfo;

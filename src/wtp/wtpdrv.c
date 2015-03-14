@@ -11,6 +11,7 @@
 #include "capwap/cw_log.h"
 #include "capwap/radioinfo.h"
 #include "capwap/sock.h"
+#include "capwap/capwap_ieee80211.h"
 
 int wpa_printf()
 {
@@ -1207,13 +1208,18 @@ return 0;
 
 int wtpdrv_get_num_radios()
 {
-	return 4;
+	return 2;
 }
 
 
-/*
-static int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
+
+int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
 {
+
+	radioinfo->rid=rid;
+	radioinfo->type|=CW_IEEE80211_RADIO_TYPE_B; //CWRADIO_TYPE_N;
+
+/*
 	struct wpa_driver_ops * drv = wpa_drivers[0];
 
 	struct hostapd_hw_modes * hwm;
@@ -1267,8 +1273,8 @@ static int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
 
 //	drv
 	
-
+*/
 
 }
 
-*/
+

@@ -169,6 +169,20 @@ int read_config(const char * filename){
 		bstr_replace(&conf_software_version,s);
 	}
 
+	str = uci_lookup_option_string(ctx,section,"hardware_version");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_hardware_version,s);
+	}
+
+	str = uci_lookup_option_string(ctx,section,"bootloader_version");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_bootloader_version,s);
+	}
+
+
+
 	str = uci_lookup_option_string(ctx,section,"serial_no");
 	if (str){
 		uint8_t * s = bstr_create_from_cfgstr(str);

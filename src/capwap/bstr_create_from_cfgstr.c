@@ -36,9 +36,8 @@ uint8_t * bstr_create_from_cfgstr(const char * s)
 	if (l<=2)
 		return bstr_create((uint8_t*)s,l+1);
 
-	if (s[1]=='.'){
+	if (s[1]=='.')
 		return bstr_create((uint8_t*)s+1,l);
-	}
 
 	if (s[1]=='x'){
 		uint8_t * ns=0;
@@ -70,7 +69,6 @@ uint8_t * bstr_create_from_cfgstr(const char * s)
 
 
 	}
-
 
 	return NULL;
 }

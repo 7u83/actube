@@ -17,6 +17,7 @@ struct cwmsg{
 	int rid;
 	int seqnum;
 	int type;
+	int capwap_mode;
 };
 
 struct conn;
@@ -36,5 +37,10 @@ extern void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn*
 extern void cwmsg_addelem_image_identifier(struct cwmsg *msg,uint32_t vendor_id,uint8_t *img, int len);
 
 extern void cwmsg_addelem_radio_operational_state(struct cwmsg * cwmsg, struct radioinfo * ri);
+
+extern void cwmsg_addelem_vendor_cosco_mwar_addr(struct cwmsg *msg, struct conn *conn);
+
+#define cwmsg_addelem_session_id(msg,session_id) \
+		cwmsg_addelem(msg,CWMSGELEM_SESSION_ID,bstr_data(session_id),bstr_len(session_id));
 
 #endif

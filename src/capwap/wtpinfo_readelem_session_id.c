@@ -13,9 +13,11 @@ int wtpinfo_readelem_session_id(struct wtpinfo * wtpinfo, int type, uint8_t * ms
 	if (type != CWMSGELEM_SESSION_ID)
 		return 0;
 
-	wtpinfo->session_id = realloc(wtpinfo->session_id,len);
-	memcpy(wtpinfo->session_id,msgelem,len);
-	wtpinfo->session_id_len=len;
+	wtpinfo->session_id = bstr_create(msgelem,len);
+
+//	wtpinfo->session_id = realloc(wtpinfo->session_id,len);
+//	memcpy(wtpinfo->session_id,msgelem,len);
+//	wtpinfo->session_id_len=len;
 	return 1;
 }
 

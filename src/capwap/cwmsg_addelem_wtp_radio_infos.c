@@ -31,26 +31,13 @@ void cwmsg_addelem_wtp_radio_info(struct cwmsg * msg,struct radioinfo *radioinfo
 }
 
 
-/*
-void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct wtpinfo * wtpinfo)
-{
-	int i;
-	for (i=1; i<30; i++)
-	{
-		if (wtpinfo->radioinfo[i].rid!=0)	
-			cwmsg_addelem_wtp_radio_info(msg,&wtpinfo->radioinfo[i]);
-	}
-
-}
-*/
-
 
 void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct radioinfo * radioinfos)
 {
 	int i;
-	for (i=1; i<=30; i++)
+	for (i=0; i<2; i++)
 	{
-		if (radioinfos[i].rid!=0)	
+//		if (radioinfos[i].rid!=0)	
 			cwmsg_addelem_wtp_radio_info(msg,&radioinfos[i]);
 	}
 

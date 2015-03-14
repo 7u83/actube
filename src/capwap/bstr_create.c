@@ -29,5 +29,4 @@ uint8_t * bstr_create(uint8_t *data, uint8_t len)
 	*str=len;
 	memcpy(str+1,data,len);
 	return str;
-
 }

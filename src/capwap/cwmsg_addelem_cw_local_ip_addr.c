@@ -30,26 +30,41 @@
 
 void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn)
 {
+
         struct sockaddr_storage a;
         socklen_t alen = sizeof(struct sockaddr_storage);
 	getsockname (conn->sock,(struct sockaddr *)&a,&alen);
+
+	int cw_mode = msg->capwap_mode;
 
 	switch (((struct sockaddr*)&a)->sa_family){
 		case AF_INET:
 		{
 			struct sockaddr_in  * sain = (struct sockaddr_in*)&a;
-			cwmsg_addelem(msg,CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS,(uint8_t*)&sain->sin_addr,4);
-		}
+			int id;
+			if (cw_mode == CWMODE_CISCO)
+				id = CWMSGELEM_WTP_IPV4_IP_ADDR; 
+			else
+				id = CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
+			
+			cwmsg_addelem(msg,id,(uint8_t*)&sain->sin_addr,4);
 			break;
-#ifdef WITH_IPV6				
+		}
+
+
 		case AF_INET6:
 		{
+			int id;
+			if (cw_mode == CWMODE_CISCO)
+				id = CWMSGELEM_WTP_IPV6_IP_ADDR; 
+			else
+				id = CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
 			struct sockaddr_in6  * sain = (struct sockaddr_in6*)&a;
-			cwmsg_addelem(msg,CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS,(uint8_t*)&sain->sin6_addr,16);
+			return cwmsg_addelem(msg,id,(uint8_t*)&sain->sin6_addr,16);
 		}
 		break;
-#endif				
-		}
+	}
+
 }
 
 

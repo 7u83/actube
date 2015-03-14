@@ -22,34 +22,61 @@
 #include "conn.h"
 #include "cwmsg.h"
 
-int cwsend_join_request(struct conn * conn,struct radioinfo * radioinfo,struct wtpinfo * wtpinfo)
+int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct wtpinfo *wtpinfo)
 {
 	uint8_t buffer[CWMSG_MAX_SIZE];
 	struct cwmsg cwmsg;
 
-	cwmsg_init(&cwmsg,buffer,CWMSG_JOIN_REQUEST,conn_get_next_seqnum(conn),radioinfo);
+	cwmsg_init(&cwmsg, buffer, CWMSG_JOIN_REQUEST, conn_get_next_seqnum(conn), radioinfo);
+	cwmsg.capwap_mode = conn->capwap_mode;
 
-	cwmsg_addelem(&cwmsg,CWMSGELEM_LOCATION_DATA,wtpinfo->location,strlen((char*)wtpinfo->location));
-	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
-	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
-	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_NAME,wtpinfo->name,strlen((char*)wtpinfo->name));
+	/* Mandatory elements */
 
-	if (wtpinfo->session_id_len>0){
-		cwmsg_addelem(&cwmsg,CWMSGELEM_SESSION_ID,wtpinfo->session_id,wtpinfo->session_id_len);
+	/* location data */
+	cwmsg_addelem(&cwmsg, CWMSGELEM_LOCATION_DATA, wtpinfo->location,
+		      strlen((char *) wtpinfo->location));
+
+	/* wtp board data */
+	cwmsg_addelem_wtp_board_data(&cwmsg, wtpinfo);
+
+	/* wtp descriptor */
+	cwmsg_addelem_wtp_descriptor(&cwmsg, wtpinfo);
+
+	/* wtp name */
+	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_NAME, wtpinfo->name, strlen((char *) wtpinfo->name));
+
+	/* session id */
+	cwmsg_addelem_session_id(&cwmsg, wtpinfo->session_id);
+
+	/* frame tunnel mode */
+	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
+		      sizeof(uint8_t));
+
+	/* WTP MAC type */
+	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
+
+	/* WTP radio information elements */
+	cwmsg_addelem_wtp_radio_infos(&cwmsg, wtpinfo->radioinfo);
+
+	switch (conn->capwap_mode) {
+		case CWMODE_CISCO:
+			cwmsg_addelem_vendor_cisco_mwar_addr(&cwmsg,conn);
+			break;
+		default:
+			/* ECN support */
+			cwmsg_addelem(&cwmsg, CWMSGELEM_ECN_SUPPORT, &wtpinfo->ecn_support,
+				      sizeof(uint8_t));
 	}
 
-	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
-	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
-	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
-
-	if (wtpinfo->capwap_mode != CWMODE_CISCO){
-		cwmsg_addelem(&cwmsg,CWMSGELEM_ECN_SUPPORT,&wtpinfo->ecn_support,sizeof(uint8_t));
-		cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
-	}
+	/* local ip address */
+	cwmsg_addelem_cw_local_ip_addr(&cwmsg, conn);
 
 
+	/* Non-mandatory elements */
+
+	/* maximum message length */
 	uint16_t l = htons(wtpinfo->max_msg_len);
-	cwmsg_addelem(&cwmsg,CWMSGELEM_MAXIMUM_MESSAGE_LENGTH,(uint8_t*)&l,sizeof(l));
+	cwmsg_addelem(&cwmsg, CWMSGELEM_MAXIMUM_MESSAGE_LENGTH, (uint8_t *) & l, sizeof(l));
 
-	return conn_send_cwmsg(conn,&cwmsg);
+	return conn_send_cwmsg(conn, &cwmsg);
 }

@@ -128,8 +128,10 @@ CAPWAPOBJS= \
 	cw_readelem_vendor_specific_payload.o \
 	cw_readelem_capwap_local_ip_addr.o \
 	   cw_readelem_wtp_reboot_statistics.o\
-   	   cwmsg_addelem_vendor_cisco_ap_timesync.o \
-	lw_checksum.o
+	cwmsg_addelem_vendor_cisco_ap_timesync.o \
+	cwmsg_addelem_vendor_cisco_mwar_addr.o \
+	lw_checksum.o \
+	#cwmsg_addelem_session_id.o
 	
 	  # cwsend_image_data_request.o 
 #	   cwmsg_set_control_header.o 

@@ -545,6 +545,7 @@ static int wtpman_join(void *arg,time_t timer)
 	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
 	struct ac_info * acinfo = get_acinfo();
 
+sleep(10);
 
 	int result_code = 0;
 	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
