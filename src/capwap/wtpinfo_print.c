@@ -205,8 +205,8 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	s+=sprintf (s,"\tSession ID: ");
 	if (wtpinfo->session_id) {
 		int i;
-		for (i=0; i<wtpinfo->session_id_len; i++)
-			s+=sprintf(s,"%02X",wtpinfo->session_id[i]);
+		for (i=0; i<bstr_len(wtpinfo->session_id); i++)
+			s+=sprintf(s,"%02X",bstr_data(wtpinfo->session_id)[i]);
 	}
 	else 
 		s+=sprintf(s,"Not set");

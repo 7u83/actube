@@ -152,6 +152,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 	int rc;
 
 	do {
+		conn->capwap_mode=CWMODE_CISCO;
 		rc = cwsend_discovery_request(conn,&ri,wtpinfo);
 		if (rc<0){
 			if (errno == EINTR)

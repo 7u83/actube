@@ -17,6 +17,9 @@
 */
 
 #include "capwap.h"
+#include "capwap_cisco.h"
+
+
 #include "conn.h"
 #include "cwmsg.h"
 
@@ -26,41 +29,49 @@ int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioinfo,str
 	struct cwmsg cwmsg;
 
 	cwmsg_init(&cwmsg,buffer,CWMSG_DISCOVERY_REQUEST,conn_get_next_seqnum(conn),NULL /*radioinfo*/);
-	
+	cwmsg.capwap_mode=conn->capwap_mode;
+
+
+	/* Mandatory elements */
+
+	/* discovery type */	
 	cwmsg_addelem(&cwmsg,CWMSGELEM_DISCOVERY_TYPE,&wtpinfo->discovery_type,sizeof(uint8_t));
+
+	/* wtp board data */
 	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
-//	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
+
+	/* wtp descriptor */
+	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
+	
+	/* wtp frame tunnel mode */
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
+	
+	/* mac type */
 	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
 
-//cwmsg_addelem(&cwmsg,CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS);
-//cwmsg_addelem_cw_local_ip_addr(&cwmsg,conn);
 
+	/* radio infos */
 	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
+	
 
-	if (conn->mtu_discovery)
-		cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
+	/* Non-mandatory elements */
 
-
-
-
-//uint8_t zven[] = {0xBF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,0x66,0x69,0x73,0x68,0x00,0x02,0xFC,0xF5,0x28,0xCA,0xAE,0xE4,0x00,0x03,0x10,0x10,
-//0x04, 0x10, 0x00,0x00,0x10,0x00,0x00,0x06,0xFC,0xF5,0x28,0xCA,0xAE,0xE5,0xC4,0x2E,0xC4,0x2E,0xC4,0x2E,0xC4,0x2E,0xC4,0x2E,
-//0xC4,0x2E,0xC4,0x2E,0xC4,0x2E,0xC4,0x2E };
+	switch (cwmsg.capwap_mode){
+		case CWMODE_CISCO:
+			cwmsg_addelem_vendor_cisco_rad_name(&cwmsg,(uint8_t*)wtpinfo->name);
+			break;
 
 
-/*
-uint8_t zven [] = {
-      // 0x00, 00 03 7A 00 02 
-	0x22, 0xE0, 00, 00, 00, 00, 00, 00, 00, 0x01, 0x66, 0x69, 0x73,0x68,0x00,0x02,0xFC,0xF5,0x28,0xCA,0xAE,0xE4,0x00,0x03,0x10,0x10 ,
-        0x04,0x10,0x00, 00, 0x10, 00, 00,0x06,0xFC,0xF5,0x28,0xCA,0xAE,0xE5,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,0xAB,0x37,  
-        00, 0x07, 00, 00, 0x27,0x11,0x00,0x08,0x00,0x00  };
+	
+		default:
+
+			if (conn->mtu_discovery)
+				cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
+
+	}
 
 
-*/
 
-
-//	cwmsg_addelem_vendor_specific_payload(&cwmsg,890,2,zven,sizeof(zven));
 
 
 	return conn_send_cwmsg(conn,&cwmsg);

@@ -23,7 +23,7 @@
 #include <sys/socket.h>
 
 #include "radioinfo.h"
-
+#include "bstr.h"
 
 
 struct wtp_reboot_statistics{
@@ -41,7 +41,6 @@ struct wtp_reboot_statistics{
 /* structure to hold info about a wtp */
 struct wtpinfo{
 	
-	int capwap_mode;
 
 
 	uint8_t *ac_name;
@@ -61,8 +60,10 @@ struct wtpinfo{
 	uint8_t frame_tunnel_mode;
 
 	uint8_t mac_type;
-	uint8_t * session_id;
-	int session_id_len;
+
+	
+	bstr_t session_id;
+//	int session_id_len;
 
 	struct radioinfo radioinfo[31];
 

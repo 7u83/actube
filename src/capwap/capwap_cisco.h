@@ -16,17 +16,28 @@
 
 */
 
-
 #ifndef __CAPWAP_CISCO_H
 #define __CAPWAP_CISCO_H
 
+#include <string.h>
+
+#define CWVENDOR_CISCO_MWAR_ADDR		2
 #define CWVENDOR_CISCO_RAD			3
 #define CWVENDOR_CISCO_RAD_SLOT			4
 #define CWVENDOR_CISCO_RAD_NAME			5
 #define	CWVENDOR_CISCO_MWAR			6
+
+#define CWVENDOR_CISCO_AP_GROUP_NAME		124
 #define CWVENDOR_CISCO_AP_TIMESYNC		151
 
 
 extern void cwmsg_addelem_vendor_cisco_ap_timesync(struct cwmsg * cwmsg);
+
+
+/* rad_name payload */
+#define cwmsg_addelem_vendor_cisco_rad_name(cwmsg,str) \
+	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO, \
+					CWVENDOR_CISCO_RAD_NAME,str,strlen((char*)str))
+
 
 #endif
