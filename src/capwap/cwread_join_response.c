@@ -25,14 +25,21 @@
 static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 {
 
+printf("Here we are reading\n");
+	cw_dbg_msgelem(CWMSG_JOIN_RESPONSE, type, msgelem, len);
+
 	struct ac_info * acinfo = (struct ac_info *)a;
 //	cw_log_debug1("Process join resp msgelem, type=%d, len=%d\n",type,len);
 
+	if (cw_readelem_result_code(&acinfo->result_code,type,msgelem,len))
+		goto foundX;
+
+
 	if (acinfo_readelem_ecn_support(acinfo,type,msgelem,len))
-		return 1;
+		goto foundX;
 
 	if (acinfo_readelem_ac_descriptor(acinfo,type,msgelem,len)) 
-		return 1;
+		goto foundX;
 
 	if (acinfo_readelem_ac_name(acinfo,type,msgelem,len)) 
 		return 1;
@@ -43,7 +50,10 @@ static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 /*	if (acinfo_readelem_cw_local_ip_addr(acinfo,type,msgelem,len))
 		return 1;
 */
+
 	return 0;
+foundX:
+	return 1;
 }
 
 

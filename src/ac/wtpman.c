@@ -379,8 +379,8 @@ static void wtpman_run_discovery(void *arg)
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
-	memcpy(radioinfo.rmac, cwrmsg->rmac,8);
-	radioinfo.rmac[0]=0;
+//	memcpy(radioinfo.rmac, cwrmsg->rmac,8);
+//	radioinfo.rmac[0]=0;
 
 	struct ac_info * acinfo = get_acinfo();
 

@@ -168,14 +168,40 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 
 
 
-	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,hstr,64);
-	s+=sprintf (s,"\tLocal IP: %s\n",hstr);
+//	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,hstr,64);
+
+int i0;
+for (i0=0; i0<10; i0++){
+	printf("%d\n", ((char*)(&wtpinfo->local_ip))[i0]  );
+}
+
+	s+=sprintf (s,"\tLocal IP: %s\n",sock_addr2str(&(wtpinfo->local_ip)));
 
 
 
 	s+=sprintf (s,"\tVendor ID: %d, %s\n", wtpinfo->vendor_id,cw_ianavendoridtostr(wtpinfo->vendor_id) );
-	s+=sprintf (s,"\tModel No.: %s\n", (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
-	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
+
+	s+=sprintf (s,"\tModel No.: "); //, (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
+	s+=bstr_to_str(s,wtpinfo->model_no,0);
+	s+=sprintf(s,"\n");
+	
+
+//	s+=sprintf (s,"\tSerial No.: %s\n", (!wtpinfo->serial_no ? (uint8_t*)"Not set" : wtpinfo->serial_no) );
+
+
+
+	s+=sprintf (s,"\tSerial No.: "); 
+	s+=bstr_to_str(s,wtpinfo->serial_no,0);
+	s+=sprintf(s,"\n");
+
+	s+=sprintf (s,"\tBoard ID: "); 
+	s+=bstr_to_str(s,wtpinfo->board_id,0);
+	s+=sprintf(s,"\n");
+
+	s+=sprintf (s,"\tBoard Revision: "); 
+	s+=bstr_to_str(s,wtpinfo->board_revision,0);
+	s+=sprintf(s,"\n");
+
 
 //	s+=sprintf (s,"\tBoard Id: %s\n", (!wtpinfo->board_id ? (uint8_t*)"Not set" : wtpinfo->board_id) );
 
@@ -256,6 +282,9 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 	}
 
 	s+=sprintf(s,"%s",ristr);
+
+
+	s+=sprintf(s,"Encryption: %08x\n",wtpinfo->encryption_cap);
 
 	s+=wtp_reboot_statistics_print(s,&wtpinfo->reboot_statistics);
 	return s-str;

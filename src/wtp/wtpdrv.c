@@ -1217,6 +1217,11 @@ int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
 {
 
 	radioinfo->rid=rid;
+	//uint8_t rm[8]="12345600";
+	uint8_t rm[8]={0x00,0x19,0xdb,0xe0,0x93,0x27};
+	
+	radioinfo->rmac = bstr_create(rm,6);
+
 	radioinfo->type|=CW_IEEE80211_RADIO_TYPE_B; //CWRADIO_TYPE_N;
 
 /*

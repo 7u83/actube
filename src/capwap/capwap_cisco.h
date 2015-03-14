@@ -27,8 +27,10 @@
 #define CWVENDOR_CISCO_RAD_NAME			5
 #define	CWVENDOR_CISCO_MWAR			6
 
-#define CWVENDOR_CISCO_AP_GROUP_NAME		124
+#define CWVENDOR_CISCO_AP_GROUP_NAME		123
 #define CWVENDOR_CISCO_AP_TIMESYNC		151
+
+#define CWVENDOR_CISCO_PL207			207
 
 
 extern void cwmsg_addelem_vendor_cisco_ap_timesync(struct cwmsg * cwmsg);
@@ -38,6 +40,12 @@ extern void cwmsg_addelem_vendor_cisco_ap_timesync(struct cwmsg * cwmsg);
 #define cwmsg_addelem_vendor_cisco_rad_name(cwmsg,str) \
 	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO, \
 					CWVENDOR_CISCO_RAD_NAME,str,strlen((char*)str))
+/* group name payload */
+#define cwmsg_addelem_vendor_cisco_group_name(cwmsg,str) \
+	cwmsg_addelem_vendor_secific_payload(cwmsg,CW_VENDOR_ID_CISCO, \
+					CWVENDOR_CISCO_GROUP_NAME,str,strlen((char*)str));
 
+
+/* payload 207 */
 
 #endif
