@@ -30,10 +30,10 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 
 		switch(subtype){
 			case CWBOARDDATA_MODELNO:
-				cw_setstr(&wtpinfo->model_no,msgelem+i,sublen);
+				bstr_replace(&wtpinfo->model_no,bstr_create(msgelem+i,sublen));
 				break;
 			case CWBOARDDATA_SERIALNO:
-				cw_setstr(&wtpinfo->serial_no,msgelem+i,sublen);
+				bstr_replace(&wtpinfo->serial_no,bstr_create(msgelem+i,sublen));
 				break;
 			case CWBOARDDATA_MACADDRESS:
 				wtpinfo->macaddress=realloc(wtpinfo->macaddress,sublen);
@@ -41,10 +41,10 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 				wtpinfo->macaddress_len=sublen;
 				break;
 			case CWBOARDDATA_BOARDID:
-				cw_setstr(&wtpinfo->board_id,msgelem+i,sublen);
+				bstr_replace(&wtpinfo->board_id,bstr_create(msgelem+i,sublen));
 				break;
 			case CWBOARDDATA_REVISION:
-				cw_setstr(&wtpinfo->board_revision,msgelem+i,sublen);
+				bstr_replace(&wtpinfo->board_revision,bstr_create(msgelem+i,sublen));
 			default:
 				break;
 		}

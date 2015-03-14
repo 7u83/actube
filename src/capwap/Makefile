@@ -94,7 +94,6 @@ CAPWAPOBJS= \
 	cwread_discovery_request.o\
 	cwread_change_state_event_request.o\
 	cwread_wtp_event_request.o \
-	   process_msgelems_discovery_request.o \
 	   process_conf_status_request.o \
 	   process_join_request.o \
 	   wtpinfo_readelem_wtp_board_data.o \
@@ -132,6 +131,7 @@ CAPWAPOBJS= \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	lw_checksum.o \
 	#cwmsg_addelem_session_id.o
+#	   process_msgelems_discovery_request.o \
 	
 	  # cwsend_image_data_request.o 
 #	   cwmsg_set_control_header.o 
@@ -185,7 +185,8 @@ CONNOBJS= conn.o \
 
 BSTROBJS= bstr_create.o \
 	bstr_create_from_cfgstr.o \
-	bstr_replace.o
+	bstr_replace.o \
+	bstr_to_str.o
 	
 
 FRAGOBJS=fragman.o

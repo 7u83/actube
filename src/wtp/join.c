@@ -20,6 +20,7 @@ void acinfo_log_(int level,const struct ac_info *acinfo,const char * xstr)
 {
 	char str[8192];
 	acinfo_print(str,acinfo);
+	cw_dbg(DBG_CW_INFO,"%s",str);
 //	cw_log_debug(level,"%s\n%s",xstr,str);
 	return;
 }
@@ -35,37 +36,54 @@ int join_state(struct conn * conn)
 	memset(&ri,0,sizeof(ri));
 	int rc;
 
+
+	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
+
 #ifdef WITH_CW_LOG_DEBUG	
 	char str[64];
 	sock_addrtostr(&conn->addr,str,64);
 //	cw_log_debug0("Sending join request to %s",str);
 #endif	
 	printf("Seqnum before = %i\n",conn->seqnum);
-	rc = cwsend_join_request(conn,&ri,wtpinfo);
+	rc = cwsend_join_request(conn,rip,wtpinfo);
 	printf("Seqnum after = %i\n",conn->seqnum);
 
 	
 	struct cwrmsg * cwrmsg;
 //	do {
+int i;
+for(int i=0; i<10; i++){
+		
 		cwrmsg = conn_get_message(conn);
+		if ( cwrmsg)
+			break;
+}
 	printf("Received %08p\n",cwrmsg);
 //	}while(cwrmsg==0);
 
 
-exit(0);
 
+	printf("SEQQQQS %d %d\n",cwrmsg->seqnum,conn->seqnum);
 
 //	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
 	if (cwrmsg->type != CWMSG_JOIN_RESPONSE || cwrmsg->seqnum != conn->seqnum){
-		printf("Wrong message\n");
+		printf("Wrong messagei %d %d\n",cwrmsg->seqnum,conn->seqnum);
+		
 	}
 
 	struct ac_info acinfo;
 	memset(&acinfo,0,sizeof(acinfo));
 
+printf("cwrad\n");
+
 	cwread_join_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+printf("Done reading\n");
+
 	acinfo_log(0,&acinfo,"Connectet to the following AC");
+
+	printf("Result_code: %d\n",acinfo.result_code);
+
 }
 
 

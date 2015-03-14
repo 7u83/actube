@@ -19,7 +19,8 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo=malloc(sizeof(struct wtpinfo));
 	memset(wtpinfo,0,sizeof(struct wtpinfo));
 
-	wtpinfo->name = (uint8_t*)"wtpXY";
+	wtpinfo->name = conf_wtpname;
+
 	wtpinfo->location = (uint8_t*)"default location";
 
 	wtpinfo->max_radios=wtpdrv_get_num_radios();
@@ -28,6 +29,8 @@ struct wtpinfo * get_wtpinfo()
 		wtpdrv_get_radioinfo(i,&(wtpinfo->radioinfo[i]));
 
 	}
+
+	wtpinfo->encryption_cap=1;
 
 	wtpinfo->serial_no=conf_serial_no;
 	wtpinfo->vendor_id=conf_vendor_id;
@@ -45,6 +48,8 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->bootloader_version=conf_bootloader_version;
 
 
+	wtpinfo->board_id = conf_board_id;
+	wtpinfo->board_revision = conf_board_revision;
 
 	wtpinfo->software_vendor_id=CW_VENDOR_ID_CISCO;
 

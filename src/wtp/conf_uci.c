@@ -182,6 +182,18 @@ int read_config(const char * filename){
 	}
 
 
+	str = uci_lookup_option_string(ctx,section,"board_id");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_board_id,s);
+	}
+
+	str = uci_lookup_option_string(ctx,section,"board_revision");
+	if (str){
+		uint8_t * s = bstr_create_from_cfgstr(str);
+		bstr_replace(&conf_board_revision,s);
+	}
+
 
 	str = uci_lookup_option_string(ctx,section,"serial_no");
 	if (str){

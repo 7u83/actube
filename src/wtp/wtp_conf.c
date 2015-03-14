@@ -74,6 +74,13 @@ uint8_t * conf_model_no;
 uint8_t * conf_serial_no;
 
 
+
+bstr_t conf_board_id;
+bstr_t conf_board_revision;
+
+
+
+
 LONGSTRS conf_timer_cfgstrs[] = {
 	"max_discovery_interval",&conf_max_discovery_interval,
 	"discovery_interval",&conf_discovery_interval,
@@ -204,7 +211,8 @@ int wtpconf_preinit()
 	conf_software_version = bstr_create_from_cfgstr(CONF_DEFAULT_SOFTWARE_VERSION);
 	conf_serial_no = bstr_create_from_cfgstr(CONF_DEFAULT_SERIAL_NO);
 
-
+	conf_board_id = bstr_create_from_cfgstr(CONF_DEFAULT_BOARD_ID);
+	conf_board_revision = bstr_create_from_cfgstr(CONF_DEFAULT_BOARD_REVISION);
 }
 
 int wtpconf_init()

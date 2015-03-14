@@ -20,6 +20,9 @@
 #ifndef __RADIOINFO_H
 #define __RADIOINFO_H
 
+#include "bstr.h"
+
+
 struct radioinfo{
 	char set;
 	int rid;
@@ -27,7 +30,7 @@ struct radioinfo{
 	int admin_state;
 	int state;
 	int cause;
-	uint8_t rmac[8];
+	bstr_t rmac;
 };
 
 #endif

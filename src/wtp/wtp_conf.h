@@ -4,6 +4,10 @@
 #include <sys/socket.h>
 
 #include "capwap/capwap.h"
+#include "capwap/bstr.h"
+
+
+
 
 extern int read_config(const char * filename);
 extern char * conf_wtpname;
@@ -24,6 +28,9 @@ extern uint8_t * conf_hardware_version;
 extern uint8_t * conf_model_no;
 extern uint8_t * conf_serial_no;
 
+
+extern bstr_t conf_board_id;
+extern bstr_t conf_board_revision;
 
 
 extern struct sockaddr_storage * conf_preffered_ac_sa;
@@ -71,8 +78,13 @@ extern uint8_t conf_macaddress_len;
 #endif
 
 
+#ifndef CONF_DEFAULT_BOARD_ID
+	#define CONF_DEFAULT_BOARD_ID "00"
+#endif
 
-
+#ifndef CONF_DEFAULT_BOARD_REVISION
+	#define CONF_DEFAULT_BOARD_REVISION "00"
+#endif
 
 
 #ifndef CONF_DEFAULT_MAX_DISCOVERY_INTERVAL

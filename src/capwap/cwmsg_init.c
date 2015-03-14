@@ -33,15 +33,16 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 	cwmsg->flags=0;
 
 	if (radioinfo){
-		if (radioinfo->rmac[0]){
+		if (radioinfo->rmac){
 			/* we assume the radio mac is already aligned */
-			rmaclen=(*radioinfo->rmac);
-			memcpy(buffer+8,radioinfo->rmac,rmaclen/8+8);
+			rmaclen=bstr_len(radioinfo->rmac);
+			*(buffer+8)=rmaclen;
+			memcpy(buffer+9,bstr_data(radioinfo->rmac),rmaclen);
 			cwmsg->flags=CWTH_FLAGS_M;	
 		}
 	}
 
-	hlen+=rmaclen;
+	hlen+=rmaclen+1;
 	if (hlen%4)
 		hlen = (hlen>>2)*4+4;
 

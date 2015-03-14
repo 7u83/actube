@@ -27,7 +27,8 @@ void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo
 
 	switch (cwmsg->capwap_mode){
 		case CWMODE_CISCO:
-			*((uint16_t*)(d+len))=0;
+			/* encryption capabilities */
+			*((uint16_t*)(d+len))=htons(wtpinfo->encryption_cap);
 			len+=2;
 			break;
 		default:

@@ -26,7 +26,7 @@
 
 
 
-static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len, int capwap_mode)
+static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len, int cq)
 {
 	if (type != CWMSGELEM_WTP_DESCRIPTOR)
 		return 0;
@@ -37,31 +37,19 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 	wtpinfo->max_radios=*msgelem;
 	wtpinfo->radios_in_use=*(msgelem+1);
 
-	int ncrypt;
-	int i=2;
-
-	switch (capwap_mode){
-		case CWMODE_CISCO:
-			wtpinfo->encryption_cap = ntohs( *((uint16_t*)(msgelem+2)) );
+	int ncrypt = *(msgelem+2);
+	int i;
+	if (ncrypt == 0 ){
+		/* non-conform */
+		cw_dbg(DBG_CW_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
+		if (!cq) 
+			i=3;
+		else
 			i=4;
-			break;
-		default:
-		{
- 			ncrypt= *(msgelem+2);
-			if (ncrypt == 0 ){
-				/* non-conform */
-				cw_dbg(DBG_CW_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
-				i=3;
-			}
-			else
-				i=ncrypt*3+3;
-
-		}
-		
-
-
 	}
-
+	else{
+		i=ncrypt*3+3;
+	}
 
 	do {
 		if (i+8>len)
@@ -113,11 +101,10 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 
 int wtpinfo_readelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len)
 {
-	int rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,CWMODE_STD);
-
+	int rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,0);
 	if (rc==-1){
-		cw_dbg(DBG_CW_RFC,"Bad wtp descriptor, trying cisco");
-		rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,CWMODE_CISCO);
+		cw_dbg(DBG_CW_RFC,"Bad wtp descriptor, trying cisco hack");
+		rc =wtpinfo_readelem_wtp_descriptor_(wtpinfo, type, msgelem, len,1);
 	}
 
 	return rc;

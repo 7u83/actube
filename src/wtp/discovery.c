@@ -134,6 +134,9 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 	struct radioinfo ri;
 	memset(&ri,0,sizeof(ri));
 
+	struct radioinfo * rip = &wtpinfo->radioinfo[0];
+
+/*
 	ri.rmac[0]=6;
 	ri.rmac[2]=14;
 	ri.rmac[3]=14;
@@ -141,7 +144,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 	ri.rmac[5]=14;
 	ri.rmac[6]=14;
 	ri.rmac[7]=14;
-
+*/
 
 #ifdef WITH_CW_LOG_DEBUG
 	char str[100];
@@ -153,7 +156,7 @@ static int do_discover_conn(struct conn * conn,struct discovery_info * di)
 
 	do {
 		conn->capwap_mode=CWMODE_CISCO;
-		rc = cwsend_discovery_request(conn,&ri,wtpinfo);
+		rc = cwsend_discovery_request(conn,rip,wtpinfo);
 		if (rc<0){
 			if (errno == EINTR)
 				continue;

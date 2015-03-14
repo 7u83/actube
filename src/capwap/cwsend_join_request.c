@@ -19,6 +19,8 @@
 #include <string.h>
 
 #include "capwap.h"
+#include "capwap_cisco.h"
+
 #include "conn.h"
 #include "cwmsg.h"
 
@@ -61,6 +63,16 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 	switch (conn->capwap_mode) {
 		case CWMODE_CISCO:
 			cwmsg_addelem_vendor_cisco_mwar_addr(&cwmsg,conn);
+
+			uint8_t data207[4] = {1,1,0,1};
+
+		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,
+                                        CWVENDOR_CISCO_PL207,data207,4);
+
+		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,
+                                        CWVENDOR_CISCO_AP_GROUP_NAME,(uint8_t*)"Tobias",strlen("Tobias"));
+
+
 			break;
 		default:
 			/* ECN support */

@@ -53,7 +53,11 @@ struct ac_info{
 	struct sockaddr_storage local_ip;
 
 	/* wireless bindings */
+	
+
 	struct radioinfo radioinfos[32];
+
+	uint32_t result_code;
 
 };
 
