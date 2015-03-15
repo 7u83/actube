@@ -16,13 +16,25 @@
 
 */
 
+/**
+ * @file
+ * @brief Implements DTLS BIO read/write functions.
+ */
+
+
 #include <arpa/inet.h>
 
 #include "cw_log.h"
 #include "dtls.h"
 
 
-
+/**
+ * Reads CAPWAP DTLS data from a connection object.
+ * @param conn conn object
+ * @param out where to write data to
+ * @param maxlen maximum number of bytes to read
+ * @return the number of bytes read
+ */ 
 int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 {
 	if (conn->dtls_buffer_len == 0) {
@@ -53,7 +65,13 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 	return ret;
 }
 
-
+/**
+ * Write DTLS data to a CAPWAP connection.
+ * @param conn the connection
+ * @param data data to write
+ * @param len number of bytes to write
+ * @return the number of bytes written
+ */
 int dtls_bio_write(struct conn *conn, const char *data, int len)
 {
 	uint8_t buffer[2048];
