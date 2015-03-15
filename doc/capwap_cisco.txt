@@ -1,0 +1,20 @@
+
+
+
+
+207. Cisco Board Data Options
+
+  The Cisco Board Data element is present in Discover Request and 
+  Join Request messages sent by the WTP.
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | ANT Type      | Rserved       | AP Type       | Join Priority |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+Type: 207 
+Length: 4
+
+
+
