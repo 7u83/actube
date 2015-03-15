@@ -73,8 +73,6 @@ static int read_subelem(struct ac_info* acinfo,int subtype,uint8_t *elem, int le
  * @return 1 AC descriptor sucessfull read \n
  *	0 not an ac descriptor message\n
  *	-1 an error has occured
- *
- *
  */
 int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len)
 {
