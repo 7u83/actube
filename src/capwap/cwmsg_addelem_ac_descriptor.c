@@ -16,12 +16,34 @@
 
 */
 
+/**
+ * @file
+ * @brief Implementation of cwmsg_addelem_ac_descriptor.
+ */ 
+
 #include <string.h>
 #include "capwap.h"
 
+
+static int add_subelem(uint8_t * buffer,int type, uint32_t vendor,bstr_t version)
+{
+
+	*((uint32_t*)buffer) = htonl(vendor);
+	*((uint32_t*)(buffer+4)) = htonl( (type<<16) | bstr_len(version));
+
+	memcpy(buffer+8,bstr_data(version),bstr_len(version));
+
+	return 8+bstr_len(version);
+}
+
+/**
+ * Add an ac descriptor message element.
+ * @param msg pointer to the message
+ * @param acinfo acinfo structure where data is taken from
+ */
 void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 {
-	uint8_t buffer[12+2048];
+	uint8_t buffer[600];
 	uint8_t * acd = buffer;
 
 	*((uint32_t*)(acd))=htonl((acinfo->stations<<16) | (acinfo->limit));
@@ -30,64 +52,18 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 
 
 	int len = 12;
-	int sublen;
 
-	sublen = 4;
-		
-	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
-	len+=4;
-	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
-	len+=4;
-	*(acd+len)=5; len++;
-	*(acd+len)=0; len++;
-	*(acd+len)=72; len++;
-	*(acd+len)=71; len++;
-	*(acd+len)=5; len++;
-	*(acd+len)=6; len++;
-	*(acd+len)=7; len++;
-	*(acd+len)=8; len++;
+	switch (msg->capwap_mode){
+		case CWMODE_CISCO:
+			len+=add_subelem(buffer+len,0,CW_VENDOR_ID_CISCO,acinfo->cisco_hardware_version);
+			len+=add_subelem(buffer+len,1,CW_VENDOR_ID_CISCO,acinfo->cisco_software_version);
+			break;
+		default:
+			len+=add_subelem(buffer+len,0,0,acinfo->hardware_version);
+			len+=add_subelem(buffer+len,1,0,acinfo->software_version);
 
+	}
 
-	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
-	len+=4;
-	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
-	len+=4;
-	*(acd+len)=7; len++;
-	*(acd+len)=3; len++;
-	*(acd+len)=1; len++;
-	*(acd+len)=72; len++;
-	*(acd+len)=5; len++;
-	*(acd+len)=6; len++;
-	*(acd+len)=7; len++;
-	*(acd+len)=8; len++;
-
-
-
-
-goto b;
-
-	/* software version subelement */
-
-	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO);
-	len+=4;
-	sublen=strlen((const char*)acinfo->software_version);
-	*((uint32_t*)(acd+len))=htonl((1<<16)|sublen);
-	len+=4;
-	memcpy(acd+len,acinfo->software_version,sublen);
-	len+=sublen;
-
-
-	/* hardware version subelement */
-	*((uint32_t*)(acd+len))=htonl(CW_VENDOR_ID_CISCO); 
-	len+=4;
-	sublen=strlen((const char*)acinfo->hardware_version);
-	*((uint32_t*)(acd+len))=htonl((4<<16)|sublen);
-	len+=4;
-	memcpy(acd+len,acinfo->hardware_version,sublen);
-	len+=sublen;
-b:
 	cwmsg_addelem(msg,CWMSGELEM_AC_DESCRIPTOR,acd,len);
-
 }
-
 
