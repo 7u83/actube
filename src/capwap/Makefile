@@ -132,6 +132,8 @@ CAPWAPOBJS= \
 	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	lw_checksum.o \
+	lw_readelem_wtp_board_data.o \
+
 	#cwmsg_addelem_session_id.o
 #	   process_msgelems_discovery_request.o \
 	
