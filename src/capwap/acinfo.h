@@ -1,3 +1,8 @@
+/**
+ *@file
+ *@brief acinfo definitions.
+ */
+
 #ifndef __ACINFO_H
 #define __ACINFO_H
 
@@ -37,12 +42,18 @@ struct ac_info{
 	int rmac;
 	int dtls_policy;
 	int vendor_id;
-	uint8_t * hardware_version;
-	int hardware_version_len;
-	uint8_t * software_version;
-	int software_version_len;
 
-//	const char * acname;
+	/** Hardware version to use in capwap-mode */
+	bstr_t hardware_version;
+	/** Software version to use in capwap-mode */
+	bstr_t software_version;
+
+	/** Hardware version to use if in cisco-mode */
+	bstr_t cisco_hardware_version; 
+	/** Software version to use if in cisco-mode */
+	bstr_t cisco_software_version;
+
+
 
 	struct sockaddr * salist;
 	int salist_len;

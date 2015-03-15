@@ -20,7 +20,6 @@
  * @file 
  * @brief  Defines cwread_change_state_even_request function. 
  * 
- * Full text
  */
 
 #include <stdio.h>
@@ -56,7 +55,11 @@ foundX:
 }
 
 /**
- * @brief Read elements of a Change State Event Request message.
+ * Read elements of a Change State Event Request message.
+ * @param wtpinfo wtpinfo where the results are stored.
+ * @param msg a pointer to the message
+ * @param len length of the message
+ * @return result code
  */
 int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {

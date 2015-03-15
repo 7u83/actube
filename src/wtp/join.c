@@ -75,10 +75,8 @@ for(int i=0; i<10; i++){
 	struct ac_info acinfo;
 	memset(&acinfo,0,sizeof(acinfo));
 
-printf("cwrad\n");
 
 	cwread_join_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-printf("Done reading\n");
 
 	acinfo_log(0,&acinfo,"Connectet to the following AC");
 

@@ -1,3 +1,9 @@
+
+/**
+ * @file
+ * @breif defines acinfo_print function
+ */
+
 #include <string.h>
 #include <stdio.h>
 
@@ -6,14 +12,27 @@
 
 #include "acinfo.h"
 
+#include "cw_util.h"
 
+
+/**
+ * Formats an acinfo object.
+ *
+ */ 
 int acinfo_print(char *str,const struct ac_info *acinfo)
 {
 	char *s = str;
 
 	s+=sprintf(s,"\tAC name: %s\n",acinfo->ac_name);
-	s+=sprintf(s,"\tHardware version: %s\n",acinfo->hardware_version);
-	s+=sprintf(s,"\tSoftware version: %s\n",acinfo->software_version);
+
+	s+=sprintf(s,"\tHardware version: ");
+	s+=cw_format_version(s,acinfo->hardware_version,0,"-");
+	s+=sprintf(s,"\n");
+
+	s+=sprintf(s,"\tSoftware version: ");
+	s+=cw_format_version(s,acinfo->software_version,0,"-");
+	s+=sprintf(s,"\n");
+
 	s+=sprintf(s,"\tStations: %i\n",acinfo->stations);
 	s+=sprintf(s,"\tSation limit: %i\n",acinfo->limit);
 	s+=sprintf(s,"\tActive WTPs: %i\n",acinfo->active_wtps);

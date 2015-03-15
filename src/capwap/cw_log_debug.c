@@ -16,6 +16,12 @@
 
 */
 
+/**
+ *@file
+ *@brief Debug helpers
+ */
+
+
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -24,6 +30,16 @@
 #include "cw_log.h"
 #include "capwap.h"
 #include "cw_util.h"
+
+
+int cw_dbg_opt_detail = 0;
+int cw_dbg_opt_level = 0;
+
+
+
+int cw_log_debug_level = 0;
+
+
 
 
 static void cw_log_debug0_(const char *format, ...)
@@ -49,6 +65,7 @@ static void cw_log_debug1_(const char *format, ...)
 	closelog();
 }
 
+
 static void cw_log_debug2_(const char *format, ...)
 {
 	if (cw_log_debug_level < 2)
@@ -59,6 +76,7 @@ static void cw_log_debug2_(const char *format, ...)
 	va_end(args);
 	closelog();
 }
+
 
 
 
@@ -109,13 +127,6 @@ int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 	return 1;
 
 }
-
-int cw_log_debug_level = 0;
-
-
-
-int cw_dbg_opt_detail = 0;
-int cw_dbg_opt_level = 0;
 
 
 void cw_log_dbg_(int level, const char *file, int line, const char *format,
@@ -242,6 +253,7 @@ cw_log_debug0_, cw_log_debug1_, cw_log_debug2_};
 
 
 
+
 /**
  * print debug info for message elements
  */
@@ -276,6 +288,8 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 			   cw_msgtostr(msg), msgelem, elemname, len);
 }
 
+
+
 void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 {
 	if (!cw_dbg_is_level(DBG_CW_RFC))
@@ -289,5 +303,8 @@ void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 	}
 }
 
-//cw_dbg(DBG_CW_MSGELEM,"Process discovery req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
-//cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
+
+
+
+
+

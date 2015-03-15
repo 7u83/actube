@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief Implents configuration status request 
+ */ 
+
 #include <stdio.h>
 
 #include "capwap.h"
@@ -34,14 +39,29 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 	cw_dbg_msgelem(CWMSG_CONFIGURATION_STATUS_REQUEST, type, msgelem,len);
 
 	/* mandatory elements */
+	
+	/* ac name */
 	if (cw_readelem_ac_name(&e->wtpinfo->ac_name,type,msgelem,len))
 		goto foundX;
-	if (cw_readelem_wtp_reboot_statistics(&e->wtpinfo->reboot_statistics,type,msgelem,len))
-		goto foundX;
+
+	/* radio administrative state */
 	if (cw_readelem_radio_administrative_state(e->wtpinfo->radioinfo, type,msgelem,len))
 		goto foundX;
+	
+	/* statistics timer */
 	if (cw_readelem_statistics_timer(&e->wtpinfo->statistics_timer, type,msgelem,len))
 		goto foundX;
+
+	/* reboot statistics */
+	if (cw_readelem_wtp_reboot_statistics(&e->wtpinfo->reboot_statistics,type,msgelem,len))
+		goto foundX;
+
+	/* non-mantatory elements */
+
+	if (cw_readelem_vendor_specific_payload
+	    (e->wtpinfo, CWMSG_CONFIGURATION_STATUS_REQUEST, type, msgelem, len))
+		return 1;
+
 
 	return 0;
 foundX:

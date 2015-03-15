@@ -31,12 +31,12 @@ static int read_subelem_cisco(struct ac_info* acinfo,int subtype,uint8_t * elem,
 {
 	switch (subtype) {
 		case 0:
-			/* software version */
-			bstr_replace(&acinfo->software_version,bstr_create(elem,len));
-			break;
-		case 1: 
 			/* hardware version */
 			bstr_replace(&acinfo->hardware_version,bstr_create(elem,len));
+			break;
+		case 1: 
+			/* software version */
+			bstr_replace(&acinfo->software_version,bstr_create(elem,len));
 			break;
 
 		default:

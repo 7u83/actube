@@ -18,8 +18,8 @@
 
 
 /* 
- * This file implements a simple fragment management system 
- * for the capwap protocol.
+ * @file
+ * @brief This file implements a simple fragment management system for the capwap protocol.
  *
  * Usage goes as follows.
  *
@@ -52,7 +52,7 @@
 #include "capwap.h"
 #include "fragman.h"
 
-/*
+/**
  * check if we keep already fragments belonging to the 
  * specified fragment id
  */
@@ -70,7 +70,7 @@ static struct frag * frag_get(struct frag * frags, int fragid)
 	return NULL;
 }
 
-/*
+/**
  * create a new fragment
  */
 static struct frag * frag_new(struct frag * frags, int fragid)

@@ -10,6 +10,7 @@ void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinf
 {
 	struct cwmsg * cwmsg = &conn->resp_msg;	
 	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_JOIN_RESPONSE,seqnum,NULL);
+	cwmsg->capwap_mode=conn->capwap_mode;
 
 	/* mandatory messagesg elements */
 	cwmsg_addelem_result_code(cwmsg,rc);
@@ -22,7 +23,6 @@ void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinf
 
 	/* */
 	cwmsg_addelem_image_identifier(cwmsg,CW_VENDOR_ID_CISCO,(uint8_t*)"/tobias",strlen("/tobias"));
-
 
 
 	uint8_t buffer[]="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -41,7 +41,7 @@ void cwsend_join_response(struct conn * conn,int seqnum, int rc, struct radioinf
 	*((uint16_t*)(buffer+9+2))=htons(23); /* Supported MS */
 	*((uint16_t*)(buffer+9+4))=htons(5); /* Active RAD's */
 	*((uint16_t*)(buffer+9+6))=htons(15); /* Supported RAD's */
-	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO, CWVENDOR_CISCO_MWAR, buffer,34);
+//	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO, CWVENDOR_CISCO_MWAR, buffer,34);
 
 	
 	conn_send_response(conn,cwmsg,seqnum);

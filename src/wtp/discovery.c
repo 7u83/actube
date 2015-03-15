@@ -94,8 +94,8 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 	printf("AC INFO\n%s",ai);
 
 
-printf("CWRHW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
-exit(0);
+//printf("CWRHW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
+///exit(0);
 
 
 /*

@@ -44,7 +44,7 @@ static int acinfo_readelem_discovery_resp(void * eparm,int type,uint8_t* msgelem
 	struct eparm *e = (struct eparm *) eparm;
 
 
-	if (acinfo_readelem_ac_descriptor(e->acinfo,type,msgelem,len))
+	if (cw_readelem_ac_descriptor(e->acinfo,type,msgelem,len))
 		goto foundX;
 
 	if (acinfo_readelem_ac_name(e->acinfo,type,msgelem,len)) 

@@ -74,11 +74,17 @@ char * conf_dtls_psk=NULL;
 int conf_security=0;
 long conf_vendor_id=CONF_DEFAULT_VENDOR_ID;
 
-char * conf_hardware_version=NULL;
-int conf_hardware_version_len=0;
 
-char * conf_software_version=NULL;
-int conf_software_version_len=0;
+bstr_t conf_hardware_version=NULL;
+bstr_t conf_software_version=NULL;
+
+bstr_t conf_cisco_hardware_version=NULL;
+bstr_t conf_cisco_software_version=NULL;
+
+
+//int conf_hardware_version_len=0;
+
+//int conf_software_version_len=0;
 
 
 int conf_use_loopback = 0;
@@ -168,7 +174,7 @@ static int init_vendor_id()
 	return 1;
 }
 
-
+/*
 static int convert_version_string(char * si[], int *l)
 {
 	char * s = *si;	
@@ -231,31 +237,47 @@ static int convert_version_string(char * si[], int *l)
 	return 1;
 }
 
+*/
 
 
 static int init_version()
 {
+
+	/* Init hardware version */
 	if (!conf_hardware_version)
 	{
 		struct utsname u;
 		int rc = uname(&u);
 		if (rc<0)
-			conf_hardware_version=CONF_DEFAULT_HARDWARE_VERSION;
+			conf_hardware_version=(bstr_t)strdup(CONF_DEFAULT_HARDWARE_VERSION);
 		else{
 			char str[265];
 			sprintf(str,"%s / %s %s",u.machine,u.sysname,u.release);
-			conf_hardware_version=strdup(str);
+			conf_hardware_version=(bstr_t)strdup(str);
 		}
 
 	}
-	conf_hardware_version_len=strlen(conf_hardware_version);
-	convert_version_string(&conf_hardware_version,&conf_hardware_version_len);
+	bstr_replace(&conf_hardware_version,bstr_create_from_cfgstr((char*)conf_hardware_version));
 
+	/* software version */
 	if (!conf_software_version)
-		conf_software_version=CONF_DEFAULT_SOFTWARE_VERSION;
-	conf_software_version_len=strlen(conf_software_version);
+		conf_software_version=(bstr_t)strdup(CONF_DEFAULT_SOFTWARE_VERSION);
+	bstr_replace(&conf_software_version,bstr_create_from_cfgstr((char*)conf_software_version));
+
+
+	/* Cisco hardware version */
+	if (!conf_cisco_hardware_version)
+		conf_cisco_hardware_version=(bstr_t)strdup(CONF_DEFAULT_CISCO_HARDWARE_VERSION);
+	bstr_replace(&conf_cisco_hardware_version,bstr_create_from_cfgstr((char*)conf_cisco_hardware_version));
+
+	/* Cisco software version */
+	if (!conf_cisco_software_version)
+		conf_cisco_software_version=(bstr_t)strdup(CONF_DEFAULT_CISCO_SOFTWARE_VERSION);
+	bstr_replace(&conf_cisco_software_version,bstr_create_from_cfgstr((char*)conf_cisco_software_version));
+
+
+
 	
-	convert_version_string(&conf_software_version,&conf_software_version_len);
 	return 1;
 }
 
@@ -529,7 +551,7 @@ static int conf_read_dbg_level(cfg_t *cfg)
 
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
-int u = cw_log_str2dbglevel(str);
+//int u = cw_log_str2dbglevel(str);
 		cw_dbg_opt_level|=cw_log_str2dbglevel(str);
 
 	}
