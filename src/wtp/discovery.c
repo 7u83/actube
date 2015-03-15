@@ -80,11 +80,23 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 
 	acinfo.aciplist = di->aciplist;
 
+
+
+
 	cwread_discovery_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+
+
+
 
 	char ai [4096];
 	acinfo_print(ai,&acinfo);
 	printf("AC INFO\n%s",ai);
+
+
+printf("CWRHW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
+exit(0);
+
 
 /*
 	printf("AC NAME %s\n",acinfo.ac_name);

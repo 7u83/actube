@@ -318,8 +318,6 @@ static int init_listen_addrs()
 
 		}
 
-
-
 		if (ifa->ifa_addr->sa_family==AF_INET && conf_ipv4){
 			sock_addrtostr(ifa->ifa_addr,str,100);
 			*strchr(str,':')=0;

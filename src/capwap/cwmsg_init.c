@@ -22,6 +22,8 @@
 #include "capwap.h"
 #include "cwmsg.h"
 
+#include "sock.h" //Tube
+
 void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, struct radioinfo * radioinfo)
 {
 	int hlen=8;
@@ -39,12 +41,16 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 			*(buffer+8)=rmaclen;
 			memcpy(buffer+9,bstr_data(radioinfo->rmac),rmaclen);
 			cwmsg->flags=CWTH_FLAGS_M;	
+			rmaclen++;
 		}
 	}
 
-	hlen+=rmaclen+1;
-	if (hlen%4)
+	hlen+=rmaclen;
+	if (hlen%4){
+		int n = hlen;
 		hlen = (hlen>>2)*4+4;
+		memset(buffer+n,0,hlen-n);	
+	}
 
 	
 	cwmsg->ctrlhdr=cwmsg->trnsprthdr+hlen; 
