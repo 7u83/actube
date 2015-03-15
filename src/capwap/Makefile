@@ -53,7 +53,8 @@ UTILOBJS= \
 	avltree_del_all.o \
 	avltree_foreach.o \
 	stravltree.o \
-	cw_util.o
+	cw_util.o \
+	cw_format_version.o
 
 # cw_tohex.o\
 #capwap_parse_ctrlhdr.o \
@@ -119,7 +120,8 @@ CAPWAPOBJS= \
 	   cw_readelem_ecn_support.o \
 	cw_readelem_maximum_message_length.o \
 	cw_readelem_result_code.o\
-	   cw_readelem_ac_name.o \
+	cw_readelem_ac_name.o \
+	cw_readelem_ac_descriptor.o \
 	cw_readelem_radio_administrative_state.o \
 	cw_readelem_radio_operational_state.o \
 	cw_readelem_statistics_timer.o \
@@ -196,8 +198,8 @@ O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
-CFLAGS = -Wall -g -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
-#CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT 
+#CFLAGS = -Wall -g -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT 
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \
