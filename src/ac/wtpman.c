@@ -369,6 +369,13 @@ static void wtpman_run_discovery(void *arg)
 	cwread_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 
+
+	printf("RMAC-LEN:%d\n",cwrmsg->rmac[0]);
+
+printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
+
+
+
 	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
 
 	char wtpinfostr[8192];
@@ -379,6 +386,8 @@ static void wtpman_run_discovery(void *arg)
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
+	radioinfo.rmac = 0; //&cwrmsg->rmac;
+	
 //	memcpy(radioinfo.rmac, cwrmsg->rmac,8);
 //	radioinfo.rmac[0]=0;
 
@@ -530,6 +539,8 @@ static int wtpman_join(void *arg,time_t timer)
 		return 0;
 	
 	}
+
+
 	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
 

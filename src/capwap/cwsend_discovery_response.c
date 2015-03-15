@@ -45,9 +45,9 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 
 
 	/* Send Cisco-specific message elements if needed  */
-	if (conn->capwap_mode == CWMODE_CISCO){
-		cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
-	}
+//	if (conn->capwap_mode == CWMODE_CISCO){
+	//	cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
+//	}
 
 
 	

@@ -21,8 +21,10 @@
 #include "capwap_cisco.h"
 
 
-void cwmsg_addelem_vendor_cisco_ap_timesync(struct cwmsg * cwmsg)
+void cwmsg_addelem_vendor_cisco_ap_timesync(struct cwmsg *cwmsg)
 {
-	time_t t = htonl(time(NULL));
-	cwmsg_addelem_vendor_specific_payload(cwmsg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_AP_TIMESYNC,(uint8_t*)&t,sizeof(t));
+	//time_t t = htonl(time(NULL));
+	uint32_t t = htonl(time(NULL));
+	cwmsg_addelem_vendor_specific_payload(cwmsg, CW_VENDOR_ID_CISCO, CWVENDOR_CISCO_AP_TIMESYNC,
+					      (uint8_t *) & t, sizeof(t));
 }
