@@ -41,12 +41,13 @@
  */
 int cw_format_version(char *s, bstr_t ver, uint32_t vendor, char * def)
 {
+	if (!ver)
+		return sprintf(s,"%s",def);
+
+
 	uint8_t * version = bstr_data(ver);
 	int len = bstr_len(ver);
-
 	
-	if (!version)
-		return sprintf(s,"%s",def);
 
 
 	int rs=0;	
@@ -76,9 +77,8 @@ int cw_format_version(char *s, bstr_t ver, uint32_t vendor, char * def)
 		rs+=sprintf(s+rs,")");
 	}
 
-
-	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_ianavendoridtostr(vendor));
-	rs+=sprintf(s+rs,"\n");
+	if (vendor) 
+		rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_ianavendoridtostr(vendor));
 	return rs;	
 }
 
