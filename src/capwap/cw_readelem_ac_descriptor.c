@@ -1,4 +1,25 @@
-#include <stdio.h> 
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * @file
+ * @brief cw_readelem_ac_descriptor is implemented here.
+ */
 
 #include "capwap.h"
 #include "acinfo.h"
@@ -43,8 +64,18 @@ static int read_subelem(struct ac_info* acinfo,int subtype,uint8_t *elem, int le
 	return 1;
 }
 
-
-
+/**
+ * Read message elment ac descriptor
+ * @param acinfo pointer to acinfo where the result is stored
+ * @param type message element type 
+ * @param msgelem pointer to message element
+ * @param len length of message element
+ * @return 1 AC descriptor sucessfull read \n
+ *	0 not an ac descriptor message\n
+ *	-1 an error has occured
+ *
+ *
+ */
 int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len)
 {
 	if (type != CWMSGELEM_AC_DESCRIPTOR)
