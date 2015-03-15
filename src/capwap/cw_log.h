@@ -15,6 +15,12 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+/**
+ *@file
+ *@brief Definitions for logging and debugging.
+ */
+
 #ifndef __CW_LOG_H
 #define __CW_LOG_H
 
@@ -22,7 +28,11 @@
 #include <stdint.h>
 #include <syslog.h>
 
-/* CAPWAP specific debugs */
+/** 
+ * \defgroup Debug options
+ * @{
+ */
+
 #define DBG_CW_MSG			0x00000001
 #define DBG_CW_MSGELEM			0x00000002
 #define DBG_CW_MSGELEM_DMP		0x00000004
@@ -36,7 +46,7 @@
 #define DBG_CW_PKT_ERR			0x00000200
 #define DBG_CW_MSG_ERR			0x00000400
 
-/* drive specific debugs */
+/* driver specific debugs */
 #define DBG_DRV				0x00010000
 #define DBG_DRV_ERR			0x00020000
 
@@ -56,6 +66,8 @@
 
 #define DBG_DETAIL_ALL			0xffffffff
 #define DBG_ERR				(DBG_CW_MSG_ERR | DBG_CW_PKT_ERR)
+
+/**@}*/
 
 
 #ifndef CW_LOG_DUMP_ROW_LEN

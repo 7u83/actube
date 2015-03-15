@@ -35,7 +35,7 @@ void cwmsg_addelem_wtp_radio_info(struct cwmsg * msg,struct radioinfo *radioinfo
 void cwmsg_addelem_wtp_radio_infos(struct cwmsg * msg,struct radioinfo * radioinfos)
 {
 	int i;
-	for (i=1; i<=4; i++)
+	for (i=0; i<=1; i++)
 	{
 //		if (radioinfos[i].rid!=0)	
 			cwmsg_addelem_wtp_radio_info(msg,&radioinfos[i]);

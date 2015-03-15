@@ -16,11 +16,27 @@
 
 */
 
+/**
+ *@file
+ *@brief Definitions for imisc. cw_utill functions.
+ */
+
+#ifndef __CW_UTIL_H
+#define __CW_UTIL_H
+
 #include <stdint.h>
 #include <time.h>
 
-extern uint8_t * cw_setstr(uint8_t ** dst, const uint8_t *src, int len);
+#include "bstr.h"
 
+extern int cw_format_version(char *s, bstr_t version, uint32_t vendor, char * def);
+extern int cw_is_printable(const uint8_t * s,int len);
+
+
+
+
+
+extern uint8_t * cw_setstr(uint8_t ** dst, const uint8_t *src, int len);
 
 extern int cw_foreach_msgelem(uint8_t * msgelems,  int len,
 		int (*callback)(void*,int,uint8_t*,int),void *arg );
@@ -28,14 +44,13 @@ extern int cw_foreach_msgelem(uint8_t * msgelems,  int len,
 
 extern int cw_rand(uint8_t*dst, int len);
 
-extern int cw_is_printable(const uint8_t * s,int len);
 
 
 #define cw_timer_start(t) (time(NULL)+t)
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
 
 
-/* generic macroto to isolate bits from a dword */
+/** Generic macroto to isolate bits from a dword */
 #define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
 
 
@@ -44,3 +59,4 @@ void cw_mand_elem_found(int *l,int type);
 int cw_is_missing_mand_elems(int *l);
 void cw_get_missing_mand_elems(char *dst, int *l);
 
+#endif

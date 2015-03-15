@@ -16,6 +16,10 @@
 
 */
 
+/**
+ * @file
+ * @brief bstr_create_from_cfgstr function
+ */
 
 #include <string.h>
 #include <stdio.h>
@@ -24,7 +28,17 @@
 #include "bstr.h"
 
 
-
+/**
+ * Create a bstr_t string from a string read from config file.
+ * 
+ * @param s String from config file.
+ * @return The create bstr_t string.
+ *
+ * The string from config file is an ASCII-text which is interpreted
+ * as hexadecimal string if it starts with ".x"
+ *
+ * @see bstr_t
+ */
 uint8_t * bstr_create_from_cfgstr(const char * s)
 {
 	int l = strlen(s);

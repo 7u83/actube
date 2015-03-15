@@ -16,11 +16,24 @@
 
 */
 
+/**
+ * @file
+ * @brief
+ */
 
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 
+/**
+ * Creates a bstr_t string.
+ * @param data source data to create the string from
+ * @param len length of the string 
+ * @return the created bstr_t string.
+ * 
+ * The bstr_t string returned is allocated by malloc. So remember to free 
+ * this resource if you don't need it anymore.
+ */
 uint8_t * bstr_create(uint8_t *data, uint8_t len)
 {
 	uint8_t * str = malloc(len*sizeof(uint8_t));

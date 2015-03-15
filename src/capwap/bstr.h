@@ -16,25 +16,50 @@
 
 */
 
+/**
+ * @file
+ * @brief Definitions for bstr functions
+ */
+
 #ifndef __BSTR_H
 #define __BSTR_H
 
 
 #include <stdint.h>
 
+/**
+ * bstr typeS
+ *
+ * bstr_t serves as binary string where the first byte cponntains
+ * the length of the string.
+ */
 typedef uint8_t* bstr_t;
 
 extern uint8_t * bstr_create(uint8_t *data, uint8_t len);
 extern uint8_t * bstr_create_from_cfgstr(const char * s);
-extern uint8_t * bstr_replace( uint8_t ** dst, uint8_t * bstr);
+extern uint8_t * bstr_replace( bstr_t * dst, uint8_t * bstr);
 
 extern int bstr_to_str(char *dst, bstr_t str,char * def);
 
 
+/**
+ * Return the length of a bstr_t string.
+ */
 #define bstr_len(s) (*(s))
+
+/**
+ * Return the data of a bstr_t string.
+ */ 
 #define bstr_data(s) (s+1)
+
+/**
+ * Return the actual size in memory a bstr_t string needs.
+ */ 
 #define bstr_size(len) (len+1)
 
+/**
+ * Max. length of a bstr_t string.
+ */ 
 #define BSTR_MAX_LEN 254
 
 

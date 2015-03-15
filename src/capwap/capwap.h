@@ -34,7 +34,9 @@
 #define CAPWAP_CONTROL_PORT_STR "5246"
 
 
-
+/**
+ * CAPWAP modes
+ */ 
 enum capwapmodes {
 	CWMODE_STD = 0,
 	CWMODE_CISCO,

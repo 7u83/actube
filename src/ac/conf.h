@@ -28,6 +28,7 @@
 
 #include "capwap.h"
 #include "lwapp.h"
+#include "bstr.h"
 
 #ifndef CONF_DEFAULT_ACNAME
 	#define CONF_DEFAULT_ACNAME "AC"
@@ -57,6 +58,10 @@
 	#define CONF_DEFAULT_HARDWARE_VERSION "Unknown"
 #endif
 
+#define CONF_DEFAULT_CISCO_HARDWARE_VERSION ".x01000001"
+#define CONF_DEFAULT_CISCO_SOFTWARE_VERSION ".x05007E00"
+
+
 #ifndef CONF_DEFAULT_CONTROL_PORT
 	#define	CONF_DEFAULT_CONTROL_PORT CAPWAP_CONTROL_PORT
 #endif
@@ -75,10 +80,11 @@ extern struct sockaddr_storage * conf_salist;
 extern int conf_salist_len;
 
 extern long conf_vendor_id;
-extern char * conf_hardware_version;
-extern int conf_hardware_version_len;
-extern char * conf_software_version;
-extern int conf_software_version_len;
+
+extern bstr_t conf_hardware_version;
+extern bstr_t conf_software_version;
+extern bstr_t conf_cisco_hardware_version;
+extern bstr_t conf_cisco_software_version;
 
 
 

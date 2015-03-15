@@ -80,10 +80,10 @@ struct ac_info * get_acinfo()
 	acinfo->vendor_id=conf_vendor_id;
 
 	acinfo->hardware_version=(uint8_t*)conf_hardware_version;
-	acinfo->hardware_version_len=conf_hardware_version_len;
-
 	acinfo->software_version=(uint8_t*)conf_software_version;
-	acinfo->software_version_len=conf_software_version_len;
+	acinfo->cisco_hardware_version=(uint8_t*)conf_cisco_hardware_version;
+	acinfo->cisco_software_version=(uint8_t*)conf_cisco_software_version;
+
 
 	if (conf_dtls_psk)
 		acinfo->security|=AC_SECURITY_S;

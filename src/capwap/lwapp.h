@@ -16,6 +16,10 @@
 
 */
 
+#ifndef __LWAPP_H
+#define __LWAPP_H
+
+
 #include <arpa/inet.h>
 
 
@@ -92,19 +96,19 @@
 */
 
 
+/* LWAPP message elements */
 
-#define LWMSGELEM_WTP_DESCRIPTOR 3
+#define LWMSGELEM_WTP_DESCRIPTOR 		3
 
-
+#define LWMSGELEM_WTP_BOARD_DATA		50
 
 
 /* function proto types */
 
 uint16_t lw_checksum(uint8_t *d,int len);
+int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
 
 
 
 
-
-
-
+#endif

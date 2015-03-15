@@ -402,6 +402,7 @@ printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)
 
 	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
 
+
 	wtpman_remove(wtpman);
 }
 
@@ -553,10 +554,9 @@ static int wtpman_join(void *arg,time_t timer)
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
-	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
+//	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
 	struct ac_info * acinfo = get_acinfo();
 
-sleep(10);
 
 	int result_code = 0;
 	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
@@ -600,9 +600,26 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
+
 	/* here the WTP has joined, now image update or change state event */
 
-	int msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	int msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
+	cwrmsg =  conn_wait_for_request(wtpman->conn, msgs, timer);
+
+	if (!cwrmsg){
+		cw_dbg(DBG_CW_MSG_ERR,"No config uration status request from %s after %d seconds, WTP died.",
+			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
+		wtpman_remove(wtpman);	
+		return;
+	}
+
+	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
+//	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+
+	
+exit(0);
+
+//	msgs = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
 	cwrmsg =  conn_wait_for_request(wtpman->conn, msgs, timer);
 
 	if (!cwrmsg){
@@ -610,7 +627,10 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
-exit(0);
+
+
+
+
 
 	switch (cwrmsg->type){
 		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
@@ -635,7 +655,6 @@ exit(0);
 
 	
 	printf("WTP is joined now\n");
-	exit(0);
 
 	int result_code = 0;
 	struct radioinfo * radioinfo;

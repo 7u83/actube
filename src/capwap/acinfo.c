@@ -69,6 +69,10 @@ int acinfo_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msg
 
 	int sub=12;
 	int sublen;
+
+
+printf("Now trying sublens\n");
+
 	while (sub<len){
 		if (len-sub<8)
 			return -1;
@@ -77,11 +81,15 @@ int acinfo_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msg
 		val = ntohl(*((uint32_t*)(msgelem+sub+4)));
 		sublen = val&0xffff;
 		sub+=8;
+
+printf("sublen = %d\n",sublen);
+
 		if (vendor != 0){
-			sub+=sublen;
-			continue;
+//			sub+=sublen;
+//			continue;
 		}
 		int subtype = val>>16;
+printf("sublen type = %d\n",subtype);
 
 		if (sub+sublen>len)
 			return -1;
