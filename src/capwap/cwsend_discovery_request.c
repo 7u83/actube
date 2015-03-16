@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief cwsend_discovery_request 
+ */ 
+
 #include "capwap.h"
 #include "capwap_cisco.h"
 
@@ -23,56 +28,54 @@
 #include "conn.h"
 #include "cwmsg.h"
 
-int cwsend_discovery_request(struct conn * conn,struct radioinfo * radioinfo,struct wtpinfo * wtpinfo)
+int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
+			     struct wtpinfo *wtpinfo)
 {
 	uint8_t buffer[CWMSG_MAX_SIZE];
 	struct cwmsg cwmsg;
 
-	cwmsg_init(&cwmsg,buffer,CWMSG_DISCOVERY_REQUEST,conn_get_next_seqnum(conn),NULL /*radioinfo*/);
-	cwmsg.capwap_mode=conn->capwap_mode;
+	cwmsg_init(&cwmsg, buffer, CWMSG_DISCOVERY_REQUEST, conn_get_next_seqnum(conn),
+		   NULL /*radioinfo */ );
+	cwmsg.capwap_mode = conn->capwap_mode;
 
 
 	/* Mandatory elements */
 
-	/* discovery type */	
-	cwmsg_addelem(&cwmsg,CWMSGELEM_DISCOVERY_TYPE,&wtpinfo->discovery_type,sizeof(uint8_t));
+	/* discovery type */
+	cwmsg_addelem(&cwmsg, CWMSGELEM_DISCOVERY_TYPE, &wtpinfo->discovery_type, sizeof(uint8_t));
 
 	/* wtp board data */
-	cwmsg_addelem_wtp_board_data(&cwmsg,wtpinfo);
+	cwmsg_addelem_wtp_board_data(&cwmsg, wtpinfo);
 
 	/* wtp descriptor */
-	cwmsg_addelem_wtp_descriptor(&cwmsg,wtpinfo);
-	
+	cwmsg_addelem_wtp_descriptor(&cwmsg, wtpinfo);
+
 	/* wtp frame tunnel mode */
-	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_FRAME_TUNNEL_MODE,&wtpinfo->frame_tunnel_mode,sizeof(uint8_t));
-	
+	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
+		      sizeof(uint8_t));
+
 	/* mac type */
-	cwmsg_addelem(&cwmsg,CWMSGELEM_WTP_MAC_TYPE,&wtpinfo->mac_type,sizeof(uint8_t));
+	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
 
 
 	/* radio infos */
-	cwmsg_addelem_wtp_radio_infos(&cwmsg,wtpinfo->radioinfo);
-	
+	cwmsg_addelem_wtp_radio_infos(&cwmsg, wtpinfo->radioinfo);
+
 
 	/* Non-mandatory elements */
 
-	switch (cwmsg.capwap_mode){
+	switch (cwmsg.capwap_mode) {
 		case CWMODE_CISCO:
-			cwmsg_addelem_vendor_cisco_rad_name(&cwmsg,(uint8_t*)wtpinfo->name);
+			cwmsg_addelem_vendor_cisco_rad_name(&cwmsg, (uint8_t *) wtpinfo->name);
+
 			break;
-
-
-	
+		
 		default:
 
 			if (conn->mtu_discovery)
-				cwmsg_addelem_mtu_discovery_padding(&cwmsg,conn);
+				cwmsg_addelem_mtu_discovery_padding(&cwmsg, conn);
 
 	}
 
-
-
-
-
-	return conn_send_cwmsg(conn,&cwmsg);
+	return conn_send_cwmsg(conn, &cwmsg);
 }

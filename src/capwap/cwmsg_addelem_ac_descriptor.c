@@ -55,14 +55,17 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo)
 
 	switch (msg->capwap_mode){
 		case CWMODE_CISCO:
-			len+=add_subelem(buffer+len,0,CW_VENDOR_ID_CISCO,acinfo->cisco_hardware_version);
+			/* It seems to be very important, that the software version sub-elemnt is 
+			   sent first. If not, the WTP gets confused and thinks the AP has
+			   version 0.0.0.0. Tested with an 8.0.110.0 image on a LAP 1131a */
+
 			len+=add_subelem(buffer+len,1,CW_VENDOR_ID_CISCO,acinfo->cisco_software_version);
-			//len+=add_subelem(buffer+len,5,CW_VENDOR_ID_CISCO,acinfo->cisco_software_version);
+			len+=add_subelem(buffer+len,0,CW_VENDOR_ID_CISCO,acinfo->cisco_hardware_version);
 
 			break;
 		default:
-			len+=add_subelem(buffer+len,4,0,acinfo->hardware_version);
 			len+=add_subelem(buffer+len,5,0,acinfo->software_version);
+			len+=add_subelem(buffer+len,4,0,acinfo->hardware_version);
 			break;
 
 	}
