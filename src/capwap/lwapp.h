@@ -19,7 +19,7 @@
 #ifndef __LWAPP_H
 #define __LWAPP_H
 
-
+#include <stdint.h>
 #include <arpa/inet.h>
 
 
