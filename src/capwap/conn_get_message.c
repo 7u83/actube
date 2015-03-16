@@ -9,6 +9,7 @@
 #include "cw_log.h"
 #include "capwap.h"
 #include "sock.h"
+#include "cw_util.h"
 
 struct args {
 	struct conn *conn;

@@ -31,6 +31,7 @@
 
 extern int cw_format_version(char *s, bstr_t version, uint32_t vendor, char * def);
 extern int cw_is_printable(const uint8_t * s,int len);
+extern const char * cw_ianavendoridtostr(int id);
 
 
 
@@ -58,5 +59,10 @@ extern int cw_rand(uint8_t*dst, int len);
 void cw_mand_elem_found(int *l,int type);
 int cw_is_missing_mand_elems(int *l);
 void cw_get_missing_mand_elems(char *dst, int *l);
+
+
+
+extern const char * cw_msgelemtostr(int elem);
+extern const char * cw_msgtostr(int type);
 
 #endif

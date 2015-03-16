@@ -70,7 +70,7 @@ static int process_elem(void *eparm,int type,uint8_t* msgelem,int len)
 	if (wtpinfo_readelem_ecn_support(wtpinfo,type,msgelem,len))
 		goto foundX;
 
-	if (cw_readelem_capwap_local_ip_addr(&wtpinfo->local_ip,type,msgelem,len)){
+	if (cw_readelem_capwap_local_ip_addr((struct sockaddr*)&wtpinfo->local_ip,type,msgelem,len)){
 		cw_mand_elem_found(e->mand, XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS);
 		return 1;
 	}

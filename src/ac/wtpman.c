@@ -37,7 +37,7 @@
 /* macro to convert our client ip to a string */
 #define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
-
+/*
 int conn_handle_echo_request(void * d)
 {
 	struct conn * conn = (struct conn *)d;
@@ -45,6 +45,7 @@ int conn_handle_echo_request(void * d)
 	cwsend_echo_response(conn,cwrmsg->seqnum,0);
 	return 0;
 }
+*/
 
 
 void conn_handle_change_state_event_request(struct conn * conn)
@@ -52,7 +53,7 @@ void conn_handle_change_state_event_request(struct conn * conn)
 }
 
 
-static struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer)
+static struct cwrmsg * xconn_wait_for_message(struct conn * conn, time_t timer)
 {
 	struct cwrmsg * cwrmsg;
 
@@ -158,7 +159,7 @@ static struct cwrmsg * conn_wait_for_request(struct conn * conn, int *msglist, t
 
 
 
-struct cwrmsg * conn_send_request(struct conn * conn)
+struct cwrmsg * xconn_send_request(struct conn * conn)
 {
 	int i;
 
@@ -201,7 +202,7 @@ int wtpman_handle_request(void *p)
 	struct cwrmsg * cwrmsg = &conn->cwrmsg;
 	switch(conn->cwrmsg.type){
 		case CWMSG_ECHO_REQUEST:
-			conn_handle_echo_request(conn);
+			cw_handle_echo_request(conn);
 			break;
 		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
 			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
@@ -237,7 +238,7 @@ void send_image_file(struct conn * conn,const char * filename)
 	data.data = buffer;
 
 
-	conn->request_handler = conn_handle_echo_request;
+	conn->request_handler = cw_handle_echo_request;
 	conn->request_handler_param = conn;
 
 int bl=0;
@@ -616,7 +617,6 @@ static void wtpman_run(void *arg)
 
 	int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
 	cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
-printf("Have a message (con status req)\n");
 
 	if (!cwrmsg){
 		cw_dbg(DBG_CW_MSG_ERR,"No config uration status request from %s after %d seconds, WTP died.",
@@ -624,7 +624,7 @@ printf("Have a message (con status req)\n");
 		wtpman_remove(wtpman);	
 		return;
 	}
-printf("Con Stat Req waitr\n");
+printf("Have Masseg %d\n",cwrmsg->type);
 	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
 	int result_code=0;
 	struct ac_info *acinfo = get_acinfo();
@@ -634,7 +634,7 @@ printf("Send the respi but sleep\n");
 
 	
 printf("Next thoing\n");
-	int change_status_msgs[] = { CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	int change_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST,CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
 	cwrmsg =  conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
 printf("Done\n");
 

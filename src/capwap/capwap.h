@@ -393,7 +393,6 @@ extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int le
 extern void process_conf_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 
 extern void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
-extern int cwsend_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo); //,struct wtpinfo * wtpinfo
 extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len);
 extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
@@ -406,10 +405,7 @@ extern void cwsend_conf_status_response(struct conn * conn,int seqnum, int rc, s
 extern void cwsend_unknown_response(struct conn * conn,int seqnum, int unknow_request);
 
 
-extern const char * cw_msgelemtostr(int elem);
-extern const char * cw_msgtostr(int type);
 
-extern const char * cw_ianavendoridtostr(int id);
 extern int hdr_print(char *str, uint8_t *packet, int len);
 
 extern int cw_readelem_ecn_support(uint8_t *ecn_support, int type, uint8_t * msgelem, int len);
@@ -479,5 +475,13 @@ extern int cw_readelem_vendor_specific_payload(void * data, int msgtype, int ele
       22 Data Transfer Error (No Information to Transfer)
 
 */
+
+extern int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len);
+extern int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
+
+
+
+extern int cw_send_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo);
+extern int cw_handle_echo_request(void * d);
 
 #endif

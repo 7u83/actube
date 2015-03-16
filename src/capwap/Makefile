@@ -88,8 +88,10 @@ CAPWAPOBJS= \
 	   cwsend_join_request.o \
 	   cwsend_join_response.o \
 	   cwread_join_response.o \
-	   cwsend_echo_request.o \
-	   cwsend_echo_response.o \
+	cwsend_echo_request.o \
+	cw_send_echo_response.o \
+	cw_send_image_file.o \
+	cw_handle_echo_request.o \
 	   cwsend_conf_status_response.o\
 	   cwread_configuration_status_request.o\
 	cwread_discovery_request.o\
@@ -185,7 +187,11 @@ CONNOBJS= conn.o \
 	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
 	conn_prepare_request.o \
-	conn_prepare_image_data_request.o
+	conn_prepare_image_data_request.o \
+	conn_send_request.o \
+	conn_wait_for_message.o
+
+
 
 BSTROBJS= bstr_create.o \
 	bstr_create_from_cfgstr.o \

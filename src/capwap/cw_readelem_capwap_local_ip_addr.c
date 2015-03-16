@@ -3,7 +3,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#
 #include "capwap.h"
 
 int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len)
