@@ -35,6 +35,7 @@ struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 	{"pkt_dmp",DBG_CW_PKT_DMP},
 	{"pkt_err",DBG_CW_PKT_ERR},
 	{"msg_err",DBG_CW_MSG_ERR},
+	{"img_dtl",DBG_CW_IMG_DTL},
 
 	{"dtls",DBG_DTLS},
 	{"dtls_dietail",DBG_DTLS_DETAIL},

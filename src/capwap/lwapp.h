@@ -22,6 +22,8 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 
+#include "wtpinfo.h"
+
 
 /* version */
 #define LW_VERSION 0

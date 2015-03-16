@@ -33,18 +33,19 @@
  * @{
  */
 
-#define DBG_CW_MSG			0x00000001
-#define DBG_CW_MSGELEM			0x00000002
-#define DBG_CW_MSGELEM_DMP		0x00000004
-#define DBG_CW_INFO			0x00000008
-#define DBG_CW_RFC			0x00000010
+#define DBG_CW_MSG			0x00000001	/* CAPWAP messages */
+#define DBG_CW_MSGELEM			0x00000002	/* CAPWAP message elements */
+#define DBG_CW_MSGELEM_DMP		0x00000004	/* Dump CAPWAP message elements */
+#define DBG_CW_INFO			0x00000008	
+#define DBG_CW_RFC			0x00000010	/* RCF-realted CAPWAP errors */
 #define DBG_CW_STRICT			0x00000010
-#define DBG_CW_PKT_IN			0x00000020
-#define DBG_CW_PKT_OUT			0x00000040
-#define DBG_CW_PKT_DMP			0x00000080
-#define DBG_CW_PKT_DTL			0x00000100
+#define DBG_CW_PKT_IN			0x00000020	/* Headers of incoming CAPWAP packets */
+#define DBG_CW_PKT_OUT			0x00000040	/* Headers of outgoing CAPWAP packets */
+#define DBG_CW_PKT_DMP			0x00000080	/* Dump packts */
+#define DBG_CW_PKT_DTL			0x00000100	
 #define DBG_CW_PKT_ERR			0x00000200
-#define DBG_CW_MSG_ERR			0x00000400
+#define DBG_CW_MSG_ERR			0x00000400	/* Errors in CAPWAP messages */
+#define DBG_CW_IMG_DTL			0x00000800	/* Detail about image transfer */
 
 /* driver specific debugs */
 #define DBG_DRV				0x00010000

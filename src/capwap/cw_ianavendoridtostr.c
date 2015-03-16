@@ -16,10 +16,21 @@
 
 */
 
+/**
+ * @file
+ * @brief cw_iananvendoridtostr
+ */
 
 #include "capwap.h"
 
-/* definition of some iana assigned vendor id's */
+/**
+ * Convert IANA vendor ID to string
+ * @param id the ID
+ * @return a pointer to the string
+ *
+ * Defines of only a view number of IDs. If the ID is unknown
+ * the string "Unknown" is returned.
+ */
 const char * cw_ianavendoridtostr(int id){
 	switch(id){
 		case CW_VENDOR_ID_ZYXEL:
