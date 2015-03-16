@@ -27,14 +27,11 @@ int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgel
 
 	if ( len != 46 ) {
 		cw_dbg(DBG_CW_MSG_ERR,"LWAPP msg size wrong. (WTP BOARD DATA) must be 46");
-		exit(0);
 		return -1;
 	}
 
-	uint16_t card_id = htonl( * ( (uint16_t*)(msgelem) ) );
-	uint16_t card_rev = htonl( * ( (uint16_t*)(msgelem +2 ) ) );
-	
-
+//	uint16_t card_id = htonl( * ( (uint16_t*)(msgelem) ) );
+//	uint16_t card_rev = htonl( * ( (uint16_t*)(msgelem +2 ) ) );
 
 	return 1;
 }

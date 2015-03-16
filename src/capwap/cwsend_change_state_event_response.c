@@ -1,8 +1,19 @@
+/**
+ * @file
+ * @brief Implements change state event 
+ */ 
 
 #include "cwmsg.h"
 #include "capwap.h"
 #include "cw_log.h"
 #include "sock.h"
+
+/**
+ * Send change state event response 
+ * @param conn connection to use
+ * @param seqnum sequence number
+ * @param radioinfo radioinfo to us
+ */
 
 void cwsend_change_state_event_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo)
 {
@@ -12,7 +23,7 @@ void cwsend_change_state_event_response(struct conn * conn,int seqnum, struct ra
 	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_CHANGE_STATE_EVENT_RESPONSE,seqnum,NULL);
 
 	cwmsg_addelem_result_code(cwmsg,0);
-	cwmsg_addelem_radio_operational_state(cwmsg,radioinfo);
+//	cwmsg_addelem_radio_operational_state(cwmsg,radioinfo);
 	
 	conn_send_response(conn,cwmsg,seqnum);
 }

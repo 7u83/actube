@@ -23,6 +23,12 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 			
 			return 0;
 		}
+		case CWMSG_DISCOVERY_REQUEST:
+		{
+
+		}
+
+
 		default:
 			return 0;
 
@@ -57,8 +63,6 @@ int cw_readelem_vendor_specific_payload(void * data,int msgtype,int elemtype,uin
 			return cw_readelem_cisco_payload(data,msgtype,elem_id,msgelem+6,elem_len);
 
 	}
-
-
 
 
 	return 1;	

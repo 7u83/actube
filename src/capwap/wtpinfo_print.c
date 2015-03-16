@@ -170,12 +170,13 @@ int wtpinfo_print(char *str, struct wtpinfo * wtpinfo)
 
 //	sock_addrtostr((struct sockaddr*)&wtpinfo->local_ip,hstr,64);
 
+/*
 int i0;
 for (i0=0; i0<10; i0++){
 	printf("%d\n", ((char*)(&wtpinfo->local_ip))[i0]  );
 }
 
-	s+=sprintf (s,"\tLocal IP: %s\n",sock_addr2str(&(wtpinfo->local_ip)));
+*/	s+=sprintf (s,"\tLocal IP: %s\n",sock_addr2str(&(wtpinfo->local_ip)));
 
 
 

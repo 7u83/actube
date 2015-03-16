@@ -29,7 +29,7 @@
 #include <syslog.h>
 
 /** 
- * \defgroup Debug options
+ * @defgroup DebugOptions Dbug Options
  * @{
  */
 

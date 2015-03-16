@@ -64,10 +64,10 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 		case CWMODE_CISCO:
 			cwmsg_addelem_vendor_cisco_mwar_addr(&cwmsg,conn);
 
-			uint8_t data207[4] = {1,1,0,1};
+			uint8_t data207[4] = {11,77,30,31};
 
 		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,
-                                        CWVENDOR_CISCO_PL207,data207,4);
+                                        CWVENDOR_CISCO_BOARD_DATA_OPTIONS,data207,4);
 
 		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,
                                         CWVENDOR_CISCO_AP_GROUP_NAME,(uint8_t*)"Tobias",strlen("Tobias"));

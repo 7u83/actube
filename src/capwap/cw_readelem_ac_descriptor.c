@@ -24,7 +24,7 @@
 #include "capwap.h"
 #include "acinfo.h"
 #include "bstr.h"
-
+#include "cw_log.h"
 
 
 static int read_subelem_cisco(struct ac_info* acinfo,int subtype,uint8_t * elem, int len)
@@ -40,7 +40,8 @@ static int read_subelem_cisco(struct ac_info* acinfo,int subtype,uint8_t * elem,
 			break;
 
 		default:
-			printf("What? %d\n",subtype);
+			//printf("What? %d\n",subtype);
+			break;
 
 	}
 	
@@ -115,7 +116,7 @@ int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem
 		sub+=8;
 		int subtype = val>>16;
 
-
+		cw_dbg(DBG_CW_MSGELEM,"ac descriptor sub-element vendor: %d, type:%d, len: %d",vendor,subtype,sublen);
 		switch (vendor) {
 			case 0:
 				read_subelem(acinfo,subtype,msgelem+sub,sublen);

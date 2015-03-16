@@ -96,6 +96,10 @@ static int conn_rh(void *param)
 	int i;
 	int *msglist=p->msglist; 
 
+
+printf("Param %p\n",param);
+
+
 	for (i=0; msglist[i]!=-1; i++){
 		if (msglist[i] == p->conn->cwrmsg.type )
 			return 0;
@@ -409,6 +413,8 @@ printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)
 
 static void wtpman_run_run(void *arg)
 {
+
+	
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct conn * conn = wtpman->conn;
 
@@ -434,7 +440,7 @@ static void wtpman_run_run(void *arg)
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
-	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"CiscoClient",strlen("CiscoClient"));
+	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"NudelSuppe",strlen("NudelSuppe"));
 
 	cwrmsg = conn_send_request(conn);
 
@@ -560,6 +566,9 @@ static int wtpman_join(void *arg,time_t timer)
 
 	int result_code = 0;
 	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
+printf("SLeep befor join resp\n");
+printf("Slept befor join resp\n");
+
 	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
 	cw_log(LOG_INFO,"WTP joined, Name = %s, Location = %s, IP = %s",
 		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
@@ -601,10 +610,13 @@ static void wtpman_run(void *arg)
 	}
 
 
+
+
 	/* here the WTP has joined, now image update or change state event */
 
-	int msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
-	cwrmsg =  conn_wait_for_request(wtpman->conn, msgs, timer);
+	int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
+	cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
+printf("Have a message (con status req)\n");
 
 	if (!cwrmsg){
 		cw_dbg(DBG_CW_MSG_ERR,"No config uration status request from %s after %d seconds, WTP died.",
@@ -612,15 +624,19 @@ static void wtpman_run(void *arg)
 		wtpman_remove(wtpman);	
 		return;
 	}
-
+printf("Con Stat Req waitr\n");
 	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
-//	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+	int result_code=0;
+	struct ac_info *acinfo = get_acinfo();
+	struct radioinfo rinf;
+	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&rinf,acinfo,&wtpman->wtpinfo);
+printf("Send the respi but sleep\n");
 
 	
-exit(0);
-
-//	msgs = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
-	cwrmsg =  conn_wait_for_request(wtpman->conn, msgs, timer);
+printf("Next thoing\n");
+	int change_status_msgs[] = { CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	cwrmsg =  conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
+printf("Done\n");
 
 	if (!cwrmsg){
 		wtpman_remove(wtpman);	
@@ -629,12 +645,13 @@ exit(0);
 
 
 
-
-
-
 	switch (cwrmsg->type){
 		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+			{
 			printf("Change state event\n!");
+			struct radioinfo ri;
+			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,&ri);
+			}
 			break;
 		case CWMSG_IMAGE_DATA_REQUEST:
 			printf("Image update\n!");
@@ -656,7 +673,7 @@ exit(0);
 	
 	printf("WTP is joined now\n");
 
-	int result_code = 0;
+/*
 	struct radioinfo * radioinfo;
 
 
@@ -672,7 +689,7 @@ exit(0);
 	printf("CWR TYPE %d\n",cwrmsg->type);
 	exit(0);
 
-
+*/
 
 //	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
 //	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
@@ -685,7 +702,7 @@ exit(0);
 	wtpman_run_run(wtpman);
 	exit(0);
 
-
+/*
 int ii;
 for (ii=0; ii<3; ii++){
 	cwrmsg = wtpman_wait_for_message(wtpman,timer);
@@ -697,7 +714,7 @@ for (ii=0; ii<3; ii++){
 		}
 	}
 }
-
+*/
 
 	wtpman_run_run(wtpman);
 
