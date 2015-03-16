@@ -16,6 +16,6 @@ GNUTLS_LDFLAGS=-L../contrib/gnutls-${GNUTLS_VERSION}/lib/.libs/
 else
 GNUTLS_CFLAGS=
 GNUTLS_LIBS=
-GNUTLS_LDFLAGS=-lgnutls -nettle -lgmp
+GNUTLS_LDFLAGS=-lgnutls -lnettle -lgmp
 
 endif
