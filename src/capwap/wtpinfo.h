@@ -45,6 +45,8 @@ struct wtpinfo{
 
 	uint8_t *ac_name;
 	uint8_t *name;
+	uint8_t *group;
+
 	uint8_t * location;
 
 	uint32_t vendor_id;
