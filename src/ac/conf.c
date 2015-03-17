@@ -104,6 +104,8 @@ int conf_lwapp=1;
 char * conf_lw_control_port=0;
 #endif 
 
+char * conf_image_dir=0;
+
 
 char * conf_control_port=0;
 
@@ -271,10 +273,11 @@ static int init_version()
 	bstr_replace(&conf_cisco_hardware_version,bstr_create_from_cfgstr((char*)conf_cisco_hardware_version));
 
 	/* Cisco software version */
+/*
 	if (!conf_cisco_software_version)
 		conf_cisco_software_version=(bstr_t)strdup(CONF_DEFAULT_CISCO_SOFTWARE_VERSION);
 	bstr_replace(&conf_cisco_software_version,bstr_create_from_cfgstr((char*)conf_cisco_software_version));
-
+*/
 
 
 	
@@ -595,11 +598,10 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("dtls_psk",&conf_dtls_psk),
 		
 		CFG_SIMPLE_BOOL("dtls_verify_peer",&conf_dtls_verify_peer),
-
 		CFG_SIMPLE_BOOL("ipv4",&conf_ipv4),
 		CFG_SIMPLE_BOOL("ipv6",&conf_ipv6),
-
 		CFG_SIMPLE_STR("db_file",conf_db_file),
+		CFG_SIMPLE_STR("image_dir",&conf_image_dir),
 
 		CFG_END()
 	};
@@ -662,6 +664,9 @@ int read_config(const char * filename){
 
 	if (!conf_sslcipher)
 		conf_sslcipher=CAPWAP_CIPHER;
+
+	if (!conf_image_dir)
+		conf_image_dir=CONF_DEFAULT_IMAGE_DIR;
 
 
 	init_listen_addrs();

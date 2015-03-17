@@ -29,20 +29,23 @@
 
 #include "cw_log.h"
 
-void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo)
+void cwsend_discovery_response(struct conn *conn, int seqnum, struct radioinfo *radioinfo,
+			       struct ac_info *acinfo, struct wtpinfo *wtpinfo)
 {
-	cw_dbg(DBG_CW_MSG,"Sending discovery response to %s, seq = %d",sock_addr2str(&conn->addr),seqnum);
+	cw_dbg(DBG_CW_MSG, "Sending discovery response to %s, seq = %d", sock_addr2str(&conn->addr),
+	       seqnum);
 
-	struct cwmsg * cwmsg = &conn->resp_msg;	
-	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_DISCOVERY_RESPONSE,seqnum,NULL);
+	struct cwmsg *cwmsg = &conn->resp_msg;
+	cwmsg_init(cwmsg, conn->resp_buffer, CWMSG_DISCOVERY_RESPONSE, seqnum, NULL);
 	cwmsg->capwap_mode = conn->capwap_mode;
 
-	
-	cwmsg_addelem_ac_descriptor(cwmsg,acinfo);
-	cwmsg_addelem(cwmsg,CWMSGELEM_AC_NAME,(uint8_t*)acinfo->ac_name,strlen((char*)acinfo->ac_name));
 
-	cwmsg_addelem_wtp_radio_infos(cwmsg,acinfo->radioinfos);
-	cwmsg_addelem_ctrl_ip_addrs(cwmsg,acinfo);
+	cwmsg_addelem_ac_descriptor(cwmsg, acinfo,wtpinfo);
+	cwmsg_addelem(cwmsg, CWMSGELEM_AC_NAME, (uint8_t *) acinfo->ac_name,
+		      strlen((char *) acinfo->ac_name));
+
+	cwmsg_addelem_wtp_radio_infos(cwmsg, acinfo->radioinfos);
+	cwmsg_addelem_ctrl_ip_addrs(cwmsg, acinfo);
 
 
 	/* Send Cisco-specific message elements if needed  */
@@ -53,11 +56,10 @@ void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo *
 			break;
 		default:
 			break;
-		
+
 	}
 
 
-	
-	conn_send_response(conn,cwmsg,seqnum);
-}
 
+	conn_send_response(conn, cwmsg, seqnum);
+}

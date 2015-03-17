@@ -35,7 +35,10 @@
 
 
 /* macro to convert our client ip to a string */
-#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
+//#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
+
+#define CLIENT_IP (sock_addr2str(&wtpman->conn->addr))
+
 
 /*
 int conn_handle_echo_request(void * d)
@@ -216,7 +219,7 @@ int wtpman_handle_request(void *p)
 }
 
 
-void send_image_file(struct conn * conn,const char * filename)
+void usend_image_file(struct conn * conn,const char * filename)
 {
 	FILE * infile;
 	infile = fopen(filename,"rb");
@@ -234,7 +237,7 @@ void send_image_file(struct conn * conn,const char * filename)
 
 	struct cwrmsg * cwrmsg;
 	uint8_t  buffer[1024];
-	struct image_data data;
+	struct cwimage_data data;
 	data.data = buffer;
 
 
@@ -441,7 +444,7 @@ static void wtpman_run_run(void *arg)
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
-	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"NudelSuppe",strlen("NudelSuppe"));
+//	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"Schlumpf",strlen("Schlumpf"));
 
 	cwrmsg = conn_send_request(conn);
 
@@ -580,6 +583,42 @@ printf("Slept befor join resp\n");
 	
 }
 
+
+static int wtpman_send_image_file(struct wtpman * wtpman,struct cwrmsg * cwrmsg)
+{
+	struct cwimage_data data;
+	memset(&data,0,sizeof(struct cwimage_data));
+	uint8_t id [1025];
+	data.identifier=id;
+	char filename[2048];
+	id[0]=0;
+
+
+	cw_read_image_data_request(&data,cwrmsg->msgelems,cwrmsg->msgelems_len);
+	if (!strlen(id)){
+		cw_dbg(DBG_CW_MSG_ERR, "No image identifier in image data request");
+		cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
+		return 0;
+	}
+
+	sprintf(filename,"%s/%s",conf_image_dir,id);
+
+	FILE *infile;
+	infile = fopen(filename, "rb");
+	if (infile) {
+		cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
+		cw_log(LOG_INFO, "Sending image file %s to %s", filename, sock_addr2str(&wtpman->conn->addr));
+		cw_send_image_file(wtpman->conn, infile);
+		return 1;
+	}
+
+	cw_log(LOG_ERR, "Can't open image file %s:%s", filename, strerror(errno));
+	cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
+
+	return 0;
+
+}
+
 static void wtpman_run(void *arg)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
@@ -613,17 +652,36 @@ static void wtpman_run(void *arg)
 
 
 
-	/* here the WTP has joined, now image update or change state event */
+	/* here the WTP has joined, now we assume an image data request  
+	   or an configuration status request. Nothing else. i
+	   State is Image update 
+	*/
 
-	int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
-	cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
+	do {
+		int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
+		cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
 
-	if (!cwrmsg){
-		cw_dbg(DBG_CW_MSG_ERR,"No config uration status request from %s after %d seconds, WTP died.",
-			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
-		wtpman_remove(wtpman);	
-		return;
-	}
+		if (!cwrmsg){
+			cw_dbg(DBG_CW_MSG_ERR,"No conf status or img data request from %s after %d seconds, WTP died.",
+				sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
+			wtpman_remove(wtpman);	
+			return;
+		}
+
+		/* Image data request, the WTP wants an update */
+		if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+			int rc = wtpman_send_image_file(wtpman,cwrmsg);	
+			if (rc ){
+				wtpman_remove(wtpman);
+				return;
+			}
+
+		}
+
+	} while (cwrmsg->type != CWMSG_CONFIGURATION_STATUS_REQUEST); 
+
+
+
 printf("Have Masseg %d\n",cwrmsg->type);
 	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
 	int result_code=0;
@@ -655,12 +713,12 @@ printf("Done\n");
 			break;
 		case CWMSG_IMAGE_DATA_REQUEST:
 			printf("Image update\n!");
-			cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
+			//cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 
-			cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
+			//cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
 
-			send_image_file(wtpman->conn,"/tftpboot/c1130-k9w7-tar.default");
+			//send_image_file(wtpman->conn,"/tftpboot/c1130-k9w7-tar.default");
 		
 	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w7-tar.123-8.JEA3.tar");
 //			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");

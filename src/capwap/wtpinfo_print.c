@@ -209,7 +209,11 @@ for (i0=0; i0<10; i0++){
 
 
 	s+=sprintf (s,"\tSoftware Version: ");
-	s+=version_print(s,wtpinfo->software_version,wtpinfo->software_version_len,wtpinfo->software_vendor_id);
+//	s+=version_print(s,wtpinfo->software_version,wtpinfo->software_version_len,wtpinfo->software_vendor_id);
+	s+=cw_format_version(s,wtpinfo->software_version,wtpinfo->software_vendor_id,"Not set");
+	s+=sprintf (s,"\n");
+
+
 	s+=sprintf (s,"\tHardware Version: ");
 	s+=version_print(s,wtpinfo->hardware_version,wtpinfo->hardware_version_len,wtpinfo->hardware_vendor_id);
 	s+=sprintf (s,"\tBootloader Version: ");
