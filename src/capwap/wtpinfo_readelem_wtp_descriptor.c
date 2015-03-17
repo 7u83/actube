@@ -92,7 +92,8 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 				break;
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION:
 				wtpinfo->software_vendor_id=vendor_id;
-				cw_setstr(&wtpinfo->software_version,msgelem+i,sublen);
+
+				bstr_replace(&wtpinfo->software_version,bstr_create(msgelem+i,sublen));
 				wtpinfo->software_version_len=sublen;
 				break;
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION:

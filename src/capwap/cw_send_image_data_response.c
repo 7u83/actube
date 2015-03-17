@@ -17,12 +17,17 @@
 
 */
 
+/**
+ * @file 
+ * @brief Implements cw_send_image_data_response
+ */
+
 #include "sock.h"
 #include "capwap.h"
 #include "cw_log.h"
 
 
-void cwsend_image_data_response(struct conn * conn,int seqnum, int rc)
+void cw_send_image_data_response(struct conn * conn,int seqnum, int rc)
 {
 	cw_dbg(DBG_CW_MSG,"Sending image data response to %s, seq = %d",sock_addr2str(&conn->addr),seqnum);
 

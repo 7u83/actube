@@ -19,6 +19,7 @@
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include <arpa/inet.h>
 
@@ -116,8 +117,8 @@ struct capwap_ctrlhdr
 #define	CWMSG_JOIN_REQUEST			3 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_JOIN_RESPONSE			4 + CWIANA_ENTERPRISE_NUMBER*256
 
-#define CWMSG_CONFIGURATION_STATUS_REQUEST	5 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_CONFIGURATION_STATUS_RESPONSE	6 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_CONFIGURATION_STATUS_REQUEST	5 
+#define CWMSG_CONFIGURATION_STATUS_RESPONSE	6
 
 #define CWMSG_CONFIGURATION_UPDATE_REQUEST	7
 #define CWMSG_CONFIGURATION_UPDATE_RESPONSE	8
@@ -128,11 +129,11 @@ struct capwap_ctrlhdr
 #define CWMSG_CHANGE_STATE_EVENT_REQUEST	11
 #define CWMSG_CHANGE_STATE_EVENT_RESPONSE	12
 
-#define CWMSG_ECHO_REQUEST			13 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_ECHO_RESPONSE			14 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_ECHO_REQUEST			13
+#define CWMSG_ECHO_RESPONSE			14
 
-#define CWMSG_IMAGE_DATA_REQUEST		15 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_IMAGE_DATA_RESPONSE		16 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_IMAGE_DATA_REQUEST		15 
+#define CWMSG_IMAGE_DATA_RESPONSE		16 
 
 #define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
@@ -348,17 +349,21 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo * wtpinfo,uint8_t *msgelem, int 
 #define AC_DTLS_POLICY_D		4	/* DTLS Data channel support */		
 
 
-struct image_data{
+
+struct cwimage_data{
 	uint8_t * data;
 	uint8_t type;
 	int len;
+	uint32_t vendor_id;
+	uint8_t *identifier;
 };
 
-struct image_identifier{
+/*
+struct cwimage_identifier{
 	uint32_t vendor_id;
 	char *name;
 };
-
+*/
 
 
 
@@ -393,9 +398,8 @@ extern void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int le
 extern void process_conf_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 
 extern void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len);
-extern void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len);
 extern void cwsend_image_data_response(struct conn * conn,int seqnum, int rc);
-extern int cwsend_image_data_request(struct conn * conn, struct image_data * data, struct image_identifier *id );
+extern int cwsend_image_data_request(struct conn * conn, struct cwimage_data * data, struct image_identifier *id );
 extern int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
 extern void cwsend_change_state_event_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo);
 extern int cwread_wtp_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len);
@@ -467,14 +471,19 @@ extern int cw_readelem_vendor_specific_payload(void * data, int msgtype, int ele
       18 Message Unexpected (Invalid in Current State)
 
       19 Message Unexpected (Unrecognized Request)
+*/
 
-      20 Failure - Missing Mandatory Message Element
-
+#define CW_RESULT_MISSING_MAND_ELEM				20 
+/*
       21 Failure - Unrecognized Message Element
 
       22 Data Transfer Error (No Information to Transfer)
 
 */
+
+
+
+extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
 extern int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len);
 extern int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len);
@@ -483,5 +492,7 @@ extern int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type
 
 extern int cw_send_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo);
 extern int cw_handle_echo_request(void * d);
+extern void cw_send_image_file(struct conn *conn, FILE *infile);
+
 
 #endif

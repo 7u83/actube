@@ -3,7 +3,7 @@
 
     libcapwap is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
     libcapwap is distributed in the hope that it will be useful,
@@ -16,64 +16,59 @@
 
 */
 
+/**
+ *@file
+ *@brief Image Data handling
+ */
+#include <string.h>
+
 #include "capwap.h"
-#include "acinfo.h"
 
 #include "cw_log.h"
 #include "cw_util.h"
 
-#include <stdio.h> // tube
+#include <stdio.h> 
 
-int cw_readelem_image_identifier(uint8_t **dst, int type,uint8_t *msgelem, int len)
+int cw_readelem_image_identifier(struct cwimage_data *data, int type,uint8_t *msgelem, int len)
 {
 	if (type != CWMSGELEM_IMAGE_IDENTIFIER)
 		return 0;
 
-	uint32_t vendor_id = ntohl(*((uint32_t*)msgelem));
-	printf("Vendor id %d\n",vendor_id);
-	
-	int i;
-	for(i=0; i<len; i++){
-		printf("%c",msgelem[i]);
+	data->vendor_id = ntohl(*((uint32_t*)msgelem));
+
+	if (len >= 1024) {
+		cw_dbg(DBG_CW_MSG_ERR,"Image identifier too long (>1024), truncating");
+		len = 1024;
 	}
-	printf("\n");
+	
+	if ( data->identifier ){
+		memcpy(data->identifier,msgelem,len);
+		*(data->identifier+len)=0;
+	}
 
 	return 1;
 }
 
-static int imgdata_request(void * a,int type,uint8_t* msgelem,int len)
+static int imgdata_request(void * ptr,int type,uint8_t* msgelem,int len)
 {
-printf("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH oioioioioi here\n");
-	cw_dbg_msgelem(CWMSG_DISCOVERY_REQUEST, type, msgelem, len);
+	cw_dbg_msgelem(CWMSG_IMAGE_DATA_REQUEST, type, msgelem, len);
 
-//	struct ac_info * acinfo = (struct ac_info *)a;
+
 	cw_dbg(DBG_ALL,"Reading image data req msgelem, type=%d - %s ,len=%d\n",type,cw_msgelemtostr(type),len);
 
-	if (cw_readelem_image_identifier(0,type,msgelem,len))
+	if (cw_readelem_image_identifier(ptr,type,msgelem,len))
 		return 1;
 
-/*	if (acinfo_readelem_ac_descriptor(acinfo,type,msgelem,len)) 
-		return 1;
-
-	if (acinfo_readelem_ac_name(acinfo,type,msgelem,len)) 
-		return 1;
-	
-	if (acinfo_readelem_ctrl_ip_addr(acinfo,type,msgelem,len)) 
-		return 1;
-*/
 	return 0;
 }
 
 
-
-void cwread_image_data_request(struct ac_info * acinfo, uint8_t * msg, int len)
+/**
+ * Read an image data request message
+ */
+void cw_read_image_data_request(struct cwimage_data *data, uint8_t * msg, int len)
 {
-	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
-	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
-	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
-	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
-	printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRrrr im data eqi\n");
-	cw_foreach_msgelem(msg,len,imgdata_request,NULL);
+	cw_foreach_msgelem(msg,len,imgdata_request,data);
 }
 
 

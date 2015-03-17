@@ -60,6 +60,7 @@
 
 #define CONF_DEFAULT_CISCO_HARDWARE_VERSION ".x01000001"
 #define CONF_DEFAULT_CISCO_SOFTWARE_VERSION ".x06006E00"
+#define CONF_DEFAULT_IMAGE_DIR "/tftpboot"
 
 
 #ifndef CONF_DEFAULT_CONTROL_PORT
@@ -111,7 +112,7 @@ extern char * conf_dtls_psk;
 extern int conf_dtls_verify_peer;
 char * conf_sslcipher;
 
-
+extern char *conf_image_dir;
 
 
 extern char ** conf_mcast_groups;

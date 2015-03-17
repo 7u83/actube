@@ -19,10 +19,9 @@
 #include "capwap.h"
 #include "lwapp.h"
 
-//#include "string.h"		//tube
 
 
-int conn_prepare_image_data_request(struct conn *conn, struct image_data *data,
+int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data,
 				    struct image_identifier *id)
 {
 	struct cwmsg *cwmsg = &conn->req_msg;

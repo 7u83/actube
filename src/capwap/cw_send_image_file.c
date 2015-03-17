@@ -38,8 +38,10 @@
  * Send an image file to an AP
  * 
  */ 
-void cw_send_image_file(struct conn *conn, const char *filename)
+void cw_send_image_file(struct conn *conn, FILE *infile)
 {
+
+/*
 	FILE *infile;
 	infile = fopen(filename, "rb");
 	if (!infile) {
@@ -49,10 +51,12 @@ void cw_send_image_file(struct conn *conn, const char *filename)
 
 
 	cw_log(LOG_INFO, "Sending image file %s to %s", filename, sock_addr2str(&conn->addr));
+*/
 
 	struct cwrmsg *cwrmsg;
 	uint8_t buffer[1024];	/* buffer MUST be 1024 */
-	struct image_data data;
+	struct cwimage_data data;
+	memset(&data,0,sizeof(struct cwimage_data));
 	data.data = buffer;
 
 
@@ -87,5 +91,4 @@ void cw_send_image_file(struct conn *conn, const char *filename)
 
 	} while (!feof(infile));
 
-	fclose(infile);
 }
