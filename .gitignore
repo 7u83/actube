@@ -23,7 +23,8 @@
 *.hex
 
 # Vim backups and swaps
-*~ 
+*~
+
 
 
 # SSL stuff
@@ -31,7 +32,11 @@
 *.crt
 *.key
 *.req
+*.der
 
 # Archives
 *.gz
 *.tgz
+*.tar
+*.tar.gz
+*.tar.xz
