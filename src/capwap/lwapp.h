@@ -61,7 +61,6 @@
 
 
 
-#define lw_foreach_msgelem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
 
 //#define LWAPP_PACKET_PREAMBLE (CW_VERSION<<4)
 //#define LWAPP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
@@ -101,16 +100,22 @@
 /* LWAPP message elements */
 
 #define LWMSGELEM_WTP_DESCRIPTOR 		3
+#define LWMSGELEM_WTP_NAME			5
 
 #define LWMSGELEM_SUPPORTED_RATES		16
 
 #define LWMSGELEM_WTP_BOARD_DATA		50
 
 
+/* useful macros */
+
+#define lw_foreach_msgelem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+
 /* function proto types */
 
-uint16_t lw_checksum(uint8_t *d,int len);
-int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
+extern uint16_t lw_checksum(uint8_t *d,int len);
+extern int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
+extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int len);
 
 
 
