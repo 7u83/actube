@@ -377,10 +377,9 @@ static void wtpman_run_discovery(void *arg)
 	cwread_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 
+//	printf("RMAC-LEN:%d\n",cwrmsg->rmac[0]);
 
-	printf("RMAC-LEN:%d\n",cwrmsg->rmac[0]);
-
-printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
+//printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
 
 
 
@@ -389,7 +388,6 @@ printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)
 	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
-
 
 
 	struct radioinfo radioinfo;
@@ -459,6 +457,12 @@ static void wtpman_run_run(void *arg)
 	cwmsg_addelem_image_identifier(&conn->req_msg,CW_VENDOR_ID_CISCO,"image00",strlen("image00"));
 	cwrmsg = conn_send_request(conn);
 */	
+
+	for (i=0; i<100; i++){
+		time_t t = cw_timer_start(1);
+		printf("Wait...\n");
+		conn_wait_for_message(conn,t);
+	}
 
 	printf("Set name?\n");
 	exit(0);	
