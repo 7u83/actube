@@ -11,7 +11,7 @@
 #include "conf.h"
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 ACIPLIST * get_aciplist()
 {
@@ -109,10 +109,10 @@ struct ac_info * get_acinfo()
 	int i;
 	for (i=1; i<=4; i++){
 		acinfo->radioinfos[i].type= 
-			CW_IEEE80211_RADIO_TYPE_B |
-			CW_IEEE80211_RADIO_TYPE_A | 
-			CW_IEEE80211_RADIO_TYPE_G | 
-			CW_IEEE80211_RADIO_TYPE_N;
+			CW_80211_RADIO_TYPE_B |
+			CW_80211_RADIO_TYPE_A | 
+			CW_80211_RADIO_TYPE_G | 
+			CW_80211_RADIO_TYPE_N;
 //		acinfo->radioinfos[i].type=0xffffffff; 
 		acinfo->radioinfos[i].rid=i;
 	}

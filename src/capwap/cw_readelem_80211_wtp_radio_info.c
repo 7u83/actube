@@ -19,18 +19,18 @@
 #include <arpa/inet.h>
 
 #include "wtpinfo.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 #include "cw_log.h"
 
 
-int cw_readelem_ieee80211_wtp_radio_info(void *dst,int type,uint8_t *msgelem, int len)
+int cw_readelem_80211_wtp_radio_info(void *dst,int type,uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_IEEE80211_WTP_RADIO_INFO)
+	if (type != CWMSGELEM_80211_WTP_RADIO_INFO)
 		return 0;
 
 	if (len!=5){
-		cw_dbg(DBG_CW_MSG_ERR,"Discarding msgelem IEEE80211_WTP_RADIO_INFO, wrong size, len=%d\n",len);
+		cw_dbg(DBG_CW_MSG_ERR,"Discarding msgelem 80211_WTP_RADIO_INFO, wrong size, len=%d\n",len);
 		return 0;
 	}
 

@@ -17,7 +17,7 @@
 */
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 #include <stdio.h> 
 #include <stdlib.h>

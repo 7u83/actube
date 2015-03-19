@@ -18,7 +18,7 @@
 
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 
 const char * cw_msgelemtostr(int elem)
@@ -148,7 +148,7 @@ const char * cw_msgelemtostr(int elem)
 
 
 
-		case CWMSGELEM_IEEE80211_WTP_RADIO_INFO:
+		case CWMSGELEM_80211_WTP_RADIO_INFO:
 			return "802.11: wtp radio info";
 
 

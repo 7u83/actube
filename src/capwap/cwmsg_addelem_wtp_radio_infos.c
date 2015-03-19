@@ -17,7 +17,7 @@
 */
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 #include "radioinfo.h"
 
 void cwmsg_addelem_wtp_radio_info(struct cwmsg * msg,struct radioinfo *radioinfo)
@@ -27,7 +27,7 @@ void cwmsg_addelem_wtp_radio_info(struct cwmsg * msg,struct radioinfo *radioinfo
 	*ri = radioinfo->rid;
 
 	*((uint32_t*)(ri+1))=htonl(radioinfo->type);
-	cwmsg_addelem(msg,CWMSGELEM_IEEE80211_WTP_RADIO_INFO,ri,5);
+	cwmsg_addelem(msg,CWMSGELEM_80211_WTP_RADIO_INFO,ri,5);
 }
 
 
