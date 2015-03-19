@@ -27,7 +27,7 @@ extern void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqn
 //int cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * conn);
 //
 extern void cwmsg_addelem(struct cwmsg *msg,int type, const uint8_t *elem, int len);
-extern void cwmsg_vaddelem(struct cwmsg *msg,int type,int n, ...);
+extern void cwmsg_vaddelem(struct cwmsg *msg,int type, ...);
 
 extern void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo,struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_ac_timestamp(struct cwmsg *msg);
