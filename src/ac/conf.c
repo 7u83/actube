@@ -590,6 +590,11 @@ int read_config(const char * filename){
 		CFG_SIMPLE_STR("ac_name",&conf_acname),
 		CFG_SIMPLE_STR("hardware_version",&conf_hardware_version),
 		CFG_SIMPLE_STR("software_version",&conf_software_version),
+		
+		CFG_SIMPLE_STR("cisco_hardware_version",&conf_cisco_hardware_version),
+		CFG_SIMPLE_STR("cisco_software_version",&conf_cisco_software_version),
+
+
 
 		CFG_SIMPLE_STR("ssl_cert",&conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key",&conf_sslkeyfilename),

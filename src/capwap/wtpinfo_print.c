@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 #include "cw_util.h"
 
@@ -33,16 +33,16 @@ int radioinfo_print(char * str, struct radioinfo * radioinfo)
 	s += sprintf(s,"\t  RID %d ",radioinfo->rid);
 	s += sprintf(s,"modes: ");
 
-	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_B){
+	if(radioinfo->type & CW_80211_RADIO_TYPE_B){
 		s+=sprintf(s,"B");
 	}
-	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_G){
+	if(radioinfo->type & CW_80211_RADIO_TYPE_G){
 		s+=sprintf(s,"G");
 	}
-	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_A){
+	if(radioinfo->type & CW_80211_RADIO_TYPE_A){
 		s+=sprintf(s,"A");
 	}
-	if(radioinfo->type & CW_IEEE80211_RADIO_TYPE_N){
+	if(radioinfo->type & CW_80211_RADIO_TYPE_N){
 		s+=sprintf(s,"N");
 	}
 

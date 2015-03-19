@@ -20,7 +20,7 @@
 #include <string.h>
 
 #include "capwap.h"
-#include "capwap_ieee80211.h"
+#include "capwap_80211.h"
 
 #include "cw_log.h"
 #include "cw_util.h"
@@ -85,7 +85,7 @@ void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg,
 		CWMSGELEM_WTP_DESCRIPTOR,
 		CWMSGELEM_WTP_FRAME_TUNNEL_MODE,
 		CWMSGELEM_WTP_MAC_TYPE,
-		CWMSGELEM_IEEE80211_WTP_RADIO_INFO,
+		CWMSGELEM_80211_WTP_RADIO_INFO,
 		-1
 	};
 

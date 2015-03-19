@@ -102,7 +102,8 @@ CAPWAPOBJS= \
 	   wtpinfo_readelem_wtp_board_data.o \
 	   wtpinfo_readelem_wtp_mac_type.o \
 	   wtpinfo_readelem_wtp_radio_info.o  \
-	cw_readelem_ieee80211_wtp_radio_info.o \
+	cw_readelem_80211_wtp_radio_info.o \
+	cwmsg_addelem_80211_add_wlan.o \
 	   wtpinfo_readelem_wtp_descriptor.o \
 	   wtpinfo_readelem_discovery_type.o \
 	   wtpinfo_readelem_wtp_frame_tunnel_mode.o \
