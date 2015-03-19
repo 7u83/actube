@@ -209,6 +209,8 @@ int wtpconf_preinit()
 
 	conf_vendor_id = CONF_DEFAULT_VENDOR_ID;
 	conf_software_version = bstr_create_from_cfgstr(CONF_DEFAULT_SOFTWARE_VERSION);
+	conf_hardware_version = bstr_create_from_cfgstr(CONF_DEFAULT_HARDWARE_VERSION);
+	conf_bootloader_version = bstr_create_from_cfgstr(CONF_DEFAULT_BOOTLOADER_VERSION);
 	conf_serial_no = bstr_create_from_cfgstr(CONF_DEFAULT_SERIAL_NO);
 
 	conf_board_id = bstr_create_from_cfgstr(CONF_DEFAULT_BOARD_ID);
