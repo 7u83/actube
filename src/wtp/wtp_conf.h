@@ -61,6 +61,10 @@ extern uint8_t conf_macaddress_len;
 	#define CONF_DEFAULT_BOOTLOADER_VENDOR_ID CW_VENDOR_ID_FSF
 #endif
 
+#ifndef CONF_DEFAULT_BOOTLOADER_VERSION
+	#define CONF_DEFAULT_BOOTLOADER_VERSION "W-FAT-BL-0.1"
+#endif
+
 #ifndef CONF_DEFAULT_MODEL_NO
 	#define CONF_DEFAULT_MODEL_NO "W-FAT"
 #endif
