@@ -22,18 +22,19 @@
 
 #include "cwmsg.h"
 
-void cwmsg_vaddelem(struct cwmsg *msg,int type,int n, ...)
+void cwmsg_vaddelem(struct cwmsg *msg,int type, ...)
 {
 	va_list vl;
-	va_start(vl,n);
-	int i,len=0;
-	for (i=0; i<n; i++){
+	va_start(vl,type);
+	int len=0;
 
-		uint8_t *data=va_arg(vl,uint8_t*);
+	uint8_t *data;	
+	while ( ( data = va_arg(vl,uint8_t*)) != 0 ){
 		int l=va_arg(vl,int);
 		memcpy(msg->msgelems+4+msg->pos+len,data,l);
 		len+=l;
 	}
+
 
 	uint32_t val = type<<16|len;
 	*((uint32_t*)(msg->msgelems+msg->pos))=htonl(val);
