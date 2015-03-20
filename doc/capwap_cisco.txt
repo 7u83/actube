@@ -17,6 +17,28 @@
 Type: 83
 Length: 16
 
+  IP Address: The IP address of AP
+  Netmask: Netmask 
+  Default Gateway: default gateway
+
+
+128. Cisco Rest Button State
+  The state of the reset button
+
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   | ResetBtnState | 
+   +-+-+-+-+-+-+-+-+ 
+
+Type: 128 
+Length: 1
+
+  ResetBtnState: 1 = Enabeled
+                 0 = Disabled (?)
+
+
+
 
 207. Cisco Board Data Options
 
