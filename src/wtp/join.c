@@ -164,5 +164,7 @@ conn->capwap_mode = CWMODE_CISCO;
 
 	join_state(conn);
 
+printf("Joined with conn %p\n",conn);
+
 	return 1;
 }

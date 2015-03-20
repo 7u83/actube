@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file 
+ * @brief 
+ */ 
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -26,6 +31,7 @@
 #include "capwap.h"
 
 
+/*
 void conn_init(struct conn * conn)
 {
 	memset(conn,0,sizeof(struct conn));
@@ -35,13 +41,18 @@ void conn_init(struct conn * conn)
 	conn->wait_join=CAPWAP_WAIT_JOIN;
 	conn->mtu_discovery=1;
 }
-
+*/
 
 
 /**
- * function
- * @retval 1 Success
- * @retval 0 failure, conslt errno for more details
+ * Create a conn object
+ * @param socket a socket
+ * @param addr the address associated
+ * @param qsize size of packet queue
+ * @return A pointer to the created object
+ * This function creates a conn obnject with queueing functionality
+ * for asynchronous operation. 
+ * To create a conn object without queue functionallity use  #conn_create_noq.
  */
 struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 {

@@ -5,7 +5,7 @@
 #include "capwap/wtpinfo.h"
 #include "capwap/acinfo.h"
 #include "capwap/conn.h"
-#include "capwap/capwap_ieee80211.h"
+#include "capwap/capwap_80211.h"
 
 #include "wtp_conf.h"
 #include "wtp_interface.h"
@@ -96,5 +96,6 @@ struct conn * get_conn()
 		}
 		conn->mtu_discovery=conf_mtu_discovery;	
 	}
+	printf("Get conn returns %p\n",conn);
 	return conn;
 }
