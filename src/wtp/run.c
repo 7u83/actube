@@ -1,11 +1,14 @@
+#include <stdlib.h>
 #include <time.h>
 #include <errno.h>
+#include <string.h>
 
 #include "capwap/capwap.h"
 #include "capwap/conn.h"
 #include "capwap/radioinfo.h"
 #include "capwap/cw_log.h"
 #include "capwap/dtls.h"
+#include "capwap/sock.h"
 
 
 #include "wtp_conf.h"
@@ -59,9 +62,14 @@ struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
 
 
 
+extern struct conn * get_conn();
 
 int run(struct conn * conn)
 {
+
+	conn = get_conn();
+	printf("Running with conn %p\n");
+
 	struct radioinfo radioinfo;
 	memset(&radioinfo,0,sizeof(radioinfo));
 
@@ -69,18 +77,29 @@ int run(struct conn * conn)
 	while (1){	
 		if (time(NULL)-echo_interval_timer >= conf_echo_interval)
 		{
-			struct cwmsg cwmsg;
-			uint8_t buffer[CWMSG_MAX_SIZE];
+	//		struct cwmsg cwmsg;
+	//		uint8_t buffer[CWMSG_MAX_SIZE];
 
 		//	cwsend_echo_request(conn,&radioinfo);
 
 //			cw_log_debug1("Sending echo request");
-			cwmsg_init_echo_request(&cwmsg,buffer,conn,&radioinfo);
-			struct cwrmsg * rc = send_request(conn,&cwmsg);
+			struct cwmsg *cwmsg=&conn->req_msg;
+			uint8_t * buffer = conn->req_buffer;
+			cwmsg_init_echo_request(cwmsg,buffer,conn,&radioinfo);
+
+
+printf("Conn target is %s",sock_addr2str(&conn->addr));
+printf("Calling conn send req\n");
+printf("conn max retrans: %d\n",conn->max_retransmit);
+			struct cwrmsg * rc = conn_send_request(conn);
+printf("Back from conn send req\n");
 
 //			printf("conn->seqnum %i\n",conn->seqnum);
 //			struct cwrmsg * rc = get_response(conn,CWMSG_ECHO_RESPONSE,conn->seqnum);		
 			if (rc==0){
+
+printf("Error !\n");
+exit(0);
 
 				dtls_shutdown(conn);	
 		//		cw_log_debug1("Connection lost, no echo response");

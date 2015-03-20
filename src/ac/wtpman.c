@@ -29,6 +29,7 @@
 #include <errno.h>
 
 #include "capwap.h"
+#include "capwap_80211.h"
 #include "capwap_cisco.h"
 
 #include "cw_util.h"
@@ -428,7 +429,7 @@ static void wtpman_run_run(void *arg)
 
 	
 	int i;
-	for (i=0; i<10; i++){
+	for (i=0; i<1; i++){
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
 		conn_wait_for_message(conn,t);
@@ -442,16 +443,37 @@ static void wtpman_run_run(void *arg)
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
-//	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"Schlumpf",strlen("Schlumpf"));
+	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CWVENDOR_CISCO_RAD_NAME,(uint8_t*)"Schlumpf",strlen("Schlumpf"));
 
 	cwrmsg = conn_send_request(conn);
 
 
-	for (i=0; i<10; i++){
+	for (i=0; i<3; i++){
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
 		conn_wait_for_message(conn,t);
 	}
+
+
+
+printf("Adding WLAN\n");
+	struct cwwlan wlan;
+	memset(&wlan,0,sizeof(wlan));
+
+	const char * wl = "wl7u83";
+	wlan.ssid = bstr_create(wl,strlen(wl));
+
+	conn_prepare_request(conn,CWMSG_80211_WLAN_CONFIGURATION_REQUEST);
+	struct cwmsg * cwmsg = &conn->req_msg;
+	cwmsg_addelem_80211_add_wlan(cwmsg,&wlan);
+
+	cwrmsg = conn_send_request(conn);
+
+printf("WLAN CONF sent\n");
+
+
+
+
 
 /*	conn_prepare_request(conn,CWMSG_RESET_REQUEST);
 	cwmsg_addelem_image_identifier(&conn->req_msg,CW_VENDOR_ID_CISCO,"image00",strlen("image00"));

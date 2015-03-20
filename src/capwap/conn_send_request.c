@@ -9,6 +9,8 @@
 
 /**
  * Send a request message and wait for response
+ * @param conn the connection
+ * 
  */ 
 struct cwrmsg * conn_send_request(struct conn * conn)
 {
@@ -16,7 +18,8 @@ struct cwrmsg * conn_send_request(struct conn * conn)
 
 	struct cwrmsg * cwrmsg;
 	struct cwmsg * cwmsg = &conn->req_msg;
-	
+
+
         for (i=0; i<conn->max_retransmit; i++) {
 
                 time_t r_timer = cw_timer_start(conn->retransmit_interval);

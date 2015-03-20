@@ -172,7 +172,7 @@ endif
 
 DTLSOBJS+=dtls_bio.o 
 
-CONNOBJS= conn.o \
+CONNOBJS= conn_create.o \
 	conn_detect_capwap.o \
 	conn_send_packet.o \
 	conn_send_cwmsg.o \
@@ -191,7 +191,8 @@ CONNOBJS= conn.o \
 	conn_prepare_request.o \
 	conn_prepare_image_data_request.o \
 	conn_send_request.o \
-	conn_wait_for_message.o
+	conn_wait_for_message.o \
+	conn_init.o
 
 
 

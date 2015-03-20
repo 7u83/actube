@@ -163,6 +163,11 @@ int read_config(const char * filename){
 	if (str) 
 		conf_vendor_id=atoi(str);
 
+	str = uci_lookup_option_string(ctx,section,"echo_interval");
+	if (str) 
+		conf_echo_interval=atoi(str);
+
+
 	str = uci_lookup_option_string(ctx,section,"software_version");
 	if (str){
 		uint8_t * s = bstr_create_from_cfgstr(str);
@@ -207,6 +212,8 @@ int read_config(const char * filename){
 		uint8_t * s = bstr_create_from_cfgstr(str);
 		bstr_replace(&conf_model_no,s);
 	}
+
+	
 
 
 	

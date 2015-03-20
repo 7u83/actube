@@ -193,6 +193,7 @@ struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer);
 
 #define conn_is_error(conn) (conn->dtls_error)
 
+void conn_init(struct conn * conn);
 
 
 #endif /* __CONLIST_H */

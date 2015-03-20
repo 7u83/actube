@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief Implement conn_create_noq
+ */ 
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -26,7 +31,7 @@
 #include "cw_log.h"
 
 /**
- * function
+ * Create a connection object without queueing
  * @retval 1 Success
  * @retval 0 failure, conslt errno for more details
  */
@@ -37,7 +42,8 @@ struct conn * conn_create_noq(int sock, struct sockaddr * addr)
 	if (!conn)
 		return NULL;
 
-	memset(conn,0,sizeof(struct conn));
+	conn_init(conn);
+
 
 	conn->sock=sock;
 
