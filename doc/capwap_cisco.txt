@@ -1,4 +1,19 @@
 
+2. Cisco MWAR Addr
+
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   MWAR Type   |                  Address                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                Adress                         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+   Type: 2 for MWAR Addr
+   Length:   7
+
+
+
 83. Cisco AP IP Address
   The IPv4 configuration of the WTP
  
@@ -14,16 +29,34 @@
    |                           Reserved                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
-Type: 83
-Length: 16
+   Type: 83
+   Length: 16
 
-  IP Address: The IP address of AP
-  Netmask: Netmask 
-  Default Gateway: default gateway
+    IP Address: The IP address of AP
+    Netmask: Netmask 
+    Default Gateway: default gateway
+
+
+126. Cisco AP Regulatory Domain
+
+//bandId[0], regDomainSet[1], regDomainSlotId[0], regDomainCode0:[0], regDomainCode1:[1]
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Board ID    | regDomainSet  | RegDomainSlot | RegDomainCode |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   | RegDomainCope1|
+   +-+-+-+-+-+-+-+-+
+
+   Type: 126
+   Length: 7
+
 
 
 128. Cisco Rest Button State
-  The state of the reset button
+
+   The state of the reset button
 
     0
     0 1 2 3 4 5 6 7
@@ -31,11 +64,11 @@ Length: 16
    | ResetBtnState | 
    +-+-+-+-+-+-+-+-+ 
 
-Type: 128 
-Length: 1
+   Type: 128 for Cisco Rest Button State
+   Length: 1
 
-  ResetBtnState: 1 = Enabeled
-                 0 = Disabled (?)
+   ResetBtnState: 1 = Enabeled
+                  0 = Disabled (?)
 
 
 
@@ -51,8 +84,24 @@ Length: 1
    | ANT Type      | Reserved      | AP Type       | Join Priority |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
-Type: 207 
-Length: 4
+   Type: 207 
+   Length: 4
+
+
+
+LWAPP
+=====
+
+73. Cisco PAth MTU
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |         Data length           |            Padding            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+Type: 73
+Length: >=4
 
 
 
