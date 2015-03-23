@@ -99,11 +99,10 @@ printf("Back from conn send req\n");
 			if (rc==0){
 
 printf("Error !\n");
-exit(0);
 
-				dtls_shutdown(conn);	
+//				dtls_shutdown(conn);	
 		//		cw_log_debug1("Connection lost, no echo response");
-				return 0;
+//				return 0;
 			}
 			echo_interval_timer=time(NULL);
 		}

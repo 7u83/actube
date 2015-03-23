@@ -50,12 +50,13 @@ static int acprint(void *p,void*d) //,int ctr)
 	ACIP * ip = (ACIP*)d;
 	char str[100];
 	sock_addrtostr((struct sockaddr*)&ip->ip,str,100);
-//	printf("ACIP: %s\n",str);
-//	printf("CTR: %i\n",ip->wtp_count);
+	printf("ACIP: %s\n",str);
+	printf("CTR: %i\n",ip->wtp_count);
 	return 1;
 }
 
 
+struct ac_info wtp_acinfo;
 
 
 static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
@@ -75,22 +76,22 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 */
 
 
-	struct ac_info acinfo;
-	memset(&acinfo,0,sizeof(acinfo));
+	struct ac_info * acinfo = &wtp_acinfo;
+	memset(acinfo,0,sizeof(struct ac_info));
 
-	acinfo.aciplist = di->aciplist;
-
-
+	acinfo->aciplist = di->aciplist;
 
 
-	cwread_discovery_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+
+
+	cwread_discovery_response(acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 
 
 
 
 	char ai [4096];
-	acinfo_print(ai,&acinfo);
+	acinfo_print(ai,acinfo);
 	printf("AC INFO\n%s",ai);
 
 
@@ -111,7 +112,7 @@ static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 
 	printf("ACL COUNT: %i\n",acinfo.aciplist->count);
 */	
-	aciplist_foreach(acinfo.aciplist,acprint,0);
+	aciplist_foreach(acinfo->aciplist,acprint,0);
 
 //	responses++;
 //
@@ -300,7 +301,6 @@ ACIPLIST * do_discovery(const char *acaddr)
 		discovery_count++;
 
 
-		/* create socket */
 		int sockfd;
 		int opt;
 		sockfd=socket(res->ai_family,SOCK_DGRAM,0);
@@ -324,17 +324,20 @@ ACIPLIST * do_discovery(const char *acaddr)
 
 		do_discover_conn(conn,&di);	
 
-		close(sockfd);
 
-		if ( di.aciplist->count != 0)
+		if ( di.aciplist->count != 0){
+			set_sock(sockfd);
 			break;
+		}
+
+		close(sockfd);
 		
 	}
 
 	freeaddrinfo(res0);
 
 	if (di.aciplist->count){
-//		cw_log_debug2("Discover responses received: %i\n",di.response_count);
+		cw_dbg(DBG_CW_INFO,"Discovery responses received: %i\n",di.response_count);
 		return di.aciplist;
 
 	}

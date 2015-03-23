@@ -49,7 +49,8 @@ void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, str
 	if (hlen%4){
 		int n = hlen;
 		hlen = (hlen>>2)*4+4;
-		memset(buffer+n,0,hlen-n);	
+		memset(buffer+n,0,hlen-n);
+		*(buffer+n)=0xc0;
 	}
 
 	

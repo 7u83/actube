@@ -1,9 +1,14 @@
 
+
+#include "gnutls/dtls.h"
+
 #include "dtls.h"
 #include "dtls_gnutls.h"
 
 #include "conn.h"
 #include "cw_log.h"
+
+
 
 int dtls_gnutls_connect(struct conn *conn)
 {
@@ -12,6 +17,9 @@ int dtls_gnutls_connect(struct conn *conn)
 
 //	gnutls_dh_set_prime_bits(d->session, 512);
 	gnutls_handshake_set_timeout(d->session,GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);	
+
+	gnutls_dtls_set_data_mtu(d->session,1500);
+	gnutls_dtls_set_mtu(d->session,1500);
 
 	int rc;	
 	do {

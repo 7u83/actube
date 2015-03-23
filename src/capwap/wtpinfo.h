@@ -66,7 +66,7 @@ struct wtpinfo{
 
 	
 	bstr_t session_id;
-//	int session_id_len;
+
 
 	struct radioinfo radioinfo[31];
 

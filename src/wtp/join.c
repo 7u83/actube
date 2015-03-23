@@ -62,19 +62,23 @@ for(int i=0; i<10; i++){
 //	}while(cwrmsg==0);
 
 
-
-	printf("SEQQQQS %d %d\n",cwrmsg->seqnum,conn->seqnum);
+if(!cwrmsg) {
+	exit(0);
+}
+	
+	printf("SEQS %d %d\n",cwrmsg->type,conn->seqnum);
 
 //	cw_log_debug0("Received message %i",cwrmsg->seqnum);
 
 	if (cwrmsg->type != CWMSG_JOIN_RESPONSE || cwrmsg->seqnum != conn->seqnum){
-		printf("Wrong messagei %d %d\n",cwrmsg->seqnum,conn->seqnum);
+		printf("Wrong message %d %d\n",cwrmsg->type,conn->seqnum);
 		
 	}
 
 	struct ac_info acinfo;
 	memset(&acinfo,0,sizeof(acinfo));
 
+acinfo.result_code=99;
 
 	cwread_join_response(&acinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
@@ -91,7 +95,9 @@ int join(struct sockaddr *sa)
 	int sockfd;
 	int rc;
 
-	sockfd = socket(AF_INET,SOCK_DGRAM,0);
+//	sockfd = socket(AF_INET,SOCK_DGRAM,0);
+
+	sockfd = get_sock();
 	if (sockfd==-1){
 		cw_log(LOG_ERR,"Can't create socket: %s\n",strerror(errno));
 		return -1;
@@ -111,6 +117,7 @@ int join(struct sockaddr *sa)
 	struct conn * conn = get_conn();
 
 conn->capwap_mode = CWMODE_CISCO;
+conn->seqnum=-1;
 
 
 	conn->sock=sockfd;

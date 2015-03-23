@@ -67,11 +67,13 @@
 
 
 
-#define LWMSG_DISCOVERY_REQUEST		1
-#define LWMSG_DISCOVERY_RESPONSE	2
+#define LWMSG_DISCOVERY_REQUEST			1
+#define LWMSG_DISCOVERY_RESPONSE		2
 
-/*                  Join Request                         3
-                  Join Response                        4
+#define LW_MSG_JOIN_REQUEST			3
+#define LW_MSG_JOIN_RESPONSE			4
+
+/*
                   Join ACK                             5
                   Join Confirm                         6
                   Unused                             7-9
@@ -99,23 +101,51 @@
 
 /* LWAPP message elements */
 
-#define LWMSGELEM_WTP_DESCRIPTOR 		3
-#define LWMSGELEM_WTP_NAME			5
+#define LW_ELEM_AC_ADDRESS			2
+#define LW_ELEM_WTP_DESCRIPTOR 			3
+#define LW_ELEM_WTP_NAME			5
+#define LW_ELEM_AC_DESCRIPTOR			6
+
+#define LW_ELEM_AC_NAME				31
 
 #define LWMSGELEM_SUPPORTED_RATES		16
+#define LW_ELEM_TEST				18
 
-#define LWMSGELEM_WTP_BOARD_DATA		50
+#define LW_ELEM_WTP_BOARD_DATA			50
+
+#define LW_ELEM_VENDOR_SPECIFIC			104
 
 
-/* useful macros */
+/* useful macros and inline functions */
 
-#define lw_foreach_msgelem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+#define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+
+static inline int lw_put_dword(uint8_t *dst, uint32_t dw){
+	*((uint32_t*)(dst)) = htonl(dw);
+	return 4;
+}
+
+static inline int lw_put_word(uint8_t *dst, uint16_t w){
+	*((uint16_t*)(dst)) = htons(w);
+	return 2;
+}
+
+static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
+{
+	*dst=type;
+	*((uint16_t*)(dst+1)) = htons(len);
+	return len;
+}
+
+
+
 
 /* function proto types */
 
 extern uint16_t lw_checksum(uint8_t *d,int len);
 extern int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
 extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int len);
+
 
 
 

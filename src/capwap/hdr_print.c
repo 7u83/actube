@@ -21,14 +21,14 @@
 #include <stdio.h>
 
 #include "capwap.h"
-
+#include "sock.h"
 
 
 
 int hdr_print(char *str, uint8_t *packet, int len)
 {
 	
-
+printf("The readl header printer\n");
 
 	char *s = str;
 
@@ -38,7 +38,8 @@ int hdr_print(char *str, uint8_t *packet, int len)
 		return s-str;
 	}
 
-	int preamble = CWTH_GET_PREAMBLE(packet);
+	int preamble = cw_get_hdr_preamble(packet); //CWTH_GET_PREAMBLE(packet);
+
 	if (preamble==01){
 		s+=sprintf(s,"\tEncrypted data.");
 		return s-str;
@@ -57,21 +58,29 @@ int hdr_print(char *str, uint8_t *packet, int len)
 	
 
 
-	int hlen = CWTH_GET_HLEN(packet);
-	int rid = CWTH_GET_RID(packet);
-	int wbid = CWTH_GET_WBID(packet);
+	int hlen = cw_get_hdr_hlen(packet); //CWTH_GET_HLEN(packet);
+
+	int rid = cw_get_hdr_rid(packet);
+	int wbid = cw_get_hdr_wbid(packet);
+
 	s+=sprintf(s,"\tHLEN: %d, RID: %02X, WBID %02X",hlen,rid,wbid);	
 
 
 
 	s+=sprintf(s," Flags: (T=%d,F=%d,L=%d,W=%d,M=%d,K=%d)\n",
-				CWTH_GET_FLAG_T(packet),
-				CWTH_GET_FLAG_F(packet),
-				CWTH_GET_FLAG_L(packet),
-				CWTH_GET_FLAG_W(packet),
-				CWTH_GET_FLAG_M(packet),
-				CWTH_GET_FLAG_K(packet)
+				cw_get_hdr_flag_t(packet),
+				cw_get_hdr_flag_f(packet),
+				cw_get_hdr_flag_l(packet),
+				cw_get_hdr_flag_w(packet),
+				cw_get_hdr_flag_m(packet),
+				cw_get_hdr_flag_k(packet)
 		);
+	if (cw_get_hdr_flag_m(packet)){
+		uint8_t * rmac = cw_get_hdr_rmac(packet);
+		s+=sprintf(s,"\tRadio MAC: %s\n",sock_hwaddr2str(bstr_data(rmac),
+				bstr_len(rmac)));
+
+	}
 
 
 	if (len < 8){
@@ -79,13 +88,13 @@ int hdr_print(char *str, uint8_t *packet, int len)
 		return s-str;
 	}
 	
-	int frag_id = CWTH_GET_FRAGID(packet);
-	int frag_offs = CWTH_GET_FRAGOFFSET(packet);
+	int frag_id = cw_get_hdr_fragid(packet);
+	int frag_offs = cw_get_hdr_fragoffset(packet);
 	s+=sprintf(s,"\tFrag Id: %d, Frag Offs:: %d\n",frag_id,frag_offs);
 
 
 	int bhlen = 4*hlen;
-	if (CWTH_GET_FLAG_F(packet) && frag_offs!=0){
+	if (cw_get_hdr_flag_f(packet) && frag_offs!=0){
 		s+=sprintf(s,"\tFragment data ...");
 		return s-str;
 	}

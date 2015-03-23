@@ -43,7 +43,7 @@ int acinfo_readelem_ac_name(struct ac_info * acinfo,int type, uint8_t *msgelem, 
 
 int acinfo_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_AC_DESCRIPTOR)
+	if (type != CW_ELEM_AC_DESCRIPTOR)
 		return 0;
 
 	if (len<12)

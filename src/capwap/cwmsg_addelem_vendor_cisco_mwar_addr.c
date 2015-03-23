@@ -12,7 +12,7 @@
 #include "conn.h"
 
 
-
+#include "sock.h"
 
 void cwmsg_addelem_vendor_cisco_mwar_addr(struct cwmsg *msg, struct conn *conn)
 {
@@ -21,9 +21,11 @@ void cwmsg_addelem_vendor_cisco_mwar_addr(struct cwmsg *msg, struct conn *conn)
 	switch (((struct sockaddr*)&conn->addr)->sa_family){
 		case AF_INET:
 		{
-			data[0]=0;
+			data[0]=1;	/* mwar type */
 			data[5]=0;
 			data[6]=0;
+
+printf("Adding mwar addr %s\n",sock_addr2str(&conn->addr));
 
 			struct sockaddr_in  * sain = (struct sockaddr_in*)&conn->addr;
 			memcpy(data+1,(uint8_t*)&sain->sin_addr,4);

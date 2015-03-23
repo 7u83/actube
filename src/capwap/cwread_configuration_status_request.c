@@ -36,7 +36,7 @@ struct eparm{
 static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 {
 	struct eparm * e = (struct eparm*)eparm;
-	cw_dbg_msgelem(CWMSG_CONFIGURATION_STATUS_REQUEST, type, msgelem,len);
+	cw_dbg_msgelem(CW_MSG_CONFIGURATION_STATUS_REQUEST, type, msgelem,len);
 
 	/* mandatory elements */
 	
@@ -59,7 +59,7 @@ static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 	/* non-mantatory elements */
 
 	if (cw_readelem_vendor_specific_payload
-	    (e->wtpinfo, CWMSG_CONFIGURATION_STATUS_REQUEST, type, msgelem, len))
+	    (e->wtpinfo, CW_MSG_CONFIGURATION_STATUS_REQUEST, type, msgelem, len))
 		return 1;
 
 
@@ -73,7 +73,7 @@ foundX:
 void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
 	int mand[] = {
-		CWMSGELEM_AC_NAME,
+		CW_ELEM_AC_NAME,
 		CWMSGELEM_WTP_REBOOT_STATISTICS,
 		CWMSGELEM_RADIO_ADMINISTRATIVE_STATE,
 		CWMSGELEM_STATISTICS_TIMER,

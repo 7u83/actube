@@ -35,7 +35,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 	struct cwmsg cwmsg;
 
 	cwmsg_init(&cwmsg, buffer, CWMSG_DISCOVERY_REQUEST, conn_get_next_seqnum(conn),
-		   NULL /*radioinfo */ );
+		   radioinfo  );
 	cwmsg.capwap_mode = conn->capwap_mode;
 
 
@@ -67,6 +67,12 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 	switch (cwmsg.capwap_mode) {
 		case CWMODE_CISCO:
 			cwmsg_addelem_vendor_cisco_rad_name(&cwmsg, (uint8_t *) wtpinfo->name);
+			
+			uint8_t data207[4] = {1,1,0,1};
+		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,
+                                        CW_CISCO_BOARD_DATA_OPTIONS,data207,4);
+
+	
 			break;
 		
 		default:

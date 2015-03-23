@@ -81,9 +81,16 @@ int do_connect(void *priv,void *data)
 	if (!rc)
 		return 1;
 
-	
-	rc = configure();
+printf("Sleep after oin\n");
+sleep(5);
+printf("Go conf\n");
 
+
+//	rc = join(&ip->ip);
+//	if (!rc)
+//		return 1;
+
+	rc = configure();
 
 	run (get_conn());
 	return 0;

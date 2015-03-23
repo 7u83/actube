@@ -44,7 +44,7 @@
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |   Board ID    | regDomainSet  | RegDomainSlot | RegDomainCode |
+   |   Band ID    | regDomainSet  | RegDomainSlot | RegDomainCode |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    | RegDomainCope1|
    +-+-+-+-+-+-+-+-+
@@ -54,7 +54,7 @@
 
 
 
-128. Cisco Rest Button State
+128. Cisco Reset Button State
 
    The state of the reset button
 
@@ -88,11 +88,22 @@
    Length: 4
 
 
+208. Cisco MWAR Type
+
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   | MWAR Type     | 
+   +-+-+-+-+-+-+-+-+ 
+
+  01 Primary?
+
+
 
 LWAPP
 =====
 
-73. Cisco PAth MTU
+73. Cisco Path MTU
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
