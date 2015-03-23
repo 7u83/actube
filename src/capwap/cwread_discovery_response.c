@@ -68,8 +68,8 @@ static int acinfo_readelem_discovery_resp(void * eparm,int type,uint8_t* msgelem
 void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len)
 {
 	int mand[] = {
-		CWMSGELEM_AC_DESCRIPTOR,
-		CWMSGELEM_AC_NAME,
+		CW_ELEM_AC_DESCRIPTOR,
+		CW_ELEM_AC_NAME,
 		XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS,
 		XCWMSGELEM_CAPWAP_RADIO_INFO,
 

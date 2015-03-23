@@ -22,7 +22,7 @@
  */
 int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len)
 {
-	if (type != LWMSGELEM_WTP_BOARD_DATA)
+	if (type != LW_ELEM_WTP_BOARD_DATA)
 		return 0;
 
 	if ( len != 46 ) {

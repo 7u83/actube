@@ -127,8 +127,10 @@ static int process_message(struct conn * conn,struct cwrmsg *cwrmsg,int (*cb)(vo
 
 static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 {
-	if (!cw_dbg_is_level(DBG_CW_PKT_OUT))
+	if (!cw_dbg_is_level(DBG_CW_PKT_IN))
 		return;
+
+printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Header printer\n");
 
 	/* print the header */
 	char hdr[200];
@@ -136,11 +138,13 @@ static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 
 
 	if (!cw_dbg_is_level(DBG_CW_PKT_DMP)){
-		cw_dbg(DBG_CW_PKT_OUT,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
+printf("the dumpi dumper\n");
+		cw_dbg(DBG_CW_PKT_IN,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
 		return;
 
 	}
 
+printf("The super dumper\n");
 	cw_dbg_dmp(DBG_CW_PKT_DMP,packet,len,"Processing packet from %s, len=%d\n%s\n\tDump:",
 			sock_addr2str(&conn->addr),len,hdr
 		);
@@ -156,7 +160,6 @@ static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(void*,struct cwrmsg*),void *cbarg)
 {
 
-	cw_dbg_packet(conn,packet,len);
 
 
 
@@ -182,6 +185,10 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		/* decode dtls */
 		return;
 	}
+
+printf("Debug packet **************************************************************************\n");
+	cw_dbg_packet(conn,packet,len);
+
 
 	int hlen = 4*((val >> 19) & 0x1f);
 	
@@ -219,6 +226,8 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		f = fragman_add(conn->fragman, packet,hlen,payloadlen);
 		if (f==NULL)
 			return;
+
+		cw_dbg_packet(conn,f+4,*(uint32_t*)f);
 
 		if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,f+4,*(uint32_t*)f)){
 			free(f);

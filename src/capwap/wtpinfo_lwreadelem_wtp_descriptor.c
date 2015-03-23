@@ -28,7 +28,7 @@
 
 int wtpinfo_lwreadelem_wtp_descriptor(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len)
 {
-	if (type != LWMSGELEM_WTP_DESCRIPTOR)
+	if (type != LW_ELEM_WTP_DESCRIPTOR)
 		return 0;
 
 /*	if (len!=16)

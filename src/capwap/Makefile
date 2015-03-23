@@ -56,8 +56,21 @@ UTILOBJS= \
 	cw_util.o \
 	cw_format_version.o
 
+
+
+# LWAPP objs
+LWAPPOBJS = \
+	lw_checksum.o \
+	lw_readelem_wtp_name.o \
+
+# LWAPP cisco vendor specific objs
+LWAPPCISCOOBJS = \
+	lw_addelem.o
+ 
+
 # cw_tohex.o\
 #capwap_parse_ctrlhdr.o \
+
 
 CAPWAPOBJS= \
 	   cwmsg_init.o \
@@ -134,9 +147,7 @@ CAPWAPOBJS= \
 	   cw_readelem_wtp_reboot_statistics.o\
 	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
-	lw_checksum.o \
 	lw_readelem_wtp_board_data.o \
-	lw_readelem_wtp_name.o
 
 	#cwmsg_addelem_session_id.o
 #	   process_msgelems_discovery_request.o \
@@ -188,6 +199,7 @@ CONNOBJS= conn_create.o \
 	conn_get_message.o  \
 	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
+	cw_prepare_configuration_status_request.o \
 	conn_prepare_request.o \
 	conn_prepare_image_data_request.o \
 	conn_send_request.o \
@@ -204,7 +216,11 @@ BSTROBJS= bstr_create.o \
 
 FRAGOBJS=fragman.o
 
-OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) $(LOGOBJS) $(UTILOBJS) $(DTLSOBJS) $(BSTROBJS)
+OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
+	$(LOGOBJS) $(UTILOBJS) $(DTLSOBJS) $(BSTROBJS) \
+	$(LWAPPOBJS) \
+	$(LWAPPCISCOOBJS) 
+
 O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))

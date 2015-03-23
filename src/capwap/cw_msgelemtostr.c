@@ -24,14 +24,14 @@
 const char * cw_msgelemtostr(int elem)
 {
 	switch (elem){
-		case CWMSGELEM_AC_DESCRIPTOR:
-			return "ac descriptor";
+		case CW_ELEM_AC_DESCRIPTOR:
+			return "AC descriptor";
 		
 /*   AC IPv4 List                                          2
    AC IPv6 List                                          3
 */   
-		case CWMSGELEM_AC_NAME:
-			return "ac name";
+		case CW_ELEM_AC_NAME:
+			return "AC name";
 /*
    AC Name with Priority                                 5
    AC Timestamp                                          6
@@ -40,14 +40,14 @@ const char * cw_msgelemtostr(int elem)
    Reserved                                              9
 */   
 		case CWMSGELEM_CONTROL_IPV4_ADDRESS:
-			return "ctrl ipv4 addr";
+			return "Ctrl IPv4 addr";
 		case CWMSGELEM_CONTROL_IPV6_ADDRESS:
-			return "ctrl ipv6 addr";
+			return "ctrl IPv6 addr";
    
 		case CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
-			return "capwap local ipv4 addr";
+			return "CAPWAP local IPv4 addr";
 		case CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
-			return "capwap local ipv6 addr";
+			return "CAPWAP local IPv6 addr";
 /*   CAPWAP Timers                                        12
    CAPWAP Transport Protocol                            51
    Data Transfer Data                                   13
@@ -65,7 +65,7 @@ const char * cw_msgelemtostr(int elem)
    Duplicate IPv6 Address                               22
 */   
 		case CWMSGELEM_ECN_SUPPORT:
-			return "ecn support";
+			return "ECN support";
  /*  Idle Timeout                                         23
 */
 		case CWMSGELEM_IMAGE_DATA:
@@ -99,18 +99,18 @@ const char * cw_msgelemtostr(int elem)
 
 /*   Returned Message Element                             34
 */   
-		case CWMSGELEM_SESSION_ID:
+		case CW_ELEM_SESSION_ID:
 			return "session id";
 
 		case CWMSGELEM_STATISTICS_TIMER:
-			return "statistics timer";
+			return "Statistics Timer";
 
-		case CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD:
-			return "vendor specific payload";
+		case CW_ELEM_VENDOR_SPECIFIC_PAYLOAD:
+			return "Vendor Specific Payload";
 
  
 		case CWMSGELEM_WTP_BOARD_DATA:
-			return "wtp board data";
+			return "WTP Board Data";
    
 		case CWMSGELEM_WTP_DESCRIPTOR:
 			return "wtp descriptor";
@@ -122,8 +122,8 @@ const char * cw_msgelemtostr(int elem)
 /*		case CWMSGELEM_RESERVED_1:
 			return "reserved (42)";
 */
-		case CWMSGELEM_WTP_IPV4_IP_ADDR:
-			return "WTP IPv4 IP address";
+		case CW_ELEM_WTP_IPV4_IP_ADDRESS:
+			return "WTP IPv4 IP Address";
 
 /*
    Reserved                                             43

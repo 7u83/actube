@@ -87,6 +87,6 @@ void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo,struc
 
 	}
 
-	cwmsg_addelem(msg,CWMSGELEM_AC_DESCRIPTOR,acd,len);
+	cwmsg_addelem(msg,CW_ELEM_AC_DESCRIPTOR,acd,len);
 }
 

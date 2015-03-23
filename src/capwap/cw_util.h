@@ -51,7 +51,7 @@ extern int cw_rand(uint8_t*dst, int len);
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
 
 
-/** Generic macroto to isolate bits from a dword */
+/** Generic macro to isolate bits from a dword */
 #define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
 
 

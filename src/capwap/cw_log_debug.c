@@ -265,7 +265,7 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 
 	const char *elemname;
 	char vendorname[256];
-	if (msgelem == CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD) {
+	if (msgelem == CW_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
 		int vendor = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
 		sprintf(vendorname, "%s/%s/%d",

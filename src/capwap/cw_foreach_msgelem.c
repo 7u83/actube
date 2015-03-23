@@ -32,6 +32,9 @@ int cw_foreach_msgelem(uint8_t * msgelems, int len,
 	int elen;
 	int i = 0;
 	do {
+		
+
+
 		val = ntohl(*(uint32_t *) (msgelems + i));
 		type = (val >> 16) & 0xFFFF;
 		elen = val & 0xffff;
@@ -44,8 +47,10 @@ printf("Bumm %d %d\n",i+elen+4,len);
 			return 0;
 		}
 
+
 		callback(arg, type, msgelems + i + 4, elen);
 		i += elen + 4;
+		printf("left = %d\n",len-i);
 
 	} while (i < len);
 	return 1;

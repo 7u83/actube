@@ -27,6 +27,7 @@
 #include "cwmsg.h"
 #include "conn.h"
 
+#include "sock.h" //Tube
 
 void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn)
 {
@@ -36,6 +37,8 @@ void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn)
 	getsockname (conn->sock,(struct sockaddr *)&a,&alen);
 
 	int cw_mode = msg->capwap_mode;
+cw_mode = CWMODE_CISCO;
+
 
 	switch (((struct sockaddr*)&a)->sa_family){
 		case AF_INET:
@@ -43,9 +46,11 @@ void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn)
 			struct sockaddr_in  * sain = (struct sockaddr_in*)&a;
 			int id;
 			if (cw_mode == CWMODE_CISCO)
-				id = CWMSGELEM_WTP_IPV4_IP_ADDR; 
+				id = CW_ELEM_WTP_IPV4_IP_ADDRESS; 
 			else
 				id = CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
+
+printf("Sending local ip %s\n",sock_addr2str(sain));
 			
 			cwmsg_addelem(msg,id,(uint8_t*)&sain->sin_addr,4);
 			break;
@@ -56,7 +61,7 @@ void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn * conn)
 		{
 			int id;
 			if (cw_mode == CWMODE_CISCO)
-				id = CWMSGELEM_WTP_IPV6_IP_ADDR; 
+				id = CW_ELEM_WTP_IPV6_IP_ADDRESS; 
 			else
 				id = CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
 			struct sockaddr_in6  * sain = (struct sockaddr_in6*)&a;

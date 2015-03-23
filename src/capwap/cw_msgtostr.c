@@ -22,10 +22,10 @@ const char * cw_msgtostr(int type)
 {
 	switch(type){
 		case CWMSG_DISCOVERY_REQUEST:
-			return "discovery request";
+			return "Discovery Request";
 
 		case CWMSG_DISCOVERY_RESPONSE:
-			return "discovery response";
+			return "Discovery Response";
 
 		case CWMSG_JOIN_REQUEST:
 			return "join request";
@@ -33,11 +33,11 @@ const char * cw_msgtostr(int type)
 		case CWMSG_JOIN_RESPONSE:
 			return "join response";
 
-		case CWMSG_CONFIGURATION_STATUS_REQUEST:
-			return "configuration status request";
+		case CW_MSG_CONFIGURATION_STATUS_REQUEST:
+			return "Configuration Status Request";
 
-		case CWMSG_CONFIGURATION_STATUS_RESPONSE:
-			return "configuration status response";
+		case CW_MSG_CONFIGURATION_STATUS_RESPONSE:
+			return "Configuration Status Response";
 
 		case CWMSG_CONFIGURATION_UPDATE_REQUEST:
 			return "configuration update request";

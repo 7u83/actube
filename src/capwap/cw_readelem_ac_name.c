@@ -23,7 +23,7 @@
 
 int cw_readelem_ac_name(uint8_t **dst, int type,uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_AC_NAME)
+	if (type != CW_ELEM_AC_NAME)
 		return 0;
 
 	if (len > 512 ) {

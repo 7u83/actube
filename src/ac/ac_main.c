@@ -222,7 +222,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 
 	/* first of all check preamble */
-	int preamble = CWTH_GET_PREAMBLE(buffer);
+	int preamble = cw_get_hdr_preamble(buffer);
 
 #ifdef WITH_DTLS
 	if (preamble != CAPWAP_PACKET_PREAMBLE && preamble != CAPWAP_DTLS_PACKET_PREAMBLE){

@@ -604,7 +604,7 @@ printf("Slept befor join resp\n");
 		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
 		sock_addr2str(&wtpman->conn->addr));
 
-
+//exit(0);
 	return 1;
 	
 }
@@ -684,7 +684,7 @@ static void wtpman_run(void *arg)
 	*/
 
 	do {
-		int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CWMSG_CONFIGURATION_STATUS_REQUEST, -1 };
+		int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST, -1 };
 		cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
 
 		if (!cwrmsg){
@@ -704,7 +704,7 @@ static void wtpman_run(void *arg)
 
 		}
 
-	} while (cwrmsg->type != CWMSG_CONFIGURATION_STATUS_REQUEST); 
+	} while (cwrmsg->type != CW_MSG_CONFIGURATION_STATUS_REQUEST); 
 
 
 
@@ -995,7 +995,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 */
 
 	uint8_t * data;
-
+/*
 	lw_foreach_msgelem(data,msgdata,msglen){
 		int eltype = LWMSGELEM_GET_TYPE(data);
 		int ellen = LWMSGELEM_GET_LEN(data);
@@ -1006,7 +1006,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 		printf ("ELEM TYPE: %d, LEN: %d\n",eltype,ellen);
 
 	}
-
+*/
 
 	char wi[4096];
 	wtpinfo_print(wi,&wtpman->wtpinfo);

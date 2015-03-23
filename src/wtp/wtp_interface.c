@@ -6,6 +6,7 @@
 #include "capwap/acinfo.h"
 #include "capwap/conn.h"
 #include "capwap/capwap_80211.h"
+#include "capwap/cw_log.h"
 
 #include "wtp_conf.h"
 #include "wtp_interface.h"
@@ -29,6 +30,8 @@ struct wtpinfo * get_wtpinfo()
 		wtpdrv_get_radioinfo(i,&(wtpinfo->radioinfo[i]));
 
 	}
+
+	wtpinfo->radios_in_use=2;
 
 	wtpinfo->encryption_cap=1;
 
@@ -56,17 +59,22 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->macaddress=conf_macaddress;
 	wtpinfo->macaddress_len=conf_macaddress_len;
 
-	wtpinfo->mac_type=0;
+
+	wtpinfo->max_msg_len=14000;
+
+	wtpinfo->mac_type=1;
 
 
 //	wtpinfo->session_id = malloc(8);
 //	wtpinfo->session_id_len = cw_rand(wtpinfo->session_id,8);
 
 	uint8_t sessid[4];
-	int sidl = cw_rand(sessid,4);
-	wtpinfo->session_id = bstr_create(sessid,sidl);
+	memset(sessid,0,4);
+	int sidl = cw_rand(sessid+2,2);
+	
+	wtpinfo->session_id = bstr_create(sessid,4);
 
-	wtpinfo->frame_tunnel_mode=1;
+	wtpinfo->frame_tunnel_mode=4;
 	return wtpinfo;
 }
 
@@ -84,6 +92,22 @@ ACIPLIST * order_aciplist(ACIPLIST *aciplistin)
 
 	return aciplistin;
 }
+
+
+static int sockfd = -1;
+int get_sock()
+{
+	return sockfd;
+	
+}
+
+
+int set_sock(int sock)
+{
+	sockfd = sock;	
+}
+
+
 
 
 static struct conn * conn=0;

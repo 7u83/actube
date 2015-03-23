@@ -15,7 +15,7 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 
 
 	switch (msgtype) {
-		case CWMSG_CONFIGURATION_STATUS_REQUEST:
+		case CW_MSG_CONFIGURATION_STATUS_REQUEST:
 		{
 			if (lw_readelem_wtp_board_data((struct wtpinfo*)data,elem_id,msgelem,len))
 				return 1;
@@ -47,7 +47,7 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 
 int cw_readelem_vendor_specific_payload(void * data,int msgtype,int elemtype,uint8_t *msgelem, int len)
 {
-	if (elemtype != CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD)
+	if (elemtype != CW_ELEM_VENDOR_SPECIFIC_PAYLOAD)
 		return 0;
 
 	if (len < 6){
@@ -64,6 +64,8 @@ int cw_readelem_vendor_specific_payload(void * data,int msgtype,int elemtype,uin
 
 		case CW_VENDOR_ID_CISCO:
 			return cw_readelem_cisco_payload(data,msgtype,elem_id,msgelem+6,elem_len);
+		default:
+			cw_dbg(DBG_ERR,"Can't read vendor specific payload. Vendor ID %d",vendor_id);
 
 	}
 

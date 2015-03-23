@@ -36,7 +36,7 @@ void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg,int vendor_id, int 
 	memcpy(buffer+6,payload,len);
 
 
-	cwmsg_addelem(msg,CWMSGELEM_VENDOR_SPECIFIC_PAYLOAD,buffer,len+6);
+	cwmsg_addelem(msg,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,buffer,len+6);
 	free(buffer);
 }
 

@@ -10,7 +10,7 @@
 
 int wtpinfo_readelem_session_id(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len)
 {
-	if (type != CWMSGELEM_SESSION_ID)
+	if (type != CW_ELEM_SESSION_ID)
 		return 0;
 
 	wtpinfo->session_id = bstr_create(msgelem,len);
