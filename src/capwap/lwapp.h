@@ -20,8 +20,10 @@
 #define __LWAPP_H
 
 #include <stdint.h>
+#include <string.h>
 #include <arpa/inet.h>
 
+#include "acinfo.h"
 #include "wtpinfo.h"
 
 
@@ -108,7 +110,7 @@
 
 #define LW_ELEM_AC_NAME				31
 
-#define LWMSGELEM_SUPPORTED_RATES		16
+#define LW_ELEM_SUPPORTED_RATES			16
 #define LW_ELEM_TEST				18
 
 #define LW_ELEM_WTP_BOARD_DATA			50
@@ -120,24 +122,44 @@
 
 #define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
 
-static inline int lw_put_dword(uint8_t *dst, uint32_t dw){
-	*((uint32_t*)(dst)) = htonl(dw);
-	return 4;
+
+#define lw_put_byte(dst,b) \
+	(*(dst)=b,1)
+
+#define lw_put_word(dst,w)\
+	(*((uint16_t*)(dst)) = htons(w),2)
+
+#define lw_put_dword(dst,dw)\
+	(*((uint32_t*)(dst)) = htonl(dw),4)
+
+
+/* it would be nice to implement the next functions as macros,
+   but to avoid side effects, we are using C99 inline functions */
+
+
+static inline int lw_put_data(uint8_t*dst,const uint8_t*data,uint16_t len)
+{
+	memcpy(dst,data,len); 
+	return len;
 }
 
-static inline int lw_put_word(uint8_t *dst, uint16_t w){
-	*((uint16_t*)(dst)) = htons(w);
-	return 2;
+static inline int lw_put_bstr(uint8_t * dst, const bstr_t b){
+	lw_put_data(dst,bstr_data(b),bstr_len(b));
+	return bstr_len(b);
+}
+
+static inline int lw_put_str(uint8_t*dst,const uint8_t *str) {
+	return lw_put_data(dst,str,strlen((char*)str));
 }
 
 static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 {
 	*dst=type;
 	*((uint16_t*)(dst+1)) = htons(len);
-	return len;
+	return 3;
 }
 
-
+extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
 
 
 /* function proto types */
@@ -146,7 +168,7 @@ extern uint16_t lw_checksum(uint8_t *d,int len);
 extern int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
 extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int len);
 
-
+extern int lw_put_ac_descriptor(uint8_t * dst, struct ac_info * acinfo);
 
 
 
