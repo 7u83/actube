@@ -53,9 +53,9 @@ void cwsend_discovery_response(struct conn *conn, int seqnum, struct radioinfo *
 		case CWMODE_CISCO:
 		case CWMODE_CIPWAP:
 		{
-			cwmsg_addelem_vendor_cisco_ap_timesync(cwmsg);
-			uint8_t mwtype=1;
-			cwmsg_addelem_vendor_s_payload(cwmsg,CW_VENDOR_ID_CISCO,CW_CISCO_MWAR_TYPE,&mwtype,1);
+			cwmsg_addelem_cisco_ap_timesync(cwmsg,time(NULL),0);
+			//uint8_t mwtype=1;
+			//cwmsg_addelem_vendor_s_payload(cwmsg,CW_VENDOR_ID_CISCO,CW_CISCO_MWAR_TYPE,&mwtype,1);
 			break;
 		}
 		default:

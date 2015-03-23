@@ -39,11 +39,11 @@ int join_state(struct conn * conn)
 
 	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
 
-#ifdef WITH_CW_LOG_DEBUG	
-	char str[64];
-	sock_addrtostr(&conn->addr,str,64);
+//#ifdef WITH_CW_LOG_DEBUG	
+//	char str[64];
+//	sock_addrtostr(&conn->addr,str,64);
 //	cw_log_debug0("Sending join request to %s",str);
-#endif	
+//#endif	
 	printf("Seqnum before = %i\n",conn->seqnum);
 	rc = cwsend_join_request(conn,rip,wtpinfo);
 	printf("Seqnum after = %i\n",conn->seqnum);

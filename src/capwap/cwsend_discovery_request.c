@@ -66,7 +66,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 
 	switch (cwmsg.capwap_mode) {
 		case CWMODE_CISCO:
-			cwmsg_addelem_vendor_cisco_rad_name(&cwmsg, (uint8_t *) wtpinfo->name);
+			cwmsg_addelem_cisco_rad_name(&cwmsg, (uint8_t *) wtpinfo->name);
 			
 			uint8_t data207[4] = {1,1,0,1};
 		        cwmsg_addelem_vendor_specific_payload(&cwmsg,CW_VENDOR_ID_CISCO,

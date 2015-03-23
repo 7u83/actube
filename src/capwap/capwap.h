@@ -16,6 +16,12 @@
 
 */
 
+/**
+ * @file
+ * @brief CAPWAP desfinitions 
+ */
+
+
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
 
@@ -517,58 +523,111 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
 /* Use some macros from LWAPP */
 
-#define cw_put_dword lw_put_dword
+#define cw_put_byte lw_put_byte
 #define cw_put_word lw_put_word
+#define cw_put_dword lw_put_dword
+#define cw_put_data lw_put_data
 
 
-static inline int cw_put_elem_hdr(uint8_t * dst, uint16_t type, uint16_t len)
-{
-	*((uint32_t *) (dst)) = htonl(type << 16 | len);
-	return 4 + len;
-}
+/**
+ * Put a message element headder to buffer
+ * @param dst pointer to buffer (uint8_t)
+ * @param type tpe of message element
+ * @param len length of message element data
+ * @return the number bytes put (always 4)
+ */
 
-
-static inline int cw_addelem(uint8_t *dst, uint16_t type,uint8_t*data,uint16_t len)
-{
-	memcpy(dst+4,data,len);
-	return cw_put_elem_hdr(dst,type,len);
-}
-
+#define cw_put_elem_hdr(dst,type,len) \
+	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
 
 /*
-static inline int cw_addbyteelem(uint8_t *dst, uint16_t type, uint8_t byte)
+static inline int cw_put_elem_hdr(uint8_t * dst, uint8_t type, uint16_t len)
 {
-//	*(dst+3)=byte;
-//	return cw_put_elem_hdr(
+	cw_put_word(dst, type);
+	cw_put_word(dst + 4, len);
+	return 4;
 }
 */
 
-static inline int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendor_id, uint16_t type,
-					      uint8_t * data, uint16_t len)
-{
-	cw_put_dword(dst+4, vendor_id);
-	cw_put_word(dst + 8, type);
-	memcpy(dst + 10, data, len);
-	return cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 10-4);
+
+/** 
+ * Put a message element header for a message to contain a vendor specific payload
+ * @param dst pointer to destination buffer
+ * @param vendorid vendorid
+ * @param elementid element id of vendor specific data
+ * @len length of vendor specific data 
+ * @return the number of bytes put (always 10)
+ */
+static inline int cw_put_elem_vendor_hdr(uint8_t *dst,uint32_t vendorid,uint16_t elemid,uint16_t len){
+	
+	cw_put_elem_hdr(dst,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,len+6);
+	cw_put_dword(dst+4,vendorid);
+	cw_put_word(dst+8,elemid);
+	return 10;
 }
+
+
+/**
+ * Add a message element to a buffer
+ * @param dst pointer to buffer
+ * @type message element type
+ * @data pointer to data
+ * @length of message element 
+ * @return the number of bytes put
+ */ 
+static inline int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len)
+{
+	int l = cw_put_elem_hdr(dst, type, len);
+	return l + cw_put_data(dst+l, data, len);
+}
+
+
+static inline int cw_addelem_bstr(uint8_t *dst, uint16_t type, const bstr_t bstr)
+{
+	return cw_addelem(dst,type,bstr_data(bstr),bstr_len(bstr));	
+}
+
+/*
+#define cw_put_elem_vendor_hdr(dst,vendorid,elemid,len)\
+	(cw_put_elem_hdr(dst,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,  \
+	cw_put_dword(dst+4,vendorid) + cw_put_word(dst+8,elemid) +len ))
+
+
+
+
+
+#define cw_addelem(dst,type,data,len)\
+	(cw_put_elem_hdr(dst,type,len)+cw_put_data(dst+4,data,len))
+*/
+
+/*
+#define cw_addelem_vendor_specific_payload(dst,vendorid,elemid,data,len)\
+	(cw_put_elem_vendor_hdr(dst,vendorid,elemid,len) + \
+	 cw_put_data(dst+10,data,len))
+*/
+
+extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid, uint16_t elemid,
+					      uint8_t * data, uint16_t len);
+
+
 
 
 #define cw_addelem_ac_name(dst,name) \
 	cw_addelem(dst,CW_ELEM_AC_NAME,name,strlen((char*)(name)))
 
 #define cw_addelem_session_id(dst,sessid)\
-	cw_addelem(dst,CW_ELEM_SESSION_ID,bstr_data(sessid),bstr_len(sessid))
+	cw_addelem_bstr(dst,CW_ELEM_SESSION_ID,sessid)
 
 
 
 /* cwmsg methods */
 
-#define cwmsg_addelem_vendor_s_payload(cwmsg,vendor_id, type, data,len) \
+#define cwmsg_addelem_vendor_specific_payload(cwmsg,vendor_id, type, data,len) \
 	(cwmsg)->pos+=cw_addelem_vendor_specific_payload((cwmsg)->msgelems+(cwmsg)->pos,vendor_id,type,data,len)
 
 #define cwmsg_addelem_ac_name(cwmsg,name) \
 	(cwmsg)->pos+=cw_addelem_ac_name((cwmsg)->msgelems+(cwmsg)->pos,name)
-	
+
 #define cwmsg_addelem_session_id(cwmsg,sessid) \
 	(cwmsg)->pos+=cw_addelem_session_id((cwmsg)->msgelems+(cwmsg)->pos,sessid)
 

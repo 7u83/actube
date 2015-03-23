@@ -21,7 +21,7 @@ void cwmsg_addelem_vendor_cisco_mwar_addr(struct cwmsg *msg, struct conn *conn)
 	switch (((struct sockaddr*)&conn->addr)->sa_family){
 		case AF_INET:
 		{
-			data[0]=1;	/* mwar type */
+			data[0]=2;	/* mwar type */
 			data[5]=0;
 			data[6]=0;
 
