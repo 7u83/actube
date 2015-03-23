@@ -1,6 +1,8 @@
 
 2. Cisco MWAR Addr
 
+   Address of AC
+
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -12,6 +14,14 @@
    Type: 2 for MWAR Addr
    Length:   7
 
+   MWAR Type: 0 SPAM Normal MWAR
+              1 SPAM Master MWAR
+
+   Address: IPv4 Address of AC
+
+   Usage of this field differs from LWAPP where the MAC address
+   of AP is stored in the Address field.
+   (See RFC 5412 - Message type 2: AC Address)
 
 
 83. Cisco AP IP Address
@@ -44,7 +54,7 @@
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |   Band ID    | regDomainSet  | RegDomainSlot | RegDomainCode |
+   |   Band ID    | regDomainSet  | RegDomainSlot | RegDomainCode  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    | RegDomainCope1|
    +-+-+-+-+-+-+-+-+
@@ -71,6 +81,19 @@
                   0 = Disabled (?)
 
 
+151. Cisco AP Time Sync
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                        Unix timestamp                         |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |      Type     |
+   +-+-+-+-+-+-+-+-+
+
+   Type: 151
+   
+   Unix timestamp: Time in seconds since 1.1.1970
+   Type: Time type
+         0 = Manual (?)
+
 
 
 207. Cisco Board Data Options
@@ -96,7 +119,10 @@
    | MWAR Type     | 
    +-+-+-+-+-+-+-+-+ 
 
-  01 Primary?
+  MWAR Type:
+    00 = Normal MWAR
+    01 = Normal MWAR 
+    02 = Configured MWAR
 
 
 
