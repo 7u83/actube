@@ -61,6 +61,7 @@ UTILOBJS= \
 # LWAPP objs
 LWAPPOBJS = \
 	lw_checksum.o \
+	lw_put_ac_descriptor.o \
 	lw_readelem_wtp_name.o \
 
 # LWAPP cisco vendor specific objs
@@ -86,7 +87,7 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_result_code.o \
 	   cwmsg_addelem_ac_timestamp.o \
-	cwmsg_addelem_vendor_specific_payload.o \
+	cw_addelem_vendor_specific_payload.o \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
 	cwmsg_addelem_radio_operational_state.o \
@@ -145,9 +146,11 @@ CAPWAPOBJS= \
 	cw_readelem_vendor_specific_payload.o \
 	cw_readelem_capwap_local_ip_addr.o \
 	   cw_readelem_wtp_reboot_statistics.o\
-	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
-	lw_readelem_wtp_board_data.o \
+	lw_readelem_wtp_board_data.o 
+
+#	cwmsg_addelem_vendor_cisco_ap_timesync.o \
+#	cwmsg_addelem_vendor_specific_payload.o \
 
 	#cwmsg_addelem_session_id.o
 #	   process_msgelems_discovery_request.o \

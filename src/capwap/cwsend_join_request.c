@@ -100,7 +100,7 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 */
 
 
-			cwmsg_addelem_vendor_s_payload(&cwmsg, CW_VENDOR_ID_CISCO,
+			cwmsg_addelem_vendor_specific_payload(&cwmsg, CW_VENDOR_ID_CISCO,
 						CW_CISCO_AP_GROUP_NAME,(uint8_t *)"default-group",strlen("default-group"));
 
 
@@ -121,17 +121,18 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 		case CWMODE_CISCO:
 		{
 			uint8_t mtu[2048];
-			int l = lw_put_cisco_path_mtu(mtu,1485,1101);
+			int l = lw_put_cisco_path_mtu(mtu,1485,11);
 
-			printf("Len = %d\n",l);
+	//		printf("Len = %d\n",l);
 
 		//	cwmsg_addelem_vendor_specific_payload(&cwmsg,LW_VENDOR_CISCO,
 		//			LW_ELEM_VENDOR_SPECIFIC,mtu,l);
 
 
 		//	(&cwmsg)->pos+=4;	
-			struct ac_info acinfo;
+printf("Adding mwar\n");
 			extern struct ac_info wtp_acinfo;
+		//	cwmsg_addelem_cisco_mwar(&cwmsg,&wtp_acinfo);
 
 //			memset(&acinfo,0,sizeof(struct ac_info));
 //			cwmsg_addelem_ac_descriptor(&cwmsg,&wtp_acinfo,wtpinfo);
