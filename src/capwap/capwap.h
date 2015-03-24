@@ -428,7 +428,7 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
 #define CW_VENDOR_ID_FSF	11591
 #define CW_VENDOR_ID_ZYXEL	890
-#define CW_VENDOR_ID_CISCO	4232704
+#define CW_VENDOR_ID_CISCO	LW_VENDOR_ID_CISCO
 
 
 
