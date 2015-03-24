@@ -40,6 +40,7 @@ int lw_addelem_cisco_padding(uint8_t *dst, int len)
 	return lw_put_elem_hdr(dst,LW_ELEM_VENDOR_SPECIFIC,11+len);
 }
 
+/*
 int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding)
 {
 	lw_put_dword(dst,LW_VENDOR_CISCO);
@@ -49,6 +50,7 @@ int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding)
 	memset(dst+10,0,padding);
 	return padding+10;
 }
+*/
 
 
 /*
