@@ -19,6 +19,9 @@
 #ifndef __LWAPP_CISCO_H
 #define __LWAPP_CISCO_H
 
+#include <stdint.h>
+
+#include "lwapp.h"
 
 #define LW_VENDOR_CISCO				4232704
 
@@ -32,9 +35,10 @@
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
 
 
+
+/*
 #define lw_addelem_cisco_path_mtu(dst,max,padding) \
-	lw_put_elem_hdr(dst,LW_ELEM_VENDOR_SPECIFIC,lw_put_cisco_path_mth(dst,max,padding))
-
-
+	lw_put_elem_hdr(dst,LW_ELEM_VENDOR_SPECIFIC,lw_put_cisco_path_mtu(dst,max,padding))
+*/
 
 #endif
