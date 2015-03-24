@@ -64,7 +64,6 @@
  * @param type of time
  * @return number of bytes put (15)
  */
-
 static inline int cw_addelem_cisco_ap_timesync(uint8_t * dst, time_t time, uint8_t type)
 {
 	cw_put_dword(dst + 10, time);
@@ -106,7 +105,6 @@ static inline int cw_addelem_cisco_ap_group_name(uint8_t * dst, uint8_t * name)
  * This message elemet is basically an LWAPP AC Descriptor 
  * encapsulated in a CAPWAP vendor specific payload message
  */
-
 static inline int cw_addelem_cisco_mwar(uint8_t *dst, struct ac_info *acinfo){
 	int l = lw_put_ac_descriptor(dst+10,acinfo);
 	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_MWAR,l);
