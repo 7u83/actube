@@ -30,6 +30,8 @@
 /* version */
 #define LW_VERSION 0
 
+#define LW_VENDOR_ID_CISCO	4232704
+
 
 /* ports */
 #define LWAPP_CONTROL_PORT 12223
@@ -133,8 +135,8 @@
 	(*((uint32_t*)(dst)) = htonl(dw),4)
 
 
-/* it would be nice to implement the next functions as macros,
-   but to avoid side effects, we are using C99 inline functions */
+/* the following functions are defined as static inline and not as 
+   macro to avoid any side effects */
 
 
 static inline int lw_put_data(uint8_t*dst,const uint8_t*data,uint16_t len)
