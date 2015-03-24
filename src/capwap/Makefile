@@ -62,7 +62,9 @@ UTILOBJS= \
 LWAPPOBJS = \
 	lw_checksum.o \
 	lw_put_ac_descriptor.o \
+	lw_put_cisco_path_mtu.o \
 	lw_readelem_wtp_name.o \
+
 
 # LWAPP cisco vendor specific objs
 LWAPPCISCOOBJS = \
