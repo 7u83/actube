@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 
+#include "lwapp.h"
 #include "cw_util.h"
 
 /**
@@ -78,7 +79,7 @@ int cw_format_version(char *s, bstr_t ver, uint32_t vendor, char * def)
 	}
 
 	if (vendor) 
-		rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_ianavendoridtostr(vendor));
+		rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, lw_vendor_id_to_str(vendor));
 	return rs;	
 }
 
