@@ -31,6 +31,17 @@ struct radioinfo{
 	int state;
 	int cause;
 	bstr_t rmac;
+
+	uint16_t regDomain;
+
+	uint8_t country_str[4];
+	int cfp_period;
+	int cfp_max_duration;
+	int beacon_period;
+	int dtim_period;
+	int max_bssid;
+	int occupancy_limit;
+	
 };
 
 #endif

@@ -1215,16 +1215,20 @@ int wtpdrv_get_num_radios()
 
 int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
 {
-
 	radioinfo->rid=rid;
 	//uint8_t rm[8]="12345600";
 //	uint8_t rm[8]={0x00,0x19,0xdb,0xe0,0x93,0x27};
-//	uint8_t rm[8]={0x00,0x3a,0x99,0x02,0xfa,0xc0};
-	uint8_t rm[8]={0x68,0x67,0x65,0x64,0x63,0x62};
+	uint8_t rm[8]={0x00,0x3a,0x99,0x02,0xfa,0xc0};
+//	uint8_t rm[8]={0x68,0x67,0x65,0x64,0x63,0x62};
 
 	radioinfo->rmac = bstr_create(rm,6);
+	
 
 	radioinfo->type|=rid+1; //CW_80211_RADIO_TYPE_B; //CWRADIO_TYPE_N;
+	radioinfo->regDomain=1;
+	
+	memcpy(radioinfo->country_str,"AUDE",4);
+	
 
 /*
 	struct wpa_driver_ops * drv = wpa_drivers[0];

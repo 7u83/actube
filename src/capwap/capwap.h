@@ -610,6 +610,7 @@ extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid, 
 					      uint8_t * data, uint16_t len);
 
 
+extern void cw_prepare_configuration_status_request(struct conn * conn, struct radioinfo * radioinfo, struct wtpinfo *wtpinfo);
 
 
 #define cw_addelem_ac_name(dst,name) \

@@ -1,4 +1,14 @@
 
+Terms used by Cisco, CAPWAP, LWAPP and others ...
+
+Slot ID = Radio ID
+AC = MWAR = WLC 
+AP = RAD = WTP
+
+
+
+
+
 2. Cisco MWAR Addr
 
    Address of AC
@@ -25,7 +35,7 @@
 
 
 83. Cisco AP IP Address
-  The IPv4 configuration of the WTP
+    The IPv4 configuration of the WTP
  
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -36,8 +46,10 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    |                       Default Gateway                         |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
-   |                           Reserved                            |
+   |      Type     |             Reserved ...                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |    Reserved   |            
+   +-+-+-+-+-+-+-+-+
 
    Type: 83
    Length: 16
@@ -45,6 +57,10 @@
     IP Address: The IP address of AP
     Netmask: Netmask 
     Default Gateway: default gateway
+    Type: 
+       1=Static
+       0=DHCP  
+    Reserved: (?)
 
 
 126. Cisco AP Regulatory Domain
@@ -54,9 +70,9 @@
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |   Band ID    | regDomainSet  | RegDomainSlot | RegDomainCode  |
+   |   Band ID    | regDomainSet  | RegDomainSlot | RegDomainCode0 |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
-   | RegDomainCope1|
+   | RegDomainCode1|
    +-+-+-+-+-+-+-+-+
 
    Type: 126
@@ -94,6 +110,9 @@
    Type: Time type
          0 = Manual (?)
 
+169. Cisco AP IP Domain 
+
+170. Cisco AP IP Name Server
 
 
 207. Cisco Board Data Options
@@ -124,10 +143,34 @@
     01 = Normal MWAR 
     02 = Configured MWAR
 
+254. Cisco SPAM AP LED Flash Config
+
 
 
 LWAPP
 =====
+20. Ciscp AP Username Password
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                       Username (32 bytes) ...                         
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+                             ... Username                          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |                         Password hash ...                        
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+
+
+44. Cisco AP Telnet SSH
+    0                   1             
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |               |               |  
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+   Type: 44
+   Length: 2
+
 
 73. Cisco Path MTU
 
@@ -135,6 +178,8 @@ LWAPP
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |         Data length           |            Padding            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |         Padding data ..        
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
 Type: 73

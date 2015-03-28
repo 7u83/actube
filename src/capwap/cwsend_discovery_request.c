@@ -59,7 +59,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 
 
 	/* radio infos */
-	cwmsg_addelem_wtp_radio_infos(&cwmsg, wtpinfo->radioinfo);
+//	cwmsg_addelem_wtp_radio_infos(&cwmsg, wtpinfo->radioinfo);
 
 
 	/* Non-mandatory elements */

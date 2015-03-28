@@ -105,19 +105,27 @@
 
 /* LWAPP message elements */
 
-#define LW_ELEM_AC_ADDRESS			2
-#define LW_ELEM_WTP_DESCRIPTOR 			3
-#define LW_ELEM_WTP_NAME			5
-#define LW_ELEM_AC_DESCRIPTOR			6
+#define LW_ELEM_AC_ADDRESS				2
+#define LW_ELEM_WTP_DESCRIPTOR 				3
+#define LW_ELEM_WTP_NAME				5
+#define LW_ELEM_AC_DESCRIPTOR				6
 
-#define LW_ELEM_AC_NAME				31
+#define LW_ELEM_AC_NAME					31
 
-#define LW_ELEM_SUPPORTED_RATES			16
-#define LW_ELEM_TEST				18
+#define LW_ELEM_SUPPORTED_RATES				16
+#define LW_ELEM_TEST					18
 
-#define LW_ELEM_WTP_BOARD_DATA			50
+#define LW_ELEM_CERTIFICATE				44
+#define LW_ELEM_WTP_BOARD_DATA				50
+#define LW_ELEM_AP_IP_ADDR				82
 
-#define LW_ELEM_VENDOR_SPECIFIC			104
+#define LW_ELEM_VENDOR_SPECIFIC				104
+
+
+
+/* LWAPP IEEE 802.11 bindings */
+
+#define LW_ELEM_80211_WTP_WLAN_RADIO_CONFIGURATION	8
 
 
 /* useful macros and inline functions */
@@ -162,6 +170,8 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 }
 
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
+#define lw_put_certificate(dst,cert,len) lw_put_data(dst,cert,len)
+extern int lw_put_ac_descriptor(uint8_t * dst, struct ac_info * acinfo);
 
 
 /* function proto types */
@@ -170,7 +180,8 @@ extern uint16_t lw_checksum(uint8_t *d,int len);
 extern int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
 extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int len);
 
-extern int lw_put_ac_descriptor(uint8_t * dst, struct ac_info * acinfo);
+
+extern int lw_put_80211_wtp_wlan_radio_configuration(uint8_t*dst,struct radioinfo *ri);
 
 
 
