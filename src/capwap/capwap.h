@@ -147,7 +147,7 @@ struct capwap_ctrlhdr
 
 #define CW_ELEM_AC_DESCRIPTOR			1
 #define CW_ELEM_AC_IPV4_LIST			2
-#define CW_ELEM_AC_IPv6_LIST			3
+#define CW_ELEM_AC_IPV6_LIST			3
 #define CW_ELEM_AC_NAME				4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY		5
 #define CW_ELEM_AC_TIMESTAMP			6
@@ -164,12 +164,15 @@ struct capwap_ctrlhdr
 
 
 
-#define CWMSGELEM_CAPWAP_TIMERS			12
+#define CW_ELEM_CAPWAP_TIMERS			12
 /*   CAPWAP Transport Protocol                            51
    Data Transfer Data                                   13
    Data Transfer Mode                                   14
    Decryption Error Report                              15
-   Decryption Error Report Period                       16
+*/
+#define CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD	16
+//   Decryption Error Report Period                       16
+/*
    Delete MAC ACL Entry                                 17
    Delete Station                                       18
    Reserved                                             19
@@ -180,8 +183,9 @@ struct capwap_ctrlhdr
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS		22
 
 #define CWMSGELEM_ECN_SUPPORT			53
- /*  Idle Timeout                                         23
-  */
+
+#define CW_ELEM_IDLE_TIMEOUT			23
+
 #define CWMSGELEM_IMAGE_DATA			24
 
 #define CWMSGELEM_IMAGE_IDENTIFIER		25
@@ -208,8 +212,8 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_WTP_BOARD_DATA		38
 
 #define CWMSGELEM_WTP_DESCRIPTOR		39
-/*   WTP Fallback                                         40
-  */
+#define CW_ELEM_WTP_FALLBACK			40
+
 #define CWMSGELEM_WTP_FRAME_TUNNEL_MODE		41
 #define CWMSGELEM_RESERVED_1			42
 
