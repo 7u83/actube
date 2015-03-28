@@ -493,6 +493,16 @@ extern int cw_send_echo_response(struct conn *conn, int seqnum, struct radioinfo
 extern int cw_handle_echo_request(void *d);
 extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
+/* Use some macros from LWAPP */
+
+#define cw_put_byte lw_put_byte
+#define cw_put_word lw_put_word
+#define cw_put_dword lw_put_dword
+#define cw_put_data lw_put_data
+
+#define cw_get_byte lw_get_byte
+#define cw_get_word lw_get_word
+#define cw_get_dword lw_get_dword
 
 
 /* macro to isolate bits from a dword */
@@ -521,12 +531,19 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
 #define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_T ) ? 1:0)
 
 
-/* Use some macros from LWAPP */
+/**
+ * Get length of a CAPWAP message elemet 
+ * @param e pointer to element (uint8_t*)
+ * @return length of element
+ */
+#define cw_get_elem_type(e) cw_get_word(e)
 
-#define cw_put_byte lw_put_byte
-#define cw_put_word lw_put_word
-#define cw_put_dword lw_put_dword
-#define cw_put_data lw_put_data
+/**
+ * Get type of a CAPWAP message element
+ * @pram e pointer to element (uint8_t*)
+ * @return type of element
+ */
+#define cw_get_elem_len(e)  cw_get_word(e+2)
 
 
 /**
