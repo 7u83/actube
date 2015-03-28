@@ -33,9 +33,10 @@
  * @{
  */
 
-#define DBG_CW_MSG			0x00000001	/* CAPWAP messages */
-#define DBG_CW_MSGELEM			0x00000002	/* CAPWAP message elements */
-#define DBG_CW_MSGELEM_DMP		0x00000004	/* Dump CAPWAP message elements */
+#define DBG_MSG				0x00000001	/* Parsed CAPWAP/LWAPP messages */
+#define DBG_ELEM			0x00000002	/* Parsed CAPWAP/LWAPP message elements */
+#define DBG_ELEM_DMP			0x00000004	/* Dump CAPWAP message elements */
+
 #define DBG_CW_INFO			0x00000008	
 #define DBG_CW_RFC			0x00000010	/* RCF-realted CAPWAP errors */
 #define DBG_CW_STRICT			0x00000010
