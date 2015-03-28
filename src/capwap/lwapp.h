@@ -143,6 +143,16 @@
 	(*((uint32_t*)(dst)) = htonl(dw),4)
 
 
+#define lw_get_byte(src)\
+	(*(uint8_t*)(src))
+
+#define lw_get_word(src) \
+	(ntohs(  *(uint16_t*(src))))
+
+#define lw_get_dword(src) \
+	(ntohl(  *(uint32_t*(src))))
+
+
 /* the following functions are defined as static inline and not as 
    macro to avoid any side effects */
 
