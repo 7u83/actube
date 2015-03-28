@@ -66,6 +66,12 @@ LWAPPOBJS = \
 	lw_put_cisco_path_mtu.o \
 	lw_readelem_wtp_name.o \
 	lw_put_80211_wtp_wlan_radio_configuration.o \
+	lw_readelem_vendor_specific.o \
+	lw_vendor_id_to_str.o \
+	lw_elem_id_to_str.o \
+	lw_msg_id_to_str.o \
+	lw_cisco_id_to_str.o
+
 
 
 # LWAPP cisco vendor specific objs
@@ -137,7 +143,6 @@ CAPWAPOBJS= \
 	   cw_msgelemtostr.o \
 	   cw_msgtostr.o \
 	   hdr_print.o \
-	   cw_ianavendoridtostr.o \
 	   cw_readelem_ecn_support.o \
 	cw_readelem_maximum_message_length.o \
 	cw_readelem_result_code.o\
@@ -153,8 +158,10 @@ CAPWAPOBJS= \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	lw_readelem_wtp_board_data.o \
 	cw_readmsg_configuration_status_response.o \
+	cw_cisco_id_to_str.o\
 
 	
+	   #cw_ianavendoridtostr.o \
 
 #	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 #	cwmsg_addelem_vendor_specific_payload.o \
