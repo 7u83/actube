@@ -493,6 +493,10 @@ extern int cw_send_echo_response(struct conn *conn, int seqnum, struct radioinfo
 extern int cw_handle_echo_request(void *d);
 extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
+extern int cw_readmsg_configuration_status_response(uint8_t *elems,int elems_len);
+
+
+
 /* Use some macros from LWAPP */
 
 #define cw_put_byte lw_put_byte
@@ -537,17 +541,42 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
  * @return length of element
  */
 #define cw_get_elem_type(e) cw_get_word(e)
+#define cw_get_elem_id(e) cw_get_elem_type(e)
 
 /**
  * Get type of a CAPWAP message element
  * @pram e pointer to element (uint8_t*)
  * @return type of element
  */
-#define cw_get_elem_len(e)  cw_get_word(e+2)
+#define cw_get_elem_len(e) cw_get_word(e+2)
+
+/**
+ * Get a pinter to the data of a CAPWAP message element 
+ * @param e pointer to message element 
+ * @return pointer to data
+ */
+#define cw_get_elem_data(e) (e+4)
+
+/** 
+ * Iterate through message elements of a CAPWAP message
+ * @param i iterator witch points to the current element (uint8_t*)
+ * @param elems pointer to message elements (uint8_t*)
+ * @param len length of message element buffer
+ * 
+ * You can use this macro like a for loop.
+ * 
+ * uint8_t * i
+ * cw_foreach_elem(i,elem,len){
+ *   ...
+ *   print_message(i);
+ *   ...
+ * }
+ */ 
+#define cw_foreach_elem(i,elems,len) for(i=elems; i<elems+len; i=i+4+cw_get_elem_len(i))
 
 
 /**
- * Put a message element headder to buffer
+ * Put a message element header to buffer
  * @param dst pointer to buffer (uint8_t)
  * @param type tpe of message element
  * @param len length of message element data
@@ -556,15 +585,6 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
 #define cw_put_elem_hdr(dst,type,len) \
 	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
-
-/*
-static inline int cw_put_elem_hdr(uint8_t * dst, uint8_t type, uint16_t len)
-{
-	cw_put_word(dst, type);
-	cw_put_word(dst + 4, len);
-	return 4;
-}
-*/
 
 
 /** 
