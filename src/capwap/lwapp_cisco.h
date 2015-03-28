@@ -28,7 +28,9 @@
 
 /* Vendor specific message elements LWAPP Cisco */
 
-#define LW_ELEM_CISCO_PATH_MTU			73
+#define LW_CISCO_PATH_MTU			73
+
+#define LW_CISCO_MWAR_HASH_VALUE		134
 
 
 /* function proto types */
