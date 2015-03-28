@@ -44,6 +44,7 @@ void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo)
 	len += add_board_data_subelem(msg+len,CWBOARDDATA_REVISION,wtpinfo->board_revision);
 
 
+
 	if (wtpinfo->macaddress) {
 		*((uint32_t *) (msg + len)) =
 		    htonl(CWBOARDDATA_MACADDRESS << 16 | wtpinfo->macaddress_len);

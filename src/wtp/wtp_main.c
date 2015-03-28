@@ -63,7 +63,7 @@ int main()
 
 #include <time.h>
 
-
+int pmu;
 
 //#include <openssl/ssl.h>
 
@@ -75,6 +75,10 @@ int do_connect(void *priv,void *data)
 
 	sock_setport(&ip->ip,atoi(conf_control_port));
 //	printf("Would connect to %s\n",str);
+
+
+printf("Sleep 5000\n");
+printf("slept\n");
 	
 	int rc;
 	rc = join(&ip->ip);
@@ -83,10 +87,10 @@ int do_connect(void *priv,void *data)
 
 printf("Sleep after oin\n");
 printf("Go conf\n");
-	extern struct conn * get_conn();
-	extern join_state(struct conn * conn);
-	struct conn * conn = get_conn();
-printf("Join conn = %p\n",conn);
+//	extern struct conn * get_conn();
+//	extern join_state(struct conn * conn);
+//	struct conn * conn = get_conn();
+//printf("Join conn = %p\n",conn);
 
 //	join_state(conn);
 

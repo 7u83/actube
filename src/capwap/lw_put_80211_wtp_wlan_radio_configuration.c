@@ -18,6 +18,9 @@ int lw_put_80211_wtp_wlan_radio_configuration(uint8_t*dst,struct radioinfo *ri)
 	lw_put_data(dst+16,ri->country_str,4);
 	lw_put_byte(dst+20,ri->max_bssid);
 
-	return 21;	
+	/* XXX not LWAP conform */
+	lw_put_data(dst+21,(uint8_t*)"DEAU990",7);
+
+	return 21+7;	
 }
 

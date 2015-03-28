@@ -30,6 +30,7 @@
 
 #include "acinfo.h" //Tube
 
+extern int pmu;
 
 int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct wtpinfo *wtpinfo)
 {
@@ -121,7 +122,11 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 		case CWMODE_CISCO:
 		{
 			uint8_t mtu[2048];
-			int l = lw_put_cisco_path_mtu(mtu,1485,11);
+			if(pmu) {
+				int l = lw_put_cisco_path_mtu(mtu,1485,11);
+			}
+
+			//cwmsg_addelem_cisco_certificate(&cwmsg,mtu,10);
 
 	//		printf("Len = %d\n",l);
 

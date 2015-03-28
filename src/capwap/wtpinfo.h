@@ -67,6 +67,8 @@ struct wtpinfo{
 	
 	bstr_t session_id;
 
+	
+
 
 	struct radioinfo radioinfo[31];
 
@@ -84,6 +86,9 @@ struct wtpinfo{
 
 	uint16_t encryption_cap;	
 	
+
+	/** Base MAC address */
+	bstr_t base_mac;	
 	
 
 	uint8_t * macaddress;

@@ -59,6 +59,8 @@ struct wtpinfo * get_wtpinfo()
 	wtpinfo->macaddress=conf_macaddress;
 	wtpinfo->macaddress_len=conf_macaddress_len;
 
+	
+
 
 	wtpinfo->max_msg_len=14000;
 

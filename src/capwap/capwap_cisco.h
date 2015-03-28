@@ -35,8 +35,10 @@
 #define CW_CISCO_RAD_SLOT				4
 #define CW_CISCO_RAD_NAME				LW_ELEM_WTP_NAME	/* 5 */
 #define	CW_CISCO_MWAR					LW_ELEM_AC_DESCRIPTOR	/* 6 */
+#define CW_CISCO_STATION_CFG				8
 
-#define CWVENDOR_CISCO_BOARD DATA			LW_ELEM_WTP_BOARD_DATA	/* 50 */
+#define CW_CISCO_CERTIFICATE				LW_ELEM_CERTIFICATE	/* 44 */
+#define CW_CISCO_BOARD DATA				LW_ELEM_WTP_BOARD_DATA	/* 50 */
 #define CWVENDER_CISCO_AP_MODE_AND_TYPE			54
 
 #define CWVENDOR_CISCO_AP_IP_ADDR			83
@@ -45,7 +47,7 @@
 
 #define CW_CISCO_AP_GROUP_NAME				123
 #define CWVENDOR_CISCO_AP_LED_STATE_CONFIG		125
-#define CW_ELEM_CISCO_AP_REGULATORY_DOMAIN		126
+#define CW_CISCO_AP_REGULATORY_DOMAIN			126
 
 #define CWVENDOR_CISCO_AP_PRE_STD_SWITCH_CONFIG		137
 #define CWVENDOR_CISCO_AP_POWER_INJECTOR_CONFIG		138
@@ -89,11 +91,23 @@ static inline int cw_addelem_cisco_rad_name(uint8_t * dst, uint8_t * name)
  * @param name Group name, zero terminated
  * @return number of bytes put
  */
-static inline int cw_addelem_cisco_ap_group_name(uint8_t * dst, uint8_t * name)
-{
+static inline int cw_addelem_cisco_ap_group_name(uint8_t * dst, uint8_t * name){
 	return cw_addelem_vendor_specific_payload(dst, CW_VENDOR_ID_CISCO, CW_CISCO_AP_GROUP_NAME, name,
 						  strlen((char *) name));
 }
+
+
+
+static inline int cw_addelem_cisco_ap_regulatory_domain(uint8_t *dst, struct radioinfo * ri){
+	uint8_t *d=dst+10;
+	
+	d+=cw_put_byte(d,ri->rid);	/* Band ID */
+	d+=cw_put_byte(d,1);		/* Set True/False */
+	d+=cw_put_byte(d,ri->rid);	/* Slot ID */
+	d+=cw_put_word(d,ri->regDomain);
+	return 5 + cw_put_elem_vendor_hdr(dst, CW_VENDOR_ID_CISCO, CW_CISCO_AP_REGULATORY_DOMAIN, 5);
+}
+
 
 
 /**
@@ -108,6 +122,25 @@ static inline int cw_addelem_cisco_ap_group_name(uint8_t * dst, uint8_t * name)
 static inline int cw_addelem_cisco_mwar(uint8_t *dst, struct ac_info *acinfo){
 	int l = lw_put_ac_descriptor(dst+10,acinfo);
 	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_MWAR,l);
+}
+
+/** 
+ * Add a Cisco Certificate payload message element
+ * @param dst destination buffer
+ * @param src pointer to DER certificate
+ * @param len length of certificate
+ * @return number of bytes put
+ */
+static inline int cw_addelem_cisco_certificate(uint8_t*dst,uint8_t*src,int len){
+	int l = lw_put_certificate(dst+10,src,len);
+	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_CERTIFICATE,l);
+}
+
+
+
+static inline int cw_addelem_cisco_station_cfg(uint8_t * dst,struct radioinfo *ri){
+	int l = lw_put_80211_wtp_wlan_radio_configuration(dst+10,ri);
+	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_STATION_CFG,l);
 }
 
 
@@ -133,7 +166,14 @@ static inline int cw_addelem_cisco_mwar(uint8_t *dst, struct ac_info *acinfo){
 #define cwmsg_addelem_cisco_mwar(cwmsg,acinfo)\
 	(cwmsg)->pos+=cw_addelem_cisco_mwar(((cwmsg)->msgelems+(cwmsg)->pos),(acinfo))
 
+#define cwmsg_addelem_cisco_certificate(cwmsg,crt,len)\
+	(cwmsg)->pos+=cw_addelem_cisco_certificate(((cwmsg)->msgelems+(cwmsg)->pos),crt,len)
 
+#define cwmsg_addelem_cisco_ap_regulatory_domain(cwmsg,radioinfo)\
+	(cwmsg)->pos+=cw_addelem_cisco_ap_regulatory_domain(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
+
+#define cwmsg_addelem_cisco_station_cfg(cwmsg,radioinfo)\
+	(cwmsg)->pos+=cw_addelem_cisco_station_cfg(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
 
 
 #endif
