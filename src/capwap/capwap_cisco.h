@@ -30,32 +30,35 @@
 #include "lwapp.h"
 #include "capwap.h"
 
-#define CWVENDOR_CISCO_MWAR_ADDR			2
-#define CWVENDOR_CISCO_RAD				3
-#define CW_CISCO_RAD_SLOT				4
-#define CW_CISCO_RAD_NAME				LW_ELEM_WTP_NAME	/* 5 */
-#define	CW_CISCO_MWAR					LW_ELEM_AC_DESCRIPTOR	/* 6 */
-#define CW_CISCO_STATION_CFG				8
+#define CW_CISCO_MWAR_ADDR			2
+#define CW_CISCO_RAD				3
+#define CW_CISCO_RAD_SLOT			4
+#define CW_CISCO_RAD_NAME			LW_ELEM_WTP_NAME			/* 5 */
+#define	CW_CISCO_MWAR				LW_ELEM_AC_DESCRIPTOR			/* 6 */
+#define CW_CISCO_STATION_CFG			8
 
-#define CW_CISCO_CERTIFICATE				LW_ELEM_CERTIFICATE	/* 44 */
-#define CW_CISCO_BOARD DATA				LW_ELEM_WTP_BOARD_DATA	/* 50 */
-#define CWVENDER_CISCO_AP_MODE_AND_TYPE			54
+#define CW_CISCO_MULTI_DOMAIN_CAPAB		LW_ELEM_80211_MULTI_DOMAIN_CAPABILITY	/* 10 */
 
-#define CWVENDOR_CISCO_AP_IP_ADDR			83
+#define CW_CISCO_CERTIFICATE			LW_ELEM_CERTIFICATE			/* 44 */
+#define CW_CISCO_WTP_BOARD_DATA			LW_ELEM_WTP_BOARD_DATA			/* 50 */
+#define CW_CISCO_AP_MODE_AND_TYPE		LW_ELEM_80211_WTP_MODE_AND_TYPE		/* 54 */
 
-#define CWVENDOR_CISCO_SPAM_VENDOR_SPECIFIC		104
+#define CW_CISCO_AP_IP_ADDR			83
 
-#define CW_CISCO_AP_GROUP_NAME				123
-#define CWVENDOR_CISCO_AP_LED_STATE_CONFIG		125
-#define CW_CISCO_AP_REGULATORY_DOMAIN			126
+#define CW_CISCO_SPAM_VENDOR_SPECIFIC		104
 
-#define CWVENDOR_CISCO_AP_PRE_STD_SWITCH_CONFIG		137
-#define CWVENDOR_CISCO_AP_POWER_INJECTOR_CONFIG		138
+#define CW_CISCO_AP_GROUP_NAME			123
 
-#define CW_CISCO_AP_TIMESYNC				151
+#define CW_CISCO_AP_LED_STATE_CONFIG		125
+#define CW_CISCO_AP_REGULATORY_DOMAIN		126
 
-#define CW_CISCO_BOARD_DATA_OPTIONS			207
-#define CW_CISCO_MWAR_TYPE				208
+#define CW_CISCO_AP_PRE_STD_SWITCH_CONFIG	137
+#define CW_CISCO_AP_POWER_INJECTOR_CONFIG	138
+
+#define CW_CISCO_AP_TIMESYNC			151
+
+#define CW_CISCO_BOARD_DATA_OPTIONS		207
+#define CW_CISCO_MWAR_TYPE			208
 
 
 
@@ -142,6 +145,14 @@ static inline int cw_addelem_cisco_station_cfg(uint8_t * dst,struct radioinfo *r
 	int l = lw_put_80211_wtp_wlan_radio_configuration(dst+10,ri);
 	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_STATION_CFG,l);
 }
+
+static inline int cw_readelem_cisco_station_cfg(uint8_t *src,int len){
+	
+//	lw_readelem_
+	return 0;
+}
+
+const char * cw_cisco_id_to_str(int elem_id);
 
 
 
