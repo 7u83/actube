@@ -147,10 +147,10 @@
 	(*(uint8_t*)(src))
 
 #define lw_get_word(src) \
-	(ntohs(  *(uint16_t*(src))))
+	(ntohs(  *((uint16_t*)(src))))
 
 #define lw_get_dword(src) \
-	(ntohl(  *(uint32_t*(src))))
+	(ntohl(  *((uint32_t*)(src))))
 
 
 /* the following functions are defined as static inline and not as 
