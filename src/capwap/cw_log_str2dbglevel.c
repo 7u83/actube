@@ -25,9 +25,9 @@
 struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 
 	{"info",DBG_CW_INFO},
-	{"msg",DBG_CW_MSG},
-	{"msgelem",DBG_CW_MSGELEM},
-	{"msgelem_dmp",DBG_CW_MSGELEM_DMP},
+	{"msg",DBG_MSG},
+	{"msgelem",DBG_ELEM},
+	{"msgelem_dmp",DBG_ELEM_DMP},
 	{"rfc",DBG_CW_RFC},
 	{"pkt_in",DBG_CW_PKT_IN},
 	{"pkt_out",DBG_CW_PKT_OUT},

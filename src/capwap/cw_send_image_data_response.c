@@ -29,7 +29,7 @@
 
 void cw_send_image_data_response(struct conn * conn,int seqnum, int rc)
 {
-	cw_dbg(DBG_CW_MSG,"Sending image data response to %s, seq = %d",sock_addr2str(&conn->addr),seqnum);
+	cw_dbg(DBG_MSG,"Sending image data response to %s, seq = %d",sock_addr2str(&conn->addr),seqnum);
 
 	struct cwmsg * cwmsg = &conn->resp_msg;	
 	cwmsg_init(cwmsg,conn->resp_buffer,CWMSG_IMAGE_DATA_RESPONSE,seqnum,NULL);

@@ -33,8 +33,9 @@
 static int process_elem(void *w,int type,uint8_t* msgelem,int len)
 {
 	struct wtpinfo * wtpinfo = (struct wtpinfo*)w;
-	cw_dbg(DBG_CW_MSGELEM,"Process conf status req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
-	cw_dbg_dmp(DBG_CW_MSGELEM_DMP,msgelem,len,"Dump for msgelem ...");
+	cw_dbg(DBG_ELEM,"Process conf status req msgelem, type=%d (%s), len=%d",type,cw_msgelemtostr(type),len);
+
+	cw_dbg_dmp(DBG_ELEM_DMP,msgelem,len,"Dump for msgelem ...");
 
 
 	if (wtpinfo_readelem_ac_name(wtpinfo,type,msgelem,len)) 

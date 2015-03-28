@@ -120,6 +120,7 @@ int wtp_main(const char *ad)
 
 	wtpconf_init();
 	
+	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
 	
 
 

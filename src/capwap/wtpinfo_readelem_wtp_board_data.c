@@ -22,11 +22,11 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 		int sublen = val&0xffff;
 		i+=4;
 		if (sublen+i>len){
-			cw_dbg(DBG_CW_MSGELEM,"WTP Board data sub-element too long, type=%d,len=%d",subtype,sublen);
+			cw_dbg(DBG_ELEM,"WTP Board data sub-element too long, type=%d,len=%d",subtype,sublen);
 			return;
 		}
 		
-		cw_dbg(DBG_CW_MSGELEM,"Reading WTP board data sub-element, type=%d, len=%d",subtype,sublen);
+		cw_dbg(DBG_ELEM,"Reading WTP board data sub-element, type=%d, len=%d",subtype,sublen);
 
 		switch(subtype){
 			case CWBOARDDATA_MODELNO:
@@ -61,7 +61,7 @@ int wtpinfo_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *
 	if (type!=CWMSGELEM_WTP_BOARD_DATA)
 		return 0;
 	if (len<4){
-		cw_dbg(DBG_CW_MSGELEM,"Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d\n",type,len);
+		cw_dbg(DBG_ELEM,"Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d\n",type,len);
 		return 1;
 	}
 

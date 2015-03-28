@@ -66,7 +66,7 @@ static int read_subelem(struct ac_info* acinfo,int subtype,uint8_t *elem, int le
 }
 
 /**
- * Read message elment ac descriptor
+ * Read CAPWAP message elment: AC Descriptor
  * @param acinfo pointer to acinfo where the result is stored
  * @param type message element type 
  * @param msgelem pointer to message element
@@ -116,7 +116,7 @@ int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem
 		sub+=8;
 		int subtype = val>>16;
 
-		cw_dbg(DBG_CW_MSGELEM,"ac descriptor sub-element vendor: %d, type:%d, len: %d",vendor,subtype,sublen);
+		cw_dbg(DBG_ELEM,"AC Descriptor sub-element vendor: %d, type:%d, len: %d",vendor,subtype,sublen);
 		switch (vendor) {
 			case 0:
 				read_subelem(acinfo,subtype,msgelem+sub,sublen);

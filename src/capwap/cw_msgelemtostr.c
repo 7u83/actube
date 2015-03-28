@@ -25,13 +25,13 @@ const char * cw_msgelemtostr(int elem)
 {
 	switch (elem){
 		case CW_ELEM_AC_DESCRIPTOR:
-			return "AC descriptor";
-		
-/*   AC IPv4 List                                          2
-   AC IPv6 List                                          3
-*/   
+			return "AC Descriptor";
+		case CW_ELEM_AC_IPV4_LIST:
+			return "AC IPv4 List";
+		case CW_ELEM_AC_IPV6_LIST:
+			return "AC IPv6 List";
 		case CW_ELEM_AC_NAME:
-			return "AC name";
+			return "AC Name";
 /*
    AC Name with Priority                                 5
    AC Timestamp                                          6
@@ -48,11 +48,18 @@ const char * cw_msgelemtostr(int elem)
 			return "CAPWAP local IPv4 addr";
 		case CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
 			return "CAPWAP local IPv6 addr";
-/*   CAPWAP Timers                                        12
-   CAPWAP Transport Protocol                            51
+
+		case CW_ELEM_CAPWAP_TIMERS:
+			return "CAWPAP Timers";
+ /*  CAPWAP Transport Protocol                            51
    Data Transfer Data                                   13
    Data Transfer Mode                                   14
    Decryption Error Report                              15
+*/
+
+		case CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD:
+			return "Decryption Error Report Period";
+/*
    Decryption Error Report Period                       16
    Delete MAC ACL Entry                                 17
    Delete Station                                       18
@@ -66,8 +73,10 @@ const char * cw_msgelemtostr(int elem)
 */   
 		case CWMSGELEM_ECN_SUPPORT:
 			return "ECN support";
- /*  Idle Timeout                                         23
-*/
+
+		case CW_ELEM_IDLE_TIMEOUT:
+			return "Idle Timeout";
+
 		case CWMSGELEM_IMAGE_DATA:
 			return "image data";
 
@@ -90,17 +99,17 @@ const char * cw_msgelemtostr(int elem)
 			return "radio administrative state";
 
 		case CWMSGELEM_RADIO_OPERATIONAL_STATE:
-			return "radio operational state";
+			return "Radio Operational State";
 
 /*   Radio Operational State                              32
 */
 		case CWMSGELEM_RESULT_CODE:
-			return "result code";
+			return "Result Code";
 
 /*   Returned Message Element                             34
 */   
 		case CW_ELEM_SESSION_ID:
-			return "session id";
+			return "Session ID";
 
 		case CWMSGELEM_STATISTICS_TIMER:
 			return "Statistics Timer";
@@ -114,10 +123,11 @@ const char * cw_msgelemtostr(int elem)
    
 		case CWMSGELEM_WTP_DESCRIPTOR:
 			return "wtp descriptor";
-/*   WTP Fallback                                         40
-  */
+
+		case CW_ELEM_WTP_FALLBACK:
+			return "WTP Fallback";
 		case CWMSGELEM_WTP_FRAME_TUNNEL_MODE:
-			return "frame tunnel mode";
+			return "Frame Tunnel Mode";
 
 /*		case CWMSGELEM_RESERVED_1:
 			return "reserved (42)";

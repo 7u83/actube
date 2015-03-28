@@ -72,7 +72,7 @@ int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, i
 	eparm.wtpinfo = wtpinfo;
 	eparm.mand=mand;
 
-	cw_dbg(DBG_CW_MSGELEM,"Reading change state event request, len=%d",len);
+	cw_dbg(DBG_ELEM,"Reading change state event request, len=%d",len);
 	cw_foreach_msgelem(msg,len,readelem,&eparm);
 
 

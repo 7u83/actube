@@ -32,7 +32,7 @@
 void cwsend_discovery_response(struct conn *conn, int seqnum, struct radioinfo *radioinfo,
 			       struct ac_info *acinfo, struct wtpinfo *wtpinfo)
 {
-	cw_dbg(DBG_CW_MSG, "Sending discovery response to %s, seq = %d", sock_addr2str(&conn->addr),
+	cw_dbg(DBG_MSG, "Sending discovery response to %s, seq = %d", sock_addr2str(&conn->addr),
 	       seqnum);
 
 	struct cwmsg *cwmsg = &conn->resp_msg;

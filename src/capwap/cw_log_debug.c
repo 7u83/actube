@@ -260,7 +260,7 @@ cw_log_debug0_, cw_log_debug1_, cw_log_debug2_};
 
 void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 {
-	if (!cw_dbg_is_level(DBG_CW_MSGELEM))
+	if (!cw_dbg_is_level(DBG_ELEM))
 		return;
 
 	const char *elemname;
@@ -277,13 +277,13 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 	}
 
 
-	if (!cw_dbg_is_level(DBG_CW_MSGELEM_DMP))
-		cw_dbg(DBG_CW_MSGELEM,
+	if (!cw_dbg_is_level(DBG_ELEM_DMP))
+		cw_dbg(DBG_ELEM,
 		       "Reading %s msgelem, type=%d (%s), len=%d",
 		       cw_msgtostr(msg), msgelem, elemname, len);
 
 	else
-		cw_dbg_dmp(DBG_CW_MSGELEM, msgbuf, len,
+		cw_dbg_dmp(DBG_ELEM, msgbuf, len,
 			   "Reading %s msgelem, type=%d (%s), len=%d\n\t Dump ...",
 			   cw_msgtostr(msg), msgelem, elemname, len);
 }

@@ -8,7 +8,7 @@ void cwmsg_addelem_capwap_timers(struct cwmsg *msg,int discovery,int echo_reques
 	uint8_t timers[2];
 	timers[0]=discovery;
 	timers[1]=echo_request;
-	cwmsg_addelem(msg,CWMSGELEM_CAPWAP_TIMERS,timers,sizeof(timers));
+	cwmsg_addelem(msg,CW_ELEM_CAPWAP_TIMERS,timers,sizeof(timers));
 }
 
 void cwsend_conf_status_response(struct conn * conn,int seqnum, int rc, struct radioinfo * radioinfo, struct ac_info * acinfo, struct wtpinfo * wtpinfo)
