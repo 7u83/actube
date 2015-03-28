@@ -82,7 +82,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 			return -1;
 		}
 
-		cw_dbg(DBG_CW_MSG,"Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
+		cw_dbg(DBG_MSG,"Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
 	
 		switch(subtype){
 			case CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION:

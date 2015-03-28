@@ -49,7 +49,7 @@ struct cwrmsg *conn_get_message(struct conn *conn)
 
 	if (args.cwrmsg) {
 
-		cw_dbg(DBG_CW_MSG,
+		cw_dbg(DBG_MSG,
 		       "Received message from %s, type=%d - %s, seq=%d",
 		       sock_addr2str(&conn->addr), args.cwrmsg->type,
 		       cw_msgtostr(args.cwrmsg->type),

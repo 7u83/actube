@@ -23,7 +23,7 @@ struct cwrmsg * conn_get_response(struct conn * conn)
 		while(!cw_timer_timeout(r_timer)){
 	                cwrmsg = conn_get_message(conn);
 	                if (cwrmsg){
-			        cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+			        cw_dbg(DBG_MSG,"Received message from %s, type=%d - %s"
 	               			 ,sock_addr2str(&conn->addr),cwrmsg->type,cw_msgtostr(cwrmsg->type));
 	                        if (cwrmsg->type == type){
 	                        	return cwrmsg;        

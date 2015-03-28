@@ -83,7 +83,7 @@ void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg
 	eparm.wtpinfo = wtpinfo;
 	eparm.mand=mand;
 
-	cw_dbg(DBG_CW_MSGELEM,"Reading configuration status request, len=%d",len);
+	cw_dbg(DBG_ELEM,"Reading configuration status request, len=%d",len);
 	cw_foreach_msgelem(msg,len,readelem,&eparm);
 
 	if (cw_is_missing_mand_elems(mand)){

@@ -1,3 +1,5 @@
+#include <stdlib.h> //Tube
+
 #include "capwap/capwap.h"
 #include "capwap/conn.h"
 #include "wtp_interface.h"
@@ -10,7 +12,9 @@ int configure()
 	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
 
 	cw_prepare_configuration_status_request(conn,rip,wtpinfo);
-	conn_send_request(conn);
+	struct cwrmsg * cwrmsg = conn_send_request(conn);
+
+	int rc = cw_readmsg_configuration_status_response(cwrmsg->msgelems,cwrmsg->msgelems_len);
 
 exit(0);
 }

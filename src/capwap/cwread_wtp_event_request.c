@@ -34,7 +34,7 @@ int cwread_wtp_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 	eparm.wtpinfo = wtpinfo;
 	eparm.mand=mand;
 
-	cw_dbg(DBG_CW_MSGELEM,"Reading wtp event request, len=%d",len);
+	cw_dbg(DBG_ELEM,"Reading wtp event request, len=%d",len);
 	cw_foreach_msgelem(msg,len,readelem,&eparm);
 
 

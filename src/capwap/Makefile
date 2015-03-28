@@ -21,7 +21,7 @@ endif
 NAME=libcapwap.a
 
 SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addrlen.o \
-	 sock_receive.o sock_mwait.o sock_addrtostr.o \
+	sock_mwait.o sock_addrtostr.o \
 	 sock_setport.o \
 	 sock_getport.o \
 	 sock_getifaddr.o \
@@ -32,6 +32,7 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_addrinit.o \
 	 sock_set_dontfrag.o \
 	 sock_get_primary_if.o
+	 #sock_receive.o 
 
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
@@ -150,7 +151,10 @@ CAPWAPOBJS= \
 	cw_readelem_capwap_local_ip_addr.o \
 	   cw_readelem_wtp_reboot_statistics.o\
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
-	lw_readelem_wtp_board_data.o 
+	lw_readelem_wtp_board_data.o \
+	cw_readmsg_configuration_status_response.o \
+
+	
 
 #	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 #	cwmsg_addelem_vendor_specific_payload.o \
@@ -227,6 +231,8 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LWAPPOBJS) \
 	$(LWAPPCISCOOBJS) 
 
+#include $(OBJS:.o=.d)
+
 O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
@@ -249,7 +255,7 @@ $(ARCH)/%.o:%.c
 	@mkdir -p $(ARCH)
 	@echo "  CC "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
-
+	@$(CC) -MM $(CFLAGS) $< > $*.d
 
 $(ARCH)/$(NAME) : $(OBJS)
 	@echo "  AR $(ARCH)/$(NAME)"

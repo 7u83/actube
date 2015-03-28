@@ -149,7 +149,22 @@ AP = RAD = WTP
 
 LWAPP
 =====
-20. Ciscp AP Username Password
+In this section Cisco vendor specific message elements used in LWAPP 
+are listed.
+
+Some of these elements are used  by Cisco in CAPWAP where the
+vendor specific LWAPP message element is encapsulated in a vendor 
+specific CAPWAP message element. So in CAPWAP we see headers like 
+this:
+
+Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
+00 40 96 00 00 68  | 00 40 96 00 00 86 | ...
+
+
+
+
+
+20. Cisco AP Username Password
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                       Username (32 bytes) ...                         
@@ -184,6 +199,17 @@ LWAPP
 
 Type: 73
 Length: >=4
+
+134. Cisco MWAR Hash Value
+   
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |         Hash ... 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+   Hash: ASCII string witch represents in hexadecimal notation 
+         the SHA1 hash of the device certificate.
 
 
 
