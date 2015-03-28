@@ -25,6 +25,8 @@
 # Vim backups and swaps
 *~
 
+# Dependencies
+*.d
 
 
 # SSL stuff
