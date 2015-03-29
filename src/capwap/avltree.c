@@ -37,7 +37,7 @@ struct avltree * avltree_create(int (*cmp)(const void*,const void*),void(*del)(v
 {
 	struct avltree * t = malloc(sizeof(struct avltree));
 	if (!t)
-		return 0;
+		return NULL;
 	t->root=0;
 	t->count=0;
 	t->cmp=cmp;
@@ -49,7 +49,7 @@ struct avlnode * avlnode_create(void * data)
 {
 	struct avlnode * n = malloc(sizeof(struct avlnode));
 	if(!n)
-		return 0;
+		return NULL;
 	
 	n->left=n->right=0;
 	n->bal=0;
@@ -226,7 +226,12 @@ static int  avltree_add0(struct avltree *t, struct avlnode ** parent, void ** da
 }
 
 
-
+/**
+ * Add an element to an AVL tree
+ * @t avltree
+ * @data pointer to element
+ * @return added alement or NULL if error.
+ */
 void * avltree_add(struct avltree *t, void * data)
 {
 	if (t->root==0){
@@ -239,7 +244,7 @@ void * avltree_add(struct avltree *t, void * data)
 	int rc = avltree_add0(t,&t->root,&d);
 
 	if (rc>3)
-		return 0;
+		return NULL;
 
 	return d;
 }
@@ -267,7 +272,7 @@ static void rot_r(struct avlnode *n, struct avlnode **parent)
 
 
 /*
- * Delete the node withe the highest value
+ * Delete the node with the highest value
  * returns the rebalancing factor
  */
 
@@ -299,7 +304,7 @@ static int avltree_delete_hi(struct avlnode **parent, void **data)
 }
 */
 
-struct avltree * trrr;
+//struct avltree * trrr;
 
 static void rot_rl(struct avlnode *n, struct avlnode **parent)
 {
