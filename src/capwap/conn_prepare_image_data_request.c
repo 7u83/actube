@@ -37,7 +37,7 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 	if (conn->capwap_mode == CWMODE_CISCO) {
 		uint8_t type = 3;
 		uint16_t checksum = htons(lw_checksum(data->data, data->len));
-		cwmsg_vaddelem(cwmsg, CWMSGELEM_IMAGE_DATA, 
+		cwmsg_vaddelem(cwmsg, CW_ELEM_IMAGE_DATA, 
 			       &type, 1, 
 				&checksum, 2, 
 				data->data, data->len,
@@ -48,7 +48,7 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 
 	/* standard capwap operation */
 
-	cwmsg_vaddelem(cwmsg,CWMSGELEM_IMAGE_DATA,
+	cwmsg_vaddelem(cwmsg,CW_ELEM_IMAGE_DATA,
 		&data->type, sizeof(data->type),
 		data->data, data->len,
 		NULL

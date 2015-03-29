@@ -31,7 +31,7 @@
 
 int cw_readelem_image_identifier(struct cwimage_data *data, int type,uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_IMAGE_IDENTIFIER)
+	if (type != CW_ELEM_IMAGE_IDENTIFIER)
 		return 0;
 
 	data->vendor_id = ntohl(*((uint32_t*)msgelem));
