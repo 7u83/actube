@@ -16,13 +16,23 @@
 
 */
 
+/**
+ * @file
+ * @brief Yet another AVL tree implementation
+ */ 
+
 #include <stdlib.h>
 #include <stdio.h>
 
 
 #include "avltree.h"
 
-
+/**
+ * Create an AVL tree
+ * @param cmp pointer compare function
+ * @param del pointer to delete function which is called when an element will be deletet
+ * @return pointer to an #avltree struct
+ */ 
 struct avltree * avltree_create(int (*cmp)(const void*,const void*),void(*del)(void*))
 {
 	struct avltree * t = malloc(sizeof(struct avltree));
