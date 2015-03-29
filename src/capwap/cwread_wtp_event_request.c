@@ -14,7 +14,7 @@ struct eparm {
 static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 {
 	struct eparm * e = (struct eparm*)eparm;
-	cw_dbg_msgelem(CWMSG_CHANGE_STATE_EVENT_REQUEST,type,msgelem,len);
+	cw_dbg_msgelem(CW_MSG_CHANGE_STATE_EVENT_REQUEST,type,msgelem,len);
 
 
 

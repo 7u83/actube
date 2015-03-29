@@ -35,15 +35,22 @@
 #define CW_CISCO_RAD_SLOT			4
 #define CW_CISCO_RAD_NAME			LW_ELEM_WTP_NAME			/* 5 */
 #define	CW_CISCO_MWAR				LW_ELEM_AC_DESCRIPTOR			/* 6 */
-#define CW_CISCO_STATION_CFG			8
+#define CW_CISCO_WTP_RADIO_CFG			8
 
 #define CW_CISCO_MULTI_DOMAIN_CAPAB		LW_ELEM_80211_MULTI_DOMAIN_CAPABILITY	/* 10 */
+#define CW_CISCO_LOCATION_DATA			LW_ELEM_LOCATION_DATA			/* 35 */
+#define CW_CISCO_STATISTICS_TIMER		LW_ELEM_STATISTICS_TIMER		/* 37 */
 
 #define CW_CISCO_CERTIFICATE			LW_ELEM_CERTIFICATE			/* 44 */
 #define CW_CISCO_WTP_BOARD_DATA			LW_ELEM_WTP_BOARD_DATA			/* 50 */
 #define CW_CISCO_AP_MODE_AND_TYPE		LW_ELEM_80211_WTP_MODE_AND_TYPE		/* 54 */
 
-#define CW_CISCO_AP_IP_ADDR			83
+#define CW_CISCO_AC_IPV4_LIST			LW_ELEM_AC_IPV4_LIST			/* 59 */
+
+
+#define CW_CISCO_AP_STATIC_IP_ADDR		83
+
+#define CW_CISCO_AC_NAME_WITH_INDEX		91
 
 #define CW_CISCO_SPAM_VENDOR_SPECIFIC		104
 
@@ -56,6 +63,9 @@
 #define CW_CISCO_AP_POWER_INJECTOR_CONFIG	138
 
 #define CW_CISCO_AP_TIMESYNC			151
+#define CW_CISCO_AP_DOMAIN			169
+#define CW_CISCO_AP_DNS				170
+
 
 #define CW_CISCO_BOARD_DATA_OPTIONS		207
 #define CW_CISCO_MWAR_TYPE			208
@@ -140,11 +150,13 @@ static inline int cw_addelem_cisco_certificate(uint8_t*dst,uint8_t*src,int len){
 }
 
 
-
-static inline int cw_addelem_cisco_station_cfg(uint8_t * dst,struct radioinfo *ri){
+/*
+static inline int cw_addelem_cisco_wtp_radio_cfg(uint8_t * dst,struct radioinfo *ri){
 	int l = lw_put_80211_wtp_wlan_radio_configuration(dst+10,ri);
 	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_STATION_CFG,l);
 }
+*/
+
 
 static inline int cw_readelem_cisco_station_cfg(uint8_t *src,int len){
 	
@@ -152,7 +164,10 @@ static inline int cw_readelem_cisco_station_cfg(uint8_t *src,int len){
 	return 0;
 }
 
-const char * cw_cisco_id_to_str(int elem_id);
+extern const char * cw_cisco_id_to_str(int elem_id);
+
+int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct radioinfo *ri);
+int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
 
 
 
@@ -183,8 +198,8 @@ const char * cw_cisco_id_to_str(int elem_id);
 #define cwmsg_addelem_cisco_ap_regulatory_domain(cwmsg,radioinfo)\
 	(cwmsg)->pos+=cw_addelem_cisco_ap_regulatory_domain(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
 
-#define cwmsg_addelem_cisco_station_cfg(cwmsg,radioinfo)\
-	(cwmsg)->pos+=cw_addelem_cisco_station_cfg(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
+#define cwmsg_addelem_cisco_wtp_radio_cfg(cwmsg,radioinfo)\
+	(cwmsg)->pos+=cw_addelem_cisco_wtp_radio_cfg(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
 
 
 #endif

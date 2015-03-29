@@ -14,6 +14,7 @@ USE_CONTRIB_GNUTLS=1
 
 # Compiler to use
 CC=clang
+#CC=gcca
 #CC=mips-openwrt-linux-uclibc-gcc
 #LD=mips-openwrt-linux-uclibc-ld
 #AR=mips-openwrt-linux-uclibc-ar

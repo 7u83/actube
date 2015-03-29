@@ -25,7 +25,7 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 				    struct image_identifier *id)
 {
 	struct cwmsg *cwmsg = &conn->req_msg;
-	cwmsg_init(cwmsg, conn->req_buffer, CWMSG_IMAGE_DATA_REQUEST, conn_get_next_seqnum(conn),
+	cwmsg_init(cwmsg, conn->req_buffer, CW_MSG_IMAGE_DATA_REQUEST, conn_get_next_seqnum(conn),
 		   0);
 
 	if (!data) 

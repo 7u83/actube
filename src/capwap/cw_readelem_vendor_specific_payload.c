@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Implements cw_readelem_vendor_specific_payload 
+ */
+
 
 #include <arpa/inet.h>
 
@@ -31,6 +36,18 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 
 		}
 
+		case CW_MSG_CONFIGURATION_STATUS_RESPONSE:
+		{
+
+			struct radioinfo ri;
+			//lw_read_elem_wtp_wlan_radio_
+			//cw_read
+
+
+		}
+
+
+
 
 		default:
 			return 0;
@@ -44,6 +61,15 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 }
 
 
+/**
+ * Read a CAPWAP Vendor Specific Payload message element.
+ * @param data pointer to data where the results can be stored
+ * @param msgtype type of message in which the element was found
+ * @param elemtype element type, must be CW_ELEM_VENDOR_PECIFIC_PAYLOAD
+ * @param msgelem pointer to message elemenet data
+ * @param len length of message element data
+ * @return 1 = successful read\n 0 = no vendor specific payload element
+ */
 
 int cw_readelem_vendor_specific_payload(void * data,int msgtype,int elemtype,uint8_t *msgelem, int len)
 {
@@ -56,8 +82,8 @@ int cw_readelem_vendor_specific_payload(void * data,int msgtype,int elemtype,uin
 	}
 
 
-	uint32_t vendor_id = ntohl( *((uint32_t*)msgelem) );
-	uint16_t elem_id = ntohs( *( (uint16_t*)(msgelem+4) ));
+	uint32_t vendor_id = cw_get_dword(msgelem); 
+	uint16_t elem_id = cw_get_word(msgelem+4); 
 	int elem_len = len - 6;
 
 	switch (vendor_id) {

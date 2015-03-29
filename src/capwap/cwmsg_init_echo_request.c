@@ -22,7 +22,7 @@
 
 void cwmsg_init_echo_request(struct cwmsg * cwmsg,uint8_t *buffer,struct conn * conn, struct radioinfo * radioinfo)
 {
-	cwmsg_init(cwmsg,buffer,CWMSG_ECHO_REQUEST,conn_get_next_seqnum(conn),radioinfo);
+	cwmsg_init(cwmsg,buffer,CW_MSG_ECHO_REQUEST,conn_get_next_seqnum(conn),radioinfo);
 }
 
 

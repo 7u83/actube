@@ -39,10 +39,10 @@ const char * cw_msgtostr(int type)
 		case CW_MSG_CONFIGURATION_STATUS_RESPONSE:
 			return "Configuration Status Response";
 
-		case CWMSG_CONFIGURATION_UPDATE_REQUEST:
+		case CW_MSG_CONFIGURATION_UPDATE_REQUEST:
 			return "configuration update request";
 
-		case CWMSG_CONFIGURATION_UPDATE_RESPONSE:
+		case CW_MSG_CONFIGURATION_UPDATE_RESPONSE:
 			return "configuration update response";
 			
 		case CWMSG_WTP_EVENT_REQUEST:
@@ -51,32 +51,32 @@ const char * cw_msgtostr(int type)
 			return "wtp event response";
 
 
-		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
 			return "change state event request";
-		case CWMSG_CHANGE_STATE_EVENT_RESPONSE:
+		case CW_MSG_CHANGE_STATE_EVENT_RESPONSE:
 			return "change state event response";
 
 /*
            Change State Event Request          11
            Change State Event Response         12
 */	   
-		case CWMSG_ECHO_REQUEST:
+		case CW_MSG_ECHO_REQUEST:
 			return "echo request";
-		case CWMSG_ECHO_RESPONSE:
+		case CW_MSG_ECHO_RESPONSE:
 			return "echo response";
 
-		case CWMSG_IMAGE_DATA_REQUEST:
+		case CW_MSG_IMAGE_DATA_REQUEST:
 			return "image data request";
-		case CWMSG_IMAGE_DATA_RESPONSE:
+		case CW_MSG_IMAGE_DATA_RESPONSE:
 			return "image data response";
 
 /*          Image Data Request                  15
            Image Data Response                 16
 */
 
-		case CWMSG_RESET_REQUEST:
+		case CW_MSG_RESET_REQUEST:
 			return "reset request";
-		case CWMSG_RESET_RESPONSE:
+		case CW_MSG_RESET_RESPONSE:
 			return "reset response";
 
 /*

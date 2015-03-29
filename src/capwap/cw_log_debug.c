@@ -29,6 +29,9 @@
 
 #include "cw_log.h"
 #include "capwap.h"
+#include "capwap_cisco.h"
+#include "lwapp_cisco.h"
+
 #include "cw_util.h"
 
 
@@ -80,8 +83,7 @@ static void cw_log_debug2_(const char *format, ...)
 
 
 
-int cw_log_debug_dump_(int level, const uint8_t * data, int len,
-		       const char *format, ...)
+int cw_log_debug_dump_(int level, const uint8_t * data, int len, const char *format, ...)
 {
 	int maxtlen = 2048;
 	int i;
@@ -129,8 +131,7 @@ int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 }
 
 
-void cw_log_dbg_(int level, const char *file, int line, const char *format,
-		 ...)
+void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 {
 
 	if (!(level & cw_dbg_opt_level))
@@ -152,8 +153,7 @@ void cw_log_dbg_(int level, const char *file, int line, const char *format,
 
 
 void cw_log_dbg_dmp_(int level, const char *file, int line,
-		     const uint8_t * data, int len, const char *format,
-		     ...)
+		     const uint8_t * data, int len, const char *format, ...)
 {
 
 	if (!(level & cw_dbg_opt_level))
@@ -254,6 +254,41 @@ cw_log_debug0_, cw_log_debug1_, cw_log_debug2_};
 
 
 
+
+
+
+
+int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id, const uint8_t * elem_data)
+{
+	switch (vendor_id) {
+		case CW_VENDOR_ID_CISCO:
+			{
+				sprintf(dst, "\n\t  Cisco Vendor Specific: %d - %s", elem_id,
+					cw_cisco_id_to_str(elem_id));
+
+				/* dive into LWAPP vendor specific decoding */
+				if (elem_id == CW_CISCO_SPAM_VENDOR_SPECIFIC) {
+					uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
+					char b[256];
+					sprintf(b, "\n\t   LWAPP Cisco Specific: %d - %s",
+						lw_elem_id, lw_cisco_id_to_str(lw_elem_id));
+					strcat(dst, b);
+
+
+
+				}
+				break;
+			}
+
+
+
+	}
+
+	return 0;
+}
+
+
+
 /**
  * print debug info for message elements
  */
@@ -265,13 +300,18 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 
 	const char *elemname;
 	char vendorname[256];
+	char vendor_details[265];
+	*vendor_details = 0;
+
 	if (msgelem == CW_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
-		int vendor = ntohl(*((uint32_t *) msgbuf));
+		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
 		sprintf(vendorname, "%s/%s/%d",
 			(char *) cw_msgelemtostr(msgelem),
-			(char *) cw_ianavendoridtostr(vendor), type);
+			(char *) lw_vendor_id_to_str(vendor_id), type);
 		elemname = vendorname;
+		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);
+
 	} else {
 		elemname = cw_msgelemtostr(msgelem);
 	}
@@ -279,16 +319,47 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 
 	if (!cw_dbg_is_level(DBG_ELEM_DMP))
 		cw_dbg(DBG_ELEM,
-		       "Reading %s msgelem, type=%d (%s), len=%d",
-		       cw_msgtostr(msg), msgelem, elemname, len);
+		       "%s, CAWPAP element: type=%d (%s), len=%d%s",
+		       cw_msgtostr(msg), msgelem, elemname, len, vendor_details);
 
 	else
 		cw_dbg_dmp(DBG_ELEM, msgbuf, len,
-			   "Reading %s msgelem, type=%d (%s), len=%d\n\t Dump ...",
-			   cw_msgtostr(msg), msgelem, elemname, len);
+			   "%s, CAPWAP element: type=%d (%s), len=%d%s\n\tDump ...",
+			   cw_msgtostr(msg), msgelem, elemname, len, vendor_details);
 }
 
 
+void lw_dbg_elem_(int msg_id, int elem_id, const uint8_t * elem_data, int elem_len)
+{
+	if (!cw_dbg_is_level(DBG_ELEM))
+		return;
+
+	const char *elem_name;
+	char vendorname[256];
+
+	if (elem_id == LW_ELEM_VENDOR_SPECIFIC) {
+		uint32_t vendor = lw_get_dword(elem_data);
+		int type = lw_get_word(elem_data + 4);
+		sprintf(vendorname, "%s/%s/%d",
+			(char *) lw_elem_id_to_str(elem_id),
+			(char *) lw_vendor_id_to_str(vendor), type);
+		elem_name = vendorname;
+	} else
+		elem_name = lw_elem_id_to_str(msg_id);
+
+
+	if (!cw_dbg_is_level(DBG_ELEM_DMP))
+		cw_dbg(DBG_ELEM,
+		       "%s, LWAPP element: type=%d (%s), len=%d",
+		       lw_msg_id_to_str(msg_id), elem_id, elem_name, elem_len);
+
+	else
+		cw_dbg_dmp(DBG_ELEM, elem_data, elem_len,
+			   "%s, LWAPP element: type=%d (%s), len=%d\n\tDump ...",
+			   lw_msg_id_to_str(msg_id), elem_id, elem_name, elem_len);
+
+
+}
 
 void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 {
@@ -298,13 +369,6 @@ void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 	if (cw_is_missing_mand_elems(mand)) {
 		char str[512];
 		cw_get_missing_mand_elems(str, mand);
-		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s",
-		       cw_msgtostr(msgtype), str);
+		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s", cw_msgtostr(msgtype), str);
 	}
 }
-
-
-
-
-
-

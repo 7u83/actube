@@ -21,9 +21,9 @@
 #include "capwap_80211.h"
 
 
-const char * cw_msgelemtostr(int elem)
+const char * cw_msgelemtostr(int elem_id)
 {
-	switch (elem){
+	switch (elem_id){
 		case CW_ELEM_AC_DESCRIPTOR:
 			return "AC Descriptor";
 		case CW_ELEM_AC_IPV4_LIST:
@@ -98,12 +98,10 @@ const char * cw_msgelemtostr(int elem)
 		case CWMSGELEM_RADIO_ADMINISTRATIVE_STATE:
 			return "radio administrative state";
 
-		case CWMSGELEM_RADIO_OPERATIONAL_STATE:
+		case CW_ELEM_RADIO_OPERATIONAL_STATE:
 			return "Radio Operational State";
 
-/*   Radio Operational State                              32
-*/
-		case CWMSGELEM_RESULT_CODE:
+		case CW_ELEM_RESULT_CODE:
 			return "Result Code";
 
 /*   Returned Message Element                             34
@@ -111,7 +109,7 @@ const char * cw_msgelemtostr(int elem)
 		case CW_ELEM_SESSION_ID:
 			return "Session ID";
 
-		case CWMSGELEM_STATISTICS_TIMER:
+		case CW_ELEM_STATISTICS_TIMER:
 			return "Statistics Timer";
 
 		case CW_ELEM_VENDOR_SPECIFIC_PAYLOAD:

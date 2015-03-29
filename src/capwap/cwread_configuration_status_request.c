@@ -76,7 +76,7 @@ void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg
 		CW_ELEM_AC_NAME,
 		CWMSGELEM_WTP_REBOOT_STATISTICS,
 		CWMSGELEM_RADIO_ADMINISTRATIVE_STATE,
-		CWMSGELEM_STATISTICS_TIMER,
+		CW_ELEM_STATISTICS_TIMER,
 		-1};
 
 	struct eparm eparm;

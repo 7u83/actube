@@ -31,8 +31,8 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_getbroadcastaddr.o \
 	 sock_addrinit.o \
 	 sock_set_dontfrag.o \
-	 sock_get_primary_if.o
-	 #sock_receive.o 
+	 sock_get_primary_if.o \
+	 sock_receive.o  \
 
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
@@ -95,12 +95,10 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_wtp_board_data.o \
 	   cwmsg_addelem_cw_local_ip_addr.o \
 	   cwmsg_addelem_mtu_discovery_padding.o \
-	   cwmsg_addelem_result_code.o \
 	   cwmsg_addelem_ac_timestamp.o \
 	cw_addelem_vendor_specific_payload.o \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
-	cwmsg_addelem_radio_operational_state.o \
 	   cwmsg_send.o \
 	cwsend_change_state_event_response.o \
 	cwsend_unknow_response.o \
@@ -109,6 +107,7 @@ CAPWAPOBJS= \
 	   cwsend_discovery_request.o \
 	cw_read_image_data_request.o \
 	cw_send_image_data_response.o \
+	cw_send_configuration_update_response.o \
 	   cwsend_join_request.o \
 	   cwsend_join_response.o \
 	   cwread_join_response.o \
@@ -158,10 +157,15 @@ CAPWAPOBJS= \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	lw_readelem_wtp_board_data.o \
 	cw_readmsg_configuration_status_response.o \
+	cw_readmsg_configuration_status_request.o \
 	cw_cisco_id_to_str.o\
+	cw_readelem_cisco_wtp_radio_cfg.o \
+	cw_addelem_cisco_wtp_radio_cfg.o
 
 	
 	   #cw_ianavendoridtostr.o \
+	   #cwmsg_addelem_result_code.o \
+#	cwmsg_addelem_radio_operational_state.o \
 
 #	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 #	cwmsg_addelem_vendor_specific_payload.o \
@@ -217,10 +221,12 @@ CONNOBJS= conn_create.o \
 	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
 	cw_prepare_configuration_status_request.o \
+	cw_prepare_change_state_event_request.o \
 	conn_prepare_request.o \
 	conn_prepare_image_data_request.o \
 	conn_send_request.o \
 	conn_wait_for_message.o \
+	conn_wait_for_request.o \
 	conn_init.o
 
 

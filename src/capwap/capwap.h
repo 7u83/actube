@@ -108,23 +108,23 @@ struct capwap_ctrlhdr
 #define CW_MSG_CONFIGURATION_STATUS_REQUEST	5
 #define CW_MSG_CONFIGURATION_STATUS_RESPONSE	6
 
-#define CWMSG_CONFIGURATION_UPDATE_REQUEST	7
-#define CWMSG_CONFIGURATION_UPDATE_RESPONSE	8
+#define CW_MSG_CONFIGURATION_UPDATE_REQUEST	7
+#define CW_MSG_CONFIGURATION_UPDATE_RESPONSE	8
 
 #define CWMSG_WTP_EVENT_REQUEST			9
 #define CWMSG_WTP_EVENT_RESPONSE		10
 
-#define CWMSG_CHANGE_STATE_EVENT_REQUEST	11
-#define CWMSG_CHANGE_STATE_EVENT_RESPONSE	12
+#define CW_MSG_CHANGE_STATE_EVENT_REQUEST	11
+#define CW_MSG_CHANGE_STATE_EVENT_RESPONSE	12
 
-#define CWMSG_ECHO_REQUEST			13
-#define CWMSG_ECHO_RESPONSE			14
+#define CW_MSG_ECHO_REQUEST			13
+#define CW_MSG_ECHO_RESPONSE			14
 
-#define CWMSG_IMAGE_DATA_REQUEST		15
-#define CWMSG_IMAGE_DATA_RESPONSE		16
+#define CW_MSG_IMAGE_DATA_REQUEST		15
+#define CW_MSG_IMAGE_DATA_RESPONSE		16
 
-#define CWMSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
+#define CW_MSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
+#define CW_MSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
 
 #define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 + CWIANA_ENTERPRISE_NUMBER*256
 #define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 + CWIANA_ENTERPRISE_NUMBER*256
@@ -150,6 +150,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_AC_IPV6_LIST			3
 #define CW_ELEM_AC_NAME				4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY		5
+#define CW_ELEM_AC_NAME_WITH_INDEX		5	/* Draft 7 */
 #define CW_ELEM_AC_TIMESTAMP			6
 
 /*   Add MAC ACL Entry                                     7
@@ -198,14 +199,14 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_MTU_DISCOVERY_PADDING		52
 
 #define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE	31
-#define CWMSGELEM_RADIO_OPERATIONAL_STATE	32
+#define CW_ELEM_RADIO_OPERATIONAL_STATE		32
 
-#define CWMSGELEM_RESULT_CODE			33
+#define CW_ELEM_RESULT_CODE			33
 
 /*   Returned Message Element                             34
 */
 #define CW_ELEM_SESSION_ID			35
-#define CWMSGELEM_STATISTICS_TIMER		36
+#define CW_ELEM_STATISTICS_TIMER		36
 
 #define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD		37
 
@@ -365,7 +366,7 @@ extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn *conn)
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg, struct radioinfo *radioinfos);
 
-extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
+//extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
 extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id, int type,
 						  uint8_t * payload, int len);
 
@@ -497,7 +498,8 @@ extern int cw_send_echo_response(struct conn *conn, int seqnum, struct radioinfo
 extern int cw_handle_echo_request(void *d);
 extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
-extern int cw_readmsg_configuration_status_response(uint8_t *elems,int elems_len);
+extern int cw_readmsg_configuration_status_response(uint8_t * elems, int elems_len);
+extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len);
 
 
 
@@ -507,6 +509,7 @@ extern int cw_readmsg_configuration_status_response(uint8_t *elems,int elems_len
 #define cw_put_word lw_put_word
 #define cw_put_dword lw_put_dword
 #define cw_put_data lw_put_data
+#define cw_put_bstr lw_put_bstr
 
 #define cw_get_byte lw_get_byte
 #define cw_get_word lw_get_word
@@ -575,7 +578,7 @@ extern int cw_readmsg_configuration_status_response(uint8_t *elems,int elems_len
  *   print_message(i);
  *   ...
  * }
- */ 
+ */
 #define cw_foreach_elem(i,elems,len) for(i=elems; i<elems+len; i=i+4+cw_get_elem_len(i))
 
 
@@ -599,11 +602,13 @@ extern int cw_readmsg_configuration_status_response(uint8_t *elems,int elems_len
  * @len length of vendor specific data 
  * @return the number of bytes put (always 10)
  */
-static inline int cw_put_elem_vendor_hdr(uint8_t *dst,uint32_t vendorid,uint16_t elemid,uint16_t len){
-	
-	cw_put_elem_hdr(dst,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,len+6);
-	cw_put_dword(dst+4,vendorid);
-	cw_put_word(dst+8,elemid);
+static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid, uint16_t elemid,
+					 uint16_t len)
+{
+
+	cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
+	cw_put_dword(dst + 4, vendorid);
+	cw_put_word(dst + 8, elemid);
 	return 10;
 }
 
@@ -615,18 +620,35 @@ static inline int cw_put_elem_vendor_hdr(uint8_t *dst,uint32_t vendorid,uint16_t
  * @data pointer to data
  * @length of message element 
  * @return the number of bytes put
- */ 
+ */
 static inline int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len)
 {
 	int l = cw_put_elem_hdr(dst, type, len);
-	return l + cw_put_data(dst+l, data, len);
+	return l + cw_put_data(dst + l, data, len);
 }
 
 
-static inline int cw_addelem_bstr(uint8_t *dst, uint16_t type, const bstr_t bstr)
+static inline int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr)
 {
-	return cw_addelem(dst,type,bstr_data(bstr),bstr_len(bstr));	
+	return cw_addelem(dst, type, bstr_data(bstr), bstr_len(bstr));
 }
+
+
+static inline int cw_addelem_result_code(uint8_t *dst,uint32_t code)
+{
+	cw_put_dword(dst+4,code);
+	return 4+ cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
+}
+
+
+static inline int cw_addelem_radio_operational_state(uint8_t *dst, struct radioinfo * ri)
+{
+	cw_put_byte(dst+4+0,ri->rid);
+	cw_put_byte(dst+4+1,ri->state);
+	cw_put_byte(dst+4+2,ri->cause);
+	return 3+ cw_put_elem_hdr(dst, CW_ELEM_RADIO_OPERATIONAL_STATE, 3);
+}
+
 
 /*
 #define cw_put_elem_vendor_hdr(dst,vendorid,elemid,len)\
@@ -651,7 +673,12 @@ extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid, 
 					      uint8_t * data, uint16_t len);
 
 
-extern void cw_prepare_configuration_status_request(struct conn * conn, struct radioinfo * radioinfo, struct wtpinfo *wtpinfo);
+extern void cw_prepare_configuration_status_request(struct conn *conn, struct radioinfo *radioinfo,
+						    struct wtpinfo *wtpinfo);
+extern void cw_prepare_change_state_event_request(struct conn *conn, struct radioinfo *radioinfo,
+						  struct wtpinfo *wtpinfo);
+
+extern int cw_send_configuration_update_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo);
 
 
 #define cw_addelem_ac_name(dst,name) \
@@ -672,5 +699,11 @@ extern void cw_prepare_configuration_status_request(struct conn * conn, struct r
 
 #define cwmsg_addelem_session_id(cwmsg,sessid) \
 	(cwmsg)->pos+=cw_addelem_session_id((cwmsg)->msgelems+(cwmsg)->pos,sessid)
+
+#define cwmsg_addelem_result_code(cwmsg,code) \
+	(cwmsg)->pos+=cw_addelem_result_code((cwmsg)->msgelems+(cwmsg)->pos,code)
+
+#define cwmsg_addelem_radio_operational_state(cwmsg,ri) \
+	(cwmsg)->pos+=cw_addelem_radio_operational_state((cwmsg)->msgelems+(cwmsg)->pos,ri)
 
 #endif

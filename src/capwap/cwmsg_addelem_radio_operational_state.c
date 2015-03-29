@@ -11,5 +11,5 @@ void cwmsg_addelem_radio_operational_state(struct cwmsg * cwmsg, struct radioinf
 	s[1]=ri->state;
 	s[2]=ri->cause;
 
-	cwmsg_addelem(cwmsg,CWMSGELEM_RADIO_OPERATIONAL_STATE,s,3);
+	cwmsg_addelem(cwmsg,CW_ELEM_RADIO_OPERATIONAL_STATE,s,3);
 }

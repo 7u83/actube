@@ -46,12 +46,31 @@ const char * cw_cisco_id_to_str(int elem_id)
 
 		case CW_CISCO_SPAM_VENDOR_SPECIFIC:
 			return "LWAPP Vendor Specific";
-		case CW_CISCO_STATION_CFG:
-			return "Station CFG";
+		case CW_CISCO_WTP_RADIO_CFG:
+			return "WTP Radio CFG";
 		case CW_CISCO_AP_REGULATORY_DOMAIN:
 			return "AP Regulatory Domain";
 		case CW_CISCO_WTP_BOARD_DATA:
 			return "WTP Board Data";
+
+		case CW_CISCO_MULTI_DOMAIN_CAPAB:
+			return "Multi Domain Capability";
+
+		case CW_CISCO_AP_STATIC_IP_ADDR:
+			return "AP Static IP Addr";
+		case CW_CISCO_AP_DOMAIN:
+			return "AP Domain";
+		case CW_CISCO_AP_DNS:
+			return "AP DNS";
+		case CW_CISCO_AC_NAME_WITH_INDEX:
+			return "AC Name with Index";
+		case CW_CISCO_AC_IPV4_LIST:
+			return "AC IPv4 List";
+
+		case CW_CISCO_LOCATION_DATA:
+			return "Location Data";
+		case CW_CISCO_STATISTICS_TIMER:
+			return "Statistics Timer";
 
 		default:
 			return "Unknown";
