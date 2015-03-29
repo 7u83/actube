@@ -173,11 +173,13 @@ struct capwap_ctrlhdr
 */
 #define CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD	16
 //   Decryption Error Report Period                       16
-/*
-   Delete MAC ACL Entry                                 17
-   Delete Station                                       18
-   Reserved                                             19
-*/
+
+#define CW_ELEM_DELETE_MAC_ACL_ENTRY		17
+
+#define CW_ELEM_DELETE_STATION			18
+
+#define CW_ELEM_RESEERVED_19			19
+
 #define CWMSGELEM_DISCOVERY_TYPE		20
 
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS		21
@@ -186,10 +188,9 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_ECN_SUPPORT			53
 
 #define CW_ELEM_IDLE_TIMEOUT			23
+#define CW_ELEM_IMAGE_DATA			24
+#define CW_ELEM_IMAGE_IDENTIFIER		25
 
-#define CWMSGELEM_IMAGE_DATA			24
-
-#define CWMSGELEM_IMAGE_IDENTIFIER		25
   /* Image Information                                    26
      Initiate Download                                    27
    */
@@ -231,8 +232,7 @@ struct capwap_ctrlhdr
 
 #define CWMSGELEM_WTP_STATIC_IP_ADDRESS_INFO	49
 
-/*   WTP Static IP Address Information                    49
-*/
+#define CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION	49
 
 /* Cisco's CAPWAP definitions (CAPWAP draft 7)*/
 #define	CW_ELEM_WTP_IPV4_IP_ADDRESS		42

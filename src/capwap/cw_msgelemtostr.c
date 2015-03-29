@@ -77,21 +77,21 @@ const char * cw_msgelemtostr(int elem_id)
 		case CW_ELEM_IDLE_TIMEOUT:
 			return "Idle Timeout";
 
-		case CWMSGELEM_IMAGE_DATA:
-			return "image data";
+		case CW_ELEM_IMAGE_DATA:
+			return "Image Data";
 
-		case CWMSGELEM_IMAGE_IDENTIFIER:
-			return "image identifier";
+		case CW_ELEM_IMAGE_IDENTIFIER:
+			return "Image Identifier";
 
 
   /* Image Information                                    26
    Initiate Download                                    27
    */
 		case CWMSGELEM_LOCATION_DATA:
-			return "location data";
+			return "Location Data";
 
 		case CWMSGELEM_MAXIMUM_MESSAGE_LENGTH:
-			return "max msg len";
+			return "Maximum Message Length";
 		case CWMSGELEM_MTU_DISCOVERY_PADDING:
 			return "mtu discovery padding";
 
@@ -148,10 +148,11 @@ const char * cw_msgelemtostr(int elem_id)
 
 
 		case CWMSGELEM_WTP_REBOOT_STATISTICS:
-			return "wtp reboot statistics";
+			return "WTP Reboot Statistics";
+
+		case CW_ELEM_STATIC_IP_ADDRESS_INFORMATION:	/*49*/
+			return "WTP Static IP Addr Info";
  
-/*   WTP Static IP Address Information                    49
-*/
 
 
 
