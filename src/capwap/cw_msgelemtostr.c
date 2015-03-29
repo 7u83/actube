@@ -136,11 +136,11 @@ const char * cw_msgelemtostr(int elem_id)
 /*
    Reserved                                             43
 */   
-		case CWMSGELEM_WTP_MAC_TYPE:
-			return "mac type";
+		case CW_ELEM_WTP_MAC_TYPE:
+			return "Mac Type";
 
-		case CWMSGELEM_WTP_NAME:
-			return "wtp name";
+		case CW_ELEM_WTP_NAME:
+			return "WTP Name";
 /*   
    Unused/Reserved                                      46
    WTP Radio Statistics                                 47
@@ -150,7 +150,7 @@ const char * cw_msgelemtostr(int elem_id)
 		case CWMSGELEM_WTP_REBOOT_STATISTICS:
 			return "WTP Reboot Statistics";
 
-		case CW_ELEM_STATIC_IP_ADDRESS_INFORMATION:	/*49*/
+		case CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION:	/*49*/
 			return "WTP Static IP Addr Info";
  
 

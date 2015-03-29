@@ -74,9 +74,6 @@ enum capwapmodes {
 #define CWTH_WBID_EPCGLOBAL	3
 
 
-
-
-
 #define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
 #define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
 
@@ -100,10 +97,10 @@ struct capwap_ctrlhdr
 
 /* CAPWAP message types as defined in RFC 5416 */
 
-#define	CWMSG_DISCOVERY_REQUEST			1 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_DISCOVERY_RESPONSE		2 + CWIANA_ENTERPRISE_NUMBER*256
-#define	CWMSG_JOIN_REQUEST			3 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_JOIN_RESPONSE			4 + CWIANA_ENTERPRISE_NUMBER*256
+#define	CW_MSG_DISCOVERY_REQUEST		1 
+#define CW_MSG_DISCOVERY_RESPONSE		2 
+#define	CWMSG_JOIN_REQUEST			3 
+#define CWMSG_JOIN_RESPONSE			4 
 
 #define CW_MSG_CONFIGURATION_STATUS_REQUEST	5
 #define CW_MSG_CONFIGURATION_STATUS_RESPONSE	6
@@ -123,11 +120,11 @@ struct capwap_ctrlhdr
 #define CW_MSG_IMAGE_DATA_REQUEST		15
 #define CW_MSG_IMAGE_DATA_RESPONSE		16
 
-#define CW_MSG_RESET_REQUEST			17 + CWIANA_ENTERPRISE_NUMBER*256
-#define CW_MSG_RESET_RESPONSE			18 + CWIANA_ENTERPRISE_NUMBER*256
+#define CW_MSG_RESET_REQUEST			17
+#define CW_MSG_RESET_RESPONSE			18 
 
-#define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 + CWIANA_ENTERPRISE_NUMBER*256
-#define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 
+#define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 
 
 /*           Data Transfer Request               21
            Data Transfer Response              22
@@ -137,107 +134,75 @@ struct capwap_ctrlhdr
            Station Configuration Response      26
 */
 
-#define CWMSG_MAXMSG				26 + CWIANA_ENTERPRISE_NUMBER*256
+#define CWMSG_MAXMSG				26 
 
 
 /*
-* CAPWAP message elements as defined in  RFC 5416  
+* CAPWAP message elements as defined in  RFC 5415
 */
 
 
-#define CW_ELEM_AC_DESCRIPTOR			1
-#define CW_ELEM_AC_IPV4_LIST			2
-#define CW_ELEM_AC_IPV6_LIST			3
-#define CW_ELEM_AC_NAME				4
-#define CW_ELEM_AC_NAME_WITH_PRIORITY		5
-#define CW_ELEM_AC_NAME_WITH_INDEX		5	/* Draft 7 */
-#define CW_ELEM_AC_TIMESTAMP			6
+#define CW_ELEM_AC_DESCRIPTOR				1
+#define CW_ELEM_AC_IPV4_LIST				2
+#define CW_ELEM_AC_IPV6_LIST				3
+#define CW_ELEM_AC_NAME					4
+#define CW_ELEM_AC_NAME_WITH_PRIORITY			5
+#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 */
+#define CW_ELEM_AC_TIMESTAMP				6
 
-/*   Add MAC ACL Entry                                     7
-   Add Station                                           8
-   Reserved                                              9
-*/
-#define CWMSGELEM_CONTROL_IPV4_ADDRESS		10
-#define CWMSGELEM_CONTROL_IPV6_ADDRESS		11
-
-#define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS	30
-#define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS	50
-
-
-
-#define CW_ELEM_CAPWAP_TIMERS			12
-/*   CAPWAP Transport Protocol                            51
-   Data Transfer Data                                   13
-   Data Transfer Mode                                   14
-   Decryption Error Report                              15
-*/
-#define CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD	16
-//   Decryption Error Report Period                       16
-
-#define CW_ELEM_DELETE_MAC_ACL_ENTRY		17
-
-#define CW_ELEM_DELETE_STATION			18
-
-#define CW_ELEM_RESEERVED_19			19
-
-#define CWMSGELEM_DISCOVERY_TYPE		20
-
-#define CW_ELEM_DUPLICATE_IPV4_ADDRESS		21
-#define CW_ELEM_DUPLICATE_IPV6_ADRESS		22
-
-#define CWMSGELEM_ECN_SUPPORT			53
-
-#define CW_ELEM_IDLE_TIMEOUT			23
-#define CW_ELEM_IMAGE_DATA			24
-#define CW_ELEM_IMAGE_IDENTIFIER		25
-
-  /* Image Information                                    26
-     Initiate Download                                    27
-   */
-#define CWMSGELEM_LOCATION_DATA			28
-
-#define CWMSGELEM_MAXIMUM_MESSAGE_LENGTH	29
-#define CWMSGELEM_MTU_DISCOVERY_PADDING		52
-
-#define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE	31
-#define CW_ELEM_RADIO_OPERATIONAL_STATE		32
-
-#define CW_ELEM_RESULT_CODE			33
-
-/*   Returned Message Element                             34
-*/
-#define CW_ELEM_SESSION_ID			35
-#define CW_ELEM_STATISTICS_TIMER		36
-
-#define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD		37
-
-#define CWMSGELEM_WTP_BOARD_DATA		38
-
-#define CWMSGELEM_WTP_DESCRIPTOR		39
-#define CW_ELEM_WTP_FALLBACK			40
-
-#define CWMSGELEM_WTP_FRAME_TUNNEL_MODE		41
-#define CWMSGELEM_RESERVED_1			42
-
-/*
-   Reserved                                             43
-*/
-#define CWMSGELEM_WTP_MAC_TYPE			44
-#define CWMSGELEM_WTP_NAME			45
-/*   
-   Unused/Reserved                                      46
-   WTP Radio Statistics                                 47
-*/
-#define CWMSGELEM_WTP_REBOOT_STATISTICS		48
-
-#define CWMSGELEM_WTP_STATIC_IP_ADDRESS_INFO	49
-
+#define CW_ELEM_ADD_MAC_ACL_ENTRY			7
+#define CW_ELEM_ADD_STATION				8
+#define CW_ELEM_RESERVED_9				9
+#define CWMSGELEM_CONTROL_IPV4_ADDRESS			10
+#define CWMSGELEM_CONTROL_IPV6_ADDRESS			11
+#define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS		30
+#define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS		50
+#define CW_ELEM_CAPWAP_TIMERS				12
+#define CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL		51     /* not in draft 7 */
+#define CW_ELEM_DATA_TRANSFER_DATA			13
+#define CW_ELEM_DATA_TRANSFER_MODE			14
+#define CW_ELEM_DECRYPTION_ERROR_REPORT			15
+#define CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD		16
+#define CW_ELEM_DELETE_MAC_ACL_ENTRY			17
+#define CW_ELEM_DELETE_STATION				18
+#define CW_ELEM_RESEERVED_19				19
+#define CWMSGELEM_DISCOVERY_TYPE			20
+#define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
+#define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
+#define CWMSGELEM_ECN_SUPPORT				53
+#define CW_ELEM_IDLE_TIMEOUT				23
+#define CW_ELEM_IMAGE_DATA				24
+#define CW_ELEM_IMAGE_IDENTIFIER			25
+#define CW_ELEM_IMAGE_INFORMATION			26
+#define CW_ELEM_INITIATE_DOWNLOAD			27
+#define CWMSGELEM_LOCATION_DATA				28
+#define CWMSGELEM_MAXIMUM_MESSAGE_LENGTH		29
+#define CWMSGELEM_MTU_DISCOVERY_PADDING			52
+#define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE		31
+#define CW_ELEM_RADIO_OPERATIONAL_STATE			32
+#define CW_ELEM_RESULT_CODE				33
+#define CW_ELEM_RETURNED_MESSAGE_ELEMENT		34
+#define CW_ELEM_SESSION_ID				35
+#define CW_ELEM_STATISTICS_TIMER			36
+#define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD			37
+#define CWMSGELEM_WTP_BOARD_DATA			38
+#define CWMSGELEM_WTP_DESCRIPTOR			39
+#define CW_ELEM_WTP_FALLBACK				40
+#define CWMSGELEM_WTP_FRAME_TUNNEL_MODE			41
+#define CW_ELEM_RESERVED_42				42
+#define CW_ELEM_RESERVED_43				43
+#define CW_ELEM_WTP_MAC_TYPE				44
+#define CW_ELEM_WTP_NAME				45
+#define CW_ELEM_RESERVED_46				46
+#define CW_ELEM_WTP_RADIO_STATISTICS			47
+#define CWMSGELEM_WTP_REBOOT_STATISTICS			48
 #define CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION	49
+#define CW_ELEM_WTP_STATIC_IP_ADDR_INFO			49
 
-/* Cisco's CAPWAP definitions (CAPWAP draft 7)*/
-#define	CW_ELEM_WTP_IPV4_IP_ADDRESS		42
-#define	CW_ELEM_WTP_IPV6_IP_ADDRESS		43
 
+/* Cisco's CAPWAP definitions (CAPWAP draft 7) */
+#define	CW_ELEM_WTP_IPV4_IP_ADDRESS			42
+#define	CW_ELEM_WTP_IPV6_IP_ADDRESS			43
 
 
 /* pseudo message elements, defined for libcapwap */
@@ -437,28 +402,24 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
 
 
-#define CW_RESULT_SUCCESS				0
-#define CW_RESULT_FAILURE				1
-#define CW_RESULT_SUCCESS_NAT				2
-#define CW_RESULT_JOIN_FAILURE				3
-#define CW_RESULT_JOIN_RESOURCE_DEPLETION		4
-#define CW_RESULT_JOIN_UNKNOWN_SOURCE			5
+#define CW_RESULT_SUCCESS					0
+#define CW_RESULT_FAILURE					1
+#define CW_RESULT_SUCCESS_NAT					2
+#define CW_RESULT_JOIN_FAILURE					3
+#define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
+#define CW_RESULT_JOIN_UNKNOWN_SOURCE				5
+#define CW_RESULT_JOIN_FAILURE_INCORRECT_DATA			6
+#define CW_RESULT_JOIN_FAILURE_SESSION_ALREADY_IN_USE		7 
+#define CW_RESULT_JOIN_FAILURE_WTP_HARDWARE_NOT_SUPPORTED	8 
+#define CW_RESULT_JOIN_FAILURE_BINDING_NOT_SUPPORTED		9 
+#define CW_RESULT_RESET_FAILURE_UNABLE_TO_RESET			10 
 
+#define CW_RESULT_RESET_FAILURE_FIRMWARE_WRITE_ERROR		11 
+
+#define CW_RESULT_CONFIGURATION_FAILURE				12 //Configuration Failure (Unable to Apply Requested Configuration
+
+//         - Service Provided Anyhow)
 /*
-     6  Join Failure (Incorrect Data)
-
-      7  Join Failure (Session ID Already in Use)
-
-      8  Join Failure (WTP Hardware Not Supported)
-
-      9  Join Failure (Binding Not Supported)
-
-      10 Reset Failure (Unable to Reset)
-
-      11 Reset Failure (Firmware Write Error)
-
-      12 Configuration Failure (Unable to Apply Requested Configuration
-         - Service Provided Anyhow)
 
       13 Configuration Failure (Unable to Apply Requested Configuration
          - Service Not Provided)

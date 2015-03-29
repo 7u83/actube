@@ -105,9 +105,9 @@ void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 		CWMSGELEM_LOCATION_DATA,
 		CWMSGELEM_WTP_BOARD_DATA,
 		CWMSGELEM_WTP_DESCRIPTOR,
-		CWMSGELEM_WTP_NAME,
+		CW_ELEM_WTP_NAME,
 		CWMSGELEM_WTP_FRAME_TUNNEL_MODE,
-		CWMSGELEM_WTP_MAC_TYPE,
+		CW_ELEM_WTP_MAC_TYPE,
 		CWMSGELEM_ECN_SUPPORT,
 		XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS,
 		XCWMSGELEM_CAPWAP_RADIO_INFO,
@@ -122,7 +122,7 @@ void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 	cw_foreach_msgelem(msg, len, process_elem,
 			   &eparm);
 
-	cw_dbg_missing_mand_elems_(0, CWMSG_DISCOVERY_REQUEST, eparm.mand);
+	cw_dbg_missing_mand_elems_(0, CWMSG_JOIN_REQUEST, eparm.mand);
 
 }
 

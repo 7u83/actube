@@ -72,6 +72,41 @@ const char * cw_cisco_id_to_str(int elem_id)
 		case CW_CISCO_STATISTICS_TIMER:
 			return "Statistics Timer";
 
+		case CW_CISCO_AP_MODE_AND_TYPE:
+			return "AP Mode and Type";
+
+		case CW_CISCO_ADD_WLAN:
+			return "Add WLAN";
+
+		case CW_CISCO_MWAR_ADDR:
+			return "MWAR Addr";
+
+		case CW_CISCO_BOARD_DATA_OPTIONS:
+			return "WTP Board Data Options";
+		case CW_CISCO_AP_RESET_BUTTON_STATE:
+			return "Reset Button State";
+
+		case CW_CISCO_MAC_OPERATION:
+			return "Mac Operation";
+
+		case CW_CISCO_TX_POWER:
+			return "TX Power";
+		case CW_CISCO_TX_POWER_LEVELS:
+			return "TX Power Levels";
+		case CW_CISCO_DIRECT_SEQUENCE_CONTROL:
+			return "Direct Sequence Control";
+		case CW_CISCO_AP_MODEL:
+			return "AP Model";
+		case CW_CISCO_AP_MINIOS_VERSION:
+			return "AP MiniOS Version";
+		case CW_CISCO_LWAPP_CHANNEL_POWER:
+			return "LWAPP Channel Power";
+		case CW_CISCO_ANTENNA_PAYLOAD:
+			return "Antenna Payload";
+		case CW_CISCO_SUPPORTED_RATES:
+			return "Supported Rates";
+
+
 		default:
 			return "Unknown";
 

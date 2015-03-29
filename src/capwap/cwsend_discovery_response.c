@@ -36,7 +36,7 @@ void cwsend_discovery_response(struct conn *conn, int seqnum, struct radioinfo *
 	       seqnum);
 
 	struct cwmsg *cwmsg = &conn->resp_msg;
-	cwmsg_init(cwmsg, conn->resp_buffer, CWMSG_DISCOVERY_RESPONSE, seqnum, NULL);
+	cwmsg_init(cwmsg, conn->resp_buffer, CW_MSG_DISCOVERY_RESPONSE, seqnum, NULL);
 	cwmsg->capwap_mode = conn->capwap_mode;
 
 

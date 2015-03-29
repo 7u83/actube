@@ -35,7 +35,7 @@ static int wtpinfo_readelem_discovery_req(void *eparm, int type,
 					  uint8_t * msgelem, int len)
 {
 	struct eparm *e = (struct eparm *) eparm;
-	cw_dbg_msgelem(CWMSG_DISCOVERY_REQUEST, type, msgelem, len);
+	cw_dbg_msgelem(CW_MSG_DISCOVERY_REQUEST, type, msgelem, len);
 
 	/* mandatory message elements */
 	if (wtpinfo_readelem_discovery_type
@@ -66,7 +66,7 @@ static int wtpinfo_readelem_discovery_req(void *eparm, int type,
 		return 1;
 
 	if (cw_readelem_vendor_specific_payload
-	    (e->wtpinfo, CWMSG_DISCOVERY_REQUEST, type, msgelem, len))
+	    (e->wtpinfo, CW_MSG_DISCOVERY_REQUEST, type, msgelem, len))
 		return 1;
 
 	return 0;
@@ -84,7 +84,7 @@ void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg,
 		CWMSGELEM_WTP_BOARD_DATA,
 		CWMSGELEM_WTP_DESCRIPTOR,
 		CWMSGELEM_WTP_FRAME_TUNNEL_MODE,
-		CWMSGELEM_WTP_MAC_TYPE,
+		CW_ELEM_WTP_MAC_TYPE,
 		CWMSGELEM_80211_WTP_RADIO_INFO,
 		-1
 	};
@@ -96,5 +96,5 @@ void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg,
 	cw_foreach_msgelem(msg, len, wtpinfo_readelem_discovery_req,
 			   &eparm);
 
-	cw_dbg_missing_mand_elems_(0, CWMSG_DISCOVERY_REQUEST, eparm.mand);
+	cw_dbg_missing_mand_elems_(0, CW_MSG_DISCOVERY_REQUEST, eparm.mand);
 }

@@ -39,7 +39,7 @@ struct eparm {
 
 static int acinfo_readelem_discovery_resp(void * eparm,int type,uint8_t* msgelem,int len)
 {
-	cw_dbg_msgelem(CWMSG_DISCOVERY_RESPONSE, type, msgelem, len);
+	cw_dbg_msgelem(CW_MSG_DISCOVERY_RESPONSE, type, msgelem, len);
 	
 	struct eparm *e = (struct eparm *) eparm;
 
@@ -84,7 +84,7 @@ void cwread_discovery_response(struct ac_info * acinfo, uint8_t * msg, int len)
 
 	cw_foreach_msgelem(msg,len,acinfo_readelem_discovery_resp,&eparm);
 
-	cw_dbg_missing_mand_elems_(0, CWMSG_DISCOVERY_RESPONSE, eparm.mand);
+	cw_dbg_missing_mand_elems_(0, CW_MSG_DISCOVERY_RESPONSE, eparm.mand);
 }
 
 
