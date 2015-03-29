@@ -36,7 +36,7 @@ AP = RAD = WTP
 8. Cisco WTP Radio Configuration
 
    See RFC 5412 - LWAPP 80211 WTP WLAN Radio Configuration. This Cisco 
-   CAPWAP element is slightly different.
+   CAPWAP element is slightly different from LWAPP.
 
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -184,7 +184,7 @@ AP = RAD = WTP
    +-+-+-+-+-+-+-+-+
 
    Type: 126
-   Length: 7
+   Length: 5
 
 
 
@@ -275,12 +275,17 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 20. Cisco AP Username Password
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                       Username (32 bytes) ...                         
+   |                       Username (33 bytes) ...                         
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
                              ... Username                          |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    |                         Password hash ...                        
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+   
+
+   Username: 
+	0-terminated username, the field has to fillid up with zeros.
 
 
 
@@ -293,6 +298,36 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
    Type: 44
    Length: 2
+
+
+
+54. AP Mode and Type
+
+   The AP Mode and Type message element is used to configure a WTP to
+   operate in a specific mode.
+
+    0                   1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Mode      |     Type      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+   Type:   54 for AP  Mode and Type
+
+   Length:   2
+
+   Mode:   An 8-bit value describing the type of information being sent.
+      The following values are supported:
+
+      0 -  Split MAC
+      2 -  Local MAC
+
+   Type: AP Type 
+
+      4 -  
+
+
 
 
 73. Cisco Path MTU

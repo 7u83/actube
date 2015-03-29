@@ -59,7 +59,7 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 	cwmsg_addelem_wtp_descriptor(&cwmsg, wtpinfo);
 
 	/* wtp name */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_NAME, wtpinfo->name, strlen((char *) wtpinfo->name));
+	cwmsg_addelem(&cwmsg, CW_ELEM_WTP_NAME, wtpinfo->name, strlen((char *) wtpinfo->name));
 
 	/* session id */
 	cwmsg_addelem_session_id(&cwmsg, wtpinfo->session_id);
@@ -69,7 +69,7 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 		      sizeof(uint8_t));
 
 	/* WTP MAC type */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
+	cwmsg_addelem(&cwmsg, CW_ELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
 
 
 	/* local ip address */

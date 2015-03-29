@@ -44,7 +44,10 @@ const char * lw_elem_id_to_str(int elem_id)
 
 
 		case LW_ELEM_80211_WTP_WLAN_RADIO_CONFIGURATION:
-			return "80211 WTP Wlan Radio Configuration";
+			return "80.211 WTP Wlan Radio Configuration";
+
+		case LW_ELEM_80211_WTP_MODE_AND_TYPE:
+			return "802.11 WTP Mode and Type";
 
 
 

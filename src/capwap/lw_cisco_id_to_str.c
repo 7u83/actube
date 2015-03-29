@@ -14,6 +14,9 @@ const char * lw_cisco_id_to_str(int elem_id)
 			return "AP Username and Password";
 		case LW_CISCO_AC_IP_ADDR_WITH_INDEX:
 			return "AC IP Addr with Index";
+		case LW_CISCO_AP_SUBMODE:
+			return "AP Submode";
+
 		default: 
 			return "Unknown";
 

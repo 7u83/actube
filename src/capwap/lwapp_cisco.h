@@ -28,10 +28,12 @@
 
 /* Vendor specific message elements LWAPP Cisco */
 
-#define LW_CISCO_AP_USERNAME_PASSWORD		20
+#define LW_CISCO_AP_USERNAME_PASSWORD		18
 
 #define LW_CISCO_AC_IP_ADDR_WITH_INDEX		32
 #define LW_CISCO_AP_LOGHOST_CONFIG		36
+
+#define LW_CISCO_AP_SUBMODE			67
 
 #define LW_CISCO_PATH_MTU			73
 

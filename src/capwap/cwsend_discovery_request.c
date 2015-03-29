@@ -34,7 +34,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 	uint8_t buffer[CWMSG_MAX_SIZE];
 	struct cwmsg cwmsg;
 
-	cwmsg_init(&cwmsg, buffer, CWMSG_DISCOVERY_REQUEST, conn_get_next_seqnum(conn),
+	cwmsg_init(&cwmsg, buffer, CW_MSG_DISCOVERY_REQUEST, conn_get_next_seqnum(conn),
 		   radioinfo  );
 	cwmsg.capwap_mode = conn->capwap_mode;
 
@@ -55,7 +55,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 		      sizeof(uint8_t));
 
 	/* mac type */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
+	cwmsg_addelem(&cwmsg, CW_ELEM_WTP_MAC_TYPE, &wtpinfo->mac_type, sizeof(uint8_t));
 
 
 	/* radio infos */

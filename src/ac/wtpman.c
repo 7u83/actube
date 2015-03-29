@@ -368,7 +368,7 @@ static void wtpman_run_discovery(void *arg)
 	}
 
 	
-	if (cwrmsg->type!=CWMSG_DISCOVERY_REQUEST){
+	if (cwrmsg->type!=CW_MSG_DISCOVERY_REQUEST){
 		cw_dbg(DBG_MSG_ERR,"Invalid message in discovery state from %s, type=%s - %s ",
 			CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
 		wtpman_remove(wtpman);
@@ -440,10 +440,10 @@ static void wtpman_run_run(void *arg)
 
 
 	conn_prepare_request(conn,CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
+	cwmsg_addelem(&conn->req_msg,CW_ELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
-	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CW_CISCO_RAD_NAME,(uint8_t*)"Schlumpf",strlen("Schlumpf"));
+//	cwmsg_addelem_vendor_specific_payload(&conn->req_msg,CW_VENDOR_ID_CISCO,CW_CISCO_RAD_NAME,(uint8_t*)"Schlumpf",strlen("Schlumpf"));
 
 	cwrmsg = conn_send_request(conn);
 

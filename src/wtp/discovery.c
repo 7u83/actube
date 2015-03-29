@@ -61,7 +61,7 @@ struct ac_info wtp_acinfo;
 
 static int msg_cb(void *priv,struct cwrmsg * cwrmsg)
 {
-	if (cwrmsg->type != CWMSG_DISCOVERY_RESPONSE){
+	if (cwrmsg->type != CW_MSG_DISCOVERY_RESPONSE){
 		cw_dbg(DBG_ERR,"Expected discovery response, but received %i",cwrmsg->type);
 		return 1;
 	}

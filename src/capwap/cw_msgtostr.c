@@ -21,10 +21,10 @@
 const char * cw_msgtostr(int type)
 {
 	switch(type){
-		case CWMSG_DISCOVERY_REQUEST:
+		case CW_MSG_DISCOVERY_REQUEST:
 			return "Discovery Request";
 
-		case CWMSG_DISCOVERY_RESPONSE:
+		case CW_MSG_DISCOVERY_RESPONSE:
 			return "Discovery Response";
 
 		case CWMSG_JOIN_REQUEST:

@@ -8,7 +8,7 @@
 
 int wtpinfo_readelem_wtp_name(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len)
 {
-	if (type != CWMSGELEM_WTP_NAME)
+	if (type != CW_ELEM_WTP_NAME)
 		return 0;
 
 	if (len>512){

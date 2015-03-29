@@ -6,7 +6,7 @@
 
 int wtpinfo_readelem_wtp_mac_type(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len)
 {
-	if (type != CWMSGELEM_WTP_MAC_TYPE)
+	if (type != CW_ELEM_WTP_MAC_TYPE)
 		return 0;
 
 	if (len!=1){

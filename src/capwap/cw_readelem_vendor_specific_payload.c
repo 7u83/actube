@@ -28,7 +28,7 @@ int cw_readelem_cisco_payload(void *data,int msgtype,int elem_id,uint8_t *msgele
 			
 			return 0;
 		}
-		case CWMSG_DISCOVERY_REQUEST:
+		case CW_MSG_DISCOVERY_REQUEST:
 		{
 			struct wtpinfo *  wtpinfo = (struct wtpinfo*)data;
 			if (lw_readelem_wtp_name(&wtpinfo->name,elem_id,msgelem,len))
