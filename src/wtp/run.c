@@ -9,6 +9,7 @@
 #include "capwap/cw_log.h"
 #include "capwap/dtls.h"
 #include "capwap/sock.h"
+#include "capwap/cw_util.h"
 
 
 #include "wtp_conf.h"
@@ -73,6 +74,9 @@ int run(struct conn * conn)
 	struct radioinfo radioinfo;
 	memset(&radioinfo,0,sizeof(radioinfo));
 
+
+	struct cwrmsg * cwrmsg;
+
 	echo_interval_timer=time(NULL);
 	while (1){	
 		if (time(NULL)-echo_interval_timer >= conf_echo_interval)
@@ -85,7 +89,14 @@ int run(struct conn * conn)
 //			cw_log_debug1("Sending echo request");
 			struct cwmsg *cwmsg=&conn->req_msg;
 			uint8_t * buffer = conn->req_buffer;
-			cwmsg_init_echo_request(cwmsg,buffer,conn,&radioinfo);
+
+
+	struct wtpinfo * wtpinfo = get_wtpinfo();
+	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
+
+			cwmsg_init_echo_request(cwmsg,buffer,conn,rip);
+
+printf("Echo ->>>>>>>>>>>>>>>>>>>>> Seqnum %d\n",conn->req_msg.seqnum);
 
 
 printf("Conn target is %s",sock_addr2str(&conn->addr));
@@ -106,6 +117,17 @@ printf("Error !\n");
 			}
 			echo_interval_timer=time(NULL);
 		}
+
+		time_t rt = cw_timer_start(5);	
+		cwrmsg = conn_wait_for_request(conn,0,rt);
+	struct wtpinfo * wtpinfo = get_wtpinfo();
+	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
+
+		if(cwrmsg){
+			cw_readmsg_configuration_update_request(cwrmsg->msgelems,cwrmsg->msgelems_len);
+			cw_send_configuration_update_response(conn,cwrmsg->seqnum,rip);
+		}
+
 		sleep(1);
 
 	}

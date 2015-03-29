@@ -116,7 +116,7 @@ printf("Param %p\n",param);
 	return 1;	
 }
 
-static struct cwrmsg * conn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
+static struct cwrmsg * zconn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
 {
 	int (*request_handler_save) (void*);
 	void * request_handler_param_save;
@@ -178,7 +178,7 @@ printf("Current Seqnum = %d\n",conn->seqnum);
 
                 time_t r_timer = cw_timer_start(conn->retransmit_interval);
 		if (i!=0)
-	                cw_dbg(DBG_CW_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+	                cw_dbg(DBG_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 
 		conn_send_cwmsg(conn,&conn->req_msg);
 		cwrmsg = conn_wait_for_message(conn,r_timer);
@@ -194,7 +194,7 @@ printf("Current Seqnum = %d\n",conn->seqnum);
 		}
 
         }
-        cw_dbg(DBG_CW_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+        cw_dbg(DBG_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
         return 0;
 
 }
@@ -205,10 +205,10 @@ int wtpman_handle_request(void *p)
 	struct conn * conn = wtpman->conn;
 	struct cwrmsg * cwrmsg = &conn->cwrmsg;
 	switch(conn->cwrmsg.type){
-		case CWMSG_ECHO_REQUEST:
+		case CW_MSG_ECHO_REQUEST:
 			cw_handle_echo_request(conn);
 			break;
-		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
 			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
 			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
 			break;
@@ -341,7 +341,7 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 
 	}while(!cwrmsg);
 
-	cw_dbg(DBG_CW_MSG,"Received message from %s, type=%d - %s"
+	cw_dbg(DBG_MSG,"Received message from %s, type=%d - %s"
 		,CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
 
 	return cwrmsg;
@@ -362,14 +362,14 @@ static void wtpman_run_discovery(void *arg)
 
 	if ( !cwrmsg  )
 	{
-		cw_dbg(DBG_CW_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
+		cw_dbg(DBG_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
 		wtpman_remove(wtpman);
 		return;
 	}
 
 	
 	if (cwrmsg->type!=CWMSG_DISCOVERY_REQUEST){
-		cw_dbg(DBG_CW_MSG_ERR,"Invalid message in discovery state from %s, type=%s - %s ",
+		cw_dbg(DBG_MSG_ERR,"Invalid message in discovery state from %s, type=%s - %s ",
 			CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
 		wtpman_remove(wtpman);
 		return;
@@ -439,7 +439,7 @@ static void wtpman_run_run(void *arg)
 
 
 
-	conn_prepare_request(conn,CWMSG_CONFIGURATION_UPDATE_REQUEST);
+	conn_prepare_request(conn,CW_MSG_CONFIGURATION_UPDATE_REQUEST);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
 
@@ -567,11 +567,11 @@ static int wtpman_join(void *arg,time_t timer)
 
 	if (!cwrmsg){
 		if (conn_is_error(wtpman->conn)){
-			cw_dbg(DBG_CW_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
+			cw_dbg(DBG_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
 			return 0;
 		}
 			
-		cw_dbg(DBG_CW_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
+		cw_dbg(DBG_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
 		sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_dtls);
 		return 0;
 	
@@ -595,7 +595,7 @@ static int wtpman_join(void *arg,time_t timer)
 
 
 	int result_code = 0;
-	cw_dbg(DBG_CW_MSG,"Sending join response to %s",CLIENT_IP);
+	cw_dbg(DBG_MSG,"Sending join response to %s",CLIENT_IP);
 printf("SLeep befor join resp\n");
 printf("Slept befor join resp\n");
 
@@ -622,7 +622,7 @@ static int wtpman_send_image_file(struct wtpman * wtpman,struct cwrmsg * cwrmsg)
 
 	cw_read_image_data_request(&data,cwrmsg->msgelems,cwrmsg->msgelems_len);
 	if (!strlen(id)){
-		cw_dbg(DBG_CW_MSG_ERR, "No image identifier in image data request");
+		cw_dbg(DBG_MSG_ERR, "No image identifier in image data request");
 		cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
 		return 0;
 	}
@@ -684,18 +684,18 @@ static void wtpman_run(void *arg)
 	*/
 
 	do {
-		int cfg_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST, -1 };
+		int cfg_status_msgs[] = { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST, -1 };
 		cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
 
 		if (!cwrmsg){
-			cw_dbg(DBG_CW_MSG_ERR,"No conf status or img data request from %s after %d seconds, WTP died.",
+			cw_dbg(DBG_MSG_ERR,"No conf status or img data request from %s after %d seconds, WTP died.",
 				sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
 			wtpman_remove(wtpman);	
 			return;
 		}
 
 		/* Image data request, the WTP wants an update */
-		if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+		if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
 			int rc = wtpman_send_image_file(wtpman,cwrmsg);	
 			if (rc ){
 				wtpman_remove(wtpman);
@@ -718,7 +718,7 @@ printf("Send the respi but sleep\n");
 
 	
 printf("Next thoing\n");
-	int change_status_msgs[] = { CWMSG_IMAGE_DATA_REQUEST,CWMSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	int change_status_msgs[] = { CW_MSG_IMAGE_DATA_REQUEST,CW_MSG_CHANGE_STATE_EVENT_REQUEST, -1 };
 	cwrmsg =  conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
 printf("Done\n");
 
@@ -730,14 +730,14 @@ printf("Done\n");
 
 
 	switch (cwrmsg->type){
-		case CWMSG_CHANGE_STATE_EVENT_REQUEST:
+		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
 			{
 			printf("Change state event\n!");
 			struct radioinfo ri;
 			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,&ri);
 			}
 			break;
-		case CWMSG_IMAGE_DATA_REQUEST:
+		case CW_MSG_IMAGE_DATA_REQUEST:
 			printf("Image update\n!");
 			//cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
 
@@ -805,7 +805,7 @@ for (ii=0; ii<3; ii++){
 exit(0);
 
 
-	if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+	if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
 		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
 		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
 	}
@@ -829,7 +829,7 @@ exit(0);
 	if (cwrmsg)
 		printf("I have got a message of type %d\n",cwrmsg->type);
 
-	if (cwrmsg->type==CWMSG_IMAGE_DATA_REQUEST){
+	if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
 		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
 		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
 	}
@@ -884,7 +884,7 @@ if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 		msg_counter=0;
 
 
-		if (cwrmsg->type == CWMSG_ECHO_REQUEST){
+		if (cwrmsg->type == CW_MSG_ECHO_REQUEST){
 			cwsend_echo_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
 		}
 //		printf("Got msg: %i\n",cwrmsg->type);

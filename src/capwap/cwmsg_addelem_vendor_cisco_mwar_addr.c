@@ -30,7 +30,7 @@ printf("Adding mwar addr %s\n",sock_addr2str(&conn->addr));
 			struct sockaddr_in  * sain = (struct sockaddr_in*)&conn->addr;
 			memcpy(data+1,(uint8_t*)&sain->sin_addr,4);
 			cwmsg_addelem_vendor_specific_payload(msg, CW_VENDOR_ID_CISCO, 
-						CWVENDOR_CISCO_MWAR_ADDR,
+						CW_CISCO_MWAR_ADDR,
 						data,7);
 
 

@@ -38,7 +38,7 @@ struct eparm {
 static int readelem(void * eparm,int type,uint8_t* msgelem,int len)
 {
 	struct eparm * e = (struct eparm*)eparm;
-	cw_dbg_msgelem(CWMSG_CHANGE_STATE_EVENT_REQUEST,type,msgelem,len);
+	cw_dbg_msgelem(CW_MSG_CHANGE_STATE_EVENT_REQUEST,type,msgelem,len);
 
 	/* mandatory elements */
 	if (cw_readelem_result_code(&e->result_code,type,msgelem,len))
@@ -64,8 +64,8 @@ foundX:
 int cwread_change_state_event_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
 	int mand[] = {
-		CWMSGELEM_RADIO_OPERATIONAL_STATE,
-		CWMSGELEM_RESULT_CODE,
+		CW_ELEM_RADIO_OPERATIONAL_STATE,
+		CW_ELEM_RESULT_CODE,
 		-1};
 
 	struct eparm eparm;

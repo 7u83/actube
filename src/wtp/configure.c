@@ -16,6 +16,13 @@ int configure()
 
 	int rc = cw_readmsg_configuration_status_response(cwrmsg->msgelems,cwrmsg->msgelems_len);
 
-exit(0);
+	printf("Chage Sate\n");
+	cw_prepare_change_state_event_request(conn,rip,wtpinfo);
+	cwrmsg = conn_send_request(conn);
+
+
+	printf("Got change resp %p\n",cwrmsg);
+
+
 }
 

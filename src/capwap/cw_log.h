@@ -34,6 +34,8 @@
  */
 
 #define DBG_MSG				0x00000001	/* Parsed CAPWAP/LWAPP messages */
+#define DBG_MSG_ERR			0x00000001
+
 #define DBG_ELEM			0x00000002	/* Parsed CAPWAP/LWAPP message elements */
 #define DBG_ELEM_DMP			0x00000004	/* Dump CAPWAP message elements */
 
@@ -102,16 +104,7 @@ extern int cw_dbg_opt_level;
 #endif
 
 #ifdef WITH_CW_LOG_DEBUG
-/*
-	#define cw_log_debug0(...) cw_log_debug_cbs[0](__VA_ARGS__)
-	#define cw_log_debug1(...) cw_log_debug_cbs[1](__VA_ARGS__)
-	#define cw_log_debug2(...) cw_log_debug_cbs[2](__VA_ARGS__)
-	#define cw_log_debug_dump(level,str,len,...) cw_log_debug_dump_(level,str,len,__VA_ARGS__)
-	#define cw_log_debug0_dump(str,len,...) cw_log_debug_dump_(0,str,len,__VA_ARGS__)
-	#define cw_log_debug1_dump(str,len,...) cw_log_debug_dump_(1,str,len,__VA_ARGS__)
-	#define cw_log_debug2_dump(str,len,...) cw_log_debug_dump_(2,str,len,__VA_ARGS__)
-	#define cw_log_debug(level,...) cw_log_debug_cbs[level](__VA_ARGS__)
-*/
+
 
 	#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
 	#define cw_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
@@ -120,20 +113,12 @@ extern int cw_dbg_opt_level;
 	#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
 	#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand) cw_dbg_missing_mand_elems_(conn, msgtyoe, mand)
 
+	#define lw_dbg_elem(msgtype,msgelemtype,msgbuf,msglen) lw_dbg_elem_(msgtype,msgelemtype,msgbuf,msglen)
+
 #else
 	#define cw_log_dbg(...)
 	#define cw_dbg(...)
 
-
-/*	#define cw_log_debug0(...) 
-	#define cw_log_debug1(...) 
-	#define cw_log_debug2(...) 
-	#define cw_log_debug(...)
-	#define cw_log_debug_dump(level,str,len) 
-	#define cw_log_debug0_dump(level,str,len)
-	#define cw_log_debug1_dump(level,str,len) 
-	#define cw_log_debug2_dump(level,str,len) 
-*/
 	#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
 
 #endif
@@ -149,10 +134,12 @@ extern void cw_log_tofile(int level,const char *format, ...);
 
 
 extern void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t *msgbuf,int len);
+
+
 struct conn;
 extern void cw_dbg_missing_mand_elems_(struct conn * conn,int msgtyoe, int * mand);
 
-
+extern void lw_dbg_elem(int msg_id,int elem_id,const uint8_t*elem_data,int elem_len);
 
 extern int cw_log_debug_level;
 extern int cw_log_str2dbglevel(const char * str);

@@ -71,8 +71,8 @@
 
 
 
-#define LWMSG_DISCOVERY_REQUEST			1
-#define LWMSG_DISCOVERY_RESPONSE		2
+#define LW_MSG_DISCOVERY_REQUEST		1
+#define LW_MSG_DISCOVERY_RESPONSE		2
 
 #define LW_MSG_JOIN_REQUEST			3
 #define LW_MSG_JOIN_RESPONSE			4
@@ -111,12 +111,16 @@
 #define LW_ELEM_AC_DESCRIPTOR				6
 
 #define LW_ELEM_AC_NAME					31
+#define LW_ELEM_LOCATION_DATA				35
+#define LW_ELEM_STATISTICS_TIMER			37
+
 
 #define LW_ELEM_SUPPORTED_RATES				16
 #define LW_ELEM_TEST					18
 
 #define LW_ELEM_CERTIFICATE				44
 #define LW_ELEM_WTP_BOARD_DATA				50
+#define LW_ELEM_AC_IPV4_LIST				59
 #define LW_ELEM_AP_IP_ADDR				82
 
 #define LW_ELEM_VENDOR_SPECIFIC				104
@@ -126,6 +130,8 @@
 /* LWAPP IEEE 802.11 bindings */
 
 #define LW_ELEM_80211_WTP_WLAN_RADIO_CONFIGURATION	8
+#define LW_ELEM_80211_MULTI_DOMAIN_CAPABILITY		10
+#define LW_ELEM_80211_WTP_MODE_AND_TYPE			54
 
 
 /* useful macros and inline functions */
@@ -192,6 +198,10 @@ extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int l
 
 
 extern int lw_put_80211_wtp_wlan_radio_configuration(uint8_t*dst,struct radioinfo *ri);
+
+extern const char * lw_vendor_id_to_str(uint32_t vendor_id);
+extern const char * lw_elem_id_to_str(int elem_id);
+extern const char * lw_msg_id_to_str(int msg_id);
 
 
 

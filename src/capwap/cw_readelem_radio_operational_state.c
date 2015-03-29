@@ -22,7 +22,7 @@
 
 int cw_readelem_radio_operational_state(struct radioinfo * radioinfo, int type,uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_RADIO_OPERATIONAL_STATE)
+	if (type != CW_ELEM_RADIO_OPERATIONAL_STATE)
 		return 0;
 	
 	if (len<3)

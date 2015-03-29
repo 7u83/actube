@@ -21,8 +21,8 @@ void cw_prepare_configuration_status_request(struct conn * conn, struct radioinf
 	cwmsg_addelem_cisco_ap_regulatory_domain(cwmsg,&wtpinfo->radioinfo[0]);
 	cwmsg_addelem_cisco_ap_regulatory_domain(cwmsg,&wtpinfo->radioinfo[1]);
 	
-	cwmsg_addelem_cisco_station_cfg(cwmsg,&wtpinfo->radioinfo[0]);
-	cwmsg_addelem_cisco_station_cfg(cwmsg,&wtpinfo->radioinfo[1]);
+	cwmsg_addelem_cisco_wtp_radio_cfg(cwmsg,&wtpinfo->radioinfo[0]);
+	cwmsg_addelem_cisco_wtp_radio_cfg(cwmsg,&wtpinfo->radioinfo[1]);
 
 /*
 	uint8_t mtu[2048];

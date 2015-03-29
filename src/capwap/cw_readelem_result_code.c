@@ -22,7 +22,7 @@
 
 int cw_readelem_result_code(uint32_t *result_code, int type, uint8_t * msgelem, int len)
 {
-	if (type != CWMSGELEM_RESULT_CODE)
+	if (type != CW_ELEM_RESULT_CODE)
 		return 0;
 
 	if (len!=4){

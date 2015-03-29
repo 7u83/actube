@@ -189,6 +189,7 @@ extern void conn_detect_capwap(struct conn * conn, struct wtpinfo * wtpinfo);
 struct cwrmsg * conn_send_request(struct conn * conn);
 struct cwrmsg * conn_wait_for_message(struct conn * conn, time_t timer);
 
+struct cwrmsg * conn_wait_for_request(struct conn * conn, int *msglist, time_t timer);
 
 
 #define conn_is_error(conn) (conn->dtls_error)

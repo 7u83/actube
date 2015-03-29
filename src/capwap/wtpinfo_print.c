@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "lwapp.h"
 #include "capwap.h"
 #include "capwap_80211.h"
 
@@ -92,7 +93,7 @@ static int version_print(char *s, const uint8_t *version, int len, uint32_t vend
 	}
 
 
-	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_ianavendoridtostr(vendor));
+	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, lw_vendor_id_to_str(vendor));
 	rs+=sprintf(s+rs,"\n");
 	return rs;	
 	
@@ -180,7 +181,7 @@ for (i0=0; i0<10; i0++){
 
 
 
-	s+=sprintf (s,"\tVendor ID: %d, %s\n", wtpinfo->vendor_id,cw_ianavendoridtostr(wtpinfo->vendor_id) );
+	s+=sprintf (s,"\tVendor ID: %d, %s\n", wtpinfo->vendor_id,lw_vendor_id_to_str(wtpinfo->vendor_id) );
 
 	s+=sprintf (s,"\tModel No.: "); //, (!wtpinfo->model_no ? (uint8_t*)"Not set" : wtpinfo->model_no) );
 	s+=bstr_to_str(s,wtpinfo->model_no,0);

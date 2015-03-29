@@ -31,8 +31,8 @@
  * Defines of only a view number of IDs. If the ID is unknown
  * the string "Unknown" is returned.
  */
-const char * cw_ianavendoridtostr(int id){
-	switch(id){
+const char * lw_vendor_id_to_str(uint32_t vendor_id){
+	switch(vendor_id){
 		case CW_VENDOR_ID_ZYXEL:
 			return "ZyXEL Communications Corp.";
 		case CW_VENDOR_ID_FSF:

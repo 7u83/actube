@@ -31,7 +31,6 @@
 
 extern int cw_format_version(char *s, bstr_t version, uint32_t vendor, char * def);
 extern int cw_is_printable(const uint8_t * s,int len);
-extern const char * cw_ianavendoridtostr(int id);
 
 
 

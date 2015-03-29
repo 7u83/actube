@@ -35,12 +35,16 @@ struct radioinfo{
 	uint16_t regDomain;
 
 	uint8_t country_str[4];
+	uint8_t country_str2[4];
+
 	int cfp_period;
 	int cfp_max_duration;
 	int beacon_period;
 	int dtim_period;
 	int max_bssid;
 	int occupancy_limit;
+
+	bstr_t bssid;	
 	
 };
 

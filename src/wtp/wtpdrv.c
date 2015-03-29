@@ -1227,7 +1227,8 @@ int wtpdrv_get_radioinfo(int rid,struct radioinfo * radioinfo)
 	radioinfo->type|=rid+1; //CW_80211_RADIO_TYPE_B; //CWRADIO_TYPE_N;
 	radioinfo->regDomain=1;
 	
-	memcpy(radioinfo->country_str,"AUDE",4);
+	strcpy(radioinfo->country_str,"DE ");
+	strcpy(radioinfo->country_str2,"DE ");
 	
 
 /*
