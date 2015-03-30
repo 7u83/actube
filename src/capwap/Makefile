@@ -239,10 +239,15 @@ BSTROBJS= bstr_create.o \
 
 FRAGOBJS=fragman.o
 
+CWACTION=cw_action.o \
+	cw_process_msg.o
+
+
 OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LOGOBJS) $(UTILOBJS) $(DTLSOBJS) $(BSTROBJS) \
 	$(LWAPPOBJS) \
-	$(LWAPPCISCOOBJS) 
+	$(LWAPPCISCOOBJS) \
+	$(CWACTION)
 
 #include $(OBJS:.o=.d)
 
@@ -250,8 +255,8 @@ O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
-#CFLAGS = -Wall -g -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT
+#CFLAGS += -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

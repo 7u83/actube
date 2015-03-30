@@ -27,10 +27,10 @@ const char * cw_msgtostr(int type)
 		case CW_MSG_DISCOVERY_RESPONSE:
 			return "Discovery Response";
 
-		case CWMSG_JOIN_REQUEST:
+		case CW_MSG_JOIN_REQUEST:
 			return "join request";
 
-		case CWMSG_JOIN_RESPONSE:
+		case CW_MSG_JOIN_RESPONSE:
 			return "join response";
 
 		case CW_MSG_CONFIGURATION_STATUS_REQUEST:

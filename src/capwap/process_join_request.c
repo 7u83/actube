@@ -42,7 +42,7 @@ static int process_elem(void *eparm,int type,uint8_t* msgelem,int len)
 	struct wtpinfo * wtpinfo = e->wtpinfo;
 
 
-	cw_dbg_msgelem(CWMSG_JOIN_REQUEST, type, msgelem, len);
+	cw_dbg_msgelem(CW_MSG_JOIN_REQUEST, type, msgelem, len);
 
 
 	/* mandatory elements */
@@ -103,10 +103,10 @@ void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 {
 	int mand[] = {
 		CWMSGELEM_LOCATION_DATA,
-		CWMSGELEM_WTP_BOARD_DATA,
-		CWMSGELEM_WTP_DESCRIPTOR,
+		CW_ELEM_WTP_BOARD_DATA,
+		CW_ELEM_WTP_DESCRIPTOR,
 		CW_ELEM_WTP_NAME,
-		CWMSGELEM_WTP_FRAME_TUNNEL_MODE,
+		CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 		CW_ELEM_WTP_MAC_TYPE,
 		CWMSGELEM_ECN_SUPPORT,
 		XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS,
@@ -122,7 +122,7 @@ void process_join_request(struct wtpinfo * wtpinfo, uint8_t * msg, int len)
 	cw_foreach_msgelem(msg, len, process_elem,
 			   &eparm);
 
-	cw_dbg_missing_mand_elems_(0, CWMSG_JOIN_REQUEST, eparm.mand);
+	cw_dbg_missing_mand_elems_(0, CW_MSG_JOIN_REQUEST, eparm.mand);
 
 }
 

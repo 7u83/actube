@@ -28,7 +28,6 @@
 int hdr_print(char *str, uint8_t *packet, int len)
 {
 	
-printf("The readl header printer\n");
 
 	char *s = str;
 

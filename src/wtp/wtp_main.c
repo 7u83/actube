@@ -57,6 +57,9 @@ const char * interfaces[]={
 
 int main()
 {
+
+
+
 	wtp_main();
 }
 

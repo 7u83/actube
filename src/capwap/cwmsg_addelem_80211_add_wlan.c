@@ -17,7 +17,7 @@ void cwmsg_addelem_80211_add_wlan(struct cwmsg *cwmsg,struct cwwlan *wlan)
 	uint16_t capab=htons(wlan->capab);
 	uint16_t keylen=htons(wlan->key_length);
 	
-	cwmsg_vaddelem(cwmsg,CWMSGELEM_80211_ADD_WLAN,
+	cwmsg_vaddelem(cwmsg,CW_ELEM_80211_ADD_WLAN,
 		&wlan->rid,1,
 		&wlan->wid,1,
 		&capab,2,

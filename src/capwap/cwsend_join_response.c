@@ -10,7 +10,7 @@ void cwsend_join_response(struct conn *conn, int seqnum, int rc, struct radioinf
 			  struct ac_info *acinfo, struct wtpinfo *wtpinfo)
 {
 	struct cwmsg *cwmsg = &conn->resp_msg;
-	cwmsg_init(cwmsg, conn->resp_buffer, CWMSG_JOIN_RESPONSE, seqnum, NULL);
+	cwmsg_init(cwmsg, conn->resp_buffer, CW_MSG_JOIN_RESPONSE, seqnum, NULL);
 	cwmsg->capwap_mode = conn->capwap_mode;
 
 	/* mandatory messagesg elements */

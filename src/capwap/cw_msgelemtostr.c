@@ -65,7 +65,7 @@ const char * cw_msgelemtostr(int elem_id)
    Delete Station                                       18
    Reserved                                             19
 */   
-		case CWMSGELEM_DISCOVERY_TYPE:
+		case CW_ELEM_DISCOVERY_TYPE:
 			return "discovery type";
 /*   
    Duplicate IPv4 Address                               21
@@ -116,15 +116,15 @@ const char * cw_msgelemtostr(int elem_id)
 			return "Vendor Specific Payload";
 
  
-		case CWMSGELEM_WTP_BOARD_DATA:
+		case CW_ELEM_WTP_BOARD_DATA:
 			return "WTP Board Data";
    
-		case CWMSGELEM_WTP_DESCRIPTOR:
+		case CW_ELEM_WTP_DESCRIPTOR:
 			return "wtp descriptor";
 
 		case CW_ELEM_WTP_FALLBACK:
 			return "WTP Fallback";
-		case CWMSGELEM_WTP_FRAME_TUNNEL_MODE:
+		case CW_ELEM_WTP_FRAME_TUNNEL_MODE:
 			return "Frame Tunnel Mode";
 
 /*		case CWMSGELEM_RESERVED_1:

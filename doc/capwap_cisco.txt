@@ -320,12 +320,15 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
    Mode:   An 8-bit value describing the type of information being sent.
       The following values are supported:
 
-      0 -  Split MAC
-      2 -  Local MAC
+      0 -  Split MAC / Local Mode 
+      1 -  Monitor
+      2 -  Local MAC / FlexConnect
+      3 -  Rogue Detector
+      4 -  Sniffer
 
    Type: AP Type 
 
-      4 -  
+      0 - ?
 
 
 
