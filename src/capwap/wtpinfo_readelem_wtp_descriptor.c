@@ -28,7 +28,7 @@
 
 static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, uint8_t *msgelem, int len, int capwap_mode)
 {
-	if (type != CWMSGELEM_WTP_DESCRIPTOR)
+	if (type != CW_ELEM_WTP_DESCRIPTOR)
 		return 0;
 
 	if (len<6)

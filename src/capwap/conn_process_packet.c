@@ -130,7 +130,6 @@ static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 	if (!cw_dbg_is_level(DBG_CW_PKT_IN))
 		return;
 
-printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Header printer\n");
 
 	/* print the header */
 	char hdr[200];
@@ -138,13 +137,11 @@ printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Header prin
 
 
 	if (!cw_dbg_is_level(DBG_CW_PKT_DMP)){
-printf("the dumpi dumper\n");
 		cw_dbg(DBG_CW_PKT_IN,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
 		return;
 
 	}
 
-printf("The super dumper\n");
 	cw_dbg_dmp(DBG_CW_PKT_DMP,packet,len,"Processing packet from %s, len=%d\n%s\n\tDump:",
 			sock_addr2str(&conn->addr),len,hdr
 		);
@@ -186,7 +183,6 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		return;
 	}
 
-printf("Debug packet **************************************************************************\n");
 	cw_dbg_packet(conn,packet,len);
 
 
@@ -229,6 +225,11 @@ printf("Debug packet ***********************************************************
 
 		cw_dbg_packet(conn,f+4,*(uint32_t*)f);
 
+	
+		extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
+		cw_process_msg(conn,f+4,*(uint32_t*)f);
+
+
 		if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,f+4,*(uint32_t*)f)){
 			free(f);
 			return;
@@ -238,10 +239,15 @@ printf("Debug packet ***********************************************************
 		return;
 	}
 
+extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
+cw_process_msg(conn,packet,len);
+
+
 	if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,packet+hlen,len-hlen) ){
 	//	cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, len=%d (too short)",sock_addr2str(&conn->addr));
 		return;
 	}
+
 
 	process_message(conn,&cwrmsg,cb,cbarg); 
 	return;

@@ -16,7 +16,7 @@
 
 */
 
-
+#include <stdlib.h>
 #include <errno.h>
 #include <stdint.h>
 #include <netinet/in.h>
@@ -36,6 +36,9 @@
 
 #include "db.h"
 
+
+
+
 int ac_run();
 
 void alive_thread(void *data)
@@ -46,9 +49,83 @@ void alive_thread(void *data)
 	}
 }
 
+#include "cw_action.h"
+
+cw_actionlist_t the_tree;
+
+int dstart(struct conn *conn,struct cw_action a,uint8_t *data,int len)
+{
+	printf("DISCO STart Action!!\n");
+}
+
+
 
 int main (int argc, const char * argv[]) 
 {
+
+
+cw_actionlist_t t = cw_actionlist_create();
+the_tree=t;
+
+
+cw_action_t discovery_actions[] = {
+{ CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST,-1,0,0,
+  dstart
+},
+{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE},
+{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_BOARD_DATA},
+{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
+{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
+{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_MAC_TYPE},
+{0}
+};
+
+
+
+cw_action_t join_actions[] = {
+
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST,-1,0,0},
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_DISCOVERY_TYPE},
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_BOARD_DATA},
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
+{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_MAC_TYPE},
+{0}
+
+
+};
+
+
+cw_register_actions(t,discovery_actions);
+cw_register_actions(t,join_actions);
+
+
+#define CW_NAME_DISCOVER_REQUEST "Discovery Request"
+
+/*
+int i;
+for(i=0; discovery[i].capwap_state!=CW_STATE_MAX; i++){
+	printf("State: %d MSG_ID: %d ELEM_ID: %d\n",discovery[i].capwap_state,discovery[i].msg_id,discovery[i].elem_id);
+	void * rc = msgtree_add(t,&(discovery[i]));
+
+	printf("Added to tree %p\n",rc);
+
+}
+*/
+
+
+/*
+e.capwap_state=0;
+e.msg_id = CW_MSG_DISCOVERY_REQUEST;
+e.elem_id = CW_ELEM_AC_NAME;
+e.name = "AC Name";
+
+msgtree_add(t,&e);
+*/
+
+
+
+
 //	send_image_file(0,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
 
 

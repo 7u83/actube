@@ -41,7 +41,7 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 
 	//radioinfo->rmac=0;
 
-	cwmsg_init(&cwmsg, buffer, CWMSG_JOIN_REQUEST, conn_get_next_seqnum(conn), radioinfo);
+	cwmsg_init(&cwmsg, buffer, CW_MSG_JOIN_REQUEST, conn_get_next_seqnum(conn), radioinfo);
 	cwmsg.capwap_mode = conn->capwap_mode;
 
 //	printf("Rad info rmac %s\n",sock_hwaddr2str(bstr_data(radioinfo->rmac),bstr_len(radioinfo->rmac)));
@@ -65,7 +65,7 @@ int cwsend_join_request(struct conn *conn, struct radioinfo *radioinfo, struct w
 	cwmsg_addelem_session_id(&cwmsg, wtpinfo->session_id);
 
 	/* frame tunnel mode */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
+	cwmsg_addelem(&cwmsg, CW_ELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
 		      sizeof(uint8_t));
 
 	/* WTP MAC type */

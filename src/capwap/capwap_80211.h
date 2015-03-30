@@ -8,8 +8,8 @@
 
 
 
-#define CWMSGELEM_80211_ADD_WLAN		1024
-#define CWMSGELEM_80211_ANTENNA			1025
+#define CW_ELEM_80211_ADD_WLAN			1024
+#define CW_ELEM_80211_ANTENNA			1025
 /*
    IEEE 802.11 Assigned WTP BSSID                     1026
    IEEE 802.11 Delete WLAN                            1027

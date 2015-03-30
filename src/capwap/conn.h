@@ -30,10 +30,17 @@
 #include "cwrmsg.h"
 #include "wtpinfo.h"
 
+
+#include "cw_action.h"
+
 struct conn{
 	int sock;
 	struct sockaddr_storage addr;
 	int recv_timeout;
+
+	cw_actionlist_t msgtr;
+
+	uint8_t capwap_state;
 
 	FRAGMAN * fragman;
 //	void (* process_message)(void *,uint8_t *,uint8_t *, int);

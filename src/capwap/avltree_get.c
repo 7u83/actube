@@ -16,6 +16,8 @@
 
 */
 
+#include <stdio.h>
+
 #include "avltree.h"
 
 
@@ -31,7 +33,7 @@ void * avltree_get(struct avltree *t ,void *data)
 		else
 			n=n->right;
 	}
-	return 0;
+	return NULL;
 }
 
 

@@ -25,7 +25,7 @@
 static int acinfo_readelem_join_resp(void * a,int type,uint8_t* msgelem,int len)
 {
 
-	cw_dbg_msgelem(CWMSG_JOIN_RESPONSE, type, msgelem, len);
+	cw_dbg_msgelem(CW_MSG_JOIN_RESPONSE, type, msgelem, len);
 
 	struct ac_info * acinfo = (struct ac_info *)a;
 //	cw_log_debug1("Process join resp msgelem, type=%d, len=%d\n",type,len);

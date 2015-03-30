@@ -50,7 +50,7 @@ printf("Bumm %d %d\n",i+elen+4,len);
 
 		callback(arg, type, msgelems + i + 4, elen);
 		i += elen + 4;
-		printf("left = %d\n",len-i);
+//		printf("left = %d\n",len-i);
 
 	} while (i < len);
 	return 1;

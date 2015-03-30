@@ -7,7 +7,7 @@
 
 int wtpinfo_readelem_discovery_type(struct wtpinfo * wtpinfo, int type, uint8_t * msgelem, int len)
 {
-	if (type != CWMSGELEM_DISCOVERY_TYPE)
+	if (type != CW_ELEM_DISCOVERY_TYPE)
 		return 0;
 
 	if (len!=1){

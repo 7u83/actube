@@ -357,6 +357,13 @@ static void wtpman_run_discovery(void *arg)
 	struct cwrmsg * cwrmsg;
 
 
+extern cw_actionlist_t the_tree;
+wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
+wtpman->conn->msgtr=the_tree;
+
+
+
+
 	time_t timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
@@ -559,9 +566,13 @@ static int wtpman_join(void *arg,time_t timer)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
 
+extern cw_actionlist_t the_tree;
+wtpman->conn->msgtr=the_tree;
+wtpman->conn->capwap_state=CW_STATE_JOIN;
+
 	/* timer = cw_timer_start(wtpman->conn->wait_join); */
 
-	int join_msgs[] = { CWMSG_JOIN_REQUEST, -1 };
+	int join_msgs[] = { CW_MSG_JOIN_REQUEST, -1 };
 	struct cwrmsg * cwrmsg;	
 	cwrmsg =  conn_wait_for_request(wtpman->conn, join_msgs, timer);
 

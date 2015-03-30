@@ -55,6 +55,20 @@ enum capwapmodes {
 	CWMODE_ZYXEL
 };
 
+
+/**
+ * CAWAP States
+ */ 
+enum capwap_states {
+	CW_STATE_NONE=0,
+	CW_STATE_DISCOVERY,
+	CW_STATE_JOIN,
+	CW_STATE_UPDATE,
+	CW_STATE_RUN,
+};
+
+
+
 /* transport header flags */
 #define CWTH_FLAGS_R1 0x01	/* bit 0 reserved 1 */
 #define CWTH_FLAGS_R2 0x02	/* bit 1 reserved 2 */
@@ -99,8 +113,8 @@ struct capwap_ctrlhdr
 
 #define	CW_MSG_DISCOVERY_REQUEST		1 
 #define CW_MSG_DISCOVERY_RESPONSE		2 
-#define	CWMSG_JOIN_REQUEST			3 
-#define CWMSG_JOIN_RESPONSE			4 
+#define	CW_MSG_JOIN_REQUEST			3 
+#define CW_MSG_JOIN_RESPONSE			4 
 
 #define CW_MSG_CONFIGURATION_STATUS_REQUEST	5
 #define CW_MSG_CONFIGURATION_STATUS_RESPONSE	6
@@ -147,9 +161,8 @@ struct capwap_ctrlhdr
 #define CW_ELEM_AC_IPV6_LIST				3
 #define CW_ELEM_AC_NAME					4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY			5
-#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 */
+#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 inaming */
 #define CW_ELEM_AC_TIMESTAMP				6
-
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
 #define CW_ELEM_RESERVED_9				9
@@ -166,7 +179,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_DELETE_MAC_ACL_ENTRY			17
 #define CW_ELEM_DELETE_STATION				18
 #define CW_ELEM_RESEERVED_19				19
-#define CWMSGELEM_DISCOVERY_TYPE			20
+#define CW_ELEM_DISCOVERY_TYPE				20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
 #define CWMSGELEM_ECN_SUPPORT				53
@@ -185,10 +198,10 @@ struct capwap_ctrlhdr
 #define CW_ELEM_SESSION_ID				35
 #define CW_ELEM_STATISTICS_TIMER			36
 #define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD			37
-#define CWMSGELEM_WTP_BOARD_DATA			38
-#define CWMSGELEM_WTP_DESCRIPTOR			39
+#define CW_ELEM_WTP_BOARD_DATA				38
+#define CW_ELEM_WTP_DESCRIPTOR				39
 #define CW_ELEM_WTP_FALLBACK				40
-#define CWMSGELEM_WTP_FRAME_TUNNEL_MODE			41
+#define CW_ELEM_WTP_FRAME_TUNNEL_MODE			41
 #define CW_ELEM_RESERVED_42				42
 #define CW_ELEM_RESERVED_43				43
 #define CW_ELEM_WTP_MAC_TYPE				44
@@ -502,6 +515,14 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_F ) ? 1:0)
 #define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_T ) ? 1:0)
 
+#define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
+
+#define cw_get_msg_id(msgptr) (cw_get_dword(msgptr))
+#define cw_get_msg_type(msgptr) cw_get_msg_id(msgptr)
+
+#define cw_get_msg_seqnum(msgptr) cw_get_byte( (msgptr) +4 )
+#define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
+#define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
 
 /**
  * Get length of a CAPWAP message elemet 

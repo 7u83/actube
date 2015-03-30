@@ -20,7 +20,7 @@ ifndef ARCH
 endif
 
 
-CFLAGS += -O2 -Wall -g
+CFLAGS += -Os -Wall -g
 LDFLAGS += -L../../src/capwap/$(ARCH)
 
 

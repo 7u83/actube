@@ -52,5 +52,5 @@ void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo)
 		len += wtpinfo->macaddress_len + 4;
 	}
 
-	cwmsg_addelem(cwmsg, CWMSGELEM_WTP_BOARD_DATA, msg, len);
+	cwmsg_addelem(cwmsg, CW_ELEM_WTP_BOARD_DATA, msg, len);
 }

@@ -42,7 +42,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 	/* Mandatory elements */
 
 	/* discovery type */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_DISCOVERY_TYPE, &wtpinfo->discovery_type, sizeof(uint8_t));
+	cwmsg_addelem(&cwmsg, CW_ELEM_DISCOVERY_TYPE, &wtpinfo->discovery_type, sizeof(uint8_t));
 
 	/* wtp board data */
 	cwmsg_addelem_wtp_board_data(&cwmsg, wtpinfo);
@@ -51,7 +51,7 @@ int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 	cwmsg_addelem_wtp_descriptor(&cwmsg, wtpinfo);
 
 	/* wtp frame tunnel mode */
-	cwmsg_addelem(&cwmsg, CWMSGELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
+	cwmsg_addelem(&cwmsg, CW_ELEM_WTP_FRAME_TUNNEL_MODE, &wtpinfo->frame_tunnel_mode,
 		      sizeof(uint8_t));
 
 	/* mac type */
