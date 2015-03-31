@@ -68,6 +68,7 @@ int readelem_discovery_type(struct conn *conn,struct cw_action * a,uint8_t *data
 	cw_itemstore_set_byte(conn->itemstore,CW_ITEM_DISCOVERY_TYPE,*data);
 }
 
+/*
 int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
 {
         cw_action_t as,*af;
@@ -95,6 +96,8 @@ int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint
 
 	return 1;
 }
+*/
+
 
 int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
 {
@@ -127,10 +130,10 @@ cw_action_t discovery_actions[] = {
   readelem_discovery_type,0 },
 
 { 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-  readelem_vendor_specific_payload,0 },
+  cw_in_vendor_specific_payload,0 },
 
 { CW_VENDOR_ID_CISCO,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_CISCO_RAD_NAME,
-  readelem_cisco_rad_name,0 },
+  cw_in_wtp_name,0 },
 
 
 { 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_BOARD_DATA},

@@ -94,7 +94,7 @@ int cw_itemstore_set_str(cw_itemstore_t s,uint32_t id,char *str)
 	return 1;
 }
 
-int cw_itemstore_set_strn(cw_itemstore_t s,uint32_t id,char *str,int n)
+int cw_itemstore_set_strn(cw_itemstore_t s,uint32_t id,const char *str,int n)
 {
 	struct cw_item *i = cw_item_create(s,id);
 	if (!i)

@@ -718,4 +718,9 @@ extern struct cw_strlist capwap_state_strings[];
 
 int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
 
+
+extern int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
+extern int cw_in_wtp_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
+
+
 #endif

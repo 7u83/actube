@@ -166,6 +166,7 @@ CAPWAPOBJS= \
 	capwap_state_strings.o \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
+	cw_in_wtp_name.o \
 
 	
 	   #cw_ianavendoridtostr.o \
