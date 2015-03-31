@@ -709,8 +709,11 @@ struct cw_strlist {
 extern const char * cw_strlist_get_str(struct cw_strlist *s,int id);
 
 
+/* Constants to string conversion lists */
 extern struct cw_strlist capwap_strings_msg[];
 extern struct cw_strlist capwap_strings_state[];
+extern struct cw_strlist capwap_strings_vendor[];
+
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
