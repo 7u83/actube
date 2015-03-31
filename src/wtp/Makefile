@@ -70,7 +70,7 @@ CFLAGS += $(HA_INCS)
 
 #CFLAGS += -I../src
 #CFLAGS += -I../src/utils
-CFLAGS += -I../../src
+CFLAGS += -I../../src -I /usr/local/include
 
 #CFLAGS += -I/usr/local/include
 
