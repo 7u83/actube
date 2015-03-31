@@ -66,7 +66,9 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 }
 
 
-
+/**
+ * Parse a WTP Board Data messag element an put results to itemstore.
+ */ 
 int cw_in_wtp_board_data(struct conn *conn, struct cw_action *a, uint8_t * data, int len)
 {
 	if (len < 4) {
