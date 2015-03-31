@@ -103,8 +103,38 @@ int cw_itemstore_set_strn(cw_itemstore_t s,uint32_t id,const char *str,int n)
 	i->data=strndup(str,n);
 	return 1;
 }
-		
 
+int cw_itemstore_set_ptr(cw_itemstore_t s, uint32_t id, void*ptr)
+{
+	struct cw_item *i = cw_item_create(s,id);
+	if (!i)
+		return 0;
+	i->type=CW_ITEMTYPE_DATA;
+	i->data=ptr;
+	return 1;
+}
+
+int cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t *data,int len)
+{
+	struct cw_item *i = cw_item_create(s,id);
+	if (!i)
+		return 0;
+	i->type=CW_ITEMTYPE_DATA;
+	i->data=bstr_create(data,len);
+	return 1;
+}
+
+		
+int cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void*ptr)
+{
+	struct cw_item *i = cw_item_create(s,id);
+	if (!i)
+		return 0;
+	i->type=CW_ITEMTYPE_CONST_DATA;
+	i->data=ptr;
+	return 1;
+}
+	
 /*
 	struct cw_item * i = malloc(sizeof(struct cw_item));
 	if ( !i)
