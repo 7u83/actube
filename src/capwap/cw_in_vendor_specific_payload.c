@@ -1,5 +1,6 @@
 
 #include "capwap.h"
+#include "cw_log.h"
 /** 
  * @file 
  * @brief Implementation of Vendor Specific Payload
@@ -19,10 +20,10 @@ int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t
 
  	af = cw_actionlist_get(conn->msgtr,&as);
 
-
-
 	if (!af) {
-		printf("Msg unknown\n");
+		cw_log(DBG_ELEM,"Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
+			cw_strvendor(as.vendor_id),
+			as.elem_id,as.msg_id,cw_strmsg(as.msg_id),cw_strstate(as.capwap_state));
 		return 0;
 	}
 
