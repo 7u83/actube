@@ -34,11 +34,11 @@ struct cwrmsg * conn_get_response(struct conn * conn)
 			if (conn->dtls_error)
 	                        return 0;
 		}
-		cw_dbg(DBG_CW_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+		cw_dbg(DBG_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 		conn_send_cwmsg(conn,&conn->req_msg);
 
         }
-	cw_dbg(DBG_CW_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+	cw_dbg(DBG_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 	return 0;
 
 }

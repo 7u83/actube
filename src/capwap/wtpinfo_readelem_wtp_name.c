@@ -12,7 +12,7 @@ int wtpinfo_readelem_wtp_name(struct wtpinfo * wtpinfo, int type, uint8_t * msge
 		return 0;
 
 	if (len>512){
-		cw_dbg(DBG_CW_MSG_ERR,"Truncating WTP_NAME msgelem to 512, wrong size, type=%d,len=%d",type,len);
+		cw_dbg(DBG_MSG_ERR,"Truncating WTP_NAME msgelem to 512, wrong size, type=%d,len=%d",type,len);
 		len=512;
 	}
 

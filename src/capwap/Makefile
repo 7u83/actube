@@ -160,7 +160,11 @@ CAPWAPOBJS= \
 	cw_readmsg_configuration_status_request.o \
 	cw_cisco_id_to_str.o\
 	cw_readelem_cisco_wtp_radio_cfg.o \
-	cw_addelem_cisco_wtp_radio_cfg.o
+	cw_addelem_cisco_wtp_radio_cfg.o \
+	cw_strlist_get_str.o \
+	capwap_msg_strings.o \
+	capwap_state_strings.o \
+	itemstore.o
 
 	
 	   #cw_ianavendoridtostr.o \

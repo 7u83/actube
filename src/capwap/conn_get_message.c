@@ -16,25 +16,37 @@ struct args {
 	struct cwrmsg *cwrmsg;
 };
 
-static int pmessage(void *p, struct cwrmsg *cwrmsg)
+static int message_cb(void *p, uint8_t *rawmsg, int len)
 {
 	struct args *args = (struct args *) p;
 	struct conn *conn = args->conn;
+	memcpy(conn->cwrmsg_buffer, rawmsg, len);
 
-
+/*
 
 	memcpy(&conn->cwrmsg, cwrmsg, sizeof(struct cwrmsg));
-	memcpy(conn->cwrmsg_buffer, cwrmsg->msgelems,
-	       cwrmsg->msgelems_len);
 	conn->cwrmsg.msgelems = conn->cwrmsg_buffer;
+*/
 	args->cwrmsg = &conn->cwrmsg;
 	return 0;
 }
 
 
+void conn_msg_processor(struct conn *conn)
+{
+        uint8_t buf[2024];
+        int len = 2024;
+
+        int n = conn->read(conn, buf, len);
+        if (n > 0)
+                conn_process_packet(conn, buf, n, cw_process_msg, conn);
+
+}
 
 
-struct cwrmsg *conn_get_message(struct conn *conn)
+
+
+uint8_t *conn_get_message(struct conn *conn)
 {
 	struct args args;
 	args.cwrmsg = 0;
@@ -44,18 +56,20 @@ struct cwrmsg *conn_get_message(struct conn *conn)
 
 	int n = conn->read(conn, buf, len);
 	if (n > 0)
-		conn_process_packet(conn, buf, n, pmessage, &args);
+		conn_process_packet(conn, buf, n, message_cb, &args);
 
 
 	if (args.cwrmsg) {
-
+		cw_dbg(DBG_MSG,"Message recieved from %s",sock_addr2str(&conn->addr));
+/*
 		cw_dbg(DBG_MSG,
 		       "Received message from %s, type=%d - %s, seq=%d",
 		       sock_addr2str(&conn->addr), args.cwrmsg->type,
 		       cw_msgtostr(args.cwrmsg->type),
 		       args.cwrmsg->seqnum);
 
+*/
 	}
 
-	return args.cwrmsg;
+	return conn->cwrmsg_buffer;
 }

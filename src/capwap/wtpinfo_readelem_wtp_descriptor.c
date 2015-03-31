@@ -66,7 +66,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 	do {
 		if (i+8>len)
 		{
-			cw_dbg(DBG_CW_MSG_ERR,"WTP descriptor subelement to long, length=%d>%d",i+8,len);
+			cw_dbg(DBG_MSG_ERR,"WTP descriptor subelement to long, length=%d>%d",i+8,len);
 			return -1;
 		}
 
@@ -78,7 +78,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 		i+=8;
 
 		if (sublen+i>len){
-			cw_dbg(DBG_CW_MSG_ERR,"WTP descriptor subelement too long, length = %d",sublen);
+			cw_dbg(DBG_MSG_ERR,"WTP descriptor subelement too long, length = %d",sublen);
 			return -1;
 		}
 
@@ -102,7 +102,7 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 				wtpinfo->bootloader_version_len=sublen;
 				break;
 			default:
-				cw_dbg(DBG_CW_MSG_ERR,"Unknown WTP descriptor subelement, type = %d",subtype);
+				cw_dbg(DBG_MSG_ERR,"Unknown WTP descriptor subelement, type = %d",subtype);
 				break;
 		}
 		i+=sublen;

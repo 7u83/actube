@@ -35,7 +35,8 @@
 #include "socklist.h"
 
 #include "db.h"
-
+#include "capwap_items.h"
+#include "capwap_cisco.h"
 
 
 
@@ -53,10 +54,60 @@ void alive_thread(void *data)
 
 cw_actionlist_t the_tree;
 
-int dstart(struct conn *conn,struct cw_action a,uint8_t *data,int len)
+int dstart(struct conn *conn,struct cw_action_t * a,uint8_t *data,int len)
 {
 	printf("DISCO STart Action!!\n");
+
+	uint8_t * rmac = cw_get_hdr_rmac(data);
+	printf ("This msg is for %s\n",sock_hwaddr2str(bstr_data(rmac), bstr_len(rmac)));
 }
+
+int readelem_discovery_type(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
+{
+	printf("Discovery Type = %d\n",*data);
+	cw_itemstore_set_byte(conn->itemstore,CW_ITEM_DISCOVERY_TYPE,*data);
+}
+
+int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
+{
+        cw_action_t as,*af;
+	as = *a;
+
+	as.vendor_id = cw_get_dword(data);
+	as.elem_id = cw_get_word(data+4);
+	printf("Vendor Specific: %d, %d\n",as.vendor_id,as.elem_id);
+
+ 	af = cw_actionlist_get(conn->msgtr,&as);
+
+
+
+	if (!af) {
+		printf("Msg unknown\n");
+		return 0;
+	}
+
+	printf("Found\n");
+
+	if (af->start) {
+		af->start(conn,af,data+6,len-6);
+	}
+
+
+	return 1;
+}
+
+int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
+{
+	printf("Here is the rad name reader\n");
+	int i;
+
+	for (i=0; i<len; i++) {
+		printf("%c",data[i]);
+	}
+	printf("\n");
+}
+
+
 
 
 
@@ -69,27 +120,38 @@ the_tree=t;
 
 
 cw_action_t discovery_actions[] = {
-{ CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST,-1,0,0,
-  dstart
-},
-{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE},
-{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_BOARD_DATA},
-{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
-{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
-{CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_MAC_TYPE},
-{0}
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST,-1,
+  dstart,0 },
+
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE,
+  readelem_discovery_type,0 },
+
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+  readelem_vendor_specific_payload,0 },
+
+{ CW_VENDOR_ID_CISCO,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_CISCO_RAD_NAME,
+  readelem_cisco_rad_name,0 },
+
+
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_BOARD_DATA},
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
+{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_MAC_TYPE},
+
+
+{ 0,0,0}
 };
 
 
 
 cw_action_t join_actions[] = {
 
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST,-1,0,0},
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_DISCOVERY_TYPE},
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_BOARD_DATA},
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
-{CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_MAC_TYPE},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST,-1,0,0},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_DISCOVERY_TYPE},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_BOARD_DATA},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
+{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_MAC_TYPE},
 {0}
 
 

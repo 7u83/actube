@@ -355,16 +355,33 @@ static void wtpman_run_discovery(void *arg)
 
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg;
+	
+	void conn_msg_processor(struct conn *conn);
 
+	time_t timer = cw_timer_start(10);
 
 extern cw_actionlist_t the_tree;
 wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
 wtpman->conn->msgtr=the_tree;
 
+wtpman->conn->itemstore = cw_itemstore_create();
 
 
 
-	time_t timer = cw_timer_start(10);
+	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_DISCOVERY){
+		conn_msg_processor(wtpman->conn);
+	}
+
+//	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);
+	wtpman_remove(wtpman);
+	return;
+	
+
+
+
+
+
+	timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
 	if ( !cwrmsg  )
@@ -414,9 +431,7 @@ wtpman->conn->msgtr=the_tree;
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 */
 
-	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);			
-
-
+	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);
 	wtpman_remove(wtpman);
 }
 

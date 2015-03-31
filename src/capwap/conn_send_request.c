@@ -44,7 +44,7 @@ struct cwrmsg * conn_send_request(struct conn * conn)
 
                 time_t r_timer = cw_timer_start(conn->retransmit_interval);
 		if (i!=0)
-	                cw_dbg(DBG_CW_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+	                cw_dbg(DBG_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 
 		conn_send_cwmsg(conn,&conn->req_msg);
 		cwrmsg = conn_wait_for_message(conn,r_timer);
@@ -55,7 +55,7 @@ struct cwrmsg * conn_send_request(struct conn * conn)
                                 
 		}
         }
-        cw_dbg(DBG_CW_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+        cw_dbg(DBG_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
         return 0;
 }
 

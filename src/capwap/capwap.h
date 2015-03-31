@@ -63,8 +63,10 @@ enum capwap_states {
 	CW_STATE_NONE=0,
 	CW_STATE_DISCOVERY,
 	CW_STATE_JOIN,
+	CW_STATE_CONFIGURE,
+	CW_STATE_IMAGE,
 	CW_STATE_UPDATE,
-	CW_STATE_RUN,
+	CW_STATE_RUN
 };
 
 
@@ -122,8 +124,8 @@ struct capwap_ctrlhdr
 #define CW_MSG_CONFIGURATION_UPDATE_REQUEST	7
 #define CW_MSG_CONFIGURATION_UPDATE_RESPONSE	8
 
-#define CWMSG_WTP_EVENT_REQUEST			9
-#define CWMSG_WTP_EVENT_RESPONSE		10
+#define CW_MSG_WTP_EVENT_REQUEST			9
+#define CW_MSG_WTP_EVENT_RESPONSE		10
 
 #define CW_MSG_CHANGE_STATE_EVENT_REQUEST	11
 #define CW_MSG_CHANGE_STATE_EVENT_RESPONSE	12
@@ -137,8 +139,8 @@ struct capwap_ctrlhdr
 #define CW_MSG_RESET_REQUEST			17
 #define CW_MSG_RESET_RESPONSE			18 
 
-#define CWMSG_PRIMARY_DISCOVERY_REQUEST		19 
-#define CWMSG_PRIMARY_DISCOVERY_RESPONSE	20 
+#define CW_MSG_PRIMARY_DISCOVERY_REQUEST		19 
+#define CW_MSG_PRIMARY_DISCOVERY_RESPONSE	20 
 
 /*           Data Transfer Request               21
            Data Transfer Response              22
@@ -503,6 +505,9 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_hdr_hlen(th) ((ntohl(((uint32_t*)th)[0]) >> 19) & 0x1f)
 
 #define cw_get_hdr_rmac(th) (th+8)
+#define cw_get_hdr_rmac_len(th) (*(th+8))
+#define cw_get_hdr_rmac_size(th) cw_get_hdr_rmac_len(th)
+#define cw_get_hdr_rmac_data(th) (th+9)
 
 #define cw_get_hdr_flag_r1(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_R1 ) ? 1:0)
 #define cw_get_hdr_flag_r2(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_R2 ) ? 1:0)
@@ -524,6 +529,10 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
 #define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
 
+static inline uint8_t * cw_get_hdr_msg_elems_ptr(uint8_t *m){
+	return cw_get_msg_elems_ptr( m+cw_get_hdr_msg_offset(m) );
+}
+
 /**
  * Get length of a CAPWAP message elemet 
  * @param e pointer to element (uint8_t*)
@@ -540,7 +549,7 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_elem_len(e) cw_get_word(e+2)
 
 /**
- * Get a pinter to the data of a CAPWAP message element 
+ * Get a pointer to the data of a CAPWAP message element 
  * @param e pointer to message element 
  * @return pointer to data
  */
@@ -687,5 +696,26 @@ extern int cw_send_configuration_update_response(struct conn * conn,int seqnum,s
 
 #define cwmsg_addelem_radio_operational_state(cwmsg,ri) \
 	(cwmsg)->pos+=cw_addelem_radio_operational_state((cwmsg)->msgelems+(cwmsg)->pos,ri)
+
+
+
+/* Message to text stuff */
+
+struct cw_strlist { 
+	uint32_t id;
+	const char * str;
+};
+
+extern const char * cw_strlist_get_str(struct cw_strlist *s,int id);
+
+
+extern struct cw_strlist capwap_msg_strings[];
+extern struct cw_strlist capwap_state_strings[];
+
+#define cw_strmsg(id) cw_strlist_get_str(capwap_msg_strings,id)
+#define cw_strstate(id) cw_strlist_get_str(capwap_state_strings,id)
+
+
+int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
 
 #endif
