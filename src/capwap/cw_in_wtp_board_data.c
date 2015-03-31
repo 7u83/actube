@@ -44,28 +44,19 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_SERIALNO,
 						       msgelem + i, sublen);
 				
-//				bstr_replace(&wtpinfo->serial_no, bstr_create(msgelem + i, sublen));
 				break;
 			case CWBOARDDATA_MACADDRESS:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_MACADDRESS,
 						       msgelem + i, sublen);
 				
-/*
-				wtpinfo->macaddress = realloc(wtpinfo->macaddress, sublen);
-				memcpy(wtpinfo->macaddress, msgelem + i, sublen);
-				wtpinfo->macaddress_len = sublen;
-*/
 				break;
 			case CWBOARDDATA_BOARDID:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
 						       msgelem + i, sublen);
-//				bstr_replace(&wtpinfo->board_id, bstr_create(msgelem + i, sublen));
 				break;
 			case CWBOARDDATA_REVISION:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_REVISION,
 						       msgelem + i, sublen);
-//				bstr_replace(&wtpinfo->board_revision,
-//					     bstr_create(msgelem + i, sublen));
 			default:
 				break;
 		}
@@ -86,11 +77,8 @@ int cw_in_wtp_board_data(struct conn *conn, struct cw_action *a, uint8_t * data,
 	}
 
 	cw_itemstore_t itemstore = conn->itemstore;	
-	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR,get_dword(data));
+	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR,cw_get_dword(data));
 
-/*
-	wtpinfo->vendor_id = ntohl(*((uint32_t*)msgelem));
-*/
 	readsubelems_wtp_board_data(itemstore,data+4,len-4);
 	return 1;
 }
