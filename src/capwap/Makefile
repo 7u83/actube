@@ -164,6 +164,7 @@ CAPWAPOBJS= \
 	cw_strlist_get_str.o \
 	capwap_strings_msg.o \
 	capwap_strings_state.o \
+	capwap_strings_vendor.o \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_name.o \
