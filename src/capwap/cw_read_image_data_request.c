@@ -37,7 +37,7 @@ int cw_readelem_image_identifier(struct cwimage_data *data, int type,uint8_t *ms
 	data->vendor_id = ntohl(*((uint32_t*)msgelem));
 
 	if (len >= 1024) {
-		cw_dbg(DBG_CW_MSG_ERR,"Image identifier too long (>1024), truncating");
+		cw_dbg(DBG_MSG_ERR,"Image identifier too long (>1024), truncating");
 		len = 1024;
 	}
 	

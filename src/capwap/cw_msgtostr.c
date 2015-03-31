@@ -45,9 +45,9 @@ const char * cw_msgtostr(int type)
 		case CW_MSG_CONFIGURATION_UPDATE_RESPONSE:
 			return "configuration update response";
 			
-		case CWMSG_WTP_EVENT_REQUEST:
+		case CW_MSG_WTP_EVENT_REQUEST:
 			return "wtp event request";
-		case CWMSG_WTP_EVENT_RESPONSE:
+		case CW_MSG_WTP_EVENT_RESPONSE:
 			return "wtp event response";
 
 
@@ -83,9 +83,9 @@ const char * cw_msgtostr(int type)
            Reset Request                       17
            Reset Response                      18
 */	   
-		case CWMSG_PRIMARY_DISCOVERY_REQUEST:
+		case CW_MSG_PRIMARY_DISCOVERY_REQUEST:
 			return "primary discovery request";
-		case CWMSG_PRIMARY_DISCOVERY_RESPONSE:
+		case CW_MSG_PRIMARY_DISCOVERY_RESPONSE:
 			return "primary discovery response";
 
 /*           Data Transfer Request               21

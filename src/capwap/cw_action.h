@@ -6,16 +6,22 @@
 #include <stdint.h>
 
 #include "avltree.h"
+#include "conn.h"
 
 struct cw_action{
+	uint32_t vendor_id;
+	uint8_t proto;
 	uint8_t capwap_state;
 	uint32_t msg_id;
 	uint16_t elem_id;
-	uint32_t vendor_id;
-	uint16_t vendor_elem_id;
 
 	int (*start)(struct conn *conn,struct cw_action *a,uint8_t*data,int len);
-	int (*end)(struct conn *conn,struct cw_action *a,uint8_t*data,int len);
+	int (*end)(struct conn *conn,struct cw_action *a,uint8_t*elem,int len);
+
+	uint16_t min_len;
+	uint16_t max_len;
+
+	uint8_t capwap_state_next;
 	
 	
 	const char *name;

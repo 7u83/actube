@@ -34,7 +34,6 @@
  */
 
 #define DBG_MSG				0x00000001	/* Parsed CAPWAP/LWAPP messages */
-#define DBG_MSG_ERR			0x00000001
 
 #define DBG_ELEM			0x00000002	/* Parsed CAPWAP/LWAPP message elements */
 #define DBG_ELEM_DMP			0x00000004	/* Dump CAPWAP message elements */
@@ -47,8 +46,9 @@
 #define DBG_CW_PKT_DMP			0x00000080	/* Dump packts */
 #define DBG_CW_PKT_DTL			0x00000100	
 #define DBG_CW_PKT_ERR			0x00000200
-#define DBG_CW_MSG_ERR			0x00000400	/* Errors in CAPWAP messages */
+#define DBG_MSG_ERR			0x00000400	/* Errors in CAPWAP messages */
 #define DBG_CW_IMG_DTL			0x00000800	/* Detail about image transfer */
+#define DBG_ELEM_ERR			0x00001000
 
 /* driver specific debugs */
 #define DBG_DRV				0x00010000
@@ -69,7 +69,7 @@
 
 
 #define DBG_DETAIL_ALL			0xffffffff
-#define DBG_ERR				(DBG_CW_MSG_ERR | DBG_CW_PKT_ERR)
+#define DBG_ERR				(DBG_MSG_ERR | DBG_CW_PKT_ERR)
 
 /**@}*/
 
