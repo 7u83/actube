@@ -83,7 +83,7 @@ int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len)
 		af = cw_actionlist_get(conn->msgtr,&as);
 		
 		if (!af) {
-			printf("Wrong Elem: %d, %d\n",as.elem_id,elem_len);
+			cw_dbg(DBG_ELEM_ERR,"Element %d not aallowed in msg %d (%s)",as.elem_id,as.msg_id,cw_strmsg(as.msg_id));
 			continue;
 		}
 

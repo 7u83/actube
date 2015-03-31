@@ -717,6 +717,7 @@ extern struct cw_strlist capwap_strings_vendor[];
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
+#define cw_strvendor(id) cw_strlist_get_str(cawpap_strings_vendor,id)
 
 
 int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
