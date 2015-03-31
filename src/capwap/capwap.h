@@ -163,7 +163,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_AC_IPV6_LIST				3
 #define CW_ELEM_AC_NAME					4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY			5
-#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 inaming */
+#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 naming */
 #define CW_ELEM_AC_TIMESTAMP				6
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
@@ -173,7 +173,7 @@ struct capwap_ctrlhdr
 #define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS		30
 #define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS		50
 #define CW_ELEM_CAPWAP_TIMERS				12
-#define CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL		51     /* not in draft 7 */
+#define CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL		51	/* not in draft 7 */
 #define CW_ELEM_DATA_TRANSFER_DATA			13
 #define CW_ELEM_DATA_TRANSFER_MODE			14
 #define CW_ELEM_DECRYPTION_ERROR_REPORT			15
@@ -717,7 +717,7 @@ extern struct cw_strlist capwap_strings_vendor[];
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
-#define cw_strvendor(id) cw_strlist_get_str(cawpap_strings_vendor,id)
+#define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 
 
 int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
@@ -725,6 +725,7 @@ int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
 
 extern int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
 extern int cw_in_wtp_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
+extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action *a, uint8_t * data, int len);
 
 
 #endif
