@@ -162,8 +162,8 @@ CAPWAPOBJS= \
 	cw_readelem_cisco_wtp_radio_cfg.o \
 	cw_addelem_cisco_wtp_radio_cfg.o \
 	cw_strlist_get_str.o \
-	capwap_msg_strings.o \
-	capwap_state_strings.o \
+	capwap_strings_msg.o \
+	capwap_strings_state.o \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_name.o \

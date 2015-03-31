@@ -709,11 +709,11 @@ struct cw_strlist {
 extern const char * cw_strlist_get_str(struct cw_strlist *s,int id);
 
 
-extern struct cw_strlist capwap_msg_strings[];
-extern struct cw_strlist capwap_state_strings[];
+extern struct cw_strlist capwap_strings_msg[];
+extern struct cw_strlist capwap_strings_state[];
 
-#define cw_strmsg(id) cw_strlist_get_str(capwap_msg_strings,id)
-#define cw_strstate(id) cw_strlist_get_str(capwap_state_strings,id)
+#define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
+#define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 
 
 int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
