@@ -66,18 +66,16 @@ int cw_rand_r(uint8_t*dst, int len)
 
 int cw_rand(uint8_t *dst, int len)
 {
-	static int init = 1;
-	if (init){
-		uint32_t rinit=time(NULL);
+	static uint32_t rinit = 0;
+	if (!rinit){
 
 		int l = cw_rand_r((uint8_t*)(&rinit),sizeof(uint32_t));
-		if (l<sizeof(uint32_t))
-			cw_dbg(DBG_CW_INFO,"Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
-	
-
+		if (l<sizeof(uint32_t)){
+			cw_log(LOG_WARNING,"Can't read enough bytes from %s, using time to init rand",cw_rand_dev);
+			rinit=time(NULL);
+		}
 
 		srand(rinit);
-		init =0;
 	}
 	int i;
 	for (i=0; i<len; i++){
