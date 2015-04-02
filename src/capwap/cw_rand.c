@@ -53,11 +53,6 @@ int cw_rand_r(uint8_t*dst, int len)
 		return 0;
 	}
 
-/*	if (l<len){
-		cw_dbg(DBG_CW_INFO,"Not enough entropy reading from %s, using pseudo rand",cw_rand_dev);
-		return cw_pseudo_rand(dst,len);
-	}
-	*/
 	return l;
 }
 
@@ -71,7 +66,7 @@ int cw_rand(uint8_t *dst, int len)
 
 		int l = cw_rand_r((uint8_t*)(&rinit),sizeof(uint32_t));
 		if (l<sizeof(uint32_t)){
-			cw_log(LOG_WARNING,"Can't read enough bytes from %s, using time to init rand",cw_rand_dev);
+			cw_log(LOG_WARNING,"Can't read enough bytes from %s. Using time to init rand instead.",cw_rand_dev);
 			rinit=time(NULL);
 		}
 
