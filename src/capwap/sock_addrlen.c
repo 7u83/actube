@@ -16,6 +16,11 @@
 
 */
 
+/**
+ *@file
+ *@brief Implementation of sock_addrlen.
+ */
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -31,6 +36,8 @@
 
 /**
  * Determine the length of a sockaddr struct
+ * @param sa pointer to socket address
+ * @return length of socket
  */
 int sock_addrlen(const struct sockaddr * sa)
 {
@@ -39,10 +46,8 @@ int sock_addrlen(const struct sockaddr * sa)
 	switch(sa->sa_family){
 		case AF_INET:
 			return sizeof(struct sockaddr_in);
-#ifdef WITH_IPV6
 		case AF_INET6:	
 			return  sizeof(struct sockaddr_in6);
-#endif
 
 #ifdef AF_PACKET
 		case AF_PACKET:
