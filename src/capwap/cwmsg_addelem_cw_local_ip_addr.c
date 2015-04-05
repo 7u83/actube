@@ -48,7 +48,7 @@ cw_mode = CWMODE_CISCO;
 			if (cw_mode == CWMODE_CISCO)
 				id = CW_ELEM_WTP_IPV4_IP_ADDRESS; 
 			else
-				id = CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
+				id = CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
 
 printf("Sending local ip %s\n",sock_addr2str(sain));
 			
@@ -63,7 +63,7 @@ printf("Sending local ip %s\n",sock_addr2str(sain));
 			if (cw_mode == CWMODE_CISCO)
 				id = CW_ELEM_WTP_IPV6_IP_ADDRESS; 
 			else
-				id = CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
+				id = CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
 			struct sockaddr_in6  * sain = (struct sockaddr_in6*)&a;
 			return cwmsg_addelem(msg,id,(uint8_t*)&sain->sin6_addr,16);
 		}

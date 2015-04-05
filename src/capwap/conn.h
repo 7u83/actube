@@ -31,7 +31,7 @@
 #include "wtpinfo.h"
 
 
-#include "cw_action.h"
+#include "action.h"
 
 #include "itemstore.h"
 
@@ -42,8 +42,13 @@ struct conn {
 
 	cw_itemstore_t itemstore;
 
+	cw_itemstore_t local;
+	cw_itemstore_t remote;
 
-	struct avltree *msgtr;
+
+	struct cw_actiondef *actions;
+
+//	struct avltree *msgtr;
 
 	uint8_t capwap_state;
 
@@ -72,8 +77,11 @@ struct conn {
 	struct cwmsg req_msg;
 	struct cwmsg resp_msg;
 	uint8_t req_buffer[65536];
-	uint8_t resp_buffer[65536];
 
+	/** Buffer for outgoing response messages */
+	uint8_t resp_buffer[65536];
+	
+		
 
 	int mtu;		/* max mtu, could be changed during discovery */
 	int mtu_discovery;	/* 0 mtu discovery turned off, 1 discovery tuned on */

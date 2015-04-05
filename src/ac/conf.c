@@ -164,7 +164,7 @@ static int init_acid()
 static int init_dtls()
 {
 	if (conf_dtls_psk!=NULL){
-		conf_security=CWACSECURITY_FLAGS_S;
+//		conf_security=CW_SECURITY_FLAGS_S;
 	}
 
 	return 1;	
@@ -456,7 +456,7 @@ int init_bcast_addrs()
 
 	conf_bcast_addrs=malloc(t->count*sizeof(char*));
 
-	stravltree_foreach(t,add_bcast_addr,0,1);
+	stravltree_foreach_asc(t,add_bcast_addr,0);
 	stravltree_destroy(t);
 
 	freeifaddrs(ifa0);

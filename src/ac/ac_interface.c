@@ -12,42 +12,7 @@
 
 #include "capwap.h"
 #include "capwap_80211.h"
-
-ACIPLIST * get_aciplist()
-{
-	int i=0;
-
-	ACIPLIST * aciplist = aciplist_create();
-	if(!aciplist)
-		return 0;
-
-
-	for (i=0; i<socklist_len;i++){
-
-		if (socklist[i].type != SOCKLIST_UNICAST_SOCKET)
-			break;
-
-		struct sockaddr_storage sa;
-		unsigned int salen=sizeof(sa);
-		if ( getsockname(socklist[i].sockfd,(struct sockaddr*)&sa,&salen)<0)
-			continue;
-
-		ACIP * acip;
-		acip = malloc(sizeof(ACIP));
-		if (!acip)
-			continue;
-
-		sock_copyaddr(&acip->ip,(struct sockaddr*)&sa);
-		acip->wtp_count=0;
-
-//		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
-
-		aciplist_add(aciplist,acip);
-
-		
-	}
-	return aciplist;
-}
+#include "aciplist.h"
 
 
 
@@ -91,7 +56,7 @@ struct ac_info * get_acinfo()
 		acinfo->security|=AC_SECURITY_X;
 
 
-	acinfo->dtls_policy = AC_DTLS_POLICY_C | AC_DTLS_POLICY_D ;
+//	acinfo->dtls_policy = AC_DTLS_POLICY_C | AC_DTLS_POLICY_D ;
 //	acinfo->ac_ips = conf_ac_ips;
 //	acinfo->ac_ips_len=conf_ac_ips_len;
 
@@ -101,11 +66,11 @@ struct ac_info * get_acinfo()
 //	acinfo->salist = conf_ac_ips;
 //	acinfo->salist_len = conf_ac_ips_len;
 
-	acinfo->aciplist=get_aciplist();
+	//acinfo->aciplist=get_aciplist();
 
-
+/*
 	aciplist_foreach(acinfo->aciplist,pr,NULL);
-
+*/
 	int i;
 	for (i=1; i<=4; i++){
 		acinfo->radioinfos[i].type= 

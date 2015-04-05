@@ -14,6 +14,7 @@
 
 #include "radioinfo.h"
 
+/*
 struct acip{
 	struct sockaddr_storage ip;
 	int wtp_count;
@@ -25,7 +26,9 @@ typedef struct avltree ACIPLIST;
 ACIPLIST * aciplist_create();
 #define aciplist_destroy(l) avltree_destroy(l)
 #define aciplist_add(l,elem) avltree_add(l,elem)
-#define aciplist_foreach(l,callback,cbpriv) avltree_foreach(l,callback,cbpriv,1)
+#define aciplist_foreach(l,callback,cbpriv) avltree_foreach_asc(l,callback,cbpriv)
+*/
+
 
 
 /**
@@ -58,7 +61,7 @@ struct ac_info{
 	struct sockaddr * salist;
 	int salist_len;
 
-	ACIPLIST * aciplist;
+	//ACIPLIST * aciplist;
 	uint8_t ecn_support;
 
 	struct sockaddr_storage local_ip;

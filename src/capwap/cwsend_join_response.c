@@ -19,7 +19,7 @@ void cwsend_join_response(struct conn *conn, int seqnum, int rc, struct radioinf
 	cwmsg_addelem_ac_descriptor(cwmsg, acinfo,wtpinfo);
 	cwmsg_addelem(cwmsg, CW_ELEM_AC_NAME, acinfo->ac_name, strlen((char *) acinfo->ac_name));
 	cwmsg_addelem(cwmsg, CWMSGELEM_ECN_SUPPORT, &acinfo->ecn_support, sizeof(uint8_t));
-	cwmsg_addelem_ctrl_ip_addrs(cwmsg, acinfo);
+//	cwmsg_addelem_ctrl_ip_addrs(cwmsg, acinfo);
 //      cwmsg_addelem_cw_local_ip_addr(cwmsg,conn);
 
 

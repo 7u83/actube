@@ -117,8 +117,10 @@ printf("sublen type = %d\n",subtype);
 
 int acinfo_readelem_ctrl_ip_addr(struct ac_info * acinfo, int type, uint8_t*msgelem,int len)
 {
+
+/*
 	switch (type){
-		case CWMSGELEM_CONTROL_IPV4_ADDRESS:
+		case CW_ELEM_CONTROL_IPV4_ADDRESS:
 		{
 			if (len!=6)
 				return -1;
@@ -147,7 +149,7 @@ int acinfo_readelem_ctrl_ip_addr(struct ac_info * acinfo, int type, uint8_t*msge
 			return 1;
 
 		}
-		case CWMSGELEM_CONTROL_IPV6_ADDRESS:
+		case CW_ELEM_CONTROL_IPV6_ADDRESS:
 		{
 			if (len!=18)
 				return -1;
@@ -176,6 +178,8 @@ int acinfo_readelem_ctrl_ip_addr(struct ac_info * acinfo, int type, uint8_t*msge
 	}
 
 	return 0;
+*/
+
 }
 
 

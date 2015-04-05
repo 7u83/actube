@@ -85,18 +85,18 @@ static int wtpinfo_readelem_wtp_descriptor_(struct wtpinfo * wtpinfo, int type, 
 		cw_dbg(DBG_MSG,"Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
 	
 		switch(subtype){
-			case CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION:
+			case CW_SUBELEM_WTP_HARDWARE_VERSION:
 				wtpinfo->hardware_vendor_id=vendor_id;
 				cw_setstr(&wtpinfo->hardware_version,msgelem+i,sublen);
 				wtpinfo->hardware_version_len=sublen;
 				break;
-			case CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION:
+			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
 				wtpinfo->software_vendor_id=vendor_id;
 
 				bstr_replace(&wtpinfo->software_version,bstr_create(msgelem+i,sublen));
 				wtpinfo->software_version_len=sublen;
 				break;
-			case CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION:
+			case CW_SUBELEM_WTP_BOOTLOADER_VERSION:
 				wtpinfo->bootloader_vendor_id=vendor_id;
 				cw_setstr(&wtpinfo->bootloader_version,msgelem+i,sublen);
 				wtpinfo->bootloader_version_len=sublen;

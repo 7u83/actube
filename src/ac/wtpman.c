@@ -34,6 +34,12 @@
 
 #include "cw_util.h"
 
+#include "capwap_items.h"
+#include "ac.h"
+
+
+extern struct cw_actiondef capwap_actions;
+
 
 /* macro to convert our client ip to a string */
 //#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
@@ -352,7 +358,6 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 static void wtpman_run_discovery(void *arg)
 {
 
-
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg;
 	
@@ -360,19 +365,20 @@ static void wtpman_run_discovery(void *arg)
 
 	time_t timer = cw_timer_start(10);
 
-extern cw_actionlist_t the_tree;
-wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
-wtpman->conn->msgtr=the_tree;
+extern cw_actionlist_in_t the_tree;
 
-wtpman->conn->itemstore = cw_itemstore_create();
+	wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
+	wtpman->conn->actions = &capwap_actions;
 
+	wtpman->conn->itemstore = cw_itemstore_create();
 
+	wtpman->conn->local = ac_config;
+	wtpman->conn->remote = cw_itemstore_create();
 
 	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_DISCOVERY){
 		conn_msg_processor(wtpman->conn);
 	}
 
-//	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);
 	wtpman_remove(wtpman);
 	return;
 	
@@ -460,7 +466,7 @@ static void wtpman_run_run(void *arg)
 	printf("Update now?\n");
 
 
-
+/*
 	conn_prepare_request(conn,CW_MSG_CONFIGURATION_UPDATE_REQUEST);
 	cwmsg_addelem(&conn->req_msg,CW_ELEM_WTP_NAME,(uint8_t*)"Tube7u83",strlen("Tube7u83")+1);
 	cwmsg_addelem(&conn->req_msg,CWMSGELEM_LOCATION_DATA,(uint8_t*)"Berlin",strlen("Berlin")+1);
@@ -475,7 +481,7 @@ static void wtpman_run_run(void *arg)
 		printf("Wait...\n");
 		conn_wait_for_message(conn,t);
 	}
-
+*/
 
 
 printf("Adding WLAN\n");
@@ -581,9 +587,39 @@ static int wtpman_join(void *arg,time_t timer)
 {
 	struct wtpman * wtpman = (struct wtpman *)arg;
 
-extern cw_actionlist_t the_tree;
-wtpman->conn->msgtr=the_tree;
+extern cw_actionlist_in_t the_tree;
+wtpman->conn->actions=&capwap_actions;
 wtpman->conn->capwap_state=CW_STATE_JOIN;
+
+	wtpman->conn->capwap_state=CW_STATE_JOIN;
+	wtpman->conn->actions = &capwap_actions;
+
+	wtpman->conn->itemstore = cw_itemstore_create();
+
+	wtpman->conn->local = ac_config;
+	wtpman->conn->remote = cw_itemstore_create();
+
+	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_JOIN){
+		conn_msg_processor(wtpman->conn);
+	}
+
+
+	exit(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/* timer = cw_timer_start(wtpman->conn->wait_join); */
 
@@ -1055,7 +1091,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 void wtpman_start(struct wtpman * wtpman,int dtlsmode)
 {
 	if ( dtlsmode ){
-		cw_dbg(DBG_CW_INFO,"Starting wtpman in dtls mode");
+		cw_dbg(DBG_CW_INFO,"Starting wtpman in DTLS mode");
 		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run, (void *) wtpman);
 	}
 	else{

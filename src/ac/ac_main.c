@@ -38,7 +38,7 @@
 #include "capwap_items.h"
 #include "capwap_cisco.h"
 
-
+#include "ac.h"
 
 int ac_run();
 
@@ -50,23 +50,8 @@ void alive_thread(void *data)
 	}
 }
 
-#include "cw_action.h"
+#include "action.h"
 
-cw_actionlist_t the_tree;
-
-int dstart(struct conn *conn,struct cw_action_t * a,uint8_t *data,int len)
-{
-	printf("DISCO STart Action!!\n");
-
-	uint8_t * rmac = cw_get_hdr_rmac(data);
-	printf ("This msg is for %s\n",sock_hwaddr2str(bstr_data(rmac), bstr_len(rmac)));
-}
-
-int readelem_discovery_type(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
-{
-	printf("Discovery Type = %d\n",*data);
-	cw_itemstore_set_byte(conn->itemstore,CW_ITEM_DISCOVERY_TYPE,*data);
-}
 
 /*
 int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
@@ -99,6 +84,7 @@ int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint
 */
 
 
+/*
 int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
 {
 	printf("Here is the rad name reader\n");
@@ -109,7 +95,7 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 	}
 	printf("\n");
 }
-
+*/
 
 
 
@@ -117,116 +103,32 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 int main (int argc, const char * argv[]) 
 {
 
-
-cw_actionlist_t t = cw_actionlist_create();
-the_tree=t;
-
-
-cw_action_t discovery_actions[] = {
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST,-1,
-  dstart,0 },
-
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE,
-  readelem_discovery_type,0 },
-
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-  cw_in_vendor_specific_payload,0 },
-
-{ CW_VENDOR_ID_CISCO,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_CISCO_RAD_NAME,
-  cw_in_wtp_name,0 },
-
-
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_BOARD_DATA,
-  cw_in_wtp_board_data,0 },
-
-/*
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
-{ 0,0,CW_STATE_DISCOVERY,CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_MAC_TYPE},
-
-*/
-
-{ 0,0,0}
-};
-
-
-
-cw_action_t join_actions[] = {
-
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST,-1,0,0},
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_DISCOVERY_TYPE},
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_BOARD_DATA},
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_DESCRIPTOR},
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE},
-{0,0,CW_STATE_JOIN,CW_MSG_JOIN_REQUEST, CW_ELEM_WTP_MAC_TYPE},
-{0}
-
-
-};
-
-
-cw_register_actions(t,discovery_actions);
-cw_register_actions(t,join_actions);
-
-
-#define CW_NAME_DISCOVER_REQUEST "Discovery Request"
-
-/*
-int i;
-for(i=0; discovery[i].capwap_state!=CW_STATE_MAX; i++){
-	printf("State: %d MSG_ID: %d ELEM_ID: %d\n",discovery[i].capwap_state,discovery[i].msg_id,discovery[i].elem_id);
-	void * rc = msgtree_add(t,&(discovery[i]));
-
-	printf("Added to tree %p\n",rc);
-
-}
-*/
-
-
-/*
-e.capwap_state=0;
-e.msg_id = CW_MSG_DISCOVERY_REQUEST;
-e.elem_id = CW_ELEM_AC_NAME;
-e.name = "AC Name";
-
-msgtree_add(t,&e);
-*/
-
-
-
-
-//	send_image_file(0,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
+	
 
 
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");
-//	cw_log_debug_level=conf_debug_level;
+
+
 
 	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 
-//	cw_dbg_opt_level=   DBG_CW_MSGELEM_DMP | 
-//			DBG_CW_MSGELEM | DBG_CW_PKT| DBG_CW_RFC | DBG_ERR | DBG_CW_MSG | DBG_DTLS ; //| DBG_ALL;
-
-
 	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
 
-//	cw_log_dbg(DBG_CW_MSG,"Hello %s","World");
+	cw_register_actions_capwap_ac(&capwap_actions);
+	ac_global_init();
 
-
-
+/*
 	db_init();
 	db_start();
 	db_ping();
-
 	pthread_t alth;
 	pthread_create (&alth, NULL, alive_thread, (void *)0);
-	
-
-#ifdef WITH_DTLS
+*/	
+	int rc=0;
 	dtls_init();
-#endif	
 	if (!socklist_init())
 		goto errX;
 
@@ -234,12 +136,18 @@ msgtree_add(t,&e);
 		goto errX;
 
 
-	int rc = ac_run();
+	rc = ac_run();
 errX:
 	wtplist_destroy();
 	socklist_destroy();
 	return rc;
 }
+
+
+
+
+
+
 
 void process_ctrl_packet(int  index, struct sockaddr * addr, uint8_t * buffer, int len);
 #define AC_PROTO_CAPWAP 0
@@ -300,7 +208,7 @@ int ac_run()
 
 
 
-	get_acinfo();
+	//get_acinfo();
 
 
 	while(1){
@@ -359,7 +267,7 @@ int ac_run()
 void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
 {
 
-	int sock = socklist[index].reply_sockfd;
+//	int sock = socklist[index].reply_sockfd;
 
 	char hdrstr[1024];
 	hdr_print(hdrstr,buffer,len);
@@ -411,7 +319,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
 {
-	int sock = socklist[index].reply_sockfd;
+	//int sock = socklist[index].reply_sockfd;
 
 	uint8_t * m = buffer+6;
 	uint32_t val = ntohl(*((uint32_t*)(m)));
@@ -457,10 +365,10 @@ void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 			return;
 		};
 
-		wtpman_lw_start(wtpman);
+		//wtpman_lw_start(wtpman);
 	}
 
-	wtpman_lw_addpacket(wtpman,buffer,len);
+	//wtpman_lw_addpacket(wtpman,buffer,len);
 	wtplist_unlock();
 }
 
