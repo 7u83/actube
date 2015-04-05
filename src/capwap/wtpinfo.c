@@ -28,7 +28,7 @@ int wtpinfo_readelem_ecn_support(struct wtpinfo * wtpinfo, int type, uint8_t * m
 int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len)
 {
 	switch (type){
-		case CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
 			{
 			if (len!=4)
 				return -1;
@@ -42,7 +42,7 @@ int cw_readelem_cw_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t *
 			return 1;
 			}
 #ifdef WITH_IPV6				
-		case CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
 			{
 			if (len!=16)
 				return -1;
@@ -69,7 +69,7 @@ int wtpinfo_readelem_cw_local_ip_addr(struct wtpinfo * wtpinfo, int type, uint8_
 {
 
 	switch (type){
-		case CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
 			{
 			if (len!=4)
 				return -1;
@@ -83,7 +83,7 @@ int wtpinfo_readelem_cw_local_ip_addr(struct wtpinfo * wtpinfo, int type, uint8_
 			return 1;
 			}
 #ifdef WITH_IPV6				
-		case CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
 			{
 			if (len!=16)
 				return -1;

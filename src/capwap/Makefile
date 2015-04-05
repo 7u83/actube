@@ -38,7 +38,10 @@ LOGOBJS=cw_log.o \
 	cw_log_debug.o \
 	cw_log_tofile.o \
         cw_log_tosyslog.o \
-	cw_log_str2dbglevel.o
+	cw_log_str2dbglevel.o \
+	cw_dbg_elem.o
+
+
 
 
 WTPINFOOBJS = wtpinfo_set_location.o \
@@ -50,12 +53,15 @@ UTILOBJS= \
 	cw_rand.o \
 	cw_foreach_msgelem.o \
 	avltree.o \
-	avltree_get.o \
+	avltree_get_node.o \
 	avltree_del_all.o \
-	avltree_foreach.o \
+	avltree_foreach_lr.o \
+	avltree_foreach_rl.o \
+	avltree_foreach_from_lr.o \
 	stravltree.o \
 	cw_util.o \
-	cw_format_version.o
+	cw_format_version.o \
+	cw_msg_init.o
 
 
 
@@ -70,7 +76,8 @@ LWAPPOBJS = \
 	lw_vendor_id_to_str.o \
 	lw_elem_id_to_str.o \
 	lw_msg_id_to_str.o \
-	lw_cisco_id_to_str.o
+	lw_cisco_id_to_str.o \
+	lw_put_sockaddr.o \
 
 
 
@@ -90,7 +97,6 @@ CAPWAPOBJS= \
 	   cwmsg_vaddelem.o \
 	   cwmsg_addelem_ac_descriptor.o \
 	   cwmsg_addelem_wtp_descriptor.o \
-	   cwmsg_addelem_ctrl_ip_addrs.o \
 	   cwmsg_addelem_wtp_radio_infos.o \
 	   cwmsg_addelem_wtp_board_data.o \
 	   cwmsg_addelem_cw_local_ip_addr.o \
@@ -108,8 +114,6 @@ CAPWAPOBJS= \
 	cw_read_image_data_request.o \
 	cw_send_image_data_response.o \
 	cw_send_configuration_update_response.o \
-	   cwsend_join_request.o \
-	   cwsend_join_response.o \
 	   cwread_join_response.o \
 	cwsend_echo_request.o \
 	cw_send_echo_response.o \
@@ -121,7 +125,6 @@ CAPWAPOBJS= \
 	cwread_change_state_event_request.o\
 	cwread_wtp_event_request.o \
 	   process_conf_status_request.o \
-	   process_join_request.o \
 	   wtpinfo_readelem_wtp_board_data.o \
 	   wtpinfo_readelem_wtp_mac_type.o \
 	   wtpinfo_readelem_wtp_radio_info.o  \
@@ -139,8 +142,6 @@ CAPWAPOBJS= \
 	   acinfo_print.o \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
-	   cw_msgelemtostr.o \
-	   cw_msgtostr.o \
 	   hdr_print.o \
 	   cw_readelem_ecn_support.o \
 	cw_readelem_maximum_message_length.o \
@@ -165,11 +166,19 @@ CAPWAPOBJS= \
 	capwap_strings_msg.o \
 	capwap_strings_state.o \
 	capwap_strings_vendor.o \
+	capwap_strings_elem.o \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_name.o \
-	cw_in_wtp_board_data.o 
+	cw_in_wtp_board_data.o \
+	cw_out_generic.o \
+	cw_out_ac_descriptor.o \
+	cw_out_capwap_control_ip_addrs.o
 
+	   #cw_msgtostr.o \
+	   #cw_msgelemtostr.o \
+	   #cwmsg_addelem_ctrl_ip_addrs.o \
+	   #process_join_request.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
@@ -180,10 +189,12 @@ CAPWAPOBJS= \
 
 	#cwmsg_addelem_session_id.o
 #	   process_msgelems_discovery_request.o \
-	
+	  # cwsend_join_request.o \
+#	
 	  # cwsend_image_data_request.o 
 #	   cwmsg_set_control_header.o 
 #	   process_msgelems.o \
+#	   cwsend_join_response.o \
 
 #
 # SSL objects
@@ -235,7 +246,8 @@ CONNOBJS= conn_create.o \
 	conn_send_request.o \
 	conn_wait_for_message.o \
 	conn_wait_for_request.o \
-	conn_init.o
+	conn_init.o \
+	conn_send_msg.o
 
 
 
@@ -247,8 +259,12 @@ BSTROBJS= bstr_create.o \
 
 FRAGOBJS=fragman.o
 
-CWACTION=cw_action.o \
-	cw_process_msg.o
+CWACTION=action.o \
+	cw_process_msg.o \
+	capwap_actions_ac.o \
+	cw_in_generic.o \
+	cw_in_wtp_descriptor.o
+
 
 
 OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
@@ -281,7 +297,7 @@ $(ARCH)/%.o:%.c
 	@mkdir -p $(ARCH)
 	@echo "  CC "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
-	@$(CC) -MM $(CFLAGS) $< > $*.d
+#	@$(CC) -MM $(CFLAGS) $< > $*.d
 
 $(ARCH)/$(NAME) : $(OBJS)
 	@echo "  AR $(ARCH)/$(NAME)"

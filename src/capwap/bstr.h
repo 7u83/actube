@@ -24,7 +24,7 @@
 #ifndef __BSTR_H
 #define __BSTR_H
 
-
+#include <string.h>
 #include <stdint.h>
 
 /**
@@ -42,6 +42,7 @@ extern uint8_t * bstr_replace( bstr_t * dst, uint8_t * bstr);
 extern int bstr_to_str(char *dst, bstr_t str,char * def);
 
 
+
 /**
  * Return the length of a bstr_t string.
  */
@@ -50,7 +51,7 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
 /**
  * Return the data of a bstr_t string.
  */ 
-#define bstr_data(s) (s+1)
+#define bstr_data(s) ((s)+1)
 
 /**
  * Return the actual size in memory a bstr_t string needs.
@@ -61,6 +62,20 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
  * Max. length of a bstr_t string.
  */ 
 #define BSTR_MAX_LEN 254
+
+
+typedef uint8_t *bstr16_t;
+#define bstr16_len(s) ( *((uint16_t*)(s)) )
+#define bstr16_data(s) ((s)+2)
+#define bstr16_size(l) (l+2)
+#define BSTR16_MAX_LEN (0xffff-2)
+
+static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
+{
+	*((uint16_t*)dst)=len;
+	memcpy(dst+2,src,len);
+	return len+2;
+}
 
 
 #endif

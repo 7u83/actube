@@ -203,7 +203,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	cwrmsg.rid=(val>>14) & 0x1f;
 */
 
-printf ("Offs is %d RML is %d\n",offs,cw_get_hdr_rmac_len(packet));
+//printf ("Offs is %d RML is %d\n",offs,cw_get_hdr_rmac_len(packet));
 
 	/* Check Radio MAC if preset */
 	if (cw_get_hdr_flag_m(packet)){
@@ -229,8 +229,8 @@ printf ("Offs is %d RML is %d\n",offs,cw_get_hdr_rmac_len(packet));
 		cw_dbg_packet(conn,f+4,*(uint32_t*)f);
 
 	
-		extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
-		cw_process_msg(conn,f+4,*(uint32_t*)f);
+	//	extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
+	//	cw_process_msg(conn,f+4,*(uint32_t*)f);
 
 printf("Received a fragmented packetm should process it");
 exit(0);
@@ -247,8 +247,8 @@ exit(0);
 		return;
 	}
 
-extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
-cw_process_msg(conn,packet,len);
+//extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
+//cw_process_msg(conn,packet,len);
 
 
 	//if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,packet+hlen,len-hlen) ){
@@ -256,7 +256,6 @@ cw_process_msg(conn,packet,len);
 	//	return;
 	//}
 
-printf("Next big thing\n");
 //msg_4*((val >> 19) & 0x1f);
 	process_message(conn,packet,len,cb,cbarg); 
 	return;

@@ -8,7 +8,7 @@
 int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type, uint8_t * msgelem, int len)
 {
 	switch (type){
-		case CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS:
 		case CW_ELEM_WTP_IPV4_IP_ADDRESS:
 			{
 			if (len!=4)
@@ -23,7 +23,7 @@ int cw_readelem_capwap_local_ip_addr(struct sockaddr * local_ip, int type, uint8
 			return 1;
 			}
 #ifdef WITH_IPV6				
-		case CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
+		case CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS:
 		case CW_ELEM_WTP_IPV6_IP_ADDRESS:
 			{
 			if (len!=16)

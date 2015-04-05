@@ -58,9 +58,9 @@ enum capwapmodes {
 
 /**
  * CAWAP States
- */ 
+ */
 enum capwap_states {
-	CW_STATE_NONE=0,
+	CW_STATE_NONE = 0,
 	CW_STATE_DISCOVERY,
 	CW_STATE_JOIN,
 	CW_STATE_CONFIGURE,
@@ -81,6 +81,18 @@ enum capwap_states {
 #define CWTH_FLAGS_L  0x40	/* bit 6 last fragment */
 #define CWTH_FLAGS_F  0x80	/* bit 7 fragment */
 #define CWTH_FLAGS_T  0x100	/* bit 8 type of payload frame */
+
+
+#define CW_FLAG_HDR_R1 0x01	/* bit 0 reserved 1 */
+#define CW_FLAG_HDR_R2 0x02	/* bit 1 reserved 2 */
+#define CW_FLAG_HDR_R3 0x04	/* bit 2 reserved 3 */
+#define CW_FLAG_HDR_K  0x08	/* bit 3 Keep alive flag */
+#define CW_FLAG_HDR_M  0x10	/* bit 4 MAC Adress field present */
+#define CW_FLAG_HDR_W  0x20	/* bit 5 wireless info present */
+#define CW_FLAG_HDR_L  0x40	/* bit 6 last fragment */
+#define CW_FLAG_HDR_F  0x80	/* bit 7 fragment */
+#define CW_FLAG_HDR_T  0x100	/* bit 8 type of payload frame */
+
 
 
 /* wireless binding ids */
@@ -113,44 +125,45 @@ struct capwap_ctrlhdr
 
 /* CAPWAP message types as defined in RFC 5416 */
 
-#define	CW_MSG_DISCOVERY_REQUEST		1 
-#define CW_MSG_DISCOVERY_RESPONSE		2 
-#define	CW_MSG_JOIN_REQUEST			3 
-#define CW_MSG_JOIN_RESPONSE			4 
+#define	CW_MSG_DISCOVERY_REQUEST			1
+#define CW_MSG_DISCOVERY_RESPONSE			2
+#define	CW_MSG_JOIN_REQUEST				3
+#define CW_MSG_JOIN_RESPONSE				4
 
-#define CW_MSG_CONFIGURATION_STATUS_REQUEST	5
-#define CW_MSG_CONFIGURATION_STATUS_RESPONSE	6
+#define CW_MSG_CONFIGURATION_STATUS_REQUEST		5
+#define CW_MSG_CONFIGURATION_STATUS_RESPONSE		6
 
-#define CW_MSG_CONFIGURATION_UPDATE_REQUEST	7
-#define CW_MSG_CONFIGURATION_UPDATE_RESPONSE	8
+#define CW_MSG_CONFIGURATION_UPDATE_REQUEST		7
+#define CW_MSG_CONFIGURATION_UPDATE_RESPONSE		8
 
 #define CW_MSG_WTP_EVENT_REQUEST			9
-#define CW_MSG_WTP_EVENT_RESPONSE		10
+#define CW_MSG_WTP_EVENT_RESPONSE			10
 
-#define CW_MSG_CHANGE_STATE_EVENT_REQUEST	11
-#define CW_MSG_CHANGE_STATE_EVENT_RESPONSE	12
+#define CW_MSG_CHANGE_STATE_EVENT_REQUEST		11
+#define CW_MSG_CHANGE_STATE_EVENT_RESPONSE		12
 
-#define CW_MSG_ECHO_REQUEST			13
-#define CW_MSG_ECHO_RESPONSE			14
+#define CW_MSG_ECHO_REQUEST				13
+#define CW_MSG_ECHO_RESPONSE				14
 
-#define CW_MSG_IMAGE_DATA_REQUEST		15
-#define CW_MSG_IMAGE_DATA_RESPONSE		16
+#define CW_MSG_IMAGE_DATA_REQUEST			15
+#define CW_MSG_IMAGE_DATA_RESPONSE			16
 
-#define CW_MSG_RESET_REQUEST			17
-#define CW_MSG_RESET_RESPONSE			18 
+#define CW_MSG_RESET_REQUEST				17
+#define CW_MSG_RESET_RESPONSE				18
 
-#define CW_MSG_PRIMARY_DISCOVERY_REQUEST		19 
-#define CW_MSG_PRIMARY_DISCOVERY_RESPONSE	20 
+#define CW_MSG_PRIMARY_DISCOVERY_REQUEST		19
+#define CW_MSG_PRIMARY_DISCOVERY_RESPONSE		20
 
-/*           Data Transfer Request               21
-           Data Transfer Response              22
-           Clear Configuration Request         23
-           Clear Configuration Response        24
-           Station Configuration Request       25
-           Station Configuration Response      26
-*/
+#define CW_MSG_DATA_TRANSFER_REQUEST			21
+#define CW_MSG_DATA_TRANSFER_RESPONSE			22
 
-#define CWMSG_MAXMSG				26 
+#define CW_MSG_CLEAR_CONFIGURATION_REQUEST		23
+#define CW_MSG_CLEAR_CONFIGURATION_RESPONSE		24
+
+#define CW_STATION_CONFIGURATION_REQUEST		25
+#define CW_STATION_CONFIGURATION_RESPONSE		26
+
+#define CW_MSG_MAXMSG					26
 
 
 /*
@@ -168,10 +181,10 @@ struct capwap_ctrlhdr
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
 #define CW_ELEM_RESERVED_9				9
-#define CWMSGELEM_CONTROL_IPV4_ADDRESS			10
-#define CWMSGELEM_CONTROL_IPV6_ADDRESS			11
-#define CWMSGELEM_CAPWAP_LOCAL_IPV4_ADDRESS		30
-#define CWMSGELEM_CAPWAP_LOCAL_IPV6_ADDRESS		50
+#define CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS		10
+#define CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS		11
+#define CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS		30
+#define CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS		50
 #define CW_ELEM_CAPWAP_TIMERS				12
 #define CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL		51	/* not in draft 7 */
 #define CW_ELEM_DATA_TRANSFER_DATA			13
@@ -180,7 +193,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD		16
 #define CW_ELEM_DELETE_MAC_ACL_ENTRY			17
 #define CW_ELEM_DELETE_STATION				18
-#define CW_ELEM_RESEERVED_19				19
+#define CW_ELEM_RESERVED_19				19
 #define CW_ELEM_DISCOVERY_TYPE				20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
@@ -190,7 +203,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_IMAGE_IDENTIFIER			25
 #define CW_ELEM_IMAGE_INFORMATION			26
 #define CW_ELEM_INITIATE_DOWNLOAD			27
-#define CWMSGELEM_LOCATION_DATA				28
+#define CW_ELEM_LOCATION_DATA				28
 #define CWMSGELEM_MAXIMUM_MESSAGE_LENGTH		29
 #define CWMSGELEM_MTU_DISCOVERY_PADDING			52
 #define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE		31
@@ -237,16 +250,25 @@ struct capwap_ctrlhdr
 #define CWBOARDDATA_MACADDRESS		4
 
 
-/* */
-#define CWACSECURITY_FLAGS_R		1	/* Reserved */
-#define CWACSECURITY_FLAGS_X		2	/* X.509 */
-#define CWACSECURITY_FLAGS_S		4	/* DTLS psk */
+/* AC Security flags for authentication  */
+#define CW_FLAG_AC_SECURITY_R		1	/* Reserved */
+#define CW_FLAG_AC_SECURITY_X		2	/* X.509 */
+#define CW_FLAG_AC_SECURITY_S		4	/* DTLS psk */
 
 
-#define CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION		0
-#define CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION		1
-#define CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION		2
-#define CWMSGSUBELEM_WTP_DESCRIPTOR_OTHERSOFTWARE_VERSION	3
+#define CW_FLAG_RMAC_RESERVED		0
+#define CW_FLAG_RMAC_SUPPORTED		1
+#define CW_FLAG_RMAC_NOT_SUPPORTED	2
+
+
+#define CW_SUBELEM_WTP_HARDWARE_VERSION			0
+#define CW_SUBELEM_WTP_SOFTWARE_VERSION			1
+#define CW_SUBELEM_WTP_BOOTLOADER_VERSION		2
+#define CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION		3
+
+#define CW_SUBELEM_AC_HARDWARE_VERSION			4
+#define CW_SUBELEM_AC_SOFTWARE_VERSION			5
+
 
 #include "wtpinfo.h"
 #include "acinfo.h"
@@ -315,8 +337,9 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo *wtpinfo, uint8_t * msgelem, int
 #define AC_SECURITY_S			4	/* PSK support */
 
 /* AC dtls policy flags */
-#define AC_DTLS_POLICY_C		2	/* Clear data channel support */
-#define AC_DTLS_POLICY_D		4	/* DTLS Data channel support */
+#define CW_FLAG_DTLS_POLICY_R		1	/* Clear data channel support */
+#define CW_FLAG_DTLS_POLICY_C		2	/* Clear data channel support */
+#define CW_FLAG_DTLS_POLICY_D		4	/* DTLS Data channel support */
 
 
 
@@ -344,11 +367,12 @@ extern void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wt
 extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn *conn);
 
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
-extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg, struct radioinfo *radioinfos);
+extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
+					  struct radioinfo *radioinfos);
 
 //extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
-extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id, int type,
-						  uint8_t * payload, int len);
+extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id,
+						  int type, uint8_t * payload, int len);
 
 //extern void cwsend_discovery_reponse(struct conn * conn, struct ac_info * acinfo);
 //extern int process_msgelems(uint8_t * msgelems,  int len,
@@ -359,12 +383,14 @@ extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_
 
 //void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo);
 //
-extern void cwsend_discovery_response(struct conn *conn, int seqnum, struct radioinfo *radioinfo,
-				      struct ac_info *acinfo, struct wtpinfo *wtpinfo);
+extern void cwsend_discovery_response(struct conn *conn, int seqnum,
+				      struct radioinfo *radioinfo, struct ac_info *acinfo,
+				      struct wtpinfo *wtpinfo);
 extern int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
 				    struct wtpinfo *wtpinfo);
-extern void cwsend_join_response(struct conn *conn, int seqnum, int rc, struct radioinfo *radioinfo,
-				 struct ac_info *acinfo, struct wtpinfo *wtpinfo);
+extern void cwsend_join_response(struct conn *conn, int seqnum, int rc,
+				 struct radioinfo *radioinfo, struct ac_info *acinfo,
+				 struct wtpinfo *wtpinfo);
 
 
 extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
@@ -375,14 +401,16 @@ extern void cwread_discovery_response(struct ac_info *acinfo, uint8_t * msg, int
 extern void cwsend_image_data_response(struct conn *conn, int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn *conn, struct cwimage_data *data,
 				     struct image_identifier *id);
-extern int cwread_change_state_event_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
+extern int cwread_change_state_event_request(struct wtpinfo *wtpinfo, uint8_t * msg,
+					     int len);
 extern void cwsend_change_state_event_response(struct conn *conn, int seqnum,
 					       struct radioinfo *radioinfo);
 extern int cwread_wtp_event_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-extern void cwread_configuration_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
+extern void cwread_configuration_status_request(struct wtpinfo *wtpinfo, uint8_t * msg,
+						int len);
 extern void cwsend_conf_status_response(struct conn *conn, int seqnum, int rc,
-					struct radioinfo *radioinfo, struct ac_info *acinfo,
-					struct wtpinfo *wtpinfo);
+					struct radioinfo *radioinfo,
+					struct ac_info *acinfo, struct wtpinfo *wtpinfo);
 
 extern void cwsend_unknown_response(struct conn *conn, int seqnum, int unknow_request);
 
@@ -390,20 +418,24 @@ extern void cwsend_unknown_response(struct conn *conn, int seqnum, int unknow_re
 
 extern int hdr_print(char *str, uint8_t * packet, int len);
 
-extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * msgelem, int len);
-extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * msgelem,
+				   int len);
+extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem,
+					      int len);
 extern int cw_readelem_ac_name(uint8_t ** dst, int type, uint8_t * msgelem, int len);
 extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,
 					     uint8_t * msgelem, int len);
-extern int cw_readelem_cw_local_ip_addr(struct sockaddr *local_ip, int type, uint8_t * msgelem,
-					int len);
+extern int cw_readelem_cw_local_ip_addr(struct sockaddr *local_ip, int type,
+					uint8_t * msgelem, int len);
 extern int cw_readelem_radio_administrative_state(struct radioinfo *radioinfo, int type,
 						  uint8_t * msgelem, int len);
 extern int cw_readelem_radio_operational_state(struct radioinfo *radioinfo, int type,
 					       uint8_t * msgelem, int len);
 
-extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem, int len);
-extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * msgelem, int len);
+extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem,
+					int len);
+extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * msgelem,
+				   int len);
 extern int cw_readelem_mtu_discovery_padding(int type, uint8_t * msgelem, int len);
 extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elemtype,
 					       uint8_t * msgelem, int len);
@@ -424,14 +456,14 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 #define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
 #define CW_RESULT_JOIN_UNKNOWN_SOURCE				5
 #define CW_RESULT_JOIN_FAILURE_INCORRECT_DATA			6
-#define CW_RESULT_JOIN_FAILURE_SESSION_ALREADY_IN_USE		7 
-#define CW_RESULT_JOIN_FAILURE_WTP_HARDWARE_NOT_SUPPORTED	8 
-#define CW_RESULT_JOIN_FAILURE_BINDING_NOT_SUPPORTED		9 
-#define CW_RESULT_RESET_FAILURE_UNABLE_TO_RESET			10 
+#define CW_RESULT_JOIN_FAILURE_SESSION_ALREADY_IN_USE		7
+#define CW_RESULT_JOIN_FAILURE_WTP_HARDWARE_NOT_SUPPORTED	8
+#define CW_RESULT_JOIN_FAILURE_BINDING_NOT_SUPPORTED		9
+#define CW_RESULT_RESET_FAILURE_UNABLE_TO_RESET			10
 
-#define CW_RESULT_RESET_FAILURE_FIRMWARE_WRITE_ERROR		11 
+#define CW_RESULT_RESET_FAILURE_FIRMWARE_WRITE_ERROR		11
 
-#define CW_RESULT_CONFIGURATION_FAILURE				12 //Configuration Failure (Unable to Apply Requested Configuration
+#define CW_RESULT_CONFIGURATION_FAILURE				12	//Configuration Failure (Unable to Apply Requested Configuration
 
 //         - Service Provided Anyhow)
 /*
@@ -464,18 +496,20 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
-extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem, int len);
-extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type, uint8_t * msgelem,
-					    int len);
+extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
+				     int len);
+extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
+					    uint8_t * msgelem, int len);
 
 
 
-extern int cw_send_echo_response(struct conn *conn, int seqnum, struct radioinfo *radioinfo);
+extern int cw_send_echo_response(struct conn *conn, int seqnum,
+				 struct radioinfo *radioinfo);
 extern int cw_handle_echo_request(void *d);
 extern void cw_send_image_file(struct conn *conn, FILE * infile);
 
 extern int cw_readmsg_configuration_status_response(uint8_t * elems, int elems_len);
-extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len);
+extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_len);
 
 
 
@@ -521,6 +555,7 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_T ) ? 1:0)
 
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
+#define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
 
 #define cw_get_msg_id(msgptr) (cw_get_dword(msgptr))
 #define cw_get_msg_type(msgptr) cw_get_msg_id(msgptr)
@@ -529,8 +564,33 @@ extern int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 #define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
 #define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
 
-static inline uint8_t * cw_get_hdr_msg_elems_ptr(uint8_t *m){
-	return cw_get_msg_elems_ptr( m+cw_get_hdr_msg_offset(m) );
+
+#define cw_set_hdr_preamble(th,v) ((*th)=v)
+
+#define cw_set_hdr_flags(th,val,set) \
+	( set ? ((*((uint32_t*)th)) |= htonl(val)) : ((*((uint32_t*)th)) &= (0xffffffff^htonl(val))) )
+
+#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CW_FLAG_HDR_F)
+
+
+
+#define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
+#define cw_set_msg_type(msgptr,t) cw_set_msg_id(msgptr,t)
+#define cw_set_msg_seqnum(msgptr,s) cw_put_byte( (msgptr) +4,s);
+#define cw_set_msg_elems_len(msgptr,n) (cw_put_word((msgptr)+5,(n+3)))
+
+#define cw_set_msg_flags(msgptr,f) (cw_put_byte( (msgptr)+7,f))
+
+static inline uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m)
+{
+	return cw_get_msg_elems_ptr(m + cw_get_hdr_msg_offset(m));
+}
+
+static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
+{
+
+	int offset = cw_get_hdr_msg_offset(rawmsg);
+	return offset + cw_get_msg_elems_len(rawmsg + offset)+8 ;
 }
 
 /**
@@ -593,8 +653,8 @@ static inline uint8_t * cw_get_hdr_msg_elems_ptr(uint8_t *m){
  * @len length of vendor specific data 
  * @return the number of bytes put (always 10)
  */
-static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid, uint16_t elemid,
-					 uint16_t len)
+static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
+					 uint16_t elemid, uint16_t len)
 {
 
 	cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
@@ -602,6 +662,11 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid, uint1
 	cw_put_word(dst + 8, elemid);
 	return 10;
 }
+
+
+
+#define cw_put_sockaddr lw_put_sockaddr
+
 
 
 /**
@@ -625,19 +690,19 @@ static inline int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bst
 }
 
 
-static inline int cw_addelem_result_code(uint8_t *dst,uint32_t code)
+static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
 {
-	cw_put_dword(dst+4,code);
-	return 4+ cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
+	cw_put_dword(dst + 4, code);
+	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
 }
 
 
-static inline int cw_addelem_radio_operational_state(uint8_t *dst, struct radioinfo * ri)
+static inline int cw_addelem_radio_operational_state(uint8_t * dst, struct radioinfo *ri)
 {
-	cw_put_byte(dst+4+0,ri->rid);
-	cw_put_byte(dst+4+1,ri->state);
-	cw_put_byte(dst+4+2,ri->cause);
-	return 3+ cw_put_elem_hdr(dst, CW_ELEM_RADIO_OPERATIONAL_STATE, 3);
+	cw_put_byte(dst + 4 + 0, ri->rid);
+	cw_put_byte(dst + 4 + 1, ri->state);
+	cw_put_byte(dst + 4 + 2, ri->cause);
+	return 3 + cw_put_elem_hdr(dst, CW_ELEM_RADIO_OPERATIONAL_STATE, 3);
 }
 
 
@@ -660,16 +725,20 @@ static inline int cw_addelem_radio_operational_state(uint8_t *dst, struct radioi
 	 cw_put_data(dst+10,data,len))
 */
 
-extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid, uint16_t elemid,
-					      uint8_t * data, uint16_t len);
+extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid,
+					      uint16_t elemid, uint8_t * data,
+					      uint16_t len);
 
 
-extern void cw_prepare_configuration_status_request(struct conn *conn, struct radioinfo *radioinfo,
+extern void cw_prepare_configuration_status_request(struct conn *conn,
+						    struct radioinfo *radioinfo,
 						    struct wtpinfo *wtpinfo);
-extern void cw_prepare_change_state_event_request(struct conn *conn, struct radioinfo *radioinfo,
+extern void cw_prepare_change_state_event_request(struct conn *conn,
+						  struct radioinfo *radioinfo,
 						  struct wtpinfo *wtpinfo);
 
-extern int cw_send_configuration_update_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo);
+extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
+						 struct radioinfo *radioinfo);
 
 
 #define cw_addelem_ac_name(dst,name) \
@@ -701,31 +770,62 @@ extern int cw_send_configuration_update_response(struct conn * conn,int seqnum,s
 
 /* Message to text stuff */
 
-struct cw_strlist { 
+struct cw_strlist {
 	uint32_t id;
-	const char * str;
+	const char *str;
 };
 
-extern const char * cw_strlist_get_str(struct cw_strlist *s,int id);
+extern const char *cw_strlist_get_str(struct cw_strlist *s, int id);
 
 
 /* Constants to string conversion lists */
 extern struct cw_strlist capwap_strings_msg[];
 extern struct cw_strlist capwap_strings_state[];
 extern struct cw_strlist capwap_strings_vendor[];
+extern struct cw_strlist capwap_strings_elem[];
 
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
+#define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 
 
-int cw_process_msg(struct conn * conn,uint8_t * rawmsg,int len);
+int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
 
 
-extern int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
-extern int cw_in_wtp_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len);
-extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action *a, uint8_t * data, int len);
+extern int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len);
+extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
+					 uint8_t * data, int len);
+extern int cw_in_wtp_name(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			  int len);
+extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+				int len);
+extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+				int len);
+
+//extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+extern int cw_out_generic(struct conn *conn, uint32_t elem_id, uint8_t * dst,
+			  struct cw_item *item);
+extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
+				struct cw_item *item);
+extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
+					  uint8_t * dst, struct cw_item *item);
+
+
+
+struct cw_ac_status {
+	int stations;
+	int limit;
+	int active_wtps;
+	int max_wtps;
+	int security;
+	int rmac_field;
+	int dtls_policy;
+};
+
+int cw_register_actions_capwap_ac(struct cw_actiondef *def);
 
 
 #endif

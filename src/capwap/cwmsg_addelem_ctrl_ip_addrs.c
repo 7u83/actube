@@ -26,34 +26,34 @@
 #include "sock.h"
 
 //static int cwmsg_addelem_acip(struct cwmsg * msg,ACIP *ip,int ctr)
-static int cwmsg_addelem_acip(void * priv,void *data) //,int ctr)
+static int cwmsg_addelem_acip(void *priv, void *data)	//,int ctr)
 {
-//	cw_log_debug2("Adding Ctrl IP %s",sock_addr2str((struct sockaddr*)data));
+//      cw_log_debug2("Adding Ctrl IP %s",sock_addr2str((struct sockaddr*)data));
 
-	struct cwmsg * msg = (struct cwmsg*)priv;
-	ACIP * acip = (ACIP*)data;
+	struct cwmsg *msg = (struct cwmsg *) priv;
+	ACIP *acip = (ACIP *) data;
 
-	uint8_t ipmsg [18];
+	uint8_t ipmsg[18];
 
-	switch (acip->ip.ss_family){
+	switch (acip->ip.ss_family) {
 		case AF_INET:
-		{
-			struct sockaddr_in  * sain = (struct sockaddr_in*)&acip->ip;
-			memcpy(ipmsg,&sain->sin_addr.s_addr, sizeof(sain->sin_addr.s_addr));
-			*((uint16_t*)(ipmsg+4))= htons(acip->wtp_count); /* number of wtps */
-			cwmsg_addelem(msg,CWMSGELEM_CONTROL_IPV4_ADDRESS,ipmsg,6);
-		}
-		break;
-#ifdef WITH_IPV6				
+			{
+				struct sockaddr_in *sain = (struct sockaddr_in *) &acip->ip;
+				memcpy(ipmsg, &sain->sin_addr.s_addr, sizeof(sain->sin_addr.s_addr));
+				*((uint16_t *) (ipmsg + 4)) = htons(acip->wtp_count);	/* number of wtps */
+				cwmsg_addelem(msg, CW_ELEM_CONTROL_IPV4_ADDRESS, ipmsg, 6);
+			}
+			break;
+#ifdef WITH_IPV6
 		case AF_INET6:
-		{
-			struct sockaddr_in6  * sain = (struct sockaddr_in6*)&acip->ip;
-			memcpy(ipmsg,&sain->sin6_addr.s6_addr, sizeof(sain->sin6_addr.s6_addr));
-			*((uint16_t*)(ipmsg+16))= htons(acip->wtp_count); /* number of wtps */
-			cwmsg_addelem(msg,CWMSGELEM_CONTROL_IPV6_ADDRESS,ipmsg,18);
-		}
-		break;
-#endif				
+			{
+				struct sockaddr_in6 *sain = (struct sockaddr_in6 *) &acip->ip;
+				memcpy(ipmsg, &sain->sin6_addr.s6_addr, sizeof(sain->sin6_addr.s6_addr));
+				*((uint16_t *) (ipmsg + 16)) = htons(acip->wtp_count);	/* number of wtps */
+				cwmsg_addelem(msg, CW_ELEM_CONTROL_IPV6_ADDRESS, ipmsg, 18);
+			}
+			break;
+#endif
 	}
 	return 1;
 }
@@ -61,8 +61,8 @@ static int cwmsg_addelem_acip(void * priv,void *data) //,int ctr)
 
 void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo)
 {
-//	printf("Counter in the list: %i\n",acinfo->aciplist->count);
-	aciplist_foreach(acinfo->aciplist,cwmsg_addelem_acip,msg);
+//      printf("Counter in the list: %i\n",acinfo->aciplist->count);
+	aciplist_foreach(acinfo->aciplist, cwmsg_addelem_acip, msg);
 }
 
 

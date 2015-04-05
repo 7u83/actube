@@ -23,6 +23,8 @@
 #ifndef __AVLTREE_H
 #define __AVLTREE_H
 
+#include <stdio.h>
+
 struct avlnode{
 	void * data;
 	struct avlnode * left;
@@ -46,17 +48,33 @@ void avltree_destroy(struct avltree *t);
 void avltree_del_all(struct avltree *t);
 void * avltree_del(struct avltree *t, void *data);
 void * avltree_add(struct avltree *t, void *data);
-void * avltree_get(struct avltree *t ,void *data);
+//void * avltree_get(struct avltree *t ,void *data);
+struct avlnode * avltree_get_node(struct avltree *t ,void *data);
 
 extern int avltree_foreach_lr(struct avlnode *n, int (*callback)(void *,void *),void *cbpriv);
 extern int avltree_foreach_rl(struct avlnode *n, int (*callback)(void *,void *),void *cbpriv);
-extern void avltree_foreach(struct avltree *t, int (*callback)(void *,void*),void *cbpriv,int dir);
+int avltree_foreach_from_lr(struct avltree *t, struct avlnode *n, void *data,int (*callback)(void *,void *),void *cbpriv);
 
 
+//extern void avltree_foreach(struct avltree *t, int (*callback)(void *,void*),void *cbpriv,int dir);
+
+static inline void * avltree_get(struct avltree *t ,void *data){
+	struct avlnode * n = avltree_get_node(t,data);
+	if (!n)
+		return NULL;
+	return n->data;
+
+
+}
 
 #define avltree_find(t,d) avltree_get(t,d)
 #define avltree_insert(t,d) avltree_add(t,d)
-#define avltree_walk(t,dir) avltree_foreach(t,dir)
+//#define avltree_walk(t,dir) avltree_foreach(t,dir)
+
+#define avltree_foreach_asc(t,cb,priv) avltree_foreach_lr((t)->root,cb,priv)
+#define avltree_foreach_desc(t,cb,priv) avltree_foreach_rl((t)->root,cb,priv)
+
+#define avltree_foreach_from_asc(t,d,cb,priv) avltree_foreach_from_lr(t,(t)->root,d,cb,priv);
 
 
 #endif

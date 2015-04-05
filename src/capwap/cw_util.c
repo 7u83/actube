@@ -48,7 +48,7 @@ void cw_get_missing_mand_elems(char *dst, int *l)
 	const char * k = "";
 	for (i=0; l[i]!=-1; i++){
 		if(l[i]){
-			s += sprintf(s,"%s[%s]",k,cw_msgelemtostr(l[i]));
+			s += sprintf(s,"%s[%s]",k,cw_strelem(l[i]));
 			k=",";
 		}
 	

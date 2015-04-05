@@ -50,6 +50,7 @@ AC_OBJS =   wtplist.o wtpman.o conf.o ac_main.o \
 	    ac_interface.o \
 	    socklist.o \
 	    db.o \
+	ac_global.o
 
 AC_SRCS = $(AC_OBJS:.o=.c) 
 AC_DEPS := $(AC_OBJS:.o=.d)
@@ -60,6 +61,11 @@ AC_NAME = actube
 
 # top-level rule, to compile everything. 
 all: $(AC_NAME) 
+
+%.o:%.c
+	@echo "  CC "$<
+	@$(CC) -c $(CFLAGS) $< -o $@
+
 
 $(AC_NAME): $(AC_OBJS) 
 	$(CC) $(AC_OBJS) -o $(AC_NAME) $(LDFLAGS) $(LIBS)

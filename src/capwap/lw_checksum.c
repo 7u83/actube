@@ -24,8 +24,9 @@
 #include "lwapp.h"
 
 /**
- * Calculate the 16-bit checksum for LWAPP image data message 
- * elements with opcode 3 - also used by Cisco in CAPWAP
+ * Calculate the 16-bit checksum for LWAPP Image Data message 
+ * elements with opcode 3 (see RFC5412) 
+ * This is also used by Cisco in CAPWAP
  * @param d pointer to data to calulate the checksum for
  * @param len length of data
  * @return the calculated checksum.
@@ -48,3 +49,4 @@ uint16_t lw_checksum(uint8_t * d, int len)
 
 	return (~sum) & 0xffff;
 }
+

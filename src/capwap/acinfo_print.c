@@ -57,7 +57,7 @@ int acinfo_print(char *str,const struct ac_info *acinfo)
 	s+=sprintf(s,"\tSecurity: %s\n",help);
 
 	help[0]=0;
-	if (acinfo->dtls_policy & AC_DTLS_POLICY_D){
+/*	if (acinfo->dtls_policy & AC_DTLS_POLICY_D){
 		strcpy(help,"dtls");
 	}
 	if (acinfo->dtls_policy & AC_DTLS_POLICY_C){
@@ -65,7 +65,7 @@ int acinfo_print(char *str,const struct ac_info *acinfo)
 			strcat(help,"/");
 		strcat(help,"clear");
 	}
-	if (!strlen(help))
+*/	if (!strlen(help))
 		strcpy(help,"Not set");
 
 	s+=sprintf(s,"\tDTLS policy: %s\n",help);

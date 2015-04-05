@@ -61,7 +61,6 @@ void cw_get_missing_mand_elems(char *dst, int *l);
 
 
 
-extern const char * cw_msgelemtostr(int elem);
 extern const char * cw_msgtostr(int type);
 
 #endif

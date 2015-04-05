@@ -167,6 +167,15 @@
 #define lw_put_dword(dst,dw)\
 	(*((uint32_t*)(dst)) = htonl(dw),4)
 
+#define lw_set_byte(dst,b) \
+	(*(dst)=b);
+
+#define lw_set_word(dst,b) \
+	(*((uint16_t*)(dst)) = htons(w))
+
+#define lw_set_dword(dst,dw)\
+	(*((uint32_t*)(dst)) = htonl(dw))
+
 
 #define lw_get_byte(src)\
 	(*(uint8_t*)(src))
@@ -203,6 +212,9 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 	*((uint16_t*)(dst+1)) = htons(len);
 	return 3;
 }
+
+extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
+
 
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
 #define lw_put_certificate(dst,cert,len) lw_put_data(dst,cert,len)

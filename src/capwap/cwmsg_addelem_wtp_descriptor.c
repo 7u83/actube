@@ -50,15 +50,15 @@ void cwmsg_addelem_wtp_descriptor(struct cwmsg * cwmsg, struct wtpinfo * wtpinfo
 
 
 	/* hardware version subelem*/
-	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_HARDWARE_VERSION,
+	len+=wtpdesc_addsubelem(d+len,CW_SUBELEM_WTP_HARDWARE_VERSION,
 			wtpinfo->hardware_vendor_id,wtpinfo->hardware_version);
 
 	/* software version subelem*/
-	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_SOFTWARE_VERSION,
+	len+=wtpdesc_addsubelem(d+len,CW_SUBELEM_WTP_SOFTWARE_VERSION,
 			wtpinfo->software_vendor_id,wtpinfo->software_version);
 
 	/* bootloader version subelem*/
-	len+=wtpdesc_addsubelem(d+len,CWMSGSUBELEM_WTP_DESCRIPTOR_BOOTLOADER_VERSION,
+	len+=wtpdesc_addsubelem(d+len,CW_SUBELEM_WTP_BOOTLOADER_VERSION,
 			wtpinfo->bootloader_vendor_id,wtpinfo->bootloader_version);
 
 	cwmsg_addelem(cwmsg,CW_ELEM_WTP_DESCRIPTOR,d,len);

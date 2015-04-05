@@ -307,25 +307,25 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
 		sprintf(vendorname, "%s/%s/%d",
-			(char *) cw_msgelemtostr(msgelem),
+			(char *) cw_strelem(msgelem),
 			(char *) lw_vendor_id_to_str(vendor_id), type);
 		elemname = vendorname;
 		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);
 
 	} else {
-		elemname = cw_msgelemtostr(msgelem);
+		elemname = cw_strelem(msgelem);
 	}
 
 
 	if (!cw_dbg_is_level(DBG_ELEM_DMP))
 		cw_dbg(DBG_ELEM,
 		       "%s, CAWPAP element: type=%d (%s), len=%d%s",
-		       cw_msgtostr(msg), msgelem, elemname, len, vendor_details);
+		       cw_strmsg(msg), msgelem, elemname, len, vendor_details);
 
 	else
 		cw_dbg_dmp(DBG_ELEM, msgbuf, len,
 			   "%s, CAPWAP element: type=%d (%s), len=%d%s\n\tDump ...",
-			   cw_msgtostr(msg), msgelem, elemname, len, vendor_details);
+			   cw_strmsg(msg), msgelem, elemname, len, vendor_details);
 }
 
 
@@ -369,6 +369,6 @@ void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 	if (cw_is_missing_mand_elems(mand)) {
 		char str[512];
 		cw_get_missing_mand_elems(str, mand);
-		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s", cw_msgtostr(msgtype), str);
+		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s", cw_strmsg(msgtype), str);
 	}
 }
