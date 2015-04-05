@@ -61,12 +61,7 @@ static inline int cw_action_in_cmp(const void *elem1,const void *elem2)
 
 cw_action_in_t * cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in * a)
 {
-	struct cw_action_in *an = malloc(sizeof(struct cw_action_in));
-	if (!an)
-		return NULL;
-
-	memcpy(an,a,sizeof(struct cw_action_in));
-	return avltree_add(t,an);
+	return cw_actionlist_add(t,a,sizeof(struct cw_action_in));
 }
 
 
@@ -138,19 +133,16 @@ static int cw_action_out_cmp(const void *elem1,const void *elem2)
  */ 
 void * cw_actionlist_add(struct avltree *t, void *a, size_t s)
 {
-	uint8_t * an = malloc(s);
-	if (!an) 
+	void * r = avltree_replace_data(t,a,sizeof(struct cw_action_in));
+	if (r)
+		return r;
+	
+	void *an = malloc(sizeof(struct cw_action_in));
+	if (!an)
 		return NULL;
 
 	memcpy(an,a,s);
-	void  * r =  avltree_add(t,an);
-	if (r==an) 
-		return r;
-
-	/* action already exists, replace */
-	memcpy(r,an,sizeof(struct cw_action_out));
-	free (an);
-	return r;
+	return  avltree_add(t,an);
 
 }
 
@@ -168,7 +160,6 @@ cw_actionlist_out_t cw_actionlist_out_create()
 cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a)
 {
 	return cw_actionlist_add(t,a,sizeof (struct cw_action_out));
-
 }
 
 
