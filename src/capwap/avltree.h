@@ -23,6 +23,7 @@
 #ifndef __AVLTREE_H
 #define __AVLTREE_H
 
+#include <string.h>
 #include <stdio.h>
 
 struct avlnode{
@@ -63,10 +64,17 @@ static inline void * avltree_get(struct avltree *t ,void *data){
 	if (!n)
 		return NULL;
 	return n->data;
-
-
 }
 
+
+static inline void * avltree_replace_data(struct avltree *t ,void *data,int len) {
+	void * df = avltree_get(t,data);
+	if(!df)
+		return NULL;
+	memcpy(df,data,len);
+	return df;
+}
+	
 #define avltree_find(t,d) avltree_get(t,d)
 #define avltree_insert(t,d) avltree_add(t,d)
 //#define avltree_walk(t,dir) avltree_foreach(t,dir)
