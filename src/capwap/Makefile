@@ -169,12 +169,15 @@ CAPWAPOBJS= \
 	capwap_strings_elem.o \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
-	cw_in_wtp_name.o \
 	cw_in_wtp_board_data.o \
 	cw_out_generic.o \
 	cw_out_ac_descriptor.o \
-	cw_out_capwap_control_ip_addrs.o
+	cw_out_cisco_ac_descriptor.o \
+	cw_out_cisco_ap_timesync.o \
+	cw_out_capwap_control_ip_addrs.o \
+	strheap.o
 
+	#cw_in_wtp_name.o \
 	   #cw_msgtostr.o \
 	   #cw_msgelemtostr.o \
 	   #cwmsg_addelem_ctrl_ip_addrs.o \
@@ -265,6 +268,9 @@ CWACTION=action.o \
 	cw_in_generic.o \
 	cw_in_wtp_descriptor.o \
 	cipwap_actions_ac.o \
+	cipwap_strings_elem.o \
+	cw_put_msg.o \
+	capwap_action_helpers.o \
 
 
 

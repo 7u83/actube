@@ -353,6 +353,7 @@ static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t ti
 	return cwrmsg;
 }
 
+	int conn_msg_processor(struct conn *conn);
 
 
 static void wtpman_run_discovery(void *arg)
@@ -361,7 +362,6 @@ static void wtpman_run_discovery(void *arg)
 	struct wtpman * wtpman = (struct wtpman *)arg;
 	struct cwrmsg * cwrmsg;
 	
-	void conn_msg_processor(struct conn *conn);
 
 	time_t timer = cw_timer_start(10);
 
@@ -370,13 +370,18 @@ extern cw_actionlist_in_t the_tree;
 	wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
 	wtpman->conn->actions = &capwap_actions;
 
-	wtpman->conn->itemstore = cw_itemstore_create();
 
 	wtpman->conn->local = ac_config;
 	wtpman->conn->remote = cw_itemstore_create();
 
 	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_DISCOVERY){
 		conn_msg_processor(wtpman->conn);
+	}
+
+	struct cw_item * wn = cw_itemstore_get(wtpman->conn->remote,CW_ITEM_WTP_NAME);
+
+	if (wn ) {
+		printf("WTP Name: %s\n",wn->data);
 	}
 
 	wtpman_remove(wtpman);
@@ -594,16 +599,20 @@ wtpman->conn->capwap_state=CW_STATE_JOIN;
 	wtpman->conn->capwap_state=CW_STATE_JOIN;
 	wtpman->conn->actions = &capwap_actions;
 
-	wtpman->conn->itemstore = cw_itemstore_create();
+//	wtpman->conn->itemstore = cw_itemstore_create();
 
 	wtpman->conn->local = ac_config;
 	wtpman->conn->remote = cw_itemstore_create();
 
 	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_JOIN){
-		conn_msg_processor(wtpman->conn);
+		int rc = conn_msg_processor(wtpman->conn);
+		if (rc <0 ) {
+			break;
+		}
 	}
 
 
+	printf("Breaked\n");
 	exit(0);
 
 

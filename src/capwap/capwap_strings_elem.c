@@ -1,6 +1,6 @@
 #include "capwap.h"
 
-struct cw_strlist capwap_strings_elem[] = {
+struct cw_str capwap_strings_elem[] = {
 
 	{CW_ELEM_AC_DESCRIPTOR, "AC Descriptor"},
 	{CW_ELEM_AC_IPV4_LIST, "AC IPv4 List"},
@@ -55,12 +55,13 @@ struct cw_strlist capwap_strings_elem[] = {
 	{CW_ELEM_RESERVED_46, "Reserved 46"},
 	{CW_ELEM_WTP_RADIO_STATISTICS, "WTP Radio Statistics"},
 	{CWMSGELEM_WTP_REBOOT_STATISTICS, "WTP Reboot Statistics"},
-	{CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION, "WTP Static IP Address Information"}
+	{CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION, "WTP Static IP Address Information"},
 
 
 /* Cisco's CAPWAP definitions (CAPWAP draft 7) */
 /* CW_ELEM_WTP_IPV4_IP_ADDRESS			42
  CW_ELEM_WTP_IPV6_IP_ADDRESS			43
 */
+	{0,"Unknown Element"}
 
 };

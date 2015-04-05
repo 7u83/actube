@@ -61,7 +61,7 @@
 	CW_ITEM_WTP_MAC_TYPE,		/* ID to use store */		\
 	1, 1				/* min/max length */
 
-#define CW_ACTION_VENDOR_SPECIFIC_PAYLOAD	\
+#define CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD	\
 	CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,	/* Element ID */	\
 	cw_in_vendor_specific_payload, 0	/* start/end callback*/	\
 

@@ -16,6 +16,10 @@
 
 */
 
+/**
+ * @file
+ * @brief Connection object stuff
+ */
 
 #ifndef __CONN_H
 #define __CONN_H
@@ -35,14 +39,18 @@
 
 #include "itemstore.h"
 
+/**
+ * Connection Object
+ */ 
 struct conn {
 	int sock;
 	struct sockaddr_storage addr;
 	int recv_timeout;
 
-	cw_itemstore_t itemstore;
-
+	/** Basically used to store local conig data */
 	cw_itemstore_t local;
+	/** used to maintain the remote config, an AC holds here the WTP config.
+	    A WTP holds here data about it's AC  */
 	cw_itemstore_t remote;
 
 

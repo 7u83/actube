@@ -1,6 +1,6 @@
 #include "capwap.h"
 
-struct cw_strlist capwap_strings_msg[] = {
+struct cw_str capwap_strings_msg[] = {
 { CW_MSG_DISCOVERY_REQUEST, "Discovery Request" },
 { CW_MSG_DISCOVERY_RESPONSE,"Discovery Response" },
 { CW_MSG_JOIN_REQUEST, "Join Request"},

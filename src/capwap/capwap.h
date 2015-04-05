@@ -34,6 +34,7 @@
 #include "conn.h"
 
 #include "lwapp.h"
+#include "strheap.h"
 
 /* capwap version and iana number */
 #define CW_VERSION 0
@@ -83,6 +84,9 @@ enum capwap_states {
 #define CWTH_FLAGS_T  0x100	/* bit 8 type of payload frame */
 
 
+/**
+ * CAWAP header flags.
+ */ 
 #define CW_FLAG_HDR_R1 0x01	/* bit 0 reserved 1 */
 #define CW_FLAG_HDR_R2 0x02	/* bit 1 reserved 2 */
 #define CW_FLAG_HDR_R3 0x04	/* bit 2 reserved 3 */
@@ -521,6 +525,9 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 #define cw_put_data lw_put_data
 #define cw_put_bstr lw_put_bstr
 
+#define cw_set_dword lw_set_dword
+
+
 #define cw_get_byte lw_get_byte
 #define cw_get_word lw_get_word
 #define cw_get_dword lw_get_dword
@@ -557,21 +564,42 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
 #define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
 
+#define cw_set_hdr_preamble(th,v) ((*th)=v)
+
+
+/**
+ * Set the HLEN field of a CAWAP Header
+ * @param th pointer to the header
+ * @param hlen velue to set (max. 5 bits)
+ */ 
+static inline void cw_set_hdr_hlen(uint8_t *th,int hlen){
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 19) ^ 0xffffffff;
+	d |= ((hlen) & 0x1f) <<19;
+	cw_set_dword(th,d);
+}
+
+/**
+ * Set CAPWAP header flags
+ * @param th pointer to header
+ * @param flags list of flags to set or unset
+ * @param set 1=set flag, 0=unset flag
+ */
+#define cw_set_hdr_flags(th,flags,set) \
+	( set ? ((*((uint32_t*)th)) |= htonl(flags)) : ((*((uint32_t*)th)) &= (0xffffffff^htonl(flags))) )
+
+#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CW_FLAG_HDR_F)
+
+
+
+/* Macros for message headers */
+
 #define cw_get_msg_id(msgptr) (cw_get_dword(msgptr))
 #define cw_get_msg_type(msgptr) cw_get_msg_id(msgptr)
 
 #define cw_get_msg_seqnum(msgptr) cw_get_byte( (msgptr) +4 )
 #define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
 #define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
-
-
-#define cw_set_hdr_preamble(th,v) ((*th)=v)
-
-#define cw_set_hdr_flags(th,val,set) \
-	( set ? ((*((uint32_t*)th)) |= htonl(val)) : ((*((uint32_t*)th)) &= (0xffffffff^htonl(val))) )
-
-#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CW_FLAG_HDR_F)
-
 
 
 #define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
@@ -606,14 +634,14 @@ static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
  * @pram e pointer to element (uint8_t*)
  * @return type of element
  */
-#define cw_get_elem_len(e) cw_get_word(e+2)
+#define cw_get_elem_len(e) cw_get_word((e)+2)
 
 /**
  * Get a pointer to the data of a CAPWAP message element 
  * @param e pointer to message element 
  * @return pointer to data
  */
-#define cw_get_elem_data(e) (e+4)
+#define cw_get_elem_data(e) ((e)+4)
 
 /** 
  * Iterate through message elements of a CAPWAP message
@@ -770,25 +798,24 @@ extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
 
 /* Message to text stuff */
 
-struct cw_strlist {
-	uint32_t id;
-	const char *str;
-};
-
-extern const char *cw_strlist_get_str(struct cw_strlist *s, int id);
-
-
 /* Constants to string conversion lists */
-extern struct cw_strlist capwap_strings_msg[];
-extern struct cw_strlist capwap_strings_state[];
-extern struct cw_strlist capwap_strings_vendor[];
-extern struct cw_strlist capwap_strings_elem[];
+extern struct cw_str capwap_strings_msg[];
+extern struct cw_str capwap_strings_state[];
+extern struct cw_str capwap_strings_vendor[];
+extern struct cw_str capwap_strings_elem[];
 
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
+
+
+#define cw_strelemp(p,id) cw_strheap_get((p)->strelem,id)
+
+extern const char *cw_strlist_get_str(struct cw_str *s, int id);
+
+
 
 
 int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
@@ -806,13 +833,18 @@ extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8
 				int len);
 
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
-extern int cw_out_generic(struct conn *conn, uint32_t elem_id, uint8_t * dst,
-			  struct cw_item *item);
-extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
-				struct cw_item *item);
-extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
-					  uint8_t * dst, struct cw_item *item);
+extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst); //, struct cw_item *item);
 
+//extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
+				//struct cw_item *item);
+extern int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst); //,struct cw_item * item) 
+
+//extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
+//					  uint8_t * dst, struct cw_item *item);
+
+extern int cw_out_capwap_control_ip_addrs(struct conn *conn,struct cw_action_out *a,uint8_t *dst) ;
+
+extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
 
 
 struct cw_ac_status {
@@ -825,9 +857,42 @@ struct cw_ac_status {
 	int dtls_policy;
 };
 
+/**
+ * Put an cw_ac_stauts structure to a buffer
+ * @param dst destination buffer
+ * @param s #cw_ac_status to put
+ * @return number of bytes put
+ * This function is only useful (used) in conjunction with 
+ * putting AC Descriptor message elements.
+ */
+static inline int cw_put_ac_status(uint8_t *dst, struct cw_ac_status *s){
+	uint8_t *d=dst;
+
+	d += cw_put_dword (d, (s->stations << 16) | (s->limit) );
+	d += cw_put_dword (d, (s->active_wtps <<16) | (s->max_wtps) );
+	d += cw_put_dword (d, (s->security<<24) | (s->rmac_field<<16) | (s->dtls_policy));
+	return d-dst;
+}
+
+
+static inline int cw_put_version(uint8_t *dst,uint16_t subelem_id, uint32_t vendor_id,bstr16_t data)
+{
+
+	uint8_t *d=dst;
+	d += cw_put_dword(d,vendor_id);
+	d += cw_put_dword(d, (subelem_id<<16) | bstr16_len(data));
+	d += cw_put_data(d,bstr16_data(data),bstr16_len(data));
+	return d-dst;
+}
+
+
 
 int cw_register_actions_capwap_ac(struct cw_actiondef *def);
 int cw_register_actions_cipwap_ac(struct cw_actiondef *def);
+
+int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
+
 
 
 #endif

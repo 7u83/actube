@@ -98,7 +98,13 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 */
 
 
-
+/*
+int avlprint(void *priv, void *data)
+{
+	struct cw_str * d = (struct cw_str*) data;
+	printf("String: %d - %s\n",d->id,d->str);
+}
+*/
 
 int main (int argc, const char * argv[]) 
 {
@@ -117,7 +123,19 @@ int main (int argc, const char * argv[])
 
 	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
 
-	cw_register_actions_capwap_ac(&capwap_actions);
+	cw_register_actions_cipwap_ac(&capwap_actions);
+
+
+/*
+	struct avltree *avlt = capwap_actions.strelem;
+
+	avltree_foreach_asc(avlt,avlprint,0);
+
+	exit(0);
+*/
+
+
+
 	ac_global_init();
 
 /*
