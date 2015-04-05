@@ -263,7 +263,8 @@ CWACTION=action.o \
 	cw_process_msg.o \
 	capwap_actions_ac.o \
 	cw_in_generic.o \
-	cw_in_wtp_descriptor.o
+	cw_in_wtp_descriptor.o \
+	cipwap_actions_ac.o \
 
 
 
