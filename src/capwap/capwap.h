@@ -825,7 +825,9 @@ struct cw_ac_status {
 	int dtls_policy;
 };
 
+
 int cw_register_actions_capwap_ac(struct cw_actiondef *def);
+int cw_register_actions_cipwap_ac(struct cw_actiondef *def);
 
 
 #endif
