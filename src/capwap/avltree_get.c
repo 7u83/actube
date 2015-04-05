@@ -13,14 +13,22 @@
 
     You should have received a copy of the GNU General Public License
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
 */
+
+/**
+ * @file
+ * @brief Implementation of avltree_get
+ */ 
 
 #include <stdio.h>
 
 #include "avltree.h"
 
-
+/**
+ * Get an AVL tree element.
+ * @param data Element to get
+ * @return pointer to element or NULL if not found. 
+ */ 
 void * avltree_get(struct avltree *t ,void *data)
 {
 	struct avlnode *n = t->root;

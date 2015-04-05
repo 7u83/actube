@@ -41,8 +41,10 @@ static int put_ip(void *priv, void *data)
 }
 
 
-int cw_out_capwap_control_ip_addrs(struct conn *conn,uint32_t elem_id,uint8_t *dst,struct cw_item * item)
+int cw_out_capwap_control_ip_addrs(struct conn *conn,struct cw_action_out *a,uint8_t *dst) 
 {
+	struct cw_item * item = cw_itemstore_get(conn->local,a->item_id);
+
 	if ( !item ) {
 		cw_log(LOG_ERR, "Can't send CAPWAP Local IPv4/IPv6 Address, not found");
 		return 0;

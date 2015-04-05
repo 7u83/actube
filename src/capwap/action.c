@@ -119,6 +119,10 @@ static int cw_action_out_cmp(const void *elem1,const void *elem2)
 	if (r!=0)
 		return r;
 
+	r = e1->vendor_id - e2->vendor_id;
+	if (r!=0)
+		return r;
+
 	return 0;
 }
 
@@ -161,5 +165,8 @@ cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_
 {
 	return cw_actionlist_add(t,a,sizeof (struct cw_action_out));
 }
+
+
+
 
 

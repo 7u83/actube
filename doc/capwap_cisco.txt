@@ -198,7 +198,7 @@ AP = RAD = WTP
    | ResetBtnState | 
    +-+-+-+-+-+-+-+-+ 
 
-   Type: 128 for Cisco Rest Button State
+   Type: 128 for Cisco Reset Button State
    Length: 1
 
    ResetBtnState: 1 = Enabeled

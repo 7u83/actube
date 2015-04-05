@@ -32,12 +32,15 @@ static int message_cb(void *p, uint8_t *rawmsg, int len)
 }
 
 
-void conn_msg_processor(struct conn *conn)
+int conn_msg_processor(struct conn *conn)
 {
         uint8_t buf[2024];
         int len = 2024;
 
         int n = conn->read(conn, buf, len);
+	if (n<0 ) 
+		return n;
+	
         if (n > 0)
                 conn_process_packet(conn, buf, n, cw_process_msg, conn);
 

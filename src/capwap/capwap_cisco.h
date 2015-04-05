@@ -46,6 +46,7 @@
 #define CW_CISCO_DIRECT_SEQUENCE_CONTROL	LW_ELEM_DIRECT_SEQUENCE_CONTROL		/* 14 */
 #define CW_CISCO_SUPPORTED_RATES		LW_ELEM_80211_RATE_SET			/* 16 */
 
+#define CW_CISCO_MWAR_NAME			LW_ELEM_AC_NAME				/* 31 */
 
 #define CW_CISCO_LOCATION_DATA			LW_ELEM_LOCATION_DATA			/* 35 */
 #define CW_CISCO_STATISTICS_TIMER		LW_ELEM_STATISTICS_TIMER		/* 37 */
@@ -92,14 +93,19 @@
  * @param dst destination buffer
  * @param time a unix timestamp
  * @param type of time
- * @return number of bytes put (15)
+ * @return number of bytes put (5)
  */
-static inline int cw_addelem_cisco_ap_timesync(uint8_t * dst, time_t time, uint8_t type)
+static inline int cw_put_cisco_ap_timesync(uint8_t * dst, time_t time, uint8_t type)
 {
-	cw_put_dword(dst + 10, time);
-	cw_put_byte(dst + 14, type);
-	return 5 + cw_put_elem_vendor_hdr(dst, CW_VENDOR_ID_CISCO, CW_CISCO_AP_TIMESYNC, 5);
+	cw_put_dword(dst , time);
+	cw_put_byte(dst + 4, type);
+	return 5;
+
 }
+
+int cw_out_cisco_ap_timesync(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
+
+
 
 /**
  * Add a Cisco RAD Name message element to buffer
@@ -183,6 +189,8 @@ extern const char * cw_cisco_id_to_str(int elem_id);
 
 int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct radioinfo *ri);
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
+
+extern int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
 
 
 

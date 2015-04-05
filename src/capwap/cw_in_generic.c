@@ -31,7 +31,7 @@ int cw_in_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int le
 		return 0;
 	}
 
-	cw_itemstore_set(conn->itemstore,a->item_id,a->itemtype,data,len);
+	cw_itemstore_set(conn->remote,a->item_id,a->itemtype,data,len);
 	
 	return 0;
 }

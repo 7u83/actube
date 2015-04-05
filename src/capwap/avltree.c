@@ -19,7 +19,7 @@
 /**
  * @file
  * @brief Yet another AVL tree implementation
- */ 
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -32,35 +32,36 @@
  * @param cmp pointer compare function
  * @param del pointer to delete function which is called when an element will be deletet
  * @return pointer to an #avltree struct
- */ 
-struct avltree * avltree_create(int (*cmp)(const void*,const void*),void(*del)(void*))
+ */
+struct avltree *avltree_create(int (*cmp) (const void *, const void *),
+			       void (*del) (void *))
 {
-	struct avltree * t = malloc(sizeof(struct avltree));
+	struct avltree *t = malloc(sizeof(struct avltree));
 	if (!t)
 		return NULL;
-	t->root=0;
-	t->count=0;
-	t->cmp=cmp;
-	t->del=del;
+	t->root = 0;
+	t->count = 0;
+	t->cmp = cmp;
+	t->del = del;
 	return t;
 }
 
-struct avlnode * avlnode_create(void * data)
+struct avlnode *avlnode_create(void *data)
 {
-	struct avlnode * n = malloc(sizeof(struct avlnode));
-	if(!n)
+	struct avlnode *n = malloc(sizeof(struct avlnode));
+	if (!n)
 		return NULL;
-	
-	n->left=n->right=0;
-	n->bal=0;
+
+	n->left = n->right = 0;
+	n->bal = 0;
 	n->data = data;
 	return n;
 }
 
 
-void avlnode_destroy(struct avltree *t,struct avlnode *n)
+void avlnode_destroy(struct avltree *t, struct avlnode *n)
 {
-	if(t->del){
+	if (t->del) {
 		t->del(n->data);
 	}
 	free(n);
@@ -68,66 +69,62 @@ void avlnode_destroy(struct avltree *t,struct avlnode *n)
 }
 
 
-static int  avltree_add0(struct avltree *t, struct avlnode ** parent, void ** data)
+static int avltree_add0(struct avltree *t, struct avlnode **parent, void **data)
 {
-//	struct avlnode * rn;
+//      struct avlnode * rn;
 	struct avlnode *tmp;
 
-	struct avlnode * n = *parent;
-	int rc=t->cmp(*data,n->data);
+	struct avlnode *n = *parent;
+	int rc = t->cmp(*data, n->data);
 
-	int bal; 
-	if (rc==0){
-		*data=n->data;
+	int bal;
+	if (rc == 0) {
+		*data = n->data;
 		return 2;
 	}
 
-	if (rc<0){
-		if (n->left)
-		{
-			bal = avltree_add0(t,&n->left,data);
-			if (bal>1)
+	if (rc < 0) {
+		if (n->left) {
+			bal = avltree_add0(t, &n->left, data);
+			if (bal > 1)
 				return bal;
 
-			n->bal -=bal;
-			if (n->bal==0)
+			n->bal -= bal;
+			if (n->bal == 0)
 				return 0;
-			
-			if (n->bal==-2){
-				if (n->left->bal==-1){
-					n->bal=0;
-					n->left->bal=0;
-					*parent=n->left;
-					tmp=n->left->right;
-					n->left->right=n;
-					n->left=tmp;
+
+			if (n->bal == -2) {
+				if (n->left->bal == -1) {
+					n->bal = 0;
+					n->left->bal = 0;
+					*parent = n->left;
+					tmp = n->left->right;
+					n->left->right = n;
+					n->left = tmp;
 					return 0;
 				}
-				if (n->left->bal==1){
-					*parent=n->left->right;
-					if ((*parent)->bal==1) {
-						n->bal=0;
-						n->left->bal=-1;
-					}
-					else if ((*parent)->bal==-1){
-						n->bal=1;
-						n->left->bal=0;
-					}
-					else{
-						n->bal=0;
-						n->left->bal=0;
+				if (n->left->bal == 1) {
+					*parent = n->left->right;
+					if ((*parent)->bal == 1) {
+						n->bal = 0;
+						n->left->bal = -1;
+					} else if ((*parent)->bal == -1) {
+						n->bal = 1;
+						n->left->bal = 0;
+					} else {
+						n->bal = 0;
+						n->left->bal = 0;
 					}
 
-					(*parent)->bal=0;
-					n->left->right=(*parent)->left;
-					(*parent)->left=n->left;
+					(*parent)->bal = 0;
+					n->left->right = (*parent)->left;
+					(*parent)->left = n->left;
 					tmp = (*parent)->right;
-					(*parent)->right=n;
-					n->left=tmp;
+					(*parent)->right = n;
+					n->left = tmp;
 					return 0;
 
-				}	
-
+				}
 				//printf("!!!!left bal = %i\n",n->left->bal);
 				//exit(0);
 
@@ -137,67 +134,63 @@ static int  avltree_add0(struct avltree *t, struct avlnode ** parent, void ** da
 		}
 
 		/* n->left is 0 */
-		n->left=avlnode_create(*data);
+		n->left = avlnode_create(*data);
 		if (!n->left)
 			return 3;
 
 		t->count++;
 
-		if(n->right==0){
-			n->bal=-1;
+		if (n->right == 0) {
+			n->bal = -1;
 			return 1;
 		}
 
-		n->bal=0;
+		n->bal = 0;
 		return 0;
 
-	}
-	else{
-		if (n->right){
-			bal = avltree_add0(t,&n->right,data);
-			if(bal>1)
+	} else {
+		if (n->right) {
+			bal = avltree_add0(t, &n->right, data);
+			if (bal > 1)
 				return bal;
 
-			n->bal+=bal;
-			if (n->bal==0)
+			n->bal += bal;
+			if (n->bal == 0)
 				return 0;
 
-			if (n->bal==2){
-				if (n->right->bal==1){
-					n->bal=0;
-					n->right->bal=0;
-					*parent=n->right;
-					tmp=n->right->left;
-					n->right->left=n;
-					n->right=tmp;
+			if (n->bal == 2) {
+				if (n->right->bal == 1) {
+					n->bal = 0;
+					n->right->bal = 0;
+					*parent = n->right;
+					tmp = n->right->left;
+					n->right->left = n;
+					n->right = tmp;
 					return 0;
-				}
-				else if(n->right->bal==-1){
-					*parent=n->right->left;
+				} else if (n->right->bal == -1) {
+					*parent = n->right->left;
 
-					if ((*parent)->bal==-1) {
-						n->bal=0;
-						n->right->bal=1;
-					}
-					else if ((*parent)->bal==1){
-						n->bal=-1;
-						n->right->bal=0;
-					}
-					else{
-						n->bal=0;
-						n->right->bal=0;
+					if ((*parent)->bal == -1) {
+						n->bal = 0;
+						n->right->bal = 1;
+					} else if ((*parent)->bal == 1) {
+						n->bal = -1;
+						n->right->bal = 0;
+					} else {
+						n->bal = 0;
+						n->right->bal = 0;
 					}
 
 
 
 
 
-					(*parent)->bal=0;
-					n->right->left=(*parent)->right;
-					(*parent)->right=n->right;
+					(*parent)->bal = 0;
+					n->right->left = (*parent)->right;
+					(*parent)->right = n->right;
 					tmp = (*parent)->left;
-					(*parent)->left=n;
-					n->right=tmp;
+					(*parent)->left = n;
+					n->right = tmp;
 					return 0;
 				}
 				//printf("!!!!iright bal = %i\n",n->left->bal);
@@ -211,16 +204,16 @@ static int  avltree_add0(struct avltree *t, struct avlnode ** parent, void ** da
 
 		/* n->right is 0 */
 
-		n->right=avlnode_create(*data);
+		n->right = avlnode_create(*data);
 		if (!n->right)
 			return 3;
 
 		t->count++;
-		if(n->left==0){
-			n->bal=1;
+		if (n->left == 0) {
+			n->bal = 1;
 			return 1;
 		}
-		n->bal=0;
+		n->bal = 0;
 		return 0;
 	}
 }
@@ -232,18 +225,18 @@ static int  avltree_add0(struct avltree *t, struct avlnode ** parent, void ** da
  * @data pointer to element
  * @return added alement or NULL if error.
  */
-void * avltree_add(struct avltree *t, void * data)
+void *avltree_add(struct avltree *t, void *data)
 {
-	if (t->root==0){
+	if (t->root == 0) {
 		t->root = avlnode_create(data);
 		if (t->root)
 			t->count++;
 		return t->root->data;
 	}
-	void * d = data;
-	int rc = avltree_add0(t,&t->root,&d);
+	void *d = data;
+	int rc = avltree_add0(t, &t->root, &d);
 
-	if (rc>3)
+	if (rc > 3)
 		return NULL;
 
 	return d;
@@ -252,21 +245,21 @@ void * avltree_add(struct avltree *t, void * data)
 static void rot_l(struct avlnode *n, struct avlnode **parent)
 {
 	struct avlnode *tmp;
-	*parent=n->right;
-	tmp=n->right->left;
-	n->right->left=n;
-	n->right=tmp;
+	*parent = n->right;
+	tmp = n->right->left;
+	n->right->left = n;
+	n->right = tmp;
 }
 
 
 static void rot_r(struct avlnode *n, struct avlnode **parent)
 {
 	struct avlnode *tmp;
-	*parent=n->left;
-	tmp=n->left->right;
-	n->left->right=n;
-	n->left=tmp;
-}					
+	*parent = n->left;
+	tmp = n->left->right;
+	n->left->right = n;
+	n->left = tmp;
+}
 
 
 
@@ -308,84 +301,79 @@ static int avltree_delete_hi(struct avlnode **parent, void **data)
 
 static void rot_rl(struct avlnode *n, struct avlnode **parent)
 {
-	struct avlnode * tmp;
-	*parent=n->right->left;
-	n->right->left=(*parent)->right;
-	(*parent)->right=n->right;
+	struct avlnode *tmp;
+	*parent = n->right->left;
+	n->right->left = (*parent)->right;
+	(*parent)->right = n->right;
 	tmp = (*parent)->left;
-	(*parent)->left=n;
-	n->right=tmp;
+	(*parent)->left = n;
+	n->right = tmp;
 }
 
 static void rot_lr(struct avlnode *n, struct avlnode **parent)
 {
-	struct avlnode * tmp;
-	*parent=n->left->right;
-	n->left->right=(*parent)->left;
-	(*parent)->left=n->left;
+	struct avlnode *tmp;
+	*parent = n->left->right;
+	n->left->right = (*parent)->left;
+	(*parent)->left = n->left;
 	tmp = (*parent)->right;
-	(*parent)->right=n;
-	n->left=tmp;
+	(*parent)->right = n;
+	n->left = tmp;
 }
 
 
 static int adj_bal_l(struct avlnode *n, struct avlnode **parent)
 {
-	if (n->right->bal==1){
-		n->bal=0;
-		n->right->bal=0;
-		rot_l(n,parent);
+	if (n->right->bal == 1) {
+		n->bal = 0;
+		n->right->bal = 0;
+		rot_l(n, parent);
 		return 1;
-	}
-	else if(n->right->bal==0){
-		n->bal=1;
-		n->right->bal=-1;
-		rot_l(n,parent);
+	} else if (n->right->bal == 0) {
+		n->bal = 1;
+		n->right->bal = -1;
+		rot_l(n, parent);
 		return 0;
-	}else if(n->right->bal==-1){
-//		int rb;
-		n->bal=0;
-		n->right->bal=0;
-//		rb = n->right->left->bal;
-		n->right->left->bal=0;
-		rot_rl(n,parent);
+	} else if (n->right->bal == -1) {
+//              int rb;
+		n->bal = 0;
+		n->right->bal = 0;
+//              rb = n->right->left->bal;
+		n->right->left->bal = 0;
+		rot_rl(n, parent);
 		return 1;
 	}
+//      printf("adj bal l not handled \n");
+//      exit(0);
 
-//	printf("adj bal l not handled \n");
-//	exit(0);
-
-	return -11; /* that should never happen */
+	return -11;		/* that should never happen */
 }
 
 int adj_bal_r(struct avlnode *n, struct avlnode **parent)
 {
 
-	if (n->left->bal==-1){
-		n->bal=0;
-		n->left->bal=0;
-		rot_r(n,parent);
+	if (n->left->bal == -1) {
+		n->bal = 0;
+		n->left->bal = 0;
+		rot_r(n, parent);
 		return 1;
-	}
-	else if(n->left->bal==0){
-		n->bal=-1;
-		n->left->bal=1;
-		rot_r(n,parent);
+	} else if (n->left->bal == 0) {
+		n->bal = -1;
+		n->left->bal = 1;
+		rot_r(n, parent);
 		return 0;
-	}
-	else if(n->left->bal==1){
-//		int rb;
-		n->bal=0;
-		n->left->bal=0;
-//		rb = n->left->right->bal;
-		n->left->right->bal=0;
-		rot_lr(n,parent);
+	} else if (n->left->bal == 1) {
+//              int rb;
+		n->bal = 0;
+		n->left->bal = 0;
+//              rb = n->left->right->bal;
+		n->left->right->bal = 0;
+		rot_lr(n, parent);
 		return 1;
 	}
-
-//	printf("adj bal li left  not handled \n");
-//	exit(0);
-	return -11; /* that should never happen */
+//      printf("adj bal li left  not handled \n");
+//      exit(0);
+	return -11;		/* that should never happen */
 }
 
 
@@ -393,29 +381,29 @@ int adj_bal_r(struct avlnode *n, struct avlnode **parent)
 
 static int avltree_del_lo(struct avlnode **parent, void **data)
 {
-	struct avlnode * n = *parent;
+	struct avlnode *n = *parent;
 
-	if(n->left!=0){
-		int bal = avltree_del_lo(&n->left,data);
-		n->bal+=bal;
-		if (n->bal==1){
+	if (n->left != 0) {
+		int bal = avltree_del_lo(&n->left, data);
+		n->bal += bal;
+		if (n->bal == 1) {
 			return 0;
-		}			
-		if (n->bal!=2)
+		}
+		if (n->bal != 2)
 			return bal;
-		adj_bal_l(n,parent);
+		adj_bal_l(n, parent);
 		return 0;
 	}
 
 	/* found the lowest element */
 
-	*parent=n->right;
+	*parent = n->right;
 	*data = n->data;
-	free (n);
+	free(n);
 	return 1;
 
 
-	if (n->right){
+	if (n->right) {
 		free(n);
 		return 1;
 	}
@@ -429,98 +417,98 @@ static int avltree_del_lo(struct avlnode **parent, void **data)
 
 int avltree_del0(struct avltree *t, struct avlnode **parent, void **data)
 {
-	struct avlnode * n = *parent;
+	struct avlnode *n = *parent;
 	int rc;
 	int bal;
+	rc = t->cmp(*data, n->data);
 
-	rc =t->cmp(*data,n->data);
-
-	if (rc==0){
-		if (n->right == 0 && n->left ==0){
-			*parent=0;
-			avlnode_destroy(t,n);
+	if (rc == 0) {
+		if (n->right == 0 && n->left == 0) {
+			*parent = 0;
+			avlnode_destroy(t, n);
 			return 1;
 		}
 
-		if (n->right && n->left==0){
-			*parent=n->right;
-			avlnode_destroy(t,n);
+		if (n->right && n->left == 0) {
+			*parent = n->right;
+			avlnode_destroy(t, n);
 			return 1;
 
 		}
 
-		if (n->left && n->right==0){
-			avlnode_destroy(t,n);
-			*parent=n->left;
+		if (n->left && n->right == 0) {
+			avlnode_destroy(t, n);
+			*parent = n->left;
 			return 1;
 
 		}
 
 		/* node has two childs */
 
-		if (t->del){
+		if (t->del) {
 			t->del(n->data);
 		}
 		t->count--;
-		bal = avltree_del_lo(&n->right,&n->data);
-		n->bal-= bal;
-		if (n->bal==-1)
+		bal = avltree_del_lo(&n->right, &n->data);
+		n->bal -= bal;
+		if (n->bal == -1)
 			return 0;
 
 		if (n->bal != -2)
 			return bal;
 
-		return adj_bal_r(n,parent);
+		return adj_bal_r(n, parent);
 
 	}
 
-	if (rc<0){
-		if (n->left)
-		{
-			bal = avltree_del0(t,&n->left,data);
-			if (bal==2)
+	if (rc < 0) {
+		if (n->left) {
+			bal = avltree_del0(t, &n->left, data);
+			if (bal == 2)
 				return 2;
 
-			n->bal+=bal;
-			if (n->bal==1)
+			n->bal += bal;
+			if (n->bal == 1)
 				return 0;
 
-			if (n->bal!=2)
+			if (n->bal != 2)
 				return bal;
 
-			return adj_bal_l(n,parent);
+			return adj_bal_l(n, parent);
 		}
-		return 2; /* not found */
-	}	
-	else  { /* rc must be > 0 */
-		if (n->right){
-			bal = avltree_del0(t,&n->right,data);
-			if (bal==2)
+		return 2;	/* not found */
+	} else {		/* rc must be > 0 */
+		if (n->right) {
+			bal = avltree_del0(t, &n->right, data);
+			if (bal == 2)
 				return 2;
 
-			n->bal-=bal;
-			if (n->bal==-1)
+			n->bal -= bal;
+			if (n->bal == -1)
 				return 0;
 
 			if (n->bal != -2)
 				return bal;
 
-			return adj_bal_r(n,parent);
+			return adj_bal_r(n, parent);
 
 
 		}
-		return 2; /* not found */
+		return 2;	/* not found */
 
 	}
-	
+
 }
 
-void * avltree_del(struct avltree *t, void *data)
+void *avltree_del(struct avltree *t, void *data)
 {
+	if (!t->root)
+		return NULL;
+
 	void *d = data;
-	int rc = avltree_del0(t,&t->root,&d);
-	if (rc==2)
-		return 0;
+	int rc = avltree_del0(t, &t->root, &d);
+	if (rc == 2)
+		return NULL;
 	return data;
 }
 
@@ -609,11 +597,13 @@ void walk(struct avlnode *n)
 
 */
 
+/*
 void avltree_destroy(struct avltree *t)
 {
 	avltree_del_all(t);
 	free (t);
 }
+*/
 
 
 //#include <time.h>

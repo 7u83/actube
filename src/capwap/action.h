@@ -25,6 +25,7 @@
 #include "avltree.h"
 #include "conn.h"
 #include "itemstore.h"
+#include "strheap.h"
 
 
 /* Generic functions and structs */
@@ -63,11 +64,12 @@ extern int cw_actionlist_in_register_actions(cw_actionlist_in_t t,cw_action_in_t
 struct cw_action_out{
 	uint32_t msg_id;
 	uint32_t item_id;
-
+	uint32_t vendor_id;
 	uint16_t elem_id;
 	
-	int (*out)(struct conn * conn, uint32_t elem_id, uint8_t * dst ,struct cw_item * item);
-	struct cw_item *(*get)(struct conn *conn,uint32_t item_id);
+	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
+	struct cw_item *(*get)(struct conn *conn,struct cw_action_out *a);
+	
 	
 };
 typedef struct cw_action_out cw_action_out_t;
@@ -84,6 +86,10 @@ extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_ou
 struct cw_actiondef{
 	cw_actionlist_in_t in;
 	cw_actionlist_out_t out;
+	
+	cw_strheap_t strmsg;
+	cw_strheap_t strelem;
+	
 };
 
 

@@ -37,7 +37,12 @@ enum capwap_items {
 
 	CW_ITEM_LOCATION_DATA,
 	CW_ITEM_SESSION_ID,
+	
+	CW_ITEM_AC_TIMESTAMP,
 
+
+	/* CIPWAP and Cisco */
+	CW_ITEM_WTP_GROUP_NAME
 	
 
 };

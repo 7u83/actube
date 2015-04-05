@@ -16,7 +16,6 @@ int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint
 
 	as.vendor_id = cw_get_dword(data);
 	as.elem_id = cw_get_word(data+4);
-//	printf("Vendor Specific: %d, %d\n",as.vendor_id,as.elem_id);
 
  	af = cw_actionlist_in_get(conn->actions->in,&as);
 
@@ -26,8 +25,6 @@ int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint
 			as.elem_id,as.msg_id,cw_strmsg(as.msg_id),cw_strstate(as.capwap_state));
 		return 0;
 	}
-
-	printf("Found\n");
 
 	if (af->start) {
 		af->start(conn,af,data+6,len-6);
