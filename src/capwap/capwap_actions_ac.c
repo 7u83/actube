@@ -34,8 +34,9 @@ int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data
 cw_action_in_t capwap_actions_ac_in[] = {
 
 
-	/* Message Discovery Request */
+	/* -------------------------------------------------------------------------------*/
 
+	/* Message Discovery Request */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, -1,
 	 0, cw_in_set_state_none}
 	,
@@ -44,34 +45,24 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE,
 	 cw_in_generic, 0, CW_ITEMTYPE_BYTE, CW_ITEM_DISCOVERY_TYPE, 1, 1}
 	,
-
 	/* Element WTP Board Data */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA }
 	,
-	
 	/* Element WTP Descriptor */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_DESCRIPTOR }
 	,
-
 	/* Element Frame Tunnel Mode */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE}
 	,
-
-//	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_FRAME_TUNNEL_MODE,
-//	 cw_in_generic, 0, CW_ITEMTYPE_BYTE, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 1, 1}
-
 	/* Element WTP Mac Tpe */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_MAC_TYPE}
 	,
-
-//	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_WTP_MAC_TYPE,
-//	 cw_in_generic, 0, CW_ITEMTYPE_BYTE, CW_ITEM_WTP_MAC_TYPE, 1, 1}
-
 	/* Vendor Specific Payload */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 	 cw_in_vendor_specific_payload, 0}
 	,
 
+	/* -------------------------------------------------------------------------------*/
 
 	/* Message: Join Request */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, -1,
@@ -96,15 +87,9 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	/* Element WTP Board Data */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE}
 	,
+	/* Element WTP MAC Type */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_MAC_TYPE}
 	,
-
-
-
-
-
-
-
 
 
 
