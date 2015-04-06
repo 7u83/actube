@@ -1,3 +1,25 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * @file 
+ * @brief Processing of incomming messaages.
+ */ 
 
 #include <stdint.h>
 #include <stdio.h>
@@ -12,26 +34,69 @@
 #include "dbg.h"
 
 
-//int cw_out_msg(struct conn *conn, uint8_t * rawout);
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
+
+
+
+/**
+ * Init response message header
+ */ 
+void cw_init_response(struct conn * conn, uint8_t *req)
+{
+	uint8_t *buffer=conn->resp_buffer;
+	int shbytes = cw_get_hdr_msg_offset(req);
+	int dhbytes;
+	memcpy(buffer,req,shbytes);
+	cw_set_hdr_hlen(buffer,2);
+	cw_set_hdr_flags(buffer,CW_FLAG_HDR_M,1);
+	dhbytes = cw_get_hdr_msg_offset(buffer);
+
+	uint8_t * msgptr = req+shbytes;
+	uint8_t * dmsgptr = buffer+dhbytes;
+
+	cw_set_msg_type(dmsgptr,cw_get_msg_type(msgptr)+1);
+	cw_set_msg_seqnum(dmsgptr,cw_get_msg_seqnum(msgptr));
+	cw_set_msg_flags(dmsgptr,0);
+}
+
+/**
+ * send a response 
+ */ 
 int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
 {
-//	struct priv priv;
-
 	cw_init_response(conn, rawmsg);
-
-
-//	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
-
-//	cw_action_out_t as;
-
-
 	cw_put_msg(conn,conn->resp_buffer);
 	conn_send_msg(conn, conn->resp_buffer);
 	return 1;
+}
 
+
+
+
+/**
+ * Special case error message, which is sent when an unexpected messages 
+ * was received or somethin else happened.
+ * @param conn conection
+ * @param rawmsg the received request message, which the response belongs to
+ * @pqram result_code result code to send
+ * @return 1
+ */ 
+int cw_send_error_response(struct conn *conn,uint8_t *rawmsg, uint32_t result_code)
+{
+	cw_init_response(conn,rawmsg);
+	
+	uint8_t *out = conn->resp_buffer;
+
+	uint8_t *dst = cw_get_hdr_msg_elems_ptr(out);
+	int l = cw_put_elem_result_code(dst,result_code);
+	
+	cw_set_msg_elems_len(out+cw_get_hdr_msg_offset(out), l);
+
+	conn_send_msg(conn, conn->resp_buffer);
+
+	return 1;
 }
 
 
@@ -72,17 +137,39 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 	as.capwap_state = conn->capwap_state;
 	as.msg_id = cw_get_msg_id(msg_ptr);
 	as.vendor_id = 0;
-	as.elem_id = -1;
+	as.elem_id = 0;
 	as.proto=0;
 
 
 	/* Search for state/message combination */
 	afm = cw_actionlist_in_get(conn->actions->in, &as);
 
-	/* Check if message comes in right state */
 	if (!afm) {
-		cw_dbg(DBG_MSG_ERR, "Message type %d (%s) not allowed in %s State.",
-		       as.msg_id, cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+		/* Throw away unexpected response messages */
+		if (!(as.msg_id &1)) {
+			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unexpected, discarding.",
+			       as.msg_id, cw_strmsg(as.msg_id));
+			return 0;
+		}
+
+		/* Request message not found in current state, check if we know 
+		   anything else about this message type */ 
+		const char *str = cw_strheap_get(conn->actions->strmsg,as.msg_id);
+		int result_code=0;
+		if (str) {
+			/* Message found, but it was in wrong state */
+			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) not allowed in %s State.",
+			       as.msg_id, cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+			result_code = CW_RESULT_MSG_INVALID_IN_CURRENT_STATE;		
+		}
+		else {
+			/* Message is unknown */
+			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
+			       as.msg_id, cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+			result_code = CW_RESULT_MSG_UNRECOGNIZED;
+		
+		}
+		cw_send_error_response(conn,rawmsg,result_code);
 		return 0;
 	}
 
@@ -95,6 +182,9 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 	uint8_t *elem;
 
+	conn->mand = intavltree_create();
+
+	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
 		as.elem_id = cw_get_elem_id(elem);
@@ -110,6 +200,12 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 			       as.elem_id, as.msg_id, cw_strmsg(as.msg_id));
 			continue;
 		}
+	
+		if (af->mand){
+			/* add found mandatory message element 
+			   to mand list */	
+			intavltree_add(conn->mand,af->item_id);
+		}
 
 		if (af->start) {
 			af->start(conn, af, cw_get_elem_data(elem), elem_len);
@@ -117,13 +213,25 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 
 	}
 
-
-	cw_send_response(conn, rawmsg, len);
-
+	int result_code=0;
 	if (afm->end) {
-		afm->end(conn, afm, rawmsg, len);
+		result_code=afm->end(conn, afm, rawmsg, len);
 	}
 
+	/* if we've got a request message, we have to send a response message */
+	if (as.msg_id & 1) {
+		if ( result_code>0 ) {
+			/* the end method gave us an result code, so
+			   send an error message */
+			cw_send_error_response(conn,rawmsg,result_code);
+		}
+		else{
+			/* regular response message */
+			cw_send_response(conn, rawmsg, len);
+		}
+	}
+
+	intavltree_destroy(conn->mand);
 
 	return 0;
 
