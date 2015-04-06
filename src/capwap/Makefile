@@ -59,9 +59,9 @@ UTILOBJS= \
 	avltree_foreach_rl.o \
 	avltree_foreach_from_lr.o \
 	stravltree.o \
+	intavltree.o \
 	cw_util.o \
 	cw_format_version.o \
-	cw_msg_init.o
 
 
 
@@ -170,12 +170,16 @@ CAPWAPOBJS= \
 	itemstore.o \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_board_data.o \
+	cw_in_check_disc_req.o \
+	cw_in_check_join_req.o \
 	cw_out_generic.o \
 	cw_out_ac_descriptor.o \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_out_capwap_control_ip_addrs.o \
-	strheap.o
+	strheap.o \
+	cw_check_missing_mand.o \
+	dbg.o
 
 	#cw_in_wtp_name.o \
 	   #cw_msgtostr.o \
@@ -322,9 +326,10 @@ all: $(ARCH)/$(NAME)
 
 
 clean: 
-	$(RM) $(OBJS)
-	$(RM) $(DEPS)
-	$(RM) $(ARCH)/$(NAME) 
+	$(RM) $(ARCH)/*
+#	$(RM) $(OBJS)
+#	$(RM) $(DEPS)
+#	$(RM) $(ARCH)/$(NAME) 
 	
 
 clean_deps:
