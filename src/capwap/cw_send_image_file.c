@@ -60,8 +60,10 @@ void cw_send_image_file(struct conn *conn, FILE *infile)
 	data.data = buffer;
 
 
+/*
 	conn->request_handler = cw_handle_echo_request;
 	conn->request_handler_param = conn;
+*/
 
 	int bl = 0;
 
