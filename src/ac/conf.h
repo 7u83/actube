@@ -26,9 +26,9 @@
 #include <net/if.h>
 
 
-#include "capwap.h"
-#include "lwapp.h"
-#include "bstr.h"
+#include "capwap/capwap.h"
+#include "capwap/lwapp.h"
+#include "capwap/bstr.h"
 
 #ifndef CONF_DEFAULT_ACNAME
 	#define CONF_DEFAULT_ACNAME "AC"

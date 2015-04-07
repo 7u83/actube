@@ -54,7 +54,7 @@ struct cw_str capwap_strings_elem[] = {
 	{CW_ELEM_WTP_NAME, "WTP Name"},
 	{CW_ELEM_RESERVED_46, "Reserved 46"},
 	{CW_ELEM_WTP_RADIO_STATISTICS, "WTP Radio Statistics"},
-	{CWMSGELEM_WTP_REBOOT_STATISTICS, "WTP Reboot Statistics"},
+	{CW_ELEM_WTP_REBOOT_STATISTICS, "WTP Reboot Statistics"},
 	{CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION, "WTP Static IP Address Information"},
 
 

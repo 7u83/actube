@@ -19,7 +19,7 @@
 /**
  * @file 
  * @brief Processing of incomming messaages.
- */ 
+ */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -42,32 +42,51 @@ int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
 /**
  * Init response message header
- */ 
-void cw_init_response(struct conn * conn, uint8_t *req)
+ */
+void cw_init_response(struct conn *conn, uint8_t * req)
 {
-	uint8_t *buffer=conn->resp_buffer;
+	uint8_t *buffer = conn->resp_buffer;
 	int shbytes = cw_get_hdr_msg_offset(req);
 	int dhbytes;
-	memcpy(buffer,req,shbytes);
-	cw_set_hdr_hlen(buffer,2);
-	cw_set_hdr_flags(buffer,CW_FLAG_HDR_M,1);
+	memcpy(buffer, req, shbytes);
+	cw_set_hdr_hlen(buffer, 2);
+	cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
 	dhbytes = cw_get_hdr_msg_offset(buffer);
 
-	uint8_t * msgptr = req+shbytes;
-	uint8_t * dmsgptr = buffer+dhbytes;
+	uint8_t *msgptr = req + shbytes;
+	uint8_t *dmsgptr = buffer + dhbytes;
 
-	cw_set_msg_type(dmsgptr,cw_get_msg_type(msgptr)+1);
-	cw_set_msg_seqnum(dmsgptr,cw_get_msg_seqnum(msgptr));
-	cw_set_msg_flags(dmsgptr,0);
+	cw_set_msg_type(dmsgptr, cw_get_msg_type(msgptr) + 1);
+	cw_set_msg_seqnum(dmsgptr, cw_get_msg_seqnum(msgptr));
+	cw_set_msg_flags(dmsgptr, 0);
+}
+
+void cw_init_request(struct conn *conn, int msg_id)
+{
+	uint8_t *buffer = conn->req_buffer;
+
+	cw_put_dword(buffer + 0, 0);
+	cw_put_dword(buffer + 4, 0);
+	cw_set_hdr_preamble(buffer, 0);
+	cw_set_hdr_hlen(buffer, 2);
+	cw_set_hdr_wbid(buffer, 1);
+	cw_set_hdr_rid(buffer, 0);
+	uint8_t *msgptr = cw_get_hdr_msg_offset(buffer) + buffer;
+	cw_set_msg_type(msgptr, msg_id);
+	cw_set_msg_flags(msgptr, 0);
+	cw_set_msg_elems_len(msgptr, 0);
+
+
 }
 
 /**
  * send a response 
- */ 
+ */
 int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
 {
 	cw_init_response(conn, rawmsg);
-	cw_put_msg(conn,conn->resp_buffer);
+	if (cw_put_msg(conn, conn->resp_buffer) == -1)
+		return 0;
 	conn_send_msg(conn, conn->resp_buffer);
 	return 1;
 }
@@ -82,17 +101,17 @@ int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
  * @param rawmsg the received request message, which the response belongs to
  * @pqram result_code result code to send
  * @return 1
- */ 
-int cw_send_error_response(struct conn *conn,uint8_t *rawmsg, uint32_t result_code)
+ */
+int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_code)
 {
-	cw_init_response(conn,rawmsg);
-	
+	cw_init_response(conn, rawmsg);
+
 	uint8_t *out = conn->resp_buffer;
 
 	uint8_t *dst = cw_get_hdr_msg_elems_ptr(out);
-	int l = cw_put_elem_result_code(dst,result_code);
-	
-	cw_set_msg_elems_len(out+cw_get_hdr_msg_offset(out), l);
+	int l = cw_put_elem_result_code(dst, result_code);
+
+	cw_set_msg_elems_len(out + cw_get_hdr_msg_offset(out), l);
 
 	conn_send_msg(conn, conn->resp_buffer);
 
@@ -102,7 +121,7 @@ int cw_send_error_response(struct conn *conn,uint8_t *rawmsg, uint32_t result_co
 
 int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 {
-	struct cw_action_in as, *af,*afm;
+	struct cw_action_in as, *af, *afm;
 
 	uint8_t *msg_ptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
@@ -138,7 +157,7 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 	as.msg_id = cw_get_msg_id(msg_ptr);
 	as.vendor_id = 0;
 	as.elem_id = 0;
-	as.proto=0;
+	as.proto = 0;
 
 
 	/* Search for state/message combination */
@@ -146,30 +165,33 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 
 	if (!afm) {
 		/* Throw away unexpected response messages */
-		if (!(as.msg_id &1)) {
-			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unexpected, discarding.",
-			       as.msg_id, cw_strmsg(as.msg_id));
+		if (!(as.msg_id & 1)) {
+			cw_dbg(DBG_MSG_ERR,
+			       "Message type %d (%s) unexpected/illigal in %s State, discarding.",
+			       as.msg_id, cw_strmsg(as.msg_id),
+			       cw_strstate(conn->capwap_state));
 			return 0;
 		}
 
 		/* Request message not found in current state, check if we know 
-		   anything else about this message type */ 
-		const char *str = cw_strheap_get(conn->actions->strmsg,as.msg_id);
-		int result_code=0;
+		   anything else about this message type */
+		const char *str = cw_strheap_get(conn->actions->strmsg, as.msg_id);
+		int result_code = 0;
 		if (str) {
 			/* Message found, but it was in wrong state */
-			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) not allowed in %s State.",
-			       as.msg_id, cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
-			result_code = CW_RESULT_MSG_INVALID_IN_CURRENT_STATE;		
-		}
-		else {
+			cw_dbg(DBG_MSG_ERR,
+			       "Message type %d (%s) not allowed in %s State.", as.msg_id,
+			       cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+			result_code = CW_RESULT_MSG_INVALID_IN_CURRENT_STATE;
+		} else {
 			/* Message is unknown */
 			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
-			       as.msg_id, cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+			       as.msg_id, cw_strmsg(as.msg_id),
+			       cw_strstate(as.capwap_state));
 			result_code = CW_RESULT_MSG_UNRECOGNIZED;
-		
+
 		}
-		cw_send_error_response(conn,rawmsg,result_code);
+		cw_send_error_response(conn, rawmsg, result_code);
 		return 0;
 	}
 
@@ -182,6 +204,7 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 	uint8_t *elem;
 
+	/* avltree to bag the found mandatory elements */
 	conn->mand = intavltree_create();
 
 	/* iterate through message elements */
@@ -190,7 +213,8 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-		cw_dbg_elem(conn,as.msg_id, as.elem_id, cw_get_elem_data(elem), elem_len);
+		cw_dbg_elem(conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
+			    elem_len);
 
 
 		af = cw_actionlist_in_get(conn->actions->in, &as);
@@ -200,11 +224,11 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 			       as.elem_id, as.msg_id, cw_strmsg(as.msg_id));
 			continue;
 		}
-	
-		if (af->mand){
+
+		if (af->mand) {
 			/* add found mandatory message element 
-			   to mand list */	
-			intavltree_add(conn->mand,af->item_id);
+			   to mand list */
+			intavltree_add(conn->mand, af->item_id);
 		}
 
 		if (af->start) {
@@ -213,19 +237,18 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 
 	}
 
-	int result_code=0;
+	int result_code = 0;
 	if (afm->end) {
-		result_code=afm->end(conn, afm, rawmsg, len);
+		result_code = afm->end(conn, afm, rawmsg, len);
 	}
 
 	/* if we've got a request message, we have to send a response message */
 	if (as.msg_id & 1) {
-		if ( result_code>0 ) {
+		if (result_code > 0) {
 			/* the end method gave us an result code, so
 			   send an error message */
-			cw_send_error_response(conn,rawmsg,result_code);
-		}
-		else{
+			cw_send_error_response(conn, rawmsg, result_code);
+		} else {
 			/* regular response message */
 			cw_send_response(conn, rawmsg, len);
 		}

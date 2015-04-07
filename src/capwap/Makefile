@@ -98,7 +98,6 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_ac_descriptor.o \
 	   cwmsg_addelem_wtp_descriptor.o \
 	   cwmsg_addelem_wtp_radio_infos.o \
-	   cwmsg_addelem_wtp_board_data.o \
 	   cwmsg_addelem_cw_local_ip_addr.o \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_ac_timestamp.o \
@@ -121,11 +120,9 @@ CAPWAPOBJS= \
 	cw_handle_echo_request.o \
 	   cwsend_conf_status_response.o\
 	   cwread_configuration_status_request.o\
-	cwread_discovery_request.o\
 	cwread_change_state_event_request.o\
 	cwread_wtp_event_request.o \
 	   process_conf_status_request.o \
-	   wtpinfo_readelem_wtp_board_data.o \
 	   wtpinfo_readelem_wtp_mac_type.o \
 	   wtpinfo_readelem_wtp_radio_info.o  \
 	cw_readelem_80211_wtp_radio_info.o \
@@ -172,20 +169,27 @@ CAPWAPOBJS= \
 	cw_in_wtp_board_data.o \
 	cw_in_check_disc_req.o \
 	cw_in_check_join_req.o \
+	cw_in_check_img_data_req.o \
 	cw_out_generic.o \
 	cw_out_ac_descriptor.o \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
+	cw_in_cisco_image_identifier.o\
 	cw_out_capwap_control_ip_addrs.o \
 	strheap.o \
 	cw_check_missing_mand.o \
-	dbg.o
+	dbg.o \
+	md5sum.o \
+	format.o 
+	
 
 	#cw_in_wtp_name.o \
 	   #cw_msgtostr.o \
 	   #cw_msgelemtostr.o \
 	   #cwmsg_addelem_ctrl_ip_addrs.o \
 	   #process_join_request.o \
+	   #cwmsg_addelem_wtp_board_data.o \
+	   #wtpinfo_readelem_wtp_board_data.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
@@ -202,6 +206,7 @@ CAPWAPOBJS= \
 #	   cwmsg_set_control_header.o 
 #	   process_msgelems.o \
 #	   cwsend_join_response.o \
+#	cwread_discovery_request.o\
 
 #
 # SSL objects
@@ -243,7 +248,6 @@ CONNOBJS= conn_create.o \
 	connlist.o \
 	conn_create_noq.o \
 	conn_send_response.o \
-	conn_get_message.o  \
 	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
 	cw_prepare_configuration_status_request.o \
@@ -255,6 +259,7 @@ CONNOBJS= conn_create.o \
 	conn_wait_for_request.o \
 	conn_init.o \
 	conn_send_msg.o
+#conn_get_message.o  \
 
 
 
@@ -269,8 +274,10 @@ FRAGOBJS=fragman.o
 CWACTION=action.o \
 	cw_process_msg.o \
 	capwap_actions_ac.o \
+	capwap_actions_wtp.o \
 	cw_in_generic.o \
 	cw_in_wtp_descriptor.o \
+	cw_out_wtp_board_data.o \
 	cipwap_actions_ac.o \
 	cipwap_strings_elem.o \
 	cw_put_msg.o \
@@ -291,7 +298,7 @@ O:=$(OBJS);
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
 CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
-#CFLAGS += -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
+CFLAGS = -Wall  -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

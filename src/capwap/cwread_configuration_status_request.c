@@ -74,7 +74,7 @@ void cwread_configuration_status_request(struct wtpinfo * wtpinfo, uint8_t * msg
 {
 	int mand[] = {
 		CW_ELEM_AC_NAME,
-		CWMSGELEM_WTP_REBOOT_STATISTICS,
+		CW_ELEM_WTP_REBOOT_STATISTICS,
 		CWMSGELEM_RADIO_ADMINISTRATIVE_STATE,
 		CW_ELEM_STATISTICS_TIMER,
 		-1};

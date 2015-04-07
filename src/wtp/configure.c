@@ -6,6 +6,7 @@
 
 int configure()
 {
+/*
 	struct conn * conn = get_conn();
 	struct wtpinfo * wtpinfo = get_wtpinfo();
 
@@ -22,7 +23,7 @@ int configure()
 
 
 	printf("Got change resp %p\n",cwrmsg);
-
+*/
 
 }
 

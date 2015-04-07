@@ -56,7 +56,7 @@ extern int cw_rand(uint8_t*dst, int len);
 
 /* functions used to "rfc-verify" message elements */
 void cw_mand_elem_found(int *l,int type);
-int cw_is_missing_mand_elems(int *l);
+//int cw_is_missing_mand_elems(int *l);
 void cw_get_missing_mand_elems(char *dst, int *l);
 
 

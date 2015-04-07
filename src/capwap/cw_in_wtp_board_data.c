@@ -54,25 +54,25 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 		       sublen);
 
 		switch (subtype) {
-			case CWBOARDDATA_MODELNO:
+			case CW_BOARDDATA_MODELNO:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_MODELNO,
 						       msgelem + i, sublen);
 				break;
-			case CWBOARDDATA_SERIALNO:
+			case CW_BOARDDATA_SERIALNO:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_SERIALNO,
 						       msgelem + i, sublen);
 				
 				break;
-			case CWBOARDDATA_MACADDRESS:
+			case CW_BOARDDATA_MACADDRESS:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_MACADDRESS,
 						       msgelem + i, sublen);
 				
 				break;
-			case CWBOARDDATA_BOARDID:
+			case CW_BOARDDATA_BOARDID:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
 						       msgelem + i, sublen);
 				break;
-			case CWBOARDDATA_REVISION:
+			case CW_BOARDDATA_REVISION:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_REVISION,
 						       msgelem + i, sublen);
 			default:

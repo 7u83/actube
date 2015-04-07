@@ -4,6 +4,8 @@
 #include "capwap.h"
 #include "capwap_items.h"
 
+#include "cw_log.h"
+
 
 int cw_put_item(uint8_t *dst,struct cw_item*item)
 {
@@ -31,7 +33,6 @@ int cw_out_generic(struct conn *conn,struct cw_action_out *a,uint8_t *dst) // ,s
 		item = a->get (conn,a);
 	}
 
-	printf("Out generic item %p\n",item);
 
 	/* Size for msg elem header depends on 
 	   vendor specific payload */
@@ -39,13 +40,14 @@ int cw_out_generic(struct conn *conn,struct cw_action_out *a,uint8_t *dst) // ,s
 		
 
 	int len;
-	if ( !item )
-		len=0;
+	if ( !item ){
+		if (a->mand){
+			cw_log(LOG_ERR,"Cannot send mandatory message element %d",a->elem_id);
+		}
+		return 0;
+	}
 	else{
-		printf("Putting it\n");
-		printf("To put: %d %s\n",len,item->data);
 		len = cw_put_item(dst+start,item);
-		printf("Putted: %d %s\n",len,item->data);
 	}
 
 

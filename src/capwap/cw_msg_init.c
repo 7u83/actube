@@ -32,6 +32,4 @@ void cw_init_response(struct conn * conn, uint8_t *req)
 	cw_set_msg_type(dmsgptr,cw_get_msg_type(msgptr)+1);
 	cw_set_msg_seqnum(dmsgptr,cw_get_msg_seqnum(msgptr));
 	cw_set_msg_flags(dmsgptr,0);
-
-
 }

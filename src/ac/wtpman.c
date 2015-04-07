@@ -7,35 +7,33 @@
 
 #include "wtplist.h"
 
-#include "capwap.h"
-#include "sock.h"
+#include "capwap/capwap.h"
+#include "capwap/sock.h"
 #include "socklist.h"
 
-#include "conn.h"
+#include "capwap/conn.h"
 #include "wtpman.h"
 #include "conf.h"
-#include "cw_log.h"
-
-#include "dtls.h"
-
+#include "capwap/cw_log.h"
 
 
 #include "conf.h"
 
-#include "lwmsg.h"
-#include "lwapp.h"
+#include "capwap/lwmsg.h"
+#include "capwap/lwapp.h"
 
 
 #include <errno.h>
 
-#include "capwap.h"
-#include "capwap_80211.h"
-#include "capwap_cisco.h"
+#include "capwap/capwap_80211.h"
+#include "capwap/capwap_cisco.h"
 
-#include "cw_util.h"
+#include "capwap/cw_util.h"
 
-#include "capwap_items.h"
+#include "capwap/capwap_items.h"
 #include "ac.h"
+
+#include "capwap/dtls.h"
 
 
 extern struct cw_actiondef capwap_actions;
@@ -58,33 +56,33 @@ int conn_handle_echo_request(void * d)
 */
 
 
-void conn_handle_change_state_event_request(struct conn * conn)
+void conn_handle_change_state_event_request(struct conn *conn)
 {
 }
 
-
-static struct cwrmsg * xconn_wait_for_message(struct conn * conn, time_t timer)
+/*
+static struct cwrmsg *xconn_wait_for_message(struct conn *conn, time_t timer)
 {
-	struct cwrmsg * cwrmsg;
+	struct cwrmsg *cwrmsg;
 
 
-	while (!cw_timer_timeout(timer)){
+	while (!cw_timer_timeout(timer)) {
 		cwrmsg = conn_get_message(conn);
 
-		if (!cwrmsg){
+		if (!cwrmsg) {
 			if (!conn_is_error(conn))
 				continue;
 
 			return 0;
 		}
 
-		if (cwrmsg->type & 1){
-			if (conn->request_handler){
+		if (cwrmsg->type & 1) {
+			if (conn->request_handler) {
 				if (conn->request_handler(conn->request_handler_param))
 					continue;
 			}
 
-			
+
 		}
 
 		return cwrmsg;
@@ -93,157 +91,167 @@ static struct cwrmsg * xconn_wait_for_message(struct conn * conn, time_t timer)
 
 	return 0;
 }
+*/
 
-
-struct rh_param{
-	struct conn * conn;
+struct rh_param {
+	struct conn *conn;
 	int *msglist;
 
 };
 
 static int conn_rh(void *param)
 {
-	struct rh_param * p = (struct rh_param*)param;
+	struct rh_param *p = (struct rh_param *) param;
 	int i;
-	int *msglist=p->msglist; 
+	int *msglist = p->msglist;
 
 
-printf("Param %p\n",param);
+	printf("Param %p\n", param);
 
 
-	for (i=0; msglist[i]!=-1; i++){
-		if (msglist[i] == p->conn->cwrmsg.type )
+	for (i = 0; msglist[i] != -1; i++) {
+		if (msglist[i] == p->conn->cwrmsg.type)
 			return 0;
 
 	}
 	/* unexpected response here */
-	cw_log(LOG_ERR,"Unexpected message from %s",sock_addr2str(&p->conn->addr));
-	cwsend_unknown_response(p->conn,p->conn->cwrmsg.seqnum,p->conn->cwrmsg.type);
-	return 1;	
+	cw_log(LOG_ERR, "Unexpected message from %s", sock_addr2str(&p->conn->addr));
+	cwsend_unknown_response(p->conn, p->conn->cwrmsg.seqnum, p->conn->cwrmsg.type);
+	return 1;
 }
 
-static struct cwrmsg * zconn_wait_for_request(struct conn * conn, int *msglist, time_t timer)
+
+/*
+static struct cwrmsg *zconn_wait_for_request(struct conn *conn, int *msglist,
+					     time_t timer)
 {
-	int (*request_handler_save) (void*);
-	void * request_handler_param_save;
+	int (*request_handler_save) (void *);
+	void *request_handler_param_save;
 
 	struct rh_param rh_param;
-	
 
-	if (msglist){
-		request_handler_save=conn->request_handler;
-		request_handler_param_save=conn->request_handler_param;
-		rh_param.conn=conn;
-		rh_param.msglist=msglist;
-		conn->request_handler=conn_rh;
-		conn->request_handler_param=&rh_param;
+
+	if (msglist) {
+		request_handler_save = conn->request_handler;
+		request_handler_param_save = conn->request_handler_param;
+		rh_param.conn = conn;
+		rh_param.msglist = msglist;
+		conn->request_handler = conn_rh;
+		conn->request_handler_param = &rh_param;
 	}
 
 
-	struct cwrmsg * cwrmsg;
-	while (!cw_timer_timeout(timer)){
-		cwrmsg = conn_wait_for_message(conn,timer);
-		if (!cwrmsg){
+	struct cwrmsg *cwrmsg;
+	while (!cw_timer_timeout(timer)) {
+		cwrmsg = conn_wait_for_message(conn, timer);
+		if (!cwrmsg) {
 			if (!conn_is_error(conn))
 				continue;
 			break;
 		}
 
-		/* response message?  no action*/
-		if (! (cwrmsg->type & 1) )
-			continue;		
+		if (!(cwrmsg->type & 1))
+			continue;
 
-		/* it's a request message */
 		break;
 	}
 
-	if (msglist){
-		conn->request_handler=request_handler_save;
-		conn->request_handler_param=request_handler_param_save;
+	if (msglist) {
+		conn->request_handler = request_handler_save;
+		conn->request_handler_param = request_handler_param_save;
 	}
 
 	return cwrmsg;
 }
 
+*/
 
 
-
-
-struct cwrmsg * xconn_send_request(struct conn * conn)
+/*
+struct cwrmsg *xconn_send_request(struct conn *conn)
 {
 	int i;
 
-	struct cwrmsg * cwrmsg;
-	struct cwmsg * cwmsg = &conn->req_msg;
-	
-printf("Retrans interval = %d\n",conn->retransmit_interval);
-printf("Current Seqnum = %d\n",conn->seqnum);
+	struct cwrmsg *cwrmsg;
+	struct cwmsg *cwmsg = &conn->req_msg;
+
+	printf("Retrans interval = %d\n", conn->retransmit_interval);
+	printf("Current Seqnum = %d\n", conn->seqnum);
 
 
-        for (i=0; i<conn->max_retransmit; i++) {
+	for (i = 0; i < conn->max_retransmit; i++) {
 
-                time_t r_timer = cw_timer_start(conn->retransmit_interval);
-		if (i!=0)
-	                cw_dbg(DBG_MSG_ERR,"Retransmitting message, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
+		time_t r_timer = cw_timer_start(conn->retransmit_interval);
+		if (i != 0)
+			cw_dbg(DBG_MSG_ERR, "Retransmitting message, type=%d,seq=%d",
+			       cwmsg->type, cwmsg->seqnum);
 
-		conn_send_cwmsg(conn,&conn->req_msg);
-		cwrmsg = conn_wait_for_message(conn,r_timer);
-		if (cwrmsg){
-			if (cwrmsg->type == conn->req_msg.type+1){
+		conn_send_cwmsg(conn, &conn->req_msg);
+		cwrmsg = conn_wait_for_message(conn, r_timer);
+		if (cwrmsg) {
+			if (cwrmsg->type == conn->req_msg.type + 1) {
 				printf("YeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA!!!!!\n");
-				return cwrmsg;        
+				return cwrmsg;
 			}
+//                      cw_dbg(DBG_CW_MSG_ERR,"Wrong message blablub, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
 
-//                	cw_dbg(DBG_CW_MSG_ERR,"Wrong message blablub, type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
-			
-                                
+
 		}
 
-        }
-        cw_dbg(DBG_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
-        return 0;
+	}
+	cw_dbg(DBG_MSG_ERR, "Max retransmit's reached, message type=%d,seq=%d",
+	       cwmsg->type, cwmsg->seqnum);
+	return 0;
 
 }
+*/
 
 int wtpman_handle_request(void *p)
 {
-	struct wtpman * wtpman = (struct wtpman *)p;
-	struct conn * conn = wtpman->conn;
-	struct cwrmsg * cwrmsg = &conn->cwrmsg;
-	switch(conn->cwrmsg.type){
+
+/*
+	struct wtpman *wtpman = (struct wtpman *) p;
+	struct conn *conn = wtpman->conn;
+	struct cwrmsg *cwrmsg = &conn->cwrmsg;
+	switch (conn->cwrmsg.type) {
 		case CW_MSG_ECHO_REQUEST:
 			cw_handle_echo_request(conn);
 			break;
 		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
-			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
+			cwread_change_state_event_request(&wtpman->wtpinfo,
+							  cwrmsg->msgelems,
+							  cwrmsg->msgelems_len);
+			cwsend_change_state_event_response(wtpman->conn, cwrmsg->seqnum,
+							   wtpman->wtpinfo.radioinfo);
 			break;
 		default:
-			printf("Unhandeleed  message %d!!!!!!!!!!!!\n",cwrmsg->type);
-			cwsend_unknown_response(conn,cwrmsg->seqnum,cwrmsg->type);
+			printf("Unhandeleed  message %d!!!!!!!!!!!!\n", cwrmsg->type);
+			cwsend_unknown_response(conn, cwrmsg->seqnum, cwrmsg->type);
 	}
 	return 1;
+*/
 }
 
 
-void usend_image_file(struct conn * conn,const char * filename)
+void usend_image_file(struct conn *conn, const char *filename)
 {
-	FILE * infile;
-	infile = fopen(filename,"rb");
-	if (!infile){
-		cw_log(LOG_ERR,"Can't open image file %s:%s",filename,strerror(errno));
+	FILE *infile;
+	infile = fopen(filename, "rb");
+	if (!infile) {
+		cw_log(LOG_ERR, "Can't open image file %s:%s", filename, strerror(errno));
 		return;
 	}
 
 
-	
 
 
 
-	cw_log(LOG_INFO,"Sending image file %s to %s",filename,sock_addr2str(&conn->addr));
 
-	struct cwrmsg * cwrmsg;
-	uint8_t  buffer[1024];
+	cw_log(LOG_INFO, "Sending image file %s to %s", filename,
+	       sock_addr2str(&conn->addr));
+
+	struct cwrmsg *cwrmsg;
+	uint8_t buffer[1024];
 	struct cwimage_data data;
 	data.data = buffer;
 
@@ -251,12 +259,12 @@ void usend_image_file(struct conn * conn,const char * filename)
 	conn->request_handler = cw_handle_echo_request;
 	conn->request_handler_param = conn;
 
-int bl=0;
+	int bl = 0;
 
 //fseek(infile,2703*1024,SEEK_SET);
-	do{
+	do {
 
-		data.len = fread(buffer,1,sizeof(buffer),infile);
+		data.len = fread(buffer, 1, sizeof(buffer), infile);
 //data.len=0;
 
 /*
@@ -272,43 +280,44 @@ buffer[279]=199;
 buffer[319]=219;
 
 */
-int ai;
-for (ai=0; ai<1024; ai++){
-	printf("%02X ",buffer[ai]);
+		int ai;
+		for (ai = 0; ai < 1024; ai++) {
+			printf("%02X ", buffer[ai]);
 
-}
+		}
 
 
 
 		if (feof(infile))
-			data.type=2;
-		else	
-			data.type=1;
+			data.type = 2;
+		else
+			data.type = 1;
 
-		if (data.len==0){
-			printf("*******************************************len0************************************\n");
+		if (data.len == 0) {
+			printf
+			    ("*******************************************len0************************************\n");
 		}
 
-		printf("Send img data request, block=%d, len=%d, ch=%d\n",bl,data.len,lw_checksum(data.data,data.len));
+		printf("Send img data request, block=%d, len=%d, ch=%d\n", bl, data.len,
+		       lw_checksum(data.data, data.len));
 
 //exit(0);
 
 		bl++;
 
-		conn_prepare_image_data_request(conn,&data,0);
-		cwrmsg = conn_send_request(conn);
+		conn_prepare_image_data_request(conn, &data, 0);
+//		cwrmsg = conn_send_request(conn);
 
 
-		if (cwrmsg){
+		if (cwrmsg) {
 			printf("Got img data response\n");
-		}
-		else{
+		} else {
 			printf("Respnse Timeout\n");
 			exit(0);
 		}
 
 
-	}while(!feof(infile));
+	} while (!feof(infile));
 
 
 	exit(0);
@@ -318,9 +327,9 @@ for (ai=0; ai<1024; ai++){
 
 
 //ACIPLIST * get_aciplist();
-struct ac_info * get_acinfo();
+struct ac_info *get_acinfo();
 
-static void wtpman_remove(struct wtpman * wtpman)
+static void wtpman_remove(struct wtpman *wtpman)
 {
 	wtplist_lock();
 	wtplist_remove(wtpman);
@@ -335,58 +344,79 @@ static void wtpman_remove(struct wtpman * wtpman)
  * Returns pointer to cwrms if message is received
  * Returns EOF in case of any other error
  */
-static struct cwrmsg * wtpman_wait_for_message(struct wtpman * wtpman, time_t timer)
+
+/*
+static struct cwrmsg *wtpman_wait_for_message(struct wtpman *wtpman, time_t timer)
 {
-	struct cwrmsg * cwrmsg;
+	struct cwrmsg *cwrmsg;
 	do {
 		cwrmsg = conn_get_message(wtpman->conn);
 		if (!cwrmsg && wtpman->conn->dtls_error)
-			return (struct cwrmsg*)EOF;
-		if (!cwrmsg && cw_timer_timeout(timer)) 
+			return (struct cwrmsg *) EOF;
+		if (!cwrmsg && cw_timer_timeout(timer))
 			return NULL;
 
-	}while(!cwrmsg);
+	} while (!cwrmsg);
 
-	cw_dbg(DBG_MSG,"Received message from %s, type=%d - %s"
-		,CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
+	cw_dbg(DBG_MSG, "Received message from %s, type=%d - %s", CLIENT_IP, cwrmsg->type,
+	       cw_msgtostr(cwrmsg->type));
 
 	return cwrmsg;
 }
+*/
 
-	int conn_msg_processor(struct conn *conn);
+//int conn_msg_processor(struct conn *conn);
 
+
+
+
+
+int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len)
+{
+	printf("Discovery END!!!\n");
+	conn->capwap_state=CW_STATE_NONE;
+	return 0;
+
+}
 
 static void wtpman_run_discovery(void *arg)
 {
 
-	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct cwrmsg * cwrmsg;
-	
+	struct wtpman *wtpman = (struct wtpman *) arg;
+	struct cwrmsg *cwrmsg;
+
 
 	time_t timer = cw_timer_start(10);
 
-extern cw_actionlist_in_t the_tree;
+	extern cw_actionlist_in_t the_tree;
 
-	wtpman->conn->capwap_state=CW_STATE_DISCOVERY;
+	wtpman->conn->capwap_state = CW_STATE_DISCOVERY;
 	wtpman->conn->actions = &capwap_actions;
+
+/*
+	cw_actionlist_in_set_msg_end_callback(capwap_actions.in, CW_STATE_DISCOVERY,
+					      CW_MSG_DISCOVERY_REQUEST, check_discovery);
+
+*/
 
 
 	wtpman->conn->local = ac_config;
 	wtpman->conn->remote = cw_itemstore_create();
 
-	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_DISCOVERY){
-		conn_msg_processor(wtpman->conn);
+	while (!cw_timer_timeout(timer)
+	       && wtpman->conn->capwap_state == CW_STATE_DISCOVERY) {
+		cw_read_messages(wtpman->conn);
 	}
 
-	struct cw_item * wn = cw_itemstore_get(wtpman->conn->remote,CW_ITEM_WTP_NAME);
+	struct cw_item *wn = cw_itemstore_get(wtpman->conn->remote, CW_ITEM_WTP_NAME);
 
-	if (wn ) {
-		printf("WTP Name: %s\n",wn->data);
+	if (wn) {
+		printf("WTP Name: %s\n", wn->data);
 	}
 
 	wtpman_remove(wtpman);
 	return;
-	
+
 
 
 
@@ -395,45 +425,49 @@ extern cw_actionlist_in_t the_tree;
 	timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
-	if ( !cwrmsg  )
-	{
-		cw_dbg(DBG_MSG_ERR,"No complete message from %s received after %d seconds",CLIENT_IP,10);
+	if (!cwrmsg) {
+		cw_dbg(DBG_MSG_ERR,
+		       "No complete message from %s received after %d seconds", CLIENT_IP,
+		       10);
 		wtpman_remove(wtpman);
 		return;
 	}
 
-	
-	if (cwrmsg->type!=CW_MSG_DISCOVERY_REQUEST){
-		cw_dbg(DBG_MSG_ERR,"Invalid message in discovery state from %s, type=%s - %s ",
-			CLIENT_IP,cwrmsg->type,cw_msgtostr(cwrmsg->type));
+
+	if (cwrmsg->type != CW_MSG_DISCOVERY_REQUEST) {
+		cw_dbg(DBG_MSG_ERR,
+		       "Invalid message in discovery state from %s, type=%s - %s ",
+		       CLIENT_IP, cwrmsg->type, cw_msgtostr(cwrmsg->type));
 		wtpman_remove(wtpman);
 		return;
 	}
 
-	cwread_discovery_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
+	cwread_discovery_request(&wtpman->wtpinfo, cwrmsg->msgelems,
+				 cwrmsg->msgelems_len);
 
 
-//	printf("RMAC-LEN:%d\n",cwrmsg->rmac[0]);
+//      printf("RMAC-LEN:%d\n",cwrmsg->rmac[0]);
 
 //printf("HW: %s\n",sock_hwaddr2str(bstr_data(cwrmsg->rmac),bstr_len(cwrmsg->rmac)));
 
 
 
-	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
+	conn_detect_capwap(wtpman->conn, &wtpman->wtpinfo);
 
 	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
+	wtpinfo_print(wtpinfostr, &wtpman->wtpinfo);
+	cw_dbg(DBG_CW_INFO, "Discovery request gave us the follwing WTP Info:\n%s",
+	       wtpinfostr);
 
 
 	struct radioinfo radioinfo;
 	radioinfo.rid = cwrmsg->rid;
-	radioinfo.rmac = 0; //&cwrmsg->rmac;
-	
-//	memcpy(radioinfo.rmac, cwrmsg->rmac,8);
-//	radioinfo.rmac[0]=0;
+	radioinfo.rmac = 0;	//&cwrmsg->rmac;
 
-	struct ac_info * acinfo = get_acinfo();
+//      memcpy(radioinfo.rmac, cwrmsg->rmac,8);
+//      radioinfo.rmac[0]=0;
+
+	struct ac_info *acinfo = get_acinfo();
 
 
 
@@ -442,7 +476,8 @@ extern cw_actionlist_in_t the_tree;
 	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 */
 
-	cwsend_discovery_response(wtpman->conn,cwrmsg->seqnum,&radioinfo,acinfo,&wtpman->wtpinfo);
+	cwsend_discovery_response(wtpman->conn, cwrmsg->seqnum, &radioinfo, acinfo,
+				  &wtpman->wtpinfo);
 	wtpman_remove(wtpman);
 }
 
@@ -450,26 +485,26 @@ extern cw_actionlist_in_t the_tree;
 static void wtpman_run_run(void *arg)
 {
 
-	
-	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct conn * conn = wtpman->conn;
+/*
+	struct wtpman *wtpman = (struct wtpman *) arg;
+	struct conn *conn = wtpman->conn;
 
-	struct cwrmsg * cwrmsg;
+	struct cwrmsg *cwrmsg;
 
 
-	conn->request_handler=wtpman_handle_request;
-	conn->request_handler_param=wtpman;
+	conn->request_handler = wtpman_handle_request;
+	conn->request_handler_param = wtpman;
 
-	
+
 	int i;
-	for (i=0; i<1; i++){
+	for (i = 0; i < 1; i++) {
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
-		conn_wait_for_message(conn,t);
+		conn_wait_for_message(conn, t);
 	}
 
 	printf("Update now?\n");
-
+*/
 
 /*
 	conn_prepare_request(conn,CW_MSG_CONFIGURATION_UPDATE_REQUEST);
@@ -488,22 +523,22 @@ static void wtpman_run_run(void *arg)
 	}
 */
 
-
-printf("Adding WLAN\n");
+/*
+	printf("Adding WLAN\n");
 	struct cwwlan wlan;
-	memset(&wlan,0,sizeof(wlan));
+	memset(&wlan, 0, sizeof(wlan));
 
-	const char * wl = "wl7u83";
-	wlan.ssid = bstr_create(wl,strlen(wl));
+	const char *wl = "wl7u83";
+	wlan.ssid = bstr_create(wl, strlen(wl));
 
-	conn_prepare_request(conn,CWMSG_80211_WLAN_CONFIGURATION_REQUEST);
-	struct cwmsg * cwmsg = &conn->req_msg;
-	cwmsg_addelem_80211_add_wlan(cwmsg,&wlan);
+	conn_prepare_request(conn, CWMSG_80211_WLAN_CONFIGURATION_REQUEST);
+	struct cwmsg *cwmsg = &conn->req_msg;
+	cwmsg_addelem_80211_add_wlan(cwmsg, &wlan);
 
 	cwrmsg = conn_send_request(conn);
 
-printf("WLAN CONF sent\n");
-
+	printf("WLAN CONF sent\n");
+*/
 
 
 
@@ -511,17 +546,18 @@ printf("WLAN CONF sent\n");
 /*	conn_prepare_request(conn,CWMSG_RESET_REQUEST);
 	cwmsg_addelem_image_identifier(&conn->req_msg,CW_VENDOR_ID_CISCO,"image00",strlen("image00"));
 	cwrmsg = conn_send_request(conn);
-*/	
+*/
 
-	for (i=0; i<100; i++){
+/*
+	for (i = 0; i < 100; i++) {
 		time_t t = cw_timer_start(1);
 		printf("Wait...\n");
-		conn_wait_for_message(conn,t);
+		conn_wait_for_message(conn, t);
 	}
 
 	printf("Set name?\n");
-	exit(0);	
-
+	exit(0);
+*/
 
 }
 
@@ -529,90 +565,193 @@ printf("WLAN CONF sent\n");
 
 static int wtpman_establish_dtls(void *arg)
 {
-	struct wtpman * wtpman = (struct wtpman *)arg;
-	
+	struct wtpman *wtpman = (struct wtpman *) arg;
+
 	/* setup cipher */
-	wtpman->conn->dtls_cipher=conf_sslcipher;
+	wtpman->conn->dtls_cipher = conf_sslcipher;
 
 	/* setup DTSL certificates */
-	int dtls_ok=0;
-	if (conf_sslkeyfilename && conf_sslcertfilename){
+	int dtls_ok = 0;
+	if (conf_sslkeyfilename && conf_sslcertfilename) {
 
 
 		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
 		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
 		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
-		cw_dbg(DBG_DTLS,"DTLS - Using key file %s",wtpman->conn->dtls_key_file);
-		cw_dbg(DBG_DTLS,"DTLS - Using cert file %s",wtpman->conn->dtls_cert_file);
-		dtls_ok=1;
+		cw_dbg(DBG_DTLS, "DTLS - Using key file %s", wtpman->conn->dtls_key_file);
+		cw_dbg(DBG_DTLS, "DTLS - Using cert file %s",
+		       wtpman->conn->dtls_cert_file);
+		dtls_ok = 1;
 	}
 
 	/* setup DTLS psk */
-	if (conf_dtls_psk){
-		wtpman->conn->dtls_psk=conf_dtls_psk;
-		wtpman->conn->dtls_psk_len=strlen(conf_dtls_psk);
-		dtls_ok=1;
+	if (conf_dtls_psk) {
+		wtpman->conn->dtls_psk = conf_dtls_psk;
+		wtpman->conn->dtls_psk_len = strlen(conf_dtls_psk);
+		dtls_ok = 1;
 	}
 
-	if (!dtls_ok){
-		cw_log(LOG_ERR,"Can't establish DTLS session, neither psk nor certs set in config file.");
+	if (!dtls_ok) {
+		cw_log(LOG_ERR,
+		       "Can't establish DTLS session, neither psk nor certs set in config file.");
 		return 0;
 	}
 
 	/* try to accept the connection */
-	if ( !dtls_accept(wtpman->conn) ){
-		cw_dbg(DBG_DTLS,"Error establishing DTLS session with %s",CLIENT_IP);
+	if (!dtls_accept(wtpman->conn)) {
+		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s", CLIENT_IP);
 		return 0;
 	}
-	
-	cw_dbg(DBG_DTLS,"DTLS session established with %s, cipher=%s", CLIENT_IP,dtls_get_cipher(wtpman->conn));
-	/* DTLS handshake done */
 
+	cw_dbg(DBG_DTLS, "DTLS session established with %s, cipher=%s", CLIENT_IP,
+	       dtls_get_cipher(wtpman->conn));
+	/* DTLS handshake done */
 
 	int cert_len;
 	struct dtls_ssl_cert cert;
 
 	FILE *f;
-	f = fopen ("pcert.der","wb");
+	f = fopen("pcert.der", "wb");
 
 	printf("Calling peers cert\n");
-	cert = dtls_get_peers_cert(wtpman->conn,0);
+	cert = dtls_get_peers_cert(wtpman->conn, 0);
 	printf("Back from peers cert\n");
-	
-	printf("Have Peers Cert: %p, %d\n",cert.data,cert.size);
-	fwrite(cert.data,1,cert.size,f);
-	
+
+	printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
+	fwrite(cert.data, 1, cert.size, f);
 
 
 	return 1;
 }
 
-static int wtpman_join(void *arg,time_t timer)
+static int wtpman_join(void *arg, time_t timer)
 {
-	struct wtpman * wtpman = (struct wtpman *)arg;
+	struct wtpman *wtpman = (struct wtpman *) arg;
 
-extern cw_actionlist_in_t the_tree;
-wtpman->conn->actions=&capwap_actions;
-wtpman->conn->capwap_state=CW_STATE_JOIN;
+	extern cw_actionlist_in_t the_tree;
+	wtpman->conn->actions = &capwap_actions;
+	wtpman->conn->capwap_state = CW_STATE_JOIN;
 
-	wtpman->conn->capwap_state=CW_STATE_JOIN;
+	wtpman->conn->capwap_state = CW_STATE_JOIN;
 	wtpman->conn->actions = &capwap_actions;
 
-//	wtpman->conn->itemstore = cw_itemstore_create();
+//      wtpman->conn->itemstore = cw_itemstore_create();
 
 	wtpman->conn->local = ac_config;
 	wtpman->conn->remote = cw_itemstore_create();
 
-	while ( !cw_timer_timeout(timer) && wtpman->conn->capwap_state==CW_STATE_JOIN){
-		int rc = conn_msg_processor(wtpman->conn);
-		if (rc <0 ) {
+	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
+		int rc = cw_read_messages(wtpman->conn);
+		if (rc < 0) {
+			break;
+		}
+	}
+
+	if (wtpman->conn->capwap_state==CW_STATE_JOIN){
+		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
+		       sock_addr2str(&wtpman->conn->addr), wtpman->conn->wait_dtls);
+
+		return 0;
+	}
+	
+
+	return 1;
+
+
+}
+
+
+static int wtpman_send_image_file(struct wtpman *wtpman, struct cwrmsg *cwrmsg)
+{
+	struct cwimage_data data;
+	memset(&data, 0, sizeof(struct cwimage_data));
+	uint8_t id[1025];
+	data.identifier = id;
+	char filename[2048];
+	id[0] = 0;
+
+
+	cw_read_image_data_request(&data, cwrmsg->msgelems, cwrmsg->msgelems_len);
+	if (!strlen(id)) {
+		cw_dbg(DBG_MSG_ERR, "No image identifier in image data request");
+		cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum,
+					    CW_RESULT_FAILURE);
+		return 0;
+	}
+
+	sprintf(filename, "%s/%s", conf_image_dir, id);
+
+	FILE *infile;
+	infile = fopen(filename, "rb");
+	if (infile) {
+		cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum,
+					    CW_RESULT_SUCCESS);
+		cw_log(LOG_INFO, "Sending image file %s to %s", filename,
+		       sock_addr2str(&wtpman->conn->addr));
+		cw_send_image_file(wtpman->conn, infile);
+		return 1;
+	}
+
+	cw_log(LOG_ERR, "Can't open image file %s:%s", filename, strerror(errno));
+	cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum, CW_RESULT_FAILURE);
+
+	return 0;
+
+}
+
+static void wtpman_run(void *arg)
+{
+	struct wtpman *wtpman = (struct wtpman *) arg;
+	struct cwrmsg *cwrmsg;	// = conn_get_message(wtpman->conn);
+
+	wtpman->conn->seqnum = 0;
+
+	/* reject connections to our multi- or broadcast sockets */
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
+		       CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+	/* establish dtls session */
+	if (!wtpman_establish_dtls(wtpman)) {
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	/* dtls is established, goto join state */
+	if (!wtpman_join(wtpman, timer)) {
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+
+
+	/* here the WTP has joined, now we assume an image data request  
+	   or an configuration status request. Nothing else. 
+	   State is Image update 
+	 */
+
+	
+	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
+		int rc = cw_read_messages(wtpman->conn);
+		if (rc < 0) {
 			break;
 		}
 	}
 
 
-	printf("Breaked\n");
+
+
+
+
 	exit(0);
 
 
@@ -622,190 +761,72 @@ wtpman->conn->capwap_state=CW_STATE_JOIN;
 
 
 
+/*
 
 
 
 
-
-
-
-
-	/* timer = cw_timer_start(wtpman->conn->wait_join); */
-
-	int join_msgs[] = { CW_MSG_JOIN_REQUEST, -1 };
-	struct cwrmsg * cwrmsg;	
-	cwrmsg =  conn_wait_for_request(wtpman->conn, join_msgs, timer);
-
-	if (!cwrmsg){
-		if (conn_is_error(wtpman->conn)){
-			cw_dbg(DBG_MSG_ERR,"DTLS connection closed while waiting for join request from %s.",CLIENT_IP);
-			return 0;
-		}
-			
-		cw_dbg(DBG_MSG_ERR,"No join request from %s after %d seconds, WTP died.",
-		sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_dtls);
-		return 0;
-	
-	}
-
-
-	process_join_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-	conn_detect_capwap(wtpman->conn,&wtpman->wtpinfo);
-
-	{
-	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-	cw_dbg(DBG_CW_INFO,"Join request gave us the follwing WTP Info:\n%s",wtpinfostr);
-	}
-
-
-	struct radioinfo radioinfo;
-	radioinfo.rid = cwrmsg->rid;
-//	memcpy (radioinfo.rmac, cwrmsg->rmac,8);
-	struct ac_info * acinfo = get_acinfo();
-
-
-	int result_code = 0;
-	cw_dbg(DBG_MSG,"Sending join response to %s",CLIENT_IP);
-printf("SLeep befor join resp\n");
-printf("Slept befor join resp\n");
-
-	cwsend_join_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
-	cw_log(LOG_INFO,"WTP joined, Name = %s, Location = %s, IP = %s",
-		wtpman->wtpinfo.name,wtpman->wtpinfo.location,
-		sock_addr2str(&wtpman->conn->addr));
-
-//exit(0);
-	return 1;
-	
-}
-
-
-static int wtpman_send_image_file(struct wtpman * wtpman,struct cwrmsg * cwrmsg)
-{
-	struct cwimage_data data;
-	memset(&data,0,sizeof(struct cwimage_data));
-	uint8_t id [1025];
-	data.identifier=id;
-	char filename[2048];
-	id[0]=0;
-
-
-	cw_read_image_data_request(&data,cwrmsg->msgelems,cwrmsg->msgelems_len);
-	if (!strlen(id)){
-		cw_dbg(DBG_MSG_ERR, "No image identifier in image data request");
-		cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
-		return 0;
-	}
-
-	sprintf(filename,"%s/%s",conf_image_dir,id);
-
-	FILE *infile;
-	infile = fopen(filename, "rb");
-	if (infile) {
-		cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
-		cw_log(LOG_INFO, "Sending image file %s to %s", filename, sock_addr2str(&wtpman->conn->addr));
-		cw_send_image_file(wtpman->conn, infile);
-		return 1;
-	}
-
-	cw_log(LOG_ERR, "Can't open image file %s:%s", filename, strerror(errno));
-	cw_send_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
-
-	return 0;
-
-}
-
-static void wtpman_run(void *arg)
-{
-	struct wtpman * wtpman = (struct wtpman *)arg;
-	struct cwrmsg * cwrmsg; // = conn_get_message(wtpman->conn);
-
-	wtpman->conn->seqnum=0;
-
-	/* reject connections to our multi- or broadcast sockets */
-	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET){
-		cw_dbg(DBG_DTLS,"Dropping connection from %s to non-unicast socket.", CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
-
-	/* establish dtls session*/
-	if (!wtpman_establish_dtls(wtpman)){
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-	/* dtls is established, goto join state */
-	if (!wtpman_join(wtpman,timer)){
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-
-
-	/* here the WTP has joined, now we assume an image data request  
-	   or an configuration status request. Nothing else. i
-	   State is Image update 
-	*/
 
 	do {
-		int cfg_status_msgs[] = { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST, -1 };
-		cwrmsg =  conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
+		int cfg_status_msgs[] =
+		    { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST,
+	-1 };
+		cwrmsg = conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
 
-		if (!cwrmsg){
-			cw_dbg(DBG_MSG_ERR,"No conf status or img data request from %s after %d seconds, WTP died.",
-				sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
-			wtpman_remove(wtpman);	
+		if (!cwrmsg) {
+			cw_dbg(DBG_MSG_ERR,
+			       "No conf status or img data request from %s after %d seconds, WTP died.",
+			       sock_addr2str(&wtpman->conn->addr),
+			       wtpman->conn->wait_join);
+			wtpman_remove(wtpman);
 			return;
 		}
 
-		/* Image data request, the WTP wants an update */
-		if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
-			int rc = wtpman_send_image_file(wtpman,cwrmsg);	
-			if (rc ){
+		// Image data request, the WTP wants an update 
+		if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
+			int rc = wtpman_send_image_file(wtpman, cwrmsg);
+			if (rc) {
 				wtpman_remove(wtpman);
 				return;
 			}
 
 		}
 
-	} while (cwrmsg->type != CW_MSG_CONFIGURATION_STATUS_REQUEST); 
+	} while (cwrmsg->type != CW_MSG_CONFIGURATION_STATUS_REQUEST);
 
 
 
-printf("Have Masseg %d\n",cwrmsg->type);
-	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
-	int result_code=0;
+	printf("Have Masseg %d\n", cwrmsg->type);
+	cwread_configuration_status_request(&wtpman->wtpinfo, cwrmsg->msgelems,
+					    cwrmsg->msgelems_len);
+	int result_code = 0;
 	struct ac_info *acinfo = get_acinfo();
 	struct radioinfo rinf;
-	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&rinf,acinfo,&wtpman->wtpinfo);
-printf("Send the respi but sleep\n");
+	cwsend_conf_status_response(wtpman->conn, cwrmsg->seqnum, result_code, &rinf,
+				    acinfo, &wtpman->wtpinfo);
+	printf("Send the respi but sleep\n");
 
-	
-printf("Next thoing\n");
-	int change_status_msgs[] = { CW_MSG_IMAGE_DATA_REQUEST,CW_MSG_CHANGE_STATE_EVENT_REQUEST, -1 };
-	cwrmsg =  conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
-printf("Done\n");
 
-	if (!cwrmsg){
-		wtpman_remove(wtpman);	
+	printf("Next thoing\n");
+	int change_status_msgs[] =
+	    { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CHANGE_STATE_EVENT_REQUEST, -1 };
+	cwrmsg = conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
+	printf("Done\n");
+
+	if (!cwrmsg) {
+		wtpman_remove(wtpman);
 		return;
 	}
 
 
 
-	switch (cwrmsg->type){
+	switch (cwrmsg->type) {
 		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
 			{
-			printf("Change state event\n!");
-			struct radioinfo ri;
-			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,&ri);
+				printf("Change state event\n!");
+				struct radioinfo ri;
+				cwsend_change_state_event_response(wtpman->conn,
+								   cwrmsg->seqnum, &ri);
 			}
 			break;
 		case CW_MSG_IMAGE_DATA_REQUEST:
@@ -816,17 +837,18 @@ printf("Done\n");
 			//cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
 
 			//send_image_file(wtpman->conn,"/tftpboot/c1130-k9w7-tar.default");
-		
-	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w7-tar.123-8.JEA3.tar");
-//			send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");
-	//		send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
-		
+
+			//              send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w7-tar.123-8.JEA3.tar");
+//                      send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");
+			//              send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
+
 			break;
 	}
 
 
-	
+
 	printf("WTP is joined now\n");
+*/
 
 /*
 	struct radioinfo * radioinfo;
@@ -846,16 +868,18 @@ printf("Done\n");
 
 */
 
-//	cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
-//	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
+//      cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
+//      cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
 
+/*
 	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-	cw_dbg(DBG_ALL,"WTP conf_status\n%s",wtpinfostr);
+	wtpinfo_print(wtpinfostr, &wtpman->wtpinfo);
+	cw_dbg(DBG_ALL, "WTP conf_status\n%s", wtpinfostr);
 
 	printf("Run run run run run\n");
 	wtpman_run_run(wtpman);
 	exit(0);
+*/
 
 /*
 int ii;
@@ -871,17 +895,19 @@ for (ii=0; ii<3; ii++){
 }
 */
 
+/*
 	wtpman_run_run(wtpman);
 
-exit(0);
+	exit(0);
 
 
-	if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
-		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
-		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
+	if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
+		cwread_image_data_request(0, cwrmsg->msgelems, cwrmsg->msgelems_len);
+		cwsend_image_data_response(wtpman->conn, cwrmsg->seqnum,
+					   CW_RESULT_FAILURE);
 	}
 
-
+*/
 
 
 
@@ -891,36 +917,37 @@ exit(0);
 	send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
 	printf("Back from sending image file\n");
 */
-exit(0);
-
-
-	timer = cw_timer_start(30);
-	cwrmsg = wtpman_wait_for_message(wtpman,timer);
-
-	if (cwrmsg)
-		printf("I have got a message of type %d\n",cwrmsg->type);
-
-	if (cwrmsg->type==CW_MSG_IMAGE_DATA_REQUEST){
-		cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
-		cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_FAILURE);
-	}
-	
-
-
 	exit(0);
 
 
+/*
+	timer = cw_timer_start(30);
+	cwrmsg = wtpman_wait_for_message(wtpman, timer);
+
+	if (cwrmsg)
+		printf("I have got a message of type %d\n", cwrmsg->type);
+
+	if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
+		cwread_image_data_request(0, cwrmsg->msgelems, cwrmsg->msgelems_len);
+		cwsend_image_data_response(wtpman->conn, cwrmsg->seqnum,
+					   CW_RESULT_FAILURE);
+	}
 
 
-//	char wtpinfostr[8192];
-//	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-//	cw_log_debug0("WTP joined\n%s",wtpinfostr);
+*/
+
+
+
+
+//      char wtpinfostr[8192];
+//      wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
+//      cw_log_debug0("WTP joined\n%s",wtpinfostr);
 
 //exit(0);
-
+/*
 	int msg_counter = 0;
-	while(1){
-		struct cwrmsg * cwrmsg = conn_get_message(wtpman->conn);
+	while (1) {
+		struct cwrmsg *cwrmsg = conn_get_message(wtpman->conn);
 
 
 
@@ -929,15 +956,15 @@ exit(0);
 
 		if (!cwrmsg) {
 			msg_counter++;
-			if (msg_counter < CAPWAP_ECHO_INTERVAL *2 ) 
+			if (msg_counter < CAPWAP_ECHO_INTERVAL * 2)
 				continue;
-			
-		//	cw_log_debug0("WTP died");
+
+			//      cw_log_debug0("WTP died");
 			wtpman_remove(wtpman);
 			return;
 		}
 
-
+*/
 /*
 if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 	process_conf_status_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
@@ -952,79 +979,61 @@ if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
 
 }
 */
-		msg_counter=0;
+
+/*
+		msg_counter = 0;
 
 
-		if (cwrmsg->type == CW_MSG_ECHO_REQUEST){
-			cwsend_echo_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
+		if (cwrmsg->type == CW_MSG_ECHO_REQUEST) {
+			cwsend_echo_response(wtpman->conn, cwrmsg->seqnum,
+					     wtpman->wtpinfo.radioinfo);
 		}
-//		printf("Got msg: %i\n",cwrmsg->type);
-
-	}
-
-
-
-
-//	process_discovery(wtpman,cwrmsg);
-	exit(0);
-
-
-	printf("Messag gote ssl\n");
-
-	printf("Precdeis sssl\n");
-
-	printf ("SEQNUM REC: %i\n",cwrmsg->seqnum);
-
-	printf("procdis ende\n");
-
-
-	exit(0);
-
-
-
-
-	while (1) 
-	{
-	/*
-		sem_wait(&wtpman->q_sem);
-		int qrpos = wtpman->qrpos+1;
-		if (qrpos==WTPMAN_QSIZE)
-			qrpos=0;
-		wtpman->qrpos=qrpos;
-
-		uint8_t * packet = wtpman->q[qrpos]+4;
-		int len = *( (uint32_t*)(wtpman->q[qrpos]));
 */
-		uint8_t * packet = conn_q_get_packet(wtpman->conn);
-//		int len = *( (uint32_t*)(packet));
+
+//              printf("Got msg: %i\n",cwrmsg->type);
+
+}
 
 
-//		conn_process_packet(wtpman->conn,packet+4,len);
+
+
+//      process_discovery(wtpman,cwrmsg);
+	
+
+/*
+	while (1) {
+		uint8_t *packet = conn_q_get_packet(wtpman->conn);
+//              int len = *( (uint32_t*)(packet));
+
+
+//              conn_process_packet(wtpman->conn,packet+4,len);
 		free(packet);
 	}
-}
+*/
 
-void wtpman_destroy(struct wtpman * wtpman)
+
+
+void wtpman_destroy(struct wtpman *wtpman)
 {
-	if ( wtpman->conn)
+	if (wtpman->conn)
 		conn_destroy(wtpman->conn);
-	free (wtpman);
+	free(wtpman);
 }
 
 
 
-struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr)
+struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 {
-	struct wtpman * wtpman;
+	struct wtpman *wtpman;
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
 		return 0;
-	memset (wtpman,0,sizeof(struct wtpman));
+	memset(wtpman, 0, sizeof(struct wtpman));
 
 	int sockfd = socklist[socklistindex].reply_sockfd;
 
-	wtpman->conn=conn_create(sockfd,srcaddr,100);
-	if (!wtpman->conn){
+	wtpman->conn = conn_create(sockfd, srcaddr, 100);
+	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
@@ -1033,25 +1042,25 @@ struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr)
 }
 
 
-void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len)
+void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-	conn_q_add_packet(wtpman->conn,packet,len);
+	conn_q_add_packet(wtpman->conn, packet, len);
 }
 
 
-void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
+void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-//	uint8_t * m = packet+12;
-//	int l = LWTH_GET_LENGTH(packet+6);
+//      uint8_t * m = packet+12;
+//      int l = LWTH_GET_LENGTH(packet+6);
 
-	uint8_t * msg = packet+12;
+	uint8_t *msg = packet + 12;
 
 
-	int msgtype = LWMSG_GET_TYPE(msg);	
-	int msglen = LWMSG_GET_LEN(msg);	
-	printf ("Type is %d, Len is %d\n",msgtype,msglen);
-	
-	uint8_t * msgdata = LWMSG_GET_DATA(msg);
+	int msgtype = LWMSG_GET_TYPE(msg);
+	int msglen = LWMSG_GET_LEN(msg);
+	printf("Type is %d, Len is %d\n", msgtype, msglen);
+
+	uint8_t *msgdata = LWMSG_GET_DATA(msg);
 
 /*
 	int c=0; 
@@ -1065,7 +1074,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 
 */
 
-	uint8_t * data;
+	uint8_t *data;
 /*
 	lw_foreach_msgelem(data,msgdata,msglen){
 		int eltype = LWMSGELEM_GET_TYPE(data);
@@ -1080,16 +1089,16 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 */
 
 	char wi[4096];
-	wtpinfo_print(wi,&wtpman->wtpinfo);
-	printf ("WTPINFO: \n%s\n",wi);
+	wtpinfo_print(wi, &wtpman->wtpinfo);
+	printf("WTPINFO: \n%s\n", wi);
 
 
-	
-//	char buffer[2048];
-//	struct lwmsg lwmsg;
-//	lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
-	
-//	conn_send_packet(wtpman->conn,buffer,60);
+
+//      char buffer[2048];
+//      struct lwmsg lwmsg;
+//      lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
+
+//      conn_send_packet(wtpman->conn,buffer,60);
 
 
 
@@ -1097,22 +1106,21 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t *packet, int len)
 }
 
 
-void wtpman_start(struct wtpman * wtpman,int dtlsmode)
+void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
-	if ( dtlsmode ){
-		cw_dbg(DBG_CW_INFO,"Starting wtpman in DTLS mode");
-		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run, (void *) wtpman);
-	}
-	else{
-		cw_dbg(DBG_CW_INFO,"Starting wtpman in non-dtls mode");
-		pthread_create (&wtpman->thread, NULL, (void *) &wtpman_run_discovery, (void *) wtpman);
+	if (dtlsmode) {
+		cw_dbg(DBG_CW_INFO, "Starting wtpman in DTLS mode");
+		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run,
+			       (void *) wtpman);
+	} else {
+		cw_dbg(DBG_CW_INFO, "Starting wtpman in non-dtls mode");
+		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run_discovery,
+			       (void *) wtpman);
 	}
 }
 
 
-void wtpman_lw_start(struct wtpman * wtpman)
+void wtpman_lw_start(struct wtpman *wtpman)
 {
 
 }
-
-

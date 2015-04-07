@@ -4,6 +4,7 @@
 #include "conn.h"
 
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
+void cw_dbg_missing_mand(int level,struct conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
 
 
 #ifdef WITH_CW_LOG_DEBUG

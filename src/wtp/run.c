@@ -14,6 +14,7 @@
 
 #include "wtp_conf.h"
 
+/*
 static int echo_interval_timer;
 
 struct cwrmsg * get_response(struct conn * conn, int type,int seqnum)
@@ -34,9 +35,10 @@ struct cwrmsg * get_response(struct conn * conn, int type,int seqnum)
 	return 0;
 	
 }
+*/
 
 
-
+/*
 struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
 {
 	int i;
@@ -61,10 +63,11 @@ struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
 	return 0;
 }
 
+*/
 
+//extern struct conn * get_conn();
 
-extern struct conn * get_conn();
-
+/*
 int run(struct conn * conn)
 {
 
@@ -135,4 +138,4 @@ printf("Error !\n");
 }
 
 
-
+*/

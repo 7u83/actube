@@ -27,18 +27,19 @@
 
 #include "actube.h"
 #include "wtplist.h"
-#include "dtls.h"
-#include "cw_log.h"
+#include "capwap/dtls.h"
+#include "capwap/cw_log.h"
 #include "conf.h"
-#include "sock.h"
+#include "capwap/sock.h"
 
 #include "socklist.h"
 
 #include "db.h"
-#include "capwap_items.h"
-#include "capwap_cisco.h"
+#include "capwap/capwap_items.h"
+#include "capwap/capwap_cisco.h"
 
 #include "ac.h"
+#include "capwap/format.h"
 
 int ac_run();
 
@@ -50,7 +51,7 @@ void alive_thread(void *data)
 	}
 }
 
-#include "action.h"
+#include "capwap/action.h"
 
 
 /*
@@ -98,19 +99,12 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 */
 
 
-/*
-int avlprint(void *priv, void *data)
-{
-	struct cw_str * d = (struct cw_str*) data;
-	printf("String: %d - %s\n",d->id,d->str);
-}
-*/
+#include "capwap/capwap_crypto.h"
+
+
 
 int main (int argc, const char * argv[]) 
 {
-
-	
-
 
 	cw_log_name="AC-Tube";
 

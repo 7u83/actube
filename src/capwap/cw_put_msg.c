@@ -25,6 +25,8 @@
 #include "capwap_items.h"
 #include "conn.h"
 
+#include "cw_log.h"
+
 struct args{
 	struct conn * conn;
 	uint32_t msg_id;
@@ -48,6 +50,7 @@ static int action_cb(void *args_param, void *a_param)
 
 	if (a->item_id == CW_ITEM_NONE) {
 		/* Start of message */
+		args->len=0;
 		return 1;		
 	}
 
@@ -94,7 +97,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	args.conn = conn;
 	args.msg_id = as.msg_id;
 	args.dst = msgptr+8; 
-	args.len=0;
+	args.len=-1;
 
 	avltree_foreach_from_asc(conn->actions->out, &as, action_cb, &args);
 
@@ -104,6 +107,13 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	printf ("Total elems len = %d\n",args.len);
 	printf("Total msg len = %d\n",cw_get_hdr_msg_total_len(rawout)); 	
 */
+
+	if (args.len==-1) {
+		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
+			args.msg_id,cw_strmsg(args.msg_id));
+
+	}
+
 	return args.len;
 }
 

@@ -232,8 +232,8 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	//	extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
 	//	cw_process_msg(conn,f+4,*(uint32_t*)f);
 
-printf("Received a fragmented packetm should process it");
-exit(0);
+//printf("Received a fragmented packetm should process it");
+//exit(0);
 
 /*
 		if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,f+4,*(uint32_t*)f)){
@@ -260,4 +260,24 @@ exit(0);
 	process_message(conn,packet,len,cb,cbarg); 
 	return;
 }
+
+
+/**
+ * Used as main message loop
+ */ 
+int cw_read_messages(struct conn *conn)
+{
+        uint8_t buf[2024];
+        int len = 2024;
+
+        int n = conn->read(conn, buf, len);
+	if (n<0 ) 
+		return n;
+	
+        if (n > 0)
+                conn_process_packet(conn, buf, n, cw_process_msg, conn);
+
+}
+
+
 

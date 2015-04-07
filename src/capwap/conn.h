@@ -38,6 +38,7 @@
 #include "action.h"
 
 #include "itemstore.h"
+#include "intavltree.h"
 
 /**
  * Connection Object
@@ -52,6 +53,9 @@ struct conn {
 	/** used to maintain the remote config, an AC holds here the WTP config.
 	    A WTP holds here data about it's AC  */
 	cw_itemstore_t remote;
+
+	/** Counter for mandatory message elements */
+	struct avltree *mand;
 
 
 	struct cw_actiondef *actions;
@@ -226,6 +230,10 @@ struct cwrmsg *conn_wait_for_request(struct conn *conn, int *msglist, time_t tim
 #define conn_is_error(conn) (conn->dtls_error)
 
 void conn_init(struct conn *conn);
+
+extern int cw_read_messages(struct conn *conn);
+
+
 
 
 #endif				/* __CONLIST_H */

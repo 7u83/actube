@@ -3,11 +3,11 @@
 
 #include "ac.h"
 #include "conf.h"
-#include "capwap.h"
-#include "capwap_items.h"
-#include "aciplist.h"
+#include "capwap/capwap.h"
+#include "capwap/capwap_items.h"
+#include "capwap/aciplist.h"
 #include "socklist.h"
-#include "sock.h"
+#include "capwap/sock.h"
 
 struct cw_ac_status ac_status;
 
@@ -93,10 +93,13 @@ int ac_global_init()
 	ac_status.dtls_policy = CW_FLAG_DTLS_POLICY_C | CW_FLAG_DTLS_POLICY_D;
 
 
-	cw_itemstore_set_version(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
+	cw_itemstore_set_vendorstr(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
 				 bstr_data(conf_hardware_version), bstr_len(conf_hardware_version));
-	cw_itemstore_set_version(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
+	cw_itemstore_set_vendorstr(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
 				 bstr_data(conf_software_version), bstr_len(conf_software_version));
+
+
+	cw_itemstore_set_str(ac_config,CW_ITEM_AC_IMAGE_DIR,conf_image_dir);
 
 //	cw_itemstore_set_avltree(ac_config, CW_ITEM_AC_IP_LIST, aciplist);
 

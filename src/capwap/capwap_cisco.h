@@ -191,6 +191,7 @@ int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct ra
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
 
 extern int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
+int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 
 
 

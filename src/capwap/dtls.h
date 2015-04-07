@@ -15,11 +15,13 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#ifndef __CW_DTLS_H
+#define __CW_DTLS_H
+
+
 #include <stdint.h>
 #include "conn.h"
 
-#ifndef __DTLS_H
-#define __DTLS_H
 
 struct dtls_ssl_cert 
 {
