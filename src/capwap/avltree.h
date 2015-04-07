@@ -91,6 +91,7 @@ static inline void avltree_destroy(struct avltree *t)
 }
 
 
+
 #define avltree_find(t,d) avltree_get(t,d)
 #define avltree_insert(t,d) avltree_add(t,d)
 //#define avltree_walk(t,dir) avltree_foreach(t,dir)

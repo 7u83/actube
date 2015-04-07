@@ -46,6 +46,7 @@ struct cw_action_in{
 	uint16_t item_id;
 	uint16_t min_len;
 	uint16_t max_len;
+	uint8_t mand;
 };
 
 
@@ -58,6 +59,12 @@ extern cw_actionlist_in_t cw_actionlist_in_create();
 extern cw_action_in_t * cw_actionlist_in_get(cw_actionlist_in_t t,cw_action_in_t *a);
 extern cw_action_in_t * cw_actionlist_in_add(cw_actionlist_in_t t,cw_action_in_t *a);
 extern int cw_actionlist_in_register_actions(cw_actionlist_in_t t,cw_action_in_t * actions);
+extern cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a, 
+				      uint8_t capwap_state,
+					uint32_t msg_id,
+				      int (*fun) (struct conn * conn,
+						  struct cw_action_in * a, uint8_t * data,
+						  int len));
 
 
 /* Definitions for outgoing messages */
@@ -69,9 +76,12 @@ struct cw_action_out{
 	
 	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	struct cw_item *(*get)(struct conn *conn,struct cw_action_out *a);
-	
-	
+	uint8_t mand;
+	uint8_t itemtype;
+	void *defval;
+
 };
+
 typedef struct cw_action_out cw_action_out_t;
 
 typedef struct avltree *cw_actionlist_out_t;

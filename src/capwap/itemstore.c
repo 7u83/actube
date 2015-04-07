@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "itemstore.h"
+#include "capwap.h"
 
 
 
@@ -13,7 +14,8 @@ static inline void cw_itemstore_del_data(void *e)
 		case CW_ITEMTYPE_DATA:
 		case CW_ITEMTYPE_STR:
 		case CW_ITEMTYPE_BSTR:
-		case CW_ITEMTYPE_VERSION:
+		case CW_ITEMTYPE_BSTR16:
+		case CW_ITEMTYPE_VENDORSTR:
 		case CW_ITEMTYPE_FUN:
 			free(item->data);
 			break;
@@ -104,12 +106,28 @@ int cw_itemstore_set_str(cw_itemstore_t s, uint32_t id, const char *str)
 	return 1;
 }
 
-int cw_itemstore_set_strn(cw_itemstore_t s, uint32_t id, const char *str, int n)
+int cw_itemstore_set_data(cw_itemstore_t s, uint32_t id, const uint8_t *data, int len)
 {
 	struct cw_item *i = cw_item_create(s, id);
 	if (!i)
 		return 0;
 	i->type = CW_ITEMTYPE_DATA;
+	i->data = malloc(len);
+	if(!i->data)
+		return 1;
+	memcpy(i->data,data,len);
+	return 1;
+}
+
+
+
+
+int cw_itemstore_set_strn(cw_itemstore_t s, uint32_t id, const char *str, int n)
+{
+	struct cw_item *i = cw_item_create(s, id);
+	if (!i)
+		return 0;
+	i->type = CW_ITEMTYPE_STR;
 	i->data = strndup(str, n);
 	return 1;
 }
@@ -134,6 +152,20 @@ int cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t * data, int le
 	return 1;
 }
 
+int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int len)
+{
+	struct cw_item *i = cw_item_create(s, id);
+	if (!i)
+		return 0;
+	i->type = CW_ITEMTYPE_BSTR16;
+	i->data = bstr16_create(data, len);
+	return 1;
+}
+
+
+
+
+
 
 int cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void *ptr)
 {
@@ -145,23 +177,15 @@ int cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void *ptr)
 	return 1;
 }
 
-int cw_itemstore_set_version(cw_itemstore_t s, uint32_t id, uint32_t vendor_id,
-			     uint8_t * versionstr, int len)
+int cw_itemstore_set_vendorstr(cw_itemstore_t s, uint32_t id, uint32_t vendor_id,
+			     uint8_t * vendorstr, int len)
 {
 	struct cw_item *i = cw_item_create(s, id);
 	if (!i)
 		return 0;
-	i->type = CW_ITEMTYPE_VERSION;
-
-	uint8_t *ptr = malloc(bstr16_size(len) + 4);
-	i->data = ptr;
-
-	if (!ptr)
-		return 1;
-
-	*((uint32_t *) ptr) = vendor_id;
-	bstr16_ncpy(ptr + 4, versionstr, len);
-
+	
+	i->type = CW_ITEMTYPE_VENDORSTR;
+	i->data = vendorstr_create(vendor_id,vendorstr,len);
 	return 1;
 }
 
@@ -239,3 +263,33 @@ void cw_item_release_data_ptr(struct cw_item *item, void *data)
 
 	}
 }
+
+
+
+int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type, uint8_t *data, int len)
+{
+	switch (item_type) {
+		case CW_ITEMTYPE_BYTE:
+			cw_itemstore_set_byte(itemstore,item_id,*data);	
+			break;
+
+		case CW_ITEMTYPE_STR:
+			cw_itemstore_set_strn(itemstore,item_id,(char*)data,len);
+			break;
+		case CW_ITEMTYPE_BSTR:
+			cw_itemstore_set_bstrn(itemstore,item_id,data,len);
+			break;
+		case CW_ITEMTYPE_DATA:
+			cw_itemstore_set_data(itemstore,item_id,data,len);
+			break;
+		case CW_ITEMTYPE_VENDORSTR:
+			cw_itemstore_set_vendorstr(itemstore,item_id,
+				cw_get_dword(data),data+4,len-4);
+		
+
+	}
+	return 0;
+}
+
+
+

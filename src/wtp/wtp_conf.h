@@ -142,6 +142,8 @@ typedef struct {
 extern LONGSTRS conf_timer_cfgstrs[];
 
 
+int wtpconf_preinit();
+int wtpconf_init();
 
 
 #endif

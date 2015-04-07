@@ -23,7 +23,7 @@
 
 int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,uint8_t *msgelem, int len)
 {
-	if (type != CWMSGELEM_WTP_REBOOT_STATISTICS)
+	if (type != CW_ELEM_WTP_REBOOT_STATISTICS)
 		return 0;
 
 	s->reboot_count=ntohs(*((uint16_t*)(msgelem+0)));

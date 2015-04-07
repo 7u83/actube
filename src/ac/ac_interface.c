@@ -4,15 +4,15 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "sock.h"
+#include "capwap/sock.h"
 
 #include "socklist.h"
-#include "acinfo.h"
+#include "capwap/acinfo.h"
 #include "conf.h"
 
-#include "capwap.h"
-#include "capwap_80211.h"
-#include "aciplist.h"
+#include "capwap/capwap.h"
+#include "capwap/capwap_80211.h"
+#include "capwap/aciplist.h"
 
 
 

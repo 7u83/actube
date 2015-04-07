@@ -13,7 +13,7 @@
 #include "capwap/sock.h"
 #include "capwap/dtls.h"
 
-
+/*
 #define acinfo_log acinfo_log_
 
 void acinfo_log_(int level,const struct ac_info *acinfo,const char * xstr)
@@ -175,3 +175,6 @@ printf("Joined with conn %p\n",conn);
 
 	return 1;
 }
+
+
+*/

@@ -11,7 +11,7 @@
 #include "wtp_conf.h"
 #include "wtp_interface.h"
 
-
+/*
 struct wtpinfo * get_wtpinfo()
 {
 	struct wtpinfo * wtpinfo;
@@ -125,3 +125,8 @@ struct conn * get_conn()
 	printf("Get conn returns %p\n",conn);
 	return conn;
 }
+
+*/
+
+
+

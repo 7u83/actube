@@ -21,13 +21,13 @@
 
 #include <confuse.h>
 
-#include "capwap.h"
-#include "sock.h"
+#include "capwap/capwap.h"
+#include "capwap/sock.h"
 
 #include "conf.h"
 
-#include "cw_log.h"
-#include "cw_util.h"
+#include "capwap/cw_log.h"
+#include "capwap/cw_util.h"
 
 uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
@@ -391,7 +391,7 @@ static char * conf_default_mcast_groups_ipv6[] = {
 #endif
 
 //#include "avltree"
-#include "stravltree.h"
+#include "capwap/stravltree.h"
 
 
 
@@ -567,6 +567,12 @@ int read_config(const char * filename){
 
 	if (!init_control_port())
 		return 0;
+
+
+
+
+
+
 
 	cfg_opt_t opts[] = {
 		CFG_STR_LIST("dbg", "{}", CFGF_NONE),

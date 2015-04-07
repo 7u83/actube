@@ -361,6 +361,7 @@ void lw_dbg_elem_(int msg_id, int elem_id, const uint8_t * elem_data, int elem_l
 
 }
 
+/*
 void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 {
 	if (!cw_dbg_is_level(DBG_CW_RFC))
@@ -372,3 +373,4 @@ void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
 		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s", cw_strmsg(msgtype), str);
 	}
 }
+*/

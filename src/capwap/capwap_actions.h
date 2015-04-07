@@ -46,6 +46,35 @@
 	CW_ITEM_SESSION_ID,		/* ID to use store */		\
 	16, 16				/* min/max length */
 
+#define CW_ACTION_IN_IMAGE_IDENTIFIER	 	\
+	CW_ELEM_IMAGE_IDENTIFIER,	/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_VENDORSTR, 		/* Type of element */		\
+	CW_ITEM_IMAGE_IDENTIFIER,	/* ID to use store */		\
+	5, 4096				/* min/max length */
+
+#define CW_ACTION_IN_AC_NAME	 	\
+	CW_ELEM_AC_NAME, 		/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	CW_ITEM_AC_NAME,		/* ID to use store */		\
+	1, 1024				/* min/max length */
+
+#define CW_ACTION_IN_STATISTICS_TIMER	 	\
+	CW_ELEM_STATISTICS_TIMER,	/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_DWORD, 		/* Type of element */		\
+	CW_ITEM_STATISTICS_TIMER,	/* ID to use store */		\
+	1, 1024				/* min/max length */
+
+#define CW_ACTION_IN_WTP_REBOOT_STATISTICS	 	\
+	CW_ELEM_WTP_REBOOT_STATISTICS,	/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_DATA, 		/* Type of element */		\
+	CW_ITEM_WTP_REBOOT_STATISTICS,	/* ID to use store */		\
+	15, 15				/* min/max length */
+
+
 #define CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE	 	\
 	CW_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
@@ -63,16 +92,24 @@
 
 #define CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD	\
 	CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,	/* Element ID */	\
-	cw_in_vendor_specific_payload, 0	/* start/end callback*/	\
-
-
+	cw_in_vendor_specific_payload,0,	/* start/end callback*/	\
+	0,								\
+	0,								\
+	0,0								
+	
 #define CW_ACTION_IN_WTP_BOARD_DATA	\
-	CW_ELEM_WTP_BOARD_DATA,		/* Element ID */		\
-	cw_in_wtp_board_data, 0		/* start/end callback */	\
+	CW_ELEM_WTP_BOARD_DATA,			/* Element ID */		\
+	cw_in_wtp_board_data, 0,		/* start/end callback */	\
+	0,									\
+	CW_ITEM_WTP_BOARD_DATA,							\
+	0,0									
 
 #define CW_ACTION_IN_WTP_DESCRIPTOR	\
-	CW_ELEM_WTP_DESCRIPTOR,		/* Element ID */		\
-	cw_in_wtp_descriptor, 0		/* start/end callback */	\
+	CW_ELEM_WTP_DESCRIPTOR,			/* Element ID */		\
+	cw_in_wtp_descriptor, 0,		/* start/end callback */	\
+	0,									\
+	CW_ITEM_WTP_DESCRIPTOR,							\
+	0,0								
 	
 
 #endif

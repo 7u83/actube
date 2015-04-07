@@ -65,7 +65,7 @@ enum capwap_states {
 	CW_STATE_DISCOVERY,
 	CW_STATE_JOIN,
 	CW_STATE_CONFIGURE,
-	CW_STATE_IMAGE,
+	CW_STATE_IMAGE_DATA,
 	CW_STATE_UPDATE,
 	CW_STATE_RUN
 };
@@ -227,7 +227,7 @@ struct capwap_ctrlhdr
 #define CW_ELEM_WTP_NAME				45
 #define CW_ELEM_RESERVED_46				46
 #define CW_ELEM_WTP_RADIO_STATISTICS			47
-#define CWMSGELEM_WTP_REBOOT_STATISTICS			48
+#define CW_ELEM_WTP_REBOOT_STATISTICS			48
 #define CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION	49
 #define CW_ELEM_WTP_STATIC_IP_ADDR_INFO			49
 
@@ -247,11 +247,11 @@ struct capwap_ctrlhdr
 
 
 /* wtp board data subelements */
-#define CWBOARDDATA_MODELNO		0
-#define CWBOARDDATA_SERIALNO		1
-#define CWBOARDDATA_BOARDID		2
-#define CWBOARDDATA_REVISION		3
-#define CWBOARDDATA_MACADDRESS		4
+#define CW_BOARDDATA_MODELNO		0
+#define CW_BOARDDATA_SERIALNO		1
+#define CW_BOARDDATA_BOARDID		2
+#define CW_BOARDDATA_REVISION		3
+#define CW_BOARDDATA_MACADDRESS		4
 
 
 /* AC Security flags for authentication  */
@@ -397,7 +397,7 @@ extern void cwsend_join_response(struct conn *conn, int seqnum, int rc,
 				 struct wtpinfo *wtpinfo);
 
 
-extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
+//extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 extern void process_join_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 extern void process_conf_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 
@@ -477,18 +477,18 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
       14 Image Data Error (Invalid Checksum)
 
-      15 Image Data Error (Invalid Data Length)
-
-      16 Image Data Error (Other Error)
-
-      17 Image Data Error (Image Already Present)
-
-      18 Message Unexpected (Invalid in Current State)
-
-      19 Message Unexpected (Unrecognized Request)
 */
+#define CW_RESULT_IMAGE_DATA_IVALID_LENGTH			15 //Image Data Error (Invalid Data Length)
 
+#define CW_RESULT_IMAGE_DATA_OTHER_ERROR			16 //Image Data Error (Other Error)
+/*
+      17 Image Data Error (Image Already Present)
+*/
+ 
+#define CW_RESULT_MSG_INVALID_IN_CURRENT_STATE			18 
+#define CW_RESULT_MSG_UNRECOGNIZED				19 
 #define CW_RESULT_MISSING_MAND_ELEM				20
+
 /*
       21 Failure - Unrecognized Message Element
 
@@ -578,6 +578,33 @@ static inline void cw_set_hdr_hlen(uint8_t *th,int hlen){
 	d |= ((hlen) & 0x1f) <<19;
 	cw_set_dword(th,d);
 }
+
+/**
+ * Set the WBID field of a CAWAP Header
+ * @param th pointer to the header
+ * @param hlen velue to set (max. 5 bits)
+ */ 
+static inline void cw_set_hdr_wbid(uint8_t *th,int wbid){
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 9) ^ 0xffffffff;
+	d |= ((wbid) & 0x1f) <<9;
+	cw_set_dword(th,d);
+}
+
+/**
+ * Set the RID field of a CAWAP Header
+ * @param th pointer to the header
+ * @param hlen velue to set (max. 5 bits)
+ */ 
+static inline void cw_set_hdr_rid(uint8_t *th,int rid){
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 9) ^ 0xffffffff;
+	d |= ((rid) & 0x1f) <<14;
+	cw_set_dword(th,d);
+}
+
+
+
 
 /**
  * Set CAPWAP header flags
@@ -718,7 +745,7 @@ static inline int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bst
 }
 
 
-static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
+static inline int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
 {
 	cw_put_dword(dst + 4, code);
 	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
@@ -778,6 +805,12 @@ extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
 
 
 /* cwmsg methods */
+static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
+{
+	cw_put_dword(dst + 4, code);
+	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
+}
+
 
 #define cwmsg_addelem_vendor_specific_payload(cwmsg,vendor_id, type, data,len) \
 	(cwmsg)->pos+=cw_addelem_vendor_specific_payload((cwmsg)->msgelems+(cwmsg)->pos,vendor_id,type,data,len)
@@ -811,7 +844,14 @@ extern struct cw_str capwap_strings_elem[];
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 
 
-#define cw_strelemp(p,id) cw_strheap_get((p)->strelem,id)
+static inline const char * cw_strelemp_(cw_strheap_t h, int msg_id) {
+	const char * rc = cw_strheap_get(h,msg_id);
+	if (rc)
+		return rc;
+	return cw_strheap_get(h,0);
+}
+
+#define cw_strelemp(p,id) cw_strelemp_((p)->strelem,id)
 
 extern const char *cw_strlist_get_str(struct cw_str *s, int id);
 
@@ -875,13 +915,12 @@ static inline int cw_put_ac_status(uint8_t *dst, struct cw_ac_status *s){
 }
 
 
-static inline int cw_put_version(uint8_t *dst,uint16_t subelem_id, uint32_t vendor_id,bstr16_t data)
+static inline int cw_put_version(uint8_t *dst,uint16_t subelem_id, uint8_t *v)
 {
-
 	uint8_t *d=dst;
-	d += cw_put_dword(d,vendor_id);
-	d += cw_put_dword(d, (subelem_id<<16) | bstr16_len(data));
-	d += cw_put_data(d,bstr16_data(data),bstr16_len(data));
+	d += cw_put_dword(d,vendorstr_get_vendor_id(v));
+	d += cw_put_dword(d, (subelem_id<<16) | vendorstr_len(v));
+	d += cw_put_data(d,vendorstr_data(v),vendorstr_len(v));
 	return d-dst;
 }
 
@@ -889,9 +928,20 @@ static inline int cw_put_version(uint8_t *dst,uint16_t subelem_id, uint32_t vend
 
 int cw_register_actions_capwap_ac(struct cw_actiondef *def);
 int cw_register_actions_cipwap_ac(struct cw_actiondef *def);
+int cw_register_actions_capwap_wtp(struct cw_actiondef *def);
+
 
 int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
+extern int cw_in_check_disc_req(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_in_t *a);
+int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len);
+int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len);
+
+int cw_out_wtp_board_data(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
+
+void cw_init_request(struct conn *conn,int msg_id);
 
 
 

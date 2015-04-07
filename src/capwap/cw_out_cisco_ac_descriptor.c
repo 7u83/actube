@@ -24,7 +24,7 @@ int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_
 	i = cw_itemstore_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
 
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,*((uint32_t*)(i->data)),i->data+4);
+	 	d += cw_put_version(d,1,i->data);
 	}
 	else {
 		cw_dbg(DBG_ELEM_ERR, "Can't send software version in AC descriptor, not set.");

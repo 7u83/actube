@@ -9,6 +9,12 @@
  *brief CIPWAP Actions
  */
 
+#define CW_ACTION_IN_CISCO_IMAGE_IDENTIFIER	 	\
+	CW_ELEM_IMAGE_IDENTIFIER,			/* Element ID*/			\
+	cw_in_cisco_image_identifier, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_VENDORSTR, 				/* Type of element */		\
+	CW_ITEM_IMAGE_IDENTIFIER,			/* ID to use store */		\
+	1, 4096						/* min/max length */
 
 
 cw_action_in_t cipwap_actions_ac_in[] = {
@@ -26,6 +32,15 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 	cw_in_generic, 0, CW_ITEMTYPE_STR,CW_ITEM_WTP_GROUP_NAME,1,512}
 	,
 
+	/* -------------------------------------------------------------------------------
+	 * Image Data Request - Conig State
+	 */
+
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_REQUEST,
+	 CW_ACTION_IN_CISCO_IMAGE_IDENTIFIER,
+	 0}
+	,
+
 
 
 	{0,0,0}
@@ -39,7 +54,6 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 	 * Discovery Response OUT
 	 */
 
-
 	/* AC Descriptor (Cisco) */
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_DESCRIPTOR, 0 ,
 	CW_ELEM_AC_DESCRIPTOR, cw_out_cisco_ac_descriptor, 0}
@@ -50,6 +64,17 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_TIMESTAMP, CW_VENDOR_ID_CISCO,
 	CW_CISCO_AP_TIMESYNC, cw_out_cisco_ap_timesync, 0}
 	,
+
+	/* -------------------------------------------------------------------------------
+	 * Join Response OUT
+	 */
+
+	/* AC Descriptor (Cisco) */
+	{CW_MSG_JOIN_RESPONSE, CW_ITEM_AC_DESCRIPTOR, 0 ,
+	CW_ELEM_AC_DESCRIPTOR, cw_out_cisco_ac_descriptor, 0}
+	,
+
+
 
 
 	{0,0,0}

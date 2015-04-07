@@ -6,7 +6,7 @@ ifndef CC
 endif
 
 
-
+V=0
 
 CFLAGS+=-DWITH_RMAC_SUPPORT 
 CFLAGS+=-DWITH_IPV6
@@ -21,6 +21,7 @@ endif
 
 
 CFLAGS += -Os -Wall -g
+CFLAGS += -Os -Wall 
 LDFLAGS += -L../../src/capwap/$(ARCH)
 
 
@@ -103,7 +104,7 @@ ALL=wtp
 
 all: $(ALL)
 
-Q=
+Q=@
 E=echo
 ifeq ($(V), 1)
 Q=
@@ -111,8 +112,8 @@ E=true
 endif
 
 %.o: %.c
-	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
 	@$(E) "  CC " $<
+	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
 
 
 wtp: $(BCHECK) $(OBJS)

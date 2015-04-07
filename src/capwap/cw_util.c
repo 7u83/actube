@@ -55,6 +55,7 @@ void cw_get_missing_mand_elems(char *dst, int *l)
 	}
 }
 
+/*
 int cw_is_missing_mand_elems(int *l)
 {
 	int i;
@@ -66,4 +67,4 @@ int cw_is_missing_mand_elems(int *l)
 	return 0;
 }
 
-
+*/

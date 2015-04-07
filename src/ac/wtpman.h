@@ -5,8 +5,8 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "capwap.h"
-#include "fragman.h"
+#include "capwap/capwap.h"
+#include "capwap/fragman.h"
 
 #define WTPMAN_QSIZE 1024
 
