@@ -111,7 +111,6 @@ CAPWAPOBJS= \
 	   cwread_discovery_response.o \
 	   cwsend_discovery_request.o \
 	cw_read_image_data_request.o \
-	cw_send_image_data_response.o \
 	cw_send_configuration_update_response.o \
 	   cwread_join_response.o \
 	cwsend_echo_request.o \
@@ -190,6 +189,7 @@ CAPWAPOBJS= \
 	   #process_join_request.o \
 	   #cwmsg_addelem_wtp_board_data.o \
 	   #wtpinfo_readelem_wtp_board_data.o \
+#	cw_send_image_data_response.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
@@ -197,6 +197,7 @@ CAPWAPOBJS= \
 
 #	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 #	cwmsg_addelem_vendor_specific_payload.o \
+#	conn_prepare_image_data_request.o \
 
 	#cwmsg_addelem_session_id.o
 #	   process_msgelems_discovery_request.o \
@@ -253,7 +254,6 @@ CONNOBJS= conn_create.o \
 	cw_prepare_configuration_status_request.o \
 	cw_prepare_change_state_event_request.o \
 	conn_prepare_request.o \
-	conn_prepare_image_data_request.o \
 	conn_send_request.o \
 	conn_wait_for_message.o \
 	conn_wait_for_request.o \
