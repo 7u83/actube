@@ -161,13 +161,13 @@ static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
 #endif
 
 
-void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(void*,uint8_t *,int),void *cbarg)
+int conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(void*,uint8_t *,int),void *cbarg)
 {
 
 	if (len<8){
 		/* packet too short */
 		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, packet too short, len=%d",sock_addr2str(&conn->addr),len);
-		return;
+		return 0;
 	}
 
 	int preamble = cw_get_hdr_preamble(packet);
@@ -175,12 +175,12 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	if ( (preamble & 0xf0) != CW_VERSION){
 		/* wrong version */
 		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, wrong version, version=%d",sock_addr2str(&conn->addr),(preamble&0xf0)>>8);
-		return;
+		return 0;
 	}
 
 	if (preamble & 0xf ) {
 		/* decode dtls */
-		return;
+		return 0;
 	}
 
 	/* log this packet */
@@ -194,7 +194,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 	if (payloadlen<0){
 		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, header length greater than len, hlen=%d",sock_addr2str(&conn->addr),offs);
 		/* EINVAL */
-		return;
+		return 0;
 	}
 
 /*
@@ -211,7 +211,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		if (cw_get_hdr_rmac_len(packet)+8>offs){
 			/* wrong rmac size */
 			cw_dbg(DBG_CW_PKT_ERR,"Discarding packet, wrong R-MAC size, size=%d",*(packet+8));
-			return;
+			return 0;
 		}
 //		memcpy(cwrmsg.rmac, packet+8,8);
 	}
@@ -224,7 +224,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		uint8_t * f;
 		f = fragman_add(conn->fragman, packet,offs,payloadlen);
 		if (f==NULL)
-			return;
+			return 0;
 
 		cw_dbg_packet(conn,f+4,*(uint32_t*)f);
 
@@ -244,7 +244,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 		process_message(conn,f+4,*(uint32_t*)f,cb,cbarg); 
 
 		free (f);
-		return;
+		return 1;
 	}
 
 //extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
@@ -258,7 +258,7 @@ void conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(
 
 //msg_4*((val >> 19) & 0x1f);
 	process_message(conn,packet,len,cb,cbarg); 
-	return;
+	return 1;
 }
 
 
@@ -277,7 +277,7 @@ int cw_read_messages(struct conn *conn)
         if (n > 0)
                 conn_process_packet(conn, buf, n, cw_process_msg, conn);
 
+	
 }
-
 
 

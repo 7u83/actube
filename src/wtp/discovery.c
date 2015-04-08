@@ -57,6 +57,7 @@ static int run_discovery(struct conn *conn)
         while (!cw_timer_timeout(timer)
                && conn->capwap_state == CW_STATE_DISCOVERY) {
                 cw_read_messages(conn);
+		printf ("Got one annswer\n");
 		
         }
 

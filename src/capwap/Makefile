@@ -32,7 +32,7 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_addrinit.o \
 	 sock_set_dontfrag.o \
 	 sock_get_primary_if.o \
-	 sock_receive.o  \
+	 #sock_receive.o  \
 
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
@@ -54,6 +54,7 @@ UTILOBJS= \
 	cw_foreach_msgelem.o \
 	avltree.o \
 	avltree_get_node.o \
+	avltree_get.o \
 	avltree_del_all.o \
 	avltree_foreach_lr.o \
 	avltree_foreach_rl.o \
@@ -91,7 +92,6 @@ LWAPPCISCOOBJS = \
 
 
 CAPWAPOBJS= \
-	   cwmsg_init.o \
 	   cwmsg_init_echo_request.o \
 	   cwmsg_addelem.o \
 	   cwmsg_vaddelem.o \
@@ -101,7 +101,6 @@ CAPWAPOBJS= \
 	   cwmsg_addelem_cw_local_ip_addr.o \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_ac_timestamp.o \
-	cw_addelem_vendor_specific_payload.o \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
@@ -182,6 +181,7 @@ CAPWAPOBJS= \
 	format.o 
 	
 
+#	cw_addelem_vendor_specific_payload.o \
 	#cw_in_wtp_name.o \
 	   #cw_msgtostr.o \
 	   #cw_msgelemtostr.o \
@@ -190,6 +190,7 @@ CAPWAPOBJS= \
 	   #cwmsg_addelem_wtp_board_data.o \
 	   #wtpinfo_readelem_wtp_board_data.o \
 #	cw_send_image_data_response.o \
+	   #cwmsg_init.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
