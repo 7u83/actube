@@ -53,7 +53,7 @@ struct avltree *avltree_create(int (*cmp) (const void *, const void *),
 void avltree_del_all(struct avltree *t);
 void *avltree_del(struct avltree *t, void *data);
 void *avltree_add(struct avltree *t, void *data);
-//void * avltree_get(struct avltree *t ,void *data);
+void * avltree_get(struct avltree *t ,void *data);
 struct avlnode *avltree_get_node(struct avltree *t, void *data);
 
 extern int avltree_foreach_lr(struct avlnode *n, int (*callback) (void *, void *),
@@ -65,15 +65,6 @@ int avltree_foreach_from_lr(struct avltree *t, struct avlnode *n, void *data,
 
 
 //extern void avltree_foreach(struct avltree *t, int (*callback)(void *,void*),void *cbpriv,int dir);
-
-static inline void *avltree_get(struct avltree *t, void *data)
-{
-	struct avlnode *n = avltree_get_node(t, data);
-	if (!n)
-		return NULL;
-	return n->data;
-}
-
 
 static inline void *avltree_replace_data(struct avltree *t, void *data, int len)
 {
