@@ -112,4 +112,12 @@
 	0,0								
 	
 
+#define CW_ACTION_IN_CAPWAP_CONTROL_IPV4_ADDRESS	 	\
+	CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,		/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	CW_ITEMTYPE_DATA, 				/* Type of element */		\
+	CW_ITEM_CAPWAP_CONTROL_IP_ADDR,			/* ID to use store */		\
+	6, 6						/* min/max length */
+
+
 #endif

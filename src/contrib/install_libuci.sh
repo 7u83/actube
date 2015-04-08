@@ -20,4 +20,4 @@ export LDFLAGS
 
 cmake ..
 make uci cli
-
+make install

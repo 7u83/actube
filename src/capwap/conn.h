@@ -170,7 +170,7 @@ struct conn *conn_create_noq(int sock, struct sockaddr *addr);
 
 
 extern int conn_send_cwmsg(struct conn *conn, struct cwmsg *cwmsg);
-extern void conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
 				int (*cb) (void *, uint8_t *,int len), void *cbarg);
 
 extern uint8_t *conn_get_message(struct conn *conn);

@@ -30,7 +30,7 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 	/* ------------------------------------------------------------------------------- */
 
-	/* Message Discovery Request */
+	/* Message Discovery Response */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE, 0,
 	 0, 0}
 	,
@@ -44,7 +44,8 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 1}
 	,
 
-
+	/* Element CAPWAP Control IPv4 Address */
+	
 
 
 	{0, 0, 0}
