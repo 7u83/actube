@@ -28,6 +28,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <stdint.h>
+
+#define AVLTREE_MAX_DEPTH	32
 
 struct avlnode {
 	void *data;
@@ -43,6 +46,9 @@ struct avltree {
 	void (*del) (void *);
 	int count;
 };
+
+typedef struct avltree * avltree_t;
+
 
 void avlnode_destroy(struct avltree *t, struct avlnode *n);
 
@@ -83,6 +89,7 @@ static inline void avltree_destroy(struct avltree *t)
 
 
 
+
 #define avltree_find(t,d) avltree_get(t,d)
 #define avltree_insert(t,d) avltree_add(t,d)
 //#define avltree_walk(t,dir) avltree_foreach(t,dir)
@@ -93,4 +100,45 @@ static inline void avltree_destroy(struct avltree *t)
 #define avltree_foreach_from_asc(t,d,cb,priv) avltree_foreach_from_lr(t,(t)->root,d,cb,priv);
 
 
+struct avliter{
+	struct avlnode *stack[AVLTREE_MAX_DEPTH*2];
+
+	struct avlnode *cur;
+	int stack_ptr;
+	struct avlnode * root;
+
+};
+typedef struct avliter avliter_t;
+
+
+void * avliter_next(avliter_t *i);
+
+void * avliter_seek_set(struct avliter *i)
+{
+	i->stack_ptr=0;
+	i->cur=i->root;
+	return avliter_next(i);
+}
+
+
+static inline void avliter_init(avliter_t *i, avltree_t t){
+	i->root = t->root;
+	i->stack_ptr=0;
+}
+
+	
+#define avliter_foreach_asc(iter,val) \
+	while(NULL != (val = avliter_next(iter)))
+
+static inline void * avliter_get(avliter_t *i){
+	if(!i->cur)
+		return NULL;
+	return i->cur->data;	
+}
+
+
+
+
 #endif
+
+
