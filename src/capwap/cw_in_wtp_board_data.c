@@ -96,7 +96,7 @@ int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		return 1;
 	}
 
-	cw_itemstore_t itemstore = conn->remote;	
+	cw_itemstore_t itemstore = conn->incomming;	
 	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR,cw_get_dword(data));
 
 	readsubelems_wtp_board_data(itemstore,data+4,len-4);

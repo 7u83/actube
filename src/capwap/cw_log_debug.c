@@ -43,94 +43,6 @@ int cw_dbg_opt_level = 0;
 int cw_log_debug_level = 0;
 
 
-
-
-static void cw_log_debug0_(const char *format, ...)
-{
-	if (cw_log_debug_level < 0)
-		return;
-	va_list args;
-	va_start(args, format);
-	cw_vlog_(LOG_DEBUG, format, args);
-	va_end(args);
-	closelog();
-}
-
-static void cw_log_debug1_(const char *format, ...)
-{
-	if (cw_log_debug_level < 1)
-		return;
-
-	va_list args;
-	va_start(args, format);
-	cw_vlog_(LOG_DEBUG, format, args);
-	va_end(args);
-	closelog();
-}
-
-
-static void cw_log_debug2_(const char *format, ...)
-{
-	if (cw_log_debug_level < 2)
-		return;
-	va_list args;
-	va_start(args, format);
-	cw_vlog_(LOG_DEBUG, format, args);
-	va_end(args);
-	closelog();
-}
-
-
-
-
-int cw_log_debug_dump_(int level, const uint8_t * data, int len, const char *format, ...)
-{
-	int maxtlen = 2048;
-	int i;
-	int rowlen = CW_LOG_DUMP_ROW_LEN;
-	int rows = len / rowlen;
-	int tlen = 0;
-
-	char *dst = malloc(len * 3 + (rows * 2) + 8 + maxtlen);
-	if (!dst)
-		return 0;
-
-	if (format != NULL) {
-		va_list args;
-		va_start(args, format);
-		tlen = vsnprintf(dst, maxtlen, format, args);
-		va_end(args);
-	}
-
-
-
-	if (len % CW_LOG_DUMP_ROW_LEN)
-		rows++;
-
-
-
-	char *pdst = dst + tlen;
-	sprintf(pdst, "\n\t");
-	pdst += 2;
-
-	for (i = 0; i < len; i++) {
-		sprintf(pdst, "%02X ", data[i] & 0xff);
-		pdst += 3;
-		if ((i + 1) % rowlen == 0) {
-			sprintf(pdst, "\n\t");
-			pdst += 2;
-		}
-
-	}
-
-	cw_log_debug_cbs[level] ("%s", dst);
-
-	free(dst);
-	return 1;
-
-}
-
-
 void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 {
 
@@ -248,8 +160,8 @@ void cw_log_dbg_dmp_(int level, const char *file, int line,
 
 
 
-void (*cw_log_debug_cbs[]) (const char *fromat, ...) = {
-cw_log_debug0_, cw_log_debug1_, cw_log_debug2_};
+//void (*cw_log_debug_cbs[]) (const char *fromat, ...) = {
+//cw_log_debug0_, cw_log_debug1_, cw_log_debug2_};
 
 
 
@@ -361,16 +273,4 @@ void lw_dbg_elem_(int msg_id, int elem_id, const uint8_t * elem_data, int elem_l
 
 }
 
-/*
-void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtype, int *mand)
-{
-	if (!cw_dbg_is_level(DBG_CW_RFC))
-		return;
 
-	if (cw_is_missing_mand_elems(mand)) {
-		char str[512];
-		cw_get_missing_mand_elems(str, mand);
-		cw_dbg(DBG_CW_RFC, "Missing msgelems in %s: %s", cw_strmsg(msgtype), str);
-	}
-}
-*/

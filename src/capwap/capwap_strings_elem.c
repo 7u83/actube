@@ -62,6 +62,6 @@ struct cw_str capwap_strings_elem[] = {
 /* CW_ELEM_WTP_IPV4_IP_ADDRESS			42
  CW_ELEM_WTP_IPV6_IP_ADDRESS			43
 */
-	{0,"Unknown Element"}
+	{CW_STR_STOP,"Unknown Element"}
 
 };

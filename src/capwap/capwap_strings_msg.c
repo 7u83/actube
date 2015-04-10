@@ -30,7 +30,7 @@ struct cw_str capwap_strings_msg[] = {
            Station Configuration Response      26
 */
 
-{0,"Unknown Message Type"}
+{CW_STR_STOP,"Unknown Message Type"}
 
 };
 

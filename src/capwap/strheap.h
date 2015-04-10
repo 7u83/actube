@@ -9,9 +9,11 @@
 typedef struct avltree * cw_strheap_t;
 
 struct cw_str {
-	uint32_t id;
+	int id;
 	const char *str;
 };
+
+#define CW_STR_STOP	-1138
 
 extern cw_strheap_t cw_strheap_create();
 extern int cw_strheap_register_strings(cw_strheap_t h, struct cw_str *s);

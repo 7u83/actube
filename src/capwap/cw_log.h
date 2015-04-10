@@ -28,6 +28,10 @@
 #include <stdint.h>
 #include <syslog.h>
 
+#ifndef LOG_ERROR
+#define LOG_ERROR LOG_ERR
+#endif
+
 /** 
  * @defgroup DebugOptions Dbug Options
  * @{

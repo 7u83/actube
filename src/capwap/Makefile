@@ -32,7 +32,7 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_addrinit.o \
 	 sock_set_dontfrag.o \
 	 sock_get_primary_if.o \
-	 #sock_receive.o  \
+	 sock_receive.o  \
 
 LOGOBJS=cw_log.o \
 	cw_log_debug.o \
@@ -59,10 +59,13 @@ UTILOBJS= \
 	avltree_foreach_lr.o \
 	avltree_foreach_rl.o \
 	avltree_foreach_from_lr.o \
+	avliter_next.o \
+	avliter_seek.o \
 	stravltree.o \
 	intavltree.o \
 	cw_util.o \
 	cw_format_version.o \
+	send.o
 
 
 
@@ -97,7 +100,6 @@ CAPWAPOBJS= \
 	   cwmsg_vaddelem.o \
 	   cwmsg_addelem_ac_descriptor.o \
 	   cwmsg_addelem_wtp_descriptor.o \
-	   cwmsg_addelem_wtp_radio_infos.o \
 	   cwmsg_addelem_cw_local_ip_addr.o \
 	   cwmsg_addelem_mtu_discovery_padding.o \
 	   cwmsg_addelem_ac_timestamp.o \
@@ -122,9 +124,6 @@ CAPWAPOBJS= \
 	cwread_wtp_event_request.o \
 	   process_conf_status_request.o \
 	   wtpinfo_readelem_wtp_mac_type.o \
-	   wtpinfo_readelem_wtp_radio_info.o  \
-	cw_readelem_80211_wtp_radio_info.o \
-	cwmsg_addelem_80211_add_wlan.o \
 	   wtpinfo_readelem_wtp_descriptor.o \
 	   wtpinfo_readelem_discovery_type.o \
 	   wtpinfo_readelem_wtp_frame_tunnel_mode.o \
@@ -159,6 +158,8 @@ CAPWAPOBJS= \
 	cw_addelem_cisco_wtp_radio_cfg.o \
 	cw_strlist_get_str.o \
 	capwap_strings_msg.o \
+	capwap_strings_elem80211.o\
+	acpriolist.o\
 	capwap_strings_state.o \
 	capwap_strings_vendor.o \
 	capwap_strings_elem.o \
@@ -166,21 +167,26 @@ CAPWAPOBJS= \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_board_data.o \
 	cw_in_check_disc_req.o \
+	cw_in_check_disc_resp.o\
 	cw_in_check_join_req.o \
+	cw_in_check_join_resp.o \
 	cw_in_check_img_data_req.o \
 	cw_out_generic.o \
 	cw_out_ac_descriptor.o \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
-	cw_out_capwap_control_ip_addrs.o \
+	cw_out_capwap_control_ip_addr_list.o \
+	cw_in_capwap_control_ipv4_address.o\
 	strheap.o \
 	cw_check_missing_mand.o \
 	dbg.o \
 	md5sum.o \
-	format.o 
+	format.o \
+	
 	
 
+#	   cwmsg_addelem_wtp_radio_infos.o \
 #	cw_addelem_vendor_specific_payload.o \
 	#cw_in_wtp_name.o \
 	   #cw_msgtostr.o \
@@ -191,10 +197,13 @@ CAPWAPOBJS= \
 	   #wtpinfo_readelem_wtp_board_data.o \
 #	cw_send_image_data_response.o \
 	   #cwmsg_init.o \
+#	cw_readelem_80211_wtp_radio_info.o \
+#	cwmsg_addelem_80211_add_wlan.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
 #	cwmsg_addelem_radio_operational_state.o \
+#	   wtpinfo_readelem_wtp_radio_info.o  \
 
 #	cwmsg_addelem_vendor_cisco_ap_timesync.o \
 #	cwmsg_addelem_vendor_specific_payload.o \
@@ -273,16 +282,19 @@ BSTROBJS= bstr_create.o \
 FRAGOBJS=fragman.o
 
 CWACTION=action.o \
-	cw_process_msg.o \
 	capwap_actions_ac.o \
 	capwap_actions_wtp.o \
+	capwap_80211_actions_wtp.o \
 	cw_in_generic.o \
 	cw_in_wtp_descriptor.o \
 	cw_out_wtp_board_data.o \
 	cipwap_actions_ac.o \
 	cipwap_strings_elem.o \
+	capwap_strings_result.o\
 	cw_put_msg.o \
 	capwap_action_helpers.o \
+
+#	cw_process_msg.o \
 
 
 

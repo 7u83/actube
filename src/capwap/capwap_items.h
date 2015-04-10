@@ -35,7 +35,7 @@ enum capwap_items {
 	CW_ITEM_AC_SOFTWARE_VERSION,
 
 	CW_ITEM_AC_IP_LIST,
-	CW_ITEM_CAPWAP_CONTROL_IP_LIST,
+	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
 
 	CW_ITEM_LOCATION_DATA,
 	CW_ITEM_SESSION_ID,
@@ -52,8 +52,10 @@ enum capwap_items {
 	
 
 	/* Other Items */
-	CW_ITEM_AC_IMAGE_DIR,		/* Path where image WTP images are stored */
-	CW_ITEM_WTP_IMAGE_FILENAME	/* Full path of image filename */
+	CW_ITEM_AC_IMAGE_DIR,		/* Path where WTP images are stored */
+	CW_ITEM_WTP_IMAGE_FILENAME,	/* Full path of image filename */
+	CW_ITEM_DISCOVERIES,
+	CW_ITEM_AC_PRIO_LIST		/* AC Name with Priority list */
 
 };
 

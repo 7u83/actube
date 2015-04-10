@@ -104,7 +104,7 @@ int ac_global_init()
 //	cw_itemstore_set_avltree(ac_config, CW_ITEM_AC_IP_LIST, aciplist);
 
 	
-	cw_itemstore_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_LIST, get_iplist,release_iplist,(void*)771);
+	cw_itemstore_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, get_iplist,release_iplist,(void*)771);
 
 	return 1;
 }

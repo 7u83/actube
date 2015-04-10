@@ -242,7 +242,7 @@ int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 		result_code = afm->end(conn, afm, rawmsg, len);
 	}
 
-	/* if we've got a request message, we have to send a response message */
+	/* if we've got a request message, we always have to send a response message */
 	if (as.msg_id & 1) {
 		if (result_code > 0) {
 			/* the end method gave us an result code, so

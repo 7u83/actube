@@ -34,7 +34,7 @@ static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a, ui
 	if (len<6)
 		return -1;
 
-	cw_itemstore_t itemstore = conn->remote;
+	cw_itemstore_t itemstore = conn->incomming;
 
 	cw_itemstore_set_byte(itemstore,CW_ITEM_WTP_MAX_RADIOS,cw_get_byte(data));
 	cw_itemstore_set_byte(itemstore,CW_ITEM_WTP_RADIOS_IN_USE,cw_get_byte(data+1));

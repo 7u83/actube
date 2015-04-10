@@ -17,6 +17,7 @@
 */
 
 #include <stdlib.h>
+#include <errno.h>
 
 #include <gnutls/gnutls.h>
 
@@ -68,8 +69,15 @@ int dtls_gnutls_read(struct conn * conn, uint8_t *buffer, int len)
 	struct dtls_gnutls_data * d = conn->dtls_data;
 	int rc = gnutls_record_recv_seq(d->session,buffer,len,seq);
 
-	if ( rc == GNUTLS_E_AGAIN )
-		return 0;
+	if (rc==0) {
+		errno = ECONNRESET;
+		return -1;
+	}
+
+	if ( rc == GNUTLS_E_AGAIN ){
+		errno = EAGAIN;
+		return -1;
+	}
 
 	if ( rc < 0 ){
 		cw_log(LOG_ERR, "DTLS - read error: %s", gnutls_strerror(rc));

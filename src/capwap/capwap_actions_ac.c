@@ -153,12 +153,12 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* AC Name */
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_NAME, 0,
-	 CW_ELEM_AC_NAME, cw_out_generic, cw_out_get_local}
+	 CW_ELEM_AC_NAME, cw_out_generic, cw_out_get_outgoing}
 	,
 
 	/* List of CAPWAP Control IPv4 and IPv6 addresses */
-	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_CAPWAP_CONTROL_IP_LIST, 0,
-	 0, cw_out_capwap_control_ip_addrs, cw_out_get_local}
+	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 0,
+	 0, cw_out_capwap_control_ip_addr_list, cw_out_get_outgoing}
 	,
 
 
@@ -170,7 +170,7 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* Result Code */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_RESULT_CODE, 0,
-	 CW_ELEM_RESULT_CODE, cw_out_generic, cw_out_get_local, 1}
+	 CW_ELEM_RESULT_CODE, cw_out_generic, cw_out_get_outgoing, 1}
 	,
 
 	/* AC Descriptor */
@@ -180,7 +180,7 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* AC Name */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_AC_NAME, 0,
-	 CW_ELEM_AC_NAME, cw_out_generic, cw_out_get_local}
+	 CW_ELEM_AC_NAME, cw_out_generic, cw_out_get_outgoing}
 	,
 
 
@@ -194,7 +194,7 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* Result Code */
 	{CW_MSG_IMAGE_DATA_RESPONSE, CW_ITEM_RESULT_CODE, 0,
-	 CW_ELEM_RESULT_CODE, cw_out_generic, cw_out_get_local, 1}
+	 CW_ELEM_RESULT_CODE, cw_out_generic, cw_out_get_outgoing, 1}
 	,
 
 

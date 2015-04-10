@@ -10,6 +10,7 @@
 static inline void cw_itemstore_del_data(void *e)
 {
 	struct cw_item *item = (struct cw_item *) e;
+
 	switch (item->type) {
 		case CW_ITEMTYPE_DATA:
 		case CW_ITEMTYPE_STR:
@@ -91,6 +92,7 @@ int cw_itemstore_set_dword(cw_itemstore_t s, uint32_t id, uint32_t dword)
 	struct cw_item *i = cw_item_create(s, id);
 	if (!i)
 		return 0;
+
 	i->dword = dword;
 	i->type = CW_ITEMTYPE_DWORD;
 	return 1;
@@ -272,7 +274,12 @@ int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type, 
 		case CW_ITEMTYPE_BYTE:
 			cw_itemstore_set_byte(itemstore,item_id,*data);	
 			break;
-
+		case CW_ITEMTYPE_WORD:
+			cw_itemstore_set_word(itemstore,item_id,*data);	
+			break;
+		case CW_ITEMTYPE_DWORD:
+			cw_itemstore_set_dword(itemstore,item_id,*data);	
+			break;
 		case CW_ITEMTYPE_STR:
 			cw_itemstore_set_strn(itemstore,item_id,(char*)data,len);
 			break;

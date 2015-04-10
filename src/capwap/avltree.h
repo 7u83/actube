@@ -30,8 +30,15 @@
 
 #include <stdint.h>
 
+/** Maximum AVL Tree depth. 
+    The number of nodes is calculated by 2^depth.
+    So a value of 32 should be enough for around 4 
+    billion nodes. */
 #define AVLTREE_MAX_DEPTH	32
 
+/**
+ * Defines the structure of an AVL Node.
+ */
 struct avlnode {
 	void *data;
 	struct avlnode *left;
@@ -39,7 +46,9 @@ struct avlnode {
 	int bal;
 };
 
-
+/**
+ * AVL Tree
+ */ 
 struct avltree {
 	struct avlnode *root;
 	int (*cmp) (const void *, const void *);
@@ -81,6 +90,16 @@ static inline void *avltree_replace_data(struct avltree *t, void *data, int len)
 	return df;
 }
 
+static inline void *avltree_replace(struct avltree *t,void *data){
+	struct avlnode * node = avltree_get_node(t,data);
+	if (node){
+		t->del(node->data);
+		return node->data=data;	
+	}
+	return avltree_add(t,data);
+}
+
+
 static inline void avltree_destroy(struct avltree *t)
 {
 	avltree_del_all(t);
@@ -106,6 +125,7 @@ struct avliter{
 	struct avlnode *cur;
 	int stack_ptr;
 	struct avlnode * root;
+	int (*cmp) (const void *, const void *);
 
 };
 typedef struct avliter avliter_t;
@@ -113,23 +133,35 @@ typedef struct avliter avliter_t;
 
 void * avliter_next(avliter_t *i);
 
-void * avliter_seek_set(struct avliter *i)
+static inline void * avliter_seek_set(struct avliter *i)
 {
 	i->stack_ptr=0;
 	i->cur=i->root;
 	return avliter_next(i);
 }
 
-
+/**
+ * Init an AVL Tree Iterator.
+ *
+ * After initialization #avliter_next would return the first element.
+ * The behavior of #avliter_get would still be undefined.
+ * @param i AVL Iterator to initialize
+ * @param t correspondending AVL Tree
+ *
+ * @See avliter_t, 
+ */
 static inline void avliter_init(avliter_t *i, avltree_t t){
 	i->root = t->root;
 	i->stack_ptr=0;
+	i->cmp=t->cmp;
 }
 
 	
-#define avliter_foreach_asc(iter,val) \
-	while(NULL != (val = avliter_next(iter)))
-
+/**
+ * Get the element, where AVL Iterator currently is positioned.
+ * @param i AVL Iterator
+ * @return element or NULL if not found.
+ */
 static inline void * avliter_get(avliter_t *i){
 	if(!i->cur)
 		return NULL;
@@ -137,7 +169,23 @@ static inline void * avliter_get(avliter_t *i){
 }
 
 
+extern void * avliter_seek(avliter_t *i,void *d);
 
+
+#define DEFINE_AVLITER(i,t)\
+	avliter_t i; avliter_init(&i,t)
+
+
+#define avliter_foreach(i)\
+	for (avliter_seek_set(i); NULL != avliter_get(i); avliter_next(i))
+
+#define avliter_foreach_from(i,from)\
+	for (avliter_seek(i,from); NULL != avliter_get(i); avliter_next(i))
+
+#define avliter_foreach_asc(iter,val) \
+	while(NULL != (val = avliter_next(iter)))
+
+	
 
 #endif
 

@@ -1,5 +1,7 @@
 
 #include "capwap.h"
+#include "capwap_items.h"
+
 #include "intavltree.h"
 #include "cw_log.h"
 #include "dbg.h"
@@ -24,6 +26,9 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		return -1;
 	}
 
+		
+
 	/* ok, send response */
+
 	return 0;
 }
