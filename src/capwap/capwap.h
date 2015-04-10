@@ -962,6 +962,8 @@ int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t 
 int cw_out_wtp_board_data(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
 
 void cw_init_request(struct conn *conn,int msg_id);
+struct cw_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * a);
+
 
 
 

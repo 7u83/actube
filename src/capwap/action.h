@@ -73,7 +73,7 @@ struct cw_action_out{
 	uint32_t item_id;
 	uint32_t vendor_id;
 	uint16_t elem_id;
-	
+	int (*init)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	struct cw_item *(*get)(struct conn *conn,struct cw_action_out *a);
 	uint8_t mand;

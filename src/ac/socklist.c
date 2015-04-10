@@ -282,7 +282,7 @@ int socklist_add_unicast(const char *addr, const char * port, int ac_proto)
 		socklist[socklist_len].ac_proto=ac_proto;
 	
 		socklist_len++;
-		cw_log(LOG_INFO,"Bound to: %s (%i)\n",addr,sockfd);
+		cw_log(LOG_INFO,"Bound to: %s (%i)",addr,sockfd);
 	}
 
 	freeaddrinfo(res0);	
@@ -349,7 +349,7 @@ int socklist_add_broadcast(const char *addr, const char * port,int ac_proto)
 //		printf ("sock proto %d\n",socklist[socklist_len].ac_proto);
 		socklist_len++;
 
-		cw_log(LOG_INFO,"Bound to broadcast: %s:%s (%i,R:%i,I:%d)\n",addr,port,sockfd,rfd,socklist_len-1);
+		cw_log(LOG_INFO,"Bound to broadcast: %s:%s (%i,R:%i,I:%d)",addr,port,sockfd,rfd,socklist_len-1);
 	}
 
 	freeaddrinfo(res0);	

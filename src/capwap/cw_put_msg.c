@@ -37,6 +37,7 @@
 int cw_put_msg(struct conn *conn, uint8_t * rawout)
 {
 
+
 	/* rawout is already initialized, so we can get 
 	   msg type from buffer */
 	uint8_t *msgptr = rawout + cw_get_hdr_msg_offset(rawout);

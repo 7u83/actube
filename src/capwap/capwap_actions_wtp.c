@@ -89,13 +89,13 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 	/* AC Name */
 	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_DISCOVERY_TYPE, 0,
-	 CW_ELEM_DISCOVERY_TYPE, cw_out_generic, cw_out_get_outgoing}
+	 CW_ELEM_DISCOVERY_TYPE, NULL,cw_out_generic, cw_out_get_outgoing}
 	,
 
 
 	/* WTP Board Data */
 	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_BOARD_DATA, 0,
-	 CW_ELEM_WTP_BOARD_DATA, cw_out_wtp_board_data, cw_out_get_outgoing}
+	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing}
 	,
 
 
@@ -108,14 +108,25 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 	/* Location Data */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_LOCATION_DATA, 0,
-	 CW_ELEM_LOCATION_DATA, cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_LOCATION_DATA, NULL,cw_out_generic, cw_out_get_local,1}
 	,
+
+	/* WTP Board Data */
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_BOARD_DATA, 0,
+	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing}
+	,
+
 
 	/* WTP Name */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_NAME, 0,
-	 CW_ELEM_WTP_NAME, cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_local,1}
 	,
 
+
+	/* Session ID */
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_SESSION_ID, 0,
+	 CW_ELEM_SESSION_ID, NULL,cw_out_generic, cw_out_get_session_id,1}
+	,
 
 	{0, 0}
 
