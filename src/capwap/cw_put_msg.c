@@ -27,47 +27,6 @@
 
 #include "cw_log.h"
 
-struct args{
-	struct conn * conn;
-	uint32_t msg_id;
-	uint8_t * dst;
-	int len;
-};
-
-
-
-static int action_cb(void *args_param, void *a_param)
-{
-	struct cw_action_out * a = (struct cw_action_out *)a_param;
-	struct args * args = (struct args *)args_param;
-	
-//printf("ACTION_CB: %d %d %d\n",a->msg_id, a->vendor_id, a->item_id);
-
-	if (a->msg_id != args->msg_id) {
-		/* Element is from next msg, close action */
-		return 0;
-	}
-
-	if (a->item_id == CW_ITEM_NONE) {
-		/* Start of message */
-		args->len=0;
-		return 1;		
-	}
-
-
-	int l = 0;
-
-	uint8_t *dst = args->dst + args->len;
-
-
-	if (a->out) {
-		l = a->out(args->conn, a, dst); 
-	}
-
-	args->len += l;
-	return 1;
-}
-
 
 /**
  * Put a message to a buffer
@@ -90,31 +49,38 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	as.item_id = CW_ITEM_NONE;
 	as.vendor_id = 0;
 
-	
-	/* setup arguments for callback function */	
-	struct args args;
+	uint8_t *dst = msgptr+8;
 
-	args.conn = conn;
-	args.msg_id = as.msg_id;
-	args.dst = msgptr+8; 
-	args.len=-1;
+	DEFINE_AVLITER(i,conn->actions->out);
 
-	avltree_foreach_from_asc(conn->actions->out, &as, action_cb, &args);
+	cw_action_out_t *am;
 
-	cw_set_msg_elems_len(msgptr, args.len);
-
-/*
-	printf ("Total elems len = %d\n",args.len);
-	printf("Total msg len = %d\n",cw_get_hdr_msg_total_len(rawout)); 	
-*/
-
-	if (args.len==-1) {
+	if (! (am=avliter_seek(&i,&as))){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
-			args.msg_id,cw_strmsg(args.msg_id));
-
+			as.msg_id,cw_strmsg(as.msg_id));
+		return -1;
 	}
 
-	return args.len;
+	cw_action_out_t *ae;
+	int len = 0;
+	while(NULL != (ae=avliter_next(&i))) {
+
+		printf("Put %d %d\n",ae->msg_id,ae->elem_id);
+
+		if (ae->msg_id != as.msg_id) {
+			/* Element is from next msg, close action */
+			break;
+		}
+
+		if (ae->out) {
+			len += ae->out(conn, ae, dst+len); 
+		}
+
+	};
+
+
+	cw_set_msg_elems_len(msgptr, len);
+	return len;
 }
 
 
