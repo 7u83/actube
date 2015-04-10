@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include "cw_util.h"
-#include "cw_log.h"
+#include "log.h"
 #include "capwap.h"
 
 void cw_mand_elem_found(int *l,int type)

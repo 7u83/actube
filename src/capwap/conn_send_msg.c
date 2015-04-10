@@ -1,7 +1,7 @@
 
 #include "conn.h"
 #include "capwap.h"
-#include "cw_log.h"
+#include "log.h"
 #include "sock.h"
 
 

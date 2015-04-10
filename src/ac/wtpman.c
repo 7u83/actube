@@ -14,7 +14,7 @@
 #include "capwap/conn.h"
 #include "wtpman.h"
 #include "conf.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 
 #include "conf.h"

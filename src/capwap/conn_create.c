@@ -25,7 +25,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include "cw_log.h"
+#include "log.h"
 #include "conn.h"
 #include "sock.h"
 #include "capwap.h"

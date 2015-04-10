@@ -20,7 +20,7 @@
 #include "dbg.h"
 #include "sock.h"
 
-#include "cw_log.h"
+#include "log.h"
 
 /**
  * Put a list of missing mandatory message elements to debug output

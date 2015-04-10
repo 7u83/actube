@@ -2,7 +2,7 @@
 
 #include "conn.h"
 #include "capwap.h"
-#include "cw_log.h"
+#include "log.h"
 #include "sock.h"
 
 int cw_send_request(struct conn *conn,int msg_id)

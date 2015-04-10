@@ -22,7 +22,7 @@
 #include <netinet/in.h>
 
 #include "capwap.h"
-#include "cw_log.h"
+#include "log.h"
 #include "cw_util.h"
 
 #include "acinfo.h"

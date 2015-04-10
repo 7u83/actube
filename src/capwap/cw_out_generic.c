@@ -4,7 +4,7 @@
 #include "capwap.h"
 #include "capwap_items.h"
 
-#include "cw_log.h"
+#include "log.h"
 
 
 int cw_put_item(uint8_t * dst, struct cw_item *item)

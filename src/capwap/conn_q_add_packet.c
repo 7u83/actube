@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cw_log.h"
+#include "log.h"
 #include "conn.h"
 
 

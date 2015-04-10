@@ -106,30 +106,12 @@ CAPWAPOBJS= \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
-	cwsend_change_state_event_response.o \
 	cwsend_unknow_response.o \
-	   cwsend_discovery_response.o \
-	   cwread_discovery_response.o \
-	   cwsend_discovery_request.o \
-	cw_read_image_data_request.o \
 	cw_send_configuration_update_response.o \
-	   cwread_join_response.o \
 	cwsend_echo_request.o \
 	cw_send_echo_response.o \
-	cw_send_image_file.o \
 	cw_handle_echo_request.o \
 	   cwsend_conf_status_response.o\
-	   cwread_configuration_status_request.o\
-	cwread_change_state_event_request.o\
-	cwread_wtp_event_request.o \
-	   process_conf_status_request.o \
-	   wtpinfo_readelem_wtp_mac_type.o \
-	   wtpinfo_readelem_wtp_descriptor.o \
-	   wtpinfo_readelem_discovery_type.o \
-	   wtpinfo_readelem_wtp_frame_tunnel_mode.o \
-	   wtpinfo_readelem_location_data.o \
-	   wtpinfo_readelem_wtp_name.o \
-	   wtpinfo_readelem_session_id.o \
 	   wtpinfo.o \
 	   aciplist.o \
 	   acinfo.o \
@@ -137,25 +119,9 @@ CAPWAPOBJS= \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   hdr_print.o \
-	   cw_readelem_ecn_support.o \
-	cw_readelem_maximum_message_length.o \
-	cw_readelem_result_code.o\
-	cw_readelem_ac_name.o \
-	cw_readelem_ac_descriptor.o \
-	cw_readelem_radio_administrative_state.o \
-	cw_readelem_radio_operational_state.o \
-	cw_readelem_statistics_timer.o \
-	cw_readelem_mtu_discovery_padding.o \
-	cw_readelem_vendor_specific_payload.o \
-	cw_readelem_capwap_local_ip_addr.o \
-	   cw_readelem_wtp_reboot_statistics.o\
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	lw_readelem_wtp_board_data.o \
-	cw_readmsg_configuration_status_response.o \
-	cw_readmsg_configuration_status_request.o \
 	cw_cisco_id_to_str.o\
-	cw_readelem_cisco_wtp_radio_cfg.o \
-	cw_addelem_cisco_wtp_radio_cfg.o \
 	cw_strlist_get_str.o \
 	capwap_strings_msg.o \
 	capwap_strings_elem80211.o\
@@ -185,7 +151,37 @@ CAPWAPOBJS= \
 	format.o \
 	
 	
+#		cw_readmsg_configuration_status_response.o \
+	cw_readmsg_configuration_status_request.o \
+cw_readelem_maximum_message_length.o \
+	cw_readelem_result_code.o\
+	cw_readelem_ac_name.o \
+	cw_readelem_ac_descriptor.o \
+	cw_readelem_radio_administrative_state.o \
+	cw_readelem_radio_operational_state.o \
+	cw_readelem_statistics_timer.o \
+	cw_readelem_mtu_discovery_padding.o \
+	cw_readelem_vendor_specific_payload.o \
+	cw_readelem_capwap_local_ip_addr.o \
+	   cw_readelem_wtp_reboot_statistics.o\
+	conn_get_response.o \
+#	cwsend_change_state_event_response.o \
+	   cwread_discovery_response.o \
+	   cwsend_discovery_request.o \
+	cw_send_image_file.o \
+	   cwread_configuration_status_request.o\
+	cwread_change_state_event_request.o\
+	cwread_wtp_event_request.o \
+	   process_conf_status_request.o \
+	   cw_readelem_ecn_support.o \
 
+#	   wtpinfo_readelem_wtp_mac_type.o \
+#	   wtpinfo_readelem_wtp_descriptor.o \
+#	   wtpinfo_readelem_discovery_type.o \
+#	   wtpinfo_readelem_wtp_frame_tunnel_mode.o \
+#	   wtpinfo_readelem_location_data.o \
+#	   wtpinfo_readelem_wtp_name.o \
+#	   wtpinfo_readelem_session_id.o \
 #	   cwmsg_addelem_wtp_radio_infos.o \
 #	cw_addelem_vendor_specific_payload.o \
 	#cw_in_wtp_name.o \
@@ -199,6 +195,9 @@ CAPWAPOBJS= \
 	   #cwmsg_init.o \
 #	cw_readelem_80211_wtp_radio_info.o \
 #	cwmsg_addelem_80211_add_wlan.o \
+	   cwsend_discovery_response.o \
+	cw_readelem_cisco_wtp_radio_cfg.o \
+	cw_addelem_cisco_wtp_radio_cfg.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
@@ -218,6 +217,11 @@ CAPWAPOBJS= \
 #	   process_msgelems.o \
 #	   cwsend_join_response.o \
 #	cwread_discovery_request.o\
+	   cwread_join_response.o \
+	cw_read_image_data_request.o \
+#	conn_send_cwmsg.o \
+#	conn_send_request.o \
+#	conn_wait_for_request.o \
 
 #
 # SSL objects
@@ -249,7 +253,6 @@ DTLSOBJS+=dtls_bio.o
 CONNOBJS= conn_create.o \
 	conn_detect_capwap.o \
 	conn_send_packet.o \
-	conn_send_cwmsg.o \
 	conn_process_packet.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
@@ -259,14 +262,11 @@ CONNOBJS= conn_create.o \
 	connlist.o \
 	conn_create_noq.o \
 	conn_send_response.o \
-	conn_get_response.o \
 	conn_prepare_configuration_update_request.o \
 	cw_prepare_configuration_status_request.o \
 	cw_prepare_change_state_event_request.o \
 	conn_prepare_request.o \
-	conn_send_request.o \
 	conn_wait_for_message.o \
-	conn_wait_for_request.o \
 	conn_init.o \
 	conn_send_msg.o
 #conn_get_message.o  \

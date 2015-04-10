@@ -2,7 +2,7 @@
 #include "capwap.h"
 #include "intavltree.h"
 #include "dbg.h"
-#include "cw_log.h"
+#include "log.h"
 #include "capwap_items.h"
 
 int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,

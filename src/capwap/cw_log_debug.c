@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "cw_log.h"
+#include "log.h"
 #include "capwap.h"
 #include "capwap_cisco.h"
 #include "lwapp_cisco.h"

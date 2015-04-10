@@ -1,7 +1,7 @@
 
 #include <sqlite3.h>
 
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 #include "conf.h"
 

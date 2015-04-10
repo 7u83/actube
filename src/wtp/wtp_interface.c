@@ -6,7 +6,7 @@
 #include "capwap/acinfo.h"
 #include "capwap/conn.h"
 #include "capwap/capwap_80211.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 #include "wtp_conf.h"
 #include "wtp_interface.h"

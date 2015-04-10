@@ -6,7 +6,7 @@
 #include "wtpinfo.h"
 #include "capwap.h"
 
-#include "cw_log.h"
+#include "log.h"
 
 
 /*

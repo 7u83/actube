@@ -6,7 +6,7 @@
 #include "capwap/capwap.h"
 #include "capwap/capwap_items.h"
 #include "capwap/conn.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "capwap/dtls.h"
 #include "capwap/acpriolist.h"
 

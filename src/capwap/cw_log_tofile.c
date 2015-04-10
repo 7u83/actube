@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "cw_log.h"
+#include "log.h"
 
 
 int cw_log_file_flags = LOG_PERROR;

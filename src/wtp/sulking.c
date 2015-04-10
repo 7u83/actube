@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 #include "wtp.h"
 #include "wtp_conf.h"

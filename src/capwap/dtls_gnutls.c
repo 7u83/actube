@@ -24,7 +24,7 @@
 #include "dtls_gnutls.h"
 
 #include "conn.h"
-#include "cw_log.h"
+#include "log.h"
 #include "cw_util.h"
 
 int dtls_gnutls_init()

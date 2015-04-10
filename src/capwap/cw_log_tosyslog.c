@@ -16,7 +16,7 @@
 
 */
 
-#include "cw_log.h"
+#include "log.h"
 
 
 void cw_vlog_(int level,const char * format, va_list args)

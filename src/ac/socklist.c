@@ -25,7 +25,7 @@
 #include <pthread.h>
 
 
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "capwap/sock.h"
 
 

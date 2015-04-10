@@ -12,14 +12,14 @@
 
 
 #include "capwap/capwap.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "capwap/cw_util.h"
 
 #include "wtp_conf.h"
 
 
 #include "capwap/sock.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 #include "capwap/bstr.h"
 
