@@ -18,6 +18,9 @@ int cw_put_item(uint8_t * dst, struct cw_item *item)
 			return cw_put_word(dst, item->word);
 		case CW_ITEMTYPE_DWORD:
 			return cw_put_dword(dst, item->dword);
+		case CW_ITEMTYPE_BSTR:
+			return cw_put_bstr(dst,item->data);
+			
 	}
 
 	return 0;

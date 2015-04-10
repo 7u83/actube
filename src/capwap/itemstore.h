@@ -74,7 +74,7 @@ extern cw_itemstore_t cw_itemstore_create();
 extern int cw_itemstore_set_strn(cw_itemstore_t s, uint32_t id, const char *str, int n);
 extern int cw_itemstore_set_str(cw_itemstore_t s, uint32_t id, const char *str);
 extern int cw_itemstore_set_ptr(cw_itemstore_t s, uint32_t id, void *ptr);
-extern int cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t * data, int len);
+extern cw_item_t * cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t * data, int len);
 extern int cw_itemstore_set_dword(cw_itemstore_t s, uint32_t id, uint32_t dword);
 extern int cw_itemstore_set_word(cw_itemstore_t s, uint32_t id, uint32_t word);
 extern int cw_itemstore_set_byte(cw_itemstore_t s, uint32_t id, uint8_t byte);

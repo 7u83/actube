@@ -30,17 +30,17 @@
 #include "cw_util.h"
 #include "log.h"
 
-char * cw_rand_dev = "/dev/random";
+char *cw_rand_dev = "/dev/random";
 
-int cw_rand_r(uint8_t*dst, int len)
+int cw_rand_r(uint8_t * dst, int len)
 {
 	int rf;
 	int l;
 
- 	rf = open(cw_rand_dev, O_RDONLY | O_NDELAY); 
-	if (rf<0){
+	rf = open(cw_rand_dev, O_RDONLY | O_NDELAY);
+	if (rf < 0) {
 
-		cw_log(LOG_ERR,"Can't open %s: %s",cw_rand_dev,strerror(errno));
+		cw_log(LOG_ERR, "Can't open %s: %s", cw_rand_dev, strerror(errno));
 		return 0;
 	}
 
@@ -48,8 +48,8 @@ int cw_rand_r(uint8_t*dst, int len)
 	l = read(rf, dst, len);
 	close(rf);
 
-	if ((l<0) && (errno != EAGAIN)){
-		cw_log(LOG_ERR,"Cant read from %s: %s",cw_rand_dev,strerror(errno));
+	if ((l < 0) && (errno != EAGAIN)) {
+		cw_log(LOG_ERR, "Cant read from %s: %s", cw_rand_dev, strerror(errno));
 		return 0;
 	}
 
@@ -58,25 +58,24 @@ int cw_rand_r(uint8_t*dst, int len)
 
 
 
-
-int cw_rand(uint8_t *dst, int len)
+int cw_rand(uint8_t * dst, int len)
 {
 	static uint32_t rinit = 0;
-	if (!rinit){
+	if (!rinit) {
 
-		int l = cw_rand_r((uint8_t*)(&rinit),sizeof(uint32_t));
-		if (l<sizeof(uint32_t)){
-			cw_log(LOG_WARNING,"Can't read enough bytes from %s. Using time to init rand instead.",cw_rand_dev);
-			rinit=time(NULL);
+		int l = cw_rand_r((uint8_t *) (&rinit), sizeof(uint32_t));
+		if (l < sizeof(uint32_t)) {
+			cw_log(LOG_WARNING,
+			       "Can't read enough bytes from %s. Using time to init rand instead.",
+			       cw_rand_dev);
+			rinit = time(NULL);
 		}
 
 		srand(rinit);
 	}
 	int i;
-	for (i=0; i<len; i++){
-		dst[i]=rand();
+	for (i = 0; i < len; i++) {
+		dst[i] = rand();
 	}
 	return len;
 }
-
-

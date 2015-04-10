@@ -144,14 +144,14 @@ int cw_itemstore_set_ptr(cw_itemstore_t s, uint32_t id, void *ptr)
 	return 1;
 }
 
-int cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t * data, int len)
+cw_item_t * cw_itemstore_set_bstrn(cw_itemstore_t s, uint32_t id, uint8_t * data, int len)
 {
 	struct cw_item *i = cw_item_create(s, id);
 	if (!i)
-		return 0;
+		return NULL;
 	i->type = CW_ITEMTYPE_BSTR;
 	i->data = bstr_create(data, len);
-	return 1;
+	return i;
 }
 
 int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int len)

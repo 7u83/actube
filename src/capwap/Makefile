@@ -95,14 +95,6 @@ LWAPPCISCOOBJS = \
 
 
 CAPWAPOBJS= \
-	   cwmsg_init_echo_request.o \
-	   cwmsg_addelem.o \
-	   cwmsg_vaddelem.o \
-	   cwmsg_addelem_ac_descriptor.o \
-	   cwmsg_addelem_wtp_descriptor.o \
-	   cwmsg_addelem_cw_local_ip_addr.o \
-	   cwmsg_addelem_mtu_discovery_padding.o \
-	   cwmsg_addelem_ac_timestamp.o \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
@@ -148,7 +140,15 @@ CAPWAPOBJS= \
 #		cwsend_unknow_response.o \
 	cw_send_configuration_update_response.o \
 	cwsend_echo_request.o \
-	cw_send_echo_response.o \
+		   cwmsg_init_echo_request.o \
+	   cwmsg_addelem.o \
+	   cwmsg_vaddelem.o \
+	   cwmsg_addelem_ac_descriptor.o \
+	   cwmsg_addelem_wtp_descriptor.o \
+	   cwmsg_addelem_cw_local_ip_addr.o \
+	   cwmsg_addelem_mtu_discovery_padding.o \
+	   cwmsg_addelem_ac_timestamp.o \
+cw_send_echo_response.o \
 	cw_handle_echo_request.o \
 	   cwsend_conf_status_response.o\
 	cw_readmsg_configuration_status_response.o \

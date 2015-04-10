@@ -56,13 +56,13 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 
 	/* AC Descriptor (Cisco) */
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_DESCRIPTOR, 0 ,
-	CW_ELEM_AC_DESCRIPTOR, cw_out_cisco_ac_descriptor, 0}
+	CW_ELEM_AC_DESCRIPTOR, NULL,cw_out_cisco_ac_descriptor, 0}
 	,
 
 	/* Cisco AP Timesync - Important to get the WTP a DTLS 
 	   connection stablished*/
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_TIMESTAMP, CW_VENDOR_ID_CISCO,
-	CW_CISCO_AP_TIMESYNC, cw_out_cisco_ap_timesync, 0}
+	CW_CISCO_AP_TIMESYNC, NULL,cw_out_cisco_ap_timesync, 0}
 	,
 
 	/* -------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 
 	/* AC Descriptor (Cisco) */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_AC_DESCRIPTOR, 0 ,
-	CW_ELEM_AC_DESCRIPTOR, cw_out_cisco_ac_descriptor, 0}
+	CW_ELEM_AC_DESCRIPTOR, NULL,cw_out_cisco_ac_descriptor, 0}
 	,
 
 

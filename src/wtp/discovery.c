@@ -114,7 +114,6 @@ static int run_discovery(struct conn *conn)
 
 	time_t timer = cw_timer_start(0);
 
-	cw_itemstore_t discs;
 
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CW_STATE_DISCOVERY) {
@@ -129,9 +128,16 @@ static int run_discovery(struct conn *conn)
 			cw_log(LOG_ERROR,"Error reading messages: %s",strerror(errno));
 			break;
 		}
-		discs = cw_itemstore_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
 	}
 
+	cw_itemstore_t discs;
+	discs = cw_itemstore_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
+
+
+	if (!discs) {
+		cw_log(LOG_ERR,"No discovery responses received");
+		return 0;
+	}
 
 	int i;
 
