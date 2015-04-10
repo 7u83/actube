@@ -32,6 +32,19 @@
 #define LOG_ERROR LOG_ERR
 #endif
 
+#ifndef CW_LOG_DEFAULT_LOG
+#define CW_LOG_DEFAULT_LOG cw_log_file
+#endif
+#ifndef CW_LOG_DEFAULT_VLOG
+#define CW_LOG_DEFAULT_VLOG cw_log_vfile
+#endif
+
+
+
+
+
+
+
 /** 
  * @defgroup DebugOptions Dbug Options
  * @{
@@ -78,17 +91,7 @@
 /**@}*/
 
 
-#ifndef CW_LOG_DUMP_ROW_LEN
-#define CW_LOG_DUMP_ROW_LEN 32
-#endif
 
-#ifndef CW_LOG_DUMP_ROW_TAB_LEN
-#define CW_LOG_DUMP_ROW_TAB_LEN 8
-#endif
-
-#ifndef CW_LOG_DEFAULT_LOG
-#define CW_LOG_DEFAULT_LOG cw_log_tosyslog
-#endif
 
 
 extern void cw_log_dbg_(int type, const char *file, int line, const char *fromat, ...);
@@ -103,7 +106,7 @@ extern int cw_dbg_opt_level;
 
 
 #ifdef WITH_CW_LOG
-#define cw_log(level,...) cw_log_cb(level,__VA_ARGS__)
+#define cw_log(level,...) cw_log_colored(level,__VA_ARGS__)
 #else
 #define cw_log(...)
 #endif
@@ -129,14 +132,27 @@ extern int cw_dbg_opt_level;
 #endif
 
 extern void (*cw_log_cb) (int level, const char *fromat, ...);
-extern void (*cw_log_debug_cb) (int type, const char *format, ...);
+extern void (*cw_vlog_cb) (int level, const char *fromat, va_list args);
 
-extern void (*cw_log_debug_cbs[]) (const char *fromat, ...);
+/* Syslog functins */
+extern void cw_log_syslog(int level, const char *format, ...);
+extern void cw_log_vsyslog(int level,const char * format, va_list args);
+
+/* Log to File functions */
+void cw_log_vfile(int level,const char * format, va_list args);
+void cw_log_file(int level,const char *format, ...);
+
+
+
+void cw_log_colored(int level, const char *format, ...);
+
+
+
+//extern void (*cw_log_debug_cb) (int type, const char *format, ...);
+
+//extern void (*cw_log_debug_cbs[]) (const char *fromat, ...);
 extern int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 			      const char *format, ...);
-extern void cw_vlog_(int level, const char *format, va_list args);
-extern void cw_log_tosyslog(int level, const char *format, ...);
-extern void cw_log_tofile(int level, const char *format, ...);
 
 
 extern void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len);

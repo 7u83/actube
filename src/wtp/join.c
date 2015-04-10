@@ -170,7 +170,9 @@ int run_join(struct conn * conn)
 
 	}
 	if (rc != 0 && rc != 2) {
-		cw_log(LOG_ERR,"Join to %s was not successful.",sock_addr2str(&conn->addr));
+		cw_log(LOG_ERR,"Can't Join AC at %s, AC returned code: %d - %s.",
+			sock_addr2str(&conn->addr),
+			rc,cw_strresult(rc));
 		return 0;
 	}
 

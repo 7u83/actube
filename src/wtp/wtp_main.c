@@ -75,6 +75,8 @@ int main()
 	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
 
 
+cw_log(LOG_ERR,"Entetrente");
+
 	discovery();
 	join();
 
