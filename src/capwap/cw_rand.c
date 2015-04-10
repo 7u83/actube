@@ -28,7 +28,7 @@
 #include <fcntl.h>
 
 #include "cw_util.h"
-#include "cw_log.h"
+#include "log.h"
 
 char * cw_rand_dev = "/dev/random";
 

@@ -25,7 +25,7 @@
 #include "lwapp.h"
 
 #include "cw_util.h"
-#include "cw_log.h"
+#include "log.h"
 
 /**
  * Reads the LWAPP message element WTP Name

@@ -25,7 +25,7 @@
 #include "capwap_items.h"
 #include "conn.h"
 
-#include "cw_log.h"
+#include "log.h"
 
 
 /**

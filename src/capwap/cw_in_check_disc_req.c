@@ -3,7 +3,7 @@
 #include "capwap_items.h"
 
 #include "intavltree.h"
-#include "cw_log.h"
+#include "log.h"
 #include "dbg.h"
 #include "sock.h"
 

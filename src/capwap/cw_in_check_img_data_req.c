@@ -3,7 +3,7 @@
 
 #include "capwap.h"
 #include "dbg.h"
-#include "cw_log.h"
+#include "log.h"
 #include "capwap_items.h"
 
 

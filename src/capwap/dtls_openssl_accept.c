@@ -21,7 +21,7 @@
 #include "conn.h"
 #include "sock.h"
 #include "dtls_openssl.h"
-#include "cw_log.h"
+#include "log.h"
 
 int dtls_openssl_accept(struct conn *conn)
 {

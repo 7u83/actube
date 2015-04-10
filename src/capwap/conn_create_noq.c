@@ -28,7 +28,7 @@
 #include "conn.h"
 #include "sock.h"
 
-#include "cw_log.h"
+#include "log.h"
 
 /**
  * Create a connection object without queueing

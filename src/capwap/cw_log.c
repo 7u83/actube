@@ -19,7 +19,7 @@
 
 #include <stdarg.h>
 
-#include "cw_log.h"
+#include "log.h"
 
 void (*cw_log_cb)(int level,const char * fromat, ...) = CW_LOG_DEFAULT_LOG;
 const char * cw_log_name = "cw";

@@ -25,7 +25,6 @@
 #include <arpa/inet.h>
 
 
-#include "cw_log.h"
 
 int conn_send_packet(struct conn * conn, const uint8_t * buffer, int len)
 {

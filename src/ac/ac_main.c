@@ -28,7 +28,7 @@
 #include "actube.h"
 #include "wtplist.h"
 #include "capwap/dtls.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "conf.h"
 #include "capwap/sock.h"
 

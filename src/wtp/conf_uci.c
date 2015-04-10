@@ -12,10 +12,10 @@
 #include <uci.h>
 
 #include "capwap/capwap.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "wtp_conf.h"
 
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 #include "capwap/bstr.h"
 

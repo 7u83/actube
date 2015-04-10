@@ -8,7 +8,7 @@
 #include "nlt.h"
 
 
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 #include "capwap/radioinfo.h"
 #include "capwap/sock.h"
 #include "capwap/capwap_80211.h"

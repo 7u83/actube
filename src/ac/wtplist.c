@@ -35,7 +35,7 @@
 
 
 #include "conf.h"
-#include "capwap/cw_log.h"
+#include "capwap/log.h"
 
 /*
 static struct wtpman ** wtplist = 0;

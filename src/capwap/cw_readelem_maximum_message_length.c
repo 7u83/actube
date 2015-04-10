@@ -18,7 +18,7 @@
 
 #include "capwap.h"
 #include "cw_util.h"
-#include "cw_log.h"
+#include "log.h"
 
 int cw_readelem_maximum_message_length(uint16_t *dst, int type,uint8_t *msgelem, int len)
 {

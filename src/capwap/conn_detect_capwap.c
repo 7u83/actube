@@ -19,7 +19,7 @@
 #include "capwap.h"
 #include "wtpinfo.h"
 #include "conn.h"
-#include "cw_log.h"
+#include "log.h"
 #include "sock.h"
 
 void conn_detect_capwap(struct conn * conn, struct wtpinfo * wtpinfo)

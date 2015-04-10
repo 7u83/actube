@@ -24,7 +24,7 @@
 #include "capwap.h"
 #include "dbg.h"
 
-#include "cw_log.h"
+#include "log.h"
 #include "cw_util.h"
 
 #include "conn.h"

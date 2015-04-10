@@ -2,7 +2,7 @@
 #include <errno.h>
 
 #include "action.h"
-#include "cw_log.h"
+#include "log.h"
 #include "itemstore.h"
 #include "capwap.h"
 #include "capwap_items.h"

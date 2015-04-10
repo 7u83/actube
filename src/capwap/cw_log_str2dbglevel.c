@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "cw_log.h"
+#include "log.h"
 
 
 struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
