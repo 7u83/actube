@@ -454,12 +454,12 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
 
 #define CW_RESULT_SUCCESS					0
-#define CW_RESULT_FAILURE					1
+#define CW_RESULT_MISSING_AC_LIST				1
 #define CW_RESULT_SUCCESS_NAT					2
 #define CW_RESULT_JOIN_FAILURE					3
 #define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
 #define CW_RESULT_JOIN_UNKNOWN_SOURCE				5
-#define CW_RESULT_JOIN_FAILURE_INCORRECT_DATA			6
+#define CW_RESULT_JOIN_INCORRECT_DATA				6
 #define CW_RESULT_JOIN_FAILURE_SESSION_ALREADY_IN_USE		7
 #define CW_RESULT_JOIN_FAILURE_WTP_HARDWARE_NOT_SUPPORTED	8
 #define CW_RESULT_JOIN_FAILURE_BINDING_NOT_SUPPORTED		9
@@ -640,6 +640,15 @@ static inline uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m)
 {
 	return cw_get_msg_elems_ptr(m + cw_get_hdr_msg_offset(m));
 }
+
+static inline uint8_t * cw_get_hdr_msg_ptr(uint8_t *rawmsg)
+{
+	return rawmsg + cw_get_hdr_msg_offset(rawmsg);
+}
+
+#define cw_get_hdr_msg_id(ptr)\
+	cw_get_msg_id(cw_get_hdr_msg_ptr(ptr))
+#define cw_get_hdr_msg_type cw_get_hdr_msg_id
 
 static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
 {
@@ -836,19 +845,21 @@ extern struct cw_str capwap_strings_msg[];
 extern struct cw_str capwap_strings_state[];
 extern struct cw_str capwap_strings_vendor[];
 extern struct cw_str capwap_strings_elem[];
+extern struct cw_str capwap_strings_result[];
 
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
+#define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,(id))
 
 
 static inline const char * cw_strelemp_(cw_strheap_t h, int msg_id) {
 	const char * rc = cw_strheap_get(h,msg_id);
 	if (rc)
 		return rc;
-	return cw_strheap_get(h,0);
+	return cw_strheap_get(h,CW_STR_STOP);
 }
 
 #define cw_strelemp(p,id) cw_strelemp_((p)->strelem,id)
@@ -858,7 +869,7 @@ extern const char *cw_strlist_get_str(struct cw_str *s, int id);
 
 
 
-int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
+//int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
 
 
 extern int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -871,6 +882,8 @@ extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8
 				int len);
 extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len);
+extern int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len);
 
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst); //, struct cw_item *item);
@@ -882,7 +895,7 @@ extern int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8
 //extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
 //					  uint8_t * dst, struct cw_item *item);
 
-extern int cw_out_capwap_control_ip_addrs(struct conn *conn,struct cw_action_out *a,uint8_t *dst) ;
+extern int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a,uint8_t *dst) ;
 
 extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
 
@@ -932,8 +945,15 @@ int cw_register_actions_capwap_wtp(struct cw_actiondef *def);
 
 
 int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+struct cw_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a);
 struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
+extern int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len);
+
 extern int cw_in_check_disc_req(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len);
+
 int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_in_t *a);
 int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len);
 int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -944,5 +964,31 @@ int cw_out_wtp_board_data(struct conn *conn,struct cw_action_out * a,uint8_t *ds
 void cw_init_request(struct conn *conn,int msg_id);
 
 
+
+/** 
+ * @defgroup TimerFunctions Timer functions
+ * @{
+ */
+
+/**
+ * Start a timer.
+ * @param t number of seconds until the timer expires
+ * @return timer value to initialize a variable of time_t
+ *
+ * Example: time_t timer = cw_timer_start(60);
+ */ 
+#define cw_timer_start(t) (time(NULL)+t)
+
+/**
+ * Check if a timer is expired.
+ * @param t an time_t variable intializes by #cw_timer_start
+ * @return 0=timer is not expired\n 1=timer is expired.
+ */
+#define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
+
+/** @} */
+
+
+int cw_send_request(struct conn *conn,int msg_id);
 
 #endif

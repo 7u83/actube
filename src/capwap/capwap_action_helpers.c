@@ -11,14 +11,19 @@ int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data
 	return 1;
 }
 
+
+struct cw_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a)
+{
+	return cw_itemstore_get(conn->outgoing, a->item_id);
+}
+
+struct cw_item *cw_out_get_incomming(struct conn *conn, struct cw_action_out *a)
+{
+	return cw_itemstore_get(conn->incomming, a->item_id);
+}
+
 struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 {
-	return cw_itemstore_get(conn->local, a->item_id);
+	return cw_itemstore_get(conn->local,a->item_id);
 }
-
-struct cw_item *cw_out_get_remote(struct conn *conn, struct cw_action_out *a)
-{
-	return cw_itemstore_get(conn->local, a->item_id);
-}
-
 

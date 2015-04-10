@@ -1,4 +1,11 @@
+#ifndef __CAPWAP_80211
+#define __CAPWAP_80211
 
+#include "capwap.h"
+#include <stdint.h>
+
+#include "bstr.h"
+#include "action.h"
 
 
 #define CW80211IANA_ENTERPRISE_NUMBER		 13277	
@@ -8,8 +15,8 @@
 
 
 
-#define CW_ELEM_80211_ADD_WLAN			1024
-#define CW_ELEM_80211_ANTENNA			1025
+#define CW_ELEM80211_ADD_WLAN				1024
+#define CW_ELEM80211_ANTENNA				1025
 /*
    IEEE 802.11 Assigned WTP BSSID                     1026
    IEEE 802.11 Delete WLAN                            1027
@@ -35,7 +42,7 @@
    IEEE 802.11 WTP Radio Fail Alarm Indication        1047
 */   
 
-#define CWMSGELEM_80211_WTP_RADIO_INFO	1048
+#define CW_ELEM80211_WTP_RADIO_INFORMATION		1048
 
 
 
@@ -44,14 +51,6 @@
  */ 
 
 
-
-
-/*
-#define CW_IEEE80211_RADIO_TYPE_B		(1<<24)
-#define CW_IEEE80211_RADIO_TYPE_A		(2<<24)
-#define CW_IEEE80211_RADIO_TYPE_G		(4<<24)
-#define CW_IEEE80211_RADIO_TYPE_N		(8<<24)
-*/
 
 #define CW_80211_RADIO_TYPE_B		(1)
 #define CW_80211_RADIO_TYPE_A		(2)
@@ -62,7 +61,7 @@
 
 
 
-struct cwwlan {
+struct cw_wlan {
 	uint8_t rid; /* Radio ID */
 	uint8_t wid; /* WLAN ID */
 	uint16_t capab; 
@@ -77,16 +76,18 @@ struct cwwlan {
 	uint8_t tunnel_mode;
 	uint8_t suppress_ssid;
 	bstr_t ssid;
-
 };
 
 
 
 
-extern int cw_readelem_ieee80211_wtp_radio_info(void *dst,int type,uint8_t *msgelem, int len);
+
+extern int cw_register_actions_capwap_80211_wtp(struct cw_actiondef *def);
+extern struct cw_str capwap_strings_elem80211[];
 
 
 
 
+#endif
 
 

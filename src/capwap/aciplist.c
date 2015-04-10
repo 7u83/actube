@@ -32,6 +32,11 @@ static int acip_cmp(const void *x1, const void *x2)
 {
 	struct cw_acip *ip1 = (struct cw_acip *) x1;
 	struct cw_acip *ip2 = (struct cw_acip *) x2;
+		
+	int r = ip1->wtp_count - ip2->wtp_count;
+	if (r!=0)
+		return r;
+
 
 	if (ip1->ip.ss_family != ip2->ip.ss_family) {
 		if (ip1->ip.ss_family == AF_INET)

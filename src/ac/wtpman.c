@@ -117,15 +117,15 @@ static void wtpman_run_discovery(void *arg)
 */
 
 
-	wtpman->conn->local = ac_config;
-	wtpman->conn->remote = cw_itemstore_create();
+	wtpman->conn->outgoing = ac_config;
+	wtpman->conn->incomming = cw_itemstore_create();
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CW_STATE_DISCOVERY) {
 		cw_read_messages(wtpman->conn);
 	}
 
-	struct cw_item *wn = cw_itemstore_get(wtpman->conn->remote, CW_ITEM_WTP_NAME);
+	struct cw_item *wn = cw_itemstore_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
 	if (wn) {
 		printf("WTP Name: %s\n", wn->data);
@@ -282,8 +282,8 @@ static int wtpman_join(void *arg, time_t timer)
 
 //      wtpman->conn->itemstore = cw_itemstore_create();
 
-	wtpman->conn->local = ac_config;
-	wtpman->conn->remote = cw_itemstore_create();
+	wtpman->conn->outgoing = ac_config;
+	wtpman->conn->incomming = cw_itemstore_create();
 
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
 		int rc = cw_read_messages(wtpman->conn);
@@ -305,7 +305,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 }
 
-
+/*
 static int wtpman_send_image_file(struct wtpman *wtpman, struct cwrmsg *cwrmsg)
 {
 	struct cwimage_data data;
@@ -343,6 +343,7 @@ static int wtpman_send_image_file(struct wtpman *wtpman, struct cwrmsg *cwrmsg)
 	return 0;
 
 }
+*/
 
 static void wtpman_run(void *arg)
 {

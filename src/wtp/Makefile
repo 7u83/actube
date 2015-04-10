@@ -21,7 +21,7 @@ endif
 
 
 CFLAGS += -Os -Wall -g
-CFLAGS += -Os -Wall 
+#CFLAGS += -Os -Wall 
 LDFLAGS += -L../../src/capwap/$(ARCH)
 
 

@@ -58,7 +58,7 @@
 	cw_in_generic, 0,		/* start/end callback */	\
 	CW_ITEMTYPE_STR, 		/* Type of element */		\
 	CW_ITEM_AC_NAME,		/* ID to use store */		\
-	1, 1024				/* min/max length */
+	1, 512				/* min/max length */
 
 #define CW_ACTION_IN_STATISTICS_TIMER	 	\
 	CW_ELEM_STATISTICS_TIMER,	/* Element ID*/			\
@@ -114,10 +114,35 @@
 
 #define CW_ACTION_IN_CAPWAP_CONTROL_IPV4_ADDRESS	 	\
 	CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,		/* Element ID*/			\
+	cw_in_capwap_control_ipv4_address, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_AVLTREE, 				/* Type of element */		\
+	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,		/* ID to use store */		\
+	6, 6						/* min/max length */
+
+#define CW_ACTION_IN_CAPWAP_CONTROL_IPV6_ADDRESS	 	\
+	CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,		/* Element ID*/			\
+	cw_in_capwap_control_iv4p_address, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_AVLTREE, 				/* Type of element */		\
+	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,		/* ID to use store */		\
+	18,18						/* min/max length */
+
+
+
+#define CW_ACTION_IN_AC_DESCRIPTOR	 	\
+	CW_ELEM_AC_DESCRIPTOR,				/* Element ID*/			\
 	cw_in_generic, 0,				/* start/end callback */	\
 	CW_ITEMTYPE_DATA, 				/* Type of element */		\
-	CW_ITEM_CAPWAP_CONTROL_IP_ADDR,			/* ID to use store */		\
+	CW_ITEM_AC_DESCRIPTOR,				/* ID to use store */		\
 	6, 6						/* min/max length */
+
+
+#define CW_ACTION_IN_RESULT_CODE	 	\
+	CW_ELEM_RESULT_CODE,				/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	CW_ITEMTYPE_DWORD, 				/* Type of element */		\
+	CW_ITEM_RESULT_CODE,				/* ID to use store */		\
+	4, 4						/* min/max length */
+
 
 
 #endif

@@ -8,6 +8,7 @@
 #include "capwap/conn.h"
 #include "capwap/cw_log.h"
 #include "capwap/dtls.h"
+#include "capwap/acpriolist.h"
 
 #include "wtp.h"
 #include "wtp_conf.h"
@@ -43,8 +44,11 @@ int main()
 
 
 	cw_register_actions_capwap_wtp(&capwap_actions);
+	////cw_register_actions_capwap_80211_wtp(&capwap_actions);
+
 	conn->actions = &capwap_actions;
-	conn->remote = cw_itemstore_create();
+	conn->outgoing = cw_itemstore_create();
+	conn->incomming = cw_itemstore_create();
 	conn->local = cw_itemstore_create();
 
 	cw_itemstore_t board_data = cw_itemstore_create();
@@ -59,9 +63,20 @@ int main()
 
 
 
-	cw_itemstore_set_avltree(conn->local, CW_ITEM_WTP_BOARD_DATA, board_data);
+	cw_itemstore_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+
+	cw_acpriolist_t acprios = cw_acpriolist_create();
+	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);
+	cw_acpriolist_set(acprios,"AC8new",strlen("AC8new"),12);
+
+	cw_itemstore_set_avltree(conn->local,CW_ITEM_AC_PRIO_LIST,acprios);
+
+	cw_itemstore_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
+	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
+
 
 	discovery();
+	join();
 
 
 }

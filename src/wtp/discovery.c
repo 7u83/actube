@@ -31,6 +31,8 @@
 #include "capwap/acinfo.h"
 #include "capwap/sock.h"
 #include "capwap/cw_util.h"
+#include "capwap/aciplist.h"
+#include "capwap/acpriolist.h"
 
 
 #include "wtp.h"
@@ -41,26 +43,109 @@
 
 
 
+cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
+{
+
+	cw_aciplist_t aciplist = cw_aciplist_create();
+	if (!aciplist) {
+		cw_log(LOG_ERROR, "Can't allocate aciplist");
+		return NULL;
+	}
+
+
+	/* get the AC Name with Priority list */
+	cw_acpriolist_t priolist;
+	priolist = cw_itemstore_get_avltree(conn->local, CW_ITEM_AC_PRIO_LIST);
+
+	cw_aciplist_t resultlist=cw_aciplist_create();
+
+
+	DEFINE_AVLITER(i, dis);
+	avliter_foreach(&i){
+		cw_itemstore_t ac = ((cw_item_t *) (avliter_get(&i)))->data;
+
+		char *ac_name = cw_itemstore_get_str(ac, CW_ITEM_AC_NAME);
+
+		int prio = 256;
+		if (ac_name) {
+			/* See if we can find AC Name in Priority List */
+			if (priolist)
+				prio = cw_acpriolist_get(priolist, ac_name);
+			else
+				prio = 256;
+
+		}
+
+		cw_aciplist_t acips =
+		    cw_itemstore_get_avltree(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
+
+		DEFINE_AVLITER(i2, acips);
+		avliter_foreach(&i2){
+			cw_acip_t *acip = avliter_get(&i2);
+			cw_acip_t *n = malloc(sizeof(cw_acip_t));
+			memcpy(n,acip,sizeof(cw_acip_t));
+			
+			n->wtp_count |= prio<<16; 
+			cw_aciplist_del(resultlist,n);
+			cw_aciplist_add(resultlist,n);
+		}
+
+	}
+
+	return resultlist;
+
+}
+
+
+
 static int run_discovery(struct conn *conn)
 {
-	conn->capwap_state=CW_STATE_DISCOVERY;
-	cw_itemstore_set_byte(conn->local,CW_ITEM_DISCOVERY_TYPE,CW_DISCOVERY_TYPE_UNKNOWN);
+//      conn->incomming = cw_itemstore_create();
+
+	conn->capwap_state = CW_STATE_DISCOVERY;
+	cw_itemstore_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
+			      CW_DISCOVERY_TYPE_UNKNOWN);
 
 
-	cw_init_request(conn,CW_MSG_DISCOVERY_REQUEST);
-	cw_put_msg(conn,conn->req_buffer);
-	conn_send_msg(conn,conn->req_buffer);
+	cw_init_request(conn, CW_MSG_DISCOVERY_REQUEST);
+	cw_put_msg(conn, conn->req_buffer);
+	conn_send_msg(conn, conn->req_buffer);
 
 
-	time_t timer = cw_timer_start(10);
+	time_t timer = cw_timer_start(0);
 
-        while (!cw_timer_timeout(timer)
-               && conn->capwap_state == CW_STATE_DISCOVERY) {
-                cw_read_messages(conn);
-		printf ("Got one annswer\n");
-		
-        }
+	cw_itemstore_t discs;
 
+	while (!cw_timer_timeout(timer)
+	       && conn->capwap_state == CW_STATE_DISCOVERY) {
+		avltree_del_all(conn->incomming);
+
+		int rc = cw_read_messages(conn);
+
+		if (rc<0) {
+			if (errno==EAGAIN)
+				continue;
+
+			cw_log(LOG_ERROR,"Error reading messages: %s",strerror(errno));
+			break;
+		}
+		discs = cw_itemstore_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
+	}
+
+
+	int i;
+
+	cw_aciplist_t list = cw_select_ac(conn, discs);
+
+	DEFINE_AVLITER(ii,list);
+	avliter_foreach(&ii){
+		cw_acip_t * ip = avliter_get(&ii);
+
+	}
+
+	avltree_del_all(conn->remote);
+
+	cw_itemstore_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
 
 	return 0;
 }
@@ -70,50 +155,50 @@ static int run_discovery(struct conn *conn)
 
 /**
  * Run discovery for on address (eg broadcast 255.255.255.255)
- */ 
+ */
 static int cw_run_discovery(struct conn *conn, const char *acaddr)
 {
 
-	/* get addr of destination */	
+	/* get addr of destination */
 	struct addrinfo hints;
-	struct addrinfo * res,*res0;
-	memset(&hints,0,sizeof(hints));
+	struct addrinfo *res, *res0;
+	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_family = PF_UNSPEC;
 
-	int rc = getaddrinfo(acaddr,conf_control_port,&hints,&res0);
-	if(rc){
-		cw_log(LOG_ERR,"Can't connect to AC %s: %s",acaddr,gai_strerror(rc));
+	int rc = getaddrinfo(acaddr, conf_control_port, &hints, &res0);
+	if (rc) {
+		cw_log(LOG_ERR, "Can't connect to AC %s: %s", acaddr, gai_strerror(rc));
 		return 0;
 	}
 
-	for(res=res0; res; res=res->ai_next)
-	{
+	for (res = res0; res; res = res->ai_next) {
 
 		int sockfd;
 		int opt;
-		sockfd=socket(res->ai_family,SOCK_DGRAM,0);
-		if (sockfd == -1){
-			cw_log(LOG_ERR,"Can't create socket for %s: %s",acaddr,strerror(errno));
+		sockfd = socket(res->ai_family, SOCK_DGRAM, 0);
+		if (sockfd == -1) {
+			cw_log(LOG_ERR, "Can't create socket for %s: %s", acaddr,
+			       strerror(errno));
 			continue;
 		}
-	
-		opt = 1;
-		if (setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt))<0){
-			cw_log(LOG_ERR,"Can't set broadcast sockopt");
-		}
-		sock_set_recvtimeout(sockfd,1);
-		sock_set_dontfrag(sockfd,0);
 
-		sock_copyaddr(&conn->addr,res->ai_addr);
-		conn->sock=sockfd;
+		opt = 1;
+		if (setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt)) < 0) {
+			cw_log(LOG_ERR, "Can't set broadcast sockopt");
+		}
+		sock_set_recvtimeout(sockfd, 1);
+		sock_set_dontfrag(sockfd, 0);
+
+		sock_copyaddr(&conn->addr, res->ai_addr);
+		conn->sock = sockfd;
 
 		run_discovery(conn);
 
 		close(sockfd);
 
-	
+
 	}
 
 	freeaddrinfo(res0);
@@ -124,7 +209,8 @@ static int cw_run_discovery(struct conn *conn, const char *acaddr)
 
 int discovery()
 {
-	struct conn * conn = get_conn();
-	cw_run_discovery(conn,"255.255.255.255");	
+	struct conn *conn = get_conn();
+	cw_run_discovery(conn, "255.255.255.255");
+	conn->capwap_state=CW_STATE_JOIN;
 	return 0;
 }

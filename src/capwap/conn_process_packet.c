@@ -19,72 +19,274 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "capwap.h"
+#include "dbg.h"
+
 #include "cw_log.h"
 #include "cw_util.h"
 
 #include "conn.h"
 #include "sock.h"
 
-#include <stdio.h> //tube
+#include <stdio.h>		//tube
 
-static int cwrmsg_init_ctrlhdr(struct conn * conn, struct cwrmsg * cwrmsg, uint8_t * msg, int len)
+
+
+
+
+
+
+int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
+
+
+
+
+/**
+ * Init response message header
+ */
+void cw_init_response(struct conn *conn, uint8_t * req)
 {
-	if (len<8){
-		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, len=%d (too short)",sock_addr2str(&conn->addr),len);
+	uint8_t *buffer = conn->resp_buffer;
+	int shbytes = cw_get_hdr_msg_offset(req);
+	int dhbytes;
+	memcpy(buffer, req, shbytes);
+	cw_set_hdr_hlen(buffer, 2);
+	cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
+	dhbytes = cw_get_hdr_msg_offset(buffer);
+
+	uint8_t *msgptr = req + shbytes;
+	uint8_t *dmsgptr = buffer + dhbytes;
+
+	cw_set_msg_type(dmsgptr, cw_get_msg_type(msgptr) + 1);
+	cw_set_msg_seqnum(dmsgptr, cw_get_msg_seqnum(msgptr));
+	cw_set_msg_flags(dmsgptr, 0);
+}
+
+void cw_init_request(struct conn *conn, int msg_id)
+{
+	uint8_t *buffer = conn->req_buffer;
+
+	cw_put_dword(buffer + 0, 0);
+	cw_put_dword(buffer + 4, 0);
+	cw_set_hdr_preamble(buffer, 0);
+	cw_set_hdr_hlen(buffer, 2);
+	cw_set_hdr_wbid(buffer, 1);
+	cw_set_hdr_rid(buffer, 0);
+	uint8_t *msgptr = cw_get_hdr_msg_offset(buffer) + buffer;
+	cw_set_msg_type(msgptr, msg_id);
+	cw_set_msg_flags(msgptr, 0);
+	cw_set_msg_elems_len(msgptr, 0);
+
+
+}
+
+/**
+ * send a response 
+ */
+int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
+{
+	cw_init_response(conn, rawmsg);
+	if (cw_put_msg(conn, conn->resp_buffer) == -1)
 		return 0;
-	}
+	conn_send_msg(conn, conn->resp_buffer);
+	return 1;
+}
 
-	uint32_t val;
 
-	/* first dword of header is the message type*/
-	cwrmsg->type = ntohl(*((uint32_t*)(msg))); 
 
-	/* second dword = seqnum, len and flags */
-	val = ntohl(*((uint32_t*)(msg+4)));
 
-	cwrmsg->seqnum = cw_get_dword_bits(val,0,8);
+/**
+ * Special case error message, which is sent when an unexpected messages 
+ * was received or somethin else happened.
+ * @param conn conection
+ * @param rawmsg the received request message, which the response belongs to
+ * @pqram result_code result code to send
+ * @return 1
+ */
+int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_code)
+{
+	cw_init_response(conn, rawmsg);
 
-	cwrmsg->msgelems_len=cw_get_dword_bits(val,8,16)-3;
+	uint8_t *out = conn->resp_buffer;
 
-//	ch->flags=CW_GET_DWORD_BITS(val,24,8);
-	cwrmsg->msgelems=msg+8;
+	uint8_t *dst = cw_get_hdr_msg_elems_ptr(out);
+	int l = cw_put_elem_result_code(dst, result_code);
 
-	if (8+cwrmsg->msgelems_len != len){
+	cw_set_msg_elems_len(out + cw_get_hdr_msg_offset(out), l);
+
+	conn_send_msg(conn, conn->resp_buffer);
+
+	return 1;
+}
+
+
+static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
+{
+	struct cw_action_in as, *af, *afm;
+
+	uint8_t *msg_ptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+
+	int elems_len = cw_get_msg_elems_len(msg_ptr);
+/*
+	if (8+elems_len != len){
+		cw_dbg(DBG_MSG_ERR,"Discarding message from %s, msgelems len=%d, data len=%d, (strict capwap) ",
+			sock_addr2str(&conn->addr),elems_len,len-8);
+
 		if (conn_is_strict_capwap(conn)){
-			cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, msgelems len=%d, data len=%d, (strict capwap) ",
-				sock_addr2str(&conn->addr),cwrmsg->msgelems_len,len-8);
+			cw_dbg(DBG_MSG_ERR,"Discarding message from %s, msgelems len=%d, data len=%d, (strict capwap) ",
+				sock_addr2str(&conn->addr),elems_len,len-8);
 			return 0;
 		}
-		if (8+cwrmsg->msgelems_len < len){
+		if (8+elems_len < len){
 			cw_dbg(DBG_CW_RFC,"Packet from from %s has %d bytes extra data.",
-				sock_addr2str(&conn->addr),len-8-cwrmsg->msgelems_len);
-			cwrmsg->msgelems_len=len-8;
+				sock_addr2str(&conn->addr),len-8-elems_len);
+			elems_len=len-8;
 		}
 
-		if (8+cwrmsg->msgelems_len > len){
+		if (8+elems_len > len){
 			cw_dbg(DBG_CW_RFC,"Packet from from %s hass msgelems len of %d bytes but has only %d bytes of data, truncating.",
-				sock_addr2str(&conn->addr),cwrmsg->msgelems_len,len-8);
+				sock_addr2str(&conn->addr),elems_len,len-8);
 		}
 		return 1;
 	}
-	return 1;
+
+*/
+
+
+	/* prepare struct for search operation */
+	as.capwap_state = conn->capwap_state;
+	as.msg_id = cw_get_msg_id(msg_ptr);
+	as.vendor_id = 0;
+	as.elem_id = 0;
+	as.proto = 0;
+
+
+	/* Search for state/message combination */
+	afm = cw_actionlist_in_get(conn->actions->in, &as);
+
+	if (!afm) {
+		/* Throw away unexpected response messages */
+		if (!(as.msg_id & 1)) {
+			cw_dbg(DBG_MSG_ERR,
+			       "Message type %d (%s) unexpected/illigal in %s State, discarding.",
+			       as.msg_id, cw_strmsg(as.msg_id),
+			       cw_strstate(conn->capwap_state));
+			return 0;
+		}
+
+		/* Request message not found in current state, check if we know 
+		   anything else about this message type */
+		const char *str = cw_strheap_get(conn->actions->strmsg, as.msg_id);
+		int result_code = 0;
+		if (str) {
+			/* Message found, but it was in wrong state */
+			cw_dbg(DBG_MSG_ERR,
+			       "Message type %d (%s) not allowed in %s State.", as.msg_id,
+			       cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+			result_code = CW_RESULT_MSG_INVALID_IN_CURRENT_STATE;
+		} else {
+			/* Message is unknown */
+			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
+			       as.msg_id, cw_strmsg(as.msg_id),
+			       cw_strstate(as.capwap_state));
+			result_code = CW_RESULT_MSG_UNRECOGNIZED;
+
+		}
+		cw_send_error_response(conn, rawmsg, result_code);
+		return 0;
+	}
+
+
+	/* Execute start processor for message */
+	if (afm->start) {
+		afm->start(conn, afm, rawmsg, len);
+	}
+
+	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
+	uint8_t *elem;
+
+	/* avltree to bag the found mandatory elements */
+	conn->mand = intavltree_create();
+
+	/* iterate through message elements */
+	cw_foreach_elem(elem, elems_ptr, elems_len) {
+
+		as.elem_id = cw_get_elem_id(elem);
+		int elem_len = cw_get_elem_len(elem);
+
+		cw_dbg_elem(conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
+			    elem_len);
+
+
+		af = cw_actionlist_in_get(conn->actions->in, &as);
+
+		if (!af) {
+			cw_dbg(DBG_ELEM_ERR, "ELEM_ERR: Element %d (%s) not allowed in msg of type %d (%s).",
+			       as.elem_id,cw_strelem(as.elem_id), as.msg_id, cw_strmsg(as.msg_id));
+			continue;
+		}
+
+		if (af->mand) {
+			/* add found mandatory message element 
+			   to mand list */
+			intavltree_add(conn->mand, af->item_id);
+		}
+
+		if (af->start) {
+			af->start(conn, af, cw_get_elem_data(elem), elem_len);
+		}
+
+	}
+
+	int result_code = 0;
+	if (afm->end) {
+		result_code = afm->end(conn, afm, rawmsg, len);
+	}
+
+	/* if we've got a request message, we always have to send a response message */
+	if (as.msg_id & 1) {
+		if (result_code > 0) {
+			/* the end method gave us an result code, so
+			   send an error message */
+			cw_send_error_response(conn, rawmsg, result_code);
+		} else {
+			/* regular response message */
+			cw_send_response(conn, rawmsg, len);
+		}
+	}
+	else{
+		/* whe have got a response message */
+		
+
+	}
+
+	intavltree_destroy(conn->mand);
+
+	return result_code;
 
 }
 
 
-static int process_message(struct conn * conn,uint8_t *rawmsg,int rawlen,int (*cb)(void*,uint8_t *,int),void *cbarg)
+
+
+
+
+
+
+static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+			   int (*cb) (void *, uint8_t *, int), void *cbarg)
 {
-	uint8_t *msgptr = rawmsg+cw_get_hdr_msg_offset(rawmsg);
+	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
 
 	uint32_t type = cw_get_msg_type(msgptr);
 
 	if (!(type & 0x1)) {
 		/* It's a response  message, no further examination required. */
-		cb(cbarg,rawmsg,rawlen);
-		return 0;
+	//	cb(cbarg, rawmsg, rawlen);
+		return cw_process_msg(conn,rawmsg,rawlen);
 	}
 
 	/* It's a request message, check if seqnum is right and if
@@ -92,107 +294,92 @@ static int process_message(struct conn * conn,uint8_t *rawmsg,int rawlen,int (*c
 
 	uint8_t seqnum = cw_get_msg_seqnum(msgptr);
 
-	int s1=conn->last_seqnum_received;
-	int s2=seqnum;
-	int sd=s2-s1;
+	int s1 = conn->last_seqnum_received;
+	int s2 = seqnum;
+	int sd = s2 - s1;
 
-	if ((sd>0 && sd<128) || (sd<0 && sd<-128) || s1<0){
+	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
-		conn->last_seqnum_received=seqnum;
-		cb(cbarg,rawmsg,rawlen);
-		return 0;
+		conn->last_seqnum_received = seqnum;
+		return cw_process_msg(conn,rawmsg,rawlen);
+		//cb(cbarg, rawmsg, rawlen);
+		//return 0;
 	}
 
-	if (sd != 0)
-	{
+	if (sd != 0) {
 		cw_dbg(DBG_MSG_ERR,
-			"Discarding message from %s, old seqnum, seqnum = %d, last seqnum=%d",
-			sock_addr2str(&conn->addr),s2,s1);
-
-		return 1;
+		       "Discarding message from %s, old seqnum, seqnum = %d, last seqnum=%d",
+		       sock_addr2str(&conn->addr), s2, s1);
+		errno = EAGAIN;
+		return -1;
 	}
 
-	/* the received request message was retransmitte by our peer,
+	/* the received request message was retransmittet by our peer,
 	 * let's retransmit our response message if we have one*/
 
-	cw_dbg(DBG_MSG_ERR,"Retransmitted request message from %s detected, seqnum=%d, type=%d",
-		sock_addr2str(&conn->addr),s2,type);
+	cw_dbg(DBG_MSG_ERR,
+	       "Retransmitted request message from %s detected, seqnum=%d, type=%d",
+	       sock_addr2str(&conn->addr), s2, type);
 
-	if (conn->resp_msg.type-1 != type ){
-		cw_dbg(DBG_MSG_ERR,"No cached response for retransmission, request seqnum=%d,in cache=%d",s2,conn->resp_msg.type );
-		return 0;
+
+	if (cw_get_hdr_msg_type(conn->resp_buffer) - 1 != type) {
+		cw_dbg(DBG_MSG_ERR,
+		       "No cached response for retransmission, request seqnum=%d,in cache=%d",
+		       s2, conn->resp_msg.type);
+		errno = EAGAIN;
+		return -1;
 	}
 
-	cw_dbg(DBG_MSG_ERR,"Retransmitting response message to %s, seqnum=%d",
-		sock_addr2str(&conn->addr),s2);
-	conn_send_cwmsg(conn,&conn->resp_msg);
-	return 1;	
+	cw_dbg(DBG_MSG_ERR, "Retransmitting response message to %s, seqnum=%d",
+	       sock_addr2str(&conn->addr), s2);
+//	conn_send_cwmsg(conn, &conn->resp_msg);
+	errno = EAGAIN;
+	return -1;
 }
 
 
-#ifdef WITH_CW_LOG_DEBUG
 
-static void cw_dbg_packet(struct conn * conn, uint8_t * packet, int len)
-{
-	if (!cw_dbg_is_level(DBG_CW_PKT_IN))
-		return;
+//int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+//			int (*cb) (void *, uint8_t *, int), void *cbarg)
 
-
-	/* print the header */
-	char hdr[200];
-	hdr_print(hdr,packet,len);
-
-
-	if (!cw_dbg_is_level(DBG_CW_PKT_DMP)){
-		cw_dbg(DBG_CW_PKT_IN,"Processing capwap packet from %s, len=%d\n%s",sock_addr2str(&conn->addr),len,hdr);
-		return;
-
-	}
-
-	cw_dbg_dmp(DBG_CW_PKT_DMP,packet,len,"Processing packet from %s, len=%d\n%s\n\tDump:",
-			sock_addr2str(&conn->addr),len,hdr
-		);
-
-
-}
-
-#else
-	#define cw_dbg_packet(...)
-#endif
-
-
-int conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(void*,uint8_t *,int),void *cbarg)
+int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 {
 
-	if (len<8){
+	if (len < 8) {
 		/* packet too short */
-		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, packet too short, len=%d",sock_addr2str(&conn->addr),len);
+		cw_dbg(DBG_CW_PKT_ERR,
+		       "Discarding packet from %s, packet too short, len=%d",
+		       sock_addr2str(&conn->addr), len);
 		return 0;
 	}
 
 	int preamble = cw_get_hdr_preamble(packet);
 
-	if ( (preamble & 0xf0) != CW_VERSION){
+	if ((preamble & 0xf0) != CW_VERSION) {
 		/* wrong version */
-		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, wrong version, version=%d",sock_addr2str(&conn->addr),(preamble&0xf0)>>8);
+		cw_dbg(DBG_CW_PKT_ERR,
+		       "Discarding packet from %s, wrong version, version=%d",
+		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 8);
 		return 0;
 	}
 
-	if (preamble & 0xf ) {
+	if (preamble & 0xf) {
 		/* decode dtls */
 		return 0;
 	}
 
 	/* log this packet */
-	cw_dbg_packet(conn,packet,len);
+	cw_dbg_packet(conn, packet, len);
 
 
-	int offs = cw_get_hdr_msg_offset(packet); 
-	
+	int offs = cw_get_hdr_msg_offset(packet);
+
 
 	int payloadlen = len - offs;
-	if (payloadlen<0){
-		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, header length greater than len, hlen=%d",sock_addr2str(&conn->addr),offs);
+	if (payloadlen < 0) {
+		cw_dbg(DBG_CW_PKT_ERR,
+		       "Discarding packet from %s, header length greater than len, hlen=%d",
+		       sock_addr2str(&conn->addr), offs);
 		/* EINVAL */
 		return 0;
 	}
@@ -206,31 +393,33 @@ int conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(v
 //printf ("Offs is %d RML is %d\n",offs,cw_get_hdr_rmac_len(packet));
 
 	/* Check Radio MAC if preset */
-	if (cw_get_hdr_flag_m(packet)){
-		
-		if (cw_get_hdr_rmac_len(packet)+8>offs){
+	if (cw_get_hdr_flag_m(packet)) {
+
+		if (cw_get_hdr_rmac_len(packet) + 8 > offs) {
 			/* wrong rmac size */
-			cw_dbg(DBG_CW_PKT_ERR,"Discarding packet, wrong R-MAC size, size=%d",*(packet+8));
+			cw_dbg(DBG_CW_PKT_ERR,
+			       "Discarding packet, wrong R-MAC size, size=%d",
+			       *(packet + 8));
 			return 0;
 		}
-//		memcpy(cwrmsg.rmac, packet+8,8);
+//              memcpy(cwrmsg.rmac, packet+8,8);
 	}
-//	else{
-//		cwrmsg.rmac[0]=0;
-//	}
+//      else{
+//              cwrmsg.rmac[0]=0;
+//      }
 
 
-	if (cw_get_hdr_flag_f(packet)){	/* fragmented */
-		uint8_t * f;
-		f = fragman_add(conn->fragman, packet,offs,payloadlen);
-		if (f==NULL)
+	if (cw_get_hdr_flag_f(packet)) {	/* fragmented */
+		uint8_t *f;
+		f = fragman_add(conn->fragman, packet, offs, payloadlen);
+		if (f == NULL)
 			return 0;
 
-		cw_dbg_packet(conn,f+4,*(uint32_t*)f);
+		cw_dbg_packet(conn, f + 4, *(uint32_t *) f);
 
-	
-	//	extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
-	//	cw_process_msg(conn,f+4,*(uint32_t*)f);
+
+		//      extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
+		//      cw_process_msg(conn,f+4,*(uint32_t*)f);
 
 //printf("Received a fragmented packetm should process it");
 //exit(0);
@@ -241,43 +430,43 @@ int conn_process_packet(struct conn * conn, uint8_t *packet, int len,int (*cb)(v
 			return;
 		};
 */
-		process_message(conn,f+4,*(uint32_t*)f,cb,cbarg); 
+		int rc = process_message(conn, f + 4, *(uint32_t *) f, NULL, NULL);
 
-		free (f);
-		return 1;
+		free(f);
+		return rc;
 	}
-
 //extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
 //cw_process_msg(conn,packet,len);
 
 
 	//if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,packet+hlen,len-hlen) ){
-	//	cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, len=%d (too short)",sock_addr2str(&conn->addr));
-	//	return;
+	//      cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, len=%d (too short)",sock_addr2str(&conn->addr));
+	//      return;
 	//}
 
 //msg_4*((val >> 19) & 0x1f);
-	process_message(conn,packet,len,cb,cbarg); 
-	return 1;
+	return process_message(conn, packet, len, NULL,NULL);
 }
 
 
 /**
  * Used as main message loop
- */ 
+ */
 int cw_read_messages(struct conn *conn)
 {
-        uint8_t buf[2024];
-        int len = 2024;
+	uint8_t buf[2024];
+	int len = 2024;
 
-        int n = conn->read(conn, buf, len);
-	if (n<0 ) 
+	int n = conn->read(conn, buf, len);
+	if (n < 0)
 		return n;
-	
-        if (n > 0)
-                conn_process_packet(conn, buf, n, cw_process_msg, conn);
 
-	
+	if (n > 0) {
+		printf("Have a packet with %d bytes\n",n);
+		return conn_process_packet(conn, buf, n);
+	}
+	//printf("DTLS_ERROR: %d\n",conn->dtls_error);
+	errno = EAGAIN;
+	return -1;
+
 }
-
-

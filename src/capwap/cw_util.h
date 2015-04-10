@@ -46,8 +46,8 @@ extern int cw_rand(uint8_t*dst, int len);
 
 
 
-#define cw_timer_start(t) (time(NULL)+t)
-#define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
+//#define cw_timer_start(t) (time(NULL)+t)
+//#define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
 
 
 /** Generic macro to isolate bits from a dword */
@@ -61,6 +61,6 @@ void cw_get_missing_mand_elems(char *dst, int *l);
 
 
 
-extern const char * cw_msgtostr(int type);
+//extern const char * cw_msgtostr(int type);
 
 #endif

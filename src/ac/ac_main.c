@@ -105,7 +105,29 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 
 int main (int argc, const char * argv[]) 
 {
+/*
+	intavltree_t t = intavltree_create();
+	int i;
+	for (i=0; i<100; i++){
+		intavltree_add(t,i);
+	}
 
+	avliter_t iter;
+	avliter_init(&iter,t);
+	int *val;
+
+
+	for (avliter_seek_set(&iter); val = avliter_get(&iter); avliter_next(&iter)){
+
+
+		printf("Val is: %d\n",*val);
+
+	}
+
+
+
+	exit(0);
+*/
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");

@@ -48,11 +48,11 @@ struct conn {
 	struct sockaddr_storage addr;
 	int recv_timeout;
 
-	/** Basically used to store local conig data */
-	cw_itemstore_t local;
-	/** used to maintain the remote config, an AC holds here the WTP config.
-	    A WTP holds here data about it's AC  */
+	cw_itemstore_t outgoing;
+	cw_itemstore_t incomming;
 	cw_itemstore_t remote;
+	cw_itemstore_t local;
+
 
 	/** Counter for mandatory message elements */
 	struct avltree *mand;
@@ -170,8 +170,8 @@ struct conn *conn_create_noq(int sock, struct sockaddr *addr);
 
 
 extern int conn_send_cwmsg(struct conn *conn, struct cwmsg *cwmsg);
-extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
-				int (*cb) (void *, uint8_t *,int len), void *cbarg);
+//extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+//				int (*cb) (void *, uint8_t *,int len), void *cbarg);
 
 extern uint8_t *conn_get_message(struct conn *conn);
 

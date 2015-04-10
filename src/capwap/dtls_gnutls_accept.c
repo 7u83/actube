@@ -27,7 +27,7 @@
 #include "conn.h"
 #include "cw_log.h"
 #include "sock.h"
-#include "cw_util.h"
+#include "capwap.h"
 #include "dtls_gnutls.h"
 
 

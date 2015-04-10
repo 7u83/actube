@@ -33,6 +33,7 @@ extern int dtls_gnutls_accept(struct conn * conn);
 extern int dtls_gnutls_connect(struct conn * conn);
 extern const char * dtls_gnutls_get_cipher(struct conn * conn);
 struct dtls_ssl_cert dtls_gnutls_get_peers_cert(struct conn * conn,unsigned int n);
+extern int dtls_gnutls_shutdown(struct conn *conn);
 
 
 /* functions used only by capwap libray */

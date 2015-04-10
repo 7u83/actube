@@ -57,6 +57,7 @@ struct cw_item {
 		uint32_t dword;
 	};
 };
+typedef struct cw_item cw_item_t;
 
 typedef struct avltree *cw_itemstore_t;
 
@@ -78,8 +79,7 @@ extern int cw_itemstore_set_dword(cw_itemstore_t s, uint32_t id, uint32_t dword)
 extern int cw_itemstore_set_word(cw_itemstore_t s, uint32_t id, uint32_t word);
 extern int cw_itemstore_set_byte(cw_itemstore_t s, uint32_t id, uint8_t byte);
 extern int cw_itemstore_set_vendorstr(cw_itemstore_t s, uint32_t id,
-					 uint32_t vendor_id, uint8_t * vendorstr,
-					 int len);
+				      uint32_t vendor_id, uint8_t * vendorstr, int len);
 int cw_itemstore_set_avltree(cw_itemstore_t s, uint32_t id, struct avltree *t);
 int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int len);
 
@@ -87,22 +87,41 @@ int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int 
 extern int cw_itemstore_set_data(cw_itemstore_t s, uint32_t id, const uint8_t * data,
 				 int len);
 
-static inline char * cw_itemstore_get_str(cw_itemstore_t s,uint32_t id) {
-	struct cw_item *i = cw_itemstore_get(s,id);
+static inline char *cw_itemstore_get_str(cw_itemstore_t s, uint32_t id)
+{
+	struct cw_item *i = cw_itemstore_get(s, id);
 	if (!i)
 		return NULL;
 	return i->data;
 
 };
 
-static inline struct avltree * cw_itemstore_get_avltree(cw_itemstore_t s,uint32_t id){
-	struct cw_item *i = cw_itemstore_get(s,id);
+static inline struct avltree *cw_itemstore_get_avltree(cw_itemstore_t s, uint32_t id)
+{
+	struct cw_item *i = cw_itemstore_get(s, id);
 	if (!i)
 		return NULL;
-	if (i->type!=CW_ITEMTYPE_AVLTREE)
+	if (i->type != CW_ITEMTYPE_AVLTREE)
 		return NULL;
 	return i->data;
 }
+
+
+static inline struct avltree *cw_itemstore_get_avltree_c(cw_itemstore_t s, uint32_t id,
+							 struct avltree *(creator) ())
+{
+	struct avltree *avltree = cw_itemstore_get_avltree(s, id);
+	if (avltree){
+		return avltree;
+	}
+
+	avltree = creator();
+	if (!avltree)
+		return NULL;
+	cw_itemstore_set_avltree(s, id, avltree);
+	return avltree;
+}
+
 
 
 extern void *cw_item_get_data_ptr(struct cw_item *item);
@@ -113,6 +132,7 @@ int cw_itemstore_set_fun(cw_itemstore_t s, uint32_t id,
 			 void *(*funget) (void *arg),
 			 void (*funfree) (void *arg, void *data), void *arg);
 
-int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type, uint8_t *data, int len);
+int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type,
+		     uint8_t * data, int len);
 
 #endif

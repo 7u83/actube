@@ -29,7 +29,7 @@ int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8
 	}
 
 //	cw_itemstore_set(conn->remote,a->item_id,a->itemtype,data+dstart,len);
-	cw_itemstore_set_vendorstr(conn->remote,a->item_id,vendor_id,data+dstart,len);
+	cw_itemstore_set_vendorstr(conn->incomming,a->item_id,vendor_id,data+dstart,len);
 	return 1;
 }
 

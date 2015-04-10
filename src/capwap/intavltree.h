@@ -4,6 +4,7 @@
 #include "avltree.h"
 
 extern struct avltree * intavltree_create();
+typedef struct avltree * intavltree_t;
 int * intavltree_add(struct avltree * t, int val);
 
 #define intavltree_destroy(t) avltree_destroy(t)

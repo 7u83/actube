@@ -1,5 +1,8 @@
 #include "avltree.h"
 
+
+// XXX Function is buggy
+
 int avltree_foreach_from_lr(struct avltree *t, struct avlnode *n, void *data,int (*callback)(void *,void *),void *cbpriv)
 {
         if (!n)
