@@ -34,10 +34,10 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 	 sock_get_primary_if.o \
 	 sock_receive.o  \
 
-LOGOBJS=cw_log.o \
+LOGOBJS=log.o \
+        log_syslog.o \
+	log_file.o \
 	cw_log_debug.o \
-	cw_log_tofile.o \
-        cw_log_tosyslog.o \
 	cw_log_str2dbglevel.o \
 	cw_dbg_elem.o
 
@@ -106,12 +106,6 @@ CAPWAPOBJS= \
 	cwmsg_addelem_maximum_message_length.o \
 	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
-	cwsend_unknow_response.o \
-	cw_send_configuration_update_response.o \
-	cwsend_echo_request.o \
-	cw_send_echo_response.o \
-	cw_handle_echo_request.o \
-	   cwsend_conf_status_response.o\
 	   wtpinfo.o \
 	   aciplist.o \
 	   acinfo.o \
@@ -151,7 +145,13 @@ CAPWAPOBJS= \
 	format.o \
 	
 	
-#		cw_readmsg_configuration_status_response.o \
+#		cwsend_unknow_response.o \
+	cw_send_configuration_update_response.o \
+	cwsend_echo_request.o \
+	cw_send_echo_response.o \
+	cw_handle_echo_request.o \
+	   cwsend_conf_status_response.o\
+	cw_readmsg_configuration_status_response.o \
 	cw_readmsg_configuration_status_request.o \
 cw_readelem_maximum_message_length.o \
 	cw_readelem_result_code.o\
