@@ -9,7 +9,7 @@ struct args {
 	struct avltree *mand;
 	int n;
 };
-
+/*
 static int check_mand_cb(void *priv, void *val)
 {
 
@@ -47,7 +47,7 @@ return 1;
 	return 1;
 }
 
-
+*/
 
 int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_in_t *a)
 {

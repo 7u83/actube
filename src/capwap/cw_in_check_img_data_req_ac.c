@@ -7,7 +7,7 @@
 #include "capwap_items.h"
 
 
-int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len)
 {
 	/* Check for mandatory elements */
@@ -25,11 +25,13 @@ int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t 
 		uint32_t vendor_id = vendorstr_get_vendor_id(i->data);
 
 		const char * image_dir;
-		//XXX image_dir = cw_itemstore_get_str(conn->local,CW_ITEM_AC_IMAGE_DIR);
+		image_dir = cw_itemstore_get_str(conn->local,CW_ITEM_AC_IMAGE_DIR);
+		if ( !image_dir ) 
+			image_dir="./img/"; //XXX
 
 		char * image_filename = malloc(6+vendorstr_len(i->data)+1+strlen(image_dir));
 		if (!image_filename) 
-			return CW_RESULT_IMAGE_DATA_OTHER_ERROR;
+			return CW_RESULT_IMAGE_DATA_ERROR;
 
 		sprintf(image_filename,"%s%04X/%s",image_dir,vendor_id,vendorstr_data(i->data));
 
@@ -39,21 +41,17 @@ int cw_in_check_img_data_req(struct conn *conn, struct cw_action_in *a, uint8_t 
 			cw_log(LOG_WARNING,"Can't open image file: %s - %s - requestet by WTP",
 				image_filename,strerror(errno));
 			free(image_filename);
-			return CW_RESULT_IMAGE_DATA_OTHER_ERROR;
+			return CW_RESULT_IMAGE_DATA_ERROR;
 		}
 
-		cw_itemstore_set_str(conn->outgoing,CW_ITEM_WTP_IMAGE_FILENAME,image_filename);
-
+		cw_itemstore_set_str(conn->outgoing,CW_ITEM_IMAGE_FILENAME,image_filename);
+		cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);	
+		conn->capwap_state=CW_STATE_IMAGE_DATA;
+		return 0;
 	}
 
 	
-	/* set result code to ok and change to configure state */
-//	cw_itemstore_set_dword(conn->local,CW_ITEM_RESULT_CODE,0);
-//	conn->capwap_state = CW_STATE_CONFIGURE;
 
-	cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);	
-	conn->capwap_state=CW_STATE_IMAGE_DATA;
-
-	return 0;
+	return CW_RESULT_IMAGE_DATA_ERROR;
 
 }

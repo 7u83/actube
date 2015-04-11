@@ -19,9 +19,21 @@
 
 #include <string.h>
 
-#include "log.h"
+#include "dbg.h"
 
 
+struct cw_str cw_dbg_strings[] = {
+	{ DBG_INFO, "info" },
+	{ DBG_PKT_IN,   "pkt_in" },
+	{ DBG_PKT_OUT, "pkt_out" },
+	{ CW_STR_STOP, NULL } 
+};
+
+
+
+
+
+/*
 struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 
 	{"info",DBG_CW_INFO},
@@ -50,7 +62,9 @@ struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 	{0,0}
 
 };
+*/
 
+/*
 int cw_log_str2dbglevel(const char * str)
 {
 	int i;
@@ -60,4 +74,4 @@ int cw_log_str2dbglevel(const char * str)
 	}
 	return 0;
 }
-
+*/

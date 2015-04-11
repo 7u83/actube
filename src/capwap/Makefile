@@ -38,8 +38,8 @@ LOGOBJS=log.o \
         log_syslog.o \
 	log_file.o \
 	cw_log_debug.o \
-	cw_log_str2dbglevel.o \
-	cw_dbg_elem.o
+	cw_dbg_elem.o \
+	dbg_strings.o
 
 
 
@@ -74,7 +74,6 @@ LWAPPOBJS = \
 	lw_checksum.o \
 	lw_put_ac_descriptor.o \
 	lw_put_cisco_path_mtu.o \
-	lw_readelem_wtp_name.o \
 	lw_put_80211_wtp_wlan_radio_configuration.o \
 	lw_readelem_vendor_specific.o \
 	lw_vendor_id_to_str.o \
@@ -83,6 +82,8 @@ LWAPPOBJS = \
 	lw_cisco_id_to_str.o \
 	lw_put_sockaddr.o \
 
+#	lw_readelem_wtp_name.o \
+	lw_readelem_wtp_board_data.o \
 
 
 # LWAPP cisco vendor specific objs
@@ -95,20 +96,17 @@ LWAPPCISCOOBJS = \
 
 
 CAPWAPOBJS= \
-	cwmsg_addelem_maximum_message_length.o \
-	cwmsg_addelem_image_identifier.o \
 	   cwmsg_send.o \
 	   wtpinfo.o \
 	   aciplist.o \
-	   acinfo.o \
 	   acinfo_print.o \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   hdr_print.o \
 	cwmsg_addelem_vendor_cisco_mwar_addr.o \
-	lw_readelem_wtp_board_data.o \
 	cw_cisco_id_to_str.o\
 	cw_strlist_get_str.o \
+	cw_strlist_get_id.o \
 	capwap_strings_msg.o \
 	capwap_strings_elem80211.o\
 	acpriolist.o\
@@ -122,9 +120,12 @@ CAPWAPOBJS= \
 	cw_in_check_disc_resp.o\
 	cw_in_check_join_req.o \
 	cw_in_check_join_resp.o \
-	cw_in_check_img_data_req.o \
+	cw_in_check_img_data_req_ac.o \
+	cw_in_check_img_data_req_wtp.o \
+	cw_in_check_img_data_resp.o \
 	cw_out_generic.o \
 	cw_out_ac_descriptor.o \
+	cw_out_wtp_descriptor.o \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
@@ -137,12 +138,15 @@ CAPWAPOBJS= \
 	format.o \
 	
 	
+	   #acinfo.o \
 #		cwsend_unknow_response.o \
 	cw_send_configuration_update_response.o \
 	cwsend_echo_request.o \
 		   cwmsg_init_echo_request.o \
 	   cwmsg_addelem.o \
 	   cwmsg_vaddelem.o \
+	cw_log_str2dbglevel.o \
+	cwmsg_addelem_maximum_message_length.o \
 	   cwmsg_addelem_ac_descriptor.o \
 	   cwmsg_addelem_wtp_descriptor.o \
 	   cwmsg_addelem_cw_local_ip_addr.o \
@@ -157,6 +161,7 @@ cw_readelem_maximum_message_length.o \
 	cw_readelem_result_code.o\
 	cw_readelem_ac_name.o \
 	cw_readelem_ac_descriptor.o \
+	conn_detect_capwap.o \
 	cw_readelem_radio_administrative_state.o \
 	cw_readelem_radio_operational_state.o \
 	cw_readelem_statistics_timer.o \
@@ -164,6 +169,7 @@ cw_readelem_maximum_message_length.o \
 	cw_readelem_vendor_specific_payload.o \
 	cw_readelem_capwap_local_ip_addr.o \
 	   cw_readelem_wtp_reboot_statistics.o\
+	cwmsg_addelem_image_identifier.o \
 	conn_get_response.o \
 #	cwsend_change_state_event_response.o \
 	   cwread_discovery_response.o \
@@ -174,6 +180,7 @@ cw_readelem_maximum_message_length.o \
 	cwread_wtp_event_request.o \
 	   process_conf_status_request.o \
 	   cw_readelem_ecn_support.o \
+	conn_wait_for_message.o \
 
 #	   wtpinfo_readelem_wtp_mac_type.o \
 #	   wtpinfo_readelem_wtp_descriptor.o \
@@ -251,7 +258,6 @@ endif
 DTLSOBJS+=dtls_bio.o 
 
 CONNOBJS= conn_create.o \
-	conn_detect_capwap.o \
 	conn_send_packet.o \
 	conn_process_packet.o \
 	conn_q_add_packet.o \
@@ -266,7 +272,6 @@ CONNOBJS= conn_create.o \
 	cw_prepare_configuration_status_request.o \
 	cw_prepare_change_state_event_request.o \
 	conn_prepare_request.o \
-	conn_wait_for_message.o \
 	conn_init.o \
 	conn_send_msg.o
 #conn_get_message.o  \
@@ -288,6 +293,7 @@ CWACTION=action.o \
 	cw_in_generic.o \
 	cw_in_wtp_descriptor.o \
 	cw_out_wtp_board_data.o \
+	cw_out_image_data.o \
 	cipwap_actions_ac.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
@@ -311,7 +317,7 @@ O:=$(OBJS);
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
 CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
-CFLAGS = -Wall  -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
+#CFLAGS = -Wall  -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

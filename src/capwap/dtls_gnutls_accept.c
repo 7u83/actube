@@ -25,10 +25,12 @@
 
 
 #include "conn.h"
+#include "dbg.h"
 #include "log.h"
 #include "sock.h"
 #include "capwap.h"
 #include "dtls_gnutls.h"
+#include "timer.h"
 
 
 int dtls_gnutls_accept(struct conn *conn)

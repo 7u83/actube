@@ -1,5 +1,6 @@
 
 #include "capwap.h"
+#include "dbg.h"
 #include "log.h"
 #include "sock.h" //Tube
 /** 
@@ -20,10 +21,10 @@ int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint
 
  	af = cw_actionlist_in_get(conn->actions->in,&as);
 
-cw_dbg(DBG_ELEM,"From might be: %s\n",sock_addr2str(&conn->addr));
+//cw_dbg(DBG_ELEM,"From might be: %s\n",sock_addr2str(&conn->addr));
 
 	if (!af) {
-		cw_log(DBG_ELEM,"Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
+		cw_dbg(DBG_ELEM,"Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
 			cw_strvendor(as.vendor_id),
 			as.elem_id,as.msg_id,cw_strmsg(as.msg_id),cw_strstate(as.capwap_state));
 		return 0;

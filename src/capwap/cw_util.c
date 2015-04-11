@@ -23,6 +23,7 @@
 #include "log.h"
 #include "capwap.h"
 
+/*
 void cw_mand_elem_found(int *l,int type)
 {
 	if (!cw_dbg_is_level(DBG_CW_RFC))
@@ -37,7 +38,9 @@ void cw_mand_elem_found(int *l,int type)
 	
 	}
 }
+*/
 
+/*
 void cw_get_missing_mand_elems(char *dst, int *l)
 {
 	if (!cw_dbg_is_level(DBG_CW_RFC))
@@ -54,6 +57,7 @@ void cw_get_missing_mand_elems(char *dst, int *l)
 	
 	}
 }
+*/
 
 /*
 int cw_is_missing_mand_elems(int *l)

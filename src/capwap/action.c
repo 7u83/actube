@@ -137,11 +137,12 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
  */
 void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
 {
+
 	void *r = avltree_replace_data(t, a, sizeof(struct cw_action_in));
 	if (r)
 		return r;
 
-	void *an = malloc(sizeof(struct cw_action_in));
+	void *an = malloc(s);
 	if (!an)
 		return NULL;
 

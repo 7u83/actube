@@ -78,7 +78,9 @@ struct cw_action_out{
 	struct cw_item *(*get)(struct conn *conn,struct cw_action_out *a);
 	uint8_t mand;
 	uint8_t itemtype;
+	
 	void *defval;
+	int xopt;
 
 };
 
@@ -99,7 +101,7 @@ struct cw_actiondef{
 	
 	cw_strheap_t strmsg;
 	cw_strheap_t strelem;
-	
+
 };
 
 

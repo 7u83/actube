@@ -4,6 +4,7 @@
 #include <netlink/msg.h>
 
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 #include "capwap/avltree.h"
 
 #include "nlt.h"

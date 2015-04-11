@@ -12,6 +12,7 @@
 #include "capwap/radioinfo.h"
 #include "capwap/sock.h"
 #include "capwap/capwap_80211.h"
+#include "capwap/dbg.h"
 
 int wpa_printf()
 {

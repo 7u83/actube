@@ -55,4 +55,30 @@ extern int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
 
 
 
+/*#define	cw_format_hdr_flags(s,th) \
+	sprintf(s,"(T=%d,F=%d,L=%d,W=%d,M=%d,K=%d)",\
+		cw_get_hdr_flag_t(packet),\
+		cw_get_hdr_flag_f(packet),\
+		cw_get_hdr_flag_l(packet),\
+		cw_get_hdr_flag_w(packet),\
+		cw_get_hdr_flag_m(packet),\
+		cw_get_hdr_flag_k(packet)\
+		);
+*/
+
+static inline int cw_format_hdr_flags(char *dst,uint8_t *th)
+{
+	char * s = dst;
+	s+=sprintf(s,"%s", "(");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_t(th) ? "T":"");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_f(th) ? "F":"");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_l(th) ? "L":"");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_w(th) ? "W":"");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_m(th) ? "M":"");
+	s+=sprintf(s,"%s", cw_get_hdr_flag_k(th) ? "K":"");
+	s+=sprintf(s,"%s", ")");
+	return s-dst;
+
+}
+
 #endif

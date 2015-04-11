@@ -4,6 +4,7 @@
 #include "capwap.h"
 #include "log.h"
 #include "sock.h"
+#include "timer.h"
 
 int cw_send_request(struct conn *conn,int msg_id)
 {
@@ -18,6 +19,9 @@ int cw_send_request(struct conn *conn,int msg_id)
 	int i;
 	int rc=-1;
 	for (i=0; i<conn->max_retransmit && rc<0; i++){
+		if ( i>0 ){
+			cw_log(LOG_WARNING,"Retransmitting request ... %d",i);
+		}
 		time_t timer = cw_timer_start(conn->retransmit_interval);
 		while (!cw_timer_timeout(timer) && rc<0){
 	
@@ -36,8 +40,12 @@ int cw_send_request(struct conn *conn,int msg_id)
 
 	}
 
-	if ( rc <0 ) {
+	if ( rc <0 && errno != EAGAIN) {
 		cw_log(LOG_ERR,"Error reading from %s:%s",sock_addr2str(&conn->addr),strerror(errno));
+	}
+	if ( rc <0 && errno == EAGAIN) {
+		errno=ETIMEDOUT;
+		rc=-1;
 	}
 
 	return rc;

@@ -1,4 +1,5 @@
-#include "capwap.h"
+
+#include "strlist.h"
 
 const char * cw_strlist_get_str(struct cw_str *s,int id)
 {
