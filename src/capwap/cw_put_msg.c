@@ -26,6 +26,7 @@
 #include "conn.h"
 
 #include "log.h"
+#include "dbg.h"
 
 
 /**
@@ -66,21 +67,37 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	int len = 0;
 	while(NULL != (ae=avliter_next(&i))) {
 
-		printf("Put %d %d\n",ae->msg_id,ae->elem_id);
+		//printf("Put %d %d\n",ae->msg_id,ae->elem_id);
 
 		if (ae->msg_id != as.msg_id) {
 			/* Element is from next msg, close action */
 			break;
 		}
-
 		if (ae->out) {
-			len += ae->out(conn, ae, dst+len); 
+			int l=0;
+			l= ae->out(conn, ae, dst+len); 
+			len +=l;
+//			cw_dbg_elem_colored(DBG_ELEM, conn, ae->msg_id, ae->elem_id,
+//				 dst+len-l,l);
+
 		}
+		
+//cw_dbg_elem_colored(DBG_ELEM,"Adding element %d to msg %d, len = %d",ae->msg_id,ae->elem_id,l);
 
 	};
 
 
 	cw_set_msg_elems_len(msgptr, len);
+
+	if (as.msg_id) {
+		/* It's a request, so we have to set seqnum */
+		int s = conn_get_next_seqnum(conn);
+		cw_set_msg_seqnum(msgptr,s);	
+//		printf("Set seqnum to : %d\n",s);
+
+	}
+
+
 	return len;
 }
 

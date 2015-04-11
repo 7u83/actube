@@ -27,7 +27,7 @@ int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_
 	 	d += cw_put_version(d,1,i->data);
 	}
 	else {
-		cw_dbg(DBG_ELEM_ERR, "Can't send software version in AC descriptor, not set.");
+		cw_log(LOG_ERR, "Can't set Software Version in AC descriptor, No value defined.");
 	}
 
 	int len = d-dst-4;

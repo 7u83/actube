@@ -45,61 +45,12 @@
 
 
 
-/** 
- * @defgroup DebugOptions Dbug Options
- * @{
- */
-
-#define DBG_MSG				0x00000001	/* Parsed CAPWAP/LWAPP messages */
-
-#define DBG_ELEM			0x00000002	/* Parsed CAPWAP/LWAPP message elements */
-#define DBG_ELEM_DMP			0x00000004	/* Dump CAPWAP message elements */
-
-#define DBG_CW_INFO			0x00000008
-#define DBG_CW_RFC			0x00000010	/* RCF-realted CAPWAP errors */
-#define DBG_CW_STRICT			0x00000010
-#define DBG_CW_PKT_IN			0x00000020	/* Headers of incoming CAPWAP packets */
-#define DBG_CW_PKT_OUT			0x00000040	/* Headers of outgoing CAPWAP packets */
-#define DBG_CW_PKT_DMP			0x00000080	/* Dump packts */
-#define DBG_CW_PKT_DTL			0x00000100
-#define DBG_CW_PKT_ERR			0x00000200
-#define DBG_MSG_ERR			0x00000400	/* Errors in CAPWAP messages */
-#define DBG_CW_IMG_DTL			0x00000800	/* Detail about image transfer */
-#define DBG_ELEM_ERR			0x00001000
-
-/* driver specific debugs */
-#define DBG_DRV				0x00010000
-#define DBG_DRV_ERR			0x00020000
-
-/* DTLS debugs */
-#define DBG_DTLS			0x10000000
-#define DBG_DTLS_DETAIL			0x20000000
-#define DBG_DTLS_BIO			0x40000000
-#define DBG_DTLS_BIO_DMP		0x80000000
-
-#define DBG_ALL				0xffffffff
-#define DBG_CW_PKT_INOUT		(DBG_CW_PKT_IN | DBG_CW_PKT_OUT)
-
-
-#define DBG_DETAIL_LINE_NUMBERS		0x00000001
-#define DBG_DETAIL_ASC_DMP		0x00000002
-
-
-#define DBG_DETAIL_ALL			0xffffffff
-#define DBG_ERR				(DBG_MSG_ERR | DBG_CW_PKT_ERR)
-
-/**@}*/
 
 
 
-
-
-extern void cw_log_dbg_(int type, const char *file, int line, const char *fromat, ...);
-extern void cw_log_dbg_dmp_(int type, const char *file, int line, const uint8_t * data,
-			    int len, const char *format, ...);
-extern int cw_dbg_opt_detail;
-extern int cw_dbg_opt_level;
-
+//extern void cw_log_dbg_(int type, const char *file, int line, const char *fromat, ...);
+//extern void cw_log_dbg_dmp_(int type, const char *file, int line, const uint8_t * data,
+			    //int len, const char *format, ...);
 
 #define cw_dbg_is_level(level) (cw_dbg_opt_level & level)
 
@@ -111,28 +62,31 @@ extern int cw_dbg_opt_level;
 #define cw_log(...)
 #endif
 
-#ifdef WITH_CW_LOG_DEBUG
+//#ifdef WITH_CW_LOG_DEBUG
 
 
-#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
-#define cw_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
-#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
-#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
-#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
-#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand) cw_dbg_missing_mand_elems_(conn, msgtyoe, mand)
+//#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
 
-#define lw_dbg_elem(msgtype,msgelemtype,msgbuf,msglen) lw_dbg_elem_(msgtype,msgelemtype,msgbuf,msglen)
 
-#else
-#define cw_log_dbg(...)
-#define cw_dbg(...)
 
-#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
+//#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
+//#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
 
-#endif
+//#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
+//#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand) cw_dbg_missing_mand_elems_(conn, msgtyoe, mand)
+
+//#define lw_dbg_elem(msgtype,msgelemtype,msgbuf,msglen) lw_dbg_elem_(msgtype,msgelemtype,msgbuf,msglen)
+
+//#else
+//#define cw_log_dbg(...)
+//#define cw_dbg(...)
+
+//#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
+
+//#endif
 
 extern void (*cw_log_cb) (int level, const char *fromat, ...);
-extern void (*cw_vlog_cb) (int level, const char *fromat, va_list args);
+extern void (*cw_log_vcb) (int level, const char *fromat, va_list args);
 
 /* Syslog functins */
 extern void cw_log_syslog(int level, const char *format, ...);

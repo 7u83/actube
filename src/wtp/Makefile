@@ -20,7 +20,7 @@ ifndef ARCH
 endif
 
 
-CFLAGS += -Os -Wall -g
+CFLAGS += -O0 -Wall -g
 #CFLAGS += -Os -Wall 
 LDFLAGS += -L../../src/capwap/$(ARCH)
 
@@ -79,6 +79,8 @@ CFLAGS += -I../../src -I /usr/local/include
 
 
 OBJS += wtp_main.o
+OBJS += image_update.o
+
 
 #OBJS += wtp_conf.o
 

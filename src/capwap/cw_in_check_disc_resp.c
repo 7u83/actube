@@ -13,12 +13,12 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 	int n = cw_check_missing_mand(mlist, conn, a);
 	cw_dbg_missing_mand(DBG_ELEM, conn, mlist, n, a);
 
-	cw_dbg(DBG_CW_INFO,"This response came from: %s\n",sock_addr2str(&conn->addr));
+	//cw_dbg(DBG_INFO,"This response came from: %s",sock_addr2str(&conn->addr));
 
 
 	/* if mandatory elements are missing, ignore this response */
 	if (n) {
-		cw_dbg(DBG_CW_INFO,
+		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Response from %s - missing mandatory elements.",
 		       sock_addr2str(&conn->addr));
 		return -1;

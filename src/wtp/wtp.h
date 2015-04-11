@@ -8,6 +8,7 @@
 extern int sulking_state();
 extern int join();
 extern int discovery();
+extern int image_update();
 
 
 struct conn * get_conn();

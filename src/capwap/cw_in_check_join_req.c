@@ -9,8 +9,6 @@ int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 			 int len)
 {
 
-	printf("join req checker\n");
-
 	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */

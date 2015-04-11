@@ -71,6 +71,7 @@ static inline struct cw_item *cw_itemstore_get(cw_itemstore_t s, uint32_t id)
 
 
 extern cw_itemstore_t cw_itemstore_create();
+extern int cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void *ptr);
 extern int cw_itemstore_set_strn(cw_itemstore_t s, uint32_t id, const char *str, int n);
 extern int cw_itemstore_set_str(cw_itemstore_t s, uint32_t id, const char *str);
 extern int cw_itemstore_set_ptr(cw_itemstore_t s, uint32_t id, void *ptr);

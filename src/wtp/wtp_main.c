@@ -13,6 +13,8 @@
 #include "wtp.h"
 #include "wtp_conf.h"
 
+#include "capwap/dbg.h"
+
 
 
 /** The one and only connection object */
@@ -34,7 +36,9 @@ int main()
 
 	wtpconf_init();
 
-	cw_dbg_opt_detail = DBG_DETAIL_ASC_DMP;
+	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
+
+
 
 
 	dtls_init();
@@ -74,10 +78,14 @@ int main()
 	cw_itemstore_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
 	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
 
+	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_MAC_TYPE,0);
+	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
+
 
 
 	discovery();
 	join();
+	image_update();
 
 
 }

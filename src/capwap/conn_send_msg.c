@@ -1,7 +1,7 @@
 
 #include "conn.h"
 #include "capwap.h"
-#include "log.h"
+#include "dbg.h"
 #include "sock.h"
 
 
@@ -10,7 +10,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	int packetlen = cw_get_hdr_msg_total_len(rawmsg);
 
-	uint8_t * msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+	//uint8_t * msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
 
 	/* Zyxel doesn't count msg element length from
@@ -34,12 +34,13 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 		cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
 
+		//XXX
 		{
 			char h[200];
 			hdr_print(h,ptr,mtu);
-			cw_dbg(DBG_CW_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
+			cw_dbg(DBG_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 		}
-		cw_dbg_dmp(DBG_CW_PKT_DMP,ptr,mtu,"Sending packet ...");
+		cw_dbg_dmp(DBG_PKT_DMP,ptr,mtu,"Sending packet ...");
 		
 
 		if (conn->write(conn,ptr,mtu)<0)
@@ -86,12 +87,12 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 	}
 
 
-	cw_dbg_dmp(DBG_CW_PKT_DMP,ptr,packetlen,"Sending packet ...");
+	cw_dbg_dmp(DBG_PKT_DMP,ptr,packetlen,"Sending packet ...");
 	//return conn->write(conn,ptr,msglen-fragoffset*8+hlen);
 
 
 
-printf("Send packet len %p %d\n",ptr,packetlen);
+//printf("Send packet len %p %d\n",ptr,packetlen);
 
 	return conn->write(conn,ptr,packetlen);
 }

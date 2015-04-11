@@ -58,10 +58,8 @@ int hdr_print(char *str, uint8_t *packet, int len)
 
 
 	int hlen = cw_get_hdr_hlen(packet); //CWTH_GET_HLEN(packet);
-
 	int rid = cw_get_hdr_rid(packet);
 	int wbid = cw_get_hdr_wbid(packet);
-
 	s+=sprintf(s,"\tHLEN: %d, RID: %02X, WBID %02X",hlen,rid,wbid);	
 
 

@@ -15,6 +15,7 @@
 #include "wtpman.h"
 #include "conf.h"
 #include "capwap/log.h"
+#include "capwap/timer.h"
 
 
 #include "conf.h"
@@ -34,6 +35,8 @@
 #include "ac.h"
 
 #include "capwap/dtls.h"
+
+#include "capwap/dbg.h"
 
 
 extern struct cw_actiondef capwap_actions;
@@ -91,7 +94,7 @@ static void wtpman_remove(struct wtpman *wtpman)
 int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len)
 {
 	printf("Discovery END!!!\n");
-	conn->capwap_state=CW_STATE_NONE;
+	conn->capwap_state = CW_STATE_NONE;
 	return 0;
 
 }
@@ -173,7 +176,7 @@ static void wtpman_run_discovery(void *arg)
 
 	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr, &wtpman->wtpinfo);
-	cw_dbg(DBG_CW_INFO, "Discovery request gave us the follwing WTP Info:\n%s",
+	cw_dbg(DBG_INFO, "Discovery request gave us the follwing WTP Info:\n%s",
 	       wtpinfostr);
 
 
@@ -190,7 +193,7 @@ static void wtpman_run_discovery(void *arg)
 
 /*	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-	cw_dbg(DBG_CW_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
+	cw_dbg(DBG_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 */
 
 	cwsend_discovery_response(wtpman->conn, cwrmsg->seqnum, &radioinfo, acinfo,
@@ -223,8 +226,8 @@ static int wtpman_establish_dtls(void *arg)
 		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
 		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
-		cw_dbg(DBG_DTLS, "DTLS - Using key file %s", wtpman->conn->dtls_key_file);
-		cw_dbg(DBG_DTLS, "DTLS - Using cert file %s",
+		cw_dbg(DBG_DTLS, "Using key file %s", wtpman->conn->dtls_key_file);
+		cw_dbg(DBG_DTLS, "Using cert file %s",
 		       wtpman->conn->dtls_cert_file);
 		dtls_ok = 1;
 	}
@@ -258,12 +261,11 @@ static int wtpman_establish_dtls(void *arg)
 	FILE *f;
 	f = fopen("pcert.der", "wb");
 
-	printf("Calling peers cert\n");
 	cert = dtls_get_peers_cert(wtpman->conn, 0);
-	printf("Back from peers cert\n");
 
-	printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
-	fwrite(cert.data, 1, cert.size, f);
+//	printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
+//	fwrite(cert.data, 1, cert.size, f);
+	fclose(f);
 
 
 	return 1;
@@ -284,6 +286,11 @@ static int wtpman_join(void *arg, time_t timer)
 
 	wtpman->conn->outgoing = ac_config;
 	wtpman->conn->incomming = cw_itemstore_create();
+	wtpman->conn->local = cw_itemstore_create();
+
+	struct conn * conn = wtpman->conn;
+
+	cw_dbg(DBG_INFO,"Join State - %s",sock_addr2str(&conn->addr));
 
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
 		int rc = cw_read_messages(wtpman->conn);
@@ -292,13 +299,13 @@ static int wtpman_join(void *arg, time_t timer)
 		}
 	}
 
-	if (wtpman->conn->capwap_state==CW_STATE_JOIN){
+	if (wtpman->conn->capwap_state == CW_STATE_JOIN) {
 		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
 		       sock_addr2str(&wtpman->conn->addr), wtpman->conn->wait_dtls);
 
 		return 0;
 	}
-	
+
 
 	return 1;
 
@@ -384,278 +391,74 @@ static void wtpman_run(void *arg)
 	   State is Image update 
 	 */
 
-	
-	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
-		int rc = cw_read_messages(wtpman->conn);
+	int rc = 0;
+	while (!cw_timer_timeout(timer)
+	       && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
+		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
-			break;
+			if (errno != EAGAIN)
+				break;
 		}
 	}
 
+	if (!rc) {
+		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
 
+	}
 
+	struct conn *conn = wtpman->conn;
 
-
-
-	exit(0);
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-	do {
-		int cfg_status_msgs[] =
-		    { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CONFIGURATION_STATUS_REQUEST,
-	-1 };
-		cwrmsg = conn_wait_for_request(wtpman->conn, cfg_status_msgs, timer);
-
-		if (!cwrmsg) {
-			cw_dbg(DBG_MSG_ERR,
-			       "No conf status or img data request from %s after %d seconds, WTP died.",
-			       sock_addr2str(&wtpman->conn->addr),
-			       wtpman->conn->wait_join);
-			wtpman_remove(wtpman);
+	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
+		/* Image upload */
+		const char *filename =
+		    cw_itemstore_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME);
+		if (!filename) {
+			cw_log(LOG_ERR,
+			       "Can't send image to %s. No Image Filename Item found.",
+			       sock_addr2str(&conn->addr));
+			return;
+		}
+		cw_dbg(DBG_INFO, "Sending image file '%s' to '%s'.", filename,
+		       sock_addr2str(&conn->addr));
+		FILE *infile = fopen(filename, "rb");
+		if (infile == NULL) {
+			cw_log(LOG_ERR, "Can't open image %s: %s",
+			       sock_addr2str(&conn->addr), strerror(errno));
 			return;
 		}
 
-		// Image data request, the WTP wants an update 
-		if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
-			int rc = wtpman_send_image_file(wtpman, cwrmsg);
-			if (rc) {
-				wtpman_remove(wtpman);
-				return;
-			}
+		cw_itemstore_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
+					   infile);
 
+
+		clock_t clk = cw_clock_start();
+		int rc=0;
+	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && !feof(infile) && rc==0) {
+			rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
 		}
 
-	} while (cwrmsg->type != CW_MSG_CONFIGURATION_STATUS_REQUEST);
 
-
-
-	printf("Have Masseg %d\n", cwrmsg->type);
-	cwread_configuration_status_request(&wtpman->wtpinfo, cwrmsg->msgelems,
-					    cwrmsg->msgelems_len);
-	int result_code = 0;
-	struct ac_info *acinfo = get_acinfo();
-	struct radioinfo rinf;
-	cwsend_conf_status_response(wtpman->conn, cwrmsg->seqnum, result_code, &rinf,
-				    acinfo, &wtpman->wtpinfo);
-	printf("Send the respi but sleep\n");
-
-
-	printf("Next thoing\n");
-	int change_status_msgs[] =
-	    { CW_MSG_IMAGE_DATA_REQUEST, CW_MSG_CHANGE_STATE_EVENT_REQUEST, -1 };
-	cwrmsg = conn_wait_for_request(wtpman->conn, change_status_msgs, timer);
-	printf("Done\n");
-
-	if (!cwrmsg) {
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-
-	switch (cwrmsg->type) {
-		case CW_MSG_CHANGE_STATE_EVENT_REQUEST:
-			{
-				printf("Change state event\n!");
-				struct radioinfo ri;
-				cwsend_change_state_event_response(wtpman->conn,
-								   cwrmsg->seqnum, &ri);
-			}
-			break;
-		case CW_MSG_IMAGE_DATA_REQUEST:
-			printf("Image update\n!");
-			//cwread_image_data_request(0,cwrmsg->msgelems,cwrmsg->msgelems_len);
-
-
-			//cwsend_image_data_response(wtpman->conn,cwrmsg->seqnum,CW_RESULT_SUCCESS);
-
-			//send_image_file(wtpman->conn,"/tftpboot/c1130-k9w7-tar.default");
-
-			//              send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w7-tar.123-8.JEA3.tar");
-//                      send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-k9w8-tar.124-25e.JAP.tar");
-			//              send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAP.tar");
-
-			break;
-	}
-
-
-
-	printf("WTP is joined now\n");
-*/
-
-/*
-	struct radioinfo * radioinfo;
-
-
-	
-	cwrmsg = wtpman_wait_for_message(wtpman,timer);
-	if (!cwrmsg){
-		cw_dbg(DBG_CW_MSG_ERR,"No config or update request from %s after %d seconds, WTP died.",
-			sock_addr2str(&wtpman->conn->addr),wtpman->conn->wait_join);
-			wtpman_remove(wtpman);
-		return;
-	}	
-
-	printf("CWR TYPE %d\n",cwrmsg->type);
-	exit(0);
-
-*/
-
-//      cwread_configuration_status_request(&wtpman->wtpinfo,cwrmsg->msgelems, cwrmsg->msgelems_len);
-//      cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
-
-/*
-	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr, &wtpman->wtpinfo);
-	cw_dbg(DBG_ALL, "WTP conf_status\n%s", wtpinfostr);
-
-	printf("Run run run run run\n");
-	wtpman_run_run(wtpman);
-	exit(0);
-*/
-
-/*
-int ii;
-for (ii=0; ii<3; ii++){
-	cwrmsg = wtpman_wait_for_message(wtpman,timer);
-	if (cwrmsg){
-		if (cwrmsg->type == CWMSG_CHANGE_STATE_EVENT_REQUEST){
-			cwread_change_state_event_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-			cwsend_change_state_event_response(wtpman->conn,cwrmsg->seqnum,wtpman->wtpinfo.radioinfo);
-
+		if (rc) {
+			cw_log(LOG_ERR,"Image download RC: %s",cw_strrc(rc));
 		}
-	}
-}
-*/
-
-/*
-	wtpman_run_run(wtpman);
-
-	exit(0);
-
-
-	if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
-		cwread_image_data_request(0, cwrmsg->msgelems, cwrmsg->msgelems_len);
-		cwsend_image_data_response(wtpman->conn, cwrmsg->seqnum,
-					   CW_RESULT_FAILURE);
-	}
-
-*/
-
-
-
-
-/*		
-	printf("Sending image file\n");
-	send_image_file(wtpman->conn,"/home/tube/Downloads/c1130-rcvk9w8-tar.124-25e.JAO5.tar");
-	printf("Back from sending image file\n");
-*/
-	exit(0);
-
-
-/*
-	timer = cw_timer_start(30);
-	cwrmsg = wtpman_wait_for_message(wtpman, timer);
-
-	if (cwrmsg)
-		printf("I have got a message of type %d\n", cwrmsg->type);
-
-	if (cwrmsg->type == CW_MSG_IMAGE_DATA_REQUEST) {
-		cwread_image_data_request(0, cwrmsg->msgelems, cwrmsg->msgelems_len);
-		cwsend_image_data_response(wtpman->conn, cwrmsg->seqnum,
-					   CW_RESULT_FAILURE);
-	}
-
-
-*/
-
-
-
-
-//      char wtpinfostr[8192];
-//      wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-//      cw_log_debug0("WTP joined\n%s",wtpinfostr);
-
-//exit(0);
-/*
-	int msg_counter = 0;
-	while (1) {
-		struct cwrmsg *cwrmsg = conn_get_message(wtpman->conn);
-
-
-
-
-
-
-		if (!cwrmsg) {
-			msg_counter++;
-			if (msg_counter < CAPWAP_ECHO_INTERVAL * 2)
-				continue;
-
-			//      cw_log_debug0("WTP died");
-			wtpman_remove(wtpman);
-			return;
+		else {
+			cw_dbg(DBG_INFO,"Image '%s' sucessful sent to %s in %0.1f seconds.",
+				filename,sock_addr2str(&conn->addr),cw_clock_stop(clk));
+			conn->capwap_state=CW_STATE_NONE;
 		}
-
-*/
-/*
-if (cwrmsg->type == CWMSG_CONFIGURATION_STATUS_REQUEST){
-	process_conf_status_request(&wtpman->wtpinfo,cwrmsg->msgelems,cwrmsg->msgelems_len);
-{
-	char wtpinfostr[8192];
-	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
-	cw_dbg(DBG_CW_INFO,"Join request gave us the follwing WTP Info:\n%s",wtpinfostr);
-
-	cwsend_conf_status_response(wtpman->conn,cwrmsg->seqnum,result_code,&radioinfo,acinfo,&wtpman->wtpinfo);
-}
-
-
-}
-*/
-
-/*
-		msg_counter = 0;
-
-
-		if (cwrmsg->type == CW_MSG_ECHO_REQUEST) {
-			cwsend_echo_response(wtpman->conn, cwrmsg->seqnum,
-					     wtpman->wtpinfo.radioinfo);
-		}
-*/
-
-//              printf("Got msg: %i\n",cwrmsg->type);
-
-}
+			
+		fclose(infile);
 
 
 
-
-//      process_discovery(wtpman,cwrmsg);
-	
-
-/*
-	while (1) {
-		uint8_t *packet = conn_q_get_packet(wtpman->conn);
-//              int len = *( (uint32_t*)(packet));
-
-
-//              conn_process_packet(wtpman->conn,packet+4,len);
-		free(packet);
 	}
-*/
 
+
+
+
+
+	return;
+}
 
 
 void wtpman_destroy(struct wtpman *wtpman)
@@ -754,11 +557,11 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
 	if (dtlsmode) {
-		cw_dbg(DBG_CW_INFO, "Starting wtpman in DTLS mode");
+		cw_dbg(DBG_INFO, "Starting wtpman in DTLS mode");
 		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run,
 			       (void *) wtpman);
 	} else {
-		cw_dbg(DBG_CW_INFO, "Starting wtpman in non-dtls mode");
+		cw_dbg(DBG_INFO, "Starting wtpman in non-dtls mode");
 		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run_discovery,
 			       (void *) wtpman);
 	}

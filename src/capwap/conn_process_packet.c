@@ -173,7 +173,8 @@ static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 			       "Message type %d (%s) unexpected/illigal in %s State, discarding.",
 			       as.msg_id, cw_strmsg(as.msg_id),
 			       cw_strstate(conn->capwap_state));
-			return 0;
+			errno=EAGAIN;
+			return -1;
 		}
 
 		/* Request message not found in current state, check if we know 
@@ -339,37 +340,41 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 
 
-//int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
-//			int (*cb) (void *, uint8_t *, int), void *cbarg)
 
 int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 {
 
+	/* log this packet */
+	cw_dbg_pkt(DBG_PKT_IN,conn, packet, len);
+
 	if (len < 8) {
 		/* packet too short */
-		cw_dbg(DBG_CW_PKT_ERR,
+		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, packet too short, len=%d",
 		       sock_addr2str(&conn->addr), len);
-		return 0;
+		errno = EAGAIN;
+		return -1;
 	}
 
 	int preamble = cw_get_hdr_preamble(packet);
 
 	if ((preamble & 0xf0) != CW_VERSION) {
 		/* wrong version */
-		cw_dbg(DBG_CW_PKT_ERR,
+		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong version, version=%d",
 		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 8);
-		return 0;
+		errno=EAGAIN;
+		return -1;
 	}
 
 	if (preamble & 0xf) {
-		/* decode dtls */
-		return 0;
+		/* dtls encoded, this shuold never happen here */
+		cw_dbg(DBG_PKT_ERR,
+			"Discarding packet from %s, encrypted data, after encryption ...",
+			sock_addr2str(&conn->addr));
+		errno = EAGAIN;
+		return -1;
 	}
-
-	/* log this packet */
-	cw_dbg_packet(conn, packet, len);
 
 
 	int offs = cw_get_hdr_msg_offset(packet);
@@ -377,27 +382,19 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 
 	int payloadlen = len - offs;
 	if (payloadlen < 0) {
-		cw_dbg(DBG_CW_PKT_ERR,
+		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, header length greater than len, hlen=%d",
 		       sock_addr2str(&conn->addr), offs);
 		/* EINVAL */
 		return 0;
 	}
 
-/*
-	struct cwrmsg cwrmsg;
-	cwrmsg.wbid=(val>>9) & 0x1f;
-	cwrmsg.rid=(val>>14) & 0x1f;
-*/
-
-//printf ("Offs is %d RML is %d\n",offs,cw_get_hdr_rmac_len(packet));
-
 	/* Check Radio MAC if preset */
 	if (cw_get_hdr_flag_m(packet)) {
 
 		if (cw_get_hdr_rmac_len(packet) + 8 > offs) {
 			/* wrong rmac size */
-			cw_dbg(DBG_CW_PKT_ERR,
+			cw_dbg(DBG_PKT_ERR,
 			       "Discarding packet, wrong R-MAC size, size=%d",
 			       *(packet + 8));
 			return 0;
@@ -415,7 +412,7 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 		if (f == NULL)
 			return 0;
 
-		cw_dbg_packet(conn, f + 4, *(uint32_t *) f);
+//		cw_dbg_packet(conn, f + 4, *(uint32_t *) f);
 
 
 		//      extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
@@ -445,6 +442,9 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 	//}
 
 //msg_4*((val >> 19) & 0x1f);
+
+	cw_dbg_msg(DBG_MSG_IN,conn,packet,len);
+
 	return process_message(conn, packet, len, NULL,NULL);
 }
 
@@ -462,7 +462,7 @@ int cw_read_messages(struct conn *conn)
 		return n;
 
 	if (n > 0) {
-		printf("Have a packet with %d bytes\n",n);
+//		printf("Have a packet with %d bytes\n",n);
 		return conn_process_packet(conn, buf, n);
 	}
 	//printf("DTLS_ERROR: %d\n",conn->dtls_error);

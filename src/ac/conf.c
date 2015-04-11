@@ -27,6 +27,7 @@
 #include "conf.h"
 
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 #include "capwap/cw_util.h"
 
 uint8_t conf_macaddress[12];
@@ -537,12 +538,13 @@ static int conf_read_strings( cfg_t * cfg, char * name, char ***dst,int *len)
 }
 
 
+/*
 struct conf_dbg_level_names{
 	const char *name;
 	int level;
 };
 
-
+*/
 
 
 static int conf_read_dbg_level(cfg_t *cfg)
@@ -555,7 +557,7 @@ static int conf_read_dbg_level(cfg_t *cfg)
 	for (i=0; i<n; i++) {
 		char * str = cfg_getnstr(cfg,name,i);
 //int u = cw_log_str2dbglevel(str);
-		cw_dbg_opt_level|=cw_log_str2dbglevel(str);
+		cw_dbg_opt_level|= cw_strlist_get_id(cw_dbg_strings,str); //cw_log_str2dbglevel(str);
 
 	}
 	return 1;

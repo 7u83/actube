@@ -10,6 +10,7 @@
 
 #include "capwap/dtls.h"
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 #include "capwap/sock.h"
 #include "capwap/dtls.h"
 #include "capwap/aciplist.h"
@@ -214,92 +215,3 @@ int join()
 
 }
 
-/*
-int join(struct sockaddr *sa)
-{
-	int sockfd;
-	int rc;
-
-//	sockfd = socket(AF_INET,SOCK_DGRAM,0);
-
-	sockfd = get_sock();
-	if (sockfd==-1){
-		cw_log(LOG_ERR,"Can't create socket: %s\n",strerror(errno));
-		return -1;
-	}
-
-	sock_set_recvtimeout(sockfd,1);
-
-	rc = connect(sockfd,(struct sockaddr*)sa,sock_addrlen((struct sockaddr*)sa));
-	if (rc<0){
-		char str[100];
-		sock_addrtostr(sa,str,100);
-		cw_log(LOG_ERR,"Can't connect to %s: %s\n",str,strerror(errno));
-		close(sockfd);
-		return -1;
-	}
-
-	struct conn * conn = get_conn();
-
-conn->capwap_mode = CWMODE_CISCO;
-conn->seqnum=-1;
-
-
-	conn->sock=sockfd;
-	sock_copyaddr(&conn->addr,sa);
-
-	
-#ifdef WITH_DTLS
-	cw_dbg (DBG_DTLS,"Establishing DTLS session with %s",sock_addr2str(sa)); 
-
-
-
-	if (conf_dtls_psk){
-		conn->dtls_psk=conf_dtls_psk;
-		conn->dtls_psk_len=strlen(conn->dtls_psk);
-		conn->dtls_cipher=conf_dtls_cipher;
-	}
-
-	if (conf_sslkeyfilename && conf_sslcertfilename){
-
-		conn->dtls_key_file = conf_sslkeyfilename;
-		conn->dtls_cert_file = conf_sslcertfilename;
-		conn->dtls_key_pass = conf_sslkeypass;
-		conn->dtls_cipher=conf_dtls_cipher;
-	
-	}
-
-
-
-	rc = dtls_connect(conn);
-	if (rc!=1){
-		dtls_shutdown(conn);
-		char str[100];
-		sock_addrtostr(sa,str,100);
-		cw_log(LOG_ERR,"Can't establish DTLS connection to %s",str);
-		close(sockfd);
-		return 0;
-	}
-
-
-#endif	
-	cw_dbg (DBG_DTLS,"DTLS session established with %s, cipher=%s",sock_addr2str(sa),dtls_get_cipher(conn)); 
-
-
-	#ifdef WITH_CW_LOG_DEBUG
-	{
-		char str[100];
-		sock_addrtostr(sa,str,100);
-//		cw_log_debug0("DTLS connection to %s established",str);
-	}
-	#endif
-
-	join_state(conn);
-
-printf("Joined with conn %p\n",conn);
-
-	return 1;
-}
-
-
-*/

@@ -5,6 +5,7 @@ struct cw_str capwap_strings_state[] = {
 { CW_STATE_JOIN,"Join" },
 { CW_STATE_RUN,"Run" },
 { CW_STATE_CONFIGURE,"Configure" },
-{ CW_STR_STOP,"Undefined" }
+{ CW_STATE_IMAGE_DATA,"Image Data" },
+{ CW_STR_STOP,"Undefined" },
 };
 

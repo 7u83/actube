@@ -34,10 +34,7 @@
 
 #include "cw_util.h"
 
-
-int cw_dbg_opt_detail = 0;
-int cw_dbg_opt_level = 0;
-
+#include "dbg.h"
 
 
 int cw_log_debug_level = 0;
@@ -56,7 +53,7 @@ void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 	vsprintf(buf, format, args);
 	va_end(args);
 
-	if (cw_dbg_opt_detail & DBG_DETAIL_LINE_NUMBERS)
+	if (cw_dbg_opt_display & DBG_DISP_LINE_NUMBERS)
 		cw_log(LOG_DEBUG, "%s:%d: %s", file, line, buf);
 	else
 		cw_log(LOG_DEBUG, buf);

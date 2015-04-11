@@ -40,10 +40,11 @@ int cw_foreach_msgelem(uint8_t * msgelems, int len,
 		elen = val & 0xffff;
 		if (i + elen + 4 > len) {
 
+/*
 printf("***************************************************************************\n");
 printf("Type: %d\n",type);
 printf("Bumm %d %d\n",i+elen+4,len);
-
+*/
 			return 0;
 		}
 

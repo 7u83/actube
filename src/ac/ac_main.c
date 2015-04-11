@@ -29,6 +29,7 @@
 #include "wtplist.h"
 #include "capwap/dtls.h"
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 #include "conf.h"
 #include "capwap/sock.h"
 
@@ -137,7 +138,7 @@ int main (int argc, const char * argv[])
 	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 
-	cw_dbg_opt_detail=DBG_DETAIL_ASC_DMP;
+	cw_dbg_opt_display=DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
 	cw_register_actions_cipwap_ac(&capwap_actions);
 
@@ -305,7 +306,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 	char hdrstr[1024];
 	hdr_print(hdrstr,buffer,len);
-	cw_dbg(DBG_CW_PKT_IN,"Header for packet from %s\n%s",sock_addr2str(addr),hdrstr);
+//	cw_dbg(DBG_CW_PKT_IN,"Header for packet from %s\n%s",sock_addr2str(addr),hdrstr);
 	
 
 
@@ -317,7 +318,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 #else
 	if (preamble != CAPWAP_PACKET_PREAMBLE ){
 #endif
-		cw_dbg(DBG_CW_PKT_ERR,"Discarding packet, wrong preamble, preamble = 0x%01X",preamble);
+		cw_dbg(DBG_PKT_ERR,"Discarding packet, wrong preamble, preamble = 0x%01X",preamble);
 		return;
 	}
 
@@ -428,10 +429,10 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 #ifdef WITH_CW_LOG_DEBUG
 	char str[100];
 	sock_addrtostr(addr,str,100);
-	cw_dbg(DBG_CW_PKT_IN,"Received packet from %s, len = %i, via %s\n",sock_addr2str(addr),len,
-			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
+//	cw_dbg(DBG_PKT_IN,"Received packet from %s, len = %i, via %s\n",sock_addr2str(addr),len,
+//			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
 
-	cw_dbg_dmp(DBG_CW_PKT_DMP,buffer,len,"Dump ...");
+//	cw_dbg_dmp(DBG_CW_PKT_DMP,buffer,len,"Dump ...");
 //	cw_dbg_dmp(buffer,len,"Packet data for packet, recevied from %s",str);
 #endif	
 

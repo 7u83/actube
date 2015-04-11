@@ -68,6 +68,26 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_RESULT_CODE, 1}
 	,
 
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message Image Data Response */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_RESPONSE, 0,
+	 0, cw_in_check_img_data_resp }
+	,
+
+	/* Element: Result Code */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_RESPONSE,
+	 CW_ACTION_IN_RESULT_CODE, 1}
+
+	,
+
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message Image Data Request */
+	{0, 0, CW_STATE_IMAGE_DATA, CW_MSG_IMAGE_DATA_REQUEST, 0,
+	 0, cw_in_check_img_data_req_wtp }
+	,
+
 		
 
 
@@ -113,20 +133,59 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 	/* WTP Board Data */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_BOARD_DATA, 0,
-	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing}
+	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing,1}
 	,
 
-
+	/* WTP Descriptor */
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_DESCRIPTOR, 0, 
+	 CW_ELEM_WTP_DESCRIPTOR, NULL,cw_out_wtp_descriptor, NULL,1}
+	,
+	
 	/* WTP Name */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_NAME, 0,
 	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_local,1}
 	,
 
+	/* WTP MAC Type */
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_MAC_TYPE, 0,
+	 CW_ELEM_WTP_MAC_TYPE, NULL,cw_out_generic, cw_out_get_local,1}
+	,
+
+	/* WTP MAC Type */
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0,
+	 CW_ELEM_WTP_FRAME_TUNNEL_MODE, NULL,cw_out_generic, cw_out_get_local,1}
+	,
 
 	/* Session ID */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_SESSION_ID, 0,
 	 CW_ELEM_SESSION_ID, NULL,cw_out_generic, cw_out_get_session_id,1}
 	,
+
+
+	/* -------------------------------------------------------------------------------
+	 * Image Data Request OUT
+	 */
+
+	{CW_MSG_IMAGE_DATA_REQUEST, CW_ITEM_NONE}
+	,
+	/* Image Identifier */
+	{CW_MSG_IMAGE_DATA_REQUEST, CW_ITEM_IMAGE_IDENTIFIER, 0,
+	 CW_ELEM_IMAGE_IDENTIFIER, NULL,cw_out_generic, cw_out_get_outgoing,0}
+	,
+
+
+	/* -------------------------------------------------------------------------------
+	 * Image Data Response OUT
+	 */
+	{CW_MSG_IMAGE_DATA_RESPONSE, CW_ITEM_NONE}
+	,
+
+	/* Result Code */
+	{CW_MSG_IMAGE_DATA_RESPONSE, CW_ITEM_RESULT_CODE, 0,
+	 CW_ELEM_RESULT_CODE, NULL,cw_out_generic, cw_out_get_outgoing, 1}
+	,
+
+
 
 	{0, 0}
 
@@ -151,7 +210,6 @@ int cw_register_actions_capwap_wtp(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 
-	printf("Registered %d strings\n", rc);
 
 	return 1;
 }

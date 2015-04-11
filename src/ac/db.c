@@ -2,6 +2,7 @@
 #include <sqlite3.h>
 
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 
 #include "conf.h"
 
@@ -18,7 +19,7 @@ int db_init()
 {
 	const char * filename="ac.sqlite3";
 	
-	cw_dbg(DBG_CW_INFO,"Init sqlite3 db: %s",filename);
+	cw_dbg(DBG_INFO,"Init sqlite3 db: %s",filename);
 	int rc = sqlite3_open(filename,&handle);
 	if (rc)
 	{
@@ -46,7 +47,7 @@ static sqlite3_stmt * ping_stmt;
 
 int db_start()
 {
-	cw_dbg(DBG_CW_INFO,"Start sqlite3 db");
+	cw_dbg(DBG_INFO,"Start sqlite3 db");
 
 	sqlite3_stmt *stmt;
 	int rc = sqlite3_prepare_v2(handle, "INSERT INTO acs (acid,acname) VALUES (?,?);",-1,&stmt,0);

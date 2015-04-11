@@ -23,9 +23,13 @@
 
 
 #include "dtls_openssl.h"
+#include "capwap.h"
 
+#include "dbg.h"
 #include "log.h"
+
 #include "cw_util.h"
+#include "rand.h"
 
 #include "conn.h"
 #include "sock.h"
@@ -120,7 +124,7 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 int dtls_openssl_init()
 {
 	const char * version = SSLeay_version(SSLEAY_VERSION);
-	cw_dbg(DBG_CW_INFO,"Init SSL library - %s",version);
+	cw_dbg(DBG_INFO,"Init SSL library - %s",version);
 	SSL_load_error_strings();
 	int rc = SSL_library_init();
 	return rc;

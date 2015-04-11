@@ -23,7 +23,7 @@
 #include "wtpinfo.h"
 
 #include "cw_util.h"
-#include "log.h"
+#include "dbg.h"
 
 
 
@@ -43,7 +43,7 @@ static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a, ui
 	int i;
 	if (ncrypt == 0 ){
 		/* non-conform */
-		cw_dbg(DBG_CW_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
+		cw_dbg(DBG_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
 		if (!cq) 
 			i=3;
 		else
@@ -102,7 +102,7 @@ int cw_in_wtp_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data
 {
 	int rc =readelem_wtp_descriptor(conn, a,data,len,0);
 	if (rc==-1){
-		cw_dbg(DBG_CW_RFC,"Bad WTP descriptor, trying cisco hack");
+		cw_dbg(DBG_RFC,"Bad WTP descriptor, trying cisco hack");
 		rc =readelem_wtp_descriptor(conn, a,data,len,1);
 	}
 

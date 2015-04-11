@@ -16,6 +16,7 @@
 #include "wtp_conf.h"
 
 #include "capwap/log.h"
+#include "capwap/dbg.h"
 
 #include "capwap/bstr.h"
 
@@ -59,8 +60,9 @@ static void read_dbg_options(struct uci_context *ctx, struct uci_section *sectio
 {
 
         int i;
-        for (i=0; cw_dbg_cfgstrs[i].name; i++) {
-		set_dbg_opt(ctx,section,cw_dbg_cfgstrs[i].level,cw_dbg_cfgstrs[i].name);
+        for (i=0; cw_dbg_strings[i].id!=CW_STR_STOP; i++) {
+
+		set_dbg_opt(ctx,section,cw_dbg_strings[i].id,cw_dbg_strings[i].str);
 
         }
 }
@@ -96,13 +98,13 @@ int read_config(const char * filename){
 	if (filename == NULL){
 		filename = "wtp_uci.conf";
 	}
-	cw_dbg(DBG_ALL,"Reading config file %s",filename);
+	cw_dbg(DBG_INFO,"Reading config file %s",filename);
 
 
 	int rc = uci_load(ctx, filename, &pkg );
 
 	if (rc == UCI_ERR_NOTFOUND){
-		cw_dbg(DBG_CW_INFO,"Config file '%s' not found, running without config",filename);
+		cw_log(LOG_INFO,"Config file '%s' not found, running without config",filename);
 		return 1;
 	}
 	
@@ -126,7 +128,7 @@ int read_config(const char * filename){
 
 	section = get_anon_section(pkg,"wtp");
 	if (!section) {
-		cw_dbg(DBG_CW_INFO,"No 'wtp' section found, running without config");
+		cw_dbg(DBG_INFO,"No 'wtp' section found, running without config");
 		return 1;
 	}
 

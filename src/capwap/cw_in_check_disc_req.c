@@ -20,7 +20,7 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 
 	/* if mandatory elements are missing send no discovery response */
 	if (n) {
-		cw_dbg(DBG_CW_INFO,
+		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Request from %s - missing mandatory elements.",
 		       sock_addr2str(&conn->addr));
 		return -1;

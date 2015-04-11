@@ -53,9 +53,10 @@ enum capwap_items {
 
 	/* Other Items */
 	CW_ITEM_AC_IMAGE_DIR,		/* Path where WTP images are stored */
-	CW_ITEM_WTP_IMAGE_FILENAME,	/* Full path of image filename */
+	CW_ITEM_IMAGE_FILENAME,	/* Full path of image filename */
 	CW_ITEM_DISCOVERIES,
-	CW_ITEM_AC_PRIO_LIST		/* AC Name with Priority list */
+	CW_ITEM_AC_PRIO_LIST,		/* AC Name with Priority list */
+	CW_ITEM_IMAGE_FILEHANDLE	/* FILE handle for uploading and downloading images  */
 
 };
 

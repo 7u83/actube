@@ -38,7 +38,7 @@
  * Send an image file to an AP
  * 
  */ 
-void cw_send_image_file(struct conn *conn, FILE *infile)
+void cw_send_image_file(struct conn *conn)
 {
 
 /*
@@ -53,8 +53,14 @@ void cw_send_image_file(struct conn *conn, FILE *infile)
 	cw_log(LOG_INFO, "Sending image file %s to %s", filename, sock_addr2str(&conn->addr));
 */
 
-	struct cwrmsg *cwrmsg;
+	
+
+	
+
+
 	uint8_t buffer[1024];	/* buffer MUST be 1024 */
+
+
 	struct cwimage_data data;
 	memset(&data,0,sizeof(struct cwimage_data));
 	data.data = buffer;
@@ -82,8 +88,8 @@ void cw_send_image_file(struct conn *conn, FILE *infile)
 
 		bl++;
 
-		conn_prepare_image_data_request(conn, &data, 0);
-		cwrmsg = conn_send_request(conn);
+	//	conn_prepare_image_data_request(conn, &data, 0);
+	//	cwrmsg = conn_send_request(conn);
 
 		if (!cwrmsg) {
 			cw_log(LOG_ERR,"Error sneding image file to %s",sock_addr2str(&conn->addr));

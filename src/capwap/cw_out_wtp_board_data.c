@@ -64,7 +64,7 @@ int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * 
 		d += cw_put_data(d, bstr_data(i->data), bstr_len(i->data));
 	}
 
-	int l = d - dst;
-	return l + cw_put_elem_hdr(dst, CW_ELEM_WTP_BOARD_DATA, l - 4);
+	int l = d - dst-4;
+	return l + cw_put_elem_hdr(dst, CW_ELEM_WTP_BOARD_DATA, l );
 
 }

@@ -127,11 +127,24 @@ cw_action_in_t capwap_actions_ac_in[] = {
 
 	/* Message: Image Data Request - in Config State */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_REQUEST, 0,
-	 0, cw_in_check_img_data_req}
+	 0, cw_in_check_img_data_req_ac}
 	,
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_REQUEST,
 	 CW_ACTION_IN_IMAGE_IDENTIFIER,
 	 0}
+	,
+
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message Image Data Response IN */
+	{0, 0, CW_STATE_IMAGE_DATA, CW_MSG_IMAGE_DATA_RESPONSE, 0,
+	 0, cw_in_check_img_data_resp }
+	,
+
+	/* Element: Result Code */
+	{0, 0, CW_STATE_IMAGE_DATA, CW_MSG_IMAGE_DATA_RESPONSE,
+	 CW_ACTION_IN_RESULT_CODE, 1}
+
 	,
 
 
@@ -198,6 +211,21 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	,
 
 
+	/* -------------------------------------------------------------------------------
+	 * Image Data Request OUT
+	 */
+
+	{CW_MSG_IMAGE_DATA_REQUEST, CW_ITEM_NONE}
+	,
+	/* Image Data */
+	{CW_MSG_IMAGE_DATA_REQUEST, CW_ITEM_IMAGE_FILEHANDLE, 0,
+	 CW_ELEM_IMAGE_DATA, NULL,cw_out_image_data, cw_out_get_outgoing,0}
+	,
+
+
+
+
+
 
 	/* End of list */
 	{0, 0}
@@ -224,7 +252,6 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 
-	printf("Registered %d strings\n", rc);
 
 	return 1;
 }

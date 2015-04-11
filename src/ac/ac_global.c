@@ -68,14 +68,11 @@ cw_aciplist_t get_aciplist()
 
 void * get_iplist(void * arg)
 {
-	printf("************************************************************************************\n");
-	printf("The ist an iplist getter\n");
 	return get_aciplist();
 }
 
 void release_iplist(void *arg,void *data)
 {
-	printf("And an releaser\n");
 }
 
 int ac_global_init()

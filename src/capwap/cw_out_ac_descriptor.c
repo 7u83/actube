@@ -36,12 +36,11 @@ int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 
 
 	i = cw_itemstore_get(conn->outgoing,CW_ITEM_AC_HARDWARE_VERSION);
-
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_AC_HARDWARE_VERSION,i->data);
 	}
 	else {
-		cw_dbg(DBG_ELEM_ERR, "Can't send hard version in AC descriptor, not set.");
+		cw_log(LOG_ERR, "Can't send hard version in AC descriptor, not set.");
 	}
 
 	
@@ -51,7 +50,7 @@ int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,i->data);
 	}
 	else {
-		cw_dbg(DBG_ELEM_ERR, "Can't send software version in AC descriptor, not set.");
+		cw_log(LOG_ERR, "Can't send software version in AC descriptor, not set.");
 	}
 
 	int len = d-dst-4;

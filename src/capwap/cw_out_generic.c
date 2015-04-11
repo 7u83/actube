@@ -4,6 +4,7 @@
 #include "capwap.h"
 #include "capwap_items.h"
 
+#include "dbg.h"
 #include "log.h"
 
 
@@ -19,8 +20,17 @@ int cw_put_item(uint8_t * dst, struct cw_item *item)
 		case CW_ITEMTYPE_DWORD:
 			return cw_put_dword(dst, item->dword);
 		case CW_ITEMTYPE_BSTR:
-			return cw_put_bstr(dst,item->data);
-			
+			return cw_put_bstr(dst, item->data);
+		case CW_ITEMTYPE_VENDORSTR:
+		{
+			int l=0;
+			l+=cw_put_dword(dst, vendorstr_get_vendor_id(item->data));
+			l+=cw_put_data(dst+4, vendorstr_data(item->data),vendorstr_len(item->data));
+			return l;
+		}
+		default: 
+			cw_log(LOG_ERR,"No method to put items of type %d",item->type);
+
 	}
 
 	return 0;
@@ -45,8 +55,17 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	//
 	int len;
 	if (!item) {
 		if (a->mand) {
-			cw_log(LOG_ERR, "Error: Cannot send mandatory message element %d - (%s)",
-			       a->elem_id, cw_strelemp(conn->actions, a->elem_id));
+			cw_log(LOG_ERR,
+			       "Can't put mandatory element %d - (%s) into %s. No value found.",
+			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
+			       , cw_strmsg(a->msg_id)
+			    );
+		}
+		else{
+			cw_dbg(DBG_ELEM,"No output for elemnt %d -(%s) in %s. Item %d not found.",
+			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
+			       , cw_strmsg(a->msg_id),a->item_id);
+
 		}
 		return 0;
 	} else {
