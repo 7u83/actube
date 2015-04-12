@@ -14,27 +14,11 @@
 
 #include "radioinfo.h"
 
-/*
-struct acip{
-	struct sockaddr_storage ip;
-	int wtp_count;
-};
-
-typedef struct acip ACIP;
-typedef struct avltree ACIPLIST;
-
-ACIPLIST * aciplist_create();
-#define aciplist_destroy(l) avltree_destroy(l)
-#define aciplist_add(l,elem) avltree_add(l,elem)
-#define aciplist_foreach(l,callback,cbpriv) avltree_foreach_asc(l,callback,cbpriv)
-*/
-
-
 
 /**
  * Structure to hold info about an AC 
  */
-struct ac_info{
+struct XXXac_info{
 	int stations;		
 	int limit;
 	int active_wtps;
