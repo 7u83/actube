@@ -99,6 +99,11 @@ int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 
 				break;
 			}
+		default:
+			{
+					return sprintf(dst, "%d", elem_id);
+		
+			}
 
 
 
