@@ -68,9 +68,13 @@ void cw_init_request(struct conn *conn, int msg_id)
 {
 	uint8_t *buffer = conn->req_buffer;
 
+	/* zero the first 8 bytes */
 	cw_put_dword(buffer + 0, 0);
 	cw_put_dword(buffer + 4, 0);
-	cw_set_hdr_preamble(buffer, 0);
+
+	/* unencrypted */
+	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
+
 	cw_set_hdr_hlen(buffer, 2);
 	cw_set_hdr_wbid(buffer, 1);
 	cw_set_hdr_rid(buffer, 0);
@@ -122,37 +126,42 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_
 }
 
 
-static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
+static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 {
 	struct cw_action_in as, *af, *afm;
 
-	uint8_t *msg_ptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+ 	int offset = cw_get_hdr_msg_offset(rawmsg);
+
+	uint8_t *msg_ptr = rawmsg + offset;
 
 	int elems_len = cw_get_msg_elems_len(msg_ptr);
-/*
-	if (8+elems_len != len){
-		cw_dbg(DBG_MSG_ERR,"Discarding message from %s, msgelems len=%d, data len=%d, (strict capwap) ",
-			sock_addr2str(&conn->addr),elems_len,len-8);
 
-		if (conn_is_strict_capwap(conn)){
-			cw_dbg(DBG_MSG_ERR,"Discarding message from %s, msgelems len=%d, data len=%d, (strict capwap) ",
-				sock_addr2str(&conn->addr),elems_len,len-8);
-			return 0;
+	int payloadlen=len-offset;
+	
+	/* pre-check message */
+	if (payloadlen-8 !=  elems_len ) {
+
+		if (conn_is_strict_capwap(conn)) {
+			cw_dbg(DBG_MSG_ERR,
+			       "Discarding message from %s, msgelems len=%d, payload len=%d, (Strict CAPWAP) ",
+			       sock_addr2str(&conn->addr), elems_len, payloadlen-8);
+			errno=EAGAIN;	
+			return -1;
 		}
-		if (8+elems_len < len){
-			cw_dbg(DBG_CW_RFC,"Packet from from %s has %d bytes extra data.",
-				sock_addr2str(&conn->addr),len-8-elems_len);
-			elems_len=len-8;
+		if (elems_len < payloadlen-8 ) {
+			cw_dbg(DBG_RFC,
+			       "Packet from from %s has %d bytes of extra data, ignoring.",
+			       sock_addr2str(&conn->addr), payloadlen-8 - elems_len);
+			elems_len = len - 8;
 		}
 
-		if (8+elems_len > len){
-			cw_dbg(DBG_CW_RFC,"Packet from from %s hass msgelems len of %d bytes but has only %d bytes of data, truncating.",
-				sock_addr2str(&conn->addr),elems_len,len-8);
+		if (elems_len > payloadlen-8) {
+			cw_dbg(DBG_RFC,
+			       "Packet from from %s has msgelems len of %d bytes, but has only %d bytes of data, truncating.",
+			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
 		}
-		return 1;
 	}
 
-*/
 
 
 	/* prepare struct for search operation */
@@ -173,7 +182,7 @@ static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 			       "Message type %d (%s) unexpected/illigal in %s State, discarding.",
 			       as.msg_id, cw_strmsg(as.msg_id),
 			       cw_strstate(conn->capwap_state));
-			errno=EAGAIN;
+			errno = EAGAIN;
 			return -1;
 		}
 
@@ -217,26 +226,30 @@ static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-		cw_dbg_elem(DBG_ELEM,conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
+		cw_dbg_elem(DBG_ELEM, conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
 			    elem_len);
 
 
 		af = cw_actionlist_in_get(conn->actions->in, &as);
 
 		if (!af) {
-			cw_dbg(DBG_ELEM_ERR, "ELEM_ERR: Element %d (%s) not allowed in msg of type %d (%s).",
-			       as.elem_id,cw_strelem(as.elem_id), as.msg_id, cw_strmsg(as.msg_id));
+			cw_dbg(DBG_ELEM_ERR,
+			       "ELEM_ERR: Element %d (%s) not allowed in msg of type %d (%s).",
+			       as.elem_id, cw_strelem(as.elem_id), as.msg_id,
+			       cw_strmsg(as.msg_id));
 			continue;
 		}
 
-		if (af->mand) {
+		int afrc = 1;
+		if (af->start) {
+			afrc = af->start(conn, af, cw_get_elem_data(elem), elem_len);
+
+		}
+
+		if (af->mand && afrc) {
 			/* add found mandatory message element 
 			   to mand list */
 			intavltree_add(conn->mand, af->item_id);
-		}
-
-		if (af->start) {
-			af->start(conn, af, cw_get_elem_data(elem), elem_len);
 		}
 
 	}
@@ -256,10 +269,9 @@ static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 			/* regular response message */
 			cw_send_response(conn, rawmsg, len);
 		}
-	}
-	else{
+	} else {
 		/* whe have got a response message */
-		
+
 
 	}
 
@@ -286,8 +298,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 	if (!(type & 0x1)) {
 		/* It's a response  message, no further examination required. */
-	//	cb(cbarg, rawmsg, rawlen);
-		return cw_process_msg(conn,rawmsg,rawlen);
+		return process_elements(conn, rawmsg, rawlen);
 	}
 
 	/* It's a request message, check if seqnum is right and if
@@ -302,9 +313,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
 		conn->last_seqnum_received = seqnum;
-		return cw_process_msg(conn,rawmsg,rawlen);
-		//cb(cbarg, rawmsg, rawlen);
-		//return 0;
+		return process_elements(conn, rawmsg, rawlen);
 	}
 
 	if (sd != 0) {
@@ -333,24 +342,30 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 	cw_dbg(DBG_MSG_ERR, "Retransmitting response message to %s, seqnum=%d",
 	       sock_addr2str(&conn->addr), s2);
-//	conn_send_cwmsg(conn, &conn->resp_msg);
+
+	// XXX untested
+	conn_send_msg(conn, conn->resp_buffer);
 	errno = EAGAIN;
 	return -1;
 }
 
 
-
-
+/*
+ * Process an incomming CAPWAP packet, assuming the packet is already decrypted
+ * @param pram conn conection object 
+ * @param packet pointer to packet data
+ * @param len lenght of packet data
+ */
 int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 {
+	/* show this packet in debug output */
+	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len);
 
-	/* log this packet */
-	cw_dbg_pkt(DBG_PKT_IN,conn, packet, len);
 
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
-		       "Discarding packet from %s, packet too short, len=%d",
+		       "Discarding packet from %s, packet too short, len=%d,  at least 8 expected.",
 		       sock_addr2str(&conn->addr), len);
 		errno = EAGAIN;
 		return -1;
@@ -358,20 +373,21 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 
 	int preamble = cw_get_hdr_preamble(packet);
 
-	if ((preamble & 0xf0) != CW_VERSION) {
+	if ((preamble & 0xf0) != (CAPWAP_VERSION << 4)) {
 		/* wrong version */
 		cw_dbg(DBG_PKT_ERR,
-		       "Discarding packet from %s, wrong version, version=%d",
-		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 8);
-		errno=EAGAIN;
+		       "Discarding packet from %s, wrong version, version=%d, version %d expected.",
+		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 4,
+		       CAPWAP_VERSION);
+		errno = EAGAIN;
 		return -1;
 	}
 
 	if (preamble & 0xf) {
-		/* dtls encoded, this shuold never happen here */
+		/* Encrypted data, this shuold never happen here */
 		cw_dbg(DBG_PKT_ERR,
-			"Discarding packet from %s, encrypted data, after encryption ...",
-			sock_addr2str(&conn->addr));
+		       "Discarding packet from %s, encrypted data after decryption ...",
+		       sock_addr2str(&conn->addr));
 		errno = EAGAIN;
 		return -1;
 	}
@@ -382,70 +398,46 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 
 	int payloadlen = len - offs;
 	if (payloadlen < 0) {
+		/* Eleminate messages with wrong header size */
 		cw_dbg(DBG_PKT_ERR,
-		       "Discarding packet from %s, header length greater than len, hlen=%d",
-		       sock_addr2str(&conn->addr), offs);
-		/* EINVAL */
-		return 0;
+		       "Discarding packet from %s, header length (%d) greater than packet len (%d).",
+		       sock_addr2str(&conn->addr), offs, len);
+		errno = EAGAIN;
+		return -1;
 	}
 
-	/* Check Radio MAC if preset */
+	/* Check if Radio MAC is preset */
 	if (cw_get_hdr_flag_m(packet)) {
 
 		if (cw_get_hdr_rmac_len(packet) + 8 > offs) {
 			/* wrong rmac size */
 			cw_dbg(DBG_PKT_ERR,
-			       "Discarding packet, wrong R-MAC size, size=%d",
-			       *(packet + 8));
-			return 0;
+			       "Discarding packet from %s, wrong R-MAC size, size=%d",
+			       sock_addr2str(&conn->addr), *(packet + 8));
+			errno = EAGAIN;
+			return -1;
 		}
-//              memcpy(cwrmsg.rmac, packet+8,8);
+
 	}
-//      else{
-//              cwrmsg.rmac[0]=0;
-//      }
 
 
-	if (cw_get_hdr_flag_f(packet)) {	/* fragmented */
+	if (cw_get_hdr_flag_f(packet)) {
+		/* fragmented, add the packet to fragman */
 		uint8_t *f;
 		f = fragman_add(conn->fragman, packet, offs, payloadlen);
 		if (f == NULL)
 			return 0;
 
-//		cw_dbg_packet(conn, f + 4, *(uint32_t *) f);
-
-
-		//      extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
-		//      cw_process_msg(conn,f+4,*(uint32_t*)f);
-
-//printf("Received a fragmented packetm should process it");
-//exit(0);
-
-/*
-		if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,f+4,*(uint32_t*)f)){
-			free(f);
-			return;
-		};
-*/
+		cw_dbg_msg(DBG_MSG_IN, conn, packet, len);
 		int rc = process_message(conn, f + 4, *(uint32_t *) f, NULL, NULL);
 
 		free(f);
 		return rc;
 	}
-//extern int cw_process_msg(struct conn * conn,uint8_t*msg,int len);
-//cw_process_msg(conn,packet,len);
 
-
-	//if (!cwrmsg_init_ctrlhdr(conn,&cwrmsg,packet+hlen,len-hlen) ){
-	//      cw_dbg(DBG_CW_PKT_ERR,"Discarding packet from %s, len=%d (too short)",sock_addr2str(&conn->addr));
-	//      return;
-	//}
-
-//msg_4*((val >> 19) & 0x1f);
-
-	cw_dbg_msg(DBG_MSG_IN,conn,packet,len);
-
-	return process_message(conn, packet, len, NULL,NULL);
+	/* not fragmented, we have a complete message */
+	cw_dbg_msg(DBG_MSG_IN, conn, packet, len);
+	return process_message(conn, packet, len, NULL, NULL);
 }
 
 
@@ -462,7 +454,7 @@ int cw_read_messages(struct conn *conn)
 		return n;
 
 	if (n > 0) {
-//		printf("Have a packet with %d bytes\n",n);
+//              printf("Have a packet with %d bytes\n",n);
 		return conn_process_packet(conn, buf, n);
 	}
 	//printf("DTLS_ERROR: %d\n",conn->dtls_error);
