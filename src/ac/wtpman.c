@@ -435,7 +435,9 @@ static void wtpman_run(void *arg)
 					   infile);
 
 
-		clock_t clk = cw_clock_start();
+		DEFINE_CLOCK(clk);
+		cw_clock_start(&clk);
+
 		int rc=0;
 	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && !feof(infile) && rc==0) {
 			rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
@@ -447,7 +449,7 @@ static void wtpman_run(void *arg)
 		}
 		else {
 			cw_dbg(DBG_INFO,"Image '%s' sucessful sent to %s in %0.1f seconds.",
-				filename,sock_addr2str(&conn->addr),cw_clock_stop(clk));
+				filename,sock_addr2str(&conn->addr),cw_clock_stop(&clk));
 			conn->capwap_state=CW_STATE_NONE;
 		}
 			
