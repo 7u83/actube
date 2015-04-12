@@ -53,23 +53,29 @@ struct conn {
 	cw_itemstore_t remote;
 	cw_itemstore_t local;
 
+	
+	/** Wireless Binding ID of this connection */
+	uint8_t wbid;
+
 
 	/** Counter for mandatory message elements */
 	struct avltree *mand;
 
 
+	/** Actionsdefs - this defines the possible actions for
+	    this conn object, so in the end this is the specification
+	    of the protocoll */
 	struct cw_actiondef *actions;
 
-//	struct avltree *msgtr;
+	/** Current CAPWAP state */
 
 	uint8_t capwap_state;
 
+
+	/** The framgent manager used on this connection */
 	FRAGMAN *fragman;
-//      void (* process_message)(void *,uint8_t *,uint8_t *, int);
 
-//      void (* process_message)(void *,struct cwrmsg *);  //uint8_t *,uint8_t *, int);
-//      void * pmsgarg;
-
+	/** Current Fragment ID */
 	int fragid;
 
 	int seqnum;
@@ -77,17 +83,11 @@ struct conn {
 	int last_seqnum_received;
 	int last_message_id_received;
 
-//      struct cwmsg * last_response;
-//      struct cwmsg swm;
-//      int last_response_seqnum;
-//      int last_response_rid;
-
-	struct cwrmsg cwrmsg;
-	uint8_t cwrmsg_buffer[65536];
-
 
 	struct cwmsg req_msg;
 	struct cwmsg resp_msg;
+
+	/** Buffer for outgoing request messages */
 	uint8_t req_buffer[65536];
 
 	/** Buffer for outgoing response messages */
@@ -95,8 +95,10 @@ struct conn {
 	
 		
 
-	int mtu;		/* max mtu, could be changed during discovery */
-	int mtu_discovery;	/* 0 mtu discovery turned off, 1 discovery tuned on */
+	/** Max mtu, could be changed during discovery */
+	int mtu;
+	/* 0 mtu discovery turned off, 1 discovery tuned on */
+	int mtu_discovery;	
 
 	/* receive and send methods */
 
@@ -131,7 +133,9 @@ struct conn {
 	void *dtls_data;
 	char *dtls_cipher;
 	int dtls_error;
+
 	uint8_t dtls_cookie[8];
+
 	int dtls_verify_peer;
 
 	uint8_t dtls_buffer[2048];
@@ -154,9 +158,11 @@ struct conn {
 
 	int strict_capwap;
 
-
+/*
 	int (*request_handler) (void *);
 	void *request_handler_param;
+*/
+
 };
 
 
