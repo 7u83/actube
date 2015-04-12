@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief Various debug functions.
+ */ 
+
 #include "capwap.h"
 #include "dbg.h"
 #include "sock.h"
@@ -37,7 +42,7 @@ uint32_t cw_dbg_opt_display = 0;
 uint32_t cw_dbg_opt_level = 0;
 
 
-
+#define DBG_CLR_MAGENTA "\x1b[35m"
 
 
 static struct cw_str color_on[] = {
@@ -46,6 +51,10 @@ static struct cw_str color_on[] = {
 	{ DBG_ELEM, "\x1b[39m" },
 	{ DBG_MSG_ERR, "\x1b[31m" },
 	{ DBG_PKT_ERR, "\x1b[31m" },
+	{ DBG_ELEM_ERR, "\x1b[31m" },
+	{ DBG_SUBELEM, "\x1b[30m"},
+	{ DBG_DTLS, DBG_CLR_MAGENTA },
+
 	{ DBG_RFC, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
 	{ CW_STR_STOP, "" } 
@@ -69,7 +78,10 @@ static struct cw_str prefix[] = {
 	{ DBG_ELEM,   " Msg Element -" },
 	{ DBG_MSG_ERR," Msg Error -" },
 	{ DBG_PKT_ERR," Pkt Error -" },
+	{ DBG_ELEM_ERR," Elem Error -" },
 	{ DBG_RFC,    " RFC Violation -" },
+	{ DBG_SUBELEM," Sub-Element - "},
+	{ DBG_DTLS, " DTLS - "},
 	{ DBG_X, "XXXXX - "},
 	{ CW_STR_STOP, "" } 
 };
@@ -133,15 +145,15 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
 }
 
-int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len)
+int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	char *s=dst;
 	switch (level) {
 		case DBG_PKT_IN:
-			s+=sprintf(s,"From %s",sock_addr2str(&conn->addr));
+			s+=sprintf(s,"From %s",sock_addr2str(from));
 			break;
 		case DBG_PKT_OUT:
-			s+=sprintf(s,"To %s",sock_addr2str(&conn->addr));
+			s+=sprintf(s,"To %s",sock_addr2str(from));
 			break;
 	}
 	s+=sprintf(s," l=%d: ",len);
@@ -201,8 +213,14 @@ abort:
 
 }
 
-
-char * make_dmp( const uint8_t * data, int len)
+/**
+ * Create an ASCII hex dump of binary data
+ * 
+ * @param data data to dump
+ * @len number of bytes data contains
+ * @return a character string with the created data ASCII dump ( must be release with free)
+ */ 
+char * cw_dbg_mkdmp( const uint8_t * data, int len)
 {
 
 	int maxtlen = 2048;
@@ -222,19 +240,9 @@ char * make_dmp( const uint8_t * data, int len)
 	char *dst = malloc(2*(md * (len * 3 + (rows * 2) + 8 + maxtlen)));
 	if (!dst)
 		return NULL;
-/*
-	if (format != NULL) {
-		va_list args;
-		va_start(args, format);
-		tlen = vsnprintf(dst, maxtlen, format, args);
-		va_end(args);
-	}
-*/
-
 
 	if (len % CW_LOG_DUMP_ROW_LEN)
 		rows++;
-
 
 
 	char *pdst = dst + tlen;
@@ -278,10 +286,6 @@ char * make_dmp( const uint8_t * data, int len)
 
 	}
 
-
-
-//	cw_log_cb(LOG_DEBUG, "%s",dst);
-
 	return dst;
 }
 
@@ -303,16 +307,16 @@ char * make_dmp( const uint8_t * data, int len)
 
 
 
-void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len)
+void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
 		return;
 
 	char buf[1024];
-	cw_format_pkt(buf,level,conn,packet,len);
+	cw_format_pkt(buf,level,conn,packet,len,from);
 
 	if (cw_dbg_is_level(DBG_PKT_DMP)){
-		char  *dmp = make_dmp(packet,len);
+		char  *dmp = cw_dbg_mkdmp(packet,len);
 		cw_dbg(level,"%s%s",buf,dmp);
 		free(dmp);
 	}
@@ -321,7 +325,7 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len)
 }
 
 
-void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len)
+void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
 		return;
@@ -336,7 +340,7 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len)
 
 	int msg_id=cw_get_msg_id(msgptr);
 	s+=sprintf(s,"%s Message (type=%d) ",cw_strmsg(msg_id),msg_id);
-	s+=sprintf(s,"from %s ",sock_addr2str(&conn->addr));
+	s+=sprintf(s,"from %s ",sock_addr2str(from));
 	s+=sprintf(s,", Seqnum: %d ElemLen: %d",cw_get_msg_seqnum(msgptr),cw_get_msg_elems_len(msgptr));
 
 //abort:
@@ -536,7 +540,7 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 		       msgelem, elemname, len);
 
 	else{
-		char *dmp = make_dmp(msgbuf,len);
+		char *dmp = cw_dbg_mkdmp(msgbuf,len);
 
 		cw_dbg(DBG_ELEM, "%d (%s), len=%d%s%s",
 			msgelem, 

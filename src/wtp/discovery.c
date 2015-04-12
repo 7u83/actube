@@ -119,7 +119,7 @@ static int run_discovery(struct conn *conn)
 	       && conn->capwap_state == CW_STATE_DISCOVERY) {
 		avltree_del_all(conn->incomming);
 
-		int rc = cw_read_messages(conn);
+		int rc = cw_read_from(conn);
 
 		if (rc<0) {
 			if (errno==EAGAIN)
@@ -199,9 +199,11 @@ static int cw_run_discovery(struct conn *conn, const char *acaddr)
 
 		sock_copyaddr(&conn->addr, res->ai_addr);
 		conn->sock = sockfd;
+		conn->readfrom = conn_recvfrom_packet;
 
 		run_discovery(conn);
 
+		conn->readfrom=NULL;
 		close(sockfd);
 
 

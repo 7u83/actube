@@ -23,34 +23,37 @@
 
 #include "sock.h"
 
-int sock_receive(int sock,void *buf, size_t len, int flags, struct sockaddr * srcaddr,socklen_t *addrlen)
+int
+sock_receive (int sock, void *buf, size_t len, int flags,
+	      struct sockaddr *srcaddr, socklen_t * addrlen)
 {
 
-	//unsigned int al;
-	socklen_t al;
+  //unsigned int al;
+  socklen_t al;
 
-	al = sizeof (struct sockaddr_storage);
-	
-	memset(srcaddr, 0, sizeof(struct sockaddr));
-//	srcaddr->sa_port=999;
+  al = sizeof (struct sockaddr_storage);
 
-	int n;
-	while( (n = recvfrom(sock,(char*)buf,len,flags,srcaddr,&al)) < 0 ){
-		if (errno!=EINTR)
-			return n ;
-	}
-//	printf("Received betes %d\n",n);
-//	char str[8000];
-//	sock_addrtostr(srcaddr,str,1000);
-//	printf("RECFROM: %s\n",str);
+  memset (srcaddr, 0, sizeof (struct sockaddr));
+//      srcaddr->sa_port=999;
 
-//	struct sockaddr_in * s = (struct sockaddr_in*)srcaddr;
-//	s->sin_port=htons(78);
-//	sock_addrtostr(srcaddr,str,1000);
-//	printf("RECFROMset: %s\n",str);
-
-
-
-//	exit(9);
+  int n;
+  while ((n = recvfrom (sock, (char *) buf, len, flags, srcaddr, &al)) < 0)
+    {
+      if (errno != EINTR)
 	return n;
+    }
+//      printf("Received betes %d\n",n);
+//      char str[8000];
+//      sock_addrtostr(srcaddr,str,1000);
+//      printf("RECFROM: %s\n",str);
+
+//      struct sockaddr_in * s = (struct sockaddr_in*)srcaddr;
+//      s->sin_port=htons(78);
+//      sock_addrtostr(srcaddr,str,1000);
+//      printf("RECFROMset: %s\n",str);
+
+
+
+//      exit(9);
+  return n;
 }

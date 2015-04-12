@@ -24,13 +24,14 @@
 
 #include "conn.h"
 
-int conn_recv_packet_(struct conn* conn,uint8_t *buf,int len,int flags)
+#include "sock.h"
+
+int conn_recv_packet_(struct conn *conn, uint8_t * buf, int len, int flags)
 {
 	int n;
-	while( (n = recv(conn->sock,(char*)buf,len,flags)) < 0 ){
-		if (errno!=EINTR)
-		{
-			if ( errno==EAGAIN )
+	while ((n = recv(conn->sock, (char *) buf, len, flags)) < 0) {
+		if (errno != EINTR) {
+			if (errno == EAGAIN)
 				return n;
 
 		}
@@ -39,17 +40,37 @@ int conn_recv_packet_(struct conn* conn,uint8_t *buf,int len,int flags)
 }
 
 
+int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
+			 struct sockaddr_storage *from)
+{
+	socklen_t al;
+
+	al = sizeof(struct sockaddr_storage);
+	memset(from, 0, sizeof(struct sockaddr_storage));
+
+	int n;
+	while ((n = recvfrom(conn->sock, (char *) buf, len, 0, (struct sockaddr*)from, &al)) < 0) {
+		if (errno != EINTR) {
+			if (errno == EAGAIN)
+				return n;
+
+		}
+
+	}
+	return n;
+
+}
+
 /* yes, these functions could be better defined as macros in a .h file */
 
-int conn_recv_packet(struct conn* conn,uint8_t *buf,int len)
+int conn_recv_packet(struct conn *conn, uint8_t * buf, int len)
 {
-	return conn_recv_packet_(conn,buf,len,0);
+	return conn_recv_packet_(conn, buf, len, 0);
 }
 
-int conn_recv_packet_peek(struct conn* conn,uint8_t *buf,int len)
+int conn_recv_packet_peek(struct conn *conn, uint8_t * buf, int len)
 {
-	int rc = conn_recv_packet_(conn,buf,len,MSG_PEEK);
+	int rc = conn_recv_packet_(conn, buf, len, MSG_PEEK);
 	return rc;
-	
-}
 
+}

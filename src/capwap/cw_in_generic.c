@@ -7,7 +7,7 @@
 
 
 
-int cw_in_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len)
+int cw_in_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from)
 {
 	if (len<a->min_len) {
 		cw_dbg(DBG_ELEM_ERR,"Message element too short, %d < %d", len,a->min_len);

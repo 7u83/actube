@@ -40,7 +40,7 @@ int dtls_gnutls_accept(struct conn *conn)
 	gnutls_datum_t cookie_key;
 
 	gnutls_key_generate(&cookie_key, GNUTLS_COOKIE_KEY_SIZE);
-	cw_dbg(DBG_DTLS, "DTLS session cookie for %s generated: %s",
+	cw_dbg(DBG_DTLS, "Session cookie for %s generated: %s",
 	       sock_addr2str(&conn->addr), sock_hwaddr2idstr((uint8_t *) (&cookie_key),
 							     sizeof(cookie_key)));
 
@@ -75,7 +75,7 @@ int dtls_gnutls_accept(struct conn *conn)
 					       &conn->addr,
 					       sizeof(conn->addr), buffer+4, tlen-4, &prestate);
 		if (rc<0){
-			cw_dbg(DBG_DTLS, "DTLS - Cookie couldn't be verified: %s", gnutls_strerror(rc));
+			cw_dbg(DBG_DTLS, "Cookie couldn't be verified: %s", gnutls_strerror(rc));
 			dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
 			continue;
 		}
@@ -86,12 +86,13 @@ int dtls_gnutls_accept(struct conn *conn)
 	}
 
 	if (rc <0 ){
-		cw_log(LOG_ERR, "DTLS - Cookie couldn't be verified: %s", gnutls_strerror(rc));
+		cw_log(LOG_ERR, "Cookie couldn't be verified: %s", gnutls_strerror(rc));
 		return 0;
 	}
 
 
-	cw_dbg(DBG_DTLS, "DTLS - Cookie verified! Starting handshake ...");
+	cw_dbg(DBG_DTLS, "Cookie verified! Starting handshake with %s ...",sock_addr2str(&conn->addr));
+
 
 
 	d = dtls_gnutls_data_create(conn,GNUTLS_SERVER | GNUTLS_DATAGRAM);
@@ -109,12 +110,12 @@ int dtls_gnutls_accept(struct conn *conn)
 
 
 	if ( rc < 0 ) {
-		cw_log(LOG_ERR, "DTLS - Error in handshake: %s", gnutls_strerror(rc));
+		cw_log(LOG_ERR, "Error in handshake with %s: %s",sock_addr2str(&conn->addr), gnutls_strerror(rc));
 		return 0;
 	}
 
 
-	cw_dbg(DBG_DTLS,"DTLS - Handshake successful");
+	cw_dbg(DBG_DTLS,"Handshake with %s successful.",sock_addr2str(&conn->addr));
 
 	conn->dtls_data=d;
 	conn->read = dtls_gnutls_read;

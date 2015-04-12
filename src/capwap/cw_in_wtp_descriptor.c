@@ -28,40 +28,9 @@
 #include "sock.h"
 
 
-static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
-				   uint8_t * data, int len, int cq)
+static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t *data,int len)
 {
-
-	if (len < 6) {
-		return 0;
-	}
-
-	cw_itemstore_t itemstore = conn->incomming;
-
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
-			      cw_get_byte(data + 1));
-
-	/* Get number encryption elements */
-	int ncrypt = cw_get_byte(data + 2);
-	int i;
-	if (ncrypt == 0) {
-
-
-
-		/* non-conform */
-		cw_dbg(DBG_RFC,
-		       "Non-standard-conform WTP descriptor detected (See RFC 5415)");
-		if (!cq)
-			i = 3;
-		else
-			i = 4;
-	} else {
-		i = ncrypt * 3 + 3;
-	}
-
-
-
+	int i=0;
 	do {
 		if (i + 8 > len) {
 			cw_dbg(DBG_ELEM_ERR,
@@ -70,9 +39,9 @@ static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
 			return 0;
 		}
 
-		uint32_t vendor_id = cw_get_dword(data + i);	//ntohl(*((uint32_t*)(msgelem+i)));
-
+		uint32_t vendor_id = cw_get_dword(data + i);	
 		uint32_t val = cw_get_dword(data + i + 4);
+
 		int subtype = (val >> 16) & 0xffff;
 		int sublen = val & 0xffff;
 		i += 8;
@@ -83,7 +52,19 @@ static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
 			return 0;
 		}
 
-		cw_dbg(DBG_SUBELEM, "WTP Descriptor subtype=%d,len=%d", subtype, sublen);
+		char *dmp;
+		char *dmpmem=NULL;
+		if (cw_dbg_is_level(DBG_SUBELEM_DMP)) {
+			dmpmem=cw_dbg_mkdmp(data+i,sublen);
+			dmp=dmpmem;
+		}
+		else
+			dmp="";
+		cw_dbg(DBG_SUBELEM, "WTP Descriptor subtype=%d,len=%d%s", subtype, sublen,dmp);
+
+		if (dmpmem)
+			free(dmpmem);
+		
 
 		switch (subtype) {
 			case CW_SUBELEM_WTP_HARDWARE_VERSION:
@@ -121,11 +102,50 @@ static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
 	} while (i < len);
 
 	return 1;
+
+}
+
+static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
+				   uint8_t * data, int len)
+{
+
+	if (len < 6) {
+		return 0;
+	}
+
+	cw_itemstore_t itemstore = conn->incomming;
+
+	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
+	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
+			      cw_get_byte(data + 1));
+
+
+	/* Get number of encryption elements */
+	int ncrypt = cw_get_byte(data + 2);
+	if (ncrypt == 0) {
+		if (conn->strict_capwap){
+			cw_dbg(DBG_ELEM_ERR,"Bad WTP Descriptor, number of encryption elements is 0.");
+			return 0;
+		}
+		cw_dbg(DBG_RFC,"Non standard conform WTP Descriptor, number of encryptoin elements is 0.");
+	}
+
+
+	int pos = 3;
+	int i;
+	for (i=0; i<ncrypt; i++) {
+		pos+=3;	
+	}
+
+	return cw_read_wtp_descriptor_versions(itemstore,data+pos,len-pos);
+
 }
 
 int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len)
+			 int len,struct sockaddr *from)
 {
+
+/*
 	switch (conn->capwap_mode) {
 		case CW_MODE_STD:
 			{
@@ -134,7 +154,7 @@ int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * da
 							    CW_MODE_STD);
 				if (!rc) {
 					cw_dbg(DBG_ELEM_ERR, "Bad WTP descriptor from %s",
-					       sock_addr2str(&conn->addr));
+					       sock_addr2str(from));
 					return 0;
 				}
 				return 1;
@@ -143,12 +163,15 @@ int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * da
 
 
 	}
+*/
 
-	int rc = readelem_wtp_descriptor(conn, a, data, len, 0);
+	int rc = readelem_wtp_descriptor(conn, a, data, len);
+
+/*
 	if (rc == -1) {
 		cw_dbg(DBG_RFC, "Bad WTP descriptor, trying cisco hack");
 		rc = readelem_wtp_descriptor(conn, a, data, len, 1);
 	}
-
+*/
 	return rc;
 }

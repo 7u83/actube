@@ -9,7 +9,7 @@
 #include <unistd.h> //Tube
 
 int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len)
+			 int len,struct sockaddr *from)
 {
 
 	cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);	

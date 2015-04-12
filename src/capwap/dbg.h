@@ -1,3 +1,27 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * @file
+ * @brief
+ */
+
+
 #ifndef __DBG_H
 #define __DBG_H
 
@@ -74,18 +98,28 @@ enum debug_levels{
 	/** Show subelements */
 	DBG_SUBELEM,
 
+	/** Show subelements */
+	DBG_SUBELEM_DMP,
+
 	/** hex dump elements */	
 	DBG_ELEM_DMP,
 
 	/** General infos, like CAPWAP state */
 	DBG_INFO,	
 
+	/** Misc. warnings */
+	DBG_WARN,
+
 	/** RFC related */
 	DBG_RFC,
 
+	/** DTLS related messages */
 	DBG_DTLS,
-	DBG_DTLS_DETAIL,
+
+	/** DTLS BIOs in/out */
 	DBG_DTLS_BIO,
+
+	/** Dump DTLS BIO i/o */
 	DBG_DTLS_BIO_DMP,
 	
 	DBG_X
@@ -136,8 +170,10 @@ void cw_dbg_dmp_(int level, const char *file, int line,
 extern void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 			 const uint8_t * msgbuf, int len);
 
-void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len);
-void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len);
+void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+char * cw_dbg_mkdmp(const uint8_t * data, int len);
+
 
 
 #define cw_dbg_set_level(level,on)\

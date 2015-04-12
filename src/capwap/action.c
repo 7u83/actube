@@ -174,7 +174,7 @@ cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a,
 					uint32_t msg_id,
 				      int (*fun) (struct conn * conn,
 						  struct cw_action_in * a, uint8_t * data,
-						  int len))
+						  int len,struct sockaddr *from))
 {
 	cw_action_in_t as,*ar;
 	as.vendor_id=0;
