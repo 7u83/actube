@@ -7,6 +7,9 @@
 #include "log.h"
 
 
+#include "sock.h"
+
+
 #define BLOCK_SIZE 1024
 
 
@@ -20,7 +23,7 @@ int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 
 	FILE *infile = item->data;
 
-	
+
 	int bytes = fread(dst+5,1,BLOCK_SIZE,infile);
 
 	if (feof(infile)){

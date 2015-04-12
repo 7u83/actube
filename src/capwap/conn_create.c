@@ -31,19 +31,6 @@
 #include "capwap.h"
 
 
-/*
-void conn_init(struct conn * conn)
-{
-	memset(conn,0,sizeof(struct conn));
-	conn->retransmit_interval=CAPWAP_RETRANSMIT_INTERVAL;
-	conn->max_retransmit=CAPWAP_MAX_RETRANSMIT;
-	conn->wait_dtls=CAPWAP_WAIT_DTLS;
-	conn->wait_join=CAPWAP_WAIT_JOIN;
-	conn->mtu_discovery=1;
-}
-*/
-
-
 /**
  * Create a conn object
  * @param socket a socket
@@ -83,7 +70,7 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 		}
 		conn->qrpos=-1;
 		if (sem_init(&conn->q_sem,0,0)!=0){
-			cw_log(LOG_ERR,"sem_init %s",strerror(errno));
+			cw_log(LOG_ERR,"Fatal- Can't init semaphore for conn object: %s",strerror(errno));
 			conn_destroy(conn);
 			return NULL;
 		};

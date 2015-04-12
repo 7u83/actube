@@ -23,7 +23,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#include "acinfo.h"
+//#include "acinfo.h"
 #include "wtpinfo.h"
 
 
@@ -218,7 +218,7 @@ extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
 
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
 #define lw_put_certificate(dst,cert,len) lw_put_data(dst,cert,len)
-extern int lw_put_ac_descriptor(uint8_t * dst, struct ac_info * acinfo);
+//extern int lw_put_ac_descriptor(uint8_t * dst, struct ac_info * acinfo);
 
 
 /* function proto types */

@@ -6,6 +6,7 @@
 #include "log.h"
 #include "capwap_items.h"
 
+#include <unistd.h> //Tube
 
 int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len)
@@ -13,6 +14,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 
 	cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);	
 		conn->capwap_state=CW_STATE_IMAGE_DATA;
+//usleep(100000);
 	return 0;
 
 	return CW_RESULT_IMAGE_DATA_ERROR;

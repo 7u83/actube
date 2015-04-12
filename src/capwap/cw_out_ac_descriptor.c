@@ -24,7 +24,7 @@ int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 
 	uint8_t *d = dst+4;
 	struct cw_item * i;
-	i = cw_itemstore_get(conn->outgoing,CW_ITEM_AC_STATUS);
+	i = cw_itemstore_get(conn->local,CW_ITEM_AC_STATUS);
 	
 	if (!i) {
 		cw_log(LOG_ERR,"Can't send AC Descriptor, no AC Status Item found");
@@ -35,7 +35,7 @@ int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 
 
 
-	i = cw_itemstore_get(conn->outgoing,CW_ITEM_AC_HARDWARE_VERSION);
+	i = cw_itemstore_get(conn->local,CW_ITEM_AC_HARDWARE_VERSION);
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_AC_HARDWARE_VERSION,i->data);
 	}
@@ -44,7 +44,7 @@ int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 	}
 
 	
-	i = cw_itemstore_get(conn->outgoing,CW_ITEM_AC_SOFTWARE_VERSION);
+	i = cw_itemstore_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
 
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,i->data);

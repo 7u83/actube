@@ -40,7 +40,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 			hdr_print(h,ptr,mtu);
 			cw_dbg(DBG_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 		}
-		cw_dbg_dmp(DBG_PKT_DMP,ptr,mtu,"Sending packet ...");
+//		cw_dbg_dmp(DBG_PKT_DMP,ptr,mtu,"Sending packet ...");
 		
 
 		if (conn->write(conn,ptr,mtu)<0)
@@ -87,7 +87,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 	}
 
 
-	cw_dbg_dmp(DBG_PKT_DMP,ptr,packetlen,"Sending packet ...");
+//	cw_dbg_dmp(DBG_PKT_DMP,ptr,packetlen,"Sending packet ...");
 	//return conn->write(conn,ptr,msglen-fragoffset*8+hlen);
 
 

@@ -39,7 +39,7 @@
 
 int cw_log_debug_level = 0;
 
-
+/*
 void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 {
 
@@ -58,7 +58,7 @@ void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 	else
 		cw_log(LOG_DEBUG, buf);
 }
-
+*/
 
 
 
@@ -76,25 +76,27 @@ void cw_log_dbg_(int level, const char *file, int line, const char *format, ...)
 
 
 
-int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id, const uint8_t * elem_data)
+int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
+		     const uint8_t * elem_data)
 {
 	switch (vendor_id) {
 		case CW_VENDOR_ID_CISCO:
 			{
-				sprintf(dst, "\n\t  Cisco Vendor Specific: %d - %s", elem_id,
-					cw_cisco_id_to_str(elem_id));
+				if (elem_id != CW_CISCO_SPAM_VENDOR_SPECIFIC) {
+					return sprintf(dst, "%d - %s", elem_id,
+						       cw_cisco_id_to_str(elem_id));
+				}
+
 
 				/* dive into LWAPP vendor specific decoding */
-				if (elem_id == CW_CISCO_SPAM_VENDOR_SPECIFIC) {
-					uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
-					char b[256];
-					sprintf(b, "\n\t   LWAPP Cisco Specific: %d - %s",
-						lw_elem_id, lw_cisco_id_to_str(lw_elem_id));
-					strcat(dst, b);
+				uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
+				return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
+					       elem_id,
+					       lw_elem_id,
+					       lw_cisco_id_to_str(lw_elem_id));
 
 
 
-				}
 				break;
 			}
 
@@ -111,6 +113,7 @@ int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id, const uint8_t *
  * print debug info for message elements
  */
 
+/*
 void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 {
 	if (!cw_dbg_is_level(DBG_ELEM))
@@ -145,8 +148,9 @@ void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len)
 			   "%s, CAPWAP element: type=%d (%s), len=%d%s\n\tDump ...",
 			   cw_strmsg(msg), msgelem, elemname, len, vendor_details);
 }
+*/
 
-
+/*
 void lw_dbg_elem_(int msg_id, int elem_id, const uint8_t * elem_data, int elem_len)
 {
 	if (!cw_dbg_is_level(DBG_ELEM))
@@ -179,4 +183,4 @@ void lw_dbg_elem_(int msg_id, int elem_id, const uint8_t * elem_data, int elem_l
 
 }
 
-
+*/

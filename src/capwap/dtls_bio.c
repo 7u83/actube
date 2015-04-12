@@ -52,7 +52,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 		conn->dtls_buffer_pos += maxlen;
 		cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen,
 		       maxlen, conn->dtls_buffer_len);
-		cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, maxlen, "Dump...");
+//		cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, maxlen, "Dump...");
 
 		return maxlen;
 	}
@@ -62,7 +62,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 	conn->dtls_buffer_len = 0;
 	cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen, ret,
 	       conn->dtls_buffer_len);
-	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, ret, "Dump...");
+//	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, ret, "Dump...");
 	return ret;
 }
 
@@ -84,7 +84,7 @@ int dtls_bio_write(struct conn *conn, const char *data, int len)
 		
 
 	cw_dbg(DBG_DTLS_BIO, "SSL BIO write: %d bytes, wrote=%d, ptr: %p", len, rc, data);
-	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) data, len, "Dump ...");
+//	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) data, len, "Dump ...");
 
 	if (rc < 0)
 		return rc;

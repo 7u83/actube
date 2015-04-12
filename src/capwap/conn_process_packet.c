@@ -217,7 +217,7 @@ static int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len)
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-		cw_dbg_elem(conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
+		cw_dbg_elem(DBG_ELEM,conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
 			    elem_len);
 
 

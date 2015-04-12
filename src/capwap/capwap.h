@@ -46,16 +46,6 @@
 #define CAPWAP_CONTROL_PORT_STR "5246"
 
 
-/**
- * CAPWAP modes
- */
-enum capwapmodes {
-	CWMODE_STD = 0,
-	CWMODE_CISCO,
-	CWMODE_CIPWAP,
-	CWMODE_ZYXEL
-};
-
 
 /**
  * CAWAP States
@@ -275,7 +265,7 @@ struct capwap_ctrlhdr
 
 
 #include "wtpinfo.h"
-#include "acinfo.h"
+//#include "acinfo.h"
 
 /* Frame tunnnel mode bits */
 #define WTP_FRAME_TUNNEL_MODE_R	1	/* Reserved */
@@ -364,11 +354,12 @@ struct cwimage_identifier{
 
 
 
-
+/*
 extern void cwmsg_addelem_wtp_descriptor(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo);
 extern void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo);
 extern void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo);
 extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn *conn);
+*/
 
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
@@ -387,6 +378,8 @@ extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_
 
 //void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo);
 //
+
+/*
 extern void cwsend_discovery_response(struct conn *conn, int seqnum,
 				      struct radioinfo *radioinfo, struct ac_info *acinfo,
 				      struct wtpinfo *wtpinfo);
@@ -396,11 +389,13 @@ extern void cwsend_join_response(struct conn *conn, int seqnum, int rc,
 				 struct radioinfo *radioinfo, struct ac_info *acinfo,
 				 struct wtpinfo *wtpinfo);
 
+*/
 
 //extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 extern void process_join_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 extern void process_conf_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 
+/*
 extern void cwread_discovery_response(struct ac_info *acinfo, uint8_t * msg, int len);
 extern void cwsend_image_data_response(struct conn *conn, int seqnum, int rc);
 extern int cwsend_image_data_request(struct conn *conn, struct cwimage_data *data,
@@ -418,7 +413,7 @@ extern void cwsend_conf_status_response(struct conn *conn, int seqnum, int rc,
 
 extern void cwsend_unknown_response(struct conn *conn, int seqnum, int unknow_request);
 
-
+*/
 
 extern int hdr_print(char *str, uint8_t * packet, int len);
 
@@ -500,8 +495,8 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
-extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
-				     int len);
+//extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
+//				     int len);
 extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
 					    uint8_t * msgelem, int len);
 

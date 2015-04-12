@@ -45,12 +45,12 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 		int sublen = val & 0xffff;
 		i += 4;
 		if (sublen + i > len) {
-			cw_dbg(DBG_ELEM, "WTP Board data sub-element too long, type=%d,len=%d",
+			cw_dbg(DBG_ELEM_ERR, "WTP Board data sub-element too long, type=%d,len=%d",
 			       subtype, sublen);
 			return;
 		}
 
-		cw_dbg(DBG_ELEM, "Reading WTP board data sub-element, type=%d, len=%d", subtype,
+		cw_dbg(DBG_SUBELEM, "Reading WTP board data sub-element, type=%d, len=%d", subtype,
 		       sublen);
 
 		switch (subtype) {

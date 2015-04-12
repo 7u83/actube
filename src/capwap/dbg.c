@@ -36,13 +36,80 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 
+
+
+static struct cw_str color_on[] = {
+	{ DBG_PKT_IN, "\x1b[33m" },
+	{ DBG_MSG_IN, "\x1b[34m" },
+	{ DBG_ELEM, "\x1b[39m" },
+	{ DBG_MSG_ERR, "\x1b[31m" },
+	{ DBG_X, "\x1b[31m" },
+	{ CW_STR_STOP, "" } 
+};
+static struct cw_str color_ontext[] = {
+
+	{ DBG_ELEM_DMP, "\x1b[30m"},
+	{ CW_STR_STOP, "" } 
+};
+
+
+static struct cw_str color_off[] = {
+
+	{ CW_STR_STOP, "\x1b[22;39m\x1b[23m" } 
+};
+
+static struct cw_str prefix[] = {
+	{ DBG_INFO, " Info -" },
+	{ DBG_PKT_IN, " Pkt IN -" },
+	{ DBG_MSG_IN, " Msg IN -" },
+	{ DBG_ELEM,   " Msg Element -" },
+	{ DBG_MSG_ERR," Msg Error -" },
+	{ DBG_X, "XXXXX - "},
+	{ CW_STR_STOP, "" } 
+};
+
+
+
+
+static const char * get_dbg_color_on(int level){
+	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+		return "";
+	return cw_strlist_get_str(color_on,level);
+}
+
+static const char * get_dbg_color_off(int level){
+	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+		return "";
+	return cw_strlist_get_str(color_off,level);
+}
+
+static const char * get_dbg_prefix(int level){
+	return cw_strlist_get_str(prefix,level);
+
+}
+
+static const char * get_dbg_color_ontext(int level){
+	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+		return "";
+	return cw_strlist_get_str(color_ontext,level);
+
+}
+
+
+
+
+
+
+
+
+
 /**
  * Put a list of missing mandatory message elements to debug output
  */
 void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int n,
 			 cw_action_in_t * a)
 {
-	if (!cw_dbg_is_level(DBG_ELEM) || n == 0)
+	if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
 		return;
 
 	char buffer[2000];
@@ -54,7 +121,7 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 		delim = ", ";
 		p += sprintf(p, "%s", cw_strelemp(conn->actions, ml[i]->elem_id));
 	}
-	cw_dbg(DBG_ELEM, "Missing mandatory elements: [%s]", buffer);
+	cw_dbg(DBG_MSG_ERR, "Missing mandatory elements: [%s]", buffer);
 }
 
 int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len)
@@ -109,6 +176,108 @@ abort:
 
 }
 
+
+char * make_dmp( const uint8_t * data, int len)
+{
+
+	int maxtlen = 2048;
+	int i;
+	int rowlen = CW_LOG_DUMP_ROW_LEN;
+	int rows = len / rowlen;
+	int tlen = 0;
+
+	int md;
+	if (cw_dbg_opt_display & DBG_DISP_ASC_DMP)
+		md = 2;
+	else
+		md = 1;
+
+
+
+	char *dst = malloc(2*(md * (len * 3 + (rows * 2) + 8 + maxtlen)));
+	if (!dst)
+		return NULL;
+/*
+	if (format != NULL) {
+		va_list args;
+		va_start(args, format);
+		tlen = vsnprintf(dst, maxtlen, format, args);
+		va_end(args);
+	}
+*/
+
+
+	if (len % CW_LOG_DUMP_ROW_LEN)
+		rows++;
+
+
+
+	char *pdst = dst + tlen;
+	sprintf(pdst, "\n\t");
+	pdst += 2;
+
+	char asc_buffer[128];
+	char *ascdst = asc_buffer;
+
+	for (i = 0; i < len; i++) {
+		sprintf(pdst, "%02X ", data[i] & 0xff);
+
+		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
+			int c = data[i] & 0xff;
+			if (c < 0x20 || c > 0x7f)
+				c = '.';
+			*ascdst = c;
+			ascdst++;
+		}
+
+		pdst += 3;
+		if ((i + 1) % rowlen == 0) {
+			int l;
+			if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
+				*ascdst = 0;
+				l = sprintf(pdst, " | %s\n\t", asc_buffer);
+				ascdst = asc_buffer;
+
+			} else {
+				l = sprintf(pdst, "\n\t");
+			}
+			pdst += l;
+		}
+
+	}
+
+	if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
+		*ascdst = 0;
+		if (strlen(asc_buffer))
+			pdst += sprintf(pdst, " | %s", asc_buffer);
+
+	}
+
+
+
+//	cw_log_cb(LOG_DEBUG, "%s",dst);
+
+	return dst;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len)
 {
 	if (!cw_dbg_is_level(level))
@@ -134,7 +303,7 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len)
 	int pplen = len - (msgptr-packet);
 
 	int msg_id=cw_get_msg_id(msgptr);
-	s+=sprintf(s,"%s Message type %d",cw_strmsg(msg_id),msg_id);
+	s+=sprintf(s,"%s Message (type=%d) ",cw_strmsg(msg_id),msg_id);
 	s+=sprintf(s,"from %s ",sock_addr2str(&conn->addr));
 	s+=sprintf(s,", Seqnum: %d ElemLen: %d",cw_get_msg_seqnum(msgptr),cw_get_msg_elems_len(msgptr));
 
@@ -144,14 +313,13 @@ abort:
 
 
 
-
+/*
 void cw_dbg_packet_m(struct conn *conn, uint8_t * packet, int len)
 {
 	if (!cw_dbg_is_level(DBG_PKT_IN | DBG_PKT_OUT))
 		return;
 
 
-	/* print the header */
 	char hdr[200];
 	hdr_print(hdr, packet, len);
 
@@ -169,11 +337,12 @@ void cw_dbg_packet_m(struct conn *conn, uint8_t * packet, int len)
 
 }
 
+*/
 
-void cw_dbg_dmp_(int level, const char *file, int line,
+
+void ycw_dbg_dmp_(int level, const char *file, int line,
 		     const uint8_t * data, int len, const char *format, ...)
 {
-return;
 	if (!(level & cw_dbg_opt_level))
 		return;
 
@@ -222,7 +391,7 @@ return;
 
 		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
 			int c = data[i] & 0xff;
-			if (c < 0x20 || c > 0x80)
+			if (c < 0x20 || c > 0x7f)
 				c = '.';
 			*ascdst = c;
 			ascdst++;
@@ -251,11 +420,9 @@ return;
 
 	}
 
-	if (cw_dbg_opt_display & DBG_DISP_LINE_NUMBERS)
-		cw_log_cb(LOG_DEBUG, "%s:%d: %s", file, line, dst);
-	else{
-		cw_log_cb(LOG_DEBUG, "%s",dst);
-	}
+
+
+	cw_log_cb(LOG_DEBUG, "%s",dst);
 
 	free(dst);
 	return;
@@ -294,101 +461,28 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 
 
 	if (!cw_dbg_is_level(DBG_ELEM_DMP))
-		cw_dbg(DBG_ELEM,
-		       "%s, CAWPAP element: %d (%s), len=%d%s",
-		       cw_strmsg(msg), msgelem, elemname, len, "");
+		cw_dbg(DBG_ELEM, "%d (%s), len=%d",
+		       msgelem, elemname, len);
 
-	else
-		cw_dbg_dmp(DBG_ELEM, msgbuf, len,
-			   "%s, CAPWAP element: %d (%s), len=%d%s\n\tDump ...",
-			   cw_strmsg(msg), msgelem, elemname, len, "");
+	else{
+		char *dmp = make_dmp(msgbuf,len);
+
+		cw_dbg(DBG_ELEM, "%d (%s), len=%d%s%s",
+			msgelem, 
+			elemname, 
+			len, 
+			get_dbg_color_ontext(DBG_ELEM_DMP),
+			dmp);
+
+		free(dmp);
+	}
 }
-
-
-
-
-
-static struct cw_str color_on[] = {
-	{ DBG_PKT_IN, "\x1b[33m" },
-	{ CW_STR_STOP, "" } 
-};
-static struct cw_str color_ontext[] = {
-
-	{ CW_STR_STOP, "" } 
-};
-
-
-static struct cw_str color_off[] = {
-
-	{ CW_STR_STOP, "\033[22;39m" } 
-};
-
-static struct cw_str prefix[] = {
-	{ DBG_INFO, " Info -" },
-	{ DBG_PKT_IN, " Pkt IN -" },
-	{ CW_STR_STOP, "" } 
-};
-
-
-
-
-static const char * get_dbg_color_on(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
-		return "";
-	return cw_strlist_get_str(color_on,level);
-}
-
-static const char * get_dbg_color_off(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
-		return "";
-	return cw_strlist_get_str(color_off,level);
-}
-
-static const char * get_dbg_prefix(int level){
-	return cw_strlist_get_str(prefix,level);
-
-}
-
-static const char * get_dbg_color_ontext(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
-		return "";
-	return cw_strlist_get_str(color_ontext,level);
-
-}
-
-
-
-/*
-
-void cw_log_colored(int level, const char *format, ...)
-{
-	char fbuf[1024];
-
-	sprintf(fbuf, "%s%s%s: %s%s",
-		get_log_color_on(level),
-		get_log_prefix(level),
-		get_log_color_ontext(level),
-		format,
-		get_log_color_off(level)
-		);
-		
-
-	va_list args;
-	va_start(args, format);
-	cw_log_vcb(level,fbuf,args);
-	va_end(args);
-
-}
-
-*/
-
-
 
 
 void cw_dbg_colored(int level, const char *file, int line, const char *format, ...)
 {
 
-	if (!(level & cw_dbg_opt_level))
+	if (!(cw_dbg_is_level(level)))
 		return;
 
 	char fbuf[1024];
@@ -407,22 +501,6 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 	cw_log_vcb(level,fbuf,args);
 	va_end(args);
 
-
-return;
-
-
-
-	char buf[2048];
-
-//	va_list args;
-	va_start(args, format);
-	vsprintf(buf, format, args);
-	va_end(args);
-
-	if (cw_dbg_opt_display & DBG_DISP_LINE_NUMBERS)
-		cw_log(LOG_DEBUG, "%s:%d: %s", file, line, buf);
-	else
-		cw_log(LOG_DEBUG, buf);
 }
 
 

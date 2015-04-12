@@ -42,6 +42,7 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id, const ui
  * print debug info for message elements
  */
 
+/*
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len)
 {
 	if (!cw_dbg_is_level(DBG_ELEM))
@@ -77,4 +78,4 @@ void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgb
 			   cw_strmsg(msg), msgelem, elemname, len, "");
 }
 
-
+*/

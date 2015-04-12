@@ -47,10 +47,11 @@ static void set_dbg_opt(struct uci_context *ctx,struct uci_section * section,int
 	if (!str)
 		return;
 	if ((strcmp(str,"1")==0) || (strcmp(str,"true")==0))
-		conf_dbg_level |= opt;
+		//conf_dbg_level |= opt;
+		cw_dbg_set_level(opt,1);
 	
 	if ((strcmp(str,"0")==0) || (strcmp(str,"false")==0))
-		conf_dbg_level &= ((-1)^opt);
+		cw_dbg_set_level(opt,0);
 
 
 }

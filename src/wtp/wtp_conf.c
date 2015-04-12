@@ -56,7 +56,7 @@ long conf_echo_interval=CONF_DEFAULT_ECHO_INTERVAL;
 long conf_max_retransmit=CONF_DEFAULT_MAX_RETRANSMIT;
 long conf_retransmit_interval=CONF_DEFAULT_RETRANSMIT_INTERVAL;
 
-long conf_dbg_level=CONF_DEFAULT_DEBUG_LEVEL;
+//long conf_dbg_level=CONF_DEFAULT_DEBUG_LEVEL;
 
 
 
