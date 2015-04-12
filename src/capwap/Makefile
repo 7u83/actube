@@ -37,7 +37,6 @@ SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addr
 LOGOBJS=log.o \
         log_syslog.o \
 	log_file.o \
-	cw_log_debug.o \
 	cw_dbg_elem.o \
 	dbg_strings.o
 
@@ -84,6 +83,7 @@ LWAPPOBJS = \
 
 #	lw_readelem_wtp_name.o \
 	lw_readelem_wtp_board_data.o \
+	cw_log_debug.o \
 
 
 # LWAPP cisco vendor specific objs

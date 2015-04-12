@@ -142,6 +142,8 @@ int main (int argc, const char * argv[])
 
 	cw_dbg_opt_display=DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
+	DBGX("Attention! %s","DBGX is ON!");
+
 	cw_register_actions_cipwap_ac(&capwap_actions);
 
 
@@ -305,25 +307,14 @@ int ac_run()
 void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
 {
 
-//	int sock = socklist[index].reply_sockfd;
-
-	char hdrstr[1024];
-	hdr_print(hdrstr,buffer,len);
-//	cw_dbg(DBG_CW_PKT_IN,"Header for packet from %s\n%s",sock_addr2str(addr),hdrstr);
-	
-
-
 	/* first of all check preamble */
 	int preamble = cw_get_hdr_preamble(buffer);
 
-#ifdef WITH_DTLS
 	if (preamble != CAPWAP_PACKET_PREAMBLE && preamble != CAPWAP_DTLS_PACKET_PREAMBLE){
-#else
-	if (preamble != CAPWAP_PACKET_PREAMBLE ){
-#endif
-		cw_dbg(DBG_PKT_ERR,"Discarding packet, wrong preamble, preamble = 0x%01X",preamble);
+		cw_dbg(DBG_PKT_ERR,"Discarding packet from %s, wrong preamble, preamble = 0x%01X",sock_addr2str(addr),preamble);
 		return;
 	}
+
 
 	wtplist_lock();
 	struct wtpman * wtpman = wtplist_get(addr);
@@ -429,17 +420,6 @@ void process_lw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 
 void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int len)
 {
-
-#ifdef WITH_CW_LOG_DEBUG
-	char str[100];
-	sock_addrtostr(addr,str,100);
-//	cw_dbg(DBG_PKT_IN,"Received packet from %s, len = %i, via %s\n",sock_addr2str(addr),len,
-//			socklist[index].type==SOCKLIST_UNICAST_SOCKET ? "unicast":"bcast/mcast");
-
-//	cw_dbg_dmp(DBG_CW_PKT_DMP,buffer,len,"Dump ...");
-//	cw_dbg_dmp(buffer,len,"Packet data for packet, recevied from %s",str);
-#endif	
-
 	switch (socklist[index].ac_proto){
 		case AC_PROTO_CAPWAP:
 			process_cw_ctrl_packet(index,addr,buffer,len);
@@ -448,7 +428,6 @@ void process_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, int
 			process_lw_ctrl_packet(index,addr,buffer,len);
 			return;
 	}
-
 }
 
 

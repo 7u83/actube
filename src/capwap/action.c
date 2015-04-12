@@ -33,15 +33,15 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 	struct cw_action_in *e2 = (struct cw_action_in *) elem2;
 	int r;
 
+	r = e1->capwap_state - e2->capwap_state;
+	if (r != 0)
+		return r;
+
 	r = e1->msg_id - e2->msg_id;
 	if (r != 0)
 		return r;
 
 	r = e1->elem_id - e2->elem_id;
-	if (r != 0)
-		return r;
-
-	r = e1->capwap_state - e2->capwap_state;
 	if (r != 0)
 		return r;
 

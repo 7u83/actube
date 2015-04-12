@@ -104,8 +104,13 @@ int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, i
 static void wtpman_run_discovery(void *arg)
 {
 
+
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	struct cwrmsg *cwrmsg;
+
+	struct conn * conn = wtpman->conn;
+
+conn->strict_capwap=0;
 
 
 	time_t timer = cw_timer_start(10);

@@ -15,7 +15,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	/* Zyxel doesn't count msg element length from
 	   behind seqnum */
-	if (conn->capwap_mode == CWMODE_ZYXEL){
+	if (conn->capwap_mode == CW_MODE_ZYXEL){
 		// XXX val-=3;
 	}
 
@@ -26,6 +26,9 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	int hlen = cw_get_hdr_hlen(rawmsg)*4;
 
+//cw_set_hdr_hlen(rawmsg,223);
+//*(rawmsg + 8)=99;
+//cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_M,1);
 
 	int mtu = conn->mtu;
 
@@ -94,6 +97,6 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 //printf("Send packet len %p %d\n",ptr,packetlen);
 
-	return conn->write(conn,ptr,packetlen);
+	return conn->write(conn,ptr,packetlen-0);
 }
 

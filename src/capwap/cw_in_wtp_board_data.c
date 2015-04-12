@@ -89,17 +89,19 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
  */ 
 int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len)
 {
+
 	if (len < 4) {
 		cw_dbg(DBG_ELEM_ERR,
 		       "Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d", a->elem_id,
 		       len);
-		return 1;
+		return 0;
 	}
 
 	cw_itemstore_t itemstore = conn->incomming;	
 	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR,cw_get_dword(data));
 
 	readsubelems_wtp_board_data(itemstore,data+4,len-4);
+
 	return 1;
 }
 

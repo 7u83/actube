@@ -153,10 +153,13 @@ static inline int cw_addelem_cisco_ap_regulatory_domain(uint8_t *dst, struct rad
  * This message elemet is basically an LWAPP AC Descriptor 
  * encapsulated in a CAPWAP vendor specific payload message
  */
+
+/*
 static inline int cw_addelem_cisco_mwar(uint8_t *dst, struct ac_info *acinfo){
 	int l = lw_put_ac_descriptor(dst+10,acinfo);
 	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_MWAR,l);
 }
+*/
 
 /** 
  * Add a Cisco Certificate payload message element

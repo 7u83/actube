@@ -1,5 +1,6 @@
 
 #include "capwap.h"
+#include "dbg.h"
 
 
 
@@ -65,16 +66,18 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 	DEFINE_AVLITER(it,conn->actions->in);
 	int n=0;
 	avliter_foreach_from(&it,&as) {
-		cw_action_in_t * a = avliter_get(&it);
-		if (a->msg_id != as.msg_id) 
+//	avliter_foreach(&it) {
+		cw_action_in_t * ai = avliter_get(&it);
+
+		if (ai->msg_id != as.msg_id && ai->capwap_state != as.capwap_state) 
 			break;
-		if (!a->mand)
+		if (!ai->mand)
 			continue;
 
-		int i = a->item_id;
+		int i = ai->item_id;
 		void * rc = avltree_del(conn->mand,&i);
 		if (!rc) {
-			out[n++]=a;
+			out[n++]=ai;
 		}
 	
 	}

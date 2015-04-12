@@ -37,7 +37,7 @@
 #include "strlist.h"
 
 /* capwap version and iana number */
-#define CW_VERSION 0
+#define CAPWAP_VERSION ((uint8_t)0)
 #define CWIANA_ENTERPRISE_NUMBER 0	/* for capwap base the number */
 
 
@@ -96,8 +96,8 @@ enum capwap_states {
 #define CWTH_WBID_EPCGLOBAL	3
 
 
-#define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
-#define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
+#define CAPWAP_PACKET_PREAMBLE (CAPWAP_VERSION<<4)
+#define CAPWAP_DTLS_PACKET_PREAMBLE (CAPWAP_VERSION<<4|1)
 
 /*
  * control header stuff

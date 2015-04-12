@@ -39,14 +39,6 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE,
 	 cw_in_generic, 0, CW_ITEMTYPE_BYTE, CW_ITEM_DISCOVERY_TYPE, 1, 1, 1}
 	,
-	/* Element WTP Board Data */
-	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
-	 1}
-	,
-	/* Element WTP Descriptor */
-	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_DESCRIPTOR,
-	 1}
-	,
 	/* Element Frame Tunnel Mode */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,
 	 CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE, 1}
@@ -58,6 +50,15 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD}
 	,
+	/* Element WTP Descriptor */
+	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_DESCRIPTOR,
+	 1}
+	,
+	/* Element WTP Board Data */
+	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
+	 1}
+	,
+
 
 	/* ------------------------------------------------------------------------------- */
 
@@ -253,7 +254,7 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 	
 	
-	intavltree_add(defs->wbids,0);
+	intavltree_add(def->wbids,0);
 
 
 

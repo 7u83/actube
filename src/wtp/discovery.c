@@ -28,11 +28,11 @@
 #include "capwap/capwap_items.h"
 #include "capwap/log.h"
 #include "capwap/wtpinfo.h"
-#include "capwap/acinfo.h"
 #include "capwap/sock.h"
 #include "capwap/cw_util.h"
 #include "capwap/aciplist.h"
 #include "capwap/acpriolist.h"
+#include "capwap/timer.h"
 
 
 #include "wtp.h"

@@ -66,6 +66,10 @@ void cw_init_request(struct conn *conn, int msg_id)
 	uint8_t *buffer = conn->req_buffer;
 
 	cw_put_dword(buffer + 0, 0);
+
+	/* unencrypted */
+	cw_put_hdr_preamble(CAPWAP_VERSION<<8 | 0);
+
 	cw_put_dword(buffer + 4, 0);
 	cw_set_hdr_preamble(buffer, 0);
 	cw_set_hdr_hlen(buffer, 2);
