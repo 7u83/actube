@@ -82,7 +82,7 @@ int main()
 	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
 
 
-
+	the_conn->strict_capwap=0;
 	discovery();
 	join();
 	image_update();

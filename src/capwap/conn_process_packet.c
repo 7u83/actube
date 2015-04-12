@@ -254,6 +254,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 	}
 
+	/* all message elements are processed, do now after processing
+	   by calling the "end" function for the message */
+
 	int result_code = 0;
 	if (afm->end) {
 		result_code = afm->end(conn, afm, rawmsg, len);
@@ -265,14 +268,19 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 			/* the end method gave us an result code, so
 			   send an error message */
 			cw_send_error_response(conn, rawmsg, result_code);
-		} else {
-			/* regular response message */
+		} else if ( result_code == 0 ){
+			/* All ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);
+		} else {
+			/* the request message is ignored, no response
+			   sent */
+			errno=EAGAIN;	
 		}
 	} else {
-		/* whe have got a response message */
-
-
+		/* 
+		 * Whe have got a response message.
+		 * Put further actions here, if needed.
+		 */
 	}
 
 	intavltree_destroy(conn->mand);

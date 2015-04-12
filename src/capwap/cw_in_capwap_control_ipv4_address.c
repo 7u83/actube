@@ -19,14 +19,14 @@ int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
 
 	if (!list) {
 		cw_log(LOG_ERR, "Error: Can't allocate CAWAP IP Adress List");
-		return -1;
+		return 0;
 	}
 
 	cw_acip_t * acip;
 	acip = malloc(sizeof(cw_acip_t));
 	if (!acip) {
 		cw_log(LOG_ERR,"Can't allocate memory for acv4ip: %s",strerror(errno));
-			return 1;
+			return 0;
 	}
 
 	struct sockaddr_in addr;
@@ -39,5 +39,5 @@ int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
 	cw_aciplist_replace(list,acip);
 
 
-	return 0;
+	return 1;
 }

@@ -97,15 +97,18 @@ extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_ou
  * Definition CAPWAP modes
  */
 enum capwapmodes {
+	/** Unknown -- means auto detect and 
+	    set as soon as possible */
+	CW_MODE_UNKNOWN,
 	/** Standard mode as specified in RFC 5415 */
-	CWMODE_STD = 0,
+	CW_MODE_STD ,
 	/** Cisco specific CAPWAP */
-	CWMODE_CISCO,
+	CW_MODE_CISCO,
 	/** CIPWAP, a mix of standard CAPWAP and some 
 	Cisco extension */
-	CWMODE_CIPWAP,
+	CW_MODE_CIPWAP,
 	/** Zyxel */
-	CWMODE_ZYXEL
+	CW_MODE_ZYXEL
 };
 
 

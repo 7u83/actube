@@ -1,6 +1,7 @@
 
 #include "action.h"
 #include "dbg.h"
+#include "log.h"
 #include "itemstore.h"
 #include "capwap.h"
 
@@ -42,15 +43,12 @@ int cw_in_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int le
                 case CW_ITEMTYPE_VENDORSTR:
                         cw_itemstore_set_vendorstr(itemstore,a->item_id,
                                 cw_get_dword(data),data+4,len-4);
+		default:
+			cw_log(LOG_ERR,"Can't handle item type %d in definition for incomming msg %d (%s) - %d, cw_in_generic.", a->itemtype,a->msg_id,cw_strmsg(a->msg_id), a->elem_id);
+			return 0;
                 
 
         }
 
-
-
-//int src = 	cw_itemstore_set(conn->incomming,a->item_id,a->itemtype,data,len);
-
-//printf("Cunint ic: %d %d\n",src,conn->incomming->count);
-
-	return 0;
+	return 1;
 }

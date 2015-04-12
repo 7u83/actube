@@ -26,11 +26,16 @@ struct cw_str cw_dbg_strings[] = {
 	{ DBG_INFO, "info" },
 	{ DBG_PKT_IN,   "pkt_in" },
 	{ DBG_PKT_OUT, "pkt_out" },
+	{ DBG_PKT_ERR, "pkt_err" },
+	{ DBG_PKT_DMP, "pkt_dmp" },
+	{ DBG_RFC, "rfc" },
+
 	{ DBG_MSG_IN, "msg_in" },
 	{ DBG_MSG_ERR, "msg_err" },
 	{ DBG_ELEM,  "elem" },
 	{ DBG_ELEM_DMP, "elem_dmp" },
 	{ DBG_ELEM_ERR, "elem_err" },
+
 	{ DBG_X,"dbgx" },
 	{ CW_STR_STOP, NULL } 
 };

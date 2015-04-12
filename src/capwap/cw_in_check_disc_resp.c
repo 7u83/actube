@@ -1,3 +1,4 @@
+#include <errno.h>
 
 #include "capwap.h"
 #include "capwap_items.h"
@@ -11,17 +12,21 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 {
 	cw_action_in_t *mlist[20];
 	int n = cw_check_missing_mand(mlist, conn, a);
-	cw_dbg_missing_mand(DBG_ELEM, conn, mlist, n, a);
 
 	//cw_dbg(DBG_INFO,"This response came from: %s",sock_addr2str(&conn->addr));
 
 
 	/* if mandatory elements are missing, ignore this response */
-	if (n) {
+	if (n && conn->strict_capwap) {
+		cw_dbg_missing_mand(DBG_MSG_ERR, conn, mlist, n, a);
 		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Response from %s - missing mandatory elements.",
 		       sock_addr2str(&conn->addr));
+		errno = EAGAIN;
 		return -1;
+	}
+	if (n) {
+		cw_dbg_missing_mand(DBG_RFC, conn, mlist, n, a);
 	}
 
 	/*  we have all AC information in the incomming buffer */
@@ -32,7 +37,8 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 	if ( !discs ) {
 		cw_log(LOG_ERR,"Can't allocate store for disc resp");
-		return 0;
+		errno = ENOMEM;
+		return -1;
 	}
 
 	cw_itemstore_set_avltree(discs,discs->count,conn->incomming);

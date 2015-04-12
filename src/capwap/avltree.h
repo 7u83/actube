@@ -40,15 +40,7 @@
  * Defines the structure of an AVL Node.
  */
 struct avlnode {
-	union {
-		void *data;
-		uint8_t ubyte;
-		uint16_t uword;
-		uint32_t udword;
-		int8_t byte;
-		int16_t word;
-		int32_t dword;
-	};
+	void *data;
 	struct avlnode *left;
 	struct avlnode *right;
 	int bal;

@@ -3,7 +3,6 @@
 
 
 #include "capwap/wtpinfo.h"
-#include "capwap/acinfo.h"
 #include "capwap/conn.h"
 #include "capwap/capwap_80211.h"
 #include "capwap/log.h"

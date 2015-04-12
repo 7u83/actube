@@ -25,87 +25,130 @@
 #include "cw_util.h"
 #include "dbg.h"
 
+#include "sock.h"
 
 
-
-static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t *data, int len, int cq)
+static int readelem_wtp_descriptor(struct conn *conn, struct cw_action_in *a,
+				   uint8_t * data, int len, int cq)
 {
 
-	if (len<6)
-		return -1;
+	if (len < 6) {
+		return 0;
+	}
 
 	cw_itemstore_t itemstore = conn->incomming;
 
-	cw_itemstore_set_byte(itemstore,CW_ITEM_WTP_MAX_RADIOS,cw_get_byte(data));
-	cw_itemstore_set_byte(itemstore,CW_ITEM_WTP_RADIOS_IN_USE,cw_get_byte(data+1));
+	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
+	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
+			      cw_get_byte(data + 1));
 
-	int ncrypt = cw_get_byte(data+2);
+	/* Get number encryption elements */
+	int ncrypt = cw_get_byte(data + 2);
 	int i;
-	if (ncrypt == 0 ){
+	if (ncrypt == 0) {
+
+
+
 		/* non-conform */
-		cw_dbg(DBG_RFC,"Non-standard-conform WTP descriptor detected (See RFC 5415)");
-		if (!cq) 
-			i=3;
+		cw_dbg(DBG_RFC,
+		       "Non-standard-conform WTP descriptor detected (See RFC 5415)");
+		if (!cq)
+			i = 3;
 		else
-			i=4;
+			i = 4;
+	} else {
+		i = ncrypt * 3 + 3;
 	}
-	else{
-		i=ncrypt*3+3;
-	}
+
+
 
 	do {
-		if (i+8>len)
-		{
-			cw_dbg(DBG_ELEM_ERR,"WTP descriptor subelement to long, length=%d>%d",i+8,len);
-			return -1;
+		if (i + 8 > len) {
+			cw_dbg(DBG_ELEM_ERR,
+			       "WTP descriptor subelement to long, length=%d>%d", i + 8,
+			       len);
+			return 0;
 		}
 
-		uint32_t vendor_id=cw_get_dword(data+i); //ntohl(*((uint32_t*)(msgelem+i)));
+		uint32_t vendor_id = cw_get_dword(data + i);	//ntohl(*((uint32_t*)(msgelem+i)));
 
-		uint32_t val = cw_get_dword(data+i+4);
-		int subtype= (val>>16)&0xffff;
-		int sublen = val&0xffff;
-		i+=8;
+		uint32_t val = cw_get_dword(data + i + 4);
+		int subtype = (val >> 16) & 0xffff;
+		int sublen = val & 0xffff;
+		i += 8;
 
-		if (sublen+i>len){
-			cw_dbg(DBG_ELEM_ERR,"WTP descriptor subelement too long, length = %d",sublen);
-			return -1;
+		if (sublen + i > len) {
+			cw_dbg(DBG_ELEM_ERR,
+			       "WTP Descriptor subelement too long, length = %d", sublen);
+			return 0;
 		}
 
-		cw_dbg(DBG_SUBELEM,"Reading WTP descriptor subelement, type=%d,len=%d",subtype,sublen);
-	
-		switch(subtype){
+		cw_dbg(DBG_SUBELEM, "WTP Descriptor subtype=%d,len=%d", subtype, sublen);
+
+		switch (subtype) {
 			case CW_SUBELEM_WTP_HARDWARE_VERSION:
-				cw_itemstore_set_dword(itemstore,CW_ITEM_WTP_HARDWARE_VENDOR,vendor_id);
-				cw_itemstore_set_bstrn(itemstore,CW_ITEM_WTP_HARDWARE_VERSION,data+i,sublen);
+				cw_itemstore_set_dword(itemstore,
+						       CW_ITEM_WTP_HARDWARE_VENDOR,
+						       vendor_id);
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_HARDWARE_VERSION,
+						       data + i, sublen);
 				break;
 			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
-				cw_itemstore_set_dword(itemstore,CW_ITEM_WTP_SOFTWARE_VENDOR,vendor_id);
-				cw_itemstore_set_bstrn(itemstore,CW_ITEM_WTP_SOFTWARE_VERSION,data+i,sublen);
+				cw_itemstore_set_dword(itemstore,
+						       CW_ITEM_WTP_SOFTWARE_VENDOR,
+						       vendor_id);
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_SOFTWARE_VERSION,
+						       data + i, sublen);
 				break;
 			case CW_SUBELEM_WTP_BOOTLOADER_VERSION:
-				cw_itemstore_set_dword(itemstore,CW_ITEM_WTP_BOOTLOADER_VENDOR,vendor_id);
-				cw_itemstore_set_bstrn(itemstore,CW_ITEM_WTP_BOOTLOADER_VERSION,data+i,sublen);
+				cw_itemstore_set_dword(itemstore,
+						       CW_ITEM_WTP_BOOTLOADER_VENDOR,
+						       vendor_id);
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_BOOTLOADER_VERSION,
+						       data + i, sublen);
 				break;
 			default:
-				cw_dbg(DBG_ELEM_ERR,"Unknown WTP descriptor subelement, type = %d",subtype);
+				cw_dbg(DBG_ELEM_ERR,
+				       "Unknown WTP descriptor subelement, type = %d",
+				       subtype);
 				break;
 		}
-		i+=sublen;
+		i += sublen;
 
-	}while(i<len);
+	} while (i < len);
 
 	return 1;
 }
 
-int cw_in_wtp_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len)
+int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len)
 {
-	int rc =readelem_wtp_descriptor(conn, a,data,len,0);
-	if (rc==-1){
-		cw_dbg(DBG_RFC,"Bad WTP descriptor, trying cisco hack");
-		rc =readelem_wtp_descriptor(conn, a,data,len,1);
+	switch (conn->capwap_mode) {
+		case CW_MODE_STD:
+			{
+				int rc =
+				    readelem_wtp_descriptor(conn, a, data, len,
+							    CW_MODE_STD);
+				if (!rc) {
+					cw_dbg(DBG_ELEM_ERR, "Bad WTP descriptor from %s",
+					       sock_addr2str(&conn->addr));
+					return 0;
+				}
+				return 1;
+			}
+
+
+
+	}
+
+	int rc = readelem_wtp_descriptor(conn, a, data, len, 0);
+	if (rc == -1) {
+		cw_dbg(DBG_RFC, "Bad WTP descriptor, trying cisco hack");
+		rc = readelem_wtp_descriptor(conn, a, data, len, 1);
 	}
 
 	return rc;
 }
-

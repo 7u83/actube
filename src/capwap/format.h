@@ -53,7 +53,11 @@ extern int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
  */
 #define cw_format_hex cw_format_hexl
 
-
+/**
+ * Format MAC Address.
+ */ 
+#define cw_format_mac(dst,src,len)\
+	 cw_format_hex_bytes(dst,"%02x",":",src,len)
 
 /*#define	cw_format_hdr_flags(s,th) \
 	sprintf(s,"(T=%d,F=%d,L=%d,W=%d,M=%d,K=%d)",\

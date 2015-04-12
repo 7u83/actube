@@ -46,6 +46,7 @@ static struct cw_str color_on[] = {
 	{ DBG_ELEM, "\x1b[39m" },
 	{ DBG_MSG_ERR, "\x1b[31m" },
 	{ DBG_PKT_ERR, "\x1b[31m" },
+	{ DBG_RFC, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
 	{ CW_STR_STOP, "" } 
 };
@@ -68,6 +69,7 @@ static struct cw_str prefix[] = {
 	{ DBG_ELEM,   " Msg Element -" },
 	{ DBG_MSG_ERR," Msg Error -" },
 	{ DBG_PKT_ERR," Pkt Error -" },
+	{ DBG_RFC,    " RFC Violation -" },
 	{ DBG_X, "XXXXX - "},
 	{ CW_STR_STOP, "" } 
 };
@@ -113,7 +115,10 @@ static const char * get_dbg_color_ontext(int level){
 void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int n,
 			 cw_action_in_t * a)
 {
-	if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
+//	if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
+//		return;
+
+	if ( !cw_dbg_is_level(level) || n==0)
 		return;
 
 	char buffer[2000];
@@ -125,7 +130,7 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 		delim = ", ";
 		p += sprintf(p, "%s", cw_strelemp(conn->actions, ml[i]->elem_id));
 	}
-	cw_dbg(DBG_MSG_ERR, "Missing mandatory elements: [%s]", buffer);
+	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
 }
 
 int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len)
