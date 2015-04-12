@@ -24,6 +24,8 @@
 #include "strlist.h"
 #include "format.h"
 #include "capwap.h"
+#include "capwap_cisco.h"
+#include "lwapp_cisco.h"
 
 
 void (*cw_dbg_cb) (int level, const char *format, ...) = CW_LOG_DEFAULT_LOG;
@@ -43,6 +45,7 @@ static struct cw_str color_on[] = {
 	{ DBG_MSG_IN, "\x1b[34m" },
 	{ DBG_ELEM, "\x1b[39m" },
 	{ DBG_MSG_ERR, "\x1b[31m" },
+	{ DBG_PKT_ERR, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
 	{ CW_STR_STOP, "" } 
 };
@@ -64,6 +67,7 @@ static struct cw_str prefix[] = {
 	{ DBG_MSG_IN, " Msg IN -" },
 	{ DBG_ELEM,   " Msg Element -" },
 	{ DBG_MSG_ERR," Msg Error -" },
+	{ DBG_PKT_ERR," Pkt Error -" },
 	{ DBG_X, "XXXXX - "},
 	{ CW_STR_STOP, "" } 
 };
@@ -164,8 +168,24 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 		goto abort;
 	int frag_id = cw_get_hdr_fragid(packet);
 	int frag_offs = cw_get_hdr_fragoffset(packet);
-	s+=sprintf(s," Frag/Offs: %d/%d",frag_id,frag_offs);
+	s+=sprintf(s," Frag/Offs:%d/%d",frag_id,frag_offs);
 
+
+	if (cw_get_hdr_flag_m(packet)) {
+		/* rmac is present, print the rmac */
+		int rmac_len=cw_get_hdr_rmac_len(packet);
+		int plen=rmac_len;
+		if (rmac_len+8>len) 
+			plen=len-8;
+		if (rmac_len>10) 
+			plen=10;
+		
+		s+=sprintf(s," R-MAC:");
+		s+=cw_format_mac(s,cw_get_hdr_rmac_data(packet),plen);
+		if (rmac_len>10){
+			s+=sprintf(s," ... (len=%d)",rmac_len);
+		}
+	}
 	return s-dst;	
 
 
@@ -285,7 +305,14 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len)
 
 	char buf[1024];
 	cw_format_pkt(buf,level,conn,packet,len);
-	cw_dbg(level,"%s",buf);
+
+	if (cw_dbg_is_level(DBG_PKT_DMP)){
+		char  *dmp = make_dmp(packet,len);
+		cw_dbg(level,"%s%s",buf,dmp);
+		free(dmp);
+	}
+	else
+		cw_dbg(level,"%s",buf);
 }
 
 
@@ -300,14 +327,14 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len)
 
 
 	uint8_t * msgptr = cw_get_hdr_msg_ptr(packet);
-	int pplen = len - (msgptr-packet);
+//	int pplen = len - (msgptr-packet);
 
 	int msg_id=cw_get_msg_id(msgptr);
 	s+=sprintf(s,"%s Message (type=%d) ",cw_strmsg(msg_id),msg_id);
 	s+=sprintf(s,"from %s ",sock_addr2str(&conn->addr));
 	s+=sprintf(s,", Seqnum: %d ElemLen: %d",cw_get_msg_seqnum(msgptr),cw_get_msg_elems_len(msgptr));
 
-abort:
+//abort:
 	cw_dbg(level,"%s",buf);
 }
 
@@ -426,6 +453,45 @@ void ycw_dbg_dmp_(int level, const char *file, int line,
 
 	free(dst);
 	return;
+}
+
+
+
+
+static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
+		     const uint8_t * elem_data)
+{
+	switch (vendor_id) {
+		case CW_VENDOR_ID_CISCO:
+			{
+				if (elem_id != CW_CISCO_SPAM_VENDOR_SPECIFIC) {
+					return sprintf(dst, "%d - %s", elem_id,
+						       cw_cisco_id_to_str(elem_id));
+				}
+
+
+				/* dive into LWAPP vendor specific decoding */
+				uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
+				return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
+					       elem_id,
+					       lw_elem_id,
+					       lw_cisco_id_to_str(lw_elem_id));
+
+
+
+				break;
+			}
+		default:
+			{
+					return sprintf(dst, "%d", elem_id);
+		
+			}
+
+
+
+	}
+
+	return 0;
 }
 
 
