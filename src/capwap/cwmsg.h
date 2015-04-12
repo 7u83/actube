@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include "radioinfo.h"
-#include "acinfo.h"
+//#include "acinfo.h"
 #include "wtpinfo.h"
 
 struct cwmsg{
@@ -23,13 +23,14 @@ struct cwmsg{
 
 struct conn;
 
+/*
 extern void cwmsg_init(struct cwmsg * cwmsg, uint8_t *buffer, int type, int seqnum, struct radioinfo * radioinfo);
 //int cwmsg_send(struct cwmsg * cwmsg, int seqnum, int rid, struct conn * conn);
 //
 extern void cwmsg_addelem(struct cwmsg *msg,int type, const uint8_t *elem, int len);
 extern void cwmsg_vaddelem(struct cwmsg *msg,int type, ...);
 
-extern void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo,struct wtpinfo * wtpinfo);
+//extern void cwmsg_addelem_ac_descriptor(struct cwmsg *msg,struct ac_info * acinfo,struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_ac_timestamp(struct cwmsg *msg);
 
 
@@ -40,6 +41,6 @@ extern void cwmsg_addelem_image_identifier(struct cwmsg *msg,uint32_t vendor_id,
 //extern void cwmsg_addelem_radio_operational_state(struct cwmsg * cwmsg, struct radioinfo * ri);
 
 extern void cwmsg_addelem_vendor_cisco_mwar_addr(struct cwmsg *msg, struct conn *conn);
-
+*/
 
 #endif
