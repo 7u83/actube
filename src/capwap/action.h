@@ -41,8 +41,8 @@ struct cw_action_in{
 	uint8_t capwap_state;
 	uint32_t msg_id;
 	uint16_t elem_id;
-	int (*start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len);
-	int (*end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len);
+	int (*start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
+	int (*end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 	uint8_t itemtype;
 	uint16_t item_id;
 	uint16_t min_len;
@@ -65,7 +65,7 @@ extern cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t 
 					uint32_t msg_id,
 				      int (*fun) (struct conn * conn,
 						  struct cw_action_in * a, uint8_t * data,
-						  int len));
+						  int len,struct sockaddr *from));
 
 
 /* Definitions for outgoing messages */

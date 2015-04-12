@@ -34,7 +34,7 @@
 
 
 static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msgelem,
-						int len)
+					int len)
 {
 
 	int i = 0;
@@ -45,35 +45,40 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 		int sublen = val & 0xffff;
 		i += 4;
 		if (sublen + i > len) {
-			cw_dbg(DBG_ELEM_ERR, "WTP Board data sub-element too long, type=%d,len=%d",
+			cw_dbg(DBG_ELEM_ERR,
+			       "WTP Board data sub-element too long, type=%d,len=%d",
 			       subtype, sublen);
 			return;
 		}
 
-		cw_dbg(DBG_SUBELEM, "Reading WTP board data sub-element, type=%d, len=%d", subtype,
-		       sublen);
+		cw_dbg(DBG_SUBELEM, "Reading WTP board data sub-element, type=%d, len=%d",
+		       subtype, sublen);
 
 		switch (subtype) {
 			case CW_BOARDDATA_MODELNO:
-				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_MODELNO,
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_BOARD_MODELNO,
 						       msgelem + i, sublen);
 				break;
 			case CW_BOARDDATA_SERIALNO:
-				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_SERIALNO,
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_BOARD_SERIALNO,
 						       msgelem + i, sublen);
-				
+
 				break;
 			case CW_BOARDDATA_MACADDRESS:
-				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_MACADDRESS,
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_BOARD_MACADDRESS,
 						       msgelem + i, sublen);
-				
+
 				break;
 			case CW_BOARDDATA_BOARDID:
 				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
 						       msgelem + i, sublen);
 				break;
 			case CW_BOARDDATA_REVISION:
-				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_REVISION,
+				cw_itemstore_set_bstrn(itemstore,
+						       CW_ITEM_WTP_BOARD_REVISION,
 						       msgelem + i, sublen);
 			default:
 				break;
@@ -86,22 +91,22 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 
 /**
  * Parse a WTP Board Data messag element and put results to itemstore.
- */ 
-int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len)
+ */
+int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len, struct sockaddr *from)
 {
 
 	if (len < 4) {
 		cw_dbg(DBG_ELEM_ERR,
-		       "Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d", a->elem_id,
-		       len);
+		       "Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d",
+		       a->elem_id, len);
 		return 0;
 	}
 
-	cw_itemstore_t itemstore = conn->incomming;	
-	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR,cw_get_dword(data));
+	cw_itemstore_t itemstore = conn->incomming;
+	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR, cw_get_dword(data));
 
-	readsubelems_wtp_board_data(itemstore,data+4,len-4);
+	readsubelems_wtp_board_data(itemstore, data + 4, len - 4);
 
 	return 1;
 }
-

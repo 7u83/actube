@@ -29,12 +29,15 @@ struct cw_str cw_dbg_strings[] = {
 	{ DBG_PKT_ERR, "pkt_err" },
 	{ DBG_PKT_DMP, "pkt_dmp" },
 	{ DBG_RFC, "rfc" },
-
+	{ DBG_SUBELEM, "subelem" },
+	{ DBG_SUBELEM_DMP, "subelem_dmp" },
 	{ DBG_MSG_IN, "msg_in" },
 	{ DBG_MSG_ERR, "msg_err" },
 	{ DBG_ELEM,  "elem" },
 	{ DBG_ELEM_DMP, "elem_dmp" },
 	{ DBG_ELEM_ERR, "elem_err" },
+	{ DBG_DTLS, "dtls" },
+	{ DBG_DTLS_BIO, "dtls_bio" },
 
 	{ DBG_X,"dbgx" },
 	{ CW_STR_STOP, NULL } 

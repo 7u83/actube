@@ -8,7 +8,7 @@
 
 
 int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len)
+			 int len,struct sockaddr *from)
 {
 	/* Check for mandatory elements */
 	cw_action_in_t * mlist[60];

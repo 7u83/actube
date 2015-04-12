@@ -126,7 +126,7 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_
 }
 
 
-static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
+static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct sockaddr *from)
 {
 	struct cw_action_in as, *af, *afm;
 
@@ -211,7 +211,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 	/* Execute start processor for message */
 	if (afm->start) {
-		afm->start(conn, afm, rawmsg, len);
+		afm->start(conn, afm, rawmsg, len,from);
 	}
 
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
@@ -234,7 +234,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 		if (!af) {
 			cw_dbg(DBG_ELEM_ERR,
-			       "ELEM_ERR: Element %d (%s) not allowed in msg of type %d (%s).",
+			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
 			       as.elem_id, cw_strelem(as.elem_id), as.msg_id,
 			       cw_strmsg(as.msg_id));
 			continue;
@@ -242,7 +242,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 		int afrc = 1;
 		if (af->start) {
-			afrc = af->start(conn, af, cw_get_elem_data(elem), elem_len);
+			afrc = af->start(conn, af, cw_get_elem_data(elem), elem_len,from);
 
 		}
 
@@ -259,7 +259,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 	int result_code = 0;
 	if (afm->end) {
-		result_code = afm->end(conn, afm, rawmsg, len);
+		result_code = afm->end(conn, afm, rawmsg, len,from);
 	}
 
 	/* if we've got a request message, we always have to send a response message */
@@ -296,8 +296,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len)
 
 
 
-static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
-			   int (*cb) (void *, uint8_t *, int), void *cbarg)
+static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,struct sockaddr *from)
 {
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
@@ -306,7 +305,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 	if (!(type & 0x1)) {
 		/* It's a response  message, no further examination required. */
-		return process_elements(conn, rawmsg, rawlen);
+		return process_elements(conn, rawmsg, rawlen, from);
 	}
 
 	/* It's a request message, check if seqnum is right and if
@@ -321,7 +320,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
 		conn->last_seqnum_received = seqnum;
-		return process_elements(conn, rawmsg, rawlen);
+		return process_elements(conn, rawmsg, rawlen,from);
 	}
 
 	if (sd != 0) {
@@ -364,10 +363,10 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
-int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
+int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	/* show this packet in debug output */
-	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len);
+	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len,from);
 
 
 	if (len < 8) {
@@ -436,16 +435,16 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len)
 		if (f == NULL)
 			return 0;
 
-		cw_dbg_msg(DBG_MSG_IN, conn, packet, len);
-		int rc = process_message(conn, f + 4, *(uint32_t *) f, NULL, NULL);
+		cw_dbg_msg(DBG_MSG_IN, conn, packet, len,from);
+		int rc = process_message(conn, f + 4, *(uint32_t *) f, from);
 
 		free(f);
 		return rc;
 	}
 
 	/* not fragmented, we have a complete message */
-	cw_dbg_msg(DBG_MSG_IN, conn, packet, len);
-	return process_message(conn, packet, len, NULL, NULL);
+	cw_dbg_msg(DBG_MSG_IN, conn, packet, len,from);
+	return process_message(conn, packet, len, from);
 }
 
 
@@ -462,11 +461,32 @@ int cw_read_messages(struct conn *conn)
 		return n;
 
 	if (n > 0) {
-//              printf("Have a packet with %d bytes\n",n);
-		return conn_process_packet(conn, buf, n);
+		return conn_process_packet(conn, buf, n,(struct sockaddr*)&conn->addr);
 	}
-	//printf("DTLS_ERROR: %d\n",conn->dtls_error);
 	errno = EAGAIN;
 	return -1;
+}
+
+int cw_read_from(struct conn * conn)
+{
+	if (!conn->readfrom){
+		cw_log(LOG_ERR,"Fatal error, no readfrom method available.");
+		errno = EPROTO;
+		return -1;
+	}
+	uint8_t buf[2024];
+	int len = 2024;
+
+	struct sockaddr_storage from;
+	int n = conn->readfrom(conn, buf, len,&from);
+	if (n < 0)
+		return n;
+
+	if (n > 0) {
+		return conn_process_packet(conn, buf, n,(struct sockaddr*)&from);
+	}
+	errno = EAGAIN;
+	return -1;
+
 
 }

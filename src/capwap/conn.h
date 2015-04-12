@@ -106,6 +106,7 @@ struct conn {
 	int (*recv_packet_peek) (struct conn *, uint8_t *, int);
 	int (*send_packet) (struct conn *, const uint8_t *, int);
 
+	int (*readfrom) (struct conn *, uint8_t *, int, struct sockaddr_storage *);
 	int (*read) (struct conn *, uint8_t *, int);
 	int (*write) (struct conn *, const uint8_t *, int);
 
@@ -238,6 +239,9 @@ struct cwrmsg *conn_wait_for_request(struct conn *conn, int *msglist, time_t tim
 void conn_init(struct conn *conn);
 
 extern int cw_read_messages(struct conn *conn);
+
+extern int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
+			 struct sockaddr_storage *from);
 
 
 

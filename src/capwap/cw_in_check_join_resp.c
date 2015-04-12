@@ -8,7 +8,7 @@
 #include "capwap_items.h"
 
 int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len)
+			 int len,struct sockaddr *from)
 {
 
 	cw_action_in_t * mlist[60];

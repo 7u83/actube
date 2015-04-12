@@ -878,17 +878,17 @@ static inline const char *cw_strelemp_(cw_strheap_t h, int msg_id)
 
 
 extern int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len);
+			 int len,struct sockaddr *from);
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
-					 uint8_t * data, int len);
+					 uint8_t * data, int len,struct sockaddr *from);
 extern int cw_in_wtp_name(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			  int len);
+			  int len,struct sockaddr *from);
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len);
+				int len,struct sockaddr *from);
 extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len);
+				int len,struct sockaddr *from);
 extern int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
-					     uint8_t * data, int len);
+					     uint8_t * data, int len, struct sockaddr *from);
 
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//, struct cw_item *item);
@@ -961,22 +961,22 @@ int cw_in_set_state_none(struct conn *conn, struct cw_action_in *a, uint8_t * da
 struct cw_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a);
 struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
 extern int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len);
+				 uint8_t * data, int len,struct sockaddr *from);
 
 extern int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len);
+				int len,struct sockaddr *from);
 int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			  int len);
+			  int len,struct sockaddr *from);
 
 int cw_check_missing_mand(cw_action_in_t ** out, struct conn *conn, cw_action_in_t * a);
 int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len);
+			 int len,struct sockaddr *from);
 extern int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a,
-					uint8_t * data, int len);
+					uint8_t * data, int len,struct sockaddr *from);
 extern int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a,
-				       uint8_t * data, int len);
+				       uint8_t * data, int len,struct sockaddr *from);
 int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			      int len);
+			      int len,struct sockaddr *from);
 
 int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 

@@ -11,7 +11,7 @@
 /**
  * Default handler for Vendor Specific Payload message elements.
  */ 
-int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len)
+int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from)
 {
         cw_action_in_t as,*af;
 	as = *a;
@@ -31,7 +31,7 @@ int cw_in_vendor_specific_payload(struct conn *conn,struct cw_action_in * a,uint
 	}
 
 	if (af->start) {
-		af->start(conn,af,data+6,len-6);
+		af->start(conn,af,data+6,len-6,from);
 	}
 
 	return 1;

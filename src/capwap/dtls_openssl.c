@@ -65,7 +65,7 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 		s += sprintf(s,"SSL msg in: ");
 	
 	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
-	cw_dbg(DBG_DTLS_DETAIL,buffer);
+//	cw_dbg(DBG_DTLS_DETAIL,buffer);
 }
 #endif
 
