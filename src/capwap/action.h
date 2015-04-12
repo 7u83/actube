@@ -26,6 +26,7 @@
 #include "conn.h"
 #include "itemstore.h"
 #include "strheap.h"
+#include "intavltree.h"
 
 
 /* Generic functions and structs */
@@ -92,16 +93,32 @@ extern cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_
 extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_out_t * actions);
 #define cw_actionlist_out_get(t,a) avltree_get(t,a);
 
+/**
+ * Definition CAPWAP modes
+ */
+enum capwapmodes {
+	/** Standard mode as specified in RFC 5415 */
+	CWMODE_STD = 0,
+	/** Cisco specific CAPWAP */
+	CWMODE_CISCO,
+	/** CIPWAP, a mix of standard CAPWAP and some 
+	Cisco extension */
+	CWMODE_CIPWAP,
+	/** Zyxel */
+	CWMODE_ZYXEL
+};
+
 
 
 
 struct cw_actiondef{
 	cw_actionlist_in_t in;
 	cw_actionlist_out_t out;
-	
 	cw_strheap_t strmsg;
 	cw_strheap_t strelem;
 
+	/** Supported Wireless Binding IDs (WBID) */
+	struct avltree * wbids;
 };
 
 

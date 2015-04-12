@@ -7,7 +7,6 @@
 #include "capwap/sock.h"
 
 #include "socklist.h"
-#include "capwap/acinfo.h"
 #include "conf.h"
 
 #include "capwap/capwap.h"
@@ -25,6 +24,7 @@ struct radioinfo * get_radioinfo()
 	
 }
 
+/*
 struct ac_info * get_acinfo()
 {
 	
@@ -40,7 +40,7 @@ struct ac_info * get_acinfo()
 	acinfo->limit=10000;
 	acinfo->active_wtps=10;
 	acinfo->max_wtps=conf_max_wtps;
-	acinfo->rmac=1; 	/* radio mac supported */
+	acinfo->rmac=1; 	
 
 	acinfo->vendor_id=conf_vendor_id;
 
@@ -68,9 +68,11 @@ struct ac_info * get_acinfo()
 
 	//acinfo->aciplist=get_aciplist();
 
-/*
+
 	aciplist_foreach(acinfo->aciplist,pr,NULL);
 */
+
+/*
 	int i;
 	for (i=1; i<=4; i++){
 		acinfo->radioinfos[i].type= 
@@ -87,7 +89,7 @@ struct ac_info * get_acinfo()
 
 }
 
-
+*/
 
 get_join_result()
 {

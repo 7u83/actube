@@ -32,7 +32,7 @@ int main()
 		return 1;
 	}
 
-	cw_dbg_opt_level = conf_dbg_level;
+//	cw_dbg_opt_level = conf_dbg_level;
 
 	wtpconf_init();
 

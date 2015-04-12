@@ -23,6 +23,7 @@ int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8
 		case 0:
 			dstart=4;
 			len-=4;
+			break;
 		default:
 			vendor_id=CW_VENDOR_ID_CISCO;
 			dstart=0;

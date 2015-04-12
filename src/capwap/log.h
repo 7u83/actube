@@ -52,7 +52,6 @@
 //extern void cw_log_dbg_dmp_(int type, const char *file, int line, const uint8_t * data,
 			    //int len, const char *format, ...);
 
-#define cw_dbg_is_level(level) (cw_dbg_opt_level & level)
 
 
 

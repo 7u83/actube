@@ -56,6 +56,7 @@ int dtls_gnutls_write(struct conn * conn, const uint8_t *buffer, int len)
 	if ( rc < 0 ){
 		cw_log(LOG_ERR, "DTLS - write error: %s", gnutls_strerror(rc));
 		conn->dtls_error=1;
+		errno=ECONNRESET;
 		return -1;
 	}
 
@@ -84,6 +85,7 @@ int dtls_gnutls_read(struct conn * conn, uint8_t *buffer, int len)
 	if ( rc < 0 ){
 		cw_log(LOG_ERR, "DTLS - read error: %s", gnutls_strerror(rc));
 		conn->dtls_error=1;
+		errno=ECONNRESET;
 		return -1;
 	}
 

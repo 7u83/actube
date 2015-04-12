@@ -106,6 +106,8 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 
 int main (int argc, const char * argv[]) 
 {
+
+
 /*
 	intavltree_t t = intavltree_create();
 	int i;
@@ -171,6 +173,7 @@ int main (int argc, const char * argv[])
 		goto errX;
 
 
+printf("Debug oprtions: %08X\n",cw_dbg_opt_level);
 	rc = ac_run();
 errX:
 	wtplist_destroy();
@@ -327,6 +330,7 @@ void process_cw_ctrl_packet(int index,struct sockaddr * addr, uint8_t * buffer, 
 	if (!wtpman){
 
 		wtpman = wtpman_create(index,addr);
+
 
 		if (!wtpman ){
 			cw_log(LOG_ERR,"Error creating wtpman: %s",strerror(errno));

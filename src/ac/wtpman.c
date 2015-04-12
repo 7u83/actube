@@ -51,6 +51,7 @@ void conn_handle_change_state_event_request(struct conn *conn)
 {
 }
 
+/*
 struct rh_param {
 	struct conn *conn;
 	int *msglist;
@@ -72,14 +73,15 @@ static int conn_rh(void *param)
 			return 0;
 
 	}
-	/* unexpected response here */
 	cw_log(LOG_ERR, "Unexpected message from %s", sock_addr2str(&p->conn->addr));
 	cwsend_unknown_response(p->conn, p->conn->cwrmsg.seqnum, p->conn->cwrmsg.type);
 	return 1;
 }
+*/
 
-
+/*
 struct ac_info *get_acinfo();
+*/
 
 static void wtpman_remove(struct wtpman *wtpman)
 {
@@ -120,7 +122,8 @@ static void wtpman_run_discovery(void *arg)
 */
 
 
-	wtpman->conn->outgoing = ac_config;
+	wtpman->conn->local = ac_config;
+	wtpman->conn->outgoing = cw_itemstore_create();
 	wtpman->conn->incomming = cw_itemstore_create();
 
 	while (!cw_timer_timeout(timer)
@@ -131,7 +134,7 @@ static void wtpman_run_discovery(void *arg)
 	struct cw_item *wn = cw_itemstore_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
 	if (wn) {
-		printf("WTP Name: %s\n", wn->data);
+		//printf("WTP Name: %s\n", wn->data);
 	}
 
 	wtpman_remove(wtpman);
@@ -284,9 +287,10 @@ static int wtpman_join(void *arg, time_t timer)
 
 //      wtpman->conn->itemstore = cw_itemstore_create();
 
-	wtpman->conn->outgoing = ac_config;
+	wtpman->conn->outgoing = cw_itemstore_create();
 	wtpman->conn->incomming = cw_itemstore_create();
-	wtpman->conn->local = cw_itemstore_create();
+	wtpman->conn->local = ac_config;
+
 
 	struct conn * conn = wtpman->conn;
 
@@ -439,7 +443,7 @@ static void wtpman_run(void *arg)
 
 
 		if (rc) {
-			cw_log(LOG_ERR,"Image download RC: %s",cw_strrc(rc));
+			cw_log(LOG_ERR,"Error sending image to %s: %s",sock_addr2str(&conn->addr),cw_strrc(rc));
 		}
 		else {
 			cw_dbg(DBG_INFO,"Image '%s' sucessful sent to %s in %0.1f seconds.",
