@@ -436,7 +436,7 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sock
 		if (f == NULL)
 			return 0;
 
-		cw_dbg_msg(DBG_MSG_IN, conn, packet, len,from);
+		cw_dbg_msg(DBG_MSG_IN, conn, f+4, *(uint32_t*)f,from);
 		int rc = process_message(conn, f + 4, *(uint32_t *) f, from);
 
 		free(f);
