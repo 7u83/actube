@@ -32,6 +32,7 @@ struct cw_str cw_dbg_strings[] = {
 	{ DBG_SUBELEM, "subelem" },
 	{ DBG_SUBELEM_DMP, "subelem_dmp" },
 	{ DBG_MSG_IN, "msg_in" },
+	{ DBG_MSG_OUT, "msg_out"},
 	{ DBG_MSG_ERR, "msg_err" },
 	{ DBG_ELEM,  "elem" },
 	{ DBG_ELEM_DMP, "elem_dmp" },

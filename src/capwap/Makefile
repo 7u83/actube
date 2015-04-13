@@ -80,6 +80,7 @@ LWAPPOBJS = \
 	lw_msg_id_to_str.o \
 	lw_cisco_id_to_str.o \
 	lw_put_sockaddr.o \
+	lw_put_image_data.o
 
 #	lw_readelem_wtp_name.o \
 	lw_readelem_wtp_board_data.o \
@@ -117,6 +118,7 @@ CAPWAPOBJS= \
 	cw_in_check_disc_req.o \
 	cw_in_check_disc_resp.o\
 	cw_in_check_join_req.o \
+	cw_in_check_cipwap_join_req.o \
 	cw_in_check_join_resp.o \
 	cw_in_check_img_data_req_ac.o \
 	cw_in_check_img_data_req_wtp.o \
@@ -299,6 +301,7 @@ CWACTION=action.o \
 	capwap_strings_result.o\
 	cw_put_msg.o \
 	capwap_action_helpers.o \
+	cw_put_image_data.o
 
 #	cw_process_msg.o \
 

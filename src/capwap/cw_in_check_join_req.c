@@ -14,9 +14,12 @@ int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 	/* Check for mandatory elements */
 	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n) {
-		cw_dbg_missing_mand(DBG_ELEM,conn,mlist,n,a);
-		conn->capwap_state=CW_STATE_JOIN;
-		return CW_RESULT_MISSING_MAND_ELEM;
+		if ( conn->strict_capwap ){
+			cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
+			conn->capwap_state=CW_STATE_JOIN;
+			return CW_RESULT_MISSING_MAND_ELEM;
+		}
+		cw_dbg_missing_mand(DBG_RFC,conn,mlist,n,a);
 	}
 
 	

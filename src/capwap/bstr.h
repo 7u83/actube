@@ -89,7 +89,7 @@ static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 }
 
 
-
+typedef uint8_t * vendorstr_t;
 
 #define vendorstr_get_vendor_id(str)\
 	( *((uint32_t*)((str)+2)))

@@ -729,6 +729,7 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 
 #define cw_put_sockaddr lw_put_sockaddr
 
+int cw_put_image_data(uint8_t *dst,FILE *infile);
 
 
 /**
@@ -855,7 +856,7 @@ extern struct cw_str capwap_strings_result[];
 
 #define cw_strrc(rc) \
 	((rc)<0 ? ((rc)!=EAGAIN ? strerror(errno):"Timed out"): cw_strresult(rc))
-
+#define cw_strerror(rc) cw_strrc(rc)
 
 
 

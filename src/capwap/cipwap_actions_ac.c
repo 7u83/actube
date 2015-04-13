@@ -16,6 +16,24 @@
 	CW_ITEM_IMAGE_IDENTIFIER,			/* ID to use store */		\
 	1, 4096						/* min/max length */
 
+#define CW_ACTION_IN_CIPWAP_WTP_DESCRIPTOR	\
+	CW_ELEM_WTP_DESCRIPTOR,			/* Element ID */		\
+	cw_in_cipwap_wtp_descriptor, 0,		/* start/end callback */	\
+	0,									\
+	CW_ITEM_WTP_DESCRIPTOR,							\
+	0,0								
+
+/* For CIPWAP we allow a 
+   Session ID with 4 .. 16 bytes length */	
+#define CW_ACTION_IN_CIPWAP_SESSION_ID	 	\
+	CW_ELEM_SESSION_ID, 		/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_BSTR, 		/* Type of element */		\
+	CW_ITEM_SESSION_ID,		/* ID to use store */		\
+	4, 16				/* min/max length */
+
+
+
 
 cw_action_in_t cipwap_actions_ac_in[] = {
 
@@ -27,10 +45,34 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 	cw_in_generic, 0, CW_ITEMTYPE_STR,CW_ITEM_WTP_NAME,1,512}
 	,
 
-
 	{CW_VENDOR_ID_CISCO, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_CISCO_AP_GROUP_NAME, 
 	cw_in_generic, 0, CW_ITEMTYPE_STR,CW_ITEM_WTP_GROUP_NAME,1,512}
 	,
+
+	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,
+	 CW_ACTION_IN_CIPWAP_WTP_DESCRIPTOR,
+	 1}
+	,
+
+	/* -------------------------------------------------------------------------------
+	 * Join Request IN
+	 */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, 0,
+	 0, cw_in_check_cipwap_join_req}
+	,
+
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST,
+	 CW_ACTION_IN_CIPWAP_WTP_DESCRIPTOR, 1}
+	,
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST,
+	 CW_ACTION_IN_CIPWAP_SESSION_ID, 1}
+	,
+
+
+
+
+
+
 
 	/* -------------------------------------------------------------------------------
 	 * Image Data Request - Conig State
@@ -39,6 +81,15 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_IMAGE_DATA_REQUEST,
 	 CW_ACTION_IN_CISCO_IMAGE_IDENTIFIER,
 	 0}
+	,
+
+	
+	/* Element: Result Code  
+	   not mandatory in CIPWAP, while mandatory in CAPWAP
+	 */
+	{0, 0, CW_STATE_IMAGE_DATA, CW_MSG_IMAGE_DATA_RESPONSE,
+	 CW_ACTION_IN_RESULT_CODE, 0}
+
 	,
 
 

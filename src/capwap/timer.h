@@ -81,11 +81,6 @@ static inline double cw_clock_lap(struct timeval *tv){
  */ 
 #define cw_clock_stop cw_clock_lap
 
-
-
-	
-
-
 /** @} */
 
 

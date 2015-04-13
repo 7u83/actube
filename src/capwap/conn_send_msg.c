@@ -10,6 +10,9 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	int packetlen = cw_get_hdr_msg_total_len(rawmsg);
 
+	cw_dbg_msg(DBG_MSG_OUT, conn,rawmsg, packetlen,(struct sockaddr*)&conn->addr);
+
+
 	//uint8_t * msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
 
@@ -31,6 +34,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 //cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_M,1);
 
 	int mtu = conn->mtu;
+
 
 	while (packetlen>mtu){
 		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,1);

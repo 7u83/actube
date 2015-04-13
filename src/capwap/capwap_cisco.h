@@ -196,6 +196,12 @@ int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
 extern int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
 int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from);
 
+int cw_in_cipwap_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
+int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
+
+
 
 
 /*
