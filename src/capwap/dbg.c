@@ -155,7 +155,12 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 	char *s=dst;
 	switch (level) {
 		case DBG_PKT_IN:
-			s+=sprintf(s,"From %s",sock_addr2str(from));
+			if (cw_get_hdr_flag_f(packet)){
+				s+=sprintf(s,"Fragment from %s",sock_addr2str(from));
+			}
+			else{
+				s+=sprintf(s,"From %s",sock_addr2str(from));
+			}
 			break;
 		case DBG_PKT_OUT:
 			s+=sprintf(s,"To %s",sock_addr2str(from));
@@ -172,11 +177,11 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 	if (len<4)
 		goto abort;
 		
-		
+/*		
 	if (cw_get_hdr_flag_f(packet)){
 		s+=sprintf(s," (fragmented)");
 	}
-
+*/
 	int hlen = cw_get_hdr_hlen(packet); 
 	int rid = cw_get_hdr_rid(packet);
 	int wbid = cw_get_hdr_wbid(packet);
