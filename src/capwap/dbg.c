@@ -17,8 +17,10 @@
 */
 
 /**
- * @file
+ * @file Debugging Functions
  * @brief Various debug functions.
+ * @defgroup DebugFunctions Debug Functions
+ * @{
  */ 
 
 #include "capwap.h"
@@ -45,9 +47,14 @@ uint32_t cw_dbg_opt_level = 0;
 #define DBG_CLR_MAGENTA "\x1b[35m"
 #define DBG_CLR_BLUE_I	"\x1b[3;34m"
 
+#define DBG_CLR_YELLO	"\x1b[33m"
+#define DBG_CLR_YELLO_I "\x1b[3;33m"
+
 
 static struct cw_str color_on[] = {
-	{ DBG_PKT_IN, "\x1b[33m" },
+	{ DBG_PKT_IN, DBG_CLR_YELLO },
+	{ DBG_PKT_OUT, DBG_CLR_YELLO_I },
+
 	{ DBG_MSG_IN, "\x1b[34m" },
 	{ DBG_MSG_OUT, DBG_CLR_BLUE_I },
 
@@ -77,6 +84,7 @@ static struct cw_str color_off[] = {
 static struct cw_str prefix[] = {
 	{ DBG_INFO, " Info -" },
 	{ DBG_PKT_IN, " Pkt IN -" },
+	{ DBG_PKT_OUT, " Pkt Out -" },
 	{ DBG_MSG_IN, " Msg IN -" },
 	{ DBG_MSG_OUT, " Msg Out -" },
 
@@ -150,6 +158,9 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
 }
 
+/**
+ * Format a Packet Header
+ */
 int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	char *s=dst;
@@ -163,7 +174,12 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 			}
 			break;
 		case DBG_PKT_OUT:
-			s+=sprintf(s,"To %s",sock_addr2str(from));
+			if (cw_get_hdr_flag_f(packet)){
+				s+=sprintf(s,"Fragment to %s",sock_addr2str(from));
+			}
+			else{
+				s+=sprintf(s,"To %s",sock_addr2str(from));
+			}
 			break;
 	}
 	s+=sprintf(s," l=%d: ",len);
@@ -316,7 +332,9 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 
 
 
-
+/**
+ * Display a packet on for debugger
+ */ 
 void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
@@ -389,7 +407,7 @@ void cw_dbg_packet_m(struct conn *conn, uint8_t * packet, int len)
 
 */
 
-
+/*
 void ycw_dbg_dmp_(int level, const char *file, int line,
 		     const uint8_t * data, int len, const char *format, ...)
 {
@@ -479,7 +497,7 @@ void ycw_dbg_dmp_(int level, const char *file, int line,
 }
 
 
-
+*/
 
 static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 		     const uint8_t * elem_data)
@@ -592,4 +610,5 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 
 }
 
+/**@}*/
 
