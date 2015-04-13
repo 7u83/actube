@@ -111,6 +111,7 @@ static void wtpman_run_discovery(void *arg)
 	struct conn * conn = wtpman->conn;
 
 conn->strict_capwap=0;
+conn->capwap_mode=CW_MODE_CIPWAP;
 
 
 	time_t timer = cw_timer_start(10);
@@ -299,14 +300,27 @@ static int wtpman_join(void *arg, time_t timer)
 
 	struct conn * conn = wtpman->conn;
 
+conn->strict_capwap=0;
+conn->capwap_mode=CW_MODE_CIPWAP;
+
+
+
 	cw_dbg(DBG_INFO,"Join State - %s",sock_addr2str(&conn->addr));
 
+	int rc;
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
-		int rc = cw_read_messages(wtpman->conn);
+		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			break;
 		}
 	}
+
+	if (rc != 0  ) {
+		cw_log(LOG_ERR,"Error joining WTP %s",cw_strerror(rc));
+		return 0;
+
+	}
+
 
 	if (wtpman->conn->capwap_state == CW_STATE_JOIN) {
 		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
@@ -436,16 +450,18 @@ static void wtpman_run(void *arg)
 			return;
 		}
 
-		cw_itemstore_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
-					   infile);
 
 
 		DEFINE_CLOCK(clk);
 		cw_clock_start(&clk);
 
+		cw_item_t *eof = cw_itemstore_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
+					   infile);
+
 		int rc=0;
-	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && !feof(infile) && rc==0) {
+	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && rc==0 && eof!=NULL) {
 			rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
+			eof = cw_itemstore_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
 		}
 
 
@@ -459,7 +475,7 @@ static void wtpman_run(void *arg)
 		}
 			
 		fclose(infile);
-
+		wtpman_remove(wtpman);
 
 
 	}

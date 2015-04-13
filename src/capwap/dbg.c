@@ -43,11 +43,14 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 #define DBG_CLR_MAGENTA "\x1b[35m"
+#define DBG_CLR_BLUE_I	"\x1b[3;34m"
 
 
 static struct cw_str color_on[] = {
 	{ DBG_PKT_IN, "\x1b[33m" },
 	{ DBG_MSG_IN, "\x1b[34m" },
+	{ DBG_MSG_OUT, DBG_CLR_BLUE_I },
+
 	{ DBG_ELEM, "\x1b[39m" },
 	{ DBG_MSG_ERR, "\x1b[31m" },
 	{ DBG_PKT_ERR, "\x1b[31m" },
@@ -75,6 +78,8 @@ static struct cw_str prefix[] = {
 	{ DBG_INFO, " Info -" },
 	{ DBG_PKT_IN, " Pkt IN -" },
 	{ DBG_MSG_IN, " Msg IN -" },
+	{ DBG_MSG_OUT, " Msg Out -" },
+
 	{ DBG_ELEM,   " Msg Element -" },
 	{ DBG_MSG_ERR," Msg Error -" },
 	{ DBG_PKT_ERR," Pkt Error -" },
@@ -340,7 +345,11 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct so
 
 	int msg_id=cw_get_msg_id(msgptr);
 	s+=sprintf(s,"%s Message (type=%d) ",cw_strmsg(msg_id),msg_id);
-	s+=sprintf(s,"from %s ",sock_addr2str(from));
+	if ( level == DBG_MSG_IN ) 
+		s+=sprintf(s,"from %s ",sock_addr2str(from));
+	else
+		s+=sprintf(s,"to %s ",sock_addr2str(from));
+
 	s+=sprintf(s,", Seqnum: %d ElemLen: %d",cw_get_msg_seqnum(msgptr),cw_get_msg_elems_len(msgptr));
 
 //abort:

@@ -19,23 +19,41 @@
 #ifndef __LWAPP_H
 #define __LWAPP_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <arpa/inet.h>
 
-//#include "acinfo.h"
+#include "bstr.h"
+
+
 #include "wtpinfo.h"
 
 
-/* version */
+
+/** 
+ * @defgroup LWAPPConstants LWAPP Constats
+ * @{
+ */
+
+
+/** LWAPP Version */
 #define LW_VERSION 0
+
+/** LWAPP Control Port */
+#define LWAPP_CONTROL_PORT 12223
+/** LWAPP Control Port as string */
+#define LWAPP_CONTROL_PORT_STR "12223"
+
+/** Block Size for Image Data */
+#define LW_BLOCKSIZE_IMAGE_DATA 1024
+
+
+/**@}*/
+
 
 #define LW_VENDOR_ID_CISCO	4232704
 
-
-/* ports */
-#define LWAPP_CONTROL_PORT 12223
-#define LWAPP_CONTROL_PORT_STR "12223"
 
 
 /* macros to access transport header */
@@ -234,6 +252,7 @@ extern const char * lw_vendor_id_to_str(uint32_t vendor_id);
 extern const char * lw_elem_id_to_str(int elem_id);
 extern const char * lw_msg_id_to_str(int msg_id);
 
+extern int lw_put_image_data(uint8_t *dst,FILE *infile);
 
 
 #endif

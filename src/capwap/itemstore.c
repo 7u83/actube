@@ -169,14 +169,14 @@ int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int 
 
 
 
-int cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void *ptr)
+cw_item_t * cw_itemstore_set_const_ptr(cw_itemstore_t s, uint32_t id, void *ptr)
 {
 	struct cw_item *i = cw_item_create(s, id);
 	if (!i)
 		return 0;
 	i->type = CW_ITEMTYPE_CONST_DATA;
 	i->data = ptr;
-	return 1;
+	return i;
 }
 
 int cw_itemstore_set_vendorstr(cw_itemstore_t s, uint32_t id, uint32_t vendor_id,

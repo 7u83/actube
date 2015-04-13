@@ -141,7 +141,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 	/* pre-check message */
 	if (payloadlen-8 !=  elems_len ) {
 
-		if (conn_is_strict_capwap(conn)) {
+		if (conn->strict_hdr) {
 			cw_dbg(DBG_MSG_ERR,
 			       "Discarding message from %s, msgelems len=%d, payload len=%d, (Strict CAPWAP) ",
 			       sock_addr2str(&conn->addr), elems_len, payloadlen-8);
@@ -159,6 +159,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has msgelems len of %d bytes, but has only %d bytes of data, truncating.",
 			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
+			elems_len=payloadlen-8;
 		}
 	}
 

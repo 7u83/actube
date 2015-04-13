@@ -5,15 +5,19 @@
 #include "capwap_items.h"
 
 #include "log.h"
+#include "dbg.h"
 
 
 #include "sock.h"
 
 
-#define BLOCK_SIZE 1024
 
 
-int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	// ,struct cw_item * item) 
+
+
+
+
+int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 	cw_item_t * item = cw_itemstore_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
 	if (!item) {
@@ -22,31 +26,30 @@ int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 	}
 
 	FILE *infile = item->data;
-
-
-	int bytes = fread(dst+5,1,BLOCK_SIZE,infile);
-
-	if (feof(infile)){
-		if (ferror(infile)){
-			cw_log(LOG_ERROR,"Aborting image data transfer: %s",strerror(errno));
-			bytes=1;
-			cw_put_byte(dst+4,5);
-			bytes=0;
-
-		}
-		else{
-			/* Last image block */
-			cw_put_byte(dst+4,2); 
-
-		}
-
+	if (infile==NULL){
+		cw_log(LOG_ERR,"Image Data Request infile = NULL");
+		return 0;
 	}
-	else{
-		cw_put_byte(dst+4,1);
+	
+	int bytes=0;
+	switch ( conn->capwap_mode_out){
+		case CW_MODE_CISCO:
+			bytes = lw_put_image_data(dst+4,infile);
+			if ( bytes != LW_BLOCKSIZE_IMAGE_DATA + 3) {
+       		        	avltree_del(conn->outgoing, item);
+			}
+			break;
+		default:
+			bytes = cw_put_image_data(dst+4,infile);
+			if (dst[4] != 1){
+       		        	avltree_del(conn->outgoing, item);
+			}
 	}
-		
 
-	return bytes+1 + cw_put_elem_hdr(dst,a->elem_id,bytes+1);
+	if ( ferror(infile)){
+		cw_log(LOG_ERROR,"Aborting image data transfer: %s",strerror(errno));
+	}
 
+	return bytes + cw_put_elem_hdr(dst,a->elem_id,bytes);
 }
 

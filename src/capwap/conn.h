@@ -154,10 +154,15 @@ struct conn {
 	/* used to link the conn obj with other objects */
 	void *data;
 
-	/* misc */
+	/** Mode */
 	int capwap_mode;
+	
+	/** CAWAP mode for outgoing messages */
+	int capwap_mode_out;
+
 
 	int strict_capwap;
+	int strict_hdr;
 
 /*
 	int (*request_handler) (void *);

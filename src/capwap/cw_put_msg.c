@@ -89,7 +89,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	cw_set_msg_elems_len(msgptr, len);
 
-	if (as.msg_id) {
+	if (as.msg_id & 1) {
 		/* It's a request, so we have to set seqnum */
 		int s = conn_get_next_seqnum(conn);
 		cw_set_msg_seqnum(msgptr,s);	
