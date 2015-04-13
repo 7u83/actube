@@ -32,6 +32,13 @@
 	CW_ITEM_SESSION_ID,		/* ID to use store */		\
 	4, 16				/* min/max length */
 
+#define CW_ACTION_IN_CIPWAP_AC_NAME	 	\
+	CW_ELEM_AC_NAME, 		/* Element ID*/			\
+	cw_in_generic, 0,		/* start/end callback */	\
+	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	CW_ITEM_AC_NAME,		/* ID to use store */		\
+	0, 512				/* min/max length */
+
 
 
 
@@ -92,6 +99,14 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 
 	,
 
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message: Configuration Status Request */
+
+	/* Element: AC Name */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_REQUEST,
+	 CW_ACTION_IN_CIPWAP_AC_NAME, 1}
+	,
 
 
 	{0,0,0}
