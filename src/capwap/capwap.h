@@ -22,13 +22,16 @@
  */
 
 
+
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
+
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
+#include <errno.h>
 #include <arpa/inet.h>
 
 #include "conn.h"
@@ -36,13 +39,23 @@
 #include "lwapp.h"
 #include "strlist.h"
 
+
+
 /* capwap version and iana number */
+
+/**
+ *@defgroup CAPWAPConstants CAPWAP Constants 
+ *@{
+ */
+
+/** CAPWAP Version */
 #define CAPWAP_VERSION ((uint8_t)0)
-#define CWIANA_ENTERPRISE_NUMBER 0	/* for capwap base the number */
 
+#define CWIANA_ENTERPRISE_NUMBER 0
 
-/* ports */
+/** CAPWAP Control Port*/
 #define CAPWAP_CONTROL_PORT 5246
+/** CAPWAP Control Port as String */
 #define CAPWAP_CONTROL_PORT_STR "5246"
 
 
@@ -60,6 +73,7 @@ enum capwap_states {
 	CW_STATE_RUN
 };
 
+/**@}*/
 
 
 /* transport header flags */
@@ -117,8 +131,65 @@ struct capwap_ctrlhdr
 //extern int capwap_parse_trnsprthdr(struct capwap_trnsprthdr * cwh,uint8_t *msg, int msglen);
 //extern int capwap_parse_ctrlhdr(struct capwap_ctrlhdr * ch,uint8_t * msg, int len);
 
-/* CAPWAP message types as defined in RFC 5416 */
+/** 
+ *@defgroup CAPWAPMessages CAPWAP Messages
+ *@{
+ */
 
+/**
+ * CAPWAP message types as defined in RFC 5416 
+ */
+typedef enum {
+
+/**Discovery Request */
+CW_MSG_DISCOVERY_REQUEST = 			1,
+/** DIscovery Response */
+CW_MSG_DISCOVERY_RESPONSE = 			2,
+CW_MSG_JOIN_REQUEST = 				3,
+CW_MSG_JOIN_RESPONSE = 				4,
+
+CW_MSG_CONFIGURATION_STATUS_REQUEST = 		5,
+CW_MSG_CONFIGURATION_STATUS_RESPONSE = 		6,
+
+CW_MSG_CONFIGURATION_UPDATE_REQUEST = 		7,
+CW_MSG_CONFIGURATION_UPDATE_RESPONSE = 		8,
+
+CW_MSG_WTP_EVENT_REQUEST = 			9,
+CW_MSG_WTP_EVENT_RESPONSE = 			10,
+
+CW_MSG_CHANGE_STATE_EVENT_REQUEST = 		11,
+CW_MSG_CHANGE_STATE_EVENT_RESPONSE = 		12,
+
+CW_MSG_ECHO_REQUEST = 				13,
+CW_MSG_ECHO_RESPONSE = 				14,
+
+CW_MSG_IMAGE_DATA_REQUEST = 			15,
+CW_MSG_IMAGE_DATA_RESPONSE = 			16,
+
+CW_MSG_RESET_REQUEST = 				17,
+CW_MSG_RESET_RESPONSE = 			18,
+
+CW_MSG_PRIMARY_DISCOVERY_REQUEST = 		19,
+CW_MSG_PRIMARY_DISCOVERY_RESPONSE = 		20,
+
+CW_MSG_DATA_TRANSFER_REQUEST = 			21,
+CW_MSG_DATA_TRANSFER_RESPONSE = 		22,
+
+CW_MSG_CLEAR_CONFIGURATION_REQUEST = 		23,
+CW_MSG_CLEAR_CONFIGURATION_RESPONSE = 		24,
+
+CW_STATION_CONFIGURATION_REQUEST = 		25,
+CW_STATION_CONFIGURATION_RESPONSE = 		26,
+
+CW_MSG_MAXMSG	=				26
+
+}cw_msg_t;
+
+/**@}*/
+
+ 
+
+/*
 #define	CW_MSG_DISCOVERY_REQUEST			1
 #define CW_MSG_DISCOVERY_RESPONSE			2
 #define	CW_MSG_JOIN_REQUEST				3
@@ -158,7 +229,7 @@ struct capwap_ctrlhdr
 #define CW_STATION_CONFIGURATION_RESPONSE		26
 
 #define CW_MSG_MAXMSG					26
-
+*/
 
 /*
 * CAPWAP message elements as defined in  RFC 5415
@@ -813,28 +884,13 @@ extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
 
 
 /* cwmsg methods */
+/*
 static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
 {
 	cw_put_dword(dst + 4, code);
 	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
 }
-
-
-#define cwmsg_addelem_vendor_specific_payload(cwmsg,vendor_id, type, data,len) \
-	(cwmsg)->pos+=cw_addelem_vendor_specific_payload((cwmsg)->msgelems+(cwmsg)->pos,vendor_id,type,data,len)
-
-#define cwmsg_addelem_ac_name(cwmsg,name) \
-	(cwmsg)->pos+=cw_addelem_ac_name((cwmsg)->msgelems+(cwmsg)->pos,name)
-
-#define cwmsg_addelem_session_id(cwmsg,sessid) \
-	(cwmsg)->pos+=cw_addelem_session_id((cwmsg)->msgelems+(cwmsg)->pos,sessid)
-
-#define cwmsg_addelem_result_code(cwmsg,code) \
-	(cwmsg)->pos+=cw_addelem_result_code((cwmsg)->msgelems+(cwmsg)->pos,code)
-
-#define cwmsg_addelem_radio_operational_state(cwmsg,ri) \
-	(cwmsg)->pos+=cw_addelem_radio_operational_state((cwmsg)->msgelems+(cwmsg)->pos,ri)
-
+*/
 
 
 /* Message to text stuff */
@@ -853,11 +909,29 @@ extern struct cw_str capwap_strings_result[];
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 #define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,(id))
 
-
+/*
 #define cw_strrc(rc) \
 	((rc)<0 ? ((rc)!=EAGAIN ? strerror(errno):"Timed out"): cw_strresult(rc))
 #define cw_strerror(rc) cw_strrc(rc)
+*/
 
+static inline const char * cw_strerror(rc) {
+	if (rc<0){
+		if (errno==EAGAIN)
+			return "Timed out";
+		return strerror(errno);
+	}
+	return cw_strresult(rc);
+}
+#define cw_strrc cw_strerror
+
+static inline int cw_rcok(int rc)
+{
+	if (rc==0 || rc==2){
+		return 1;
+	}
+	return 0;
+}
 
 
 

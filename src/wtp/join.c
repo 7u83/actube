@@ -166,17 +166,13 @@ int run_join(struct conn * conn)
 
 	int rc = cw_send_request(conn,CW_MSG_JOIN_REQUEST);
 
-	if (rc >=0 ) {
-		cw_dbg(DBG_ELEM,"Join Result: %d - %s",rc,cw_strresult(rc));
-
-	}
-	if (rc != 0 && rc != 2) {
-		cw_log(LOG_ERR,"Can't Join AC at %s, AC returned code: %d - %s.",
-			sock_addr2str(&conn->addr),
-			rc,cw_strresult(rc));
+	if (!cw_rcok(rc) ) {
+		cw_log(LOG_ERR,"Can't Join AC at %s: %d - %s.",
+				sock_addr2str(&conn->addr),rc,cw_strerror(rc));
 		return 0;
 	}
 
+	cw_dbg(DBG_ELEM,"Join Result: %d - %s",rc,cw_strresult(rc));
 
 	return 1;
 }
@@ -196,7 +192,7 @@ int join()
 	avliter_foreach(&ii){
 		cw_acip_t * ip = avliter_get(&ii);
 
-		cw_dbg(DBG_ELEM,"Going to join CAWAP controller on %s",sock_addr2str(&ip->ip));
+		cw_dbg(DBG_INFO,"Going to join CAWAP controller on %s",sock_addr2str(&ip->ip));
 
 		int rc = run_join_d((struct sockaddr*)&ip->ip);
 		if (!rc) 

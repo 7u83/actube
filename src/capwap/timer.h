@@ -1,5 +1,5 @@
 /*
-    This file is part of libcapwap.
+    Tis file is part of libcapwap.
 
     libcapwap is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 
 /**
  * Define a clock variable to measure runtime (not CPU runtime, but
- * ralt time). This  variable can be used with #cw_clock_start 
+ * real time). This  variable can be used with #cw_clock_start 
  * and #cw_clock_lap.
  * 
  * @param c name of the variable

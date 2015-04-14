@@ -29,7 +29,7 @@
 /**
  * Item types supported in item store
  */
-enum cw_cfgtem_types {
+typedef enum  {
 	CW_ITEMTYPE_NONE = 0,
 	CW_ITEMTYPE_BYTE,
 	CW_ITEMTYPE_WORD,
@@ -45,7 +45,7 @@ enum cw_cfgtem_types {
 	CW_ITEMTYPE_AVLTREE,
 	CW_ITEMTYPE_FUN,
 
-};
+} cw_itemtype_t;
 
 struct cw_item {
 	uint32_t id;
@@ -135,5 +135,9 @@ int cw_itemstore_set_fun(cw_itemstore_t s, uint32_t id,
 
 int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type,
 		     uint8_t * data, int len);
+
+struct cw_item *cw_item_create(cw_itemstore_t s, uint32_t id);
+
+
 
 #endif

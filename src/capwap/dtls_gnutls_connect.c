@@ -9,7 +9,7 @@
 #include "log.h"
 #include "dbg.h"
 
-
+#include "sock.h"
 
 int dtls_gnutls_connect(struct conn *conn)
 {
@@ -34,7 +34,7 @@ int dtls_gnutls_connect(struct conn *conn)
 	}
 
 
-	cw_dbg(DBG_DTLS,"DTLS - Handshake successful");
+	cw_dbg(DBG_DTLS,"Handshake with %s successful",sock_addr2str(&conn->addr));
 
 	conn->dtls_data=d;
 	conn->read = dtls_gnutls_read;
