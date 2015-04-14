@@ -22,8 +22,6 @@ static inline void cw_itemstore_del_data(void *e)
 			break;
 		case CW_ITEMTYPE_AVLTREE:
 			avltree_destroy(item->data);
-
-
 	}
 }
 
@@ -244,7 +242,6 @@ void *cw_item_get_data_ptr(struct cw_item *item)
 
 	}
 	return item->data;
-
 }
 
 

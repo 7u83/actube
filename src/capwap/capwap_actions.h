@@ -133,7 +133,7 @@
 	cw_in_generic, 0,				/* start/end callback */	\
 	CW_ITEMTYPE_DATA, 				/* Type of element */		\
 	CW_ITEM_AC_DESCRIPTOR,				/* ID to use store */		\
-	6, 6						/* min/max length */
+	12, 8192						/* min/max length */
 
 
 #define CW_ACTION_IN_RESULT_CODE	 	\

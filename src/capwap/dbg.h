@@ -58,9 +58,8 @@ void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
 
 #endif
 
-
 /** 
- * @defgroup DebugOptions Dbug Options
+ * @defgroup DebugOptions Debug Options
  * @{
  */
 
@@ -158,7 +157,10 @@ extern struct cw_str cw_dbg_strings[];
 
 
 
-#define cw_dbg(type,...) cw_dbg_colored(type,__FILE__,__LINE__,__VA_ARGS__)
+#define cw_dbg(type,...)\
+	if (cw_dbg_is_level(type))  cw_dbg_colored(type,__FILE__,__LINE__,__VA_ARGS__)
+
+
 #define cw_dbg_dmp(type,...) cw_dbg_dmp_(type,__FILE__,__LINE__,__VA_ARGS__)
 
 

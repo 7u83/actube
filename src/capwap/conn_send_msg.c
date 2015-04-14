@@ -40,12 +40,12 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,1);
 		cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
-
+		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
 		//XXX
 		{
-			char h[200];
-			hdr_print(h,ptr,mtu);
-			cw_dbg(DBG_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
+//			char h[200];
+//			hdr_print(h,ptr,mtu);
+//			cw_dbg(DBG_PKT_OUT,"Sending capwap packet to %s:\n%s",sock_addr2str(&conn->addr),h);
 		}
 //		cw_dbg_dmp(DBG_PKT_DMP,ptr,mtu,"Sending packet ...");
 		
@@ -100,6 +100,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 
 //printf("Send packet len %p %d\n",ptr,packetlen);
+	cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,packetlen,(struct sockaddr*)&conn->addr);
 
 	return conn->write(conn,ptr,packetlen-0);
 }

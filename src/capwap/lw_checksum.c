@@ -19,6 +19,8 @@
 /**
  *@file
  *@brief Implements lw_checksum.
+ *@addtogroup LWAPPFunctions 
+ *@{
  */ 
 
 #include "lwapp.h"
@@ -49,4 +51,9 @@ uint16_t lw_checksum(uint8_t * d, int len)
 
 	return (~sum) & 0xffff;
 }
+
+
+/**
+ *@}
+ */
 

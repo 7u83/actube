@@ -173,6 +173,12 @@
 
 /* useful macros and inline functions */
 
+/** 
+ * @defgroup LWAPPFunctions LWAPP Functions
+ * @{
+ */
+
+
 #define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
 
 
@@ -230,6 +236,9 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 	*((uint16_t*)(dst+1)) = htons(len);
 	return 3;
 }
+
+/**@}*/
+
 
 extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
 

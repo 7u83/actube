@@ -20,14 +20,15 @@ ifndef ARCH
 endif
 
 
-CFLAGS += -O0 -Wall -g
-#CFLAGS += -Os -Wall 
-LDFLAGS += -L../../src/capwap/$(ARCH)
+#CFLAGS += -O0 -Wall -g
+CFLAGS += -Os -Wall 
+LDFLAGS += -L../contrib/jsmn -L../../src/capwap/$(ARCH) 
 
 
 LIBS+=-lcapwap
 LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
+LIBS+=-ljsmn
 
 CONFOBJS = wtp_conf.o
 
@@ -71,7 +72,7 @@ CFLAGS += $(HA_INCS)
 
 #CFLAGS += -I../src
 #CFLAGS += -I../src/utils
-CFLAGS += -I../../src -I /usr/local/include
+CFLAGS += -I../../src -I /usr/local/include -I ../contrib/jsmn
 
 #CFLAGS += -I/usr/local/include
 
@@ -80,6 +81,7 @@ CFLAGS += -I../../src -I /usr/local/include
 
 OBJS += wtp_main.o
 OBJS += image_update.o
+OBJS += cfg.o 
 
 
 #OBJS += wtp_conf.o

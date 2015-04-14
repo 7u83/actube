@@ -447,10 +447,10 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	}
 
 
-	if (!cw_dbg_is_level(DBG_ELEM_DMP))
+	if (!cw_dbg_is_level(DBG_ELEM_DMP)){
 		cw_dbg(DBG_ELEM, "%d (%s), len=%d",
 		       msgelem, elemname, len);
-
+	}
 	else{
 		char *dmp = cw_dbg_mkdmp(msgbuf,len);
 

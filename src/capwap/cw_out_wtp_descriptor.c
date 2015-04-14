@@ -45,5 +45,4 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 
 	int len = d-dst-4;
 	return len + cw_put_elem_hdr(dst,a->elem_id,len);
-
 }	

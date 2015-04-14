@@ -20,37 +20,42 @@ endif
 
 NAME=libcapwap.a
 
-SOCKOBJS=sock_create.o sock_copyaddr.o sock_strtoaddr.o sock_cmpaddr.o sock_addrlen.o \
-	sock_mwait.o sock_addrtostr.o \
-	 sock_setport.o \
-	 sock_getport.o \
-	 sock_getifaddr.o \
-	 sock_getifhwaddr.o \
-	 sock_hwaddrtostr.o \
-	 sock_set_recvtimeout.o \
-	 sock_getbroadcastaddr.o \
-	 sock_addrinit.o \
-	 sock_set_dontfrag.o \
-	 sock_get_primary_if.o \
-	 sock_receive.o  \
+SOCKOBJS=\
+	sock_create.o\
+	sock_copyaddr.o\
+	sock_strtoaddr.o\
+	sock_cmpaddr.o\
+	sock_addrlen.o \
+	sock_mwait.o\
+	sock_addrtostr.o \
+	sock_setport.o \
+	sock_getport.o \
+	sock_getifaddr.o \
+	sock_getifhwaddr.o \
+	sock_hwaddrtostr.o \
+	sock_set_recvtimeout.o \
+	sock_getbroadcastaddr.o \
+	sock_addrinit.o \
+	sock_set_dontfrag.o \
+	sock_get_primary_if.o \
+	sock_receive.o  \
+
 
 LOGOBJS=log.o \
         log_syslog.o \
 	log_file.o \
-	cw_dbg_elem.o \
-	dbg_strings.o
+	dbg_strings.o\
+	dbg.o
 
 
-
-
-WTPINFOOBJS = wtpinfo_set_location.o \
+WTPINFOOBJS =\
+	wtpinfo_set_location.o \
 	wtpinfo_print.o 
 
 UTILOBJS= \
 	cw_setstr.o \
 	cw_is_printable.o \
 	cw_rand.o \
-	cw_foreach_msgelem.o \
 	avltree.o \
 	avltree_get_node.o \
 	avltree_get.o \
@@ -66,6 +71,7 @@ UTILOBJS= \
 	cw_format_version.o \
 	send.o
 
+#	cw_foreach_msgelem.o \
 
 
 # LWAPP objs
@@ -102,7 +108,6 @@ CAPWAPOBJS= \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   hdr_print.o \
-	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 	cw_cisco_id_to_str.o\
 	cw_strlist_get_str.o \
 	cw_strlist_get_id.o \
@@ -133,12 +138,12 @@ CAPWAPOBJS= \
 	cw_in_capwap_control_ipv4_address.o\
 	strheap.o \
 	cw_check_missing_mand.o \
-	dbg.o \
 	md5sum.o \
 	format.o \
 	
 	
 	   #acinfo.o \
+#	cwmsg_addelem_vendor_cisco_mwar_addr.o \
 #		cwsend_unknow_response.o \
 	cw_send_configuration_update_response.o \
 	cwsend_echo_request.o \
@@ -207,6 +212,7 @@ cw_readelem_maximum_message_length.o \
 	   cwsend_discovery_response.o \
 	cw_readelem_cisco_wtp_radio_cfg.o \
 	cw_addelem_cisco_wtp_radio_cfg.o \
+	conn_prepare_request.o \
 	
 	   #cw_ianavendoridtostr.o \
 	   #cwmsg_addelem_result_code.o \
@@ -260,7 +266,6 @@ endif
 DTLSOBJS+=dtls_bio.o 
 
 CONNOBJS= conn_create.o \
-	conn_send_packet.o \
 	conn_process_packet.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
@@ -269,21 +274,23 @@ CONNOBJS= conn_create.o \
 	conn_destroy.o \
 	connlist.o \
 	conn_create_noq.o \
-	conn_send_response.o \
-	conn_prepare_configuration_update_request.o \
-	cw_prepare_configuration_status_request.o \
-	cw_prepare_change_state_event_request.o \
-	conn_prepare_request.o \
 	conn_init.o \
-	conn_send_msg.o
+	conn_send_packet.o \
+
+#	conn_send_msg.o
 #conn_get_message.o  \
+#	conn_send_response.o \
+#	cw_prepare_configuration_status_request.o \
+#	cw_prepare_change_state_event_request.o \
+	conn_prepare_configuration_update_request.o \
 
 
 
 BSTROBJS= bstr_create.o \
 	bstr_create_from_cfgstr.o \
 	bstr_replace.o \
-	bstr_to_str.o
+	bstr_to_str.o \
+	bstr16cfgstr.o
 	
 
 FRAGOBJS=fragman.o

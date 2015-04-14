@@ -15,11 +15,21 @@
 
 #include "capwap/dbg.h"
 
+#include "jsmn.h"
+
+
+
+
+
+
 
 
 /** The one and only connection object */
 struct conn *the_conn;
 struct cw_actiondef capwap_actions;
+
+
+
 
 
 
@@ -55,6 +65,10 @@ int main()
 	conn->incomming = cw_itemstore_create();
 	conn->local = cw_itemstore_create();
 
+
+//	setup_conf(conn);
+
+
 	cw_itemstore_t board_data = cw_itemstore_create();
 	cw_itemstore_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
 
@@ -65,6 +79,7 @@ int main()
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
 
+	
 
 
 	cw_itemstore_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
