@@ -1,0 +1,55 @@
+#include <errno.h>
+#include "wtp.h"
+
+#include "capwap/log.h"
+#include "capwap/dbg.h"
+#include "capwap/capwap.h"
+#include "capwap/capwap_items.h"
+
+
+int image_update()
+{
+	struct conn *conn = get_conn();
+	if (conn->capwap_state != CW_STATE_CONFIGURE) {
+		cw_log(LOG_ERR, "Current state not image update");
+		return 0;
+	}
+
+
+	const char *ii = "/c1130";
+	cw_itemstore_set_vendorstr(conn->outgoing, CW_ITEM_IMAGE_IDENTIFIER,
+				   CW_VENDOR_ID_CISCO, (uint8_t *) ii, strlen(ii));
+
+
+	int rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
+
+	if (rc < 0) {
+	}
+
+	if (rc != 0) {
+		cw_log(LOG_ERR, "AC rejected Image Data Request with code: %d - %s", rc,
+		       cw_strresult(rc));
+		return 0;
+	}
+
+	cw_dbg(DBG_ELEM,"Ready to receive image ...\n");
+
+	conn->capwap_state=CW_STATE_IMAGE_DATA;
+	rc=-11;
+        while (conn->capwap_state == CW_STATE_IMAGE_DATA) {
+                rc = cw_read_messages(conn);
+                if (rc < 0) {
+                        if (errno != EAGAIN) 
+				break;
+                }
+        }
+
+
+	printf("RC: %d %s\n",rc,strerror(errno));
+	
+
+
+
+
+	return 1;
+}

@@ -71,6 +71,13 @@ UTILOBJS= \
 	cw_format_version.o \
 	send.o
 
+MAVLOBJS= \
+	mavl.o \
+	mavl_del.o \
+	mavl_add.o \
+	mavl_create.o\
+	utf8.o
+
 #	cw_foreach_msgelem.o \
 
 
@@ -318,7 +325,8 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LOGOBJS) $(UTILOBJS) $(DTLSOBJS) $(BSTROBJS) \
 	$(LWAPPOBJS) \
 	$(LWAPPCISCOOBJS) \
-	$(CWACTION)
+	$(CWACTION) \
+	$(MAVLOBJS) 
 
 #include $(OBJS:.o=.d)
 

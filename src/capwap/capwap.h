@@ -1062,5 +1062,7 @@ struct cw_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out *a
 
 
 int cw_send_request(struct conn *conn, int msg_id);
+int cw_is_utf8(unsigned char *str, size_t len);
+
 
 #endif

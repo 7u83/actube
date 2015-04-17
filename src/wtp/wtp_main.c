@@ -66,7 +66,7 @@ int main()
 	conn->local = cw_itemstore_create();
 
 
-//	setup_conf(conn);
+	setup_conf(conn);
 
 
 	cw_itemstore_t board_data = cw_itemstore_create();
