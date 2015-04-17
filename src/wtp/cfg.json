@@ -1,0 +1,24 @@
+{
+	"hardware_version": "12345",
+	"software_version": "98765",
+	"vendor_id": 40909,
+	"modelno": "2045",
+
+	"acname_with_priority": {
+		"1":"Master-AC",
+		"2":"Cisco-AC"
+	},
+	"comment": "** The following is debug info **"
+	"dbg":[o1,o2,o3]
+	"ac": {
+		"Master-AC": {
+			
+
+		}
+		"Cisco-AC": {
+
+		}
+	}
+	
+} 
+
