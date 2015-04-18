@@ -21,7 +21,7 @@
 	cw_in_cipwap_wtp_descriptor, 0,		/* start/end callback */	\
 	0,									\
 	CW_ITEM_WTP_DESCRIPTOR,							\
-	0,0								
+	8,1028
 
 /* For CIPWAP we allow a 
    Session ID with 4 .. 16 bytes length */	

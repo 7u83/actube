@@ -29,7 +29,13 @@ struct conn *the_conn;
 struct cw_actiondef capwap_actions;
 
 
+bstr_t get_base_rmac()
+{
+//	static	uint8_t rm[8]={0x00,0x4a,0x99,0x02,0xfa,0xc0};
 
+	static     uint8_t rm[8]={0x00,0x3a,0x99,0x02,0xfa,0xc0};
+	return bstr_create(rm,6);
+}
 
 
 
@@ -64,11 +70,14 @@ int main()
 	conn->outgoing = cw_itemstore_create();
 	conn->incomming = cw_itemstore_create();
 	conn->local = cw_itemstore_create();
+	conn->base_rmac=get_base_rmac();
+	conn->capwap_mode = CW_MODE_CISCO;
 
 
 	setup_conf(conn);
 
 
+/*
 	cw_itemstore_t board_data = cw_itemstore_create();
 	cw_itemstore_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
 
@@ -78,11 +87,11 @@ int main()
 	cw_itemstore_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO, 
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
-
+*/
 	
 
 
-	cw_itemstore_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+//	cw_itemstore_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 	cw_acpriolist_t acprios = cw_acpriolist_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);
@@ -100,7 +109,7 @@ int main()
 	the_conn->strict_capwap=0;
 	discovery();
 	join();
-	image_update();
+	//image_update();
 
 
 }

@@ -36,6 +36,8 @@
 static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msgelem,
 					int len)
 {
+	if (len<4)
+		return;
 
 	int i = 0;
 	uint32_t val;

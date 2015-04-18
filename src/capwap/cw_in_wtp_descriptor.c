@@ -32,7 +32,8 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 					   int len, int silent)
 {
 	int i = 0;
-	do {
+	while (i<len) {
+
 		if (i + 8 > len) {
 			if (!silent)
 				cw_dbg(DBG_ELEM_ERR,
@@ -51,7 +52,7 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 		if (sublen + i > len) {
 			if (!silent)
 				cw_dbg(DBG_ELEM_ERR,
-				       "WTP Descriptor subelement too long, length = %d",
+				       "WTP Descriptor sub-element too long, length = %d",
 				       sublen);
 			return 0;
 		}
@@ -82,8 +83,9 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 				break;
 			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
 
-				cw_itemstore_set_vendorstr(itemstore,CW_ITEM_WTP_SOFTWARE_VERSION,
-								vendor_id,data+i,sublen);
+				cw_itemstore_set_vendorstr(itemstore,
+							   CW_ITEM_WTP_SOFTWARE_VERSION,
+							   vendor_id, data + i, sublen);
 /*
 				cw_itemstore_set_dword(itemstore,
 						       CW_ITEM_WTP_SOFTWARE_VENDOR,
@@ -111,7 +113,7 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 		}
 		i += sublen;
 
-	} while (i < len);
+	} //while (i < len);
 
 	return 1;
 

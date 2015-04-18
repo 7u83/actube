@@ -8,14 +8,18 @@
 
 #include "jsmn.h"
 #include "wtp.h"
+#include "capwap/bstr.h"
 
 struct cw_itemdef {
 	int item_id;
 	const char *cfgname;
-	int (*setfun) (struct cw_itemdef *,char *js,jsmntok_t *t);
+	int (*setfun) (struct cw_itemdef *,char *,jsmntok_t *);
+	const char def;
 
 };
 typedef struct cw_itemdef cfg_item_t;
+
+
 
 enum {
 	CW_ITEMSPACE_DBG,
@@ -23,9 +27,80 @@ enum {
 };
 
 
-int bstr16_local(struct cw_item_def *idef,char *js, jsmntok_t *t)
+static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t) ) {
+	int i;
+
+	if (t->type!=JSMN_OBJECT){
+printf("No object\n");
+		return 0;
+	}
+
+/*
+	if (t->size<3) {
+		return 0;
+	}
+
+*/
+	int j=1;
+	for (i = 0; i < t->size; i++) {
+
+		j+=vcb(js,t+j);
+		continue;
+				
+	}
+
+	return 0;
+
+}
+
+
+static int skip(jsmntok_t *t) 
 {
-	int item_id = idef=item_id;
+	switch (t->type){
+		case JSMN_OBJECT:
+		{
+			int e=t->end;
+			int n=1;
+			while (e>t->start) {
+				t++;n++;
+			}
+			return n;
+		}
+		default:
+			return t->size+2;
+
+	}
+}
+
+
+
+
+
+int byte_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+{
+printf("GET BYTE\n");
+//	if (t->type != JSMN_STRING){
+//		printf("Error: No Str: %s\n",str);
+//		return 1;
+//	}
+
+	*(js+t->end)=0;
+	const char * val = js+t->start;
+//	*(js+(t+1)->end)=0;
+//	const char * val = js+(t+1)->start;
+	struct conn * conn = get_conn();
+	
+	cw_itemstore_set_byte(conn->local,idef->item_id,atoi(val));
+
+}
+
+
+
+
+
+int bstr16_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+{
+	int item_id = idef->item_id;
 	struct conn * conn = get_conn();
 
 	*(js+t->end)=0;
@@ -37,14 +112,34 @@ int bstr16_local(struct cw_item_def *idef,char *js, jsmntok_t *t)
 	}
 //	*(js+t->end)=0;
 	printf("Set str: %d %s\n", item_id,str);
-	cw_itemstore_set_bstr16n(conn->local,item_id,js+t->start,t->end-t->start);
+	cw_itemstore_set_bstr16n(conn->local,item_id,(uint8_t*)js+t->start,t->end-t->start);
+	return 0;
 }
 
+int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t);
 
-struct cw_itemdef cfg[] = {
+
+
+
+
+struct cw_itemdef general_cfg[] = {
 	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",bstr16_local}, 
 	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",bstr16_local}, 
 	{CW_ITEM_WTP_BOARD_MODELNO, "modelno",bstr16_local}, 
+	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local},
+	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
+	{CW_ITEM_WTP_MAC_TYPE,"mac_type",byte_local},
+	{CW_ITEM_LOCATION_DATA,"location_data",bstr16_local},
+
+	{0, 0, 0}
+};
+
+
+
+struct cw_itemdef board_data_cfg[] = {
+	{CW_ITEM_WTP_BOARD_MODELNO, "model_no",NULL}, 
+	{CW_ITEM_WTP_BOARD_SERIALNO, "serial_no",NULL}, 
+	{CW_ITEM_WTP_BOARD_VENDOR, "vendor_id",NULL},
 
 	{0, 0, 0}
 };
@@ -54,7 +149,8 @@ struct cw_itemdef cfg[] = {
 
 
 
-struct cw_itemdef * get_cfg(const char *key){
+
+struct cw_itemdef * get_cfg(struct cw_itemdef *cfg,const char *key){
 	int i=0;
 	for (i=0; cfg[i].item_id; i++){
 		if ( !strcmp(key,cfg[i].cfgname ))  {
@@ -64,61 +160,94 @@ struct cw_itemdef * get_cfg(const char *key){
 	return NULL;
 }
 
-
-int scn_obj(jsmntok_t *t, int i)
+static int wtp_board_data_cb(char *js,jsmntok_t *t)
 {
+printf("VB BOARD DATA!!!\n");
+	struct conn * conn = get_conn();
+	cw_itemstore_t bd = cw_itemstore_get_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA);
+	if (!bd){
+		bd = cw_itemstore_create();
+		if (!bd){
+			return skip(t+1);
+		}
+		cw_itemstore_set_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA,bd);
+	}
 	
 
 
+
+	*(js+t->end)=0;
+	const char * key = js+t->start;
+	*(js+(t+1)->end)=0;
+	const char * val = js+(t+1)->start;
+	
+
+	struct conn *get_conn();
+	struct cw_itemdef * idef = get_cfg(board_data_cfg,key);
+
+	if (!idef){
+		return skip(t+1);
+	}
+
+	if (idef->item_id == CW_ITEM_WTP_BOARD_VENDOR){
+		cw_itemstore_set_dword(bd,CW_ITEM_WTP_BOARD_VENDOR,atoi(val));
+		
+	}
+	else{
+		bstr16_t v = bstr16cfgstr(val);
+		cw_itemstore_set_bstr16n(bd,idef->item_id,bstr16_data(v),bstr16_len(v));
+		free(v);
+
+	}
+
+
+
+	return skip(t+1);
+
 }
+
+int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+{
+printf("Local board data\n");
+
+	if ( t->type != JSMN_OBJECT ) {
+		printf("Error: wtp_board_data is no object\n");
+		printf("Size: %d\n",t->size);
+		return 0;
+	}
+printf("Scanni\n");
+	scn_obj(js, t,wtp_board_data_cb);
+	return skip(t+1);
+}
+
 
 
 static int set_cfg(char *js,jsmntok_t *t){
 
 	*(js+t->end)=0;
 	const char * key = js+t->start;
+	*(js+(t+1)->end)=0;
+	//const char * val = js+(t+1)->start;
 
-	if ( t->type != JSMN_STRING ) {
-		printf("Error - No String: %s\n",key);
-		return 0;
-	}
 
-	struct cw_itemdef * idef = get_cfg(key);
-	if(!idef){
-		printf("Error - not found: %s\n",key);
-		return 0;
-	}	
+
+	struct cw_itemdef * idef = get_cfg(general_cfg,key);
+
+//	printf("Key: %s\n",key);
+//	printf("Val: %s\n",val);
+
+	if(!idef)
+		return skip(t+1);
 
 	if ( !idef->setfun) {
 		printf("Error no setfun: %s\n",key);
 		
 	} 
 	else{
-		idef->setfun(idef->item_id,js,t+1);
+		idef->setfun(idef,js,t+1);
 	}
 
-	return 1;	
-
-}
-
-static int read_obj(char *js, jsmntok_t *t ) {
-	int i;
-
-	if (t->type!=JSMN_OBJECT){
-		return 0;
-	}
-
-	if (t->size<3) {
-		return 0;
-	}
-
-	for (i = 1; i < t->size; i++) {
-		i+=set_cfg(js,t+i);
-		continue;
-				
-	}
-
-	return 0;
+	return skip(t+1);
 
 }
 
@@ -156,24 +285,24 @@ int setup_conf(struct conn *conn)
 		printf("Parser failed\n");
 	}
 
-	read_obj(jstr, t);
-
-
-
-
-
-	int i;
+	scn_obj(jstr, t,set_cfg);
 
 
 
 
 
 
+
+
+
+/*
 
 	for (i = 0; cfg[i].item_id != CW_ITEM_NONE; i++) {
 		printf("ItemName: %s\n", cfg[i].cfgname);	//.cfgname)
 
 	}
+*/
+
 
 	return 0;
 }

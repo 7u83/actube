@@ -53,6 +53,8 @@ struct conn {
 	cw_itemstore_t remote;
 	cw_itemstore_t local;
 
+	/** base_mac */
+	bstr_t base_rmac;
 	
 	/** Wireless Binding ID of this connection */
 	uint8_t wbid;

@@ -1,15 +1,31 @@
 {
+
+
+	"dbg":[o1,o2,o3],
+	"Tube" :   "tabbe",
+
 	"hardware_version": "12345",
 	"software_version": "98765",
-	"vendor_id": 40909,
-	"modelno": "2045",
+	"comment": "** The following is debug info **",
+	"location_data": "Berlin",
+
+	"frame_tunnel_mode": "4",
+	"mac_type": 2,
+
+	
+
+	"wtp_board_data" : {
+		"vendor_id": 4232704,
+		"model_no": "Tobias Herre",
+		"serial_no": "2045",
+	},
+
 
 	"acname_with_priority": {
 		"1":"Master-AC",
 		"2":"Cisco-AC"
 	},
-	"comment": "** The following is debug info **"
-	"dbg":[o1,o2,o3]
+
 	"ac": {
 		"Master-AC": {
 			
@@ -19,6 +35,7 @@
 
 		}
 	}
+
 	
 } 
 
