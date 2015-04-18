@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 
 #include "capwap/capwap.h"
+#include "capwap/cipwap.h"
 #include "capwap/capwap_items.h"
 #include "capwap/conn.h"
 #include "capwap/log.h"
@@ -63,7 +64,7 @@ int main()
 	struct conn *conn = the_conn;
 
 
-	cw_register_actions_capwap_wtp(&capwap_actions);
+	cw_register_actions_cipwap_wtp(&capwap_actions);
 	////cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
 	conn->actions = &capwap_actions;
@@ -109,6 +110,7 @@ int main()
 	the_conn->strict_capwap=0;
 	discovery();
 	join();
+	configure();
 	//image_update();
 
 

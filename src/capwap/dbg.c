@@ -50,6 +50,8 @@ uint32_t cw_dbg_opt_level = 0;
 #define DBG_CLR_YELLO	"\x1b[33m"
 #define DBG_CLR_YELLO_I "\x1b[3;33m"
 
+#define DBG_CLR_CYAN	"\x1b[36m"
+
 
 static struct cw_str color_on[] = {
 	{ DBG_PKT_IN, DBG_CLR_YELLO },
@@ -67,6 +69,7 @@ static struct cw_str color_on[] = {
 
 	{ DBG_RFC, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
+	{ DBG_WARN, DBG_CLR_CYAN },
 	{ CW_STR_STOP, "" } 
 };
 static struct cw_str color_ontext[] = {
@@ -95,7 +98,9 @@ static struct cw_str prefix[] = {
 	{ DBG_RFC,    " RFC Violation -" },
 	{ DBG_SUBELEM," Sub-Element - "},
 	{ DBG_DTLS, " DTLS - "},
+	{ DBG_WARN, " Warning - "},
 	{ DBG_X, "XXXXX - "},
+
 	{ CW_STR_STOP, "" } 
 };
 

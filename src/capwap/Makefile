@@ -311,6 +311,7 @@ CWACTION=action.o \
 	cw_out_wtp_board_data.o \
 	cw_out_image_data.o \
 	cipwap_actions_ac.o \
+	cipwap_actions_wtp.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
 	cw_put_msg.o \

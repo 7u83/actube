@@ -8,6 +8,10 @@ int configure()
 {
 
 	struct conn * conn = get_conn();
+	cw_send_request(conn,CW_MSG_CONFIGURATION_STATUS_REQUEST);
+
+
+
 /*	struct wtpinfo * wtpinfo = get_wtpinfo();
 
 	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
