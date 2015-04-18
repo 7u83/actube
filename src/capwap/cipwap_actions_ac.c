@@ -126,7 +126,7 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 	,
 
 	/* Cisco AP Timesync - Important to get the WTP a DTLS 
-	   connection stablished*/
+	   connection established*/
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ITEM_AC_TIMESTAMP, CW_VENDOR_ID_CISCO,
 	CW_CISCO_AP_TIMESYNC, NULL,cw_out_cisco_ap_timesync, 0}
 	,

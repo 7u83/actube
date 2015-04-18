@@ -197,6 +197,16 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 
 
+	/* -------------------------------------------------------------------------------
+	 * Configuration Status Request OUT
+	 */
+	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_NONE}
+	,
+
+
+
+
+
 	{0, 0}
 
 };

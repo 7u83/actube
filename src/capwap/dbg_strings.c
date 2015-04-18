@@ -39,6 +39,7 @@ struct cw_str cw_dbg_strings[] = {
 	{ DBG_ELEM_ERR, "elem_err" },
 	{ DBG_DTLS, "dtls" },
 	{ DBG_DTLS_BIO, "dtls_bio" },
+	{ DBG_WARN, "warn" },
 
 	{ DBG_X,"dbgx" },
 	{ CW_STR_STOP, NULL } 

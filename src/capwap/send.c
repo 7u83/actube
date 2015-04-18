@@ -106,7 +106,7 @@ int cw_send_request(struct conn *conn,int msg_id)
 	}
 
 	if ( rc <0 && errno != EAGAIN) {
-		cw_log(LOG_ERR,"Error reading from %s:%s",sock_addr2str(&conn->addr),strerror(errno));
+		cw_log(LOG_ERR,"Can't read from %s: %s",sock_addr2str(&conn->addr),strerror(errno));
 	}
 	if ( rc <0 && errno == EAGAIN) {
 		errno=ETIMEDOUT;
