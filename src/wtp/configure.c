@@ -6,9 +6,9 @@
 
 int configure()
 {
-/*
+
 	struct conn * conn = get_conn();
-	struct wtpinfo * wtpinfo = get_wtpinfo();
+/*	struct wtpinfo * wtpinfo = get_wtpinfo();
 
 	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
 

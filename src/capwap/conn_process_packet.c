@@ -52,8 +52,14 @@ void cw_init_response(struct conn *conn, uint8_t * req)
 	int shbytes = cw_get_hdr_msg_offset(req);
 	int dhbytes;
 	memcpy(buffer, req, shbytes);
-	cw_set_hdr_hlen(buffer, 2);
-	cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
+
+
+	cw_set_hdr_rmac(buffer,conn->base_rmac);
+//	cw_set_hdr_hlen(buffer, 2);
+//	cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
+
+
+
 	dhbytes = cw_get_hdr_msg_offset(buffer);
 
 	uint8_t *msgptr = req + shbytes;
@@ -74,10 +80,15 @@ void cw_init_request(struct conn *conn, int msg_id)
 
 	/* unencrypted */
 	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
+	
+	cw_set_hdr_rmac(buffer,conn->base_rmac);
+	//cw_set_hdr_hlen(buffer, 2);
 
-	cw_set_hdr_hlen(buffer, 2);
+
 	cw_set_hdr_wbid(buffer, 1);
 	cw_set_hdr_rid(buffer, 0);
+
+
 	uint8_t *msgptr = cw_get_hdr_msg_offset(buffer) + buffer;
 	cw_set_msg_type(msgptr, msg_id);
 	cw_set_msg_flags(msgptr, 0);

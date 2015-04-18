@@ -111,13 +111,23 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_DISCOVERY_TYPE, 0,
 	 CW_ELEM_DISCOVERY_TYPE, NULL,cw_out_generic, cw_out_get_outgoing}
 	,
+	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0,
+	 CW_ELEM_WTP_FRAME_TUNNEL_MODE, NULL,cw_out_generic, cw_out_get_local,1}
+	,
 
+	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_MAC_TYPE, 0,
+	 CW_ELEM_WTP_MAC_TYPE, NULL,cw_out_generic, cw_out_get_local,1}
+	,
 
 	/* WTP Board Data */
 	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_BOARD_DATA, 0,
-	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing}
+	 CW_ELEM_WTP_BOARD_DATA, NULL,cw_out_wtp_board_data, cw_out_get_outgoing,1}
 	,
-
+	/* WTP Descriptor */
+	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_DESCRIPTOR, 0, 
+	 CW_ELEM_WTP_DESCRIPTOR, NULL,cw_out_wtp_descriptor, NULL,1}
+	,
+	
 
 	/* -------------------------------------------------------------------------------
 	 * Join Request OUT

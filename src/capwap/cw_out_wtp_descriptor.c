@@ -5,9 +5,11 @@
 #include "capwap_items.h"
 #include "capwap.h"
 
-
-static int cw_put_enc_subelems(uint8_t *dst)
+static int cw_put_encryption_subelems(uint8_t *dst)
 {
+cw_put_word(dst,0x01);
+return 2;
+
 	int n=2;
 	
 	dst+=cw_put_byte(dst,n);	
@@ -29,9 +31,9 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	// XXX Dummy WTP Descriptor Header
 	uint8_t *d = dst+4;
 
-	d+=cw_put_byte(d,2); 
-	d+=cw_put_byte(d,0);
-	d+=cw_put_enc_subelems(dst);
+	d+=cw_put_byte(d,2);	//max radios
+	d+=cw_put_byte(d,0);	//radios in use
+	d+=cw_put_encryption_subelems(d);
 
 	cw_item_t * i;
 	i = cw_itemstore_get(conn->outgoing,CW_ITEM_WTP_HARDWARE_VERSION);

@@ -633,6 +633,8 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 #define cw_set_hdr_preamble(th,v) ((*th)=v)
 
 
+
+
 /**
  * Set the HLEN field of a CAWAP Header
  * @param th pointer to the header
@@ -725,6 +727,32 @@ static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
 	int offset = cw_get_hdr_msg_offset(rawmsg);
 	return offset + cw_get_msg_elems_len(rawmsg + offset) + 8;
 }
+
+
+
+static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
+{
+	if (!rmac){
+		cw_set_hdr_flags(th,CW_FLAG_HDR_M,0);
+		cw_set_hdr_hlen(th, 2);
+		return 0;
+	}
+	int rmac_len = bstr_len(rmac);
+	memcpy(cw_get_hdr_rmac(th),rmac,rmac_len+1);
+	cw_set_hdr_flags(th,CW_FLAG_HDR_M,1);
+
+	int hlen =  4+rmac_len/4;
+	
+	if (rmac_len %4 != 0) {
+		hlen++;
+	}
+	cw_set_hdr_hlen(th,hlen);
+	return 1;
+}
+
+
+
+
 
 /**
  * Get length of a CAPWAP message elemet 

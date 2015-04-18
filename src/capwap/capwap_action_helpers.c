@@ -38,11 +38,19 @@ struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 struct cw_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * a)
 {
 	uint8_t session_id[16];
-	int l = cw_rand(session_id,16);
-	if ( l!=16 ) {
+
+	int slen;
+	if ( conn->capwap_mode == CW_MODE_CISCO){
+		slen=4;
+	}
+	else
+		slen=16;
+
+	int l = cw_rand(session_id,slen);
+	if ( l!=slen ) {
 		cw_log(LOG_ERR,"Can't init session ID.");
 		return NULL;
 	}
-	return cw_itemstore_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,16);
+	return cw_itemstore_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,slen);
 }
 

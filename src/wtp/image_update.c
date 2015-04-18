@@ -32,7 +32,7 @@ int image_update()
 		return 0;
 	}
 
-	cw_dbg(DBG_ELEM,"Ready to receive image ...\n");
+	cw_dbg(DBG_INFO,"Ready to receive image ...");
 
 	conn->capwap_state=CW_STATE_IMAGE_DATA;
 	rc=-11;
