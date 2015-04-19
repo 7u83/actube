@@ -8,42 +8,47 @@
 #include "log.h"
 
 
-int cw_put_item(uint8_t * dst, struct cw_item *item)
+int cw_put_item(uint8_t * dst, struct mbag_item *item)
 {
-	switch (item->type) {
-		case CW_ITEMTYPE_STR:
-			return cw_put_data(dst, item->data, strlen((char *) item->data));
-		case CW_ITEMTYPE_BYTE:
-			return cw_put_byte(dst, item->byte);
-		case CW_ITEMTYPE_WORD:
-			return cw_put_word(dst, item->word);
-		case CW_ITEMTYPE_DWORD:
-			return cw_put_dword(dst, item->dword);
-		case CW_ITEMTYPE_BSTR:
-			return cw_put_bstr(dst, item->data);
-		case CW_ITEMTYPE_BSTR16:
-			return cw_put_bstr16(dst,item->data);
-		case CW_ITEMTYPE_VENDORSTR:
-		{
-			int l=0;
-			l+=cw_put_dword(dst, vendorstr_get_vendor_id(item->data));
-			l+=cw_put_data(dst+4, vendorstr_data(item->data),vendorstr_len(item->data));
-			return l;
-		}
-		default: 
-			cw_log(LOG_ERR,"No method to put items of type %d",item->type);
-
+	if (MBAG_STR == item->type ){
+		return cw_put_data(dst, item->data, strlen((char *) item->data));
 	}
+
+	if (MBAG_BYTE == item->type){
+		return cw_put_byte(dst, item->byte);
+	}
+	if (MBAG_WORD == item->type){
+		return cw_put_word(dst, item->word);
+	}
+	if (MBAG_DWORD == item->type){
+		return cw_put_dword(dst, item->dword);
+	}
+	if (MBAG_BSTR  == item->type) {
+		return cw_put_bstr(dst, item->data);
+	}
+
+	if ( MBAG_BSTR16 == item->type)
+		return cw_put_bstr16(dst,item->data);
+
+	if (MBAG_VENDORSTR == item->type)
+	{
+		int l=0;
+		l+=cw_put_dword(dst, vendorstr_get_vendor_id(item->data));
+		l+=cw_put_data(dst+4, vendorstr_data(item->data),vendorstr_len(item->data));
+		return l;
+	}
+	cw_log(LOG_ERR,"No method to put items of type %d",item->type);
+
 
 	return 0;
 }
 
-int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	// ,struct cw_item * item) 
+int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	// ,struct mbag_item * item) 
 {
 
 
 	/* Get the item to put */
-	struct cw_item *item = NULL;
+	struct mbag_item *item = NULL;
 	if (a->get) {
 		item = a->get(conn, a);
 	}

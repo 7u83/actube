@@ -498,25 +498,26 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 int cw_is_utf8(unsigned char *str, size_t len);
 
 
-int cw_format_item(char *dst,cw_item_t * item)
+int cw_format_item(char *dst,mbag_item_t * item)
 {
 	*dst=0;
-	switch (item->type) {
-		case CW_ITEMTYPE_BSTR16:
+	if (item->type==MBAG_BSTR16){
 			strncpy(dst,bstr16_data(item->data),bstr16_len(item->data));
 			*(dst+bstr16_len(item->data))=0;
 			return bstr16_len(item->data);
 
 
 	}
+	return 0;
 }
 
-void dbg_istore_dmp(cw_itemstore_t s)
+/*
+void dbg_istore_dmp(mbag_t s)
 {
 	DEFINE_AVLITER(it,s);
 	avliter_foreach(&it) {
 
-		cw_item_t *i = avliter_get(&it);
+		mbag_item_t *i = avliter_get(&it);
 
 		char buffer[1000];
 
@@ -532,7 +533,7 @@ void dbg_istore_dmp(cw_itemstore_t s)
 
 
 }
-
+*/
 
 
 /**@}*/

@@ -45,6 +45,9 @@ bstr_t get_base_rmac()
 int main()
 {
 
+
+
+
 	wtpconf_preinit();
 
 	if (!read_config("./wtp_uci.conf")) {
@@ -58,6 +61,12 @@ int main()
 	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
 
+
+mbag_t b = mbag_create();
+
+mbag_set_byte(b,1,99);
+mbag_set_avltree(b,2,mbag_create());
+mavl_destroy(b);
 
 
 	dtls_init();
@@ -88,43 +97,44 @@ int main()
 	////cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
 	conn->actions = &capwap_actions;
-	conn->outgoing = cw_itemstore_create();
-	conn->incomming = cw_itemstore_create();
-	conn->local = cw_itemstore_create();
+	conn->outgoing = mbag_create();
+	conn->incomming = mbag_create();
+	conn->local = mbag_create();
 	conn->base_rmac=get_base_rmac();
 	conn->capwap_mode = CW_MODE_CISCO;
 
+conn->config=mbag_create();
 
 	setup_conf(conn);
 
 
 /*
-	cw_itemstore_t board_data = cw_itemstore_create();
-	cw_itemstore_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
+	mbag_t board_data = mbag_itemstore_create();
+	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
 
 
-	cw_itemstore_set_bstrn(board_data, CW_ITEM_WTP_BOARD_MACADDRESS, conf_macaddress,
+	mbag_set_bstrn(board_data, CW_ITEM_WTP_BOARD_MACADDRESS, conf_macaddress,
 			       conf_macaddress_len);
-	cw_itemstore_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO, 
+	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO, 
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
 */
 	
 
 
-//	cw_itemstore_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+//	mbag_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 	cw_acpriolist_t acprios = cw_acpriolist_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);
 	cw_acpriolist_set(acprios,"AC8new",strlen("AC8new"),12);
 
-	cw_itemstore_set_avltree(conn->local,CW_ITEM_AC_PRIO_LIST,acprios);
+	mbag_set_avltree(conn->local,CW_ITEM_AC_PRIO_LIST,acprios);
 
-	cw_itemstore_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
-//	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
+	mbag_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
+//	mbag_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
 
-	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_MAC_TYPE,0);
-	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
+	mbag_set_byte(conn->local,CW_ITEM_WTP_MAC_TYPE,0);
+	mbag_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
 
 
 	the_conn->strict_capwap=0;

@@ -1,52 +1,7 @@
 {
-
-
-	"dbg":[o1,o2,o3],
-
-	"hardware_version": ["4232704",".x01000000"],
-	"software_version": ["4232704",".x08006E00"],
-
-	"comment": "** The following is debug info **",
-	"location_data": "China",
-
-	"frame_tunnel_mode": "4",
-	"mac_type": 2,
-
-	"group_name" : "XGroup",
-
-	"wtp_name" : "TubeWTP",
-	"ac_name" : "LAC_AC",
-
-	"bssid": ".x003a9902fac0",
-
-	"wtp_board_data" : {
-		"vendor_id": "4232704",
-		"model_no": "AIR-LAP1131AG-E-K9",
-		"serial_no": "2045"
-	},
-
-
-	"acname_with_priority": {
-		"1":"Master-AC",
-		"2":"Cisco-AC"
-	},
-
-	"ac": {
-		"Master-AC": {
-			
-
-		}
-		"Cisco-AC": {
-
-		}
-	}
-
-	"radios": {
-		"1": {
-			"domain"
-			
-		}
-	}
-	
-} 
+	"wtp_name":"TubeWTP",
+	"hardware_version":["4232704",".x01000000"],
+	"software_version":["4232704",".x08006e00"],
+	"location_data":"China"
+}
 

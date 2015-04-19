@@ -24,7 +24,7 @@
 
 #include "avltree.h"
 #include "conn.h"
-#include "itemstore.h"
+#include "mbag.h"
 #include "strheap.h"
 #include "intavltree.h"
 
@@ -43,7 +43,8 @@ struct cw_action_in{
 	uint16_t elem_id;
 	int (*start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
-	uint8_t itemtype;
+//	uint8_t itemtype;
+	const struct mbag_typedef * itemtype;
 	uint16_t item_id;
 	uint16_t min_len;
 	uint16_t max_len;
@@ -76,9 +77,10 @@ struct cw_action_out{
 	uint16_t elem_id;
 	int (*init)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
-	struct cw_item *(*get)(struct conn *conn,struct cw_action_out *a);
+	struct mbag_item *(*get)(struct conn *conn,struct cw_action_out *a);
 	uint8_t mand;
-	uint8_t itemtype;
+//	uint8_t itemtype;
+	struct mbag_typedef * itemtype;
 	
 	void *defval;
 	int xopt;

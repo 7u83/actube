@@ -56,15 +56,6 @@ UTILOBJS= \
 	cw_setstr.o \
 	cw_is_printable.o \
 	cw_rand.o \
-	avltree.o \
-	avltree_get_node.o \
-	avltree_get.o \
-	avltree_del_all.o \
-	avltree_foreach_lr.o \
-	avltree_foreach_rl.o \
-	avltree_foreach_from_lr.o \
-	avliter_next.o \
-	avliter_seek.o \
 	stravltree.o \
 	intavltree.o \
 	cw_util.o \
@@ -80,6 +71,9 @@ MAVLOBJS= \
 	mavl_del_all.o\
 	mavliter_seek.o \
 	mavliter_next.o \
+	mavl_get_node.o \
+	mavl_foreach.o \
+	mavl_foreach_lr.o \
 	utf8.o
 
 #	cw_foreach_msgelem.o \
@@ -128,7 +122,6 @@ CAPWAPOBJS= \
 	capwap_strings_state.o \
 	capwap_strings_vendor.o \
 	capwap_strings_elem.o \
-	itemstore.o \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_board_data.o \
 	cw_in_check_disc_req.o \
@@ -151,6 +144,23 @@ CAPWAPOBJS= \
 	cw_check_missing_mand.o \
 	md5sum.o \
 	format.o \
+
+
+
+
+#	avltree.o \
+	avltree_get_node.o \
+	avltree_get.o \
+	avltree_del_all.o \
+	avltree_foreach_lr.o \
+	avltree_foreach_rl.o \
+	avltree_foreach_from_lr.o \
+	avliter_next.o \
+	avliter_seek.o \
+
+
+
+
 	
 	
 	   #acinfo.o \
@@ -344,7 +354,7 @@ O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
+CFLAGS = -Werror -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
 #CFLAGS = -Wall  -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \

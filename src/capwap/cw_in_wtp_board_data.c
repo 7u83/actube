@@ -26,14 +26,14 @@
 #include "capwap.h"
 #include "capwap_items.h"
 
-#include "itemstore.h"
+#include "mbag.h"
 
 #include "cw_util.h"
 #include "dbg.h"
 
 
 
-static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msgelem,
+static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 					int len)
 {
 	if (len<4)
@@ -58,28 +58,28 @@ static void readsubelems_wtp_board_data(cw_itemstore_t itemstore, uint8_t * msge
 
 		switch (subtype) {
 			case CW_BOARDDATA_MODELNO:
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOARD_MODELNO,
 						       msgelem + i, sublen);
 				break;
 			case CW_BOARDDATA_SERIALNO:
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOARD_SERIALNO,
 						       msgelem + i, sublen);
 
 				break;
 			case CW_BOARDDATA_MACADDRESS:
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOARD_MACADDRESS,
 						       msgelem + i, sublen);
 
 				break;
 			case CW_BOARDDATA_BOARDID:
-				cw_itemstore_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
+				mbag_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
 						       msgelem + i, sublen);
 				break;
 			case CW_BOARDDATA_REVISION:
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOARD_REVISION,
 						       msgelem + i, sublen);
 			default:
@@ -105,8 +105,8 @@ int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		return 0;
 	}
 
-	cw_itemstore_t itemstore = conn->incomming;
-	cw_itemstore_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR, cw_get_dword(data));
+	mbag_t itemstore = conn->incomming;
+	mbag_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR, cw_get_dword(data));
 
 	readsubelems_wtp_board_data(itemstore, data + 4, len - 4);
 

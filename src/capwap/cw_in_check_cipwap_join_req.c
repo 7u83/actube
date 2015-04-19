@@ -8,7 +8,7 @@
 #include "sock.h" //tube
 
 
-cw_get_wtp_name(struct conn *conn,struct sockaddr *addr)
+void cw_get_wtp_name(struct conn *conn,struct sockaddr *addr)
 {
 
 }
@@ -17,14 +17,15 @@ int cw_set_capwap_mode(struct conn *conn,int mode)
 {
 	cw_dbg(DBG_INFO,"Setting CAPWAP mode to %d for %s",mode,sock_addr2str(&conn->addr));
 	conn->capwap_mode_out=mode;
+	return 1;
 }
 
 
 int cw_detect_capwap(struct conn *conn)
 {
-	cw_itemstore_t is = conn->incomming;
+	mbag_t is = conn->incomming;
 
-	cw_item_t * item = cw_itemstore_get(is,CW_ITEM_WTP_SOFTWARE_VERSION);
+	mbag_item_t * item = mbag_get(is,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if (item) {
 		vendorstr_t s = item->data;
 		uint32_t v = vendorstr_get_vendor_id(s);

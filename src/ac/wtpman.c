@@ -131,15 +131,15 @@ conn->capwap_mode=CW_MODE_CIPWAP;
 
 
 	wtpman->conn->local = ac_config;
-	wtpman->conn->outgoing = cw_itemstore_create();
-	wtpman->conn->incomming = cw_itemstore_create();
+	wtpman->conn->outgoing = mbag_create();
+	wtpman->conn->incomming = mbag_create();
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CW_STATE_DISCOVERY) {
 		cw_read_messages(wtpman->conn);
 	}
 
-	struct cw_item *wn = cw_itemstore_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
+	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
 	if (wn) {
 		//printf("WTP Name: %s\n", wn->data);
@@ -293,10 +293,10 @@ static int wtpman_join(void *arg, time_t timer)
 	wtpman->conn->capwap_state = CW_STATE_JOIN;
 	wtpman->conn->actions = &capwap_actions;
 
-//      wtpman->conn->itemstore = cw_itemstore_create();
+//      wtpman->conn->itemstore = mbag_create();
 
-	wtpman->conn->outgoing = cw_itemstore_create();
-	wtpman->conn->incomming = cw_itemstore_create();
+	wtpman->conn->outgoing = mbag_create();
+	wtpman->conn->incomming = mbag_create();
 	wtpman->conn->local = ac_config;
 
 
@@ -437,7 +437,7 @@ static void wtpman_run(void *arg)
 	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
 		/* Image upload */
 		const char *filename =
-		    cw_itemstore_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME,NULL);
+		    mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME,NULL);
 		if (!filename) {
 			cw_log(LOG_ERR,
 			       "Can't send image to %s. No Image Filename Item found.",
@@ -458,13 +458,13 @@ static void wtpman_run(void *arg)
 		CLOCK_DEFINE(clk);
 		cw_clock_start(&clk);
 
-		cw_item_t *eof = cw_itemstore_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
+		mbag_item_t *eof = mbag_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
 					   infile);
 
 		int rc=0;
 	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && rc==0 && eof!=NULL) {
 			rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
-			eof = cw_itemstore_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
+			eof = mbag_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
 		}
 
 

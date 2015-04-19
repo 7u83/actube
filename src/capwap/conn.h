@@ -37,7 +37,7 @@
 
 #include "action.h"
 
-#include "itemstore.h"
+#include "mbag.h"
 #include "intavltree.h"
 
 #include "mbag.h"
@@ -50,12 +50,14 @@ struct conn {
 	struct sockaddr_storage addr;
 	int recv_timeout;
 
-	cw_itemstore_t outgoing;
-	cw_itemstore_t incomming;
-	cw_itemstore_t remote;
-	cw_itemstore_t local;
+	mbag_t outgoing;
+	mbag_t incomming;
+	mbag_t remote;
+	mbag_t local;
 
 	mbag_t radios;
+	mbag_t config;
+
 
 	/** base_mac */
 	bstr_t base_rmac;

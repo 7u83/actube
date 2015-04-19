@@ -12,7 +12,7 @@
 #define CW_ACTION_IN_CISCO_IMAGE_IDENTIFIER	 	\
 	CW_ELEM_IMAGE_IDENTIFIER,			/* Element ID*/			\
 	cw_in_cisco_image_identifier, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_VENDORSTR, 				/* Type of element */		\
+	MBAG_VENDORSTR, 				/* Type of element */		\
 	CW_ITEM_IMAGE_IDENTIFIER,			/* ID to use store */		\
 	1, 4096						/* min/max length */
 
@@ -28,14 +28,14 @@
 #define CW_ACTION_IN_CIPWAP_SESSION_ID	 	\
 	CW_ELEM_SESSION_ID, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_BSTR, 		/* Type of element */		\
+	MBAG_BSTR, 		/* Type of element */		\
 	CW_ITEM_SESSION_ID,		/* ID to use store */		\
 	2, 16				/* min/max length */
 
 #define CW_ACTION_IN_CIPWAP_AC_NAME	 	\
 	CW_ELEM_AC_NAME, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	MBAG_STR, 		/* Type of element */		\
 	CW_ITEM_AC_NAME,		/* ID to use store */		\
 	0, 512				/* min/max length */
 
@@ -49,11 +49,11 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 	 */
 
 	{CW_VENDOR_ID_CISCO, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_CISCO_RAD_NAME, 
-	cw_in_generic, 0, CW_ITEMTYPE_STR,CW_ITEM_WTP_NAME,1,512}
+	cw_in_generic, 0, MBAG_STR,CW_ITEM_WTP_NAME,1,512}
 	,
 
 	{CW_VENDOR_ID_CISCO, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_CISCO_AP_GROUP_NAME, 
-	cw_in_generic, 0, CW_ITEMTYPE_STR,CW_ITEM_WTP_GROUP_NAME,1,512}
+	cw_in_generic, 0, MBAG_STR,CW_ITEM_WTP_GROUP_NAME,1,512}
 	,
 
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,

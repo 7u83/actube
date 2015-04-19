@@ -27,7 +27,7 @@
 #define CW_ACTION_IN_LOCATION_DATA 	\
 	CW_ELEM_LOCATION_DATA, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	MBAG_STR, 		/* Type of element */		\
 	CW_ITEM_LOCATION_DATA,		/* ID to use store */		\
 	1, 1024				/* min/max length */
 
@@ -35,42 +35,42 @@
 #define CW_ACTION_IN_WTP_NAME	 	\
 	CW_ELEM_WTP_NAME, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	MBAG_STR, 		/* Type of element */		\
 	CW_ITEM_WTP_NAME,		/* ID to use store */		\
 	1, 1024				/* min/max length */
 
 #define CW_ACTION_IN_SESSION_ID	 	\
 	CW_ELEM_SESSION_ID, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_BSTR, 		/* Type of element */		\
+	MBAG_BSTR, 		/* Type of element */		\
 	CW_ITEM_SESSION_ID,		/* ID to use store */		\
 	16, 16				/* min/max length */
 
 #define CW_ACTION_IN_IMAGE_IDENTIFIER	 	\
 	CW_ELEM_IMAGE_IDENTIFIER,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_VENDORSTR, 		/* Type of element */		\
+	MBAG_VENDORSTR, 		/* Type of element */		\
 	CW_ITEM_IMAGE_IDENTIFIER,	/* ID to use store */		\
 	5, 4096				/* min/max length */
 
 #define CW_ACTION_IN_AC_NAME	 	\
 	CW_ELEM_AC_NAME, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_STR, 		/* Type of element */		\
+	MBAG_STR, 		/* Type of element */		\
 	CW_ITEM_AC_NAME,		/* ID to use store */		\
 	1, 512				/* min/max length */
 
 #define CW_ACTION_IN_STATISTICS_TIMER	 	\
 	CW_ELEM_STATISTICS_TIMER,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_DWORD, 		/* Type of element */		\
+	MBAG_DWORD, 		/* Type of element */		\
 	CW_ITEM_STATISTICS_TIMER,	/* ID to use store */		\
 	1, 1024				/* min/max length */
 
 #define CW_ACTION_IN_WTP_REBOOT_STATISTICS	 	\
 	CW_ELEM_WTP_REBOOT_STATISTICS,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_DATA, 		/* Type of element */		\
+	MBAG_DATA, 		/* Type of element */		\
 	CW_ITEM_WTP_REBOOT_STATISTICS,	/* ID to use store */		\
 	15, 15				/* min/max length */
 
@@ -78,7 +78,7 @@
 #define CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE	 	\
 	CW_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_BYTE, 		/* Type of element */		\
+	MBAG_BYTE, 		/* Type of element */		\
 	CW_ITEM_WTP_FRAME_TUNNEL_MODE,	/* ID to use store */		\
 	1, 1				/* min/max length */
 
@@ -86,7 +86,7 @@
 #define CW_ACTION_IN_WTP_MAC_TYPE	 	\
 	CW_ELEM_WTP_MAC_TYPE,		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_BYTE, 		/* Type of element */		\
+	MBAG_BYTE, 		/* Type of element */		\
 	CW_ITEM_WTP_MAC_TYPE,		/* ID to use store */		\
 	1, 1				/* min/max length */
 
@@ -115,14 +115,14 @@
 #define CW_ACTION_IN_CAPWAP_CONTROL_IPV4_ADDRESS	 	\
 	CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,		/* Element ID*/			\
 	cw_in_capwap_control_ipv4_address, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_AVLTREE, 				/* Type of element */		\
+	MBAG_AVLTREE, 				/* Type of element */		\
 	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,		/* ID to use store */		\
 	6, 6						/* min/max length */
 
 #define CW_ACTION_IN_CAPWAP_CONTROL_IPV6_ADDRESS	 	\
 	CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,		/* Element ID*/			\
 	cw_in_capwap_control_iv4p_address, 0,		/* start/end callback */	\
-	CW_ITEMTYPE_AVLTREE, 				/* Type of element */		\
+	MBAG_AVLTREE, 				/* Type of element */		\
 	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,		/* ID to use store */		\
 	18,18						/* min/max length */
 
@@ -131,7 +131,7 @@
 #define CW_ACTION_IN_AC_DESCRIPTOR	 	\
 	CW_ELEM_AC_DESCRIPTOR,				/* Element ID*/			\
 	cw_in_generic, 0,				/* start/end callback */	\
-	CW_ITEMTYPE_DATA, 				/* Type of element */		\
+	MBAG_DATA, 				/* Type of element */		\
 	CW_ITEM_AC_DESCRIPTOR,				/* ID to use store */		\
 	12, 8192						/* min/max length */
 
@@ -139,7 +139,7 @@
 #define CW_ACTION_IN_RESULT_CODE	 	\
 	CW_ELEM_RESULT_CODE,				/* Element ID*/			\
 	cw_in_generic, 0,				/* start/end callback */	\
-	CW_ITEMTYPE_DWORD, 				/* Type of element */		\
+	MBAG_DWORD, 				/* Type of element */		\
 	CW_ITEM_RESULT_CODE,				/* ID to use store */		\
 	4, 4						/* min/max length */
 

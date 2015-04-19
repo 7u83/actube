@@ -24,7 +24,7 @@ int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 
 	
 	/* set result code to ok and change to configure state */
-	cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
+	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
 	conn->capwap_state = CW_STATE_CONFIGURE;
 
 	return 0;
