@@ -1,7 +1,7 @@
 #include "log.h"
 #include "conn.h"
 
-#include "itemstore.h"
+//#include "itemstore.h"
 #include "capwap_items.h"
 #include "capwap.h"
 
@@ -28,6 +28,9 @@ return 2;
 
 int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
+
+	mbag_t mbag = conn->config;
+
 	// XXX Dummy WTP Descriptor Header
 	uint8_t *d = dst+4;
 
@@ -35,8 +38,8 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	d+=cw_put_byte(d,2);	//radios in use
 	d+=cw_put_encryption_subelems(d);
 
-	cw_item_t * i;
-	i = cw_itemstore_get(conn->local,CW_ITEM_WTP_HARDWARE_VERSION);
+	mbag_item_t * i;
+	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->data);
 	}
@@ -44,7 +47,7 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 		cw_log(LOG_ERR, "Can't send Hardware Version in WTP Descriptor, not set.");
 	}
 
-	i = cw_itemstore_get(conn->local,CW_ITEM_WTP_SOFTWARE_VERSION);
+	i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->data);
 	}

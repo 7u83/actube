@@ -43,7 +43,7 @@
 
 
 
-cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
+cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 {
 
 	cw_aciplist_t aciplist = cw_aciplist_create();
@@ -55,16 +55,16 @@ cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
 
 	/* get the AC Name with Priority list */
 	cw_acpriolist_t priolist;
-	priolist = cw_itemstore_get_avltree(conn->local, CW_ITEM_AC_PRIO_LIST);
+	priolist = mbag_get_avltree(conn->local, CW_ITEM_AC_PRIO_LIST);
 
 	cw_aciplist_t resultlist=cw_aciplist_create();
 
 
 	DEFINE_AVLITER(i, dis);
 	avliter_foreach(&i){
-		cw_itemstore_t ac = ((cw_item_t *) (avliter_get(&i)))->data;
+		mbag_t ac = ((mbag_item_t *) (avliter_get(&i)))->data;
 
-		char *ac_name = cw_itemstore_get_str(ac, CW_ITEM_AC_NAME,NULL);
+		char *ac_name = mbag_get_str(ac, CW_ITEM_AC_NAME,NULL);
 
 		int prio = 256;
 		if (ac_name) {
@@ -77,7 +77,7 @@ cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
 		}
 
 		cw_aciplist_t acips =
-		    cw_itemstore_get_avltree(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
+		    mbag_get_avltree(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 
 		DEFINE_AVLITER(i2, acips);
 		avliter_foreach(&i2){
@@ -100,10 +100,11 @@ cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
 
 static int run_discovery(struct conn *conn)
 {
-//      conn->incomming = cw_itemstore_create();
+//      conn->incomming = mbag_create();
+
 
 	conn->capwap_state = CW_STATE_DISCOVERY;
-	cw_itemstore_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
+	mbag_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
 			      CW_DISCOVERY_TYPE_UNKNOWN);
 
 
@@ -117,7 +118,7 @@ static int run_discovery(struct conn *conn)
 
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CW_STATE_DISCOVERY) {
-		avltree_del_all(conn->incomming);
+		mavl_del_all(conn->incomming);
 
 		int rc = cw_read_from(conn);
 
@@ -130,9 +131,9 @@ static int run_discovery(struct conn *conn)
 		}
 	}
 
-	cw_itemstore_t discs;
-	discs = cw_itemstore_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
-
+	mbag_t discs;
+	discs = mbag_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
+printf("discs = %p\n",discs);
 
 	if (!discs) {
 		cw_log(LOG_ERR,"No discovery responses received");
@@ -141,17 +142,26 @@ static int run_discovery(struct conn *conn)
 
 	int i;
 
+
 	cw_aciplist_t list = cw_select_ac(conn, discs);
+
+printf("List is %p\n",list);
+
 
 	DEFINE_AVLITER(ii,list);
 	avliter_foreach(&ii){
 		cw_acip_t * ip = avliter_get(&ii);
+		printf("Have an IOP\n");
 
 	}
 
-	avltree_del_all(conn->remote);
+	printf("Nitems: %d\n",conn->remote->count);
+	
+	printf("DEl: %p\n",conn->remote);
 
-	cw_itemstore_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
+	//mavl_del_all(conn->remote);
+
+	mbag_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
 
 	return 0;
 }

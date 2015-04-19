@@ -28,7 +28,7 @@
 #include "sock.h"
 
 
-static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * data,
+static int cw_read_wtp_descriptor_versions(mbag_t itemstore, uint8_t * data,
 					   int len, int silent)
 {
 	int i = 0;
@@ -74,33 +74,33 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 
 		switch (subtype) {
 			case CW_SUBELEM_WTP_HARDWARE_VERSION:
-				cw_itemstore_set_dword(itemstore,
+				mbag_set_dword(itemstore,
 						       CW_ITEM_WTP_HARDWARE_VENDOR,
 						       vendor_id);
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_HARDWARE_VERSION,
 						       data + i, sublen);
 				break;
 			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
 
-				cw_itemstore_set_vendorstr(itemstore,
+				mbag_set_vendorstr(itemstore,
 							   CW_ITEM_WTP_SOFTWARE_VERSION,
 							   vendor_id, data + i, sublen);
 /*
-				cw_itemstore_set_dword(itemstore,
+				mbag_set_dword(itemstore,
 						       CW_ITEM_WTP_SOFTWARE_VENDOR,
 						       vendor_id);
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_SOFTWARE_VERSION,
 						       data + i, sublen);
 
 */
 				break;
 			case CW_SUBELEM_WTP_BOOTLOADER_VERSION:
-				cw_itemstore_set_dword(itemstore,
+				mbag_set_dword(itemstore,
 						       CW_ITEM_WTP_BOOTLOADER_VENDOR,
 						       vendor_id);
-				cw_itemstore_set_bstrn(itemstore,
+				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOOTLOADER_VERSION,
 						       data + i, sublen);
 				break;
@@ -119,14 +119,14 @@ static int cw_read_wtp_descriptor_versions(cw_itemstore_t itemstore, uint8_t * d
 
 }
 
-static int cw_read_wtp_descriptor(cw_itemstore_t itemstore, struct conn *conn,
+static int cw_read_wtp_descriptor(mbag_t itemstore, struct conn *conn,
 				  struct cw_action_in *a, uint8_t * data, int len,
 				  int silent)
 {
 
 
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
+	mbag_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
+	mbag_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
 			      cw_get_byte(data + 1));
 
 
@@ -161,13 +161,13 @@ static int cw_read_wtp_descriptor(cw_itemstore_t itemstore, struct conn *conn,
  * Read WTP Descriptor in Cisco-Style (Draft 7)
  */
 
-static int cw_read_cisco_wtp_descriptor(cw_itemstore_t itemstore, struct conn *conn,
+static int cw_read_cisco_wtp_descriptor(mbag_t itemstore, struct conn *conn,
 					struct cw_action_in *a, uint8_t * data, int len,
 					int silent)
 {
 
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
-	cw_itemstore_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
+	mbag_set_byte(itemstore, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
+	mbag_set_byte(itemstore, CW_ITEM_WTP_RADIOS_IN_USE,
 			      cw_get_byte(data + 1));
 
 
@@ -191,7 +191,7 @@ static int cw_read_cisco_wtp_descriptor(cw_itemstore_t itemstore, struct conn *c
 int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
-	cw_itemstore_t itemstore = conn->incomming;
+	mbag_t itemstore = conn->incomming;
 
 	return cw_read_wtp_descriptor(itemstore, conn, a, data, len, 0);
 }
@@ -201,7 +201,7 @@ int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * da
 int cw_in_cipwap_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len, struct sockaddr *from)
 {
-	cw_itemstore_t itemstore = conn->incomming;
+	mbag_t itemstore = conn->incomming;
 
 	switch (conn->capwap_mode) {
 		case CW_MODE_CISCO:

@@ -14,7 +14,7 @@ struct cw_ac_status ac_status;
 
 struct cw_actiondef capwap_actions;
 
-cw_itemstore_t ac_config;
+mbag_t ac_config;
 
 
 cw_aciplist_t get_aciplist()
@@ -77,9 +77,9 @@ void release_iplist(void *arg,void *data)
 
 int ac_global_init()
 {
-	ac_config = cw_itemstore_create();
-	cw_itemstore_set_str(ac_config, CW_ITEM_AC_NAME, conf_acname);
-	cw_itemstore_set_ptr(ac_config, CW_ITEM_AC_STATUS, &ac_status);
+	ac_config = mbag_create();
+	mbag_set_str(ac_config, CW_ITEM_AC_NAME, conf_acname);
+	mbag_set_ptr(ac_config, CW_ITEM_AC_STATUS, &ac_status);
 
 	ac_status.stations = 0;
 	ac_status.limit = 1000;
@@ -90,18 +90,18 @@ int ac_global_init()
 	ac_status.dtls_policy = CW_FLAG_DTLS_POLICY_C | CW_FLAG_DTLS_POLICY_D;
 
 
-	cw_itemstore_set_vendorstr(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
+	mbag_set_vendorstr(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
 				 bstr_data(conf_hardware_version), bstr_len(conf_hardware_version));
-	cw_itemstore_set_vendorstr(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
+	mbag_set_vendorstr(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
 				 bstr_data(conf_software_version), bstr_len(conf_software_version));
 
 
-	cw_itemstore_set_str(ac_config,CW_ITEM_AC_IMAGE_DIR,conf_image_dir);
+	mbag_set_str(ac_config,CW_ITEM_AC_IMAGE_DIR,conf_image_dir);
 
-//	cw_itemstore_set_avltree(ac_config, CW_ITEM_AC_IP_LIST, aciplist);
+//	mbag_set_avltree(ac_config, CW_ITEM_AC_IP_LIST, aciplist);
 
 	
-	cw_itemstore_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, get_iplist,release_iplist,(void*)771);
+	mbag_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, get_iplist,release_iplist,(void*)771);
 
 	return 1;
 }

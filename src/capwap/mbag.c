@@ -13,6 +13,12 @@ const struct mbag_typedef mbag_type_dword = {
 	NULL
 };
 
+const struct mbag_typedef mbag_type_const_data = {
+	NULL
+};
+
+
+
 const struct mbag_typedef mbag_type_bstr = {
 	free
 };
@@ -21,12 +27,36 @@ const struct mbag_typedef mbag_type_bstr16 = {
 	free
 };
 
+const struct mbag_typedef mbag_type_str = {
+	free
+};
+
+const struct mbag_typedef mbag_type_vendorstr = {
+	free
+};
+
+
+void free_avltree(void*t){
+	mbag_item_t *i = (mbag_item_t *) t;
+
+printf("the mavl deleer %p\n",i->data);
+	mavl_destroy(i->data);
+printf("jo\n");
+
+}
+const struct mbag_typedef mbag_type_avltree = {
+	free_avltree
+};
+
+
 
 
 static void mbag_type_mbag_del(void *i)
 {
+	struct mbag_item *x = (struct mbag_item*)i;
+printf("MBAG DELETE %p\n",x->data);
 	
-	mavl_destroy(((struct mbag_item*)i)->data);
+	mavl_destroy(x->data);
 }
 
 const struct mbag_typedef mbag_type_mbag = {
@@ -36,13 +66,17 @@ const struct mbag_typedef mbag_type_mbag = {
 
 static void mbag_del_data(struct mbag_item *i)
 {
-	if (i->type->del)
+printf("Deling: %p\n",i->data);
+	if (i->type->del) {
+printf("Calling deler\n");
 		i->type->del(i);
+	}
 }
 
 
 static void mbag_del_fun(void *e)
 {
+	
 	mbag_del_data(e);
 	free(e);
 }

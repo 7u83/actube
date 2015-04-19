@@ -932,7 +932,7 @@ extern struct cw_str capwap_strings_state[];
 extern struct cw_str capwap_strings_vendor[];
 extern struct cw_str capwap_strings_elem[];
 extern struct cw_str capwap_strings_result[];
-extern struct cw_str cw_item_strings[];
+extern struct cw_str mbag_item_strings[];
 
 
 
@@ -943,7 +943,7 @@ extern struct cw_str cw_item_strings[];
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 #define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,(id))
 
-#define cw_stritem(id) cw_strlist_get_str(cw_item_strings,(id))
+#define cw_stritem(id) cw_strlist_get_str(mbag_item_strings,(id))
 
 /*
 #define cw_strrc(rc) \
@@ -1002,23 +1002,23 @@ extern int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action
 					     uint8_t * data, int len, struct sockaddr *from);
 
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
-extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//, struct cw_item *item);
+extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//, struct mbag_item *item);
 
 //extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
-				//struct cw_item *item);
-extern int cw_out_ac_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//,struct cw_item * item) 
+				//struct mbag_item *item);
+extern int cw_out_ac_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//,struct mbag_item * item) 
 extern int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 				 uint8_t * dst);
 
 
 //extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
-//                                        uint8_t * dst, struct cw_item *item);
+//                                        uint8_t * dst, struct mbag_item *item);
 
 extern int cw_out_capwap_control_ip_addr_list(struct conn *conn, struct cw_action_out *a,
 					      uint8_t * dst);
 
 extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
-int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	// ,struct cw_item * item) 
+int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	// ,struct mbag_item * item) 
 
 
 struct cw_ac_status {
@@ -1069,8 +1069,8 @@ int cw_register_actions_capwap_wtp(struct cw_actiondef *def);
 
 int cw_in_set_state_none(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len);
-struct cw_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a);
-struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
+struct mbag_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a);
+struct mbag_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
 extern int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a,
 				 uint8_t * data, int len,struct sockaddr *from);
 
@@ -1092,7 +1092,7 @@ int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t
 int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 void cw_init_request(struct conn *conn, int msg_id);
-struct cw_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out *a);
+struct mbag_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out *a);
 
 
 

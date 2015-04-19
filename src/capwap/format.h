@@ -23,6 +23,8 @@
 #ifndef __CW_FORMAT_H
 #define __CW_FORMAT_H
 
+#include "capwap.h"
+
 
 extern int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
 			   const uint8_t * src, int len);

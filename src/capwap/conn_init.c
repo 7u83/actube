@@ -39,7 +39,7 @@ void conn_init(struct conn * conn)
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;
 	conn->wait_join=CAPWAP_WAIT_JOIN;
 	conn->mtu_discovery=1;
-	conn->remote = cw_itemstore_create();
+	conn->remote = mbag_create();
 	conn->capwap_mode = CW_MODE_UNKNOWN;
 	conn->strict_capwap=1;
 }

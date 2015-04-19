@@ -1,4 +1,4 @@
-#include "capwap/itemstore.h"
+#include "capwap/mbag.h"
 #include "capwap/capwap_items.h"
 #include "capwap/conn.h"
 #include "capwap/bstr.h"
@@ -11,14 +11,25 @@
 #include "capwap/bstr.h"
 #include "capwap/radio.h"
 
-struct cw_itemdef {
+#include "capwap/mavl.h"
+#include "capwap/format.h"
+
+
+
+
+/* json putters */
+int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n);
+int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n);
+
+
+struct mbag_itemdef {
 	int item_id;
 	const char *cfgname;
-	int (*setfun) (struct cw_itemdef *,char *,jsmntok_t *);
-	const char def;
+	int (*setfun) (struct mbag_itemdef *,char *,jsmntok_t *);
+	int (*tojsonfun) (char *dst,const char *name, mbag_item_t *i,int n);
 
 };
-typedef struct cw_itemdef cfg_item_t;
+typedef struct mbag_itemdef cfg_item_t;
 
 
 
@@ -77,7 +88,7 @@ static int skip(jsmntok_t *t)
 
 
 
-int byte_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+int byte_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 {
 printf("GET BYTE\n");
 //	if (t->type != JSMN_STRING){
@@ -91,50 +102,61 @@ printf("GET BYTE\n");
 //	const char * val = js+(t+1)->start;
 	struct conn * conn = get_conn();
 	
-	cw_itemstore_set_byte(conn->local,idef->item_id,atoi(val));
-
+	mbag_set_byte(conn->local,idef->item_id,atoi(val));
+	return 0;
 }
 
 
-int vendorstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+int cfg_json_get_vendorstr(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 {
-	int item_id = idef->item_id;
 	struct conn * conn = get_conn();
+	int item_id = idef->item_id;
 
 	*(js+t->end)=0;
 	char *str = js+t->start;
 	if (t->type != JSMN_ARRAY || t->type!=2){
-		printf("Error: No ARRAY or to short: %s\n",str);
-		exit(1);
-			
+		return 0;
 	}
-//	*(js+t->end)=0;
 
 	char * val = js+(t+1)->start;
 	*(js+(t+1)->end)=0;
-	printf("Val: %s\n",val);
 
 	uint32_t vendor_id = atoi(val);
 
-	str = (uint8_t*)js+(t+2)->start;
+	str = (char*)(js+(t+2)->start);
 
 	*((t+2)->end+js)=0;
 	bstr16_t v = bstr16cfgstr(str);
 
-printf("Vendor: %d %s\n",vendor_id,str);
-	
-	cw_itemstore_set_vendorstr(conn->local,item_id,vendor_id,bstr16_data(v),bstr16_len(v));
+	mbag_set_vendorstr(conn->config,item_id,vendor_id,bstr16_data(v),bstr16_len(v));
 	free(v);
+	return 0;
+}
 
 
+int cfg_json_get_bstr16(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
+{
 
+	struct conn * conn = get_conn();
+
+	int item_id = idef->item_id;
+	*(js+t->end)=0;
+//	char *str = js+t->start;
+	if (t->type != JSMN_STRING){
+		return 0;
+	}
+	*(js+t->end)=0;
+	bstr16_t b = bstr16cfgstr(js+t->start);
+	mbag_set_bstr16(conn->config,item_id,b);
 	return 0;
 }
 
 
 
 
-int bstr16_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+
+
+int bstr16_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 {
 	int item_id = idef->item_id;
 	struct conn * conn = get_conn();
@@ -148,11 +170,11 @@ int bstr16_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
 	}
 //	*(js+t->end)=0;
 	printf("Set str: %d %s\n", item_id,str);
-	cw_itemstore_set_bstr16n(conn->local,item_id,(uint8_t*)js+t->start,t->end-t->start);
+	mbag_set_bstr16n(conn->local,item_id,(uint8_t*)js+t->start,t->end-t->start);
 	return 0;
 }
 
-int bstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+int bstr_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 {
 	int item_id = idef->item_id;
 	struct conn * conn = get_conn();
@@ -169,7 +191,7 @@ int bstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
 
 	bstr16_t v = bstr16cfgstr(str);
 
-	cw_itemstore_set_bstrn(conn->local,item_id,bstr16_data(v),bstr16_len(v)); //(uint8_t*)js+t->start,t->end-t->start);
+	mbag_set_bstrn(conn->local,item_id,bstr16_data(v),bstr16_len(v)); //(uint8_t*)js+t->start,t->end-t->start);
 	free (v);
 	return 0;
 }
@@ -177,22 +199,23 @@ int bstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
 
 
 
-int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t);
+int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t);
 
 
 
 
 
-struct cw_itemdef general_cfg[] = {
-	{CW_ITEM_AC_NAME, "ac_name",bstr16_local}, 
-	{CW_ITEM_WTP_NAME, "wtp_name",bstr16_local}, 
-	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",vendorstr_local}, 
-	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",vendorstr_local}, 
+struct mbag_itemdef general_cfg[] = {
+	{CW_ITEM_WTP_NAME, "wtp_name",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
+	{CW_ITEM_LOCATION_DATA,"location_data",cfg_json_get_bstr16,cfg_json_put_bstr16},
+
+	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",cfg_json_get_vendorstr,cfg_json_put_vendorstr}, 
+	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",cfg_json_get_vendorstr,cfg_json_put_vendorstr}, 
+
 	{CW_ITEM_WTP_BOARD_MODELNO, "modelno",bstr16_local}, 
 	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local},
 	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
 	{CW_ITEM_WTP_MAC_TYPE,"mac_type",byte_local},
-	{CW_ITEM_LOCATION_DATA,"location_data",bstr16_local},
 	{CW_ITEM_WTP_GROUP_NAME,"group_name",bstr16_local},
 	{CW_RADIO_BSSID,"bssid",bstr_local},
 
@@ -201,7 +224,7 @@ struct cw_itemdef general_cfg[] = {
 
 
 
-struct cw_itemdef board_data_cfg[] = {
+struct mbag_itemdef board_data_cfg[] = {
 	{CW_ITEM_WTP_BOARD_MODELNO, "model_no",NULL}, 
 	{CW_ITEM_WTP_BOARD_SERIALNO, "serial_no",NULL}, 
 	{CW_ITEM_WTP_BOARD_VENDOR, "vendor_id",NULL},
@@ -209,13 +232,116 @@ struct cw_itemdef board_data_cfg[] = {
 	{0, 0, 0}
 };
 
+struct mbag_itemdef * get_idef_by_id(struct mbag_itemdef *cfg,uint32_t id){
+	int i=0;
+	for (i=0; cfg[i].item_id; i++){
+		if ( cfg[i].item_id == id)  {
+			return &cfg[i];
+		}
+	}
+	return NULL;
+}
+
+
+int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n)
+{
+	if (i->type != MBAG_BSTR16){
+		return 0;
+	}
+
+	char *d = dst;
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
+	d+=sprintf(d,"\"%.*s\"",bstr16_len(i->data),bstr16_data(i->data));
+	return d-dst;
+}
+
+int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n)
+{
+	if (i->type != MBAG_VENDORSTR){
+		return 0;
+	}
+
+	char *d = dst;
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
+	d+=sprintf(d,"[\"%d\",",vendorstr_get_vendor_id(i->data));
+
+	if (cw_is_utf8(vendorstr_data(i->data),vendorstr_len(i->data))){
+		d+=sprintf(d,"\"%.*s\"",vendorstr_len(i->data),vendorstr_data(i->data));
+	}
+	else{
+		d+=sprintf(d,"\".x");
+		d+=cw_format_hex(d,vendorstr_data(i->data),vendorstr_len(i->data));
+		d+=sprintf(d,"\"");
+
+	}
+
+
+	d+=sprintf(d,"]");
+	
+//	d+=sprintf(d,"\"%.*s\",\n",bstr16_len(i->data),bstr16_data(i->data));
+	return d-dst;
+}
 
 
 
+int mbag_tojson(char *dst, mbag_t m, int n)
+{
+	char *d;
+	d = dst;
+
+printf("MBAG COUNT: %d\n",m->count);
+
+	memset(dst,'\t',n);
+	d+=n;
+	d+=sprintf(d,"%s","{\n");	
+		
+	MAVLITER_DEFINE(it,m);
+
+	const char * delim = "";
+	mavliter_foreach(&it) {
+		mbag_item_t * i = mavliter_get(&it);
+
+		struct mbag_itemdef * idef = get_idef_by_id(general_cfg,i->id);
+		if (idef==0){
+		d+=sprintf(d,"NOJai\n");
+			
+			continue;
+		}
+		if (!idef->tojsonfun)
+			continue;
+
+		d+=sprintf(d,"%s",delim);
+		delim=",\n";
+		d+=idef->tojsonfun(d,idef->cfgname,i,n+1);
+
+	}			
+	d+=sprintf(d,"\n");
+
+	d+=sprintf(d,"%s","}\n");	
+	memset(dst,'\t',n);
+	d+=n;
+
+	return d-dst;
+}
+
+tester()
+{
+	struct conn * conn = get_conn();
+	char dst[4096];
+	mbag_tojson(dst,conn->config,0);
 
 
+	printf("Json resilt:\n%s",dst);
+	
+	exit(0);
 
-struct cw_itemdef * get_cfg(struct cw_itemdef *cfg,const char *key){
+}
+
+struct mbag_itemdef * get_cfg(struct mbag_itemdef *cfg,const char *key){
 	int i=0;
 	for (i=0; cfg[i].item_id; i++){
 		if ( !strcmp(key,cfg[i].cfgname ))  {
@@ -227,15 +353,14 @@ struct cw_itemdef * get_cfg(struct cw_itemdef *cfg,const char *key){
 
 static int wtp_board_data_cb(char *js,jsmntok_t *t)
 {
-printf("VB BOARD DATA!!!\n");
 	struct conn * conn = get_conn();
-	cw_itemstore_t bd = cw_itemstore_get_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA);
+	mbag_t bd = mbag_get_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA);
 	if (!bd){
-		bd = cw_itemstore_create();
+		bd = mbag_create();
 		if (!bd){
 			return skip(t+1);
 		}
-		cw_itemstore_set_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA,bd);
+		mbag_set_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA,bd);
 	}
 	
 
@@ -248,19 +373,19 @@ printf("VB BOARD DATA!!!\n");
 	
 
 	struct conn *get_conn();
-	struct cw_itemdef * idef = get_cfg(board_data_cfg,key);
+	struct mbag_itemdef * idef = get_cfg(board_data_cfg,key);
 
 	if (!idef){
 		return skip(t+1);
 	}
 
 	if (idef->item_id == CW_ITEM_WTP_BOARD_VENDOR){
-		cw_itemstore_set_dword(bd,CW_ITEM_WTP_BOARD_VENDOR,atoi(val));
+		mbag_set_dword(bd,CW_ITEM_WTP_BOARD_VENDOR,atoi(val));
 		
 	}
 	else{
 		bstr16_t v = bstr16cfgstr(val);
-		cw_itemstore_set_bstr16n(bd,idef->item_id,bstr16_data(v),bstr16_len(v));
+		mbag_set_bstr16n(bd,idef->item_id,bstr16_data(v),bstr16_len(v));
 		free(v);
 
 	}
@@ -271,7 +396,7 @@ printf("VB BOARD DATA!!!\n");
 
 }
 
-int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 {
 printf("Local board data\n");
 
@@ -296,7 +421,7 @@ static int set_cfg(char *js,jsmntok_t *t){
 
 
 
-	struct cw_itemdef * idef = get_cfg(general_cfg,key);
+	struct mbag_itemdef * idef = get_cfg(general_cfg,key);
 
 //	printf("Key: %s\n",key);
 //	printf("Val: %s\n",val);
@@ -354,9 +479,9 @@ int setup_conf(struct conn *conn)
 
 
 
-void dbg_istore_dmp(cw_itemstore_t s);
+//void dbg_istore_dmp(mbag_t s);
 
-dbg_istore_dmp(conn->local);
+//dbg_istore_dmp(conn->local);
 
 
 

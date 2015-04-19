@@ -12,19 +12,19 @@ int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data
 }
 
 
-struct cw_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a)
+struct mbag_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a)
 {
-	return cw_itemstore_get(conn->outgoing, a->item_id);
+	return mbag_get(conn->outgoing, a->item_id);
 }
 
-struct cw_item *cw_out_get_incomming(struct conn *conn, struct cw_action_out *a)
+struct mbag_item *cw_out_get_incomming(struct conn *conn, struct cw_action_out *a)
 {
-	return cw_itemstore_get(conn->incomming, a->item_id);
+	return mbag_get(conn->incomming, a->item_id);
 }
 
-struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
+struct mbag_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 {
-	return cw_itemstore_get(conn->local,a->item_id);
+	return mbag_get(conn->local,a->item_id);
 }
 
 
@@ -35,7 +35,7 @@ struct cw_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 #include "log.h"
 #include "rand.h"
 
-struct cw_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * a)
+struct mbag_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * a)
 {
 	uint8_t session_id[16];
 
@@ -51,6 +51,6 @@ struct cw_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * 
 		cw_log(LOG_ERR,"Can't init session ID.");
 		return NULL;
 	}
-	return cw_itemstore_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,slen);
+	return mbag_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,slen);
 }
 

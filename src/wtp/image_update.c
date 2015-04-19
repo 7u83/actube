@@ -17,7 +17,7 @@ int image_update()
 
 
 	const char *ii = "/c1130";
-	cw_itemstore_set_vendorstr(conn->outgoing, CW_ITEM_IMAGE_IDENTIFIER,
+	mbag_set_vendorstr(conn->outgoing, CW_ITEM_IMAGE_IDENTIFIER,
 				   CW_VENDOR_ID_CISCO, (uint8_t *) ii, strlen(ii));
 
 

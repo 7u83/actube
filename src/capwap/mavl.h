@@ -206,6 +206,30 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 #define mavliter_foreach_asc(iter,val) \
 	while(NULL != (val = mavliter_next(iter)))
 
+
+
+
+/*
+static inline void *mavl_replace_data(struct mavl *t, void *data, int len)
+{
+	void *df = mavl_get(t, data);
+	if (!df)
+		return NULL;
+	memcpy(df, data, len);
+	return df;
+}
+
+static inline void *mavl_replace(struct mavl *t,void *data){
+	struct mavlnode * node = mavl_get_node(t,data);
+	if (node){
+		t->del(node->data);
+		return node->data=data;	
+	}
+	return mavl_add(t,data);
+}
+*/
+
+
 	
 /** @} */
 

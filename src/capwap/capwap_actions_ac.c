@@ -37,7 +37,7 @@ cw_action_in_t capwap_actions_ac_in[] = {
 
 	/* Element Discovery Type */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST, CW_ELEM_DISCOVERY_TYPE,
-	 cw_in_generic, 0, CW_ITEMTYPE_BYTE, CW_ITEM_DISCOVERY_TYPE, 1, 1, 1}
+	 cw_in_generic, 0, MBAG_BYTE, CW_ITEM_DISCOVERY_TYPE, 1, 1, 1}
 	,
 	/* Element Frame Tunnel Mode */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,

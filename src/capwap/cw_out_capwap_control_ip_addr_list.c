@@ -43,7 +43,7 @@ static int put_ip(void *priv, void *data)
 
 int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a,uint8_t *dst) 
 {
-	struct cw_item * item = cw_itemstore_get(conn->local,a->item_id);
+	struct mbag_item * item = mbag_get(conn->local,a->item_id);
 
 	if ( !item ) {
 		cw_log(LOG_ERR, "Can't send CAPWAP Local IPv4/IPv6 Address, not found");
@@ -51,13 +51,13 @@ int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a
 	}
 
 
-	cw_aciplist_t aciplist = (cw_aciplist_t) cw_item_get_data_ptr(item);
+	cw_aciplist_t aciplist = (cw_aciplist_t) mbag_item_get_data_ptr(item);
 
 
 	uint8_t *d = dst;
 	cw_aciplist_foreach(aciplist, put_ip, &d);
 
-	cw_item_release_data_ptr(item,aciplist);	
+	mbag_item_release_data_ptr(item,aciplist);	
 	return  d-dst;
 }
 

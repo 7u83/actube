@@ -23,7 +23,7 @@ int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t
 
 	
 
-	cw_item_t * iresult = cw_itemstore_get(conn->incomming,	CW_ITEM_RESULT_CODE);
+	mbag_item_t * iresult = mbag_get(conn->incomming,	CW_ITEM_RESULT_CODE);
 
 	if ( iresult ) {
 		return iresult->dword;

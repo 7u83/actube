@@ -24,14 +24,14 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 	
 
-	cw_item_t * jresult = cw_itemstore_get(conn->incomming,	CW_ITEM_RESULT_CODE);
+	mbag_item_t * jresult = mbag_get(conn->incomming,	CW_ITEM_RESULT_CODE);
 
 	if ( jresult ) {
 		return jresult->dword;
 	}
 
 	/* set result code to ok and change to configure state */
-//	cw_itemstore_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
+//	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
 
 	return 0;
 }
