@@ -1,6 +1,6 @@
 #include "mavl.h"
 
-static void mavlnode_destroy(struct mavl *t, struct mavlnode *n)
+void mavlnode_destroy(struct mavl *t, struct mavlnode *n)
 {
 	if (t->del) {
 		t->del(n->data);

@@ -30,7 +30,7 @@
 	cw_in_generic, 0,		/* start/end callback */	\
 	CW_ITEMTYPE_BSTR, 		/* Type of element */		\
 	CW_ITEM_SESSION_ID,		/* ID to use store */		\
-	4, 16				/* min/max length */
+	2, 16				/* min/max length */
 
 #define CW_ACTION_IN_CIPWAP_AC_NAME	 	\
 	CW_ELEM_AC_NAME, 		/* Element ID*/			\

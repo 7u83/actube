@@ -1,4 +1,3 @@
-#include <stdlib.h> //Tube
 
 #include "capwap/capwap.h"
 #include "capwap/conn.h"

@@ -76,6 +76,10 @@ MAVLOBJS= \
 	mavl_del.o \
 	mavl_add.o \
 	mavl_create.o\
+	mavl_get.o\
+	mavl_del_all.o\
+	mavliter_seek.o \
+	mavliter_next.o \
 	utf8.o
 
 #	cw_foreach_msgelem.o \
@@ -316,7 +320,12 @@ CWACTION=action.o \
 	capwap_strings_result.o\
 	cw_put_msg.o \
 	capwap_action_helpers.o \
-	cw_put_image_data.o
+	cw_put_image_data.o \
+	cisco.o \
+	item_strings.o \
+	mbag.o\
+	radio.o \
+	cw_out_radio_info.o
 
 #	cw_process_msg.o \
 

@@ -13,10 +13,12 @@
 #define CWMSG_80211_WLAN_CONFIGURATION_REQUEST	3398913
 #define CWMSG_80211_WLAN_CONFIGURATION_REPONSE	3398914
 
-
-
-#define CW_ELEM80211_ADD_WLAN				1024
-#define CW_ELEM80211_ANTENNA				1025
+/** 802.11 Message Elements */
+enum radioelems {
+	/** Add WLAN Message element */
+	CW_ELEM80211_ADD_WLAN	=1024,
+	/** Antenna Message element */
+	CW_ELEM80211_ANTENNA 	=1025,
 /*
    IEEE 802.11 Assigned WTP BSSID                     1026
    IEEE 802.11 Delete WLAN                            1027
@@ -26,8 +28,10 @@
    IEEE 802.11 MIC Countermeasures                    1031
    IEEE 802.11 Multi-Domain Capability                1032
    IEEE 802.11 OFDM Control                           1033
-   IEEE 802.11 Rate Set                               1034
-   IEEE 802.11 RSNA Error Report From Station         1035
+*/
+	/** Supported WLAN Rates */
+	CW_ELEM80211_RATE_SET=1034,
+/*   IEEE 802.11 RSNA Error Report From Station         1035
    IEEE 802.11 Station                                1036
    IEEE 802.11 Station QoS Profile                    1037
    IEEE 802.11 Station Session Key                    1038
@@ -42,7 +46,9 @@
    IEEE 802.11 WTP Radio Fail Alarm Indication        1047
 */   
 
-#define CW_ELEM80211_WTP_RADIO_INFORMATION		1048
+	/** Radio Information Message Element */
+	CW_ELEM80211_WTP_RADIO_INFORMATION=1048
+};
 
 
 
@@ -80,6 +86,7 @@ struct cw_wlan {
 
 
 
+int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
 extern int cw_register_actions_capwap_80211_wtp(struct cw_actiondef *def);

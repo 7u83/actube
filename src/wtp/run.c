@@ -14,6 +14,80 @@
 
 #include "wtp_conf.h"
 
+
+#include "capwap/timer.h"
+
+
+
+#include "capwap/capwap.h"
+#include "capwap/conn.h"
+#include "wtp_interface.h"
+
+
+int run()
+{
+
+
+
+	struct conn *conn = get_conn();
+	conn->capwap_state = CW_STATE_RUN;
+
+	do {
+		time_t timer = cw_timer_start(25);
+		int rc;
+
+		
+
+
+		while (!cw_timer_timeout(timer) && conn->capwap_state == CW_STATE_RUN) {
+			rc = cw_read_messages(conn);
+			if (rc < 0 && errno == EAGAIN) {
+				continue;
+			}
+
+			if ( !cw_rcok(rc))
+				break;
+
+		}
+		if (rc<0 && errno == EAGAIN){
+			rc = cw_send_request(conn,CW_MSG_ECHO_REQUEST);
+		
+			if (!cw_rcok(rc)) {
+				cw_log(LOG_ERR,"Error in run state: %d %s",rc,cw_strrc(rc));
+				break;
+			}
+			continue;
+		}
+
+		if (!cw_rcok(rc)) {
+			cw_log(LOG_ERR,"Error in run state: %d %s",rc,cw_strrc(rc));
+			break;
+		}
+		
+
+
+
+	} while (conn->capwap_state == CW_STATE_RUN);
+
+
+
+//      int rc = cw_send_request(conn,CW_MSG_CHANGE_STATE_EVENT_REQUEST);
+
+//      if ( !cw_rcok(rc) ) {
+//              cw_strresult(rc);
+//      }
+
+
+}
+
+
+
+
+
+
+
+
+
 /*
 static int echo_interval_timer;
 

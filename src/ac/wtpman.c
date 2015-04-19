@@ -437,7 +437,7 @@ static void wtpman_run(void *arg)
 	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
 		/* Image upload */
 		const char *filename =
-		    cw_itemstore_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME);
+		    cw_itemstore_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME,NULL);
 		if (!filename) {
 			cw_log(LOG_ERR,
 			       "Can't send image to %s. No Image Filename Item found.",
@@ -455,7 +455,7 @@ static void wtpman_run(void *arg)
 
 
 
-		DEFINE_CLOCK(clk);
+		CLOCK_DEFINE(clk);
 		cw_clock_start(&clk);
 
 		cw_item_t *eof = cw_itemstore_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,

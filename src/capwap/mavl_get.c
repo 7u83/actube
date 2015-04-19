@@ -31,7 +31,7 @@
  */ 
 void * mavl_get(struct mavl *t ,void *data)
 {
-	struct avlnode *n = t->root;
+	struct mavlnode *n = t->root;
 	while(n){
 		int rc=t->cmp(data,n->data);
 		if (rc==0)

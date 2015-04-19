@@ -105,6 +105,8 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Antenna Payload";
 		case CW_CISCO_SUPPORTED_RATES:
 			return "Supported Rates";
+		case CW_CISCO_SPAM_DOMAIN_SECRET:
+			return "SPAM Domain Secret";
 
 
 		default:

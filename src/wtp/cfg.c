@@ -9,6 +9,7 @@
 #include "jsmn.h"
 #include "wtp.h"
 #include "capwap/bstr.h"
+#include "capwap/radio.h"
 
 struct cw_itemdef {
 	int item_id;
@@ -95,6 +96,41 @@ printf("GET BYTE\n");
 }
 
 
+int vendorstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+{
+	int item_id = idef->item_id;
+	struct conn * conn = get_conn();
+
+	*(js+t->end)=0;
+	char *str = js+t->start;
+	if (t->type != JSMN_ARRAY || t->type!=2){
+		printf("Error: No ARRAY or to short: %s\n",str);
+		exit(1);
+			
+	}
+//	*(js+t->end)=0;
+
+	char * val = js+(t+1)->start;
+	*(js+(t+1)->end)=0;
+	printf("Val: %s\n",val);
+
+	uint32_t vendor_id = atoi(val);
+
+	str = (uint8_t*)js+(t+2)->start;
+
+	*((t+2)->end+js)=0;
+	bstr16_t v = bstr16cfgstr(str);
+
+printf("Vendor: %d %s\n",vendor_id,str);
+	
+	cw_itemstore_set_vendorstr(conn->local,item_id,vendor_id,bstr16_data(v),bstr16_len(v));
+	free(v);
+
+
+
+	return 0;
+}
+
 
 
 
@@ -116,6 +152,31 @@ int bstr16_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
 	return 0;
 }
 
+int bstr_local(struct cw_itemdef *idef,char *js, jsmntok_t *t)
+{
+	int item_id = idef->item_id;
+	struct conn * conn = get_conn();
+
+	*(js+t->end)=0;
+	char *str = js+t->start;
+	if (t->type != JSMN_STRING){
+		printf("Error: No Str: %s\n",str);
+		return 1;
+			
+	}
+//	*(js+t->end)=0;
+	printf("Set str: %d %s\n", item_id,str);
+
+	bstr16_t v = bstr16cfgstr(str);
+
+	cw_itemstore_set_bstrn(conn->local,item_id,bstr16_data(v),bstr16_len(v)); //(uint8_t*)js+t->start,t->end-t->start);
+	free (v);
+	return 0;
+}
+
+
+
+
 int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t);
 
 
@@ -123,13 +184,17 @@ int wtp_board_data_local(struct cw_itemdef *idef,char *js, jsmntok_t *t);
 
 
 struct cw_itemdef general_cfg[] = {
-	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",bstr16_local}, 
-	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",bstr16_local}, 
+	{CW_ITEM_AC_NAME, "ac_name",bstr16_local}, 
+	{CW_ITEM_WTP_NAME, "wtp_name",bstr16_local}, 
+	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",vendorstr_local}, 
+	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",vendorstr_local}, 
 	{CW_ITEM_WTP_BOARD_MODELNO, "modelno",bstr16_local}, 
 	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local},
 	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
 	{CW_ITEM_WTP_MAC_TYPE,"mac_type",byte_local},
 	{CW_ITEM_LOCATION_DATA,"location_data",bstr16_local},
+	{CW_ITEM_WTP_GROUP_NAME,"group_name",bstr16_local},
+	{CW_RADIO_BSSID,"bssid",bstr_local},
 
 	{0, 0, 0}
 };
@@ -289,8 +354,9 @@ int setup_conf(struct conn *conn)
 
 
 
+void dbg_istore_dmp(cw_itemstore_t s);
 
-
+dbg_istore_dmp(conn->local);
 
 
 

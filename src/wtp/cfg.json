@@ -2,22 +2,27 @@
 
 
 	"dbg":[o1,o2,o3],
-	"Tube" :   "tabbe",
 
-	"hardware_version": "12345",
-	"software_version": "98765",
+	"hardware_version": ["4232704",".x01000000"],
+	"software_version": ["4232704",".x08006E00"],
+
 	"comment": "** The following is debug info **",
-	"location_data": "Berlin",
+	"location_data": "China",
 
 	"frame_tunnel_mode": "4",
 	"mac_type": 2,
 
-	
+	"group_name" : "XGroup",
+
+	"wtp_name" : "TubeWTP",
+	"ac_name" : "LAC_AC",
+
+	"bssid": ".x003a9902fac0",
 
 	"wtp_board_data" : {
-		"vendor_id": 4232704,
-		"model_no": "Moodle",
-		"serial_no": "2045",
+		"vendor_id": "4232704",
+		"model_no": "AIR-LAP1131AG-E-K9",
+		"serial_no": "2045"
 	},
 
 
@@ -36,6 +41,12 @@
 		}
 	}
 
+	"radios": {
+		"1": {
+			"domain"
+			
+		}
+	}
 	
 } 
 

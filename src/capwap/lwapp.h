@@ -226,6 +226,13 @@ static inline int lw_put_bstr(uint8_t * dst, const bstr_t b){
 	return bstr_len(b);
 }
 
+static inline int lw_put_bstr16(uint8_t * dst, const bstr16_t b){
+	lw_put_data(dst,bstr16_data(b),bstr16_len(b));
+	return bstr16_len(b);
+}
+
+
+
 static inline int lw_put_str(uint8_t*dst,const uint8_t *str) {
 	return lw_put_data(dst,str,strlen((char*)str));
 }

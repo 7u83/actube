@@ -63,6 +63,7 @@
 #define CW_CISCO_AP_STATIC_IP_ADDR		83
 
 #define CW_CISCO_AC_NAME_WITH_INDEX		91
+#define CW_CISCO_SPAM_DOMAIN_SECRET		96
 
 #define CW_CISCO_SPAM_VENDOR_SPECIFIC		104
 
@@ -203,6 +204,8 @@ int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8
 
 
 
+int cw_out_cisco_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
 
 /*
 #define cw_addelem_cisco_rad(dst,acinfo)\
@@ -213,6 +216,8 @@ int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8
 
 
 /* cwmsg methods */
+
+/*
 #define cwmsg_addelem_cisco_ap_timesync(cwmsg,time,type)\
 	(cwmsg)->pos+=cw_addelem_cisco_ap_timesync(((cwmsg)->msgelems+(cwmsg)->pos),time,type)
 
@@ -233,6 +238,8 @@ int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8
 
 #define cwmsg_addelem_cisco_wtp_radio_cfg(cwmsg,radioinfo)\
 	(cwmsg)->pos+=cw_addelem_cisco_wtp_radio_cfg(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
+
+*/
 
 
 #endif

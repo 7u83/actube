@@ -88,14 +88,16 @@ int cw_itemstore_set_bstr16n(cw_itemstore_t s, uint32_t id, uint8_t * data, int 
 extern int cw_itemstore_set_data(cw_itemstore_t s, uint32_t id, const uint8_t * data,
 				 int len);
 
-static inline char *cw_itemstore_get_str(cw_itemstore_t s, uint32_t id)
+static inline char *cw_itemstore_get_str(cw_itemstore_t s, uint32_t id, char *def)
 {
 	struct cw_item *i = cw_itemstore_get(s, id);
 	if (!i)
-		return NULL;
+		return def;
 	return i->data;
 
 };
+
+
 
 static inline struct avltree *cw_itemstore_get_avltree(cw_itemstore_t s, uint32_t id)
 {
@@ -137,6 +139,35 @@ int cw_itemstore_set(cw_itemstore_t itemstore, uint32_t item_id, int item_type,
 		     uint8_t * data, int len);
 
 struct cw_item *cw_item_create(cw_itemstore_t s, uint32_t id);
+
+
+static inline void * cw_istore_get_data(cw_itemstore_t s,int id,void *def)
+{
+	struct cw_item *i = cw_itemstore_get(s, id);
+	if (!i)
+		return def;
+	return i->data;
+}
+
+
+
+static inline uint8_t cw_istore_get_byte(cw_itemstore_t s, uint32_t id, uint8_t def)
+{
+	struct cw_item *i = cw_itemstore_get(s, id);
+	if (!i)
+		return def;
+	return i->byte;
+}
+
+static inline uint16_t cw_istore_get_word(cw_itemstore_t s, uint32_t id, uint8_t def)
+{
+	struct cw_item *i = cw_itemstore_get(s, id);
+	if (!i)
+		return def;
+	return i->word;
+}
+
+#define cw_istore_get_bstr(s,id,def) cw_istore_get_data(s,id,def)
 
 
 

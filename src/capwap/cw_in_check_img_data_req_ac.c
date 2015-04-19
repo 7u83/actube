@@ -25,9 +25,7 @@ int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8
 		uint32_t vendor_id = vendorstr_get_vendor_id(i->data);
 
 		const char * image_dir;
-		image_dir = cw_itemstore_get_str(conn->local,CW_ITEM_AC_IMAGE_DIR);
-		if ( !image_dir ) 
-			image_dir="./img/"; //XXX
+		image_dir = cw_itemstore_get_str(conn->local,CW_ITEM_AC_IMAGE_DIR,"./img");
 
 		char * image_filename = malloc(6+vendorstr_len(i->data)+1+strlen(image_dir));
 		if (!image_filename) 

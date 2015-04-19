@@ -91,6 +91,50 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 		
 
 
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message Config Status Response IN */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE, 0,
+	 0,0  }
+	,
+
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
+	,
+
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message Change State Response IN */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 0,
+	 0,0  }
+	,
+
+
+	/* Message Change State Response IN */
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+	0, 0,0  }
+	,
+
+	/* Element: Vendor Specific */
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
+	,
+
+
+
+	/* Echo Response Response IN */
+	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_RESPONSE, 0,
+	 0,0  }
+	,
+
+	/* Element: Vendor Specific */
+	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_RESPONSE,
+	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
+	,
+
+
+
+
 	{0, 0, 0}
 };
 
@@ -202,10 +246,32 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	 */
 	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_NONE}
 	,
+	/* AC Name */
+	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_AC_NAME, 0,
+	CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local,1}
+	,
 
 
 
+	/* -------------------------------------------------------------------------------
+	 * Configuration Status Request OUT
+	 */
+	{CW_MSG_CHANGE_STATE_EVENT_REQUEST, CW_ITEM_NONE}
+	,
 
+
+
+	/* -------------------------------------------------------------------------------
+	 * Echo Request Request OUT
+	 */
+	{CW_MSG_ECHO_REQUEST, CW_ITEM_NONE}
+	,
+
+	/* -------------------------------------------------------------------------------
+	 * Echo Request Request OUT
+	 */
+	{CW_MSG_CONFIGURATION_UPDATE_RESPONSE, CW_ITEM_NONE}
+	,
 
 	{0, 0}
 

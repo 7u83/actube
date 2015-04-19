@@ -40,6 +40,8 @@
 #include "itemstore.h"
 #include "intavltree.h"
 
+#include "mbag.h"
+
 /**
  * Connection Object
  */ 
@@ -52,6 +54,8 @@ struct conn {
 	cw_itemstore_t incomming;
 	cw_itemstore_t remote;
 	cw_itemstore_t local;
+
+	mbag_t radios;
 
 	/** base_mac */
 	bstr_t base_rmac;
