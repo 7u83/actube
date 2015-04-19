@@ -21,7 +21,7 @@ struct cw_str capwap_strings_elem[] = {
 	{CW_ELEM_DATA_TRANSFER_DATA, "Data Transfer Data"},
 	{CW_ELEM_DATA_TRANSFER_MODE, "Data Transfer Mode"},
 	{CW_ELEM_DECRYPTION_ERROR_REPORT, "Encryption Error Report"},
-	{CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD, "Encryption Error Report Period"},
+	{CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD, "Decryption Error Report Period"},
 	{CW_ELEM_DELETE_MAC_ACL_ENTRY, "Delete MAC ACL Entry"},
 	{CW_ELEM_DELETE_STATION, "Delete Station"},
 	{CW_ELEM_RESERVED_19, "Reserved 19"},

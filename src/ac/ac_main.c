@@ -103,9 +103,27 @@ int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data
 #include "capwap/capwap_crypto.h"
 
 
+#include "capwap/mbag.h"
 
 int main (int argc, const char * argv[]) 
 {
+
+	mbag_t data = mbag_create();
+
+	mbag_set_byte(data,1,25);
+	mbag_set_byte(data,7,125);
+
+	int b = mbag_get_byte(data,1,255);
+	printf("Result: %d\n",b);
+
+	mbag_del(data,1);
+	b = mbag_get_byte(data,1,255);
+	printf("Result: %d\n",b);
+
+	//return 0;
+
+
+
 
 
 /*

@@ -28,6 +28,12 @@
  * @{
  */
 
+/** 
+ * CAPWAP timer type, used in #cw_timer_start and #cw_timer_timeout.
+ */
+typedef time_t cw_timer_t;
+
+
 /**
  * Start a timer.
  * @param t number of seconds until the timer expires
@@ -55,7 +61,7 @@
  * 
  * @param c name of the variable
  */ 
-#define DEFINE_CLOCK(c)\
+#define CLOCK_DEFINE(c)\
 	struct timeval c; 
 
 /**

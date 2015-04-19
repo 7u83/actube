@@ -64,7 +64,7 @@ cw_aciplist_t cw_select_ac(struct conn *conn, cw_itemstore_t dis)
 	avliter_foreach(&i){
 		cw_itemstore_t ac = ((cw_item_t *) (avliter_get(&i)))->data;
 
-		char *ac_name = cw_itemstore_get_str(ac, CW_ITEM_AC_NAME);
+		char *ac_name = cw_itemstore_get_str(ac, CW_ITEM_AC_NAME,NULL);
 
 		int prio = 256;
 		if (ac_name) {

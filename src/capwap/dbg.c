@@ -495,5 +495,45 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 
 }
 
+int cw_is_utf8(unsigned char *str, size_t len);
+
+
+int cw_format_item(char *dst,cw_item_t * item)
+{
+	*dst=0;
+	switch (item->type) {
+		case CW_ITEMTYPE_BSTR16:
+			strncpy(dst,bstr16_data(item->data),bstr16_len(item->data));
+			*(dst+bstr16_len(item->data))=0;
+			return bstr16_len(item->data);
+
+
+	}
+}
+
+void dbg_istore_dmp(cw_itemstore_t s)
+{
+	DEFINE_AVLITER(it,s);
+	avliter_foreach(&it) {
+
+		cw_item_t *i = avliter_get(&it);
+
+		char buffer[1000];
+
+		struct cw_str * strings = cw_item_strings;
+		
+		const char * in = cw_strlist_get_str(strings,i->id);
+		
+		cw_format_item(buffer,i);
+		printf("Item ID %d-%s: %s\n",i->id,in,buffer);
+				
+
+	}
+
+
+}
+
+
+
 /**@}*/
 

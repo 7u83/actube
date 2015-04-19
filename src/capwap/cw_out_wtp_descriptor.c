@@ -32,16 +32,24 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	uint8_t *d = dst+4;
 
 	d+=cw_put_byte(d,2);	//max radios
-	d+=cw_put_byte(d,0);	//radios in use
+	d+=cw_put_byte(d,2);	//radios in use
 	d+=cw_put_encryption_subelems(d);
 
 	cw_item_t * i;
-	i = cw_itemstore_get(conn->outgoing,CW_ITEM_WTP_HARDWARE_VERSION);
+	i = cw_itemstore_get(conn->local,CW_ITEM_WTP_HARDWARE_VERSION);
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->data);
 	}
 	else {
-		cw_log(LOG_ERR, "Can't send hard version in WTP descriptor, not set.");
+		cw_log(LOG_ERR, "Can't send Hardware Version in WTP Descriptor, not set.");
+	}
+
+	i = cw_itemstore_get(conn->local,CW_ITEM_WTP_SOFTWARE_VERSION);
+	if ( i ) {	
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->data);
+	}
+	else {
+		cw_log(LOG_ERR, "Can't send Software Version in WTP descriptor, not set.");
 	}
 
 

@@ -41,7 +41,7 @@ struct cw_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out * 
 
 	int slen;
 	if ( conn->capwap_mode == CW_MODE_CISCO){
-		slen=4;
+		slen=2;
 	}
 	else
 		slen=16;

@@ -95,6 +95,7 @@ OBJS += join.o
 OBJS += run.o
 OBJS += sulking.o
 OBJS += configure.o
+OBJS += changestate.o
 OBJS += $(CONFOBJS)
 
 

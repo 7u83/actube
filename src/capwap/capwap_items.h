@@ -56,7 +56,11 @@ enum capwap_items {
 	CW_ITEM_IMAGE_FILENAME,		/* Full path of image filename */
 	CW_ITEM_DISCOVERIES,
 	CW_ITEM_AC_PRIO_LIST,		/* AC Name with Priority list */
-	CW_ITEM_IMAGE_FILEHANDLE	/* FILE handle for uploading and downloading images  */
+	
+	/** FILE handle for uploading and downloading images  */
+	CW_ITEM_IMAGE_FILEHANDLE,	
+
+	CW_ITEM_RADIO_CFG
 
 };
 

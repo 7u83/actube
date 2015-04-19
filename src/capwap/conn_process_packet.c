@@ -444,9 +444,12 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sock
 		/* fragmented, add the packet to fragman */
 		uint8_t *f;
 		f = fragman_add(conn->fragman, packet, offs, payloadlen);
-		if (f == NULL)
-			return 0;
+		if (f == NULL){
+			errno=EAGAIN;
+			return -1;
+		}
 
+		cw_dbg_pkt(DBG_PKT_IN, conn, f+4, *(uint32_t*)f,from);
 		cw_dbg_msg(DBG_MSG_IN, conn, f+4, *(uint32_t*)f,from);
 		int rc = process_message(conn, f + 4, *(uint32_t *) f, from);
 

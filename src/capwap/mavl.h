@@ -21,8 +21,15 @@
  * @brief Yet another avl tree implementation!
  */
 
-#ifndef __AVLTREE_H
-#define __AVLTREE_H
+
+/** 
+ * @defgroup MavlFunctions MAVL Functions
+ * @{
+ */
+
+
+#ifndef __MAVL_H
+#define __MAVL_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,7 +41,7 @@
     The number of nodes is calculated by 2^depth.
     So a value of 32 should be enough for around 4 
     billion nodes. */
-#define AVLTREE_MAX_DEPTH	32
+#define MAVL_MAX_DEPTH	32
 
 /**
  * Defines the structure of an AVL Node.
@@ -50,12 +57,19 @@ struct mavlnode {
  * AVL Tree
  */ 
 struct mavl {
+	/** Pointer to root node */
 	struct mavlnode *root;
+	/** Compare function */
 	int (*cmp) (const void *, const void *);
+	/** Delete element function */
 	void (*del) (void *);
+	/** Number of elements currently stored in the tree */
 	int count;
 };
 
+/** 
+ * MAVL AVL Tree type
+ */ 
 typedef struct mavl * mavl_t;
 
 
@@ -64,6 +78,7 @@ typedef struct mavl * mavl_t;
 struct mavl *mavl_create(int (*cmp) (const void *, const void *),
 			       void (*del) (void *));
 //void mavl_destroy(struct mavl *t);
+void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
 void mavl_del_all(struct mavl *t);
 void *mavl_del(struct mavl *t, void *data);
@@ -120,7 +135,7 @@ static inline void mavl_destroy(struct mavl *t)
 
 
 struct mavliter{
-	struct mavlnode *stack[AVLTREE_MAX_DEPTH*2];
+	struct mavlnode *stack[MAVL_MAX_DEPTH*2];
 
 	struct mavlnode *cur;
 	int stack_ptr;
@@ -171,9 +186,15 @@ static inline void * mavliter_get(mavliter_t *i){
 
 extern void * mavliter_seek(mavliter_t *i,void *d);
 
-
-#define DEFINE_MAVLITER(i,t)\
+/** 
+ * Define a AVL Iterator Varialble and acciciate it with 
+ * an AVL Tree.
+ * @param i Name of Variable to define
+ * @param t #mavl_t Tree to associate.
+ */ 
+#define MAVLITER_DEFINE(i,t)\
 	mavliter_t i; mavliter_init(&i,t)
+
 
 
 #define mavliter_foreach(i)\
@@ -186,6 +207,7 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 	while(NULL != (val = mavliter_next(iter)))
 
 	
+/** @} */
 
 #endif
 

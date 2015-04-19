@@ -10,6 +10,8 @@
 #include "capwap/log.h"
 #include "capwap/dtls.h"
 #include "capwap/acpriolist.h"
+#include "capwap/capwap_80211.h"
+#include "capwap/radio.h"
 
 #include "wtp.h"
 #include "wtp_conf.h"
@@ -63,8 +65,26 @@ int main()
 	the_conn = conn_create_noq(-1, NULL);
 	struct conn *conn = the_conn;
 
+	conn->radios = mbag_create();
+	mbag_set_mbag(conn->radios,0,mbag_create());
+	mbag_set_mbag(conn->radios,1,mbag_create());
+//	mbag_set_mbag(conn->radios,0xff,mbag_create());
+	
+
+	mbag_t r;
+	r  = mbag_get_mbag(conn->radios,0,NULL);
+	mbag_set_dword(r,CW_RADIO_TYPE,1);
+	r  = mbag_get_mbag(conn->radios,1,NULL);
+	mbag_set_dword(r,CW_RADIO_TYPE,2);
+//	r  = mbag_get_mbag(conn->radios,1,NULL);
+//	mbag_set_dword(r,CW_RADIO_TYPE,1);
+
+
+
 
 	cw_register_actions_cipwap_wtp(&capwap_actions);
+	cw_register_actions_capwap_80211_wtp(&capwap_actions);
+
 	////cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
 	conn->actions = &capwap_actions;
@@ -101,7 +121,7 @@ int main()
 	cw_itemstore_set_avltree(conn->local,CW_ITEM_AC_PRIO_LIST,acprios);
 
 	cw_itemstore_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
-	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
+//	cw_itemstore_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
 
 	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_MAC_TYPE,0);
 	cw_itemstore_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
@@ -111,6 +131,9 @@ int main()
 	discovery();
 	join();
 	configure();
+	changestate();
+	run();
+
 	//image_update();
 
 

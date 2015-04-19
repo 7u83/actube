@@ -132,14 +132,14 @@ struct capwap_ctrlhdr
 //extern int capwap_parse_ctrlhdr(struct capwap_ctrlhdr * ch,uint8_t * msg, int len);
 
 /** 
- *@defgroup CAPWAPMessages CAPWAP Messages
+ *@addtogroup CAPWAPConstants 
  *@{
  */
 
 /**
  * CAPWAP message types as defined in RFC 5416 
  */
-typedef enum {
+enum cw_message_types{
 
 /**Discovery Request */
 CW_MSG_DISCOVERY_REQUEST = 			1,
@@ -183,7 +183,9 @@ CW_STATION_CONFIGURATION_RESPONSE = 		26,
 
 CW_MSG_MAXMSG	=				26
 
-}cw_msg_t;
+};
+
+//cw_msg_t;
 
 /**@}*/
 
@@ -590,6 +592,7 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 #define cw_put_dword lw_put_dword
 #define cw_put_data lw_put_data
 #define cw_put_bstr lw_put_bstr
+#define cw_put_bstr16 lw_put_bstr16
 
 #define cw_set_dword lw_set_dword
 
@@ -929,6 +932,9 @@ extern struct cw_str capwap_strings_state[];
 extern struct cw_str capwap_strings_vendor[];
 extern struct cw_str capwap_strings_elem[];
 extern struct cw_str capwap_strings_result[];
+extern struct cw_str cw_item_strings[];
+
+
 
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
@@ -936,6 +942,8 @@ extern struct cw_str capwap_strings_result[];
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 #define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,(id))
+
+#define cw_stritem(id) cw_strlist_get_str(cw_item_strings,(id))
 
 /*
 #define cw_strrc(rc) \

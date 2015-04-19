@@ -21,6 +21,8 @@ int cw_put_item(uint8_t * dst, struct cw_item *item)
 			return cw_put_dword(dst, item->dword);
 		case CW_ITEMTYPE_BSTR:
 			return cw_put_bstr(dst, item->data);
+		case CW_ITEMTYPE_BSTR16:
+			return cw_put_bstr16(dst,item->data);
 		case CW_ITEMTYPE_VENDORSTR:
 		{
 			int l=0;
@@ -54,15 +56,21 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	//
 
 	int len;
 	if (!item) {
+		const char *vendor="";
+		if ( a->vendor_id ) {
+			vendor=cw_strvendor(a->vendor_id);
+		}
 		if (a->mand) {
 			cw_log(LOG_ERR,
-			       "Can't put mandatory element %d - (%s) into %s. No value found.",
+			       "Can't put mandatory element %s%d - (%s) into %s. No value found.",
+				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id)
 			    );
 		}
 		else{
-			cw_dbg(DBG_WARN,"No output for element %d -(%s) in %s. Item %d not found.",
+			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %d not found.",
+				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id),a->item_id);
 
