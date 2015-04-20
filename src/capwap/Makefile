@@ -109,7 +109,6 @@ LWAPPCISCOOBJS = \
 
 
 CAPWAPOBJS= \
-	   wtpinfo.o \
 	   aciplist.o \
 	   lwmsg_init.o \
 	   wtpinfo_lwreadelem_wtp_descriptor.o \
@@ -160,6 +159,7 @@ CAPWAPOBJS= \
 	avliter_seek.o \
 
 
+	 #  wtpinfo.o \
 
 
 	

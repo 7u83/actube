@@ -542,10 +542,10 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 
       13 Configuration Failure (Unable to Apply Requested Configuration
          - Service Not Provided)
-
-      14 Image Data Error (Invalid Checksum)
-
 */
+#define CW_RESULT_IMAGE_DATA_INVALID_CHECKSUM			14 //Image Data Error (Invalid Checksum)
+
+
 #define CW_RESULT_IMAGE_DATA_IVALID_LENGTH			15	//Image Data Error (Invalid Data Length)
 
 #define CW_RESULT_IMAGE_DATA_ERROR				16	//Image Data Error (Other Error)

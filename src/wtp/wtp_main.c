@@ -17,6 +17,7 @@
 #include "wtp_conf.h"
 
 #include "capwap/dbg.h"
+#include "capwap/mavl.h"
 
 #include "jsmn.h"
 
@@ -39,6 +40,33 @@ bstr_t get_base_rmac()
 	static     uint8_t rm[8]={0x00,0x3a,0x99,0x02,0xfa,0xc0};
 	return bstr_create(rm,6);
 }
+
+
+int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+                         int len,struct sockaddr *from)
+{
+	printf("There was an config update request\n");
+	MAVLITER_DEFINE(it,conn->incomming);
+	printf("Here are the results\n");
+
+	mavliter_foreach(&it){
+		mbag_item_t * item = mavliter_get(&it);
+
+		printf("MBAG ITEM GOT: %d\n",item->id);
+		if (item->id == CW_ITEM_WTP_NAME) {
+			printf("Yea! WTP NAME\n");
+			
+			printf("The name is %.*s\n",bstr16_len(item->data),bstr16_data(item->data));
+
+		}
+
+	}
+
+	cfg_json_save();	
+	return 0;
+
+}
+
 
 
 
@@ -133,11 +161,21 @@ conn->config=mbag_create();
 	mbag_set_byte(conn->local,CW_ITEM_WTP_FRAME_TUNNEL_MODE,0);
 
 
+
+
+cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
+
+
+
 	the_conn->strict_capwap=0;
 	discovery();
 	join();
 	configure();
 	changestate();
+
+mavl_destroy(conn->incomming);
+conn->incomming=conn->config;
+
 	run();
 
 	//image_update();

@@ -59,6 +59,36 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 }
 
 
+		
+
+cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
+		int capwap_state,int msg_id, cw_action_fun_t callback)
+{
+	cw_action_in_t as;
+	/* prepare struct for search operation */
+	as.capwap_state = capwap_state;
+	as.msg_id = msg_id;
+	as.vendor_id = 0;
+	as.elem_id = 0;
+	as.proto = 0;
+	
+	cw_action_in_t *af;
+	
+
+	af = cw_actionlist_in_get(conn->actions->in, &as);
+	if (!af) 
+		return NULL;
+
+	cw_action_fun_t  old = af->end;
+	af->end =callback;
+	return old;
+		
+
+}
+
+
+
+
 cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in * a)
 {
 	return cw_actionlist_add(t, a, sizeof(struct cw_action_in));
@@ -190,3 +220,8 @@ cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a,
 	ar->end=fun;		
 	return ar;
 }
+
+
+
+
+

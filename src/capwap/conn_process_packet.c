@@ -229,7 +229,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 	uint8_t *elem;
 
-	/* avltree to bag the found mandatory elements */
+	/* Create an avltree to catch the found mandatory elements */
 	conn->mand = intavltree_create();
 
 	/* iterate through message elements */
