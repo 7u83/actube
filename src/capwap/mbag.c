@@ -37,11 +37,9 @@ const struct mbag_typedef mbag_type_vendorstr = {
 
 
 void free_avltree(void*t){
-	mbag_item_t *i = (mbag_item_t *) t;
+	mavl_t i = (mavl_t) t;
 
-printf("the mavl deleer %p\n",i->data);
-	mavl_destroy(i->data);
-printf("jo\n");
+	mavl_destroy(i);
 
 }
 const struct mbag_typedef mbag_type_avltree = {
@@ -53,10 +51,9 @@ const struct mbag_typedef mbag_type_avltree = {
 
 static void mbag_type_mbag_del(void *i)
 {
-	struct mbag_item *x = (struct mbag_item*)i;
-printf("MBAG DELETE %p\n",x->data);
+	mbag_t x = (mbag_t)i;
 	
-	mavl_destroy(x->data);
+	mavl_destroy(x);
 }
 
 const struct mbag_typedef mbag_type_mbag = {
@@ -66,17 +63,15 @@ const struct mbag_typedef mbag_type_mbag = {
 
 static void mbag_del_data(struct mbag_item *i)
 {
-printf("Deling: %p\n",i->data);
 	if (i->type->del) {
-printf("Calling deler\n");
-		i->type->del(i);
+		i->type->del(i->data);
 	}
 }
 
 
 static void mbag_del_fun(void *e)
 {
-	
+
 	mbag_del_data(e);
 	free(e);
 }

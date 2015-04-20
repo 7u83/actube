@@ -108,8 +108,7 @@ conn->config=mbag_create();
 	setup_conf(conn);
 
 
-/*
-	mbag_t board_data = mbag_itemstore_create();
+	mbag_t board_data = mbag_create();
 	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
 
 
@@ -118,11 +117,8 @@ conn->config=mbag_create();
 	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO, 
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
-*/
 	
-
-
-//	mbag_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+	mbag_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 	cw_acpriolist_t acprios = cw_acpriolist_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);

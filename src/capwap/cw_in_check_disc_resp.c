@@ -35,6 +35,9 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 	discs = mbag_get_avltree_c(conn->remote, CW_ITEM_DISCOVERIES,
 					   mbag_create);
 
+//mavl_del_all(discs);
+//exit(0);
+
 	if ( !discs ) {
 		cw_log(LOG_ERR,"Can't allocate store for disc resp");
 		errno = ENOMEM;

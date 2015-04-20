@@ -74,7 +74,8 @@ MAVLOBJS= \
 	mavl_get_node.o \
 	mavl_foreach.o \
 	mavl_foreach_lr.o \
-	utf8.o
+	utf8.o \
+	file.o
 
 #	cw_foreach_msgelem.o \
 

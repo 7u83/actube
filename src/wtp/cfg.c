@@ -14,23 +14,27 @@
 #include "capwap/mavl.h"
 #include "capwap/format.h"
 
-
+#include "capwap/file.h"
 
 
 /* json putters */
 int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n);
+int cfg_json_put_dword(char *dst,const char * name, mbag_item_t *i,int n);
+
+//static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t,struct mbag_itemdef *defs,mbag_t mbag), struct mbag_itemdef *defs,mbag_t mbag);
 
 
 struct mbag_itemdef {
 	int item_id;
 	const char *cfgname;
-	int (*setfun) (struct mbag_itemdef *,char *,jsmntok_t *);
+	int (*setfun) (struct mbag_itemdef *,char *,jsmntok_t *,mbag_t mbag);
 	int (*tojsonfun) (char *dst,const char *name, mbag_item_t *i,int n);
 
 };
 typedef struct mbag_itemdef cfg_item_t;
 
+int cfg_json_get_dword(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
 
 
 enum {
@@ -39,7 +43,7 @@ enum {
 };
 
 
-static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t) ) {
+static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t,struct mbag_itemdef *defs,mbag_t mbag), struct mbag_itemdef *defs,mbag_t mbag) {
 	int i;
 
 	if (t->type!=JSMN_OBJECT){
@@ -56,7 +60,7 @@ printf("No object\n");
 	int j=1;
 	for (i = 0; i < t->size; i++) {
 
-		j+=vcb(js,t+j);
+		j+=vcb(js,t+j,defs,mbag);
 		continue;
 				
 	}
@@ -107,9 +111,8 @@ printf("GET BYTE\n");
 }
 
 
-int cfg_json_get_vendorstr(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
+int cfg_json_get_vendorstr(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
 {
-	struct conn * conn = get_conn();
 	int item_id = idef->item_id;
 
 	*(js+t->end)=0;
@@ -128,13 +131,13 @@ int cfg_json_get_vendorstr(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 	*((t+2)->end+js)=0;
 	bstr16_t v = bstr16cfgstr(str);
 
-	mbag_set_vendorstr(conn->config,item_id,vendor_id,bstr16_data(v),bstr16_len(v));
+	mbag_set_vendorstr(mbag,item_id,vendor_id,bstr16_data(v),bstr16_len(v));
 	free(v);
 	return 0;
 }
 
 
-int cfg_json_get_bstr16(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
+int cfg_json_get_bstr16(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
 {
 
 	struct conn * conn = get_conn();
@@ -147,7 +150,24 @@ int cfg_json_get_bstr16(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 	}
 	*(js+t->end)=0;
 	bstr16_t b = bstr16cfgstr(js+t->start);
-	mbag_set_bstr16(conn->config,item_id,b);
+	mbag_set_bstr16(mbag,item_id,b);
+	return 0;
+}
+
+int cfg_json_get_dword(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
+{
+
+	struct conn * conn = get_conn();
+
+	int item_id = idef->item_id;
+	*(js+t->end)=0;
+//	char *str = js+t->start;
+	if (t->type != JSMN_STRING){
+		return 0;
+	}
+	*(js+t->end)=0;
+	uint32_t dw = atoi(js+t->start);
+	mbag_set_dword(mbag,item_id,dw);
 	return 0;
 }
 
@@ -199,7 +219,8 @@ int bstr_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 
 
 
-int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t);
+int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
+int cfg_json_put_obj(char *dst,const char * name, mbag_item_t *i,int n);
 
 
 
@@ -208,26 +229,26 @@ int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t);
 struct mbag_itemdef general_cfg[] = {
 	{CW_ITEM_WTP_NAME, "wtp_name",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
 	{CW_ITEM_LOCATION_DATA,"location_data",cfg_json_get_bstr16,cfg_json_put_bstr16},
-
 	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version",cfg_json_get_vendorstr,cfg_json_put_vendorstr}, 
 	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",cfg_json_get_vendorstr,cfg_json_put_vendorstr}, 
+	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local,cfg_json_put_obj},
+	{CW_RADIO_BSSID, "bssid",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
 
-	{CW_ITEM_WTP_BOARD_MODELNO, "modelno",bstr16_local}, 
-	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local},
-	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
+
+/*	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
 	{CW_ITEM_WTP_MAC_TYPE,"mac_type",byte_local},
 	{CW_ITEM_WTP_GROUP_NAME,"group_name",bstr16_local},
 	{CW_RADIO_BSSID,"bssid",bstr_local},
-
+*/
 	{0, 0, 0}
 };
 
 
 
 struct mbag_itemdef board_data_cfg[] = {
-	{CW_ITEM_WTP_BOARD_MODELNO, "model_no",NULL}, 
-	{CW_ITEM_WTP_BOARD_SERIALNO, "serial_no",NULL}, 
-	{CW_ITEM_WTP_BOARD_VENDOR, "vendor_id",NULL},
+	{CW_ITEM_WTP_BOARD_MODELNO, "model_no",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
+	{CW_ITEM_WTP_BOARD_SERIALNO, "serial_no",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
+	{CW_ITEM_WTP_BOARD_VENDOR, "vendor_id",cfg_json_get_dword,cfg_json_put_dword}, 
 
 	{0, 0, 0}
 };
@@ -257,6 +278,24 @@ int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n)
 	return d-dst;
 }
 
+
+int cfg_json_put_dword(char *dst,const char * name, mbag_item_t *i,int n)
+{
+//	if (i->type != MBAG_BSTR16){
+//		return 0;
+//	}
+
+	char *d = dst;
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
+	d+=sprintf(d,"\"%d\"",i->dword);
+	return d-dst;
+}
+
+
+
+
 int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n)
 {
 	if (i->type != MBAG_VENDORSTR){
@@ -285,18 +324,30 @@ int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n)
 //	d+=sprintf(d,"\"%.*s\",\n",bstr16_len(i->data),bstr16_data(i->data));
 	return d-dst;
 }
+int mbag_tojson(char *dst, mbag_t m, struct mbag_itemdef *defs, int n);
 
+int cfg_json_put_obj(char *dst,const char * name, mbag_item_t *i,int n)
+{
+	char *d = dst;
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
 
+	printf("here we are %s\n",dst);
+	
+	d+=mbag_tojson(d,i->data,board_data_cfg,n);
+	return d-dst;
 
-int mbag_tojson(char *dst, mbag_t m, int n)
+}
+
+int mbag_tojson(char *dst, mbag_t m, struct mbag_itemdef *defs, int n)
 {
 	char *d;
 	d = dst;
 
-printf("MBAG COUNT: %d\n",m->count);
 
-	memset(dst,'\t',n);
-	d+=n;
+//	memset(dst,'\t',n);
+//	d+=n;
 	d+=sprintf(d,"%s","{\n");	
 		
 	MAVLITER_DEFINE(it,m);
@@ -305,10 +356,20 @@ printf("MBAG COUNT: %d\n",m->count);
 	mavliter_foreach(&it) {
 		mbag_item_t * i = mavliter_get(&it);
 
-		struct mbag_itemdef * idef = get_idef_by_id(general_cfg,i->id);
+/*
+		if (i->type == MBAG_MBAG){
+			printf("MBAG DETECTD\n");
+
+			d+=mbag_tojson(d,i->data,n+1);
+			continue;
+
+		}
+
+*/
+//d+=sprintf(d,"jele .");
+
+		struct mbag_itemdef * idef = get_idef_by_id(defs,i->id);
 		if (idef==0){
-		d+=sprintf(d,"NOJai\n");
-			
 			continue;
 		}
 		if (!idef->tojsonfun)
@@ -320,24 +381,25 @@ printf("MBAG COUNT: %d\n",m->count);
 
 	}			
 	d+=sprintf(d,"\n");
-
-	d+=sprintf(d,"%s","}\n");	
-	memset(dst,'\t',n);
+	memset(d,'\t',n);
 	d+=n;
+
+	d+=sprintf(d,"%s","}");	
 
 	return d-dst;
 }
 
-tester()
+int tester()
 {
 	struct conn * conn = get_conn();
 	char dst[4096];
-	mbag_tojson(dst,conn->config,0);
+	int n = mbag_tojson(dst,conn->config,general_cfg,0);
 
 
-	printf("Json resilt:\n%s",dst);
-	
-	exit(0);
+printf("Json: %s\n",dst);
+
+	cw_save_file("cfg.save.json",dst,n);
+exit(0);	
 
 }
 
@@ -351,16 +413,16 @@ struct mbag_itemdef * get_cfg(struct mbag_itemdef *cfg,const char *key){
 	return NULL;
 }
 
-static int wtp_board_data_cb(char *js,jsmntok_t *t)
+static int wtp_board_data_cb(char *js,jsmntok_t *t,mbag_t mbag)
 {
 	struct conn * conn = get_conn();
-	mbag_t bd = mbag_get_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA);
+	mbag_t bd = mbag_get_mbag(conn->config,CW_ITEM_WTP_BOARD_DATA,NULL);
 	if (!bd){
 		bd = mbag_create();
 		if (!bd){
 			return skip(t+1);
 		}
-		mbag_set_avltree(conn->local,CW_ITEM_WTP_BOARD_DATA,bd);
+		mbag_set_mbag(mbag,CW_ITEM_WTP_BOARD_DATA,bd);
 	}
 	
 
@@ -395,24 +457,38 @@ static int wtp_board_data_cb(char *js,jsmntok_t *t)
 	return skip(t+1);
 
 }
+static int set_cfg(char *js,jsmntok_t *t,struct mbag_itemdef *defs,mbag_t mbag);
 
-int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
+int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
 {
-printf("Local board data\n");
 
 	if ( t->type != JSMN_OBJECT ) {
 		printf("Error: wtp_board_data is no object\n");
 		printf("Size: %d\n",t->size);
 		return 0;
 	}
-printf("Scanni\n");
-	scn_obj(js, t,wtp_board_data_cb);
+printf("BOARD DATA SCANER\n");
+
+	struct conn * conn = get_conn();
+	mbag_t bd = mbag_get_mbag(conn->config,CW_ITEM_WTP_BOARD_DATA,NULL);
+	if (!bd){
+		bd = mbag_create();
+		if (!bd){
+			return skip(t+1);
+		}
+		mbag_set_mbag(mbag,CW_ITEM_WTP_BOARD_DATA,bd);
+	}
+	
+
+
+
+	scn_obj(js, t,set_cfg,board_data_cfg,bd);
 	return skip(t+1);
 }
 
 
 
-static int set_cfg(char *js,jsmntok_t *t){
+static int set_cfg(char *js,jsmntok_t *t,struct mbag_itemdef *defs,mbag_t mbag){
 
 	*(js+t->end)=0;
 	const char * key = js+t->start;
@@ -421,7 +497,7 @@ static int set_cfg(char *js,jsmntok_t *t){
 
 
 
-	struct mbag_itemdef * idef = get_cfg(general_cfg,key);
+	struct mbag_itemdef * idef = get_cfg(defs,key);
 
 //	printf("Key: %s\n",key);
 //	printf("Val: %s\n",val);
@@ -434,7 +510,7 @@ static int set_cfg(char *js,jsmntok_t *t){
 		
 	} 
 	else{
-		idef->setfun(idef,js,t+1);
+		idef->setfun(idef,js,t+1,mbag);
 	}
 
 	return skip(t+1);
@@ -446,6 +522,8 @@ static int set_cfg(char *js,jsmntok_t *t){
 
 int setup_conf(struct conn *conn)
 {
+
+/*
 	FILE * infile = fopen("cfg.json","rb");
 	if ( !infile ){
 		perror("Can't open cfg.json");
@@ -465,6 +543,14 @@ int setup_conf(struct conn *conn)
 
 	fseek(infile,0,SEEK_SET);
 	fread(jstr,1,size,infile);
+*/
+
+	size_t size;
+	char *jstr = cw_load_file("cfg.json",&size);
+	if (!jstr) {
+		fprintf(stderr,"Can't load cfg %s: %s\n","cfg.json",strerror(errno));
+		return 0;
+	}
 
 	jsmn_parser p;
 	jsmntok_t t[1200];
@@ -475,7 +561,7 @@ int setup_conf(struct conn *conn)
 		printf("Parser failed\n");
 	}
 
-	scn_obj(jstr, t,set_cfg);
+	scn_obj(jstr, t,set_cfg,general_cfg,conn->config);
 
 
 

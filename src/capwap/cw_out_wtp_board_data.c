@@ -9,7 +9,7 @@
 int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 	mbag_t board_data =
-	    mbag_get_avltree(conn->local, CW_ITEM_WTP_BOARD_DATA);
+	    mbag_get_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA,NULL);
 	if (!board_data) {
 		cw_log(LOG_ERR, "Error: Can't send WTP Board Data element. WTP Board Data is not defined.");
 		return 0;

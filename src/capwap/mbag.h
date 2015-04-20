@@ -276,7 +276,6 @@ static inline int mbag_set_avltree(mbag_t s, uint32_t id, struct avltree *t)
 		return 0;
 	i->type = MBAG_AVLTREE;
 	i->data = t;
-printf("Adding AVL %p to %p\n",t,s);
 	return 1;
 }
 

@@ -1093,6 +1093,7 @@ int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * 
 
 void cw_init_request(struct conn *conn, int msg_id);
 struct mbag_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out *a);
+struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a);
 
 
 
