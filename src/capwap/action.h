@@ -29,6 +29,8 @@
 #include "intavltree.h"
 
 
+
+
 /* Generic functions and structs */
 void * cw_actionlist_add(struct avltree *t, void *a, size_t s);
 
@@ -51,8 +53,12 @@ struct cw_action_in{
 	uint8_t mand;
 };
 
+typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int ,struct sockaddr *);
 
 typedef struct cw_action_in cw_action_in_t;
+
+extern cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
+		int capwap_state,int msg_id, cw_action_fun_t callback);
 
 
 typedef struct avltree * cw_actionlist_in_t;
@@ -68,6 +74,9 @@ extern cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t 
 						  struct cw_action_in * a, uint8_t * data,
 						  int len,struct sockaddr *from));
 
+
+cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
+                int capwap_state,int msg_id, cw_action_fun_t callback);
 
 /* Definitions for outgoing messages */
 struct cw_action_out{

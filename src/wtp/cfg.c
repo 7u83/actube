@@ -389,7 +389,7 @@ int mbag_tojson(char *dst, mbag_t m, struct mbag_itemdef *defs, int n)
 	return d-dst;
 }
 
-int tester()
+int cfg_json_save()
 {
 	struct conn * conn = get_conn();
 	char dst[4096];
@@ -398,8 +398,7 @@ int tester()
 
 printf("Json: %s\n",dst);
 
-	cw_save_file("cfg.save.json",dst,n);
-exit(0);	
+	cw_save_file("cfg.json",dst,n);
 
 }
 

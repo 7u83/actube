@@ -47,6 +47,12 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 		mbag_set_bstrn(itemstore, a->item_id, data, len);
 		return 1;
 	}
+
+	if (a->itemtype == MBAG_BSTR16) {
+		mbag_set_bstr16n(itemstore, a->item_id, data, len);
+		return 1;
+	}
+
 /*	if (a->itemtype == MBAG_DATA) {
 		mbag_set_data(itemstore, a->item_id, data, len);
 		return 1;
