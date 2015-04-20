@@ -197,7 +197,7 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	
 	/* WTP Name */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_NAME, 0,
-	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_config,1}
 	,
 
 	/* WTP MAC Type */

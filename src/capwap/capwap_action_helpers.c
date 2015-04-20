@@ -27,6 +27,11 @@ struct mbag_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 	return mbag_get(conn->local,a->item_id);
 }
 
+struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a)
+{
+	return mbag_get(conn->config,a->item_id);
+}
+
 
 
 #include "capwap.h"

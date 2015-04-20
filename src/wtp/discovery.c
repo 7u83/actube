@@ -131,9 +131,10 @@ static int run_discovery(struct conn *conn)
 		}
 	}
 
+
 	mbag_t discs;
 	discs = mbag_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
-printf("discs = %p\n",discs);
+
 
 	if (!discs) {
 		cw_log(LOG_ERR,"No discovery responses received");
@@ -142,24 +143,19 @@ printf("discs = %p\n",discs);
 
 	int i;
 
-
 	cw_aciplist_t list = cw_select_ac(conn, discs);
 
-printf("List is %p\n",list);
 
 
 	DEFINE_AVLITER(ii,list);
 	avliter_foreach(&ii){
 		cw_acip_t * ip = avliter_get(&ii);
-		printf("Have an IOP\n");
 
 	}
 
-	printf("Nitems: %d\n",conn->remote->count);
 	
-	printf("DEl: %p\n",conn->remote);
 
-	//mavl_del_all(conn->remote);
+	mavl_del_all(conn->remote);
 
 	mbag_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
 

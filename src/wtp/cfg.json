@@ -1,7 +1,21 @@
 {
-	"wtp_name":"TubeWTP",
+	"wtp_name":"TubeWTPx",
 	"hardware_version":["4232704",".x01000000"],
 	"software_version":["4232704",".x08006e00"],
-	"location_data":"China"
-}
+	"location_data":"China",
+	"bssid": ".x003a9902fac0",
 
+	"wtp_board_data" : {
+		"vendor_id": "4232704",
+		"model_no": "AIR-LAP1131AG-E-K9",
+		"serial_no": "2045"
+	},
+
+
+	"acname_with_priority": {
+		"1":"Master-AC",
+		"2":"Cisco-AC"
+	},
+
+
+}
