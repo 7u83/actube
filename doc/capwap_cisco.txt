@@ -137,7 +137,7 @@ AP = RAD = WTP
     Reserved: (?)
 
 
-91.  AC Name with Index
+91.  Cisco AC Name with Index
 
    Same as AC Name with Priority, defined in CAPWAP RFC 5415.
 
@@ -168,7 +168,19 @@ AP = RAD = WTP
       containing the AC name, whose maximum size MUST NOT exceed 512
       bytes.
 
+125. SPAM AP LED State 
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   |    LEDState   | 
+   +-+-+-+-+-+-+-+-+ 
 
+   Type: 125
+   Length: 1
+   
+   LEDState:  
+       1 = Enabeled
+       0 = Disabled (?)
 
 
 126. Cisco AP Regulatory Domain
@@ -185,6 +197,8 @@ AP = RAD = WTP
 
    Type: 126
    Length: 5
+
+
 
 
 
@@ -251,6 +265,30 @@ AP = RAD = WTP
     01 = Normal MWAR 
     02 = Configured MWAR
 
+240. Cisco AP Retransmit Param 
+
+    0                   1                   2       
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Counter Type  |       Set     |     Value     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+Type: 207 
+Length: 4
+
+   Counter Type: 
+       1 = Retransmit Count
+       2 = Retransmit Interval
+
+   Set: 
+       1 = Set 
+       2 = Unset (?)
+
+   Value: 
+       Value to set.
+
+
+
 254. Cisco SPAM AP LED Flash Config
 
 
@@ -272,7 +310,8 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-20. Cisco AP Username Password
+20. Cisco AP Username Password (LWAPP)
+
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                       Username (33 bytes) ...                         
@@ -289,7 +328,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-44. Cisco AP Telnet SSH
+44. Cisco AP Telnet SSH (LWAPP)
     0                   1             
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -301,7 +340,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-54. AP Mode and Type
+54. Cisco AP Mode and Type (LWAPP)
 
    The AP Mode and Type message element is used to configure a WTP to
    operate in a specific mode.
@@ -333,7 +372,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-73. Cisco Path MTU
+73. Cisco Path MTU (LWAPP)
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -346,7 +385,22 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 Type: 73
 Length: >=4
 
-134. Cisco MWAR Hash Value
+
+133. Cisco SSC Hash Validation
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   |  HashValidtn  | 
+   +-+-+-+-+-+-+-+-+ 
+Type: 133
+Length: 1
+   
+   HashValidtn:
+       1=On   (?)
+       0=Off  (?)
+   
+
+134. Cisco MWAR Hash Value (LWAPP)
    
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -357,5 +411,26 @@ Length: >=4
    Hash: ASCII string witch represents in hexadecimal notation 
          the SHA1 hash of the device certificate.
 
+
+135. Dot11R WLC MAC and IP (LWAPP)
+
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                         WLC IP Address                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |                         WLC MAC Address ...                   |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |    ... WLC MAC Address        |        
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+
+
+166. Cisco AP Join IP Pref Mode (LWAPP)
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   |      Flags    | 
+   +-+-+-+-+-+-+-+-+ 
+Type: 166
+Length: 1
 
 
