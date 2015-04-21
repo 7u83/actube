@@ -21,6 +21,7 @@
 int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_dword(char *dst,const char * name, mbag_item_t *i,int n);
+int cfg_json_put_word(char *dst,const char * name, mbag_item_t *i,int n);
 
 //static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t,struct mbag_itemdef *defs,mbag_t mbag), struct mbag_itemdef *defs,mbag_t mbag);
 
@@ -35,6 +36,7 @@ struct mbag_itemdef {
 typedef struct mbag_itemdef cfg_item_t;
 
 int cfg_json_get_dword(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
+int cfg_json_get_word(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
 
 
 enum {
@@ -171,6 +173,23 @@ int cfg_json_get_dword(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t m
 	return 0;
 }
 
+int cfg_json_get_word(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
+{
+
+	struct conn * conn = get_conn();
+
+	int item_id = idef->item_id;
+	*(js+t->end)=0;
+//	char *str = js+t->start;
+	if (t->type != JSMN_STRING){
+		return 0;
+	}
+	*(js+t->end)=0;
+	uint32_t dw = atoi(js+t->start);
+	mbag_set_word(mbag,item_id,dw);
+	return 0;
+}
+
 
 
 
@@ -233,6 +252,13 @@ struct mbag_itemdef general_cfg[] = {
 	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version",cfg_json_get_vendorstr,cfg_json_put_vendorstr}, 
 	{CW_ITEM_WTP_BOARD_DATA,"wtp_board_data",wtp_board_data_local,cfg_json_put_obj},
 	{CW_RADIO_BSSID, "bssid",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
+	{CW_ITEM_CAPWAP_TIMERS, "capwap_timers",cfg_json_get_word,cfg_json_put_word}, 
+	{CW_ITEM_IDLE_TIMEOUT, "idle_timeout",cfg_json_get_dword,cfg_json_put_dword}, 
+	
+
+
+	{CW_ITEM_AC_HASH_VALUE, "ac_hash_value",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
+	
 
 
 /*	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
@@ -290,6 +316,20 @@ int cfg_json_put_dword(char *dst,const char * name, mbag_item_t *i,int n)
 	d+=n;
 	d+=sprintf(d,"\"%s\":",name);
 	d+=sprintf(d,"\"%d\"",i->dword);
+	return d-dst;
+}
+
+int cfg_json_put_word(char *dst,const char * name, mbag_item_t *i,int n)
+{
+//	if (i->type != MBAG_BSTR16){
+//		return 0;
+//	}
+
+	char *d = dst;
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
+	d+=sprintf(d,"\"%d\"",i->word);
 	return d-dst;
 }
 
@@ -396,7 +436,7 @@ int cfg_json_save()
 	int n = mbag_tojson(dst,conn->config,general_cfg,0);
 
 
-printf("Json: %s\n",dst);
+//printf("Json: %s\n",dst);
 
 	cw_save_file("cfg.json",dst,n);
 

@@ -386,6 +386,8 @@ extern int wtpinfo_set_radioinfo(struct wtpinfo *wtpinfo, uint8_t * msgelem, int
 #define CAPWAP_WAIT_DTLS		60
 #define	CAPWAP_WAIT_JOIN		60
 
+#define CAPWAP_TIMERS			((CAPWAP_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
+
 
 //#define CAPWAP_CIPHER                 "PSK-AES128-CBC-SHA:"
 //#define CAPWAP_CIPHER "AES128-SHA"

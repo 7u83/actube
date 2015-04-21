@@ -10,6 +10,7 @@
 #include "capwap/dtls.h"
 #include "capwap/sock.h"
 #include "capwap/cw_util.h"
+#include "capwap/capwap_items.h"
 
 
 #include "wtp_conf.h"
@@ -33,7 +34,9 @@ int run()
 	conn->capwap_state = CW_STATE_RUN;
 
 	do {
-		time_t timer = cw_timer_start(25);
+
+		int echo_interval = mbag_get_word(conn->config,CW_ITEM_CAPWAP_TIMERS,CAPWAP_TIMERS)&0xff;
+		time_t timer = cw_timer_start(echo_interval);
 		int rc;
 
 		

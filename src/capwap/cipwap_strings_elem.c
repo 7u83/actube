@@ -11,6 +11,6 @@ struct cw_str cipwap_strings_elem[] = {
 
 	{CW_CISCO_AP_GROUP_NAME, "WTP Group Name" },
 
-	{0,"Unknown Element"}
+	{CW_STR_STOP,"Unknown Element"}
 	
 };

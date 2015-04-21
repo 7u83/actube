@@ -98,6 +98,15 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 0,0  }
 	,
 
+
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+	 CW_ACTION_IN_CAPWAP_TIMERS, 1}
+	,
+	
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+	 CW_ACTION_IN_IDLE_TIMEOUT, 1}
+	,
+	
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE,
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
 	,
@@ -110,10 +119,16 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	,
 
 
-	/* Message Change State Response IN */
+	/* Message Configuration Update Request IN */
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
 	0, 0,0  }
 	,
+
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_CAPWAP_TIMERS, 0}
+	
+	,
+
 
 	/* Element: Vendor Specific */
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
@@ -182,7 +197,7 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 	/* Location Data */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_LOCATION_DATA, 0,
-	 CW_ELEM_LOCATION_DATA, NULL,cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_LOCATION_DATA, NULL,cw_out_generic, cw_out_get_config,1}
 	,
 
 	/* WTP Board Data */
