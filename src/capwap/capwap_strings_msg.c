@@ -49,9 +49,10 @@ struct cw_str capwap_strings_msg[] = {
 
 /*           Data Transfer Request               21
            Data Transfer Response              22
-           Clear Configuration Request         23
-           Clear Configuration Response        24
-           Station Configuration Request       25
+*/
+{CW_MSG_CLEAR_CONFIGURATION_REQUEST,"Clear Configuration Request"}, 
+{CW_MSG_CLEAR_CONFIGURATION_RESPONSE,"Clear Configuration Response"},
+/*           Station Configuration Request       25
            Station Configuration Response      26
 */
 

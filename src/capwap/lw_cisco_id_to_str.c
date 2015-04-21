@@ -16,6 +16,14 @@ const char * lw_cisco_id_to_str(int elem_id)
 			return "AC IP Addr with Index";
 		case LW_CISCO_AP_SUBMODE:
 			return "AP Submode";
+		case LW_CISCO_SSC_HASH_VALIDATION:
+			return "SSC Hash Validation";
+
+		case LW_CISCO_DOT11R_WLC_MAC_AND_IP:
+			return "802.11r WLC MAC and IP";
+		case LW_CISCO_AP_JOIN_IP_PREF_MODE:
+			return "AP Join IP Pref Mode";
+			
 
 		default: 
 			return "Unknown";

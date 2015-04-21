@@ -11,6 +11,6 @@ struct cw_str cw_item_strings[] = {
 	{ CW_ITEM_WTP_BOARD_MACADDRESS, "WTP Board MAC Address"},
 	{ CW_ITEM_WTP_BOARD_ID,"WTP Board ID"},
 	{ CW_ITEM_WTP_GROUP_NAME,"WTP Group Name"},
-	{ 0,0}
+	{ CW_STR_STOP,"Unknown"}
 
 };

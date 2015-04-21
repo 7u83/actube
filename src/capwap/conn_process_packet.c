@@ -277,7 +277,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 	/* if we've got a request message, we always have to send a response message */
 	if (as.msg_id & 1) {
 		if (result_code > 0) {
-			/* the end method gave us an result code, so
+			/* the end method gave us an result code>0, so
 			   send an error message */
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if ( result_code == 0 ){
@@ -285,7 +285,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 			cw_send_response(conn, rawmsg, len);
 		} else {
 			/* the request message is ignored, no response
-			   sent */
+			   will be sent */
 			errno=EAGAIN;	
 		}
 	} else {

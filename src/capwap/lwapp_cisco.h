@@ -28,19 +28,27 @@
 
 /* Vendor specific message elements LWAPP Cisco */
 
-#define LW_CISCO_AP_USERNAME_PASSWORD		18
 
-#define LW_CISCO_AC_IP_ADDR_WITH_INDEX		32
-#define LW_CISCO_AP_LOGHOST_CONFIG		36
+enum lwap_cisco_elems {
 
-#define LW_CISCO_AP_SUBMODE			67
+LW_CISCO_AP_USERNAME_PASSWORD=18,
+LW_CISCO_AC_IP_ADDR_WITH_INDEX=32,
+LW_CISCO_AP_LOGHOST_CONFIG=36,
 
-#define LW_CISCO_PATH_MTU			73
+LW_CISCO_AP_SUBMODE=67,
 
-#define LW_CISCO_ADD_WLAN			128
+LW_CISCO_PATH_MTU=73,
 
-#define LW_CISCO_MWAR_HASH_VALUE		134
+LW_CISCO_ADD_WLAN=128,
 
+LW_CISCO_SSC_HASH_VALIDATION=133,
+LW_CISCO_MWAR_HASH_VALUE=134,
+LW_CISCO_DOT11R_WLC_MAC_AND_IP=135,
+
+LW_CISCO_AP_JOIN_IP_PREF_MODE=166
+
+};
+	
 
 /* function proto types */
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);

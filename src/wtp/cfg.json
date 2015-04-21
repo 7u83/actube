@@ -1,5 +1,6 @@
 {
-	"wtp_name":"Tobias-zu-Hause",
+	"idle_timeout":"300",
+	"wtp_name":"Kaffe-Point",
 	"hardware_version":["4232704",".x01000000"],
 	"software_version":["4232704",".x08006e00"],
 	"wtp_board_data":{
@@ -7,6 +8,7 @@
 		"model_no":"AIR-LAP1131AG-E-K9",
 		"serial_no":"2045"
 	},
-	"location_data":"China",
+	"capwap_timers":"2590",
+	"location_data":"Germany",
 	"bssid":""
 }

@@ -143,6 +143,21 @@
 	CW_ITEM_RESULT_CODE,				/* ID to use store */		\
 	4, 4						/* min/max length */
 
+#define CW_ACTION_IN_CAPWAP_TIMERS	 	\
+	CW_ELEM_CAPWAP_TIMERS,				/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	MBAG_WORD, 				/* Type of element */		\
+	CW_ITEM_CAPWAP_TIMERS,				/* ID to use store */		\
+	2, 2						/* min/max length */
+
+#define CW_ACTION_IN_IDLE_TIMEOUT	 	\
+	CW_ELEM_IDLE_TIMEOUT,				/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	MBAG_DWORD, 					/* Type of element */		\
+	CW_ITEM_IDLE_TIMEOUT,				/* ID to use store */		\
+	4, 4						/* min/max length */
+
+
 
 
 #endif
