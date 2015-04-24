@@ -56,7 +56,11 @@ extern int sock_set_dontfrag(int sock,int val);
 
 extern char * sock_get_primary_if(int family);
 
-#define sock_addr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64 ) )
+
+char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int addport);
+
+
+#define sock_addr2str(s) ( sock_strsockaddr( (struct sockaddr*)s, (char[64]){0}, 64,0 ) )
 #define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
 #define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
 

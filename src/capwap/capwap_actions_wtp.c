@@ -68,6 +68,15 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_RESULT_CODE, 1}
 	,
 
+	/* Element: AC Name */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
+	 CW_ACTION_IN_AC_NAME, 1}
+	,
+
+	
+
+
+
 	/* ------------------------------------------------------------------------------- */
 
 	/* Message Image Data Response */

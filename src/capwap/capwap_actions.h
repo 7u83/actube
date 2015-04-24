@@ -157,6 +157,13 @@
 	CW_ITEM_IDLE_TIMEOUT,				/* ID to use store */		\
 	4, 4						/* min/max length */
 
+#define CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE	 	\
+	CW_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID*/			\
+	cw_in_radio_administrative_state, 0,		/* start/end callback */	\
+	MBAG_DWORD, 					/* Type of element */		\
+	0,						/* ID to use store */		\
+	4, 4						/* min/max length */
+
 
 
 

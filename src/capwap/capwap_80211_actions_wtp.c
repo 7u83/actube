@@ -12,8 +12,13 @@
 
 cw_action_in_t capwap_80211_actions_wtp_in[] = {
 
-
+	/* Discovery Response */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
+	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
+	,
+
+	/* Join Response */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
 	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
 	,
 

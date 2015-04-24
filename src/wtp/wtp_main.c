@@ -138,7 +138,7 @@ mavl_destroy(b);
 conn->config=mbag_create();
 
 	setup_conf(conn);
-
+	cfg_json_save();	
 
 	mbag_t board_data = mbag_create();
 	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
@@ -172,7 +172,7 @@ cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESP
 
 
 
-	the_conn->strict_capwap=0;
+	the_conn->strict_capwap=1;
 	discovery();
 	join();
 mavl_destroy(conn->incomming);

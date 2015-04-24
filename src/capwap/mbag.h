@@ -279,6 +279,16 @@ static inline int mbag_set_avltree(mbag_t s, uint32_t id, struct avltree *t)
 	return 1;
 }
 
+static inline int mbag_set_mavl(mbag_t s, uint32_t id, mavl_t t)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	i->type = MBAG_AVLTREE;
+	i->data = t;
+	return 1;
+}
+
 
 static inline struct avltree *mbag_get_avltree_c(mbag_t s, uint32_t id,
 							 struct avltree *(creator) ())
@@ -295,6 +305,22 @@ static inline struct avltree *mbag_get_avltree_c(mbag_t s, uint32_t id,
 	return avltree;
 }
 
+
+static inline mavl_t mbag_get_mavl(mbag_t s, uint32_t id,
+							 mavl_t (creator) ())
+{
+	struct mbag_item *i = mbag_get(s, id);
+	if (i)
+		return i->data;
+
+	if (!creator)
+		return NULL;
+	mavl_t avltree = creator();
+	if (!avltree)
+		return NULL;
+	mbag_set_mavl(s, id, avltree);
+	return avltree;
+}
 
 
 

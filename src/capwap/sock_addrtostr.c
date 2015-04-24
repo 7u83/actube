@@ -45,7 +45,10 @@ void sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst)
 }
 */
 
-char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen)
+
+
+
+char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int addport)
 {
 
 	int port;
@@ -54,7 +57,10 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen)
 		case AF_INET:
 			inet_ntop(AF_INET, &(((struct sockaddr_in *)sa)->sin_addr), s, maxlen);
 			port = ((struct sockaddr_in *)sa)->sin_port;
-			sprintf(s,"%s:%i",s,ntohs(port));
+			if (addport) 
+				sprintf(s,"%s:%i",s,ntohs(port));
+			else
+				sprintf(s,"%s",s);
 			break;
 
 	        case AF_INET6:
