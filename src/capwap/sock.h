@@ -63,7 +63,7 @@ char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int add
 #define sock_addr2str(s) ( sock_strsockaddr( (struct sockaddr*)s, (char[64]){0}, 64,0 ) )
 #define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
 #define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
-
+#define sock_addrtostr(s,str,n) sock_strsockaddr(s,str,n,1)
 
 #define sock_addrfamily(addr) ( ((struct sockaddr_storage*)(addr))->ss_family )
 
