@@ -23,7 +23,7 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		   mode send no discovery response */
 		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Request from %s - missing mandatory elements.",
-		       sock_addr2str(&conn->addr));
+		       sock_addr2str(from));
 		return -1;
 	}
 

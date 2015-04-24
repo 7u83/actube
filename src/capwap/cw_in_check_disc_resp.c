@@ -21,7 +21,7 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 		cw_dbg_missing_mand(DBG_MSG_ERR, conn, mlist, n, a);
 		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Response from %s - missing mandatory elements.",
-		       sock_addr2str(&conn->addr));
+		       sock_addr2str(from));
 		errno = EAGAIN;
 		return -1;
 	}
