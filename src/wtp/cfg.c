@@ -15,6 +15,8 @@
 #include "capwap/format.h"
 
 #include "capwap/file.h"
+#include "capwap/aciplist.h"
+#include "capwap/sock.h"
 
 
 /* json putters */
@@ -22,6 +24,8 @@ int cfg_json_put_bstr16(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_vendorstr(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_dword(char *dst,const char * name, mbag_item_t *i,int n);
 int cfg_json_put_word(char *dst,const char * name, mbag_item_t *i,int n);
+int cfg_json_put_ac_ip_list(char *dst,const char * name, mbag_item_t *i,int n);
+
 
 //static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t,struct mbag_itemdef *defs,mbag_t mbag), struct mbag_itemdef *defs,mbag_t mbag);
 
@@ -90,7 +94,90 @@ static int skip(jsmntok_t *t)
 	}
 }
 
+int cfg_json_put_ac_ip_list(char *dst,const char * name, mbag_item_t *i,int n)
+{
 
+	char *d = dst;
+
+	cw_aciplist_t aciplist = i->data;
+
+	MAVLITER_DEFINE(it,aciplist);
+
+	memset(d,'\t',n);
+	d+=n;
+	d+=sprintf(d,"\"%s\":",name);
+
+	d+=sprintf(d,"[\n");
+	const char * comma = "";
+	mavliter_foreach(&it){
+		cw_acip_t * acip = mavliter_get(&it);
+
+		d+=sprintf(d,"%s",comma);
+		memset(d,'\t',n+1);
+		d+=n+1;
+
+		d+=sprintf(d,"\"%s\"",sock_addr2str(&acip->ip));
+		comma=",\n";
+
+
+	}
+	d+=sprintf(d,"\n");
+	memset(d,'\t',n);
+	d+=n;
+
+	d+=sprintf(d,"]");
+	
+	return d-dst;
+}
+
+int cfg_json_get_ac_ip_list(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag)
+{
+
+	printf("Get AC IP List len = %d\n",t->size);
+	if (t->type != JSMN_ARRAY ) {
+		printf("ac_ip_list is not a list\n");
+		exit(0);
+
+	}
+	int size = t->size;
+	t++;
+
+	int i;
+
+	for (i=0; i<size; i++,t++){
+		js[t->end]=0;
+		
+		int rc;
+
+		cw_acip_t * acip;	
+		acip = malloc(sizeof(cw_acip_t));
+		if (!acip)
+			continue;
+		
+		/* convert IPv4 adddress */
+		rc = inet_pton(AF_INET, js+t->start, &(((struct sockaddr_in *)(&acip->ip))->sin_addr) );
+		((struct sockaddr *)(&acip->ip))->sa_family=AF_INET;
+		if (!rc) {
+			/* If it's not an IPv4 adress, try IPv6 */
+			rc = inet_pton(AF_INET6, js+t->start, &(((struct sockaddr_in6 *)(&acip->ip))->sin6_addr) );
+			((struct sockaddr *)(&acip->ip))->sa_family=AF_INET6;
+		}
+
+		if ( !rc ) {
+			
+			printf("Not an IP adress: %s\n",js+t->start);
+			exit(0);
+		}
+
+		cw_aciplist_t aciplist= mbag_get_mavl(mbag,CW_ITEM_AC_IP_LIST,cw_aciplist_create );
+		mavl_replace(aciplist,acip);
+		
+
+	}
+
+
+
+}
 
 
 
@@ -237,6 +324,7 @@ int bstr_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t)
 
 
 
+int cfg_json_get_ac_ip_list(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
 
 int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t mbag);
 int cfg_json_put_obj(char *dst,const char * name, mbag_item_t *i,int n);
@@ -254,6 +342,7 @@ struct mbag_itemdef general_cfg[] = {
 	{CW_RADIO_BSSID, "bssid",cfg_json_get_bstr16,cfg_json_put_bstr16}, 
 	{CW_ITEM_CAPWAP_TIMERS, "capwap_timers",cfg_json_get_word,cfg_json_put_word}, 
 	{CW_ITEM_IDLE_TIMEOUT, "idle_timeout",cfg_json_get_dword,cfg_json_put_dword}, 
+	{CW_ITEM_AC_IP_LIST,"ac_ip_list",cfg_json_get_ac_ip_list,cfg_json_put_ac_ip_list},
 	
 
 
@@ -372,9 +461,6 @@ int cfg_json_put_obj(char *dst,const char * name, mbag_item_t *i,int n)
 	memset(d,'\t',n);
 	d+=n;
 	d+=sprintf(d,"\"%s\":",name);
-
-	printf("here we are %s\n",dst);
-	
 	d+=mbag_tojson(d,i->data,board_data_cfg,n);
 	return d-dst;
 
@@ -436,7 +522,8 @@ int cfg_json_save()
 	int n = mbag_tojson(dst,conn->config,general_cfg,0);
 
 
-//printf("Json: %s\n",dst);
+
+
 
 	cw_save_file("cfg.json",dst,n);
 
@@ -506,7 +593,6 @@ int wtp_board_data_local(struct mbag_itemdef *idef,char *js, jsmntok_t *t,mbag_t
 		printf("Size: %d\n",t->size);
 		return 0;
 	}
-printf("BOARD DATA SCANER\n");
 
 	struct conn * conn = get_conn();
 	mbag_t bd = mbag_get_mbag(conn->config,CW_ITEM_WTP_BOARD_DATA,NULL);
@@ -561,29 +647,6 @@ static int set_cfg(char *js,jsmntok_t *t,struct mbag_itemdef *defs,mbag_t mbag){
 
 int setup_conf(struct conn *conn)
 {
-
-/*
-	FILE * infile = fopen("cfg.json","rb");
-	if ( !infile ){
-		perror("Can't open cfg.json");
-		return 0;
-	}
-
-	fseek(infile,0,SEEK_END);
-	int size = ftell(infile);
-	
-
-	char *jstr = malloc(size);
-	if ( jstr==NULL){
-		perror("Can't allocate memory");
-		return 0;
-
-	}
-
-	fseek(infile,0,SEEK_SET);
-	fread(jstr,1,size,infile);
-*/
-
 	size_t size;
 	char *jstr = cw_load_file("cfg.json",&size);
 	if (!jstr) {

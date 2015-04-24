@@ -44,7 +44,7 @@ static void acprio_del(void *d)
 
 cw_acpriolist_t cw_acpriolist_create()
 {
-	return  avltree_create(acprio_cmp, acprio_del);
+	return  mavl_create(acprio_cmp, acprio_del);
 }
 
 cw_acprio_t * cw_acpriolist_add(cw_acpriolist_t l, const char *name,int name_len, uint8_t prio)
@@ -57,7 +57,7 @@ cw_acprio_t * cw_acpriolist_add(cw_acpriolist_t l, const char *name,int name_len
 	s->prio=prio;
 
 	cw_acpriolist_del(l,s);
-	return avltree_add(l,s);
+	return mavl_add(l,s);
 	
 }
 

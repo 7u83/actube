@@ -112,6 +112,9 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "SPAM AP LED State";
 		case CW_CISCO_AP_RETRANSMIT_PARAM:
 			return "AP Retransmit Param";
+		case CW_CISCO_AP_VENUE_SETTINGS:
+			return "AP Venue Settings";
+	
 		default:
 			return "Unknown";
 

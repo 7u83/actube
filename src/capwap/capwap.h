@@ -1098,6 +1098,8 @@ struct mbag_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out 
 struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a);
 
 
+extern int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
 
 
 int cw_send_request(struct conn *conn, int msg_id);

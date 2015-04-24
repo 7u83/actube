@@ -9,6 +9,12 @@
 		"serial_no":"2045"
 	},
 	"capwap_timers":"2590",
+	"ac_ip_list":[
+		"192.168.0.1",
+		"192.168.0.13",
+		"192.168.0.15",
+		"fe80::219:dbff:fee0:9327"
+	],
 	"location_data":"Germany",
 	"bssid":""
 }

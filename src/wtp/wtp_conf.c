@@ -182,10 +182,12 @@ int wtpconf_ac_list()
 	}
 
 	if (bcrc){
-		char bcstr[100];
-		sock_addrtostr((struct sockaddr*)&bcaddr,bcstr,100);
-		char * c = strchr(bcstr,':');
-		*c=0;
+//		char bcstr[100];
+		char *bcstr;
+//		sock_addrtostr((struct sockaddr*)&bcaddr,bcstr,100);
+		bcstr = sock_addr2str((struct sockaddr*)&bcaddr); 
+//		char * c = strchr(bcstr,':');
+//		*c=0;
 		conf_ac_list[i]=strdup(bcstr);
 	}
 

@@ -140,6 +140,7 @@ CAPWAPOBJS= \
 	cw_in_cisco_image_identifier.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ipv4_address.o\
+	cw_in_radio_administrative_state.o \
 	strheap.o \
 	cw_check_missing_mand.o \
 	md5sum.o \

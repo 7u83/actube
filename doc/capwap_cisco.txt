@@ -273,7 +273,7 @@ AP = RAD = WTP
    | Counter Type  |       Set     |     Value     |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
-Type: 207 
+Type: 240
 Length: 4
 
    Counter Type: 
@@ -287,6 +287,20 @@ Length: 4
    Value: 
        Value to set.
 
+249. Cisco AP Venue Settings
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Reserved(?)  | Venue Group   |  Venue Type   |   Language ...   
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+          ... Language             |  Venue Name ...   
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+
+
+
+
 
 
 254. Cisco SPAM AP LED Flash Config
@@ -296,7 +310,7 @@ Length: 4
 LWAPP
 =====
 In this section Cisco vendor specific message elements used in LWAPP 
-are listed.
+are listed. (See RFC5412, message element type 104).
 
 Some of these elements are used  by Cisco in CAPWAP where the
 vendor specific LWAPP message element is encapsulated in a vendor 
