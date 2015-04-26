@@ -106,7 +106,7 @@ static void wtpman_run_discovery(void *arg)
 
 
 	struct wtpman *wtpman = (struct wtpman *) arg;
-	struct cwrmsg *cwrmsg;
+	//struct cwrmsg *cwrmsg;
 
 	struct conn * conn = wtpman->conn;
 
@@ -154,7 +154,7 @@ conn->radios = mbag_create();
 
 
 
-
+/*
 	timer = cw_timer_start(10);
 	cwrmsg = wtpman_wait_for_message(wtpman, timer);
 
@@ -202,16 +202,18 @@ conn->radios = mbag_create();
 
 	struct ac_info *acinfo = get_acinfo();
 
-
+*/
 
 /*	char wtpinfostr[8192];
 	wtpinfo_print(wtpinfostr,&wtpman->wtpinfo);
 	cw_dbg(DBG_INFO,"Discovery request gave us the follwing WTP Info:\n%s",wtpinfostr);
 */
 
+/*
 	cwsend_discovery_response(wtpman->conn, cwrmsg->seqnum, &radioinfo, acinfo,
 				  &wtpman->wtpinfo);
 	wtpman_remove(wtpman);
+*/
 }
 
 
