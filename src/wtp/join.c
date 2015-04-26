@@ -168,12 +168,19 @@ int run_join(struct conn * conn)
 	int rc = cw_send_request(conn,CW_MSG_JOIN_REQUEST);
 
 	if (!cw_rcok(rc) ) {
-		cw_log(LOG_ERR,"Can't Join AC at %s: %d - %s.",
+		if (rc>0 ){
+			cw_log(LOG_ERR,"Can't Join AC at %s, AC said: %d - %s.",
 				sock_addr2str(&conn->addr),rc,cw_strerror(rc));
+
+		}
+		else{
+			cw_log(LOG_ERR,"Can't Join AC at %s: %d - %s.",
+					sock_addr2str(&conn->addr),errno,cw_strerror(rc));
+		}
 		return 0;
 	}
 
-	cw_dbg(DBG_ELEM,"Join Result: %d - %s",rc,cw_strresult(rc));
+	cw_dbg(DBG_ELEM,"Joined AC at %s,  Join Result: %d - %s",sock_addr2str(&conn->addr),rc,cw_strresult(rc));
 
 	return 1;
 }
@@ -183,7 +190,6 @@ int run_join(struct conn * conn)
 int join()
 {
 	struct conn * conn = get_conn();
-conn->capwap_mode=CW_MODE_CISCO;
 
 	cw_aciplist_t iplist = mbag_get_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 	if (!iplist){

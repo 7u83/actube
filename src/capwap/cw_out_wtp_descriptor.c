@@ -5,10 +5,12 @@
 #include "capwap_items.h"
 #include "capwap.h"
 
-static int cw_put_encryption_subelems(uint8_t *dst)
+static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {
-cw_put_word(dst,0x01);
-return 2;
+	if (capwap_mode==CW_MODE_CISCO){
+		cw_put_word(dst,0x01);
+		return 2;
+	}
 
 	int n=2;
 	
@@ -34,9 +36,10 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	// XXX Dummy WTP Descriptor Header
 	uint8_t *d = dst+4;
 
-	d+=cw_put_byte(d,2);	//max radios
+	d+=cw_put_byte(d,conn->radios->count);	//max radios
 	d+=cw_put_byte(d,2);	//radios in use
-	d+=cw_put_encryption_subelems(d);
+
+	d+=cw_put_encryption_subelems(d,conn->capwap_mode);
 
 	mbag_item_t * i;
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);

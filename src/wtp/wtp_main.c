@@ -111,7 +111,7 @@ mavl_destroy(b);
 
 
 
-	cw_register_actions_cipwap_wtp(&capwap_actions);
+	cw_register_actions_capwap_wtp(&capwap_actions);
 	cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
 
@@ -130,7 +130,10 @@ mavl_destroy(b);
 	conn->incomming = mbag_create();
 	conn->local = mbag_create();
 	conn->base_rmac=get_base_rmac();
-	conn->capwap_mode = CW_MODE_CISCO;
+
+conn->capwap_mode = CW_MODE_STD;
+the_conn->strict_capwap=1;
+
 
 conn->config=mbag_create();
 
@@ -168,7 +171,6 @@ cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESP
 
 
 
-the_conn->strict_capwap=1;
 	if (!discovery())
 		return -1;
 	if (!join())

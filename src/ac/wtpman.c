@@ -239,9 +239,8 @@ static int wtpman_join(void *arg, time_t timer)
 
 	struct conn * conn = wtpman->conn;
 
-conn->capwap_mode=CW_MODE_CIPWAP;
 
-
+conn->strict_capwap=1;
 
 	cw_dbg(DBG_INFO,"Join State - %s",sock_addr2str(&conn->addr));
 
