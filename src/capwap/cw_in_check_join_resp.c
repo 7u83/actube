@@ -13,6 +13,16 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 	cw_action_in_t * mlist[60];
 
+	mbag_item_t * jresult = mbag_get(conn->incomming,CW_ITEM_RESULT_CODE);
+	if  (jresult ) {
+		if (!cw_rcok(jresult->dword)){
+			return jresult->dword;
+		}
+
+
+	}
+
+
 	/* Check for mandatory elements */
 	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n && conn->strict_capwap) {
@@ -27,7 +37,6 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 	
 
-	mbag_item_t * jresult = mbag_get(conn->incomming,	CW_ITEM_RESULT_CODE);
 
 	if ( jresult ) {
 		return jresult->dword;
