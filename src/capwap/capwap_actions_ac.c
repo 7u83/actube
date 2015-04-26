@@ -208,7 +208,12 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* AC Name */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_AC_NAME, 0,
-	 CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local}
+	 CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local,1}
+	,
+
+	/* AC Name */
+	{CW_MSG_JOIN_RESPONSE, CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 0,
+	 0, NULL, cw_out_capwap_local_ip_address, NULL,1}
 	,
 
 

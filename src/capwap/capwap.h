@@ -243,7 +243,7 @@ CW_MSG_MAXMSG	=				26
 #define CW_ELEM_AC_IPV6_LIST				3
 #define CW_ELEM_AC_NAME					4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY			5
-#define CW_ELEM_AC_NAME_WITH_INDEX			5	/* Draft 7 naming */
+#define CW_ELEM_AC_NAME_WITH_INDEX	CW_ELEM_AC_NAME_WITH_PRIORITY	/* Draft 7 naming */
 #define CW_ELEM_AC_TIMESTAMP				6
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
@@ -1116,5 +1116,7 @@ int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, 
 
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
+
+int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
 
 #endif
