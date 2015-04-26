@@ -125,6 +125,8 @@ extern long conf_debug_level;
 extern uint8_t conf_macaddress[12];
 extern uint8_t conf_macaddress_len;
 
+extern int conf_strict_capwap;
+extern int conf_strict_headers;
 
 
 #endif

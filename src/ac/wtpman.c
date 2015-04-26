@@ -18,7 +18,6 @@
 #include "capwap/timer.h"
 
 
-#include "conf.h"
 
 #include "capwap/lwmsg.h"
 #include "capwap/lwapp.h"
@@ -110,8 +109,6 @@ static void wtpman_run_discovery(void *arg)
 
 	struct conn * conn = wtpman->conn;
 
-conn->strict_capwap=0;
-conn->strict_hdr=1;
 
 conn->capwap_mode=CW_MODE_CIPWAP;
 conn->config = mbag_create();
@@ -242,8 +239,6 @@ static int wtpman_join(void *arg, time_t timer)
 
 	struct conn * conn = wtpman->conn;
 
-conn->strict_capwap=1;
-conn->strict_hdr=1;
 conn->capwap_mode=CW_MODE_CIPWAP;
 
 
@@ -481,6 +476,9 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
+
+	wtpman->conn->strict_capwap = conf_strict_capwap;
+	wtpman->conn->strict_hdr = conf_strict_headers;
 
 	return wtpman;
 }

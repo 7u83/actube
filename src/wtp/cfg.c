@@ -146,7 +146,7 @@ int cfg_json_get_ac_ip_list(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 			    mbag_t mbag)
 {
 
-	printf("Get AC IP List len = %d\n", t->size);
+//	printf("Get AC IP List len = %d\n", t->size);
 	if (t->type != JSMN_ARRAY) {
 		printf("ac_ip_list is not a list\n");
 		exit(0);
@@ -330,7 +330,7 @@ int bstr16_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 
 	}
 //      *(js+t->end)=0;
-	printf("Set str: %d %s\n", item_id, str);
+//	printf("Set str: %d %s\n", item_id, str);
 	mbag_set_bstr16n(conn->local, item_id, (uint8_t *) js + t->start,
 			 t->end - t->start);
 	return 0;
@@ -349,7 +349,7 @@ int bstr_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 
 	}
 //      *(js+t->end)=0;
-	printf("Set str: %d %s\n", item_id, str);
+//	printf("Set str: %d %s\n", item_id, str);
 
 	bstr16_t v = bstr16cfgstr(str);
 
@@ -793,8 +793,8 @@ static int cfg_json_get_ac_name_with_priority_cb(char *js, jsmntok_t * t,
 
 
 //      printf("ACNAMEKEY: %s\n",key);
-	printf("Key: %s\n", key);
-	printf("Val: %s\n", val);
+//	printf("Key: %s\n", key);
+//	printf("Val: %s\n", val);
 
 	mavl_replace(mbag, ac);
 	return skip(t + 1);
@@ -835,8 +835,8 @@ static int cfg_json_get_radios_cb(char *js, jsmntok_t * t,
 	*(js + (t + 1)->end) = 0;
 	const char *val = js + (t + 1)->start;
 
-	printf("Key: %s\n",key);
-	printf("Val: %s\n",val);
+//	printf("Key: %s\n",key);
+//	printf("Val: %s\n",val);
 
 	
 

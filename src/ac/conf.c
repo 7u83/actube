@@ -34,6 +34,11 @@ uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
 
 
+int conf_strict_capwap=1;
+int conf_strict_headers=1;
+
+
+
 const char * conf_acname = NULL; 
 int conf_acname_len = 0;
 
@@ -585,6 +590,10 @@ int read_config(const char * filename){
 		CFG_STR_LIST("bcast_addrs", "{}", CFGF_NONE),
 		CFG_STR_LIST("ac_ips","{}",CFGF_NONE),
 		CFG_SIMPLE_STR("control_port",&conf_control_port),
+
+		CFG_SIMPLE_BOOL("strict_capwap",&conf_strict_capwap),
+		CFG_SIMPLE_BOOL("strict_headers",&conf_strict_headers),
+
 	
 #ifdef WITH_LWAPP
 		CFG_SIMPLE_STR("lw_control_port",&conf_lw_control_port),
