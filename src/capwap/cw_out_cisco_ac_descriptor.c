@@ -21,14 +21,25 @@ int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_
 	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->data));
 
 	
-	i = mbag_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
-
+//	i = mbag_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
+	i = mbag_get(conn->incomming,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,5,i->data);
+	 	d += cw_put_version(d,1,i->data);
 	}
 	else {
-		cw_log(LOG_ERR, "Can't set Software Version in AC descriptor, No value defined.");
+		cw_log(LOG_ERR, "Can't set Cisco Software Version in AC descriptor, No value defined.");
 	}
+
+	i = mbag_get(conn->local,CW_ITEM_AC_HARDWARE_VERSION);
+	if ( i ) {	
+	 	d += cw_put_version(d,0,i->data);
+	}
+	else {
+		cw_log(LOG_ERR, "Can't set Cisco Hardware Version in AC descriptor, No value defined.");
+	}
+
+
+
 
 	int len = d-dst-4;
 	

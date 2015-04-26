@@ -165,9 +165,11 @@ int main (int argc, const char * argv[])
 
 	/* Locad CAPWAP base protocol */
 	if (conf_capwap_mode==CW_MODE_CIPWAP){
+		cw_dbg(DBG_INFO,"Locading CIPWAP Aactions");
 		cw_register_actions_cipwap_ac(&capwap_actions);
 	}
 	else {
+		cw_dbg(DBG_INFO,"Locading standard CAPWAP Aactions");
 		cw_register_actions_capwap_ac(&capwap_actions);
 	}
 

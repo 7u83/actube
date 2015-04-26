@@ -152,16 +152,16 @@ static inline int mbag_set_data(mbag_t s, uint32_t id, const struct mbag_typedef
 }
 
 
-static inline int mbag_set_vendorstr(mbag_t s, uint32_t id, uint32_t vendor_id,
+static inline vendorstr_t mbag_set_vendorstr(mbag_t s, uint32_t id, uint32_t vendor_id,
 			     uint8_t * vendorstr, int len)
 {
 	mbag_item_t *i = mbag_item_create(s, id);
 	if (!i)
-		return 0;
+		return NULL;
 	
 	i->type = MBAG_VENDORSTR;
 	i->data = vendorstr_create(vendor_id,vendorstr,len);
-	return 1;
+	return i->data;
 }
 
 

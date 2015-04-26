@@ -141,6 +141,15 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 	,
 
 
+	/* -------------------------------------------------------------------------------
+	 * Echo Response OUT
+	 */
+
+	{CW_MSG_ECHO_RESPONSE, CW_ITEM_AC_TIMESTAMP, CW_VENDOR_ID_CISCO,
+	CW_CISCO_AP_TIMESYNC, NULL,cw_out_cisco_ap_timesync, 0}
+	,
+
+
 
 
 	{0,0,0}

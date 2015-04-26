@@ -28,11 +28,11 @@
 	"radios":{
 		"0":{
 			"admin_state":"2",
-			"radio_type":"7"
+			"radio_type":"1"
 		},
 		"1":{
 			"admin_state":"2",
-			"radio_type":"8"
+			"radio_type":"2"
 		}
 	},
 	"bssid":""

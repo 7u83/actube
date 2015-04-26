@@ -137,15 +137,27 @@ cw_action_in_t capwap_actions_ac_in[] = {
 
 	/* ------------------------------------------------------------------------------- */
 
-	/* Message: Change State Request  - in Config State */
+	/* Message: Change State Event Request  - in Config State */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_REQUEST, 0,
-	 0, 0}
+	 cw_in_check_chng_state_evnt_req, 0}
 	,
 
 	/* Element: Result Code */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_REQUEST,
 	 CW_ACTION_IN_RESULT_CODE, 1}
 	,
+
+
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message: Change State Event Request  - in Config State */
+	{0, 0, CW_STATE_RUN, CW_MSG_CHANGE_STATE_EVENT_REQUEST, 0,
+	 cw_in_check_chng_state_evnt_req, 0}
+	,
+
+
+
+
 
 
 
@@ -163,6 +175,25 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	,
 
 
+	/* ------------------------------------------------------------------------------- */
+	
+	/*  WTP Event Request */
+	{0, 0, CW_STATE_RUN, CW_MSG_WTP_EVENT_REQUEST, 0,
+	 0, 0 }
+	,
+	/* Vendor Specific Payload */
+	{0, 0, CW_STATE_RUN, CW_MSG_WTP_EVENT_REQUEST,
+	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD}
+	,
+
+
+
+	/* ------------------------------------------------------------------------------- */
+	
+	/*  Echoh Request */
+	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_REQUEST, 0,
+	 0, 0 }
+	,
 
 
 	{0, 0, 0}
@@ -211,9 +242,14 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	 CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local,1}
 	,
 
-	/* AC Name */
+	/* Local IP Address */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 0,
 	 0, NULL, cw_out_capwap_local_ip_address, NULL,1}
+	,
+
+	/* List of CAPWAP Control IPv4 and IPv6 addresses */
+	{CW_MSG_JOIN_RESPONSE, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 0,
+	 0, NULL, cw_out_capwap_control_ip_addr_list, cw_out_get_outgoing}
 	,
 
 
@@ -266,6 +302,20 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	,	
 
 
+	/* -------------------------------------------------------------------------------
+	 * WTP Event Response OUT
+	 */
+
+	{CW_MSG_WTP_EVENT_RESPONSE, CW_ITEM_NONE}
+	,	
+
+
+	/* -------------------------------------------------------------------------------
+	 * Echo Response
+	 */
+
+	{CW_MSG_ECHO_RESPONSE, CW_ITEM_NONE}
+	,	
 
 
 	/* End of list */

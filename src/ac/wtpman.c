@@ -110,9 +110,8 @@ static void wtpman_run_discovery(void *arg)
 	struct conn * conn = wtpman->conn;
 
 
-conn->capwap_mode=CW_MODE_CIPWAP;
-conn->config = mbag_create();
-conn->radios = mbag_create();
+//conn->config = mbag_create();
+//conn->radios = mbag_create();
 
 
 	time_t timer = cw_timer_start(10);
@@ -129,7 +128,6 @@ conn->radios = mbag_create();
 */
 
 
-	wtpman->conn->local = ac_config;
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
 
@@ -226,7 +224,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
-	wtpman->conn->local = ac_config;
+//	wtpman->conn->local = ac_config;
 
 	mbag_set_str(conn->local,CW_ITEM_AC_NAME,conf_acname);
 
@@ -440,8 +438,7 @@ static void wtpman_run(void *arg)
 	conn->capwap_state=CW_STATE_RUN;
 	
 	rc = 0;
-	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_state == CW_STATE_RUN) {
+	while (wtpman->conn->capwap_state == CW_STATE_RUN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)
@@ -485,6 +482,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
 	wtpman->conn->radios=mbag_create();
+	wtpman->conn->local = ac_config;
+wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
+wtpman->conn->capwap_mode=CW_MODE_CISCO;
+//wtpman->conn->strict_capwap_hdr=0;
 
 	return wtpman;
 }

@@ -36,7 +36,7 @@ uint8_t conf_macaddress_len=0;
 
 
 long conf_strict_capwap=1;
-long conf_strict_headers=1;
+long conf_strict_headers=0;
 char * conf_capwap_mode_str=NULL;
 int conf_capwap_mode=CW_MODE_STD;
 
