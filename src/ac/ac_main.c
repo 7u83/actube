@@ -38,13 +38,14 @@
 #include "db.h"
 #include "capwap/capwap_items.h"
 #include "capwap/capwap_cisco.h"
+#include "capwap/capwap_80211.h"
 
 #include "ac.h"
 #include "capwap/format.h"
 
 int ac_run();
 
-void alive_thread(void *data)
+void * alive_thread(void *data)
 {
 	while(1){
 		sleep(5);
@@ -183,7 +184,7 @@ int main (int argc, const char * argv[])
 	db_start();
 	db_ping();
 	pthread_t alth;
-	pthread_create (&alth, NULL, alive_thread, (void *)0);
+	pthread_create (&alth, NULL, alive_thread, NULL);
 	
 	int rc=0;
 	dtls_init();

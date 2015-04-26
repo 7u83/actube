@@ -14,15 +14,18 @@
 #include "capwap/aciplist.h"
 
 
-
+/*
 int pr(void *x,void *y){
 }
+*/
 
-
+/*
 struct radioinfo * get_radioinfo()
 {
 	
 }
+*/
+
 
 /*
 struct ac_info * get_acinfo()
@@ -91,8 +94,10 @@ struct ac_info * get_acinfo()
 
 */
 
+/*
 get_join_result()
 {
 	return 0;
 }
+*/
 
