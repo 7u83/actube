@@ -37,7 +37,7 @@ bstr_t get_base_rmac()
 {
 //	static	uint8_t rm[8]={0x00,0x4a,0x99,0x02,0xfa,0xc0};
 
-	static     uint8_t rm[8]={0x00,0x3a,0x99,0x02,0xfa,0xc0};
+	static     uint8_t rm[8]={0x00,0x4a,0x99,0x02,0xfa,0xc0};
 	return bstr_create(rm,6);
 }
 
@@ -67,9 +67,6 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 int main()
 {
-
-
-
 
 	wtpconf_preinit();
 
@@ -156,9 +153,8 @@ conn->config=mbag_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);
 	cw_acpriolist_set(acprios,"AC8new",strlen("AC8new"),12);
 
-	mbag_set_avltree(conn->local,CW_ITEM_AC_PRIO_LIST,acprios);
 
-	mbag_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
+//	mbag_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
 //	mbag_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
 
 	mbag_set_byte(conn->local,CW_ITEM_WTP_MAC_TYPE,0);
@@ -172,7 +168,7 @@ cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESP
 
 
 
-	the_conn->strict_capwap=1;
+	the_conn->strict_capwap=0;
 	discovery();
 	join();
 mavl_destroy(conn->incomming);

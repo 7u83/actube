@@ -24,10 +24,16 @@
 #include "capwap_cisco.h"
 #include "strheap.h"
 
-
+#include "cipwap_actions.h"
 
 cw_action_in_t cipwap_actions_wtp_in[] = {
-		
+	
+
+
+	/* -------------------------------------------------------------------------------
+	 * Configuration Update Request IN
+	 */
+			
 	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_CISCO_RAD_NAME, 
 	cw_in_generic, 0, MBAG_BSTR16,CW_ITEM_WTP_NAME,0,512}
 	,
@@ -35,7 +41,34 @@ cw_action_in_t cipwap_actions_wtp_in[] = {
 	cw_in_generic, 0, MBAG_BSTR16,CW_ITEM_LOCATION_DATA,0,512}
 	,
 
+	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_CISCO_AC_NAME_WITH_INDEX, 
+	cw_in_ac_name_with_priority, 0, MBAG_BSTR16,CW_ITEM_AC_NAME_WITH_PRIORITY,0,512}
+	,
 
+
+	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_CISCO_AP_MODE_AND_TYPE,
+	 1}
+	,
+
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_CISCO_RADIO_ADMINISTRATIVE_STATE, 0}
+	,
+
+
+
+	{CW_VENDOR_ID_CISCO, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_CISCO_AP_GROUP_NAME, 
+	cw_in_generic, 0, MBAG_BSTR16,CW_ITEM_WTP_GROUP_NAME,1,512}
+	,
+
+
+	
+	/* -------------------------------------------------------------------------------
+	 * Configuration Status Response IN
+	 */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+	 CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE, 0}
+	,
 
 
 
@@ -54,18 +87,34 @@ cw_action_out_t cipwap_actions_wtp_out[] = {
 	/* Cisco AP Groupname - Important to get the WTP a DTLS 
 	   connection established*/
 	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_WTP_GROUP_NAME, CW_VENDOR_ID_CISCO,
-	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_generic, cw_out_get_local, 0}
+	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_generic, cw_out_get_config, 0}
 	,
 
 	/* -------------------------------------------------------------------------------
 	 * Join Request OUT
 	 */
 
+	{CW_MSG_JOIN_REQUEST, CW_ITEM_CISCO_BOARD_DATA_OPTIONS, CW_VENDOR_ID_CISCO,
+	CW_CISCO_BOARD_DATA_OPTIONS, NULL,cw_out_generic, cw_out_get_config, 1}
+	,
+	
+
+	/* -------------------------------------------------------------------------------
+	 * Configuration Status Request OUT
+	 */
+
+
 	/* Cisco AP Groupname - Important to get the WTP a DTLS 
 	   connection established*/
 	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_CFG, CW_VENDOR_ID_CISCO,
-	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_cisco_wtp_radio_cfg, cw_out_get_local, 1}
+	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_cisco_wtp_radio_cfg, cw_out_get_config, 1}
 	,
+
+	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_AP_MODE_AND_TYPE, CW_VENDOR_ID_CISCO,
+	CW_CISCO_AP_MODE_AND_TYPE, NULL,cw_out_generic, cw_out_get_config, 1}
+	,
+
+
 
 
 

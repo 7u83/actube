@@ -39,21 +39,26 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_AC_DESCRIPTOR, 1}
 	,
 
-	/* Element: AC Name */
+	/* AC Name */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
 	 CW_ACTION_IN_AC_NAME, 1}
 	,
 
-	/* Element CAPWAP Control IPv4 Address */
+	/* CAPWAP Control IPv4 Address */
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
 	 CW_ACTION_IN_CAPWAP_CONTROL_IPV4_ADDRESS, 1}
 	,
 
+	/* CAPWAP Control IPv6 Address */
+	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
+	 CW_ACTION_IN_CAPWAP_CONTROL_IPV6_ADDRESS, 1}
+	,
 
-	/* Element: Vendor Specific */
+	/* Vendor Specific Payload*/
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
 	,
+
 
 
 	/* ------------------------------------------------------------------------------- */
@@ -63,14 +68,19 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 0, cw_in_check_join_resp }
 	,
 
-	/* Element: Vendor Specific */
+	/* AC Descriptor */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
-	 CW_ACTION_IN_RESULT_CODE, 1}
+	 CW_ACTION_IN_AC_DESCRIPTOR, 1}
 	,
 
-	/* Element: AC Name */
+	/* AC Name */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
 	 CW_ACTION_IN_AC_NAME, 1}
+	,
+
+	/* Vendor Specific */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
+	 CW_ACTION_IN_RESULT_CODE, 1}
 	,
 
 	
@@ -120,6 +130,8 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD, 0}
 	,
 
+
+
 	/* ------------------------------------------------------------------------------- */
 
 	/* Message Change State Response IN */
@@ -135,8 +147,13 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 	 CW_ACTION_IN_CAPWAP_TIMERS, 0}
-	
 	,
+
+
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE, 0}
+	,
+
 
 
 	/* Element: Vendor Specific */
@@ -150,6 +167,9 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_RESPONSE, 0,
 	 0,0  }
 	,
+
+
+
 
 	/* Element: Vendor Specific */
 	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_RESPONSE,
@@ -226,12 +246,12 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 
 	/* WTP MAC Type */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_MAC_TYPE, 0,
-	 CW_ELEM_WTP_MAC_TYPE, NULL,cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_WTP_MAC_TYPE, NULL,cw_out_generic, cw_out_get_config,1}
 	,
 
 	/* WTP MAC Type */
 	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0,
-	 CW_ELEM_WTP_FRAME_TUNNEL_MODE, NULL,cw_out_generic, cw_out_get_local,1}
+	 CW_ELEM_WTP_FRAME_TUNNEL_MODE, NULL,cw_out_generic, cw_out_get_config,1}
 	,
 
 	/* Session ID */
@@ -251,7 +271,7 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	 CW_ELEM_IMAGE_IDENTIFIER, NULL,cw_out_generic, cw_out_get_outgoing,0}
 	,
 
-
+	
 	/* -------------------------------------------------------------------------------
 	 * Image Data Response OUT
 	 */
@@ -275,6 +295,19 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local,1}
 	,
 
+	/* AC Name with Priority */
+	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_AC_NAME_WITH_PRIORITY, 0,
+	CW_ELEM_AC_NAME_WITH_PRIORITY, NULL, cw_out_ac_name_with_priority, cw_out_get_config,1}
+	,
+
+	/* Radio Admin State */
+	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_ADMINISTRATIVE_STATE, 0,
+	CW_ELEM_RADIO_ADMINISTRATIVE_STATE, NULL, cw_out_radio_administrative_states, cw_out_get_config,1}
+	,
+
+
+	
+		
 
 
 	/* -------------------------------------------------------------------------------

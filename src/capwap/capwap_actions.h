@@ -121,7 +121,7 @@
 
 #define CW_ACTION_IN_CAPWAP_CONTROL_IPV6_ADDRESS	 	\
 	CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,		/* Element ID*/			\
-	cw_in_capwap_control_iv4p_address, 0,		/* start/end callback */	\
+	cw_in_capwap_control_ipv4_address, 0,		/* start/end callback */	\
 	MBAG_AVLTREE, 				/* Type of element */		\
 	CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,		/* ID to use store */		\
 	18,18						/* min/max length */
@@ -156,6 +156,16 @@
 	MBAG_DWORD, 					/* Type of element */		\
 	CW_ITEM_IDLE_TIMEOUT,				/* ID to use store */		\
 	4, 4						/* min/max length */
+
+
+#define CW_ACTION_IN_AC_NAME_WITH_PRIORITY	 	\
+	CW_ELEM_IDLE_TIMEOUT,				/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	MBAG_DWORD, 					/* Type of element */		\
+	CW_ITEM_IDLE_TIMEOUT,				/* ID to use store */		\
+	4, 4						/* min/max length */
+
+
 
 #define CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE	 	\
 	CW_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID*/			\

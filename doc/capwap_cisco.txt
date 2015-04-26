@@ -106,6 +106,40 @@ AP = RAD = WTP
       containing a TIM element whose DTIM Count field is 0.  This value
       is transmitted in the DTIM Period field of Beacon frames.
 */
+
+
+
+54. Cisco AP Mode and Type
+
+   The AP Mode and Type message element is used to configure a WTP to
+   operate in a specific mode.
+
+    0                   1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Mode      |     Type      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+   Type:   54 for AP  Mode and Type
+
+   Length:   2
+
+   Mode:   An 8-bit value describing the type of information being sent.
+      The following values are supported:
+
+      0 -  Split MAC / Local Mode 
+      1 -  Monitor
+      2 -  Local MAC / FlexConnect
+      3 -  Rogue Detector
+      4 -  Sniffer
+
+   Type: AP Type 
+
+      0 - ?
+      4 - ?
+
+
  
 
 83. Cisco AP IP Address
@@ -167,6 +201,10 @@ AP = RAD = WTP
    AC Name:   A variable-length UTF-8 encoded string [RFC3629]
       containing the AC name, whose maximum size MUST NOT exceed 512
       bytes.
+
+108. Cisco Mesh Stats
+
+
 
 125. SPAM AP LED State 
     0
@@ -245,11 +283,16 @@ AP = RAD = WTP
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | ANT Type      | Reserved      | AP Type       | Join Priority |
+   | ANT Type      |  FlexConnect  | AP Type       | Join Priority |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
    Type: 207 
    Length: 4
+
+   FlexConnect:
+      00 = FlexConnect not supported
+      01 = FlexConnect supported
+
 
 
 208. Cisco MWAR Type
@@ -296,7 +339,6 @@ Length: 4
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
           ... Language             |  Venue Name ...   
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
-
 
 
 
@@ -353,35 +395,14 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
    Length: 2
 
 
+67. AP Submode (LWAPP)
+    0
+    0 1 2 3 4 5 6 7
+   +-+-+-+-+-+-+-+-+
+   |     Submode   | 
+   +-+-+-+-+-+-+-+-+ 
 
-54. Cisco AP Mode and Type (LWAPP)
-
-   The AP Mode and Type message element is used to configure a WTP to
-   operate in a specific mode.
-
-    0                   1
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |     Mode      |     Type      |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-   Type:   54 for AP  Mode and Type
-
-   Length:   2
-
-   Mode:   An 8-bit value describing the type of information being sent.
-      The following values are supported:
-
-      0 -  Split MAC / Local Mode 
-      1 -  Monitor
-      2 -  Local MAC / FlexConnect
-      3 -  Rogue Detector
-      4 -  Sniffer
-
-   Type: AP Type 
-
-      0 - ?
+Type: 67
 
 
 

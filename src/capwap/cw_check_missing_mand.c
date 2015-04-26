@@ -75,7 +75,7 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 			continue;
 
 		int i = ai->item_id;
-		void * rc = avltree_del(conn->mand,&i);
+		void * rc = mavl_get(conn->mand,&i);
 		if (!rc) {
 			out[n++]=ai;
 		}

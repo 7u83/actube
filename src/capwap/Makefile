@@ -325,6 +325,8 @@ CWACTION=action.o \
 	cw_in_generic.o \
 	cw_in_wtp_descriptor.o \
 	cw_out_wtp_board_data.o \
+	cw_out_ac_name_with_priority.o \
+	cw_in_ac_name_with_priority.o \
 	cw_out_image_data.o \
 	cipwap_actions_ac.o \
 	cipwap_actions_wtp.o \
@@ -357,7 +359,7 @@ O:=$(OBJS);
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
 CFLAGS = -Werror -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
-#CFLAGS = -Wall  -O3 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
+#CFLAGS = -Wall  -Os -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

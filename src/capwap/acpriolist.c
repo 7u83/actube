@@ -39,8 +39,17 @@ static void acprio_del(void *d)
 	cw_acprio_t *p = (cw_acprio_t*)d;
 	if ( p->name ) 
 		free (p->name);
+//	if ( p->addr )
+//		free(p->addr);
 	free(d);
 }
+
+const struct mbag_typedef mbag_type_acprio = {
+	acprio_del
+};
+
+
+
 
 cw_acpriolist_t cw_acpriolist_create()
 {

@@ -209,6 +209,10 @@ int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8
 
 int cw_out_cisco_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
+int cw_in_cisco_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
+
+
 
 /*
 #define cw_addelem_cisco_rad(dst,acinfo)\

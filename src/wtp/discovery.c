@@ -55,7 +55,7 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 
 	/* get the AC Name with Priority list */
 	cw_acpriolist_t priolist;
-	priolist = mbag_get_avltree(conn->local, CW_ITEM_AC_PRIO_LIST);
+	priolist = mbag_get_avltree(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
 
 	cw_aciplist_t resultlist=cw_aciplist_create();
 
@@ -73,6 +73,8 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 				prio = cw_acpriolist_get(priolist, ac_name);
 			else
 				prio = 256;
+printf("Prio for %s is %d\n",ac_name,prio);
+printf("nprio: %d\n",priolist->count);
 
 		}
 

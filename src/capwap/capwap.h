@@ -273,7 +273,7 @@ CW_MSG_MAXMSG	=				26
 #define CW_ELEM_LOCATION_DATA				28
 #define CWMSGELEM_MAXIMUM_MESSAGE_LENGTH		29
 #define CWMSGELEM_MTU_DISCOVERY_PADDING			52
-#define CWMSGELEM_RADIO_ADMINISTRATIVE_STATE		31
+#define CW_ELEM_RADIO_ADMINISTRATIVE_STATE		31
 #define CW_ELEM_RADIO_OPERATIONAL_STATE			32
 #define CW_ELEM_RESULT_CODE				33
 #define CW_ELEM_RETURNED_MESSAGE_ELEMENT		34
@@ -1101,9 +1101,18 @@ struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a);
 extern int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
+int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 int cw_send_request(struct conn *conn, int msg_id);
 int cw_is_utf8(unsigned char *str, size_t len);
+
+int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
+
+int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
 
 
 #endif
