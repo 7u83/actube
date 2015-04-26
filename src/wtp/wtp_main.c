@@ -111,7 +111,7 @@ mavl_destroy(b);
 
 
 
-	cw_register_actions_capwap_wtp(&capwap_actions);
+	cw_register_actions_cipwap_wtp(&capwap_actions);
 	cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
 
@@ -132,7 +132,9 @@ mavl_destroy(b);
 	conn->base_rmac=get_base_rmac();
 
 conn->capwap_mode = CW_MODE_STD;
-the_conn->strict_capwap=1;
+conn->capwap_mode = CW_MODE_CISCO;
+
+the_conn->strict_capwap=0;
 
 
 conn->config=mbag_create();

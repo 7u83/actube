@@ -175,6 +175,7 @@ extern void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgel
 void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 char * cw_dbg_mkdmp(const uint8_t * data, int len);
+void cw_dbg_version_subelem(int level,const char*context,int subtype,vendorstr_t vstr);
 
 
 

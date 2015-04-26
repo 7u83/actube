@@ -130,7 +130,7 @@
 
 #define CW_ACTION_IN_AC_DESCRIPTOR	 	\
 	CW_ELEM_AC_DESCRIPTOR,				/* Element ID*/			\
-	cw_in_generic, 0,				/* start/end callback */	\
+	cw_in_ac_descriptor, 0,				/* start/end callback */	\
 	MBAG_DATA, 				/* Type of element */		\
 	CW_ITEM_AC_DESCRIPTOR,				/* ID to use store */		\
 	12, 8192						/* min/max length */

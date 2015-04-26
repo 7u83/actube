@@ -1113,10 +1113,14 @@ int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *
 
 int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
+int cw_in_ac_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from);
 
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
 int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
+
+int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
 
 #endif

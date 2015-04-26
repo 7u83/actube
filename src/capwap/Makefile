@@ -125,6 +125,7 @@ CAPWAPOBJS= \
 	cw_in_vendor_specific_payload.o \
 	cw_in_wtp_board_data.o \
 	cw_in_check_disc_req.o \
+	cw_in_check_chng_state_evnt_req.o\
 	cw_in_check_disc_resp.o\
 	cw_in_check_join_req.o \
 	cw_in_check_cipwap_join_req.o \
@@ -138,6 +139,7 @@ CAPWAPOBJS= \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
+	cw_in_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ipv4_address.o\
