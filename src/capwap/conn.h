@@ -56,6 +56,7 @@ struct conn {
 	mbag_t local;
 
 	mbag_t radios;
+	uint8_t radio_create;
 	mbag_t config;
 
 
@@ -256,6 +257,8 @@ extern int cw_read_messages(struct conn *conn);
 extern int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 			 struct sockaddr_storage *from);
 
+int conn_send_msg(struct conn * conn, uint8_t *rawmsg);
+int cw_read_from(struct conn * conn);
 
 
 

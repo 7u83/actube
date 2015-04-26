@@ -6,9 +6,8 @@
 #include "capwap.h"
 
 
-
-int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from)
+int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		     struct sockaddr *from)
 {
 	if (len < a->min_len) {
 		cw_dbg(DBG_ELEM_ERR,
@@ -24,8 +23,13 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 		return 0;
 	}
 
+	return 1;
+}
 
-	mbag_t itemstore = conn->incomming;
+
+int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
+		   uint8_t * data, int len, struct sockaddr *from)
+{
 
 	if (a->itemtype == MBAG_BYTE) {
 		mbag_set_byte(itemstore, a->item_id, *data);
@@ -60,7 +64,7 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 */
 	if (a->itemtype == MBAG_VENDORSTR) {
 		mbag_set_vendorstr(itemstore, a->item_id,
-					   cw_get_dword(data), data + 4, len - 4);
+				   cw_get_dword(data), data + 4, len - 4);
 		return 1;
 	}
 
@@ -68,6 +72,49 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 	       "Can't handle item type %d in definition for incomming msg %d (%s) - %d, cw_in_generic.",
 	       a->itemtype, a->msg_id, cw_strmsg(a->msg_id), a->elem_id);
 	return 0;
+
+
+}
+
+int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from)
+{
+
+	if (!check_len(conn, a, data, len, from))
+		return 0;
+
+
+	mbag_t itemstore;
+///	if (!a->target)
+		itemstore = conn->incomming;
+//	else
+//		itemstore = a->target(conn, a);
+
+
+	return do_save(itemstore, conn, a, data, len, from);
+
+
+
+}
+
+
+int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			int len, struct sockaddr *from)
+{
+	if (!check_len(conn, a, data, len, from))
+		return 0;
+
+	int rid = cw_get_byte(data);
+	mbag_t radio = mbag_get_mbag(conn->radios, rid, NULL);
+	if (!radio) {
+		if (a->vendor_id != 0
+		    || ( (a->vendor_id == 0) && (a->msg_id != CW_MSG_DISCOVERY_REQUEST
+			&& a->msg_id != CW_MSG_JOIN_REQUEST) )) {
+			cw_dbg(DBG_ELEM_ERR, "Radio not found %d", rid);
+			return 0;
+		}
+		mbag_set_mbag(conn->radios,rid,mbag_create());
+	}
 
 
 

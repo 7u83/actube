@@ -193,7 +193,7 @@ int cfg_json_get_ac_ip_list(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 	}
 
 
-
+	return 0;
 }
 
 
@@ -430,7 +430,9 @@ struct mbag_itemdef board_data_cfg[] = {
 
 
 struct mbag_itemdef radio_cfg[] = {
-	{CW_RADIO_ADMIN_STATE, "admin_state", cfg_json_get_byte, cfg_json_put_byte}
+	{CW_RADIO_ADMIN_STATE, "admin_state", cfg_json_get_byte, cfg_json_put_byte},
+	{CW_RADIO_TYPE, "radio_type", cfg_json_get_dword, cfg_json_put_dword},
+	{0,0,0}
 	
 
 };
@@ -699,7 +701,7 @@ int cfg_json_save()
 ////printf("DST:%s\n",dst);
 //exit(0);
 	cw_save_file("cfg.json", dst, n);
-
+	return 1;
 }
 
 struct mbag_itemdef *get_cfg(struct mbag_itemdef *cfg, const char *key)

@@ -45,12 +45,13 @@ struct cw_action_in{
 	uint16_t elem_id;
 	int (*start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
-//	uint8_t itemtype;
 	const struct mbag_typedef * itemtype;
 	uint16_t item_id;
 	uint16_t min_len;
 	uint16_t max_len;
 	uint8_t mand;
+//	mbag_t (*target)(struct conn *conn,struct cw_action_in *a);
+	
 };
 
 typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int ,struct sockaddr *);
@@ -92,7 +93,7 @@ struct cw_action_out{
 	struct mbag_typedef * itemtype;
 	
 	void *defval;
-	int xopt;
+//	int xopt;
 
 };
 

@@ -233,9 +233,9 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	,
 
 	/* Result Code */
-	{CW_MSG_CONFIGURATION_STATUS_RESPONSE, CW_ITEM_RESULT_CODE, 0,
-	 CW_ELEM_RESULT_CODE, NULL,cw_out_generic, cw_out_get_outgoing, 1}
-	,
+//	{CW_MSG_CONFIGURATION_STATUS_RESPONSE, CW_ITEM_RESULT_CODE, 0,
+//	 CW_ELEM_RESULT_CODE, NULL,cw_out_generic, cw_out_get_outgoing, 1}
+//	,
 
 
 

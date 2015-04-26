@@ -28,7 +28,21 @@ cw_action_in_t capwap_80211_actions_wtp_in[] = {
 
 
 cw_action_out_t capwap_80211_actions_wtp_out[]={
-	/* Session ID */
+
+	/* --------------------------------------------------------
+	 * Discovery Resquest 
+	 */
+
+	/* 802.11 Radio Information */
+	{CW_MSG_DISCOVERY_REQUEST, CW_ELEM80211_WTP_RADIO_INFORMATION, 0,
+	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
+	,
+
+	/* --------------------------------------------------------
+	 * Join Resquest 
+	 */
+
+	/* 802.11 Radio Information */
 	{CW_MSG_JOIN_REQUEST, CW_ELEM80211_WTP_RADIO_INFORMATION, 0,
 	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
 	

@@ -21,7 +21,7 @@
 
 #include "jsmn.h"
 
-
+#include "cfg.h"
 
 
 
@@ -168,9 +168,12 @@ cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESP
 
 
 
-	the_conn->strict_capwap=0;
-	discovery();
-	join();
+the_conn->strict_capwap=1;
+	if (!discovery())
+		return -1;
+	if (!join())
+		return -1;
+
 mavl_destroy(conn->incomming);
 conn->incomming=conn->config;
 	configure();

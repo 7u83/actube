@@ -161,7 +161,7 @@ static int run_discovery(struct conn *conn)
 
 	mbag_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
 
-	return 0;
+	return 1;
 }
 
 
@@ -228,5 +228,5 @@ int discovery()
 	struct conn *conn = get_conn();
 	cw_run_discovery(conn, "255.255.255.255");
 	conn->capwap_state=CW_STATE_JOIN;
-	return 0;
+	return 1;
 }

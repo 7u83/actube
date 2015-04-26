@@ -319,7 +319,7 @@ struct beacon_data{
 };
 
 
-dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd);
+int dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd);
 
 
 

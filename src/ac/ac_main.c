@@ -163,6 +163,7 @@ int main (int argc, const char * argv[])
 	DBGX("Attention! %s","DBGX is ON!");
 
 	cw_register_actions_cipwap_ac(&capwap_actions);
+	cw_register_actions_capwap_80211_ac(&capwap_actions);
 	//cw_register_actions_capwap_80211_ac(&capwap_actions);
 
 

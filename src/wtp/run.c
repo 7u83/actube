@@ -80,7 +80,7 @@ int run()
 //              cw_strresult(rc);
 //      }
 
-
+	return 0;
 }
 
 
