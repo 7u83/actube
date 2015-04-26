@@ -19,6 +19,14 @@ cw_action_in_t capwap_80211_actions_ac_in[] = {
 	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,
 	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
 	,
+	/* --------------------------------------------------------
+	 * Discovery Resquest 
+	 */
+
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST,
+	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
+	,
+
 
 
 	{0, 0, 0}
@@ -30,6 +38,12 @@ cw_action_out_t capwap_80211_actions_ac_out[]={
 	{CW_MSG_DISCOVERY_RESPONSE, CW_ELEM80211_WTP_RADIO_INFORMATION, 0,
 	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
 	,
+
+	/* Radio Infos */
+	{CW_MSG_JOIN_RESPONSE, CW_ELEM80211_WTP_RADIO_INFORMATION, 0,
+	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
+	,
+
 	{0,0,0}
 };
 

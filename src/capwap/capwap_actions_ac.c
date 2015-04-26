@@ -72,22 +72,22 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	 0, cw_in_check_join_req}
 	,
 
-	/* Element Location Data */
+	/* Location Data */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_LOCATION_DATA, 1}
 	,
-	/* Element WTP Board Data */
+	/* WTP Board Data */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA, 1}
 	,
-	/* Element WTP Board Data */
+	/* WTP Board Descriptor */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_DESCRIPTOR, 1}
 	,
-	/* Element WTP Board Data */
+	/* Element WTP Name */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_NAME, 1}
 	,
-	/* Element WTP Board Data */
+	/* Element Session ID */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_SESSION_ID, 1}
 	,
-	/* Element WTP Board Data */
+	/* Element WTP Frame Tunnel Mode */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_FRAME_TUNNEL_MODE, 1}
 	,
 	/* Element WTP MAC Type */
@@ -208,7 +208,7 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 	/* AC Name */
 	{CW_MSG_JOIN_RESPONSE, CW_ITEM_AC_NAME, 0,
-	 CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_outgoing}
+	 CW_ELEM_AC_NAME, NULL, cw_out_generic, cw_out_get_local}
 	,
 
 

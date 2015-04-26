@@ -222,6 +222,17 @@ static int wtpman_establish_dtls(void *arg)
 static int wtpman_join(void *arg, time_t timer)
 {
 	struct wtpman *wtpman = (struct wtpman *) arg;
+	struct conn * conn = wtpman->conn;
+
+	wtpman->conn->outgoing = mbag_create();
+	wtpman->conn->incomming = mbag_create();
+	wtpman->conn->local = ac_config;
+
+	mbag_set_str(conn->local,CW_ITEM_AC_NAME,conf_acname);
+
+
+
+
 
 	extern cw_actionlist_in_t the_tree;
 	wtpman->conn->actions = &capwap_actions;
@@ -232,15 +243,10 @@ static int wtpman_join(void *arg, time_t timer)
 
 //      wtpman->conn->itemstore = mbag_create();
 
-	wtpman->conn->outgoing = mbag_create();
-	wtpman->conn->incomming = mbag_create();
-	wtpman->conn->local = ac_config;
 
 
-	struct conn * conn = wtpman->conn;
 
 
-conn->strict_capwap=1;
 
 	cw_dbg(DBG_INFO,"Join State - %s",sock_addr2str(&conn->addr));
 
@@ -478,6 +484,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
+	wtpman->conn->radios=mbag_create();
 
 	return wtpman;
 }
