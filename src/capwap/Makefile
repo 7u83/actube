@@ -138,6 +138,7 @@ CAPWAPOBJS= \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
+	cw_out_capwap_local_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ipv4_address.o\
 	cw_in_radio_administrative_state.o \
