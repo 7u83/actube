@@ -202,6 +202,7 @@ AP = RAD = WTP
       containing the AC name, whose maximum size MUST NOT exceed 512
       bytes.
 
+
 108. Cisco Mesh Stats
 
 
@@ -366,7 +367,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-20. Cisco AP Username Password (LWAPP)
+20. Cisco AP Username Password (LWAPP 104)
 
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -381,6 +382,30 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
    Username: 
 	0-terminated username, the field has to fillid up with zeros.
+
+
+
+36. Cisco AP Lohohost and Last Joined Controller (LWAPP 104)
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                   IPv4 Address of Loghost                     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |          Name of last joined controller (32 Bytes)   ...           
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
