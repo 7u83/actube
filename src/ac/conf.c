@@ -29,13 +29,16 @@
 #include "capwap/log.h"
 #include "capwap/dbg.h"
 #include "capwap/cw_util.h"
+#include "capwap/action.h"
 
 uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len=0;
 
 
-int conf_strict_capwap=1;
-int conf_strict_headers=1;
+long conf_strict_capwap=1;
+long conf_strict_headers=1;
+char * conf_capwap_mode_str=NULL;
+int conf_capwap_mode=CW_MODE_STD;
 
 
 
@@ -570,6 +573,22 @@ static int conf_read_dbg_level(cfg_t *cfg)
 	return 1;
 }
 
+void conf_init_capwap_mode()
+{
+	if ( conf_capwap_mode_str==NULL)
+		return;
+
+	if ( 0==strcmp(conf_capwap_mode_str,"cipwap")){
+		conf_capwap_mode=CW_MODE_CIPWAP;
+	}
+
+	if ( 0==strcmp(conf_capwap_mode_str,"capwap")){
+		conf_capwap_mode=CW_MODE_STD;
+	}
+
+	
+}
+
 
 int read_config(const char * filename){
 	int i,n;
@@ -593,6 +612,7 @@ int read_config(const char * filename){
 
 		CFG_SIMPLE_BOOL("strict_capwap",&conf_strict_capwap),
 		CFG_SIMPLE_BOOL("strict_headers",&conf_strict_headers),
+		CFG_SIMPLE_STR("capwap_mode",&conf_capwap_mode_str),
 
 	
 #ifdef WITH_LWAPP
@@ -691,6 +711,8 @@ int read_config(const char * filename){
 
 	if (!conf_image_dir)
 		conf_image_dir=CONF_DEFAULT_IMAGE_DIR;
+
+	conf_init_capwap_mode();
 
 
 	init_listen_addrs();
