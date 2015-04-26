@@ -20,7 +20,7 @@
 
 #include "dot11.h"
 
-
+/*
 uint8_t *  mk_frame( uint8_t *b)
 {
 
@@ -70,7 +70,7 @@ int dot11_get_beacon_head(struct apdata *ap, uint8_t *dst, int *len)
 
 printf("t1\n");
 
-	/* set-up head */
+	// set-up head
 	struct dot11_mgmt_head head;
 	memset (&head,0,sizeof(head));
 
@@ -79,11 +79,11 @@ printf("t2\n");
 	head.frame_control = htole16 (DOT11_FTYPE_MGMT | DOT11_STYPE_BEACON); 
 	head.duration = htole16(0);
 
-	/* destination address */
+	// destination address 
 	memset(head.da, 0xff, sizeof(head.da));
 printf("t3\n");
 
-	/* source address */
+	// source address 
 	memcpy (head.sa , ap->mac,6);
 	memcpy (head.bssid , ap->mac,6);
 	b += add_bytes(b,&head,sizeof(head));
@@ -140,8 +140,9 @@ add_supp_rates_ie(uint8_t *buf,uint32_t * rates, int num_rates)
 	return b-buf;
 
 }
+*/
 
-
+/*
 dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd)
 {
 	bd->head = malloc(256);
@@ -165,5 +166,5 @@ printf ("done\n");
 	return 0;
 	
 }
-
+*/
 

@@ -114,6 +114,8 @@ conn->strict_capwap=0;
 conn->strict_hdr=1;
 
 conn->capwap_mode=CW_MODE_CIPWAP;
+conn->config = mbag_create();
+conn->radios = mbag_create();
 
 
 	time_t timer = cw_timer_start(10);
@@ -378,62 +380,11 @@ static int wtpman_send_image_file(struct wtpman *wtpman, struct cwrmsg *cwrmsg)
 }
 */
 
-static void wtpman_run(void *arg)
+
+static void wtpman_image_data(struct wtpman *wtpman)
 {
-	struct wtpman *wtpman = (struct wtpman *) arg;
-	struct cwrmsg *cwrmsg;	// = conn_get_message(wtpman->conn);
+	struct conn * conn = wtpman->conn;
 
-	wtpman->conn->seqnum = 0;
-
-	/* reject connections to our multi- or broadcast sockets */
-	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
-		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
-		       CLIENT_IP);
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
-
-	/* establish dtls session */
-	if (!wtpman_establish_dtls(wtpman)) {
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-	/* dtls is established, goto join state */
-	if (!wtpman_join(wtpman, timer)) {
-		wtpman_remove(wtpman);
-		return;
-	}
-
-
-
-
-	/* here the WTP has joined, now we assume an image data request  
-	   or an configuration status request. Nothing else. 
-	 */
-
-	int rc = 0;
-	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
-		rc = cw_read_messages(wtpman->conn);
-		if (rc < 0) {
-			if (errno != EAGAIN)
-				break;
-		}
-	}
-
-	if (!rc) {
-		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
-
-	}
-
-	struct conn *conn = wtpman->conn;
-
-	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
 		/* Image upload */
 		const char *filename =
 		    mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME,NULL);
@@ -480,6 +431,84 @@ static void wtpman_run(void *arg)
 		wtpman_remove(wtpman);
 
 
+}
+
+static void wtpman_run(void *arg)
+{
+
+
+	struct wtpman *wtpman = (struct wtpman *) arg;
+	struct cwrmsg *cwrmsg;	// = conn_get_message(wtpman->conn);
+
+	wtpman->conn->seqnum = 0;
+	struct conn *conn = wtpman->conn;
+
+
+	/* reject connections to our multi- or broadcast sockets */
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
+		       CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+	/* establish dtls session */
+	if (!wtpman_establish_dtls(wtpman)) {
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	/* dtls is established, goto join state */
+	if (!wtpman_join(wtpman, timer)) {
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+
+
+	/* here the WTP has joined, now we assume an image data request  
+	   or an configuration status request. Nothing else. 
+	 */
+
+	int rc = 0;
+	while (!cw_timer_timeout(timer)
+	       && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
+		rc = cw_read_messages(wtpman->conn);
+		if (rc < 0) {
+			if (errno != EAGAIN)
+				break;
+		}
+	}
+
+	if (!cw_rcok(rc)) {
+		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
+		wtpman_remove(wtpman);
+		return;
+
+	}
+
+
+	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
+		wtpman_image_data(wtpman);
+		return;
+	}
+
+
+	conn->capwap_state=CW_STATE_RUN;
+	
+	rc = 0;
+	while (!cw_timer_timeout(timer)
+	       && wtpman->conn->capwap_state == CW_STATE_RUN) {
+		rc = cw_read_messages(wtpman->conn);
+		if (rc < 0) {
+			if (errno != EAGAIN)
+				break;
+		}
 	}
 
 

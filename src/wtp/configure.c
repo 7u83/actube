@@ -27,6 +27,6 @@ int configure()
 
 	printf("Got change resp %p\n",cwrmsg);
 */
-
+	return 0;
 }
 

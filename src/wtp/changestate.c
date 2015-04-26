@@ -12,8 +12,9 @@ int changestate()
 
 	if ( !cw_rcok(rc) ) {
 		cw_strresult(rc);
+		return 0;
 	}
 
-
+	return 1;
 }
 

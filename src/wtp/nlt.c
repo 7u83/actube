@@ -10,7 +10,7 @@
 #include "nlt.h"
 
 
-
+/*
 
 static int error_handler(struct sockaddr_nl *nla, struct nlmsgerr *err, void *arg)
 {
@@ -362,3 +362,6 @@ int nlt_get_wiphy_list(struct nl_sock *sk)
 	}
 
 }
+
+
+*/

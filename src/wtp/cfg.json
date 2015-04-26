@@ -27,10 +27,12 @@
 	"wtp_board_data_options":".x00010000",
 	"radios":{
 		"0":{
-			"admin_state":"2"
+			"admin_state":"2",
+			"radio_type":"0"
 		},
 		"1":{
-			"admin_state":"2"
+			"admin_state":"2",
+			"radio_type":"0"
 		}
 	},
 	"bssid":""

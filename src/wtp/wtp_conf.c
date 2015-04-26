@@ -220,6 +220,7 @@ int wtpconf_preinit()
 
 	conf_board_id = bstr_create_from_cfgstr(CONF_DEFAULT_BOARD_ID);
 	conf_board_revision = bstr_create_from_cfgstr(CONF_DEFAULT_BOARD_REVISION);
+	return 0;
 }
 
 int wtpconf_init()

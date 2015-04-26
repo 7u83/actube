@@ -247,7 +247,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 		if (!af) {
 			cw_dbg(DBG_ELEM_ERR,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
-			       as.elem_id, cw_strelem(as.elem_id), as.msg_id,
+			       as.elem_id, cw_strelemp(conn->actions,as.elem_id), as.msg_id,
 			       cw_strmsg(as.msg_id));
 			continue;
 		}
