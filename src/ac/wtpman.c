@@ -304,7 +304,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 	struct conn * conn = wtpman->conn;
 
-conn->strict_capwap=0;
+conn->strict_capwap=1;
 conn->strict_hdr=1;
 conn->capwap_mode=CW_MODE_CIPWAP;
 

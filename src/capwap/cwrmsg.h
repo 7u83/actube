@@ -1,6 +1,7 @@
 #ifndef __CWRMSG_H
 #define __CWRMSG_H
 
+/*
 struct cwrmsg{
 	int rid;
 	int wbid;
@@ -14,5 +15,6 @@ struct cwrmsg{
 //#endif
 
 };
+*/
 
 #endif
