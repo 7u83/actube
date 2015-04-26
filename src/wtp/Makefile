@@ -20,8 +20,8 @@ ifndef ARCH
 endif
 
 
-CFLAGS += -O0 -Wall -g
-#CFLAGS += -Os -Wall 
+#CFLAGS += -O0 -Wall -g
+CFLAGS += -Os -Wall 
 LDFLAGS += -L../contrib/jsmn -L../../src/capwap/$(ARCH) 
 
 

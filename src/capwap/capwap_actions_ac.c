@@ -59,6 +59,11 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	 1}
 	,
 
+	/* Element WTP Board Data */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
+	 1}
+	,
+
 
 	/* ------------------------------------------------------------------------------- */
 
@@ -96,7 +101,7 @@ cw_action_in_t capwap_actions_ac_in[] = {
 
 	/* Message: Configuration Status Request */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_REQUEST, 0,
-	 0, cw_in_check_join_req}
+	 0, 0}
 	,
 	/* Element: AC Name */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_REQUEST,
@@ -112,15 +117,9 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	 CW_ACTION_IN_WTP_REBOOT_STATISTICS, 1}
 	,
 
-
 	/* Element Vendor Specific Payload */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_REQUEST,
 	 CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD}
-	,
-
-	/* Element WTP Board Data */
-	{0, 0, CW_STATE_CONFIGURE, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
-	 1}
 	,
 
 
@@ -134,6 +133,21 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	 CW_ACTION_IN_IMAGE_IDENTIFIER,
 	 0}
 	,
+
+
+	/* ------------------------------------------------------------------------------- */
+
+	/* Message: Change State Request  - in Config State */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_REQUEST, 0,
+	 0, 0}
+	,
+
+	/* Element: Result Code */
+	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+	 CW_ACTION_IN_RESULT_CODE, 1}
+	,
+
+
 
 	/* ------------------------------------------------------------------------------- */
 
@@ -239,6 +253,12 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	,
 
 
+	/* -------------------------------------------------------------------------------
+	 * Change State Event Response OUT
+	 */
+
+	{CW_MSG_CHANGE_STATE_EVENT_RESPONSE, CW_ITEM_NONE}
+	,	
 
 
 

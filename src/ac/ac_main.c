@@ -163,6 +163,7 @@ int main (int argc, const char * argv[])
 	DBGX("Attention! %s","DBGX is ON!");
 
 	cw_register_actions_cipwap_ac(&capwap_actions);
+	//cw_register_actions_capwap_80211_ac(&capwap_actions);
 
 
 /*
@@ -177,13 +178,12 @@ int main (int argc, const char * argv[])
 
 	ac_global_init();
 
-/*
 	db_init();
 	db_start();
 	db_ping();
 	pthread_t alth;
 	pthread_create (&alth, NULL, alive_thread, (void *)0);
-*/	
+	
 	int rc=0;
 	dtls_init();
 	if (!socklist_init())

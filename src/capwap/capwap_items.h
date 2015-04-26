@@ -27,6 +27,7 @@ enum capwap_items {
 	CW_ITEM_WTP_BOARD_DATA,
 	CW_ITEM_WTP_DESCRIPTOR,
 	CW_ITEM_CAPWAP_TIMERS,
+	CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
 
 	CW_ITEM_AC_NAME,
 	CW_ITEM_AC_DESCRIPTOR,
@@ -47,6 +48,8 @@ enum capwap_items {
 	CW_ITEM_WTP_REBOOT_STATISTICS,
 	CW_ITEM_IMAGE_IDENTIFIER,
 	CW_ITEM_AC_HASH_VALUE,
+	
+	CW_ITEM_AC_NAME_WITH_PRIORITY,
 
 
 
@@ -58,12 +61,15 @@ enum capwap_items {
 	CW_ITEM_AC_IMAGE_DIR,		/* Path where WTP images are stored */
 	CW_ITEM_IMAGE_FILENAME,		/* Full path of image filename */
 	CW_ITEM_DISCOVERIES,
-	CW_ITEM_AC_PRIO_LIST,		/* AC Name with Priority list */
 	
 	/** FILE handle for uploading and downloading images  */
 	CW_ITEM_IMAGE_FILEHANDLE,	
 
 	CW_ITEM_RADIO_CFG,
+	CW_ITEM_AP_MODE_AND_TYPE,
+
+	CW_ITEM_CISCO_BOARD_DATA_OPTIONS,
+	CW_ITEM_RADIOS
 
 };
 

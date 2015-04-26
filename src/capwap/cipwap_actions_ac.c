@@ -24,7 +24,7 @@
 	8,1028
 
 /* For CIPWAP we allow a 
-   Session ID with 4 .. 16 bytes length */	
+   Session ID with 2 ... 16 bytes length */	
 #define CW_ACTION_IN_CIPWAP_SESSION_ID	 	\
 	CW_ELEM_SESSION_ID, 		/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\

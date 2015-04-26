@@ -110,7 +110,7 @@ static void wtpman_run_discovery(void *arg)
 
 	struct conn * conn = wtpman->conn;
 
-conn->strict_capwap=1;
+conn->strict_capwap=0;
 conn->strict_hdr=1;
 
 conn->capwap_mode=CW_MODE_CIPWAP;
@@ -302,7 +302,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 	struct conn * conn = wtpman->conn;
 
-conn->strict_capwap=1;
+conn->strict_capwap=0;
 conn->strict_hdr=1;
 conn->capwap_mode=CW_MODE_CIPWAP;
 
@@ -414,7 +414,6 @@ static void wtpman_run(void *arg)
 
 	/* here the WTP has joined, now we assume an image data request  
 	   or an configuration status request. Nothing else. 
-	   State is Image update 
 	 */
 
 	int rc = 0;

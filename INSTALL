@@ -1,6 +1,15 @@
 pre-requisites
 --------------
 
+On a fresh Ubuntu 14.04:
+
+apt-get install git
+git clone https://github.com/7u83/actube.git
+apt-get install build-essential
+
+
+
+
 libcapwap:
 	
 gnutls (http://www.gnutls.org/)

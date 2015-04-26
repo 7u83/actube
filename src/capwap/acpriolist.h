@@ -2,12 +2,20 @@
 #define __ACIPRIORITYLIST_H
 
 #include "mavl.h"
+#include "mbag.h"
 //#include "mavl.h"
 
 struct cw_acprio{
 	char *name;
+	struct sockaddr_storage * addr;
 	uint8_t prio;
 };
+
+extern  const struct mbag_typedef mbag_type_acprio;
+
+#define MBAG_ACPRIO (&mbag_type_acprio)
+
+
 
 typedef struct cw_acprio cw_acprio_t;
 typedef struct mavl * cw_acpriolist_t;

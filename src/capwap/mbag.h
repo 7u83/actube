@@ -42,7 +42,10 @@ typedef const struct mbagtype_def * mbagtype_t;
 
 
 struct mbag_item{
-	uint32_t id;
+	union {
+		uint32_t id;
+		char *name;
+	};
 	const struct mbag_typedef * type;
 	union {
 		void *data;
@@ -88,6 +91,7 @@ extern const struct mbag_typedef mbag_type_const_data;
 extern mbag_t mbag_create();
 
 extern struct mbag_item *mbag_item_create(mbag_t s, uint32_t id);
+extern struct mbag_item *strmbag_item_create(mbag_t s, char *name);
 
 
 
@@ -172,6 +176,7 @@ static inline mbag_item_t *mbag_get(mbag_t s, uint32_t id)
 {
 	mbag_item_t i;
 	i.id = id;
+	i.type=0;
 	return mavl_get(s, &i);
 }
 
@@ -179,6 +184,7 @@ static inline void mbag_del(mbag_t s,uint32_t id)
 {
 	mbag_item_t i;
 	i.id = id;
+	i.type=0;
 	mavl_del(s, &i);
 }
 
