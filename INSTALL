@@ -5,25 +5,33 @@ On a fresh Ubuntu 14.04:
 
 apt-get install git
 git clone https://github.com/7u83/actube.git
-apt-get install build-essential
+apt-get install build-essential clang
 
 
 
 
 libcapwap:
-	
+
+nettle (http://www.lysator.liu.se/~nisse/nettle/)
+(apt-get install nettle-dev)
 gnutls (http://www.gnutls.org/)
+(apt-get install libgnutls28-dev)
 openssl (https://www.openssl.org/)
+(apt-get install libssl-dev)
 
 ac:
 libconfuse (http://www.nongnu.org/confuse/)
+(apt-get install libconfuse-dev)
 libsqlite3 (http://www.sqlite.org/)
+(apt-get install libsqlite3-dev)
 
 wtp:
 libuci (http://wiki.openwrt.org/doc/techref/uci)
 
 to build conten of contrib directory:
 cmake (http://www.cmake.org)
+(apt-get install cmake)
 lua (http://www.lua.org/)
-
-
+(apt-get install lua5.2)
+libnl3
+(apt-get install libnl-genl-3-dev)
