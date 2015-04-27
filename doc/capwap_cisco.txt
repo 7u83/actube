@@ -109,6 +109,13 @@ AP = RAD = WTP
 
 
 
+28. IEEE 802.11 Delete WLAN
+
+   Same as element type 28 specified in RFC 5412 (LWAPP)
+ 
+
+
+
 54. Cisco AP Mode and Type
 
    The AP Mode and Type message element is used to configure a WTP to
