@@ -246,7 +246,14 @@ AP = RAD = WTP
 
 
 
+127. AP Model 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                 AP Model Name  30 Bytes ... 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+       ... AP Model Name           |   Model Version 30 Bytes ...       
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
+ 
 
 128. Cisco Reset Button State
 
@@ -391,6 +398,20 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 	0-terminated username, the field has to fillid up with zeros.
 
 
+21. Radio Module Info (?) (LWAPP 104)
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Radio Module |                       
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+
+   Radio Module: 
+	Number of Radio Model, what the info is for
+	0xff = Radio Board Info (?)
+	 
+
+
+
 
 36. Cisco AP Lohohost and Last Joined Controller (LWAPP 104)
      0                   1                   2                   3
@@ -489,7 +510,30 @@ Length: 1
    |    ... WLC MAC Address        |        
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
+139. Hardware Info (?)
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |       RAM Description (32 Bytes) ...  
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+                ... RAM Description                                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |       RAM size                                                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |       Flash Size(?)                                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+   |       Processor Description ...      
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+ 
+   RAM Descriptrion: 
+      ASCII String describing the installed RAM, zero terminated,
+      zero filled till byte 32.
 
+   RAM size:
+      Size of RAM in bytes
+
+   Flash Size:
+
+   Processor Description: 
+      ASCII String describing the processor
 
 166. Cisco AP Join IP Pref Mode (LWAPP)
     0
