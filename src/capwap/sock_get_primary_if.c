@@ -37,6 +37,9 @@ char * sock_get_primary_if(int family)
 			continue;
 		}
 
+		if (ifa->ifa_addr == NULL)
+			continue;
+
 		if (ifa->ifa_addr->sa_family != family)
 			continue;
 

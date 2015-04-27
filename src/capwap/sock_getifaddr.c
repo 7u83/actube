@@ -37,6 +37,9 @@ int sock_getifaddr(const char * ifname,int family, int type,struct sockaddr * sa
 		if (strcmp(ifname,ifa->ifa_name))
 			continue;
 
+		if (ifa->ifa_addr == NULL)
+			continue;
+
 		if (ifa->ifa_addr->sa_family != family)
 			continue;
 
