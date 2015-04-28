@@ -217,7 +217,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 
 		}
 		cw_send_error_response(conn, rawmsg, result_code);
-		return 0;
+		errno = EAGAIN;
+		return -1;
 	}
 
 
@@ -371,7 +372,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,struc
 
 /*
  * Process an incomming CAPWAP packet, assuming the packet is already decrypted
- * @param pram conn conection object 
+ * @param conn conection object 
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
@@ -449,8 +450,12 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sock
 			return -1;
 		}
 
+
 		cw_dbg_pkt(DBG_PKT_IN, conn, f+4, *(uint32_t*)f,from);
 		cw_dbg_msg(DBG_MSG_IN, conn, f+4, *(uint32_t*)f,from);
+
+		// XXX: Modify fragman to not throw away CAPWAP headers
+
 		int rc = process_message(conn, f + 4, *(uint32_t *) f, from);
 
 		free(f);
