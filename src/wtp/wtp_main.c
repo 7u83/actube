@@ -95,16 +95,16 @@ mavl_destroy(b);
 	struct conn *conn = the_conn;
 
 	conn->radios = mbag_create();
-	mbag_set_mbag(conn->radios,0,mbag_create());
-	mbag_set_mbag(conn->radios,1,mbag_create());
+//	mbag_set_mbag(conn->radios,0,mbag_create());
+//	mbag_set_mbag(conn->radios,1,mbag_create());
 //	mbag_set_mbag(conn->radios,0xff,mbag_create());
 	
 
-	mbag_t r;
-	r  = mbag_get_mbag(conn->radios,0,NULL);
-	mbag_set_dword(r,CW_RADIO_TYPE,1);
-	r  = mbag_get_mbag(conn->radios,1,NULL);
-	mbag_set_dword(r,CW_RADIO_TYPE,2);
+//	mbag_t r;
+//	r  = mbag_get_mbag(conn->radios,0,NULL);
+//	mbag_set_dword(r,CW_RADIO_TYPE,1);
+//	r  = mbag_get_mbag(conn->radios,1,NULL);
+//	mbag_set_dword(r,CW_RADIO_TYPE,2);
 //	r  = mbag_get_mbag(conn->radios,1,NULL);
 //	mbag_set_dword(r,CW_RADIO_TYPE,1);
 
