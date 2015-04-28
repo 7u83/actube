@@ -501,10 +501,10 @@ extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, in
 					     uint8_t * msgelem, int len);
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr *local_ip, int type,
 					uint8_t * msgelem, int len);
-extern int cw_readelem_radio_administrative_state(struct radioinfo *radioinfo, int type,
-						  uint8_t * msgelem, int len);
-extern int cw_readelem_radio_operational_state(struct radioinfo *radioinfo, int type,
-					       uint8_t * msgelem, int len);
+//extern int cw_readelem_radio_administrative_state(struct radioinfo *radioinfo, int type,
+//						  uint8_t * msgelem, int len);
+//extern int cw_readelem_radio_operational_state(struct radioinfo *radioinfo, int type,
+//					       uint8_t * msgelem, int len);
 
 extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem,
 					int len);
@@ -864,6 +864,7 @@ static inline int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
 }
 
 
+/*
 static inline int cw_addelem_radio_operational_state(uint8_t * dst, struct radioinfo *ri)
 {
 	cw_put_byte(dst + 4 + 0, ri->rid);
@@ -871,6 +872,7 @@ static inline int cw_addelem_radio_operational_state(uint8_t * dst, struct radio
 	cw_put_byte(dst + 4 + 2, ri->cause);
 	return 3 + cw_put_elem_hdr(dst, CW_ELEM_RADIO_OPERATIONAL_STATE, 3);
 }
+*/
 
 
 /*
@@ -1122,5 +1124,18 @@ int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *acti
 
 int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from);
+
+
+int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
+int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
+
+int cw_radio_set_admin_state(mbag_t radios,int rid, int state,int cause);
+
+int cw_in_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
+
 
 #endif
