@@ -126,7 +126,17 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "AP Quality of Services";
 		case CW_CISCO_TLV_PAYLOAD:
 			return "TLV Payload";
-	
+		case CW_CISCO_AP_UPTIME:
+			return "AP Uptime";
+		case CW_CISCO_AP_POWER_INJECTOR_CONFIG:
+			return "AP Power Injector Config";
+		case CW_CISCO_AP_PRE_STD_SWITCH_CONFIG:
+			return "AP Pre Std Switch Config";
+		case CW_CISCO_AP_BACKUP_SOFTWARE_VERSION:
+			return "Backup Software Version";
+		case CW_CISCO_AP_LOG_FACILITY:
+			return "AP Log Facility";
+		
 		default:
 			return "Unknown";
 

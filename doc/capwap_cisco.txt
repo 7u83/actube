@@ -210,8 +210,20 @@ AP = RAD = WTP
       bytes.
 
 
-108. Cisco Mesh Stats
+//108. Cisco Mesh Stats???
 
+108. Cisco AP Uptime
+   
+   Sent by the WTP this message element gibes information about
+   the uptime of the WTP.
+
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |       Current Uptime          |         Last Uptime           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  
+   
 
 
 125. SPAM AP LED State 
@@ -288,6 +300,20 @@ AP = RAD = WTP
 169. Cisco AP IP Domain 
 
 170. Cisco AP IP Name Server
+
+183. Cisco Backup OS Version
+   Version of backup software image.
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Version ... (6 Bytes)      
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+     ... Version                   |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+  
 
 
 207. Cisco Board Data Options
@@ -408,7 +434,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 
 
 
-20. Cisco AP Username Password (LWAPP 104)
+18. Cisco AP Username Password (LWAPP 104)
 
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -437,7 +463,15 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 	0xff = Radio Board Info (?)
 	 
 
+34. Cisco AP Ethernet Port Subtype (LWAPP)
+    0                   1                   2
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+   |  Duplex       |   Speed                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+Type: 34
+Length: 3
 
 
 36. Cisco AP Lohohost and Last Joined Controller (LWAPP 104)
@@ -468,11 +502,20 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
     0                   1             
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |               |               |  
+   |      Type     |      Set      |  
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    Type: 44
    Length: 2
+
+   Type: 
+        0=Telnet?
+        1=SSH
+   Set:
+        0=Disable
+	1=Enable
+
+
 
 
 67. AP Submode (LWAPP)
@@ -499,6 +542,25 @@ Type: 67
 
 Type: 73
 Length: >=4
+
+
+74. Cisco DTLS Data Config (LWAPP)
+    0                   1                   
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | DTLS Data cap |DTLS Data en.  | 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Type: 74
+Length: 2 
+   
+   DTLS Data cab:
+	0: not capable
+	1: capabale
+
+   DTLS Data en
+	0: DTLS Data disabled
+	1: DTLS Data enabled
 
 
 133. Cisco SSC Hash Validation
