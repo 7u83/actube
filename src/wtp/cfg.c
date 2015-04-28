@@ -893,8 +893,8 @@ static int cfg_json_get_radios_cb(char *js, jsmntok_t * t,
 	*(js + (t + 1)->end) = 0;
 	const char *val = js + (t + 1)->start;
 
-//	printf("Key: %s\n",key);
-//	printf("Val: %s\n",val);
+	//printf("Radio Key: %s\n",key);
+	//printf("Radio Val: %s\n",val);
 
 	
 
@@ -903,8 +903,11 @@ static int cfg_json_get_radios_cb(char *js, jsmntok_t * t,
 
 	mbag_t radio = mbag_get_mbag(conn->radios,atoi(key),NULL);
 	if ( !radio ){
-		printf("Radio %d not found\n",atoi(key));
-		return skip(t+1);
+		radio=mbag_create();
+		mbag_set_mbag(conn->radios,atoi(key),radio);
+		
+		//printf("Radio %d not found\n",atoi(key));
+		//return skip(t+1);
 
 	}
 
