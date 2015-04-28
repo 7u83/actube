@@ -68,6 +68,11 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 0, cw_in_check_join_resp }
 	,
 
+	/* Result Code */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
+	 CW_ACTION_IN_RESULT_CODE, 1}
+	,
+
 	/* AC Descriptor */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
 	 CW_ACTION_IN_AC_DESCRIPTOR, 1}
@@ -78,13 +83,14 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_AC_NAME, 1}
 	,
 
-	/* Vendor Specific */
+	
+	/* CAPWAP Control IPv4 Address */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_RESPONSE,
-	 CW_ACTION_IN_RESULT_CODE, 1}
+	 CW_ACTION_IN_CAPWAP_CONTROL_IPV4_ADDRESS, 1}
 	,
 
-	
 
+	
 
 
 	/* ------------------------------------------------------------------------------- */
@@ -102,7 +108,7 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 	/* ------------------------------------------------------------------------------- */
 
-	/* Message Image Data Request */
+	/* Message Image Data Request IN */
 	{0, 0, CW_STATE_IMAGE_DATA, CW_MSG_IMAGE_DATA_REQUEST, 0,
 	 0, cw_in_check_img_data_req_wtp }
 	,
@@ -133,13 +139,12 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 
 	/* ------------------------------------------------------------------------------- */
-
 	/* Message Change State Response IN */
 	{0, 0, CW_STATE_CONFIGURE, CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 0,
-	 0,0  }
+	 0, cw_in_check_cfg_update_req  }
 	,
 
-
+	/* ------------------------------------------------------------------------------- */
 	/* Message Configuration Update Request IN */
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
 	0, 0,0  }
@@ -151,7 +156,7 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
-	 CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE, 0}
+	 CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE_WTP, 0}
 	,
 
 
@@ -163,6 +168,7 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 
 
 
+	/* ------------------------------------------------------------------------------- */
 	/* Echo Response Response IN */
 	{0, 0, CW_STATE_RUN, CW_MSG_ECHO_RESPONSE, 0,
 	 0,0  }
@@ -316,6 +322,11 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	{CW_MSG_CHANGE_STATE_EVENT_REQUEST, CW_ITEM_NONE}
 	,
 
+	/* Radio Ooerational State */
+	{CW_MSG_CHANGE_STATE_EVENT_REQUEST, CW_ITEM_RADIO_OPER_STATE, 0,
+	0, NULL, cw_out_radio_operational_states, cw_out_get_config,1}
+	,
+
 
 
 	/* -------------------------------------------------------------------------------
@@ -325,10 +336,16 @@ cw_action_out_t capwap_actions_wtp_out[] = {
 	,
 
 	/* -------------------------------------------------------------------------------
-	 * Echo Request Request OUT
+	 * Configuration Update Response
 	 */
 	{CW_MSG_CONFIGURATION_UPDATE_RESPONSE, CW_ITEM_NONE}
 	,
+	
+	/* Radio Oper State */
+	{CW_MSG_CONFIGURATION_UPDATE_RESPONSE, CW_ITEM_RADIO_OPER_STATE, 0,
+	0, NULL, cw_out_radio_operational_states, cw_out_get_config,1}
+	,
+
 
 	{0, 0}
 

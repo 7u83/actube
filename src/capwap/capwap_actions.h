@@ -174,6 +174,22 @@
 	0,						/* ID to use store */		\
 	4, 4						/* min/max length */
 
+#define CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE_WTP 	\
+	CW_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID*/			\
+	cw_in_radio_administrative_state_wtp, 0,		/* start/end callback */	\
+	MBAG_DWORD, 					/* Type of element */		\
+	0,						/* ID to use store */		\
+	4, 4						/* min/max length */
+
+
+
+
+#define CW_ACTION_IN_MAXIMUM_MESSAGE_LENGTH	 	\
+	CW_ELEM_MAXIMUM_MESSAGE_LENGTH,				/* Element ID*/			\
+	cw_in_generic, 0,				/* start/end callback */	\
+	MBAG_WORD, 				/* Type of element */		\
+	CW_ITEM_MAXIMUM_MESSAGE_LENGTH			/* ID to use store */		\
+	2, 2						/* min/max length */
 
 
 

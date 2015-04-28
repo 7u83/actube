@@ -97,7 +97,6 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 
 }
 
-
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			int len, struct sockaddr *from)
 {
