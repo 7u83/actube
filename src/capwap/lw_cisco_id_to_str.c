@@ -26,6 +26,12 @@ const char * lw_cisco_id_to_str(int elem_id)
 			
 		case LW_CISCO_MCAST_MGID_INFO:
 			return "MCAST MGID Info";
+		case LW_CISCO_RADIO_MODULE_INFO:
+			return "Radio Module Info";
+		case LW_CISCO_TELNET_SSH:
+			return "Telnet SSH";
+		case LW_CISCO_AP_DTLS_DATA_CFG:
+			return "AP DTLS Data Config";
 
 		default: 
 			return "Unknown";
