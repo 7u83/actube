@@ -127,6 +127,7 @@ CAPWAPOBJS= \
 	cw_in_check_disc_req.o \
 	cw_in_check_chng_state_evnt_req.o\
 	cw_in_check_disc_resp.o\
+	cw_in_check_cfg_update_req.o\
 	cw_in_check_join_req.o \
 	cw_in_check_cipwap_join_req.o \
 	cw_in_check_join_resp.o \
@@ -139,11 +140,13 @@ CAPWAPOBJS= \
 	cw_out_cisco_ac_descriptor.o \
 	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
+	cw_out_radio_operational_state.o\
 	cw_in_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ipv4_address.o\
 	cw_in_radio_administrative_state.o \
+	cw_in_radio_administrative_state_wtp.o \
 	strheap.o \
 	cw_check_missing_mand.o \
 	md5sum.o \
@@ -151,118 +154,6 @@ CAPWAPOBJS= \
 
 
 
-
-#	avltree.o \
-	avltree_get_node.o \
-	avltree_get.o \
-	avltree_del_all.o \
-	avltree_foreach_lr.o \
-	avltree_foreach_rl.o \
-	avltree_foreach_from_lr.o \
-	avliter_next.o \
-	avliter_seek.o \
-
-
-	 #  wtpinfo.o \
-
-
-	
-	
-	   #acinfo.o \
-#	cwmsg_addelem_vendor_cisco_mwar_addr.o \
-#		cwsend_unknow_response.o \
-	cw_send_configuration_update_response.o \
-	cwsend_echo_request.o \
-	   acinfo_print.o \
-		   cwmsg_init_echo_request.o \
-	   cwmsg_addelem.o \
-	   cwmsg_vaddelem.o \
-	cw_log_str2dbglevel.o \
-	cwmsg_addelem_maximum_message_length.o \
-	 #  cwmsg_send.o \
-	   cwmsg_addelem_ac_descriptor.o \
-	   cwmsg_addelem_wtp_descriptor.o \
-	   cwmsg_addelem_cw_local_ip_addr.o \
-	   cwmsg_addelem_mtu_discovery_padding.o \
-	   cwmsg_addelem_ac_timestamp.o \
-cw_send_echo_response.o \
-	cw_handle_echo_request.o \
-	   cwsend_conf_status_response.o\
-	cw_readmsg_configuration_status_response.o \
-	cw_readmsg_configuration_status_request.o \
-cw_readelem_maximum_message_length.o \
-	cw_readelem_result_code.o\
-	cw_readelem_ac_name.o \
-	cw_readelem_ac_descriptor.o \
-	conn_detect_capwap.o \
-	cw_readelem_radio_administrative_state.o \
-	cw_readelem_radio_operational_state.o \
-	cw_readelem_statistics_timer.o \
-	cw_readelem_mtu_discovery_padding.o \
-	cw_readelem_vendor_specific_payload.o \
-	cw_readelem_capwap_local_ip_addr.o \
-	   cw_readelem_wtp_reboot_statistics.o\
-	cwmsg_addelem_image_identifier.o \
-	conn_get_response.o \
-#	cwsend_change_state_event_response.o \
-	   cwread_discovery_response.o \
-	   cwsend_discovery_request.o \
-	cw_send_image_file.o \
-	   cwread_configuration_status_request.o\
-	cwread_change_state_event_request.o\
-	cwread_wtp_event_request.o \
-	   process_conf_status_request.o \
-	   cw_readelem_ecn_support.o \
-	conn_wait_for_message.o \
-
-#	   wtpinfo_readelem_wtp_mac_type.o \
-#	   wtpinfo_readelem_wtp_descriptor.o \
-#	   wtpinfo_readelem_discovery_type.o \
-#	   wtpinfo_readelem_wtp_frame_tunnel_mode.o \
-#	   wtpinfo_readelem_location_data.o \
-#	   wtpinfo_readelem_wtp_name.o \
-#	   wtpinfo_readelem_session_id.o \
-#	   cwmsg_addelem_wtp_radio_infos.o \
-#	cw_addelem_vendor_specific_payload.o \
-	#cw_in_wtp_name.o \
-	   #cw_msgtostr.o \
-	   #cw_msgelemtostr.o \
-	   #cwmsg_addelem_ctrl_ip_addrs.o \
-	   #process_join_request.o \
-	   #cwmsg_addelem_wtp_board_data.o \
-	   #wtpinfo_readelem_wtp_board_data.o \
-#	cw_send_image_data_response.o \
-	   #cwmsg_init.o \
-#	cw_readelem_80211_wtp_radio_info.o \
-#	cwmsg_addelem_80211_add_wlan.o \
-	   cwsend_discovery_response.o \
-	cw_readelem_cisco_wtp_radio_cfg.o \
-	cw_addelem_cisco_wtp_radio_cfg.o \
-	conn_prepare_request.o \
-	
-	   #cw_ianavendoridtostr.o \
-	   #cwmsg_addelem_result_code.o \
-#	cwmsg_addelem_radio_operational_state.o \
-#	   wtpinfo_readelem_wtp_radio_info.o  \
-
-#	cwmsg_addelem_vendor_cisco_ap_timesync.o \
-#	cwmsg_addelem_vendor_specific_payload.o \
-#	conn_prepare_image_data_request.o \
-
-	#cwmsg_addelem_session_id.o
-#	   process_msgelems_discovery_request.o \
-	  # cwsend_join_request.o \
-#	
-	  # cwsend_image_data_request.o 
-#	   cwmsg_set_control_header.o 
-#	   process_msgelems.o \
-#	   cwsend_join_response.o \
-#	cwread_discovery_request.o\
-	   cwread_join_response.o \
-	cw_read_image_data_request.o \
-#	conn_send_cwmsg.o \
-#	conn_send_request.o \
-#	conn_wait_for_request.o \
 
 #
 # SSL objects
