@@ -4,6 +4,7 @@
 #include "mbag.h"
 #include "radio.h"
 #include "log.h"
+#include "dbg.h"
 
 int cw_put_cisco_wtp_radio_cfg(uint8_t *dst, int rid, mbag_t radio)
 {
@@ -111,4 +112,60 @@ int cw_out_cisco_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, uint8
 
 //	return l+cw_out_cisco_wtp_radio_cfg_(conn,a,dst+l,1);
 }
+
+
+
+
+
+
+int cw_in_cisco_radio_cfg(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from)
+{
+
+	int rid = cw_get_byte(data);
+	mbag_t radio = mbag_get_mbag(conn->radios,rid,NULL);
+	if ( !radio){
+		cw_dbg(DBG_ELEM_ERR,"Radio ID %d not defined",rid);
+		return 0;
+	}
+
+	
+//	printf("Here we are %d\n",rid);
+	return 0;
+}
+
+
+int cw_radio_cisco_set_state(struct conn * conn, uint8_t *data, int len, int cause)
+{
+
+	int rid = cw_get_byte(data);
+	int state = cw_get_byte(data+1);
+	if (rid != 255)
+		return cw_radio_set_admin_state(conn->radios,rid,state,cause);
+
+
+	MAVLITER_DEFINE(it,conn->radios);
+	mavliter_foreach(&it){
+		mbag_item_t *i = mavliter_get(&it);
+		cw_radio_set_admin_state(conn->radios,i->id,state,cause);
+
+	}
+	return 1;	
+
+}
+
+
+int cw_in_cisco_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from)
+{
+	return cw_radio_cisco_set_state(conn,data,len,-1);	
+}
+
+
+int cw_in_cisco_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from)
+{
+	return cw_radio_cisco_set_state(conn,data,len,3);	
+}
+
 

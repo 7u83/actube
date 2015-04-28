@@ -60,43 +60,4 @@ int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *
 
 
 
-static int set_radio_admin_state(mbag_t radios,int rid,int state)
-{
 
-	mbag_t radio = mbag_get_mbag(radios,rid,NULL);
-	if (!radio){
-		cw_dbg(DBG_ELEM_ERR,"Can't set radio administrative state for radio %d - radio does't exists",rid);
-		return 0;	
-	}
-
-	mbag_set_byte(radio,CW_RADIO_ADMIN_STATE,state);
-	
-	return 1;
-}
-
-int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from)
-{
-	int rid = cw_get_byte(data);
-	int state = cw_get_byte(data+1);
-	return set_radio_admin_state(conn->radios,rid,state);
-}
-
-
-int cw_in_cisco_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from)
-{
-	
-	int rid = cw_get_byte(data);
-	int state = cw_get_byte(data+1);
-	if (rid != 255)
-		return set_radio_admin_state(conn->radios,rid,state);
-
-
-	MAVLITER_DEFINE(it,conn->radios);
-	mavliter_foreach(&it){
-		mbag_item_t *i = mavliter_get(&it);
-		mbag_set_byte(i->data,CW_RADIO_ADMIN_STATE,state);
-	}
-	return 1;	
-}

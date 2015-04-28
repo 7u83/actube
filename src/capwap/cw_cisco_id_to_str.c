@@ -114,6 +114,12 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "AP Retransmit Param";
 		case CW_CISCO_AP_VENUE_SETTINGS:
 			return "AP Venue Settings";
+		case CW_CISCO_80211_DELETE_WLAN:
+			return "Delete WLAN";
+		case CW_CISCO_SIG_PAYLOAD:
+			return "Signature Payload";
+		case CW_CISCO_SIG_TOGGLE:
+			return "Signature Toggle";
 	
 		default:
 			return "Unknown";

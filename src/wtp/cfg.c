@@ -29,6 +29,7 @@ int cfg_json_put_ac_ip_list(char *dst, const char *name, mbag_item_t * i, int n)
 int cfg_json_put_acobj(char *dst, const char *name, mbag_item_t * i, int n);
 int cfg_json_put_byte(char *dst, const char *name, mbag_item_t * i, int n);
 int cfg_json_put_radios(char *dst, const char *name, mbag_item_t * i, int n);
+int cfg_json_put_bstr(char *dst, const char *name, mbag_item_t * i, int n);
 
 
 //static int scn_obj(char *js, jsmntok_t *t, int (vcb)(char*js,jsmntok_t*t,struct mbag_itemdef *defs,mbag_t mbag), struct mbag_itemdef *defs,mbag_t mbag);
@@ -48,6 +49,7 @@ int cfg_json_get_word(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t
 int cfg_json_get_byte(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t mbag);
 int cfg_json_get_ac_name_with_priority(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 				       mbag_t mbag);
+int cfg_json_get_bstr(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t mbag);
 
 
 
@@ -244,6 +246,33 @@ int cfg_json_get_vendorstr(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 }
 
 
+int cfg_json_get_bstr(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t mbag)
+{
+
+	struct conn *conn = get_conn();
+
+	int item_id = idef->item_id;
+	*(js + t->end) = 0;
+//      char *str = js+t->start;
+	if (t->type != JSMN_STRING) {
+		return 0;
+	}
+	*(js + t->end) = 0;
+	bstr16_t b16 = bstr16cfgstr(js + t->start);
+
+	/* this is a dirty hack. It should be removed
+	   when we have a bstrcfgstr function */
+	   
+	bstr_t b=bstr_create(bstr16_data(b16),bstr_len(b16));
+	free(b16);
+
+	mbag_set_bstr(mbag, item_id, b);
+	return 0;
+}
+
+
+
+
 int cfg_json_get_bstr16(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t mbag)
 {
 
@@ -409,6 +438,7 @@ struct mbag_itemdef general_cfg[] = {
 	 cfg_json_put_bstr16},
 
 
+
 /*	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
 	{CW_ITEM_WTP_MAC_TYPE,"mac_type",byte_local},
 	{CW_ITEM_WTP_GROUP_NAME,"group_name",bstr16_local},
@@ -432,6 +462,8 @@ struct mbag_itemdef board_data_cfg[] = {
 struct mbag_itemdef radio_cfg[] = {
 	{CW_RADIO_ADMIN_STATE, "admin_state", cfg_json_get_byte, cfg_json_put_byte},
 	{CW_RADIO_TYPE, "radio_type", cfg_json_get_dword, cfg_json_put_dword},
+/*	{CW_RADIO_OPER_STATE,"oper_state", cfg_json_get_word,cfg_json_put_word},*/
+	{CW_RADIO_BSSID,"bssid", cfg_json_get_bstr,cfg_json_put_bstr},
 	{0,0,0}
 	
 
@@ -447,6 +479,32 @@ struct mbag_itemdef *get_idef_by_id(struct mbag_itemdef *cfg, uint32_t id)
 		}
 	}
 	return NULL;
+}
+
+
+
+/* This is almost a copy of the bstr16 function.
+   Maybe it could be combined to shorten the code. */
+int cfg_json_put_bstr(char *dst, const char *name, mbag_item_t * i, int n)
+{
+	if (i->type != MBAG_BSTR) {
+		return 0;
+	}
+
+	char *d = dst;
+	memset(d, '\t', n);
+	d += n;
+	d += sprintf(d, "\"%s\":", name);
+
+	int utf8 = cw_is_utf8(bstr_data(i->data), bstr_len(i->data));
+	if (utf8) {
+		d += sprintf(d, "\"%.*s\"", bstr_len(i->data), bstr_data(i->data));
+	} else {
+		d += sprintf(d, "\".x");
+		d += cw_format_hex(d, bstr_data(i->data), bstr_len(i->data));
+		d += sprintf(d, "\"");
+	}
+	return d - dst;
 }
 
 

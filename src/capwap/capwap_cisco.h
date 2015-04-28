@@ -46,6 +46,8 @@
 #define CW_CISCO_DIRECT_SEQUENCE_CONTROL	LW_ELEM_DIRECT_SEQUENCE_CONTROL		/* 14 */
 #define CW_CISCO_SUPPORTED_RATES		LW_ELEM_80211_RATE_SET			/* 16 */
 
+#define CW_CISCO_80211_DELETE_WLAN		LW_ELEM_80211_DELETE_WLAN		/* 28 */
+
 #define CW_CISCO_MWAR_NAME			LW_ELEM_AC_NAME				/* 31 */
 
 #define CW_CISCO_LOCATION_DATA			LW_ELEM_LOCATION_DATA			/* 35 */
@@ -61,6 +63,8 @@
 
 
 #define CW_CISCO_AP_STATIC_IP_ADDR		83
+#define CW_CISCO_SIG_PAYLOAD			84
+#define CW_CISCO_SIG_TOGGLE			87
 
 #define CW_CISCO_AC_NAME_WITH_INDEX		91
 #define CW_CISCO_SPAM_DOMAIN_SECRET		96
@@ -212,41 +216,13 @@ int cw_out_cisco_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, uint8
 int cw_in_cisco_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
+int cw_in_cisco_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
 
 
-/*
-#define cw_addelem_cisco_rad(dst,acinfo)\
-	lw_put_ac_descriptor(dst+10,acinfo)
-	 cw_put_elem_vedor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_RAD,
-*/
+int cw_in_cisco_radio_cfg(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
 
-
-
-/* cwmsg methods */
-
-/*
-#define cwmsg_addelem_cisco_ap_timesync(cwmsg,time,type)\
-	(cwmsg)->pos+=cw_addelem_cisco_ap_timesync(((cwmsg)->msgelems+(cwmsg)->pos),time,type)
-
-#define cwmsg_addelem_cisco_rad_name(cwmsg,name)\
-	(cwmsg)->pos+=cw_addelem_cisco_rad_name(((cwmsg)->msgelems+(cwmsg)->pos),(name))
-
-#define cwmsg_addelem_cisco_ap_grpoup_name(cwmsg,name)\
-	(cwmsg)->pos+=cw_addelem_ap_group_name(((cwmsg)->msgelems+(cwmsg)->pos),(name))
-
-#define cwmsg_addelem_cisco_mwar(cwmsg,acinfo)\
-	(cwmsg)->pos+=cw_addelem_cisco_mwar(((cwmsg)->msgelems+(cwmsg)->pos),(acinfo))
-
-#define cwmsg_addelem_cisco_certificate(cwmsg,crt,len)\
-	(cwmsg)->pos+=cw_addelem_cisco_certificate(((cwmsg)->msgelems+(cwmsg)->pos),crt,len)
-
-#define cwmsg_addelem_cisco_ap_regulatory_domain(cwmsg,radioinfo)\
-	(cwmsg)->pos+=cw_addelem_cisco_ap_regulatory_domain(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
-
-#define cwmsg_addelem_cisco_wtp_radio_cfg(cwmsg,radioinfo)\
-	(cwmsg)->pos+=cw_addelem_cisco_wtp_radio_cfg(((cwmsg)->msgelems+(cwmsg)->pos),radioinfo)
-
-*/
 
 
 #endif
