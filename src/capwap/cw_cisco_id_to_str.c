@@ -120,6 +120,8 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Signature Payload";
 		case CW_CISCO_SIG_TOGGLE:
 			return "Signature Toggle";
+		case CW_CISCO_80211_ASSOC_LIMIT:
+			return "Assoc Limit";
 	
 		default:
 			return "Unknown";

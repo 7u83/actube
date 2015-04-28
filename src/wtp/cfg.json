@@ -35,6 +35,11 @@
 			"admin_state":"1",
 			"radio_type":"2",
 			"bssid":".xaabbccddeeff"
+		},
+		"2":{
+			"admin_state":"1",
+			"radio_type":"2",
+			"bssid":".xaabbccddeeff"
 		}
 	},
 	"bssid":""
