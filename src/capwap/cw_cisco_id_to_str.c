@@ -122,6 +122,10 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Signature Toggle";
 		case CW_CISCO_80211_ASSOC_LIMIT:
 			return "Assoc Limit";
+		case CW_CISCO_AP_QOS:
+			return "AP Quality of Services";
+		case CW_CISCO_TLV_PAYLOAD:
+			return "TLV Payload";
 	
 		default:
 			return "Unknown";

@@ -149,6 +149,7 @@
 #define LW_ELEM_CERTIFICATE				44
 #define LW_ELEM_WTP_BOARD_DATA				50
 #define LW_ELEM_WTP_MODE_AND_TYPE			54
+#define LW_ELEM_QOS					57
 
 #define LW_ELEM_AC_IPV4_LIST				59
 #define LW_ELEM_AP_IP_ADDR				82

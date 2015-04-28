@@ -24,6 +24,8 @@ const char * lw_cisco_id_to_str(int elem_id)
 		case LW_CISCO_AP_JOIN_IP_PREF_MODE:
 			return "AP Join IP Pref Mode";
 			
+		case LW_CISCO_MCAST_MGID_INFO:
+			return "MCAST MGID Info";
 
 		default: 
 			return "Unknown";
