@@ -15,12 +15,16 @@ int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, 
 	   the Radio Admin state, adds a CW_RADIO_OPER_STATE item to the radio, 
 	   depending on results. */
 
+	int nerror=0;
+	
 	MAVLITER_DEFINE(it,conn->radios);
 	mavliter_foreach(&it){
 		mbag_item_t * radioitem = mavliter_get(&it);
 		mbag_item_t *ositem = mbag_get(radioitem->data,CW_RADIO_OPER_STATE);
-		if (!ositem)
+		if (!ositem){
+			nerror++;
 			continue;
+		}
 
 		/* Put the radio ID */
 		cw_put_byte(d+4,radioitem->id);
@@ -48,6 +52,14 @@ int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, 
 		   Set Radio Admin State */
 		mbag_del(radioitem->data,CW_RADIO_OPER_STATE);
 
+	}
+
+	if (nerror) {
+		if (a->mand) {
+			cw_log(LOG_ERROR,"Could not send Radio Operational State for all radios. Sent %d out of %d.",
+				conn->radios->count-nerror,conn->radios->count);
+
+		}
 	}
 
 	return d-dst;
