@@ -23,4 +23,7 @@ enum radiodata{
 };
 
 
+int cw_radio_update_oper_states(mbag_t radios,int cause);
+
+
 #endif
