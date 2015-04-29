@@ -1,6 +1,8 @@
 #ifndef __CAPWAP_ITEMS_H
 #define __CAPWAP_ITEMS_H
 
+#include "item.h"
+
 enum capwap_items {
 	CW_ITEM_NONE=0,
 	CW_ITEM_IDLE_TIMEOUT,
@@ -76,5 +78,6 @@ enum capwap_items {
 
 };
 
+extern struct cw_item capwap_itemdefs[];
 
 #endif
