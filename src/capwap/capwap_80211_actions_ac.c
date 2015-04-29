@@ -51,16 +51,15 @@ cw_action_out_t capwap_80211_actions_ac_out[]={
 int cw_register_actions_capwap_80211_ac(struct cw_actiondef *def)
 {
 
-	cw_actionlist_in_register_actions(def->in, capwap_80211_actions_ac_in);
-	cw_actionlist_out_register_actions(def->out, capwap_80211_actions_ac_out);
-
 	int rc;
-	rc = cw_strheap_register_strings(def->strelem, capwap_strings_elem80211);
-	printf("80211 Registerd %d\n",rc);
+	rc=cw_actionlist_in_register_actions(def->in, capwap_80211_actions_ac_in);
+	rc+=cw_actionlist_out_register_actions(def->out, capwap_80211_actions_ac_out);
+
+	rc+= cw_strheap_register_strings(def->strelem, capwap_strings_elem80211);
 	/*rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 */
 
 
-	return 1;
+	return rc;
 }
 
