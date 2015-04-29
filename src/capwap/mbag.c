@@ -1,36 +1,67 @@
 #include "mbag.h"
+#include "capwap.h"
+#include "format.h"
+
+
+static int mbag_bstr16str(void *item,char *dst)
+{
+	mbag_item_t *i= item;
+
+
+
+	char *d = dst;
+	int utf8 = cw_is_utf8(bstr16_data(i->data), bstr16_len(i->data));
+
+
+        if (utf8) {
+                d += sprintf(d, "\"%.*s\"", bstr16_len(i->data), bstr16_data(i->data));
+        } else {
+                d += sprintf(d, "\".x");
+                d += cw_format_hex(d, bstr16_data(i->data), bstr16_len(i->data));
+                d += sprintf(d, "\"");
+        }
+	return d-dst;	
+}
+
+
+static int mbag_strstr(void *item,char *dst)
+{
+	mbag_item_t *i= item;
+        return sprintf(dst, "\"%s\"", i->data);
+}
+
 
 
 const struct mbag_typedef mbag_type_byte = {
-	NULL
+	"byte",NULL
 };
 
 const struct mbag_typedef mbag_type_word = {
-	NULL
+	"word",NULL
 };
 
 const struct mbag_typedef mbag_type_dword = {
-	NULL
+	"dword",NULL
 };
 
 const struct mbag_typedef mbag_type_const_data = {
-	NULL
+	"data",NULL
 };
 
 const struct mbag_typedef mbag_type_bstr = {
-	free
+	"bstr",free
 };
 
 const struct mbag_typedef mbag_type_bstr16 = {
-	free
+	"bstr16",free,mbag_bstr16str
 };
 
 const struct mbag_typedef mbag_type_str = {
-	free
+	"str",free,mbag_strstr
 };
 
 const struct mbag_typedef mbag_type_vendorstr = {
-	free
+	"vendorstr",free
 };
 
 
@@ -41,7 +72,7 @@ void free_avltree(void*t){
 
 }
 const struct mbag_typedef mbag_type_avltree = {
-	free_avltree
+	"mavl",free_avltree
 };
 
 
@@ -55,7 +86,7 @@ static void mbag_type_mbag_del(void *i)
 }
 
 const struct mbag_typedef mbag_type_mbag = {
-	mbag_type_mbag_del
+	"mbag",mbag_type_mbag_del
 };
 
 
