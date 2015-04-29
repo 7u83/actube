@@ -88,6 +88,9 @@ int main (int argc, const char * argv[])
 
 	db_ping();
 
+
+
+
 	/* Start a database "pinger thread", which inserts
 	   every xx seconds a timestamp into the DB */
 	pthread_t alth;
@@ -129,6 +132,7 @@ int main (int argc, const char * argv[])
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 	rc = ac_run();
 errX:
+	/* XXX There is more cleanup to do */
 	wtplist_destroy();
 	socklist_destroy();
 	return rc;
