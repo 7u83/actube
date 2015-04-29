@@ -34,7 +34,9 @@
 struct mbag_item;
 
 struct mbag_typedef{
+	const char *name;
 	void (*del)(void*);
+	int (*to_str)(void*,char *dst);
 	
 };
 typedef const struct mbag_typedef * mbagtype_t;
