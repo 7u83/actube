@@ -71,8 +71,13 @@ int main (int argc, const char * argv[])
 	if(cw_dbg_opt_level)
 		cw_log(LOG_INFO,"Debug Options: %08X",cw_dbg_opt_level);
 
-	/* XXX Hard coded  debug settigns */
+	/* XXX Hard coded debug settigns, set it by config in the future */
 	cw_dbg_opt_display=DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
+
+	/* Warn, if the "secret" debugging feature for 
+	   developers is turned on ;)*/
+	DBGX("Attention! %s","DBGX is ON!");
+
 
 	/* Initialize the database */
 	if (!db_init()) 
@@ -88,15 +93,12 @@ int main (int argc, const char * argv[])
 	pthread_t alth;
 	pthread_create (&alth, NULL, alive_thread, NULL);
 
-
-	
-
-
-	DBGX("Attention! %s","DBGX is ON!");
+	/* Init DTLS library */
+	dtls_init();
 
 	int regn;
 
-	/* Locad CAPWAP base protocol */
+	/* Load CAPWAP base protocol */
 	if (conf_capwap_mode==CW_MODE_CIPWAP){
 		cw_dbg(DBG_INFO,"Loading CIPWAP Actions ...");
 		regn = cw_register_actions_cipwap_ac(&capwap_actions);
@@ -106,30 +108,15 @@ int main (int argc, const char * argv[])
 		regn = cw_register_actions_capwap_ac(&capwap_actions);
 	}
 
-	/* Bindings */
+	/* Load bindings */
 	cw_dbg(DBG_INFO,"Loading 802.11 Bindings ...");
 	regn += cw_register_actions_capwap_80211_ac(&capwap_actions);
 
 	cw_dbg(DBG_INFO,"Registered %d protocol actions and strings.",regn);
 
-	
-	//cw_register_actions_capwap_80211_ac(&capwap_actions);
-
-
-/*
-	struct avltree *avlt = capwap_actions.strelem;
-
-	avltree_foreach_asc(avlt,avlprint,0);
-
-	exit(0);
-*/
-
 
 
 	ac_global_init();
-
-	
-	dtls_init();
 	if (!socklist_init())
 		goto errX;
 
@@ -137,6 +124,8 @@ int main (int argc, const char * argv[])
 		goto errX;
 
 
+
+	
 	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 	rc = ac_run();
 errX:
