@@ -63,6 +63,9 @@ void connlist_unlock(struct connlist * cl)
 
 void connlist_destroy(struct connlist * cl)
 {
+	if (!cl)
+		return;
+
 	if (cl->t)
 		avltree_destroy(cl->t);
 	pthread_mutex_destroy(&cl->connlist_mutex);
