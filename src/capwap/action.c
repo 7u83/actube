@@ -109,24 +109,28 @@ cw_actionlist_in_t cw_actionlist_in_create()
 
 int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * actions)
 {
+	int n=0;
 	while (actions->capwap_state) {
 		cw_action_in_t *rc = cw_actionlist_in_add(t, actions);
 		if (rc == 0)
 			return 0;
 		actions++;
+		n++;
 	}
-	return 1;
+	return n;
 }
 
 int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * actions)
 {
+	int n=0;
 	while (actions->msg_id != 0) {
 		cw_action_out_t *rc = cw_actionlist_out_add(t, actions);
 		if (rc == 0)
 			return 0;
 		actions++;
+		n++;
 	}
-	return 1;
+	return n;
 }
 
 
