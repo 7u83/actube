@@ -276,47 +276,6 @@ static int wtpman_join(void *arg, time_t timer)
 
 }
 
-/*
-static int wtpman_send_image_file(struct wtpman *wtpman, struct cwrmsg *cwrmsg)
-{
-	struct cwimage_data data;
-	memset(&data, 0, sizeof(struct cwimage_data));
-	uint8_t id[1025];
-	data.identifier = id;
-	char filename[2048];
-	id[0] = 0;
-
-
-	cw_read_image_data_request(&data, cwrmsg->msgelems, cwrmsg->msgelems_len);
-	if (!strlen(id)) {
-		cw_dbg(DBG_MSG_ERR, "No image identifier in image data request");
-		cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum,
-					    CW_RESULT_FAILURE);
-		return 0;
-	}
-
-	sprintf(filename, "%s/%s", conf_image_dir, id);
-
-	FILE *infile;
-	infile = fopen(filename, "rb");
-	if (infile) {
-		cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum,
-					    CW_RESULT_SUCCESS);
-		cw_log(LOG_INFO, "Sending image file %s to %s", filename,
-		       sock_addr2str(&wtpman->conn->addr));
-		cw_send_image_file(wtpman->conn, infile);
-		return 1;
-	}
-
-	cw_log(LOG_ERR, "Can't open image file %s:%s", filename, strerror(errno));
-	cw_send_image_data_response(wtpman->conn, cwrmsg->seqnum, CW_RESULT_FAILURE);
-
-	return 0;
-
-}
-*/
-
-
 static void wtpman_image_data(struct wtpman *wtpman)
 {
 	struct conn * conn = wtpman->conn;
@@ -367,6 +326,36 @@ static void wtpman_image_data(struct wtpman *wtpman)
 		wtpman_remove(wtpman);
 
 
+}
+
+#include "db.h"
+void config_to_sql(struct conn *conn)
+{
+	// XXX for the moment we use just the IP adress as ID
+	char *wtp_id=sock_addr2str(&conn->addr);
+
+	MAVLITER_DEFINE(it,conn->incomming);
+	mavliter_foreach(&it){
+		mbag_item_t * i = mavliter_get(&it);
+		
+		struct cw_item * cwi = cw_item_get_by_id(i->id,capwap_itemdefs);
+		if (cwi){
+	//		DBGX("ID %d,%s",i->id,cwi->cfgname);
+
+	//		printf("%s != %s ?\n",i->type->name,cwi->type->name);
+			char str[256];
+			if (i->type->to_str)
+				i->type->to_str(i,str);
+			
+			db_put_wtp_prop(wtp_id,-1,cwi->cfgname,str);
+
+		}
+		else{
+		//	DBGX("ID %d",i->id);
+
+		}
+
+	}
 }
 
 static void wtpman_run(void *arg)
@@ -435,7 +424,12 @@ static void wtpman_run(void *arg)
 	}
 
 
+
 	conn->capwap_state=CW_STATE_RUN;
+
+	// XXX testing ...
+	config_to_sql(conn);
+
 	
 	rc = 0;
 	while (wtpman->conn->capwap_state == CW_STATE_RUN) {
@@ -449,7 +443,7 @@ static void wtpman_run(void *arg)
 
 
 
-
+	wtpman_remove(wtpman);
 	return;
 }
 
@@ -483,7 +477,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	wtpman->conn->strict_hdr = conf_strict_headers;
 	wtpman->conn->radios=mbag_create();
 	wtpman->conn->local = ac_config;
-wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
+//wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
 wtpman->conn->capwap_mode=CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
 
