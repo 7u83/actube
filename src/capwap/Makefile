@@ -234,7 +234,9 @@ CWACTION=action.o \
 	item_strings.o \
 	mbag.o\
 	radio.o \
-	cw_out_radio_info.o
+	cw_out_radio_info.o \
+	capwap_items.o \
+	item.o
 
 #	cw_process_msg.o \
 
