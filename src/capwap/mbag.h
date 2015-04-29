@@ -37,7 +37,7 @@ struct mbag_typedef{
 	void (*del)(void*);
 	
 };
-typedef const struct mbagtype_def * mbagtype_t;
+typedef const struct mbag_typedef * mbagtype_t;
 
 
 
