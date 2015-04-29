@@ -149,23 +149,15 @@ cw_action_out_t cipwap_actions_wtp_out[] = {
 
 int cw_register_actions_cipwap_wtp(struct cw_actiondef *def)
 {
-/*
-	def->in = cw_actionlist_in_create();
-	def->out = cw_actionlist_out_create();
-	def->strmsg = cw_strheap_create();
-	def->strelem = cw_strheap_create();
-*/
-	cw_register_actions_capwap_wtp(def);
-
-
-	cw_actionlist_in_register_actions(def->in, cipwap_actions_wtp_in);
-	cw_actionlist_out_register_actions(def->out, cipwap_actions_wtp_out);
-
 	int rc;
+	rc=cw_register_actions_capwap_wtp(def);
+
+
+	rc+=cw_actionlist_in_register_actions(def->in, cipwap_actions_wtp_in);
+	rc+=cw_actionlist_out_register_actions(def->out, cipwap_actions_wtp_out);
+
 
 	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
 
-
-
-	return 1;
+	return rc;
 }

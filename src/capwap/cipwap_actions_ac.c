@@ -161,12 +161,12 @@ cw_action_out_t cipwap_actions_ac_out[] = {
  */ 
 int cw_register_actions_cipwap_ac(struct cw_actiondef *def)
 {
-	cw_register_actions_capwap_ac(def);
+	int rc;
+	rc=cw_register_actions_capwap_ac(def);
 
-	cw_actionlist_in_register_actions(def->in, cipwap_actions_ac_in);
-	cw_actionlist_out_register_actions(def->out, cipwap_actions_ac_out);
-	cw_strheap_register_strings(def->strelem,cipwap_strings_elem);
-
-	return 1;
+	rc+=cw_actionlist_in_register_actions(def->in, cipwap_actions_ac_in);
+	rc+=cw_actionlist_out_register_actions(def->out, cipwap_actions_ac_out);
+	rc+=cw_strheap_register_strings(def->strelem,cipwap_strings_elem);
+	return rc;
 }
 

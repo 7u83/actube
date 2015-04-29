@@ -362,14 +362,13 @@ int cw_register_actions_capwap_wtp(struct cw_actiondef *def)
 	def->strmsg = cw_strheap_create();
 	def->strelem = cw_strheap_create();
 
-	cw_actionlist_in_register_actions(def->in, capwap_actions_wtp_in);
-	cw_actionlist_out_register_actions(def->out, capwap_actions_wtp_out);
-
 	int rc;
-	rc = cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
+
+	rc = cw_actionlist_in_register_actions(def->in, capwap_actions_wtp_in);
+	rc += cw_actionlist_out_register_actions(def->out, capwap_actions_wtp_out);
+
+	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
-
-
-	return 1;
+	return rc;
 }
