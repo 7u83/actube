@@ -48,11 +48,11 @@ int db_init()
 	return 1;
 }
 
-/** AC Ping statement */
-static sqlite3_stmt * ping_stmt;
 
-/** Put-WTP-Prop Statement */
+static sqlite3_stmt * ping_stmt;
 static sqlite3_stmt * put_wtp_prop_stmt;
+static sqlite3_stmt * get_task_stmt;
+
 
 
 int db_start()
@@ -100,15 +100,50 @@ void db_ping()
 {
 	int rc = sqlite3_step(ping_stmt);
 	if (rc!=SQLITE_DONE){
-		cw_log(LOG_ERR,"Error: Can't ping database, error code %d",rc);
+		cw_log(LOG_ERR,"Error: Can't ping database, error code %d - %s",rc,sqlite3_errmsg(handle));
 	}
 }
 
-void db_put_wtp_prop(const char *wtp_id,int rid, int upd, const char * prop)
+void db_put_wtp_prop(const char *wtp_id,int rid, const char * prop,const char * val)
 {
 	int rc;
-	rc = sqlite3_bind_text(put_wtp_prop_stmt,1,wtp_id,-1,SQLITE_STATIC);
-	rc = sqlite3_bind_text(put_wtp_prop_stmt,2,wtp_id,-1,SQLITE_STATIC);
+
+	sqlite3_reset(put_wtp_prop_stmt);
+	sqlite3_clear_bindings(put_wtp_prop_stmt);
+
+	if(sqlite3_bind_text(put_wtp_prop_stmt,1,wtp_id,-1,SQLITE_STATIC))
+		goto errX;
+	
+	if(sqlite3_bind_int(put_wtp_prop_stmt,2,rid))
+		goto errX;
+
+	if (sqlite3_bind_text(put_wtp_prop_stmt,3,prop,-1,SQLITE_STATIC))
+		goto errX;
+
+	if (sqlite3_bind_text(put_wtp_prop_stmt,4,val,-1,SQLITE_STATIC))
+		goto errX;
+
+	if (sqlite3_bind_int(put_wtp_prop_stmt,5,0))
+		goto errX;
+
+
+	if (sqlite3_step(put_wtp_prop_stmt))
+		goto errX;
+	return;
+errX:
+	if (rc) {
+		cw_log(LOG_ERR,"Can't update database with WTP props: %d - %s",
+			rc,sqlite3_errmsg(handle));
+	}
 
 }
+
+
+int db_get_tasks(const char * wtpid)
+{
+	
+
+
+}
+
 
