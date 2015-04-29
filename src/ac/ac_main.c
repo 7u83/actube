@@ -39,142 +39,78 @@
 #include "capwap/capwap_items.h"
 #include "capwap/capwap_cisco.h"
 #include "capwap/capwap_80211.h"
+#include "capwap/action.h"
+#include "capwap/capwap_crypto.h"
+#include "capwap/mbag.h"
+
 
 #include "ac.h"
 #include "capwap/format.h"
 
 int ac_run();
 
-void * alive_thread(void *data)
+
+static void * alive_thread(void *data)
 {
+	/* Ping the database every 5 seconds */
 	while(1){
 		sleep(5);
 		db_ping();
 	}
 }
 
-#include "capwap/action.h"
-
-
-/*
-int readelem_vendor_specific_payload(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
-{
-        cw_action_t as,*af;
-	as = *a;
-
-	as.vendor_id = cw_get_dword(data);
-	as.elem_id = cw_get_word(data+4);
-	printf("Vendor Specific: %d, %d\n",as.vendor_id,as.elem_id);
-
- 	af = cw_actionlist_get(conn->msgtr,&as);
-
-
-
-	if (!af) {
-		printf("Msg unknown\n");
-		return 0;
-	}
-
-	printf("Found\n");
-
-	if (af->start) {
-		af->start(conn,af,data+6,len-6);
-	}
-
-
-	return 1;
-}
-*/
-
-
-/*
-int readelem_cisco_rad_name(struct conn *conn,struct cw_action * a,uint8_t *data,int len)
-{
-	printf("Here is the rad name reader\n");
-	int i;
-
-	for (i=0; i<len; i++) {
-		printf("%c",data[i]);
-	}
-	printf("\n");
-}
-*/
-
-
-#include "capwap/capwap_crypto.h"
-
-
-#include "capwap/mbag.h"
-
 int main (int argc, const char * argv[]) 
 {
+	int rc =0;
 
-	mbag_t data = mbag_create();
-
-	mbag_set_byte(data,1,25);
-	mbag_set_byte(data,7,125);
-
-	int b = mbag_get_byte(data,1,255);
-	printf("Result: %d\n",b);
-
-	mbag_del(data,1);
-	b = mbag_get_byte(data,1,255);
-	printf("Result: %d\n",b);
-
-	//return 0;
-
-
-
-
-
-/*
-	intavltree_t t = intavltree_create();
-	int i;
-	for (i=0; i<100; i++){
-		intavltree_add(t,i);
-	}
-
-	avliter_t iter;
-	avliter_init(&iter,t);
-	int *val;
-
-
-	for (avliter_seek_set(&iter); val = avliter_get(&iter); avliter_next(&iter)){
-
-
-		printf("Val is: %d\n",*val);
-
-	}
-
-
-
-	exit(0);
-*/
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");
 
+	/* Show debug options if there are any set */
+	if(cw_dbg_opt_level)
+		cw_log(LOG_INFO,"Debug Options: %08X",cw_dbg_opt_level);
+
+	/* XXX Hard coded  debug settigns */
+	cw_dbg_opt_display=DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
+
+	/* Initialize the database */
+	if (!db_init()) 
+		goto errX;
+
+	if (!db_start())
+		goto errX;
+
+	db_ping();
+
+	/* Start a database "pinger thread", which inserts
+	   every xx seconds a timestamp into the DB */
+	pthread_t alth;
+	pthread_create (&alth, NULL, alive_thread, NULL);
 
 
 	
-	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 
-	cw_dbg_opt_display=DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
 	DBGX("Attention! %s","DBGX is ON!");
 
+	int regn;
+
 	/* Locad CAPWAP base protocol */
 	if (conf_capwap_mode==CW_MODE_CIPWAP){
-		cw_dbg(DBG_INFO,"Locading CIPWAP Aactions");
-		cw_register_actions_cipwap_ac(&capwap_actions);
+		cw_dbg(DBG_INFO,"Loading CIPWAP Actions ...");
+		regn = cw_register_actions_cipwap_ac(&capwap_actions);
 	}
 	else {
-		cw_dbg(DBG_INFO,"Locading standard CAPWAP Aactions");
-		cw_register_actions_capwap_ac(&capwap_actions);
+		cw_dbg(DBG_INFO,"Loading standard CAPWAP Actions ...");
+		regn = cw_register_actions_capwap_ac(&capwap_actions);
 	}
 
 	/* Bindings */
-	cw_register_actions_capwap_80211_ac(&capwap_actions);
+	cw_dbg(DBG_INFO,"Loading 802.11 Bindings ...");
+	regn += cw_register_actions_capwap_80211_ac(&capwap_actions);
+
+	cw_dbg(DBG_INFO,"Registered %d protocol actions and strings.",regn);
 
 	
 	//cw_register_actions_capwap_80211_ac(&capwap_actions);
@@ -192,13 +128,7 @@ int main (int argc, const char * argv[])
 
 	ac_global_init();
 
-	db_init();
-	db_start();
-	db_ping();
-	pthread_t alth;
-	pthread_create (&alth, NULL, alive_thread, NULL);
 	
-	int rc=0;
 	dtls_init();
 	if (!socklist_init())
 		goto errX;
@@ -207,7 +137,7 @@ int main (int argc, const char * argv[])
 		goto errX;
 
 
-printf("Debug oprtions: %08X\n",cw_dbg_opt_level);
+	cw_log(LOG_INFO,"Starting AC-Tube, Name=%s, ID=%s",conf_acname,conf_acid);
 	rc = ac_run();
 errX:
 	wtplist_destroy();
