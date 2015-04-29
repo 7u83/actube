@@ -45,7 +45,7 @@ static void acprio_del(void *d)
 }
 
 const struct mbag_typedef mbag_type_acprio = {
-	acprio_del
+	"acprio",acprio_del
 };
 
 
