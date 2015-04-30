@@ -191,7 +191,7 @@ int join()
 {
 	struct conn * conn = get_conn();
 
-	cw_aciplist_t iplist = mbag_get_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
+	cw_aciplist_t iplist = mbag_get_mavl(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 	if (!iplist){
 		cw_log(LOG_ERR,"No IPs to join controller.");
 		return 0;

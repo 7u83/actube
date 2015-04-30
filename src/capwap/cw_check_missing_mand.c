@@ -74,14 +74,13 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 		if (!ai->mand)
 			continue;
 
-		int i = ai->item_id;
+		int  i = (int)ai->item_id;
 		void * rc = mavl_get(conn->mand,&i);
 		if (!rc) {
 			out[n++]=ai;
 		}
 	
 	}
-
 
 
 

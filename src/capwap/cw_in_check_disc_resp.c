@@ -32,8 +32,8 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 	/*  we have all AC information in the incomming buffer */
 	mbag_t discs;
 
-	discs = mbag_get_avltree_c(conn->remote, CW_ITEM_DISCOVERIES,
-					   mbag_create);
+	discs = mbag_get_mavl_c(conn->remote, CW_ITEM_DISCOVERIES,
+					   mbag_i_create);
 
 //mavl_del_all(discs);
 //exit(0);
@@ -44,7 +44,8 @@ int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 		return -1;
 	}
 
-	mbag_set_avltree(discs,discs->count,conn->incomming);
+	mbag_i_set_mavl(discs,discs->count,conn->incomming);
+
 	conn->incomming = mbag_create();
 
 

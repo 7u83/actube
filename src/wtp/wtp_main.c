@@ -63,6 +63,7 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 }
 
 
+const char *t = CW_ITEM_WTP_NAME;
 
 
 int main()
@@ -82,19 +83,20 @@ int main()
 
 
 
+/*
 mbag_t b = mbag_create();
 
 mbag_set_byte(b,1,99);
 mbag_set_avltree(b,2,mbag_create());
 mavl_destroy(b);
-
+*/
 
 	dtls_init();
 
 	the_conn = conn_create_noq(-1, NULL);
 	struct conn *conn = the_conn;
 
-	conn->radios = mbag_create();
+	conn->radios = mbag_i_create();
 //	mbag_set_mbag(conn->radios,0,mbag_create());
 //	mbag_set_mbag(conn->radios,1,mbag_create());
 //	mbag_set_mbag(conn->radios,0xff,mbag_create());
@@ -152,7 +154,7 @@ conn->config=mbag_create();
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
 	
-	mbag_set_avltree(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+	mbag_set_mavl(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 	cw_acpriolist_t acprios = cw_acpriolist_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);

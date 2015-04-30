@@ -36,7 +36,7 @@ int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst
 		if ( i->type != MBAG_MBAG ) {
 			continue;
 		}
-		l+=cw_put_elem_radio_info(dst+l,i->id,i->data);
+		l+=cw_put_elem_radio_info(dst+l,i->iid,i->data);
 
 	}
 	return l;
@@ -52,7 +52,7 @@ int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *
 		if ( i->type != MBAG_MBAG ) {
 			continue;
 		}
-		l+=cw_put_elem_radio_administrative_state(dst+l,i->id,i->data);
+		l+=cw_put_elem_radio_administrative_state(dst+l,i->iid,i->data);
 
 	}
 	return l;

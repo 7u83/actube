@@ -231,7 +231,6 @@ CWACTION=action.o \
 	capwap_action_helpers.o \
 	cw_put_image_data.o \
 	cisco.o \
-	item_strings.o \
 	mbag.o\
 	radio.o \
 	cw_out_radio_info.o \
@@ -239,6 +238,7 @@ CWACTION=action.o \
 	item.o
 
 #	cw_process_msg.o \
+#	item_strings.o \
 
 
 

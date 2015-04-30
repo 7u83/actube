@@ -5,6 +5,26 @@
 #include "dbg.h"
 
 
+
+const char CW_RADIO_ADMIN_STATE[]="admin_state";
+const char CW_RADIO_OPER_STATE[]="oper_state";
+const char CW_RADIO_TYPE[]="type";
+const char CW_RADIO_REG_DOMAIN[]="reg_domain";
+const char CW_RADIO_BSSID[]="bssid";
+const char CW_RADIO_SHORT_PREAMBLE[]="short_preamble";
+const char CW_RADIO_COUNTRY_STRING[]="country_string";
+
+/* Cisco */
+
+const char CW_RADIO_OCCUPANCY_LIMIT[]="occupancy_limit";
+const char CW_RADIO_CFP_PERIOD[]="cfp_period";
+const char CW_RADIO_CFP_MAX_DURATION[]="cfp_max_duration";
+	
+
+
+
+
+
 /** 
  * Update all radio operational states.
  * @param radios definitiion of radios
@@ -31,7 +51,7 @@ int cw_radio_update_oper_states(mbag_t radios,int cause)
 
 int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause)
 {
-	mbag_t radio = mbag_get_mbag(radios,rid,NULL);
+	mbag_t radio = mbag_i_get_mbag(radios,rid,NULL);
 	if (!radio) {
 		cw_dbg(DBG_ELEM_ERR,"Can't set radio administrative state for radio %d - radio does't exists",rid);
 		return 0;

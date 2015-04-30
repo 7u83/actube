@@ -150,8 +150,8 @@ errX:
 int db_get_tasks(const char * wtpid)
 {
 		
-	sqlite3_reset(put_wtp_prop_stmt);
-	sqlite3_clear_bindings(put_wtp_prop_stmt);
+	sqlite3_reset(get_tasks_stmt);
+	sqlite3_clear_bindings(get_tasks_stmt);
 
 	if(sqlite3_bind_text(get_tasks_stmt,1,wtpid,-1,SQLITE_STATIC))
 		goto errX;
@@ -160,19 +160,20 @@ int db_get_tasks(const char * wtpid)
 
 	rc = sqlite3_step(get_tasks_stmt);
 	if (rc == SQLITE_ROW) {
-		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,0));
+/*		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,0));
 		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,1));
 		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,2));
 		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,3));
 		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,4));
+*/
 	}
 
-	DBGX("The SQL RC: %d\n",rc);
+//	DBGX("The SQL RC: %d\n",rc);
 	return 1;
 
 errX:
 	if (rc) {
-		cw_log(LOG_ERR,"Can't update database with WTP props: %d - %s",
+		cw_log(LOG_ERR,"Can't get tasks: %d - %s",
 			rc,sqlite3_errmsg(handle));
 	}
 

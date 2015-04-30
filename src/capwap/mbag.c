@@ -106,7 +106,7 @@ static void mbag_del_fun(void *e)
 }
 
 
-static void strmbag_del_fun(void *e)
+static void mbag_i_del_fun(void *e)
 {
 
 	mbag_del_data(e);
@@ -114,31 +114,31 @@ static void strmbag_del_fun(void *e)
 }
 
 
-static int strmbag_cmp_fun(const void *x1, const void *x2)
-{
-	return strcmp(( (struct mbag_item *) x1)->name , ((struct mbag_item *) x2)->name  );
-}
-
-
-
 static int mbag_cmp_fun(const void *x1, const void *x2)
 {
-	return ((struct mbag_item *) x1)->id - ((struct mbag_item *) x2)->id;
+	return strcmp(( (struct mbag_item *) x1)->id , ((struct mbag_item *) x2)->id  );
 }
+
+
+
+static int mbag_i_cmp_fun(const void *x1, const void *x2)
+{
+	return ((struct mbag_item *) x1)->iid - ((struct mbag_item *) x2)->iid;
+}
+
+mbag_t mbag_i_create()
+{
+	return mavl_create(mbag_i_cmp_fun, mbag_i_del_fun);
+}
+
 
 mbag_t mbag_create()
 {
 	return mavl_create(mbag_cmp_fun, mbag_del_fun);
-}
-
-
-mbag_t strmbag_create()
-{
-	return mavl_create(strmbag_cmp_fun, strmbag_del_fun);
 
 }
 
-struct mbag_item *mbag_item_create(mbag_t s, uint32_t id)
+struct mbag_item *mbag_item_create(mbag_t s, const char *id)
 {
 	struct mbag_item is;
 	is.id = id;
@@ -158,6 +158,30 @@ struct mbag_item *mbag_item_create(mbag_t s, uint32_t id)
 }
 
 
+struct mbag_item *mbag_i_item_create(mbag_t s, uint32_t id)
+{
+	struct mbag_item is;
+	is.iid = id;
+
+
+	struct mbag_item *i = mavl_get(s, &is);
+	if (i) {
+		mbag_del_data(i);
+		return i;
+	}
+
+	i = malloc(sizeof(struct mbag_item));
+	if (!i)
+		return NULL;
+	i->iid = id;
+	return mavl_add(s, i);
+}
+
+
+
+
+
+/*
 struct mbag_item *strmbag_item_create(mbag_t s, char *name)
 {
 	struct mbag_item is;
@@ -177,4 +201,5 @@ struct mbag_item *strmbag_item_create(mbag_t s, char *name)
 	return mavl_add(s, i);
 }
 
+*/
 

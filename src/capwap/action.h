@@ -46,7 +46,7 @@ struct cw_action_in{
 	int (*start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 	const struct mbag_typedef * itemtype;
-	uint16_t item_id;
+	const char * item_id;
 	uint16_t min_len;
 	uint16_t max_len;
 	uint8_t mand;
@@ -82,7 +82,7 @@ cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
 /* Definitions for outgoing messages */
 struct cw_action_out{
 	uint32_t msg_id;
-	uint32_t item_id;
+	const char * item_id;
 	uint32_t vendor_id;
 	uint16_t elem_id;
 	int (*init)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 

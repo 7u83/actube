@@ -95,8 +95,8 @@ int cw_out_cisco_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, uint8
 			continue;
 		}
 //		l+=cw_put_elem_radio_info(dst+l,i->id,i->data);
-		l+=cw_put_elem_cisco_radio_cfg(dst+l,i->id,i->data);
-		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->id,i->data);
+		l+=cw_put_elem_cisco_radio_cfg(dst+l,i->iid,i->data);
+		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data);
 
 	}
 	return l;
@@ -123,7 +123,7 @@ int cw_in_cisco_radio_cfg(struct conn *conn, struct cw_action_in *a, uint8_t * d
 {
 
 	int rid = cw_get_byte(data);
-	mbag_t radio = mbag_get_mbag(conn->radios,rid,NULL);
+	mbag_t radio = mbag_i_get_mbag(conn->radios,rid,NULL);
 	if ( !radio){
 		cw_dbg(DBG_ELEM_ERR,"Radio ID %d not defined",rid);
 		return 0;
@@ -147,7 +147,7 @@ int cw_radio_cisco_set_state(struct conn * conn, uint8_t *data, int len, int cau
 	MAVLITER_DEFINE(it,conn->radios);
 	mavliter_foreach(&it){
 		mbag_item_t *i = mavliter_get(&it);
-		cw_radio_set_admin_state(conn->radios,i->id,state,cause);
+		cw_radio_set_admin_state(conn->radios,i->iid,state,cause);
 
 	}
 	return 1;	

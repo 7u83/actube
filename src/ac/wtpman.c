@@ -338,16 +338,16 @@ void config_to_sql(struct conn *conn)
 	mavliter_foreach(&it){
 		mbag_item_t * i = mavliter_get(&it);
 		
-		struct cw_item * cwi = cw_item_get_by_id(i->id,capwap_itemdefs);
+		struct cw_item * cwi = cw_item_get_by_name(i->id,capwap_itemdefs);
 		if (cwi){
-	//		DBGX("ID %d,%s",i->id,cwi->cfgname);
+			DBGX("ID %d,%s",i->id,cwi->id);
 
 	//		printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
 			if (i->type->to_str)
 				i->type->to_str(i,str);
 			
-			db_put_wtp_prop(wtp_id,-1,cwi->cfgname,str);
+			db_put_wtp_prop(wtp_id,-1,cwi->id,str);
 
 		}
 		else{
@@ -428,7 +428,9 @@ static void wtpman_run(void *arg)
 	conn->capwap_state=CW_STATE_RUN;
 
 	// XXX testing ...
+	DBGX("Cofig to sql","");
 	config_to_sql(conn);
+
 
 	
 	rc = 0;
@@ -477,10 +479,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
-	wtpman->conn->radios=mbag_create();
+	wtpman->conn->radios=mbag_i_create();
 	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
-//wtpman->conn->capwap_mode=CW_MODE_CISCO;
+wtpman->conn->capwap_mode=CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
 
 	return wtpman;

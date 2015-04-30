@@ -1,5 +1,11 @@
 #include "capwap/mbag.h"
 #include "capwap/capwap_items.h"
+#include "capwap/radio.h"
+
+
+const char * uuuu = CW_ITEM_WTP_NAME;
+const char *uuu = CW_RADIO_ADMIN_STATE;
+
 #include "capwap/conn.h"
 #include "capwap/bstr.h"
 
@@ -9,7 +15,6 @@
 #include "jsmn.h"
 #include "wtp.h"
 #include "capwap/bstr.h"
-#include "capwap/radio.h"
 
 #include "capwap/mavl.h"
 #include "capwap/format.h"
@@ -36,8 +41,8 @@ int cfg_json_put_bstr(char *dst, const char *name, mbag_item_t * i, int n);
 
 
 struct mbag_itemdef {
-	int item_id;
-	const char *cfgname;
+	const char *item_id;
+//	const char *cfgname;
 	int (*setfun) (struct mbag_itemdef *, char *, jsmntok_t *, mbag_t mbag);
 	int (*tojsonfun) (char *dst, const char *name, mbag_item_t * i, int n);
 
@@ -188,7 +193,7 @@ int cfg_json_get_ac_ip_list(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 		}
 
 		cw_aciplist_t aciplist =
-		    mbag_get_mavl(mbag, CW_ITEM_AC_IP_LIST, cw_aciplist_create);
+		    mbag_get_mavl_c(mbag, CW_ITEM_AC_IP_LIST, cw_aciplist_create);
 		mavl_replace(aciplist, acip);
 
 
@@ -222,7 +227,7 @@ int byte_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 int cfg_json_get_vendorstr(struct mbag_itemdef *idef, char *js, jsmntok_t * t,
 			   mbag_t mbag)
 {
-	int item_id = idef->item_id;
+	const char * item_id = idef->item_id;
 
 	*(js + t->end) = 0;
 	char *str = js + t->start;
@@ -251,7 +256,7 @@ int cfg_json_get_bstr(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t
 
 	struct conn *conn = get_conn();
 
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	*(js + t->end) = 0;
 //      char *str = js+t->start;
 	if (t->type != JSMN_STRING) {
@@ -278,7 +283,7 @@ int cfg_json_get_bstr16(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag
 
 	struct conn *conn = get_conn();
 
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	*(js + t->end) = 0;
 //      char *str = js+t->start;
 	if (t->type != JSMN_STRING) {
@@ -296,7 +301,7 @@ int cfg_json_get_dword(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_
 
 	struct conn *conn = get_conn();
 
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	*(js + t->end) = 0;
 //      char *str = js+t->start;
 	if (t->type != JSMN_STRING) {
@@ -313,7 +318,7 @@ int cfg_json_get_word(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t
 
 	struct conn *conn = get_conn();
 
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	*(js + t->end) = 0;
 //      char *str = js+t->start;
 	if (t->type != JSMN_STRING) {
@@ -331,7 +336,7 @@ int cfg_json_get_byte(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t
 
 	struct conn *conn = get_conn();
 
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	*(js + t->end) = 0;
 //      char *str = js+t->start;
 	if (t->type != JSMN_STRING) {
@@ -348,7 +353,7 @@ int cfg_json_get_byte(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag_t
 
 int bstr16_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 {
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	struct conn *conn = get_conn();
 
 	*(js + t->end) = 0;
@@ -367,7 +372,7 @@ int bstr16_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 
 int bstr_local(struct mbag_itemdef *idef, char *js, jsmntok_t * t)
 {
-	int item_id = idef->item_id;
+	const char *item_id = idef->item_id;
 	struct conn *conn = get_conn();
 
 	*(js + t->end) = 0;
@@ -401,42 +406,42 @@ int cfg_json_get_radios(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag
 
 
 struct mbag_itemdef general_cfg[] = {
-	{CW_ITEM_WTP_NAME, "wtp_name", cfg_json_get_bstr16, cfg_json_put_bstr16},
-	{CW_ITEM_WTP_GROUP_NAME, "wtp_group_name", cfg_json_get_bstr16,
+
+	{CW_ITEM_WTP_NAME,  cfg_json_get_bstr16, cfg_json_put_bstr16},
+	{CW_ITEM_WTP_GROUP_NAME, cfg_json_get_bstr16,
 	 cfg_json_put_bstr16},
-	{CW_ITEM_LOCATION_DATA, "location_data", cfg_json_get_bstr16,
+	{CW_ITEM_LOCATION_DATA,  cfg_json_get_bstr16,
 	 cfg_json_put_bstr16},
-	{CW_ITEM_WTP_HARDWARE_VERSION, "hardware_version", cfg_json_get_vendorstr,
+	{CW_ITEM_WTP_HARDWARE_VERSION,  cfg_json_get_vendorstr,
 	 cfg_json_put_vendorstr},
-	{CW_ITEM_WTP_SOFTWARE_VERSION, "software_version", cfg_json_get_vendorstr,
+	{CW_ITEM_WTP_SOFTWARE_VERSION,  cfg_json_get_vendorstr,
 	 cfg_json_put_vendorstr},
-	{CW_ITEM_WTP_BOARD_DATA, "wtp_board_data", wtp_board_data_local,
+	{CW_ITEM_WTP_BOARD_DATA,  wtp_board_data_local,
 	 cfg_json_put_obj},
-	{CW_RADIO_BSSID, "bssid", cfg_json_get_bstr16, cfg_json_put_bstr16},
-	{CW_ITEM_CAPWAP_TIMERS, "capwap_timers", cfg_json_get_word, cfg_json_put_word},
-	{CW_ITEM_IDLE_TIMEOUT, "idle_timeout", cfg_json_get_dword, cfg_json_put_dword},
-	{CW_ITEM_AC_IP_LIST, "ac_ip_list", cfg_json_get_ac_ip_list,
+	{CW_RADIO_BSSID,  cfg_json_get_bstr16, cfg_json_put_bstr16},
+	{CW_ITEM_CAPWAP_TIMERS,  cfg_json_get_word, cfg_json_put_word},
+	{CW_ITEM_IDLE_TIMEOUT,  cfg_json_get_dword, cfg_json_put_dword},
+	{CW_ITEM_AC_IP_LIST,  cfg_json_get_ac_ip_list,
 	 cfg_json_put_ac_ip_list},
 
-	{CW_ITEM_AP_MODE_AND_TYPE, "ap_mode_and_type", cfg_json_get_word,
+	{CW_ITEM_AP_MODE_AND_TYPE, cfg_json_get_word,
 	 cfg_json_put_word},
 
-	{CW_ITEM_WTP_FRAME_TUNNEL_MODE, "wtp_frame_tunnel_mode", cfg_json_get_byte,
+	{CW_ITEM_WTP_FRAME_TUNNEL_MODE, cfg_json_get_byte,
 	 cfg_json_put_byte},
-	{CW_ITEM_WTP_MAC_TYPE, "wtp_mac_type", cfg_json_get_byte, cfg_json_put_byte},
+	{CW_ITEM_WTP_MAC_TYPE,  cfg_json_get_byte, cfg_json_put_byte},
 
-	{CW_ITEM_RADIOS, "radios", cfg_json_get_radios, cfg_json_put_radios},
+	{CW_ITEM_RADIOS,  cfg_json_get_radios, cfg_json_put_radios},
 
 
-	{CW_ITEM_AC_NAME_WITH_PRIORITY, "ac_name_with_priority",
+	{CW_ITEM_AC_NAME_WITH_PRIORITY, 
 	 cfg_json_get_ac_name_with_priority, cfg_json_put_acobj},
 
-	{CW_ITEM_AC_HASH_VALUE, "ac_hash_value", cfg_json_get_bstr16,
+	{CW_ITEM_AC_HASH_VALUE,  cfg_json_get_bstr16,
 	 cfg_json_put_bstr16},
 
-	{CW_ITEM_CISCO_BOARD_DATA_OPTIONS, "wtp_board_data_options", cfg_json_get_bstr16,
+	{CW_ITEM_CISCO_BOARD_DATA_OPTIONS,  cfg_json_get_bstr16,
 	 cfg_json_put_bstr16},
-
 
 
 /*	{CW_ITEM_WTP_FRAME_TUNNEL_MODE,"frame_tunnel_mode",byte_local},
@@ -450,31 +455,35 @@ struct mbag_itemdef general_cfg[] = {
 
 
 struct mbag_itemdef board_data_cfg[] = {
-	{CW_ITEM_WTP_BOARD_MODELNO, "model_no", cfg_json_get_bstr16, cfg_json_put_bstr16},
-	{CW_ITEM_WTP_BOARD_SERIALNO, "serial_no", cfg_json_get_bstr16,
+	{CW_ITEM_WTP_BOARD_MODELNO, cfg_json_get_bstr16, cfg_json_put_bstr16},
+	{CW_ITEM_WTP_BOARD_SERIALNO,  cfg_json_get_bstr16,
 	 cfg_json_put_bstr16},
-	{CW_ITEM_WTP_BOARD_VENDOR, "vendor_id", cfg_json_get_dword, cfg_json_put_dword},
+	{CW_ITEM_WTP_BOARD_VENDOR,  cfg_json_get_dword, cfg_json_put_dword},
 
 	{0, 0, 0}
 };
 
 
-struct mbag_itemdef radio_cfg[] = {
-	{CW_RADIO_ADMIN_STATE, "admin_state", cfg_json_get_byte, cfg_json_put_byte},
-	{CW_RADIO_TYPE, "radio_type", cfg_json_get_dword, cfg_json_put_dword},
-/*	{CW_RADIO_OPER_STATE,"oper_state", cfg_json_get_word,cfg_json_put_word},*/
-	{CW_RADIO_BSSID,"bssid", cfg_json_get_bstr,cfg_json_put_bstr},
+
+typedef struct mbag_itemdef xxx;
+xxx radio_cfg[] = {
+
+	{CW_RADIO_ADMIN_STATE,  cfg_json_get_byte, cfg_json_put_byte},
+
+	{CW_RADIO_TYPE,  cfg_json_get_dword, cfg_json_put_dword},
+	{CW_RADIO_BSSID, cfg_json_get_bstr,cfg_json_put_bstr},
+
 	{0,0,0}
 	
 
 };
 
 
-struct mbag_itemdef *get_idef_by_id(struct mbag_itemdef *cfg, uint32_t id)
+struct mbag_itemdef *get_idef_by_id(struct mbag_itemdef *cfg, const char * id)
 {
 	int i = 0;
 	for (i = 0; cfg[i].item_id; i++) {
-		if (cfg[i].item_id == id) {
+		if (strcmp(cfg[i].item_id,id)==0) {
 			return &cfg[i];
 		}
 	}
@@ -636,14 +645,14 @@ int cfg_json_put_radios(char *dst, const char *name, mbag_item_t * i, int n)
 	const char * comma="";
 	mavliter_foreach(&radios) {
 		mbag_item_t *i = mavliter_get(&radios);
-		int rid = i->id;
+		int rid = i->iid;
 		mbag_t radio = i->data;
 
 		d+=sprintf(d,"%s",comma);
 		comma=",\n";
 		memset(d, '\t', n+1);
 		d += n+1;
-		d += sprintf(d, "\"%d\":", i->id);
+		d += sprintf(d, "\"%d\":", i->iid);
 		
 		d += mbag_tojson(d, i->data, radio_cfg, n+1);
 		
@@ -735,7 +744,7 @@ int mbag_tojson(char *dst, mbag_t m, struct mbag_itemdef *defs, int n)
 
 		d += sprintf(d, "%s", delim);
 		delim = ",\n";
-		d += idef->tojsonfun(d, idef->cfgname, i, n + 1);
+		d += idef->tojsonfun(d, idef->item_id, i, n + 1);
 
 	}
 	d += sprintf(d, "\n");
@@ -766,7 +775,7 @@ struct mbag_itemdef *get_cfg(struct mbag_itemdef *cfg, const char *key)
 {
 	int i = 0;
 	for (i = 0; cfg[i].item_id; i++) {
-		if (!strcmp(key, cfg[i].cfgname)) {
+		if (!strcmp(key, cfg[i].item_id)) {
 			return &cfg[i];
 		}
 	}
@@ -872,7 +881,7 @@ int cfg_json_get_ac_name_with_priority(struct mbag_itemdef *idef, char *js, jsmn
 
 	struct conn *conn = get_conn();
 	cw_acpriolist_t al =
-	    mbag_get_mavl(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY,
+	    mbag_get_mavl_c(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY,
 			  cw_acpriolist_create);
 	if (!al)
 		return skip(t + 1);
@@ -901,10 +910,10 @@ static int cfg_json_get_radios_cb(char *js, jsmntok_t * t,
 	struct conn * conn = get_conn();
 
 
-	mbag_t radio = mbag_get_mbag(conn->radios,atoi(key),NULL);
+	mbag_t radio = mbag_i_get_mbag(conn->radios,atoi(key),NULL);
 	if ( !radio ){
 		radio=mbag_create();
-		mbag_set_mbag(conn->radios,atoi(key),radio);
+		mbag_i_set_mbag(conn->radios,atoi(key),radio);
 		
 		//printf("Radio %d not found\n",atoi(key));
 		//return skip(t+1);
@@ -929,7 +938,7 @@ int cfg_json_get_radios(struct mbag_itemdef *idef, char *js, jsmntok_t * t, mbag
 
 	struct conn *conn = get_conn();
 	cw_acpriolist_t al =
-	    mbag_get_mavl(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY,
+	    mbag_get_mavl_c(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY,
 			  cw_acpriolist_create);
 	if (!al)
 		return skip(t + 1);
