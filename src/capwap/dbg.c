@@ -502,9 +502,9 @@ int cw_format_item(char *dst,mbag_item_t * item)
 {
 	*dst=0;
 	if (item->type==MBAG_BSTR16){
-			strncpy(dst,bstr16_data(item->data),bstr16_len(item->data));
-			*(dst+bstr16_len(item->data))=0;
-			return bstr16_len(item->data);
+		strncpy(dst,(char*)bstr16_data(item->data),bstr16_len(item->data));
+		*(dst+bstr16_len(item->data))=0;
+		return bstr16_len(item->data);
 
 
 	}

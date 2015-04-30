@@ -27,7 +27,7 @@ static int mbag_bstr16str(void *item,char *dst)
 static int mbag_strstr(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "%s", i->data);
+        return sprintf(dst, "%s", (char*)i->data);
 }
 
 
