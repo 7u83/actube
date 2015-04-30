@@ -7,9 +7,7 @@
 
 struct cw_item {
 	/** ID */
-	uint32_t id;
-	/** Name of the item in cfg files */
-	const char * cfgname;
+	const char *id;
 	/** Type */
 	mbagtype_t type;
 	

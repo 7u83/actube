@@ -22,7 +22,7 @@ int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
 				 uint8_t * data, int len,struct sockaddr *from)
 {
 	cw_aciplist_t list =
-	    mbag_get_avltree_c(conn->incomming,a->item_id,cw_aciplist_create);
+	    mbag_get_mavl_c(conn->incomming,a->item_id,cw_aciplist_create);
 
 	if (!list) {
 		cw_log(LOG_ERR, "Error: Can't allocate CAWAP IP Adress List");

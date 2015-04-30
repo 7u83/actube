@@ -104,7 +104,7 @@ int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 		return 0;
 
 	int rid = cw_get_byte(data);
-	mbag_t radio = mbag_get_mbag(conn->radios, rid, NULL);
+	mbag_t radio = mbag_i_get_mbag(conn->radios, rid, NULL);
 	if (!radio) {
 		if (a->vendor_id != 0
 		    || ( (a->vendor_id == 0) && (a->msg_id != CW_MSG_DISCOVERY_REQUEST
@@ -112,7 +112,7 @@ int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 			cw_dbg(DBG_ELEM_ERR, "Radio not found %d", rid);
 			return 0;
 		}
-		mbag_set_mbag(conn->radios,rid,mbag_create());
+		mbag_i_set_mbag(conn->radios,rid,mbag_create());
 	}
 
 

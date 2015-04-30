@@ -7,7 +7,7 @@
 
 static int cmp(const void *v1,const void*v2)
 {
-	return  *((int*)v1) - *((char*)v2);
+	return  *((int*)v1) - *((int*)v2);
 }
 
 static void del(void* d)
@@ -16,14 +16,14 @@ static void del(void* d)
 	return;
 }
 
-struct avltree * intavltree_create()
+struct mavl * intavltree_create()
 {
-	return avltree_create(cmp,del);	
+	return mavl_create(cmp,del);	
 }
 
-int * intavltree_add(struct avltree * t, int val)
+int * intavltree_add(struct mavl * t, int val)
 {
-	int *v = avltree_get(t,&val);
+	int *v = mavl_get(t,&val);
 	if (v) 
 		return v;
 	
@@ -31,5 +31,5 @@ int * intavltree_add(struct avltree * t, int val)
 	if (!v)
 		return NULL;
 	*v=val;
-	return avltree_add(t,v);
+	return mavl_add(t,v);
 }

@@ -43,10 +43,11 @@ typedef const struct mbag_typedef * mbagtype_t;
 
 
 
+
 struct mbag_item{
 	union {
-		uint32_t id;
-		const char *name;
+		uint32_t iid;
+		const char *id;
 	};
 	const struct mbag_typedef * type;
 	union {
@@ -58,6 +59,7 @@ struct mbag_item{
 };
 
 typedef mavl_t mbag_t;
+
 typedef struct mbag_item mbag_item_t;
 
 
@@ -91,13 +93,14 @@ extern const struct mbag_typedef mbag_type_const_data;
 
 
 extern mbag_t mbag_create();
+extern mbag_t mbag_i_create();
 
-extern struct mbag_item *mbag_item_create(mbag_t s, uint32_t id);
-extern struct mbag_item *strmbag_item_create(mbag_t s, char *name);
+struct mbag_item *mbag_item_create(mbag_t s, const char *id);
+struct mbag_item *mbag_i_item_create(mbag_t s, uint32_t id);
 
 
 
-static inline int mbag_set_byte(mbag_t s, uint32_t id, uint8_t byte)
+static inline int mbag_set_byte(mbag_t s, const char *id, uint8_t byte)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -107,7 +110,7 @@ static inline int mbag_set_byte(mbag_t s, uint32_t id, uint8_t byte)
 	return 1;
 }
 
-static inline int mbag_set_word(mbag_t s, uint32_t id, uint16_t word)
+static inline int mbag_set_word(mbag_t s, const char *id, uint16_t word)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -119,7 +122,7 @@ static inline int mbag_set_word(mbag_t s, uint32_t id, uint16_t word)
 
 
 
-static inline int mbag_set_dword(mbag_t s, uint32_t id, uint32_t dword)
+static inline int mbag_set_dword(mbag_t s, const char *id, uint32_t dword)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -130,8 +133,17 @@ static inline int mbag_set_dword(mbag_t s, uint32_t id, uint32_t dword)
 }
 
 
+static inline int mbag_i_set_mbag(mbag_t s, uint32_t id, mbag_t mbag)
+{
+	struct mbag_item *i = mbag_i_item_create(s, id);
+	if (!i)
+		return 0;
+	i->data = mbag;
+	i->type = &mbag_type_mbag;
+	return 1;
+}
 
-static inline int mbag_set_mbag(mbag_t s, uint32_t id, mbag_t mbag)
+static inline int mbag_set_mbag(mbag_t s, const char *id, mbag_t mbag)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -141,7 +153,7 @@ static inline int mbag_set_mbag(mbag_t s, uint32_t id, mbag_t mbag)
 	return 1;
 }
 
-static inline int mbag_set_data(mbag_t s, uint32_t id, const struct mbag_typedef *type, void *data)
+static inline int mbag_set_data(mbag_t s, const char *id, const struct mbag_typedef *type, void *data)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -154,7 +166,7 @@ static inline int mbag_set_data(mbag_t s, uint32_t id, const struct mbag_typedef
 }
 
 
-static inline vendorstr_t mbag_set_vendorstr(mbag_t s, uint32_t id, uint32_t vendor_id,
+static inline vendorstr_t mbag_set_vendorstr(mbag_t s, const char *id, uint32_t vendor_id,
 			     uint8_t * vendorstr, int len)
 {
 	mbag_item_t *i = mbag_item_create(s, id);
@@ -174,7 +186,7 @@ static inline vendorstr_t mbag_set_vendorstr(mbag_t s, uint32_t id, uint32_t ven
 #define mbag_set_bstr16(m,i,d) mbag_set_data(m,i,MBAG_BSTR16,d)
 
 
-static inline mbag_item_t *mbag_get(mbag_t s, uint32_t id)
+static inline mbag_item_t *mbag_get(mbag_t s, const char *id)
 {
 	mbag_item_t i;
 	i.id = id;
@@ -182,7 +194,18 @@ static inline mbag_item_t *mbag_get(mbag_t s, uint32_t id)
 	return mavl_get(s, &i);
 }
 
-static inline void mbag_del(mbag_t s,uint32_t id)
+
+static inline mbag_item_t *mbag_i_get(mbag_t s, uint32_t id)
+{
+	mbag_item_t i;
+	i.iid = id;
+	i.type=0;
+	return mavl_get(s, &i);
+}
+
+
+
+static inline void mbag_del(mbag_t s,const char *id)
 {
 	mbag_item_t i;
 	i.id = id;
@@ -190,7 +213,7 @@ static inline void mbag_del(mbag_t s,uint32_t id)
 	mavl_del(s, &i);
 }
 
-static inline void * mbag_get_data(mbag_t s, uint32_t id, const struct mbag_typedef * type, void * def)
+static inline void * mbag_get_data(mbag_t s, const char *id, const struct mbag_typedef * type, void * def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -203,7 +226,7 @@ static inline void * mbag_get_data(mbag_t s, uint32_t id, const struct mbag_type
 #define mbag_get_bstr(m,i,d) mbag_get_data(m,i,MBAG_BSTR,d)
 #define mbag_get_bstr16(m,i,d) mbag_get_data(m,i,MBAG_BSTR16,d)
 
-static inline void * mbag_get_raw(mbag_t s, uint32_t id, void * def)
+static inline void * mbag_get_raw(mbag_t s, const char *id, void * def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -213,7 +236,7 @@ static inline void * mbag_get_raw(mbag_t s, uint32_t id, void * def)
 
 
 
-static inline uint8_t mbag_get_byte(mbag_t s, uint32_t id, uint8_t def)
+static inline uint8_t mbag_get_byte(mbag_t s, const char *id, uint8_t def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -223,7 +246,7 @@ static inline uint8_t mbag_get_byte(mbag_t s, uint32_t id, uint8_t def)
 	return i->byte;
 }
 
-static inline uint16_t mbag_get_word(mbag_t s, uint32_t id, uint16_t def)
+static inline uint16_t mbag_get_word(mbag_t s, const char *id, uint16_t def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -235,7 +258,7 @@ static inline uint16_t mbag_get_word(mbag_t s, uint32_t id, uint16_t def)
 
 
 
-static inline uint32_t mbag_get_dword(mbag_t s, uint32_t id, uint32_t def)
+static inline uint32_t mbag_get_dword(mbag_t s, const char *id, uint32_t def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -246,8 +269,18 @@ static inline uint32_t mbag_get_dword(mbag_t s, uint32_t id, uint32_t def)
 }
 
 
+static inline mbag_t mbag_i_get_mbag(mbag_t s, uint32_t id, mbag_t def)
+{
+	struct mbag_item *i = mbag_i_get(s, id);
+	if (!i)
+		return def;
+	if (i->type != MBAG_MBAG)
+		return def;
+	return i->data;
+}
 
-static inline mbag_t mbag_get_mbag(mbag_t s, uint32_t id, mbag_t def)
+
+static inline mbag_t mbag_get_mbag(mbag_t s, const char *id, mbag_t def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -257,7 +290,7 @@ static inline mbag_t mbag_get_mbag(mbag_t s, uint32_t id, mbag_t def)
 	return i->data;
 }
 
-static inline mbag_item_t * mbag_set_bstrn(mbag_t s, uint32_t id, uint8_t * data, int len)
+static inline mbag_item_t * mbag_set_bstrn(mbag_t s, const char *id, uint8_t * data, int len)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -267,7 +300,7 @@ static inline mbag_item_t * mbag_set_bstrn(mbag_t s, uint32_t id, uint8_t * data
 	return i;
 }
 
-static inline struct avltree *mbag_get_avltree(mbag_t s, uint32_t id)
+static inline struct mavl *mbag_get_mavl(mbag_t s, const char *id)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -277,7 +310,17 @@ static inline struct avltree *mbag_get_avltree(mbag_t s, uint32_t id)
 	return i->data;
 }
 
-static inline int mbag_set_avltree(mbag_t s, uint32_t id, struct avltree *t)
+static inline int mbag_i_set_mavl(mbag_t s, uint32_t id, mavl_t t)
+{
+	struct mbag_item *i = mbag_i_item_create(s, id);
+	if (!i)
+		return 0;
+	i->type = MBAG_AVLTREE;
+	i->data = t;
+	return 1;
+}
+
+static inline int mbag_set_mavl(mbag_t s, const char *id, mavl_t t)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -287,21 +330,11 @@ static inline int mbag_set_avltree(mbag_t s, uint32_t id, struct avltree *t)
 	return 1;
 }
 
-static inline int mbag_set_mavl(mbag_t s, uint32_t id, mavl_t t)
+/*
+static inline struct mavl *mbag_get_avltree_c(mbag_t s, const char *id,
+							 struct mavl *(creator) ())
 {
-	struct mbag_item *i = mbag_item_create(s, id);
-	if (!i)
-		return 0;
-	i->type = MBAG_AVLTREE;
-	i->data = t;
-	return 1;
-}
-
-
-static inline struct avltree *mbag_get_avltree_c(mbag_t s, uint32_t id,
-							 struct avltree *(creator) ())
-{
-	struct avltree *avltree = mbag_get_avltree(s, id);
+	struct mavl * avltree = mbag_get_mavl(s, id);
 	if (avltree){
 		return avltree;
 	}
@@ -309,12 +342,12 @@ static inline struct avltree *mbag_get_avltree_c(mbag_t s, uint32_t id,
 	avltree = creator();
 	if (!avltree)
 		return NULL;
-	mbag_set_avltree(s, id, avltree);
+	mbag_set_mavl(s, id, avltree);
 	return avltree;
 }
+*/
 
-
-static inline mavl_t mbag_get_mavl(mbag_t s, uint32_t id,
+static inline mavl_t mbag_get_mavl_c(mbag_t s, const char *id,
 							 mavl_t (creator) ())
 {
 	struct mbag_item *i = mbag_get(s, id);
@@ -330,12 +363,28 @@ static inline mavl_t mbag_get_mavl(mbag_t s, uint32_t id,
 	return avltree;
 }
 
+static inline mavl_t mbag_i_get_mavl(mbag_t s, uint32_t id,
+							 mavl_t (creator) ())
+{
+	struct mbag_item *i = mbag_i_get(s, id);
+	if (i)
+		return i->data;
+
+	if (!creator)
+		return NULL;
+	mavl_t avltree = creator();
+	if (!avltree)
+		return NULL;
+	mbag_i_set_mavl(s, id, avltree);
+	return avltree;
+}
+
 
 
 
 /** @} */
 
-static inline char *mbag_get_str(mbag_t s, uint32_t id, char *def)
+static inline char *mbag_get_str(mbag_t s, const char *id, char *def)
 {
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
@@ -344,7 +393,7 @@ static inline char *mbag_get_str(mbag_t s, uint32_t id, char *def)
 
 };
 
-static inline int mbag_set_str(mbag_t s, uint32_t id, const char *str)
+static inline int mbag_set_str(mbag_t s, const char *id, const char *str)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -393,7 +442,7 @@ static inline void mbag_item_release_data_ptr(struct mbag_item *item, void *data
 
 }
 
-static inline int mbag_set_strn(mbag_t s, uint32_t id, const char *str, int n)
+static inline int mbag_set_strn(mbag_t s, const char *id, const char *str, int n)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -403,7 +452,7 @@ static inline int mbag_set_strn(mbag_t s, uint32_t id, const char *str, int n)
 	return 1;
 }
 
-static inline int mbag_set_bstr16n(mbag_t s, uint32_t id, uint8_t * data, int len)
+static inline int mbag_set_bstr16n(mbag_t s, const char *id, uint8_t * data, int len)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -415,7 +464,7 @@ static inline int mbag_set_bstr16n(mbag_t s, uint32_t id, uint8_t * data, int le
 
 
 
-static inline mbag_item_t * mbag_set_const_ptr(mbag_t s, uint32_t id, void *ptr)
+static inline mbag_item_t * mbag_set_const_ptr(mbag_t s, const char *id, void *ptr)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -426,7 +475,7 @@ static inline mbag_item_t * mbag_set_const_ptr(mbag_t s, uint32_t id, void *ptr)
 }
 
 
-static inline int mbag_set_ptr(mbag_t s, uint32_t id, void *ptr)
+static inline int mbag_set_ptr(mbag_t s, const char *id, void *ptr)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
@@ -439,7 +488,7 @@ static inline int mbag_set_ptr(mbag_t s, uint32_t id, void *ptr)
 
 
 
-static inline int mbag_set_fun(mbag_t s, uint32_t id,
+static inline int mbag_set_fun(mbag_t s, const char *id,
 			 void *(*funget) (void *arg),
 			 void (*funfree) (void *arg, void *data), void *arg)
 {

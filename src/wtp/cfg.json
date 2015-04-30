@@ -1,36 +1,39 @@
 {
-	"idle_timeout":"300",
-	"wtp_name":"Kaffe-Point",
-	"wtp_mac_type":"1",
-	"wtp_frame_tunnel_mode":"4",
-	"hardware_version":["4232704",".x01000000"],
-	"software_version":["4232704",".x08007300"],
-	"wtp_board_data":{
-		"vendor_id":"4232704",
-		"model_no":"AIR-LAP1131AG-E-K9",
-		"serial_no":"2045"
-	},
-	"capwap_timers":"2590",
 	"ac_ip_list":[
 		"192.168.0.1",
 		"192.168.0.13",
 		"192.168.0.15",
 		"fe80::219:dbff:fee0:9327"
 	],
-	"location_data":"Germany",
 	"ac_name_with_priority":{
 		"":"2",
 		"Master AC":"1"
 	},
-	"wtp_group_name":"tobias",
-	"ap_mode_and_type":"512",
-	"wtp_board_data_options":".x00010000",
+	"bssid":"",
+	"capwap_timers":"2590",
+	"idle_timeout":"300",
+	"location_data":"Germany",
 	"radios":{
 		"0":{
-			"admin_state":"2",
-			"radio_type":"1",
+			"admin_state":"1",
 			"bssid":".x123456789abc"
+		},
+		"1":{
+			"admin_state":"1",
+			"bssid":".xaabbccddeeff"
+		},
+		"2":{
+			"admin_state":"1",
+			"bssid":".xaabbccddeeff"
 		}
 	},
-	"bssid":""
+	"wtp_board_data":{
+		"model_no":"AIR-LAP1131AG-E-K9",
+		"serial_no":"2045",
+		"vendor_id":"4232704"
+	},
+	"wtp_frame_tunnel_mode":"4",
+	"wtp_group_name":"tobias",
+	"wtp_mac_type":"1",
+	"wtp_name":"Kaffe-Point"
 }

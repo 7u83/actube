@@ -27,7 +27,7 @@ int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, 
 		}
 
 		/* Put the radio ID */
-		cw_put_byte(d+4,radioitem->id);
+		cw_put_byte(d+4,radioitem->iid);
 		
 		/* Get the operational state and cause */
 		uint16_t os = ositem->word;

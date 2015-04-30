@@ -55,7 +55,7 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 
 	/* get the AC Name with Priority list */
 	cw_acpriolist_t priolist;
-	priolist = mbag_get_avltree(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
+	priolist = mbag_get_mavl(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
 
 	cw_aciplist_t resultlist=cw_aciplist_create();
 
@@ -79,7 +79,7 @@ printf("nprio: %d\n",priolist->count);
 		}
 
 		cw_aciplist_t acips =
-		    mbag_get_avltree(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
+		    mbag_get_mavl(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 
 		DEFINE_AVLITER(i2, acips);
 		avliter_foreach(&i2){
@@ -135,7 +135,7 @@ static int run_discovery(struct conn *conn)
 
 
 	mbag_t discs;
-	discs = mbag_get_avltree(conn->remote, CW_ITEM_DISCOVERIES);
+	discs = mbag_get_mavl(conn->remote, CW_ITEM_DISCOVERIES);
 
 
 	if (!discs) {
@@ -159,7 +159,7 @@ static int run_discovery(struct conn *conn)
 
 	mavl_del_all(conn->remote);
 
-	mbag_set_avltree(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
+	mbag_set_mavl(conn->local,CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,list);
 
 	return 1;
 }
