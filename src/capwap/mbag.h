@@ -46,7 +46,7 @@ typedef const struct mbag_typedef * mbagtype_t;
 struct mbag_item{
 	union {
 		uint32_t id;
-		char *name;
+		const char *name;
 	};
 	const struct mbag_typedef * type;
 	union {
