@@ -119,7 +119,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 	int bits;
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_INSECURE);
-#elif
+#else
 	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_WEAK);
 #endif
         /* Generate Diffie-Hellman parameters - for use with DHE
