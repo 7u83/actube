@@ -115,3 +115,15 @@ int cw_send_request(struct conn *conn,int msg_id)
 
 	return rc;
 }
+
+
+// XXX find a better name for this function 
+int cw_send_request_2()
+{
+
+
+
+
+	return 0;
+}
+

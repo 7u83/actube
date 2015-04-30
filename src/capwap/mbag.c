@@ -14,7 +14,7 @@ static int mbag_bstr16str(void *item,char *dst)
 
 
         if (utf8) {
-                d += sprintf(d, "\"%.*s\"", bstr16_len(i->data), bstr16_data(i->data));
+                d += sprintf(d, "%.*s", bstr16_len(i->data), bstr16_data(i->data));
         } else {
                 d += sprintf(d, "\".x");
                 d += cw_format_hex(d, bstr16_data(i->data), bstr16_len(i->data));
@@ -27,7 +27,7 @@ static int mbag_bstr16str(void *item,char *dst)
 static int mbag_strstr(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "\"%s\"", i->data);
+        return sprintf(dst, "%s", i->data);
 }
 
 

@@ -27,7 +27,7 @@ int db_init()
 {
 	const char * filename="ac.sqlite3";
 	
-	cw_dbg(DBG_INFO,"Initializing Sqlite3 DB: %s",filename);
+	cw_dbg(DBG_INFO,"Initializing Sqlite3 DB: %s, SQLite3 Version %s",filename,SQLITE_VERSION);
 	int rc = sqlite3_open(filename,&handle);
 	if (rc != SQLITE_OK)
 	{
@@ -51,7 +51,7 @@ int db_init()
 
 static sqlite3_stmt * ping_stmt;
 static sqlite3_stmt * put_wtp_prop_stmt;
-static sqlite3_stmt * get_task_stmt;
+static sqlite3_stmt * get_tasks_stmt;
 
 
 
@@ -76,15 +76,23 @@ int db_start()
 	rc = sqlite3_bind_text(ping_stmt,1,conf_acid,-1,SQLITE_STATIC);
 
 
+	/* Prepare statement to update a WTP property */
 	sql = "INSERT OR REPLACE INTO wtpprops\
                 (wtpid,rid,prop,val,upd)\
                 VALUES (?,?,?,?,?)";
 
-	/* Prepare statement to update a WTP property */
 	rc = sqlite3_prepare_v2(handle, sql,-1, &put_wtp_prop_stmt,0);
 	if (rc) 
 		goto errX;
 
+
+	
+	sql = "SELECT * FROM wtpprops WHERE upd=0 AND wtpid=?";
+	rc = sqlite3_prepare_v2(handle, sql,-1, &get_tasks_stmt,0);
+	if (rc) 
+		goto errX;
+
+ 
 
 
 	return 1;
@@ -141,8 +149,34 @@ errX:
 
 int db_get_tasks(const char * wtpid)
 {
-	
+		
+	sqlite3_reset(put_wtp_prop_stmt);
+	sqlite3_clear_bindings(put_wtp_prop_stmt);
 
+	if(sqlite3_bind_text(get_tasks_stmt,1,wtpid,-1,SQLITE_STATIC))
+		goto errX;
+
+	int rc;
+
+	rc = sqlite3_step(get_tasks_stmt);
+	if (rc == SQLITE_ROW) {
+		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,0));
+		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,1));
+		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,2));
+		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,3));
+		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,4));
+	}
+
+	DBGX("The SQL RC: %d\n",rc);
+	return 1;
+
+errX:
+	if (rc) {
+		cw_log(LOG_ERR,"Can't update database with WTP props: %d - %s",
+			rc,sqlite3_errmsg(handle));
+	}
+
+	return 0;
 
 }
 
