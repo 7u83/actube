@@ -6,6 +6,10 @@ mkdir build
 cd build
 cmake ..
 make ubox
+mkdir -p /usr/local/include/libubox
+cp ../*.h /usr/local/include/libubox
+cp libubox.so /usr/local/lib
+ldconfig
 cd ../..
 
 git clone git://nbd.name/uci.git uci
@@ -18,6 +22,7 @@ LDFLAGS=-L../../libubox/build/
 export CFLAGS
 export LDFLAGS
 
-cmake ..
+cmake .. -DBUILD_LUA:BOOL=OFF
 make uci cli
 make install
+ldconfig
