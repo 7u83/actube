@@ -87,7 +87,6 @@ LWAPPOBJS = \
 	lw_put_cisco_path_mtu.o \
 	lw_put_80211_wtp_wlan_radio_configuration.o \
 	lw_readelem_vendor_specific.o \
-	lw_vendor_id_to_str.o \
 	lw_elem_id_to_str.o \
 	lw_msg_id_to_str.o \
 	lw_cisco_id_to_str.o \
@@ -97,6 +96,7 @@ LWAPPOBJS = \
 #	lw_readelem_wtp_name.o \
 	lw_readelem_wtp_board_data.o \
 	cw_log_debug.o \
+	lw_vendor_id_to_str.o \
 
 
 # LWAPP cisco vendor specific objs
