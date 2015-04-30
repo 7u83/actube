@@ -444,7 +444,7 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);
 		sprintf(vendorname, "%s/%s/%s",
 			cw_strelemp(conn->actions, msgelem),
-			(char *) lw_vendor_id_to_str(vendor_id), vendor_details);
+			(char *) cw_strvendor(vendor_id), vendor_details);
 		elemname = vendorname;
 
 	} else {
@@ -550,7 +550,7 @@ static int cw_format_version(char *s, vendorstr_t ver, char * def)
 	}
 
 	uint32_t vendor = vendorstr_get_vendor_id(ver);
-	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, lw_vendor_id_to_str(vendor));
+	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_strvendor(vendor));
 	return rs;	
 }
 
