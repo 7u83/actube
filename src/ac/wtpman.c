@@ -480,7 +480,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	wtpman->conn->radios=mbag_create();
 	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
-wtpman->conn->capwap_mode=CW_MODE_CISCO;
+//wtpman->conn->capwap_mode=CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
 
 	return wtpman;
@@ -533,9 +533,9 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 	}
 */
 
-	char wi[4096];
-	wtpinfo_print(wi, &wtpman->wtpinfo);
-	printf("WTPINFO: \n%s\n", wi);
+//	char wi[4096];
+//	wtpinfo_print(wi, &wtpman->wtpinfo);
+//	printf("WTPINFO: \n%s\n", wi);
 
 
 
