@@ -438,6 +438,8 @@ static void wtpman_run(void *arg)
 			if (errno != EAGAIN)
 				break;
 		}
+
+		db_get_tasks(sock_addr2str(&conn->addr));
 	}
 
 
