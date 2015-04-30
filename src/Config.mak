@@ -13,8 +13,8 @@ GNUTLS_VERSION=3.3.9
 USE_CONTRIB_GNUTLS=0
 
 # Compiler to use
-#CC=clang
-CC=gcc
+CC=clang
+#CC=gcc
 #CC=mips-openwrt-linux-uclibc-gcc
 #LD=mips-openwrt-linux-uclibc-ld
 #AR=mips-openwrt-linux-uclibc-ar

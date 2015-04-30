@@ -67,7 +67,7 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
 
 typedef uint8_t *bstr16_t;
 #define bstr16_len(s) ( *((uint16_t*)(s)) )
-#define bstr16_data(s) ((s)+2)
+#define bstr16_data(s) (((uint8_t*)s)+2)
 #define bstr16_size(l) (l+2)
 #define BSTR16_MAX_LEN (0xffff-2)
 
