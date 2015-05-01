@@ -12,7 +12,7 @@ struct mavl *mavl_create(int (*cmp) (const void *, const void *),
 	struct mavl *t = malloc(sizeof(struct mavl));
 	if (!t)
 		return NULL;
-	t->root = 0;
+	t->root = NULL;
 	t->count = 0;
 	t->cmp = cmp;
 	t->del = del;
