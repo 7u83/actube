@@ -27,6 +27,7 @@
 #include "mbag.h"
 #include "strheap.h"
 #include "intavltree.h"
+#include "item.h"
 
 
 
@@ -131,6 +132,7 @@ struct cw_actiondef{
 	cw_actionlist_out_t out;
 	cw_strheap_t strmsg;
 	cw_strheap_t strelem;
+	cw_itemdefheap_t items;
 
 	/** Supported Wireless Binding IDs (WBID) */
 	struct avltree * wbids;
