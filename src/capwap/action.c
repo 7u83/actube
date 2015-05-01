@@ -154,10 +154,10 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
 	}
 	else{
 		if (!e1->item_id) {
-			r = strcmp("", e2->item_id);
+			r = strcmp(CW_ITEM_NONE, e2->item_id);
 		}
 		else if (!e2->item_id){
-			r = strcmp(e1->item_id,"");
+			r = strcmp(e1->item_id,CW_ITEM_NONE);
 		}
 		else{
 			r = strcmp(e1->item_id, e2->item_id);
@@ -185,7 +185,7 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
 void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
 {
 
-	void *r = mavl_replace_data(t, a, sizeof(struct cw_action_in));
+	void *r = mavl_replace_data(t, a, s); //sizeof(struct cw_action_in));
 	if (r) {
 		return r;
 	}
@@ -199,6 +199,7 @@ void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
 
 }
 
+#include "dbg.h" // Tube
 
 /**
  * Create an action list for outgoing message lements
@@ -212,6 +213,7 @@ cw_actionlist_out_t cw_actionlist_out_create()
 
 cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a)
 {
+DBGX("Adding out action: %d %d %p ",a->msg_id,a->elem_id,a->item_id);
 	return cw_actionlist_add(t, a, sizeof(struct cw_action_out));
 }
 
