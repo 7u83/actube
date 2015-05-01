@@ -46,19 +46,19 @@ struct frag {
 	uint8_t * header;
 };
 
-typedef struct frag FRAGMAN;
+typedef struct frag frag_t; //FRAGMAN;
 
 
 //extern struct frag * fragman_add(struct frag * frags[], uint8_t *packet, int len); // struct cw_transport_header * th)
 //extern uint8_t * fragman_add(struct frag * frags, uint8_t *packet, int len); // struct cw_transport_header * th)
-extern uint8_t * fragman_add( FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen );
+extern uint8_t * fragman_add( frag_t * frags, uint8_t *packet, int hlen, int payloadlen );
 
-extern FRAGMAN * fragman_create();
-extern void fragman_destroy(FRAGMAN * frags);
+extern frag_t * fragman_create();
+extern void fragman_destroy(frag_t * frags);
 
 
 //extern frag_init(struct frag ** frag[]);
-extern void fragman_free(FRAGMAN * frags,struct frag * f);
+extern void fragman_free(frag_t * frags,struct frag * f);
 
 
 #endif
