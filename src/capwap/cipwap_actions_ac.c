@@ -108,6 +108,13 @@ cw_action_in_t cipwap_actions_ac_in[] = {
 	 CW_ACTION_IN_CIPWAP_AC_NAME, 1}
 	,
 
+	/* AP Mode and Type */
+	{CW_VENDOR_ID_CISCO, 0, CW_STATE_CONFIGURE, CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_CISCO_AP_MODE_AND_TYPE, 
+	cw_in_generic, 0, MBAG_WORD,CW_ITEM_AP_MODE_AND_TYPE,2,2}
+	,
+
+
+
 
 	{0,0,0}
 };
@@ -149,6 +156,17 @@ cw_action_out_t cipwap_actions_ac_out[] = {
 	CW_CISCO_AP_TIMESYNC, NULL,cw_out_cisco_ap_timesync, 0}
 	,
 
+
+	/* --------------------------------------------------------------------------------
+         * Configuration Update Request
+ 	 */ 
+	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_WTP_NAME, CW_VENDOR_ID_CISCO,
+	CW_CISCO_RAD_NAME, NULL,cw_out_generic, cw_out_get_outgoing,1}
+	,
+
+	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_AP_MODE_AND_TYPE, CW_VENDOR_ID_CISCO,
+	CW_CISCO_AP_MODE_AND_TYPE, NULL,cw_out_generic, cw_out_get_outgoing,1}
+	,
 
 
 
