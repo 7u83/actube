@@ -63,11 +63,18 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		return -1;
 	}
 
+DBGX("Found am %p %p",am,am->item_id);
+DBGX("Teh ELEM ID found '%s'",am->item_id);
+
 	cw_action_out_t *ae;
 	int len = 0;
 	while(NULL != (ae=avliter_next(&i))) {
 
-		//DBGX("Put %d %d\n",ae->msg_id,ae->elem_id);
+		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
+		DBGX("Elem ID %s",ae->item_id);
+		if ( ae->item_id ) {
+			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
+		}
 
 		if (ae->msg_id != as.msg_id) {
 			/* Element is from next msg, close action */
