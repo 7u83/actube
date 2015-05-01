@@ -85,6 +85,8 @@ void *mavl_del(struct mavl *t, void *data);
 void *mavl_add(struct mavl *t, void *data);
 void * mavl_get(struct mavl *t ,void *data);
 struct mavlnode *mavl_get_node(struct mavl *t, void *data);
+void mavl_merge(mavl_t m, mavl_t t);
+
 
 extern int mavl_foreach_lr(struct mavlnode *n, int (*callback) (void *, void *),
 			      void *cbpriv);
