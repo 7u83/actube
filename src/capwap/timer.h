@@ -29,7 +29,7 @@
  */
 
 /** 
- * CAPWAP timer type, used in #cw_timer_start and #cw_timer_timeout.
+ * CAPWAP timer type, used in conjunction with #cw_timer_start and #cw_timer_timeout.
  */
 typedef time_t cw_timer_t;
 
@@ -50,7 +50,9 @@ typedef time_t cw_timer_t;
  */
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
 
-
+/**
+ * Get the number of nano seconds from a timeval.
+ */
 #define cw_timevaltodouble(tv) \
 	(( ((1000000.0)*(double)((tv)->tv_sec) + (double)(tv)->tv_usec)) )
 
@@ -60,31 +62,32 @@ typedef time_t cw_timer_t;
  * and #cw_clock_lap.
  * 
  * @param c name of the variable
- */ 
+ */
 #define CLOCK_DEFINE(c)\
-	struct timeval c; 
+	struct timeval c;
 
 /**
  * Start the clock (stop watch), start measuring time
  * @param c a pounter to a variable defined with #DEFINE_CLOCK
- */ 
+ */
 #define cw_clock_start(c)\
 	gettimeofday(c,NULL);
 
 /**
  * Get lap time. (stop watch)
- * @param tv pointer to clock variable defined with #DEFINE_CLOCK
+ * @param tv pointer to a clock variable defined with #CLOCK_DEFINE
  * @return lap time in seconds.
- */ 
-static inline double cw_clock_lap(struct timeval *tv){
+ */
+static inline double cw_clock_lap(struct timeval *tv)
+{
 	struct timeval lap;
-	gettimeofday(&lap,NULL);
-	return (cw_timevaltodouble(&lap)-cw_timevaltodouble(tv))/1000000.0;
-}	
+	gettimeofday(&lap, NULL);
+	return (cw_timevaltodouble(&lap) - cw_timevaltodouble(tv)) / 1000000.0;
+}
 
 /**
  * An alias for #cw_clock_lap
- */ 
+ */
 #define cw_clock_stop cw_clock_lap
 
 /** @} */
