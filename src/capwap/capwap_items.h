@@ -75,7 +75,6 @@
 
 */
 
-extern const char CW_ITEM_NONE[];
 extern const char CW_ITEM_IDLE_TIMEOUT[];
 extern const char CW_ITEM_DISCOVERY_TYPE[];
 extern const char CW_ITEM_WTP_NAME[];
@@ -176,6 +175,6 @@ extern const char CW_ITEM_WTP_MAX_RADIOS[];
 
 
 
-extern struct cw_item capwap_itemdefs[];
+extern struct cw_itemdef capwap_itemdefs[];
 
 #endif
