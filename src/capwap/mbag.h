@@ -37,8 +37,10 @@ struct mbag_typedef{
 	const char *name;
 	void (*del)(void*);
 	int (*to_str)(void*,char *dst);
-	
+	struct mbag_item * (*from_str)(const char *src);
 };
+
+
 typedef const struct mbag_typedef * mbagtype_t;
 
 
@@ -99,6 +101,21 @@ struct mbag_item *mbag_item_create(mbag_t s, const char *id);
 struct mbag_item *mbag_i_item_create(mbag_t s, uint32_t id);
 
 
+static inline int mbag_set(mbag_t t,mbag_item_t *is)
+{
+	mavl_del(t,is);
+	mavl_add(t,is);
+	return 1;
+
+/*
+	struct mbag_item *i = mavl_get(s, is);
+	if (i) {
+		mbag_del_data(i);
+		return i;
+	}
+	mavl_add(t,is);
+*/
+}
 
 static inline int mbag_set_byte(mbag_t s, const char *id, uint8_t byte)
 {
