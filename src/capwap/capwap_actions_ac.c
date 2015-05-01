@@ -196,6 +196,13 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	,
 
 
+	/* Message: Join Request */
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_RESPONSE, 0,
+	 0, 0}
+	,
+
+
+
 	{0, 0, 0}
 };
 
@@ -318,13 +325,28 @@ cw_action_out_t capwap_actions_ac_out[] = {
 	,	
 
 
+	/* -------------------------------------------------------------------------------
+	 * Update Request
+	 */
+	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_NONE}
+	,
+
+	/* Result Code */
+	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_WTP_NAME, 0,
+	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_outgoing, 1}
+	,
+
+
+
+
+
 	/* End of list */
 	{0, 0}
 
 };
 
 
-
+#include "item.h"
 
 
 
@@ -335,6 +357,7 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 	def->strmsg = cw_strheap_create();
 	def->strelem = cw_strheap_create();
 	def->wbids = intavltree_create();
+	def->items = cw_itemdefheap_create();
 
 	int rc;
 	rc = cw_actionlist_in_register_actions(def->in, capwap_actions_ac_in);
@@ -342,6 +365,8 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
+
+	rc += cw_itemdefheap_register(def->items,capwap_itemdefs);
 	
 	
 	intavltree_add(def->wbids,0);
