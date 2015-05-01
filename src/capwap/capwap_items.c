@@ -3,17 +3,9 @@
 #include "capwap_items.h"
 
 
-const char CW_ITEM_NONE[]="";
 const char CW_ITEM_IDLE_TIMEOUT[]="idle_timeout";
 const char CW_ITEM_DISCOVERY_TYPE[]="discovery_type";
 const char CW_ITEM_WTP_NAME[]="wtp_name";
-
-const char CW_ITEM_WTP_BOARD_VENDOR[]="vendor_id";
-const char CW_ITEM_WTP_BOARD_MODELNO[]="model_no";
-const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macadddress";
-const char CW_ITEM_WTP_BOARD_ID[]="wtp_board_id";
-const char CW_ITEM_WTP_BOARD_REVISION[]="wtp_board_revision";
-const char CW_ITEM_WTP_BOARD_SERIALNO[]="serial_no";
 
 
 
@@ -27,11 +19,11 @@ const char CW_ITEM_WTP_HARDWARE_VENDOR=
 */
 
 const char CW_ITEM_WTP_HARDWARE_VERSION[]="wtp_hardware_version";
+const char CW_ITEM_WTP_SOFTWARE_VERSION[]="wtp_software_version";
 
 /*
 const char CW_ITEM_WTP_SOFTWARE_VENDOR,
 */
-const char CW_ITEM_WTP_SOFTWARE_VERSION[]="wtp_software_version";
 
 /*
 const char CW_ITEM_WTP_BOOTLOADER_VENDOR,
@@ -91,14 +83,30 @@ const char CW_ITEM_RADIOS[]="radios";
 const char CW_ITEM_RADIO_OPER_STATE[]="radio_oper_state";
 	
 
+const char CW_ITEM_WTP_BOARD_VENDOR[]="vendor_id";
+const char CW_ITEM_WTP_BOARD_MODELNO[]="model_no";
+const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macadddress";
+const char CW_ITEM_WTP_BOARD_ID[]="wtp_board_id";
+const char CW_ITEM_WTP_BOARD_REVISION[]="wtp_board_revision";
+const char CW_ITEM_WTP_BOARD_SERIALNO[]="serial_no";
+
+//const char CW_ITEM_XY[]="wtp_name";
 
 
-struct cw_item capwap_itemdefs[] = {
+struct cw_itemdef capwap_itemdefs[] = {
 
-{CW_ITEM_WTP_NAME,MBAG_BSTR16},
-{CW_ITEM_LOCATION_DATA,MBAG_BSTR16},
+{CW_ITEM_WTP_NAME,CW_ITEM_NONE,MBAG_STR},
+{CW_ITEM_LOCATION_DATA,CW_ITEM_NONE,MBAG_STR},
+{CW_ITEM_WTP_GROUP_NAME,CW_ITEM_NONE,MBAG_STR},
+{CW_ITEM_WTP_HARDWARE_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
+{CW_ITEM_WTP_SOFTWARE_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
+
+
+{CW_ITEM_WTP_BOARD_DATA,CW_ITEM_NONE,MBAG_MBAG},
+{CW_ITEM_WTP_BOARD_DATA,CW_ITEM_WTP_BOARD_VENDOR,MBAG_VENDORSTR},
 
 
 {CW_ITEM_NONE}
+
 };
 
