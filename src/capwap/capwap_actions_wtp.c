@@ -159,6 +159,10 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_RADIO_ADMINISTRATIVE_STATE_WTP, 0}
 	,
 
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_WTP_NAME, 0}
+	,
+
 
 
 	/* Element: Vendor Specific */
