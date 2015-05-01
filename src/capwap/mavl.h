@@ -18,7 +18,8 @@
 
 /**
  * @file
- * @brief Yet another avl tree implementation!
+ * @brief MAVL, Mini AVL Tree, 
+ * Yet another AVL Tree implementation!
  */
 
 
