@@ -23,9 +23,9 @@
  *
  * Usage goes as follows.
  *
- * First create a FRAGMAN object:
+ * First create a frag_t object:
  *
- * FRAGMAN * fm = fragman_create() 
+ * frag_t * fm = fragman_create() 
  *
  * Now you can add received fragmented packets to the fragment manager:
  *
@@ -97,7 +97,7 @@ static struct frag * frag_new(struct frag * frags, int fragid)
 }
 
 /*
-void fragman_free(FRAGMAN * frags,struct frag * f)
+void fragman_free(frag_t * frags,struct frag * f)
 {
 	int i;
 	for (i=0; i<FRAG_MAXIDS; i++){
@@ -110,7 +110,7 @@ void fragman_free(FRAGMAN * frags,struct frag * f)
 }
 */
 
-uint8_t * fragman_add(FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen) 
+uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen) 
 {
 	struct frag * f;
 	uint32_t val0,val1;
@@ -179,9 +179,9 @@ uint8_t * fragman_add(FRAGMAN * frags, uint8_t *packet, int hlen, int payloadlen
 	return NULL;
 }
 
-FRAGMAN * fragman_create() 
+frag_t * fragman_create() 
 {
-	FRAGMAN * frags;
+	frag_t * frags;
 	frags = malloc(sizeof(struct frag)*FRAG_MAXIDS);
 	if (frags == NULL )
 		return NULL;
@@ -189,7 +189,7 @@ FRAGMAN * fragman_create()
 	return frags;
 }
 
-void fragman_destroy(FRAGMAN * frags)
+void fragman_destroy(frag_t * frags)
 {
 	int i;
 	for (i=0;i<FRAG_MAXIDS; i++){

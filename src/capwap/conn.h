@@ -81,7 +81,7 @@ struct conn {
 
 
 	/** The framgent manager used on this connection */
-	FRAGMAN *fragman;
+	frag_t *fragman;
 
 	/** Current Fragment ID */
 	int fragid;
