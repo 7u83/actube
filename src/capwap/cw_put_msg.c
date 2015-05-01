@@ -67,7 +67,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	int len = 0;
 	while(NULL != (ae=avliter_next(&i))) {
 
-		//printf("Put %d %d\n",ae->msg_id,ae->elem_id);
+		//DBGX("Put %d %d\n",ae->msg_id,ae->elem_id);
 
 		if (ae->msg_id != as.msg_id) {
 			/* Element is from next msg, close action */
