@@ -224,6 +224,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
+	conn->config=conn->incomming;
 //	wtpman->conn->local = ac_config;
 
 	mbag_set_str(conn->local,CW_ITEM_AC_NAME,conf_acname);
@@ -338,16 +339,21 @@ void config_to_sql(struct conn *conn)
 	mavliter_foreach(&it){
 		mbag_item_t * i = mavliter_get(&it);
 		
-		struct cw_item * cwi = cw_item_get_by_name(i->id,capwap_itemdefs);
+		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->items,i->id,NULL);
 		if (cwi){
 			DBGX("ID %d,%s",i->id,cwi->id);
 
 	//		printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
-			if (i->type->to_str)
+			if (i->type->to_str){
 				i->type->to_str(i,str);
+				db_put_wtp_prop(wtp_id,-1,cwi->id,str);
+			}
+			else{
+				cw_log(LOG_ERR,"Can_'t converto to str");
+
+			}
 			
-			db_put_wtp_prop(wtp_id,-1,cwi->id,str);
 
 		}
 		else{
@@ -441,7 +447,29 @@ static void wtpman_run(void *arg)
 				break;
 		}
 
-		db_get_tasks(sock_addr2str(&conn->addr));
+		mavl_del_all(conn->outgoing);
+		db_get_tasks(conn,sock_addr2str(&conn->addr));
+
+
+
+		//printf("Conn: %d\n",conn->outgoing->count);
+
+		if ( conn->outgoing->count ) {
+			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			DBGX("CU RC: %d",rc);
+	
+			DBGX("MAV MERGE","");	
+			mavl_merge(conn->config,conn->outgoing);
+			DBGX("MAV MERGE DONE","");
+
+
+			printf("Conn aa: %d\n",conn->outgoing->count);
+			config_to_sql(conn);
+		
+		}
+
+			
+	
 	}
 
 

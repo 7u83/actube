@@ -63,6 +63,27 @@ int main (int argc, const char * argv[])
 {
 	int rc =0;
 
+/*
+int n;
+cw_itemdefheap_t h=cw_itemdefheap_create();
+n=cw_itemdefheap_register(h,capwap_itemdefs);
+printf("Registered: %d\n",n);
+
+const cw_itemdef_t * id = cw_itemdef_get(h,"wtp_name",NULL);
+
+if (id) {
+	printf("Found %s is of type %s\n",id->id,id->type->name);
+}
+else{
+	printf("Not found, why?\n");
+}
+
+mavl_destroy(h);
+
+
+exit(0);
+*/
+
 	cw_log_name="AC-Tube";
 
 	read_config("ac.conf");
@@ -113,7 +134,7 @@ int main (int argc, const char * argv[])
 
 	/* Load bindings */
 	cw_dbg(DBG_INFO,"Loading 802.11 Bindings ...");
-	regn += cw_register_actions_capwap_80211_ac(&capwap_actions);
+//	regn += cw_register_actions_capwap_80211_ac(&capwap_actions);
 
 	cw_dbg(DBG_INFO,"Registered %d protocol actions and strings.",regn);
 
