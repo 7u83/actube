@@ -49,8 +49,9 @@ LOGOBJS=log.o \
 
 
 WTPINFOOBJS =\
-	wtpinfo_set_location.o \
-	wtpinfo_print.o 
+	#wtpinfo_print.o 
+	#wtpinfo_set_location.o \
+	   wtpinfo_lwreadelem_wtp_descriptor.o \
 
 UTILOBJS= \
 	cw_setstr.o \
@@ -86,7 +87,6 @@ LWAPPOBJS = \
 	lw_checksum.o \
 	lw_put_ac_descriptor.o \
 	lw_put_cisco_path_mtu.o \
-	lw_put_80211_wtp_wlan_radio_configuration.o \
 	lw_readelem_vendor_specific.o \
 	lw_elem_id_to_str.o \
 	lw_msg_id_to_str.o \
@@ -94,6 +94,7 @@ LWAPPOBJS = \
 	lw_put_sockaddr.o \
 	lw_put_image_data.o
 
+	#lw_put_80211_wtp_wlan_radio_configuration.o \
 #	lw_readelem_wtp_name.o \
 	lw_readelem_wtp_board_data.o \
 	cw_log_debug.o \
@@ -112,7 +113,6 @@ LWAPPCISCOOBJS = \
 CAPWAPOBJS= \
 	   aciplist.o \
 	   lwmsg_init.o \
-	   wtpinfo_lwreadelem_wtp_descriptor.o \
 	   hdr_print.o \
 	cw_cisco_id_to_str.o\
 	cw_strlist_get_str.o \
@@ -233,6 +233,7 @@ CWACTION=action.o \
 	cw_put_image_data.o \
 	cisco.o \
 	mbag.o\
+	mbag_type_word.o\
 	radio.o \
 	cw_out_radio_info.o \
 	capwap_items.o \

@@ -31,7 +31,7 @@
 
 #include "fragman.h"
 #include "cwmsg.h"
-#include "wtpinfo.h"
+//#include "wtpinfo.h"
 
 
 #include "action.h"
@@ -240,7 +240,7 @@ struct cwimage_data;
 extern void conn_prepare_request(struct conn *conn, int type);
 extern int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *,
 					   struct image_identifier *id);
-extern void conn_detect_capwap(struct conn *conn, struct wtpinfo *wtpinfo);
+//extern void conn_detect_capwap(struct conn *conn, struct wtpinfo *wtpinfo);
 struct cwrmsg *conn_send_request(struct conn *conn);
 struct cwrmsg *conn_wait_for_message(struct conn *conn, time_t timer);
 

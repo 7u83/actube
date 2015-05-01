@@ -20,7 +20,6 @@
 #include "capwap.h"
 #include "capwap_items.h"
 
-#include "wtpinfo.h"
 
 #include "cw_util.h"
 #include "dbg.h"

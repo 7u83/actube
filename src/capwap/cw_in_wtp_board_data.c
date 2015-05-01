@@ -21,7 +21,6 @@
 #include <string.h>
 
 
-#include "wtpinfo.h"
 
 #include "capwap.h"
 #include "capwap_items.h"

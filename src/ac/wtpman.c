@@ -350,7 +350,7 @@ void config_to_sql(struct conn *conn)
 				db_put_wtp_prop(wtp_id,-1,cwi->id,str);
 			}
 			else{
-				cw_log(LOG_ERR,"Can_'t converto to str");
+				cw_log(LOG_ERR,"Can't converto to str");
 
 			}
 			
@@ -456,7 +456,6 @@ static void wtpman_run(void *arg)
 
 		if ( conn->outgoing->count ) {
 			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-			DBGX("CU RC: %d",rc);
 	
 			DBGX("MAV MERGE","");	
 			mavl_merge(conn->config,conn->outgoing);

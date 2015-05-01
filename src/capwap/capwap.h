@@ -337,7 +337,7 @@ CW_MSG_MAXMSG	=				26
 #define CW_SUBELEM_AC_SOFTWARE_VERSION			5
 
 
-#include "wtpinfo.h"
+//#include "wtpinfo.h"
 //#include "acinfo.h"
 
 /* Frame tunnnel mode bits */
@@ -348,7 +348,7 @@ CW_MSG_MAXMSG	=				26
 
 #include "radioinfo.h"
 
-#include "wtpinfo.h"
+//#include "wtpinfo.h"
 
 
 #define CW_DISCOVERY_TYPE_UNKNOWN	0
@@ -360,8 +360,8 @@ CW_MSG_MAXMSG	=				26
 
 
 /* wtpinfo methods */
-extern void wtpinfo_set_location(struct wtpinfo *wtpinfo, uint8_t * str, int len);
-extern int wtpinfo_set_radioinfo(struct wtpinfo *wtpinfo, uint8_t * msgelem, int len);
+//extern void wtpinfo_set_location(struct wtpinfo *wtpinfo, uint8_t * str, int len);
+//extern int wtpinfo_set_radioinfo(struct wtpinfo *wtpinfo, uint8_t * msgelem, int len);
 
 
 /* wtp mac types */
@@ -467,8 +467,8 @@ extern void cwsend_join_response(struct conn *conn, int seqnum, int rc,
 */
 
 //extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-extern void process_join_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-extern void process_conf_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
+//extern void process_join_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
+//extern void process_conf_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
 
 /*
 extern void cwread_discovery_response(struct ac_info *acinfo, uint8_t * msg, int len);
@@ -497,8 +497,8 @@ extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * ms
 extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem,
 					      int len);
 extern int cw_readelem_ac_name(uint8_t ** dst, int type, uint8_t * msgelem, int len);
-extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,
-					     uint8_t * msgelem, int len);
+//extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,
+//					     uint8_t * msgelem, int len);
 extern int cw_readelem_cw_local_ip_addr(struct sockaddr *local_ip, int type,
 					uint8_t * msgelem, int len);
 //extern int cw_readelem_radio_administrative_state(struct radioinfo *radioinfo, int type,
@@ -895,6 +895,7 @@ static inline int cw_addelem_radio_operational_state(uint8_t * dst, struct radio
 	 cw_put_data(dst+10,data,len))
 */
 
+/*
 extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid,
 					      uint16_t elemid, uint8_t * data,
 					      uint16_t len);
@@ -909,7 +910,7 @@ extern void cw_prepare_change_state_event_request(struct conn *conn,
 
 extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
 						 struct radioinfo *radioinfo);
-
+*/
 
 #define cw_addelem_ac_name(dst,name) \
 	cw_addelem(dst,CW_ELEM_AC_NAME,name,strlen((char*)(name)))

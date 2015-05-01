@@ -9,13 +9,16 @@
 
 #include "stdio.h"
 
-/** Key/String pair, used for string tables. */
+/** 
+ *Key/String pair, used for string tables, 
+ *to display message element names and so on...
+ */
 struct cw_str {
 	int id;
 	const char *str;
 };
 
-/** Stopper, indicates the laste element in a strlist */
+/** Stopper, indicates the last element in a strlist */
 #define CW_STR_STOP	0xffffffff
 
 
