@@ -33,25 +33,45 @@
 
 struct mbag_item;
 
+/** 
+ * Definition for MABG data types 
+ */ 
 struct mbag_typedef{
+	/** A human readable name for this type */
 	const char *name;
+	/** A pointer to a function to delete elements of this type */
 	void (*del)(void*);
+	/** A pointer to convert elements of this type to a string.
+	    This function is maily used to store elements to a SQL database
+	    or to json strings */
 	int (*to_str)(void*,char *dst);
+	/** Cereate an item of this type from a string, which was previously
+	    created by the #del function. */
 	struct mbag_item * (*from_str)(const char *src);
 };
 
-
+/** The type for an mbag typedf */
 typedef const struct mbag_typedef * mbagtype_t;
 
 
 
-
+/**
+ * The MBAG item 
+ */ 
 struct mbag_item{
+	/** 
+	 * Key of this item 
+	 * This could be either a string (default) or an integer uint32_t value.
+	 * If you whant to use with uint32_t keys, use the mbag_i_* functions, to 
+	 * create mbags. 
+	 */
 	union {
 		uint32_t iid;
 		const char *id;
 	};
+	/** Type of this item */
 	const struct mbag_typedef * type;
+	/** Value of this item */
 	union {
 		void *data;
 		uint8_t byte;
@@ -60,10 +80,14 @@ struct mbag_item{
 	};
 };
 
-typedef mavl_t mbag_t;
 
 typedef struct mbag_item mbag_item_t;
 
+/** 
+ * The MBAG Type
+ * It's simply an #mavl AVL Tree.
+ */ 
+typedef mavl_t mbag_t;
 
 
 extern const struct mbag_typedef mbag_type_byte;
@@ -77,8 +101,6 @@ extern const struct mbag_typedef mbag_type_str;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
 
-
-
 #define MBAG_BYTE (&mbag_type_byte)
 #define MBAG_WORD (&mbag_type_word)
 #define MBAG_DWORD (&mbag_type_dword)
@@ -87,7 +109,6 @@ extern const struct mbag_typedef mbag_type_const_data;
 #define MBAG_BSTR16 (&mbag_type_bstr16)
 #define MBAG_VENDORSTR (&mbag_type_vendorstr)
 #define MBAG_STR (&mbag_type_str)
-
 #define MBAG_DATA MBAG_STR
 #define MBAG_AVLTREE (&mbag_type_avltree)
 #define MBAG_FUN MBAG_STR
