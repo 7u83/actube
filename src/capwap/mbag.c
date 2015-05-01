@@ -1,7 +1,12 @@
 #include "mbag.h"
 #include "capwap.h"
 #include "format.h"
-
+/**
+ * @file 
+ * @MBAG functions
+ * @addtogroup MbagFunctions
+ * @{
+ */ 
 
 static int mbag_bstr16str(void *item,char *dst)
 {
@@ -47,9 +52,11 @@ const struct mbag_typedef mbag_type_byte = {
 	"byte",NULL
 };
 
+/*
 const struct mbag_typedef mbag_type_word = {
 	"word",NULL
 };
+*/
 
 const struct mbag_typedef mbag_type_dword = {
 	"dword",NULL
@@ -214,3 +221,4 @@ struct mbag_item *strmbag_item_create(mbag_t s, char *name)
 
 */
 
+/**@}*/

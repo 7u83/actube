@@ -2,7 +2,6 @@
 #include <string.h>
 
 
-#include "capwap/wtpinfo.h"
 #include "capwap/conn.h"
 #include "capwap/capwap_80211.h"
 #include "capwap/log.h"

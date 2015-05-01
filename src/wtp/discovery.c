@@ -27,7 +27,6 @@
 #include "capwap/capwap.h"
 #include "capwap/capwap_items.h"
 #include "capwap/log.h"
-#include "capwap/wtpinfo.h"
 #include "capwap/sock.h"
 #include "capwap/cw_util.h"
 #include "capwap/aciplist.h"

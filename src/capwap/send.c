@@ -118,7 +118,7 @@ int cw_send_request(struct conn *conn,int msg_id)
 
 
 // XXX find a better name for this function 
-int cw_send_request_2()
+int cw_send_custom_request_2(struct conn *conn,int msg_id)
 {
 
 
