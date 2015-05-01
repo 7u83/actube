@@ -3,6 +3,8 @@
 
 #include "capwap/log.h"
 #include "capwap/dbg.h"
+#include "capwap/capwap_items.h"
+#include "capwap/conn.h"
 
 #include "conf.h"
 
@@ -87,7 +89,7 @@ int db_start()
 
 
 	
-	sql = "SELECT * FROM wtpprops WHERE upd=0 AND wtpid=?";
+	sql = "SELECT * FROM wtpprops WHERE upd>0 AND wtpid=?";
 	rc = sqlite3_prepare_v2(handle, sql,-1, &get_tasks_stmt,0);
 	if (rc) 
 		goto errX;
@@ -115,6 +117,8 @@ void db_ping()
 void db_put_wtp_prop(const char *wtp_id,int rid, const char * prop,const char * val)
 {
 	int rc;
+
+DBGX("Putting %s:%s",prop,val);
 
 	sqlite3_reset(put_wtp_prop_stmt);
 	sqlite3_clear_bindings(put_wtp_prop_stmt);
@@ -147,7 +151,7 @@ errX:
 }
 
 
-int db_get_tasks(const char * wtpid)
+int db_get_tasks(struct conn * conn,const char * wtpid)
 {
 		
 	sqlite3_reset(get_tasks_stmt);
@@ -158,15 +162,49 @@ int db_get_tasks(const char * wtpid)
 
 	int rc;
 
-	rc = sqlite3_step(get_tasks_stmt);
-	if (rc == SQLITE_ROW) {
-/*		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,0));
-		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,1));
-		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,2));
-		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,3));
-		DBGX("Have a rowi %s",sqlite3_column_text(get_tasks_stmt,4));
-*/
+
+	//rc = sqlite3_step(get_tasks_stmt);
+	while (SQLITE_ROW == sqlite3_step(get_tasks_stmt)) {
+
+		const char *prop =  (const char*)sqlite3_column_text(get_tasks_stmt,2);
+		const char *val =  (const char*)sqlite3_column_text(get_tasks_stmt,3);
+
+		DBGX("Prop: %s Val: %s",prop,val);
+	
+		struct cw_itemdef * cwi = cw_item_get_by_name(prop,capwap_itemdefs);
+		if (!cwi) {
+			DBGX("Not found: %s",prop);
+			return 0;
+		}
+
+		uint8_t data[1024];
+		printf("Type: %s\n",cwi->type->name);
+
+		if (!cwi->type->from_str) {
+			cw_log(LOG_ERR,"Can't convert from SQL %s",prop);
+			return 1;
+		}
+
+
+
+		mbag_item_t * i = cwi->type->from_str(val);
+i->id=cwi->id;
+DBGX("Item made: %s",i->id);
+DBGX("Item data: %s",i->data);
+
+		mbag_set(conn->outgoing,i);
+
+
+	/*	
+		if (i->type == MBAG_STR) {
+			mbag_set_strn(conn->outgoing, a->item_id, (char *) data, len);
+			return 1;
+		}
+	*/
+
 	}
+
+
 
 //	DBGX("The SQL RC: %d\n",rc);
 	return 1;
@@ -180,5 +218,7 @@ errX:
 	return 0;
 
 }
+
+
 
 
