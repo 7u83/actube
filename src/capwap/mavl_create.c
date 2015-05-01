@@ -19,7 +19,7 @@
 /**
  *@file
  *@Implementation of mavl_create
- *@addtogroup Mavl 
+ *@addtogroup MavlFunctions 
  *@{
  */ 
 #include "mavl.h"
