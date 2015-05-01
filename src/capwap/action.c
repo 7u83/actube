@@ -149,7 +149,7 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
 	if (r != 0)
 		return r;
 
-	r = e1->item_id - e2->item_id;
+	r = strcmp(e1->item_id, e2->item_id);
 	if (r != 0)
 		return r;
 
