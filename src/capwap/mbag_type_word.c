@@ -18,6 +18,7 @@
 
 
 #include "mbag.h"
+#include "format.h"
 
 
 static struct mbag_item *  from_str(const char *src)
@@ -38,7 +39,7 @@ static int to_str(void *item,char *dst)
 }
 
 
-
+/** Defines a word, two bytes. */
 const struct mbag_typedef mbag_type_word = {
 	"WORD",NULL,to_str,from_str
 };

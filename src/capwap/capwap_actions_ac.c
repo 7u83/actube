@@ -93,9 +93,18 @@ cw_action_in_t capwap_actions_ac_in[] = {
 	/* Element WTP MAC Type */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_WTP_MAC_TYPE, 1}
 	,
+
+	/* Non-Mandatory Join Req Elements */
+
 	/* Element Vendor Specific Payload */
 	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_VENDOR_SPECIFIC_PAYLOAD}
 	,
+
+	/* Maximum Message Length */
+	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST, CW_ACTION_IN_MAXIMUM_MESSAGE_LENGTH}
+	,
+
+
 
 	/* ------------------------------------------------------------------------------- */
 

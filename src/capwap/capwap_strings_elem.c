@@ -35,7 +35,7 @@ struct cw_str capwap_strings_elem[] = {
 	{CW_ELEM_IMAGE_INFORMATION, "Image Information"},
 	{CW_ELEM_INITIATE_DOWNLOAD, "Initiate Download"},
 	{CW_ELEM_LOCATION_DATA, "Location Data"},
-	{CWMSGELEM_MAXIMUM_MESSAGE_LENGTH, "Maximum Message Length"},
+	{CW_ELEM_MAXIMUM_MESSAGE_LENGTH, "Maximum Message Length"},
 	{CWMSGELEM_MTU_DISCOVERY_PADDING, "MTU Discovery Padding"},
 	{CW_ELEM_RADIO_ADMINISTRATIVE_STATE, "Radio Administrative State"},
 	{CW_ELEM_RADIO_OPERATIONAL_STATE, "Radio Operational State"},
