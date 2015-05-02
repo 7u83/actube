@@ -76,6 +76,7 @@ MAVLOBJS= \
 	mavl_foreach.o \
 	mavl_foreach_lr.o \
 	mavl_merge.o \
+	mavl_create_conststr.o \
 	utf8.o \
 	file.o
 

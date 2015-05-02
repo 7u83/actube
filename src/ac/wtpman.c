@@ -347,7 +347,7 @@ void config_to_sql(struct conn *conn)
 			char str[256];
 			if (i->type->to_str){
 				i->type->to_str(i,str);
-				db_put_wtp_prop(wtp_id,-1,cwi->id,str);
+				db_put_wtp_prop(wtp_id,cwi->id,cwi->sub_id,str);
 			}
 			else{
 				cw_log(LOG_ERR,"Can't converto to str");
@@ -448,24 +448,28 @@ static void wtpman_run(void *arg)
 		}
 
 		mavl_del_all(conn->outgoing);
-		db_get_tasks(conn,sock_addr2str(&conn->addr));
 
+		mavl_conststr_t r = db_get_update_tasks(conn,sock_addr2str(&conn->addr));
 
+		if ( !r )
+			continue;
 
-		//printf("Conn: %d\n",conn->outgoing->count);
+		if (!conn->outgoing->count)
+			continue;
 
-		if ( conn->outgoing->count ) {
-			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-	
-			DBGX("MAV MERGE","");	
-			mavl_merge(conn->config,conn->outgoing);
-			DBGX("MAV MERGE DONE","");
+//		DBGX("Have %d tasks",r->count);
 
-
-			printf("Conn aa: %d\n",conn->outgoing->count);
-			config_to_sql(conn);
-		
-		}
+		DBGX("Sending Request","");
+		rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+		DBGX("Request Sent","");
+		mavl_merge(conn->config,conn->outgoing);
+		mavl_destroy(conn->outgoing);
+		conn->outgoing=mbag_create();
+		DBGX("Mavel merged","");
+		config_to_sql(conn);
+		DBGX("Back tu SQL","");
+		mavl_destroy(r);
+		DBGX("DESTROY R","");
 
 			
 	

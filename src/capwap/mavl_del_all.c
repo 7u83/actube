@@ -30,7 +30,7 @@ static void mavl_del_all0(struct mavl *t ,struct mavlnode * n)
 void mavl_del_all(struct mavl *t)
 {
 	mavl_del_all0(t,t->root);		
-	t->root=0;
+	t->root=NULL;
 }
 
 

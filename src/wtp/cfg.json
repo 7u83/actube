@@ -13,7 +13,7 @@
 	"capwap_timers":"2590",
 	"cisco_ap_mode_and_type":"516",
 	"idle_timeout":"300",
-	"location_data":"Germany",
+,
 	"radios":{
 		"0":{
 			"admin_state":"1",
@@ -36,5 +36,5 @@
 	"wtp_frame_tunnel_mode":"4",
 	"wtp_group_name":"tobias",
 	"wtp_mac_type":"1",
-	"wtp_name":"hihihi"
+	"wtp_name":"Thomas Mann"
 }

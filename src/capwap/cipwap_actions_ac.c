@@ -161,11 +161,11 @@ cw_action_out_t cipwap_actions_ac_out[] = {
          * Configuration Update Request
  	 */ 
 	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_WTP_NAME, CW_VENDOR_ID_CISCO,
-	CW_CISCO_RAD_NAME, NULL,cw_out_generic, cw_out_get_outgoing,1}
+	CW_CISCO_RAD_NAME, NULL,cw_out_generic, cw_out_get_outgoing,0}
 	,
 
 	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_AP_MODE_AND_TYPE, CW_VENDOR_ID_CISCO,
-	CW_CISCO_AP_MODE_AND_TYPE, NULL,cw_out_generic, cw_out_get_outgoing,1}
+	CW_CISCO_AP_MODE_AND_TYPE, NULL,cw_out_generic, cw_out_get_outgoing,0}
 	,
 
 
