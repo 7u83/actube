@@ -19,6 +19,8 @@
 /**
  * @file
  * @brief Definitions for bstr functions
+ * @defgroup Bstr BSTR Functions
+ * @{
  */
 
 #ifndef __BSTR_H
@@ -29,7 +31,7 @@
 #include <stdint.h>
 
 /**
- * bstr typeS
+ * bstr type
  *
  * bstr_t serves as binary string where the first byte cponntains
  * the length of the string.
@@ -64,19 +66,26 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
  */ 
 #define BSTR_MAX_LEN 254
 
-
+/**
+  * The same as #bstr_t, but there are two bytes used
+  * to describe the length of the string.
+  */  
 typedef uint8_t *bstr16_t;
+
 #define bstr16_len(s) ( *((uint16_t*)(s)) )
 #define bstr16_data(s) (((uint8_t*)s)+2)
 #define bstr16_size(l) (l+2)
 #define BSTR16_MAX_LEN (0xffff-2)
 
+/*
 static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
 {
 	*((uint16_t*)dst)=len;
 	memcpy(dst+2,src,len);
 	return len+2;
 }
+*/
+
 
 static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 {
@@ -128,4 +137,6 @@ uint8_t * bstr16cfgstr(const char * s);
 
 
 #endif
+
+/**@}*/
 

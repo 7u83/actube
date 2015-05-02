@@ -21,7 +21,7 @@
 #define __MBAG_H
 
 /** 
- * @defgroup MBaglFunctions MBAG Functions
+ * @defgroup MbagFunctions MBAG 
  * @{
  */
 
@@ -85,6 +85,7 @@ typedef struct mbag_item mbag_item_t;
 
 /** 
  * The MBAG Type
+ *
  * It's simply an #mavl AVL Tree.
  */ 
 typedef mavl_t mbag_t;
@@ -101,6 +102,10 @@ extern const struct mbag_typedef mbag_type_str;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
 
+/**
+ *@defgroup MbagTypes  MBAG Types 
+ *@{
+ */
 #define MBAG_BYTE (&mbag_type_byte)
 #define MBAG_WORD (&mbag_type_word)
 #define MBAG_DWORD (&mbag_type_dword)
@@ -113,7 +118,7 @@ extern const struct mbag_typedef mbag_type_const_data;
 #define MBAG_AVLTREE (&mbag_type_avltree)
 #define MBAG_FUN MBAG_STR
 #define MBAG_CONST_DATA (&mbag_type_const_data)
-
+/**@}*/
 
 extern mbag_t mbag_create();
 extern mbag_t mbag_i_create();

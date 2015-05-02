@@ -235,6 +235,8 @@ CWACTION=action.o \
 	cisco.o \
 	mbag.o\
 	mbag_type_word.o\
+	mbag_type_vendorstr.o\
+	mbag_type_sockaddr.o\
 	radio.o \
 	cw_out_radio_info.o \
 	capwap_items.o \

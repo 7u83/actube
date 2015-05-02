@@ -13,7 +13,6 @@
 	"capwap_timers":"2590",
 	"cisco_ap_mode_and_type":"516",
 	"idle_timeout":"300",
-,
 	"radios":{
 		"0":{
 			"admin_state":"1",

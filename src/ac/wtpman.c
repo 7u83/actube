@@ -341,7 +341,8 @@ void config_to_sql(struct conn *conn)
 		
 		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->items,i->id,NULL);
 		if (cwi){
-			DBGX("ID %d,%s",i->id,cwi->id);
+			DBGX("ID %s,%s",i->id,cwi->id);
+			DBGX("Typei %s,Typecwd %s",i->type->name,cwi->type->name);
 
 	//		printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
@@ -459,17 +460,12 @@ static void wtpman_run(void *arg)
 
 //		DBGX("Have %d tasks",r->count);
 
-		DBGX("Sending Request","");
 		rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-		DBGX("Request Sent","");
 		mavl_merge(conn->config,conn->outgoing);
 		mavl_destroy(conn->outgoing);
 		conn->outgoing=mbag_create();
-		DBGX("Mavel merged","");
 		config_to_sql(conn);
-		DBGX("Back tu SQL","");
 		mavl_destroy(r);
-		DBGX("DESTROY R","");
 
 			
 	

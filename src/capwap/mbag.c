@@ -78,9 +78,11 @@ const struct mbag_typedef mbag_type_str = {
 	"str",free,mbag_strstr,mbag_fromstr
 };
 
+/*
 const struct mbag_typedef mbag_type_vendorstr = {
 	"vendorstr",free
 };
+*/
 
 
 void free_avltree(void*t){

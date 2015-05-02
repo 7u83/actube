@@ -135,7 +135,7 @@ void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const
 {
 	int rc;
 
-DBGX("Putting %s/%s:%s",id,sub_id,val);
+//DBGX("Putting %s/%s:%s",id,sub_id,val);
 
 	sqlite3_reset(put_wtp_prop_stmt);
 	sqlite3_clear_bindings(put_wtp_prop_stmt);
@@ -196,17 +196,17 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 	while (SQLITE_ROW == sqlite3_step(get_tasks_stmt)) {
 
 		int ii;
-		DBGX("-----------------------------------------------------","");
+		//DBGX("-----------------------------------------------------","");
 		for (ii=0; ii<5; ii++){
 
-			DBGX("CVALL: %s",(const char*)sqlite3_column_text(get_tasks_stmt,ii));
+			//DBGX("CVALL: %s",(const char*)sqlite3_column_text(get_tasks_stmt,ii));
 
 
 		}
 
 		const char *id =  (const char*)sqlite3_column_text(get_tasks_stmt,1);
 		if (!id) {
-			DBGX("::::::::::::::::::::::::::::::::::::::::::::::::::::NULL ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!","");
+			//DBGX("::::::::::::::::::::::::::::::::::::::::::::::::::::NULL ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!","");
 			continue;
 		}
 
@@ -214,11 +214,11 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 
 		const char *val =  (const char*)sqlite3_column_text(get_tasks_stmt,3);
 
-		DBGX("ID: (%s), SubID (%s), Val (%s)",id,sub_id,val);
+		//DBGX("ID: (%s), SubID (%s), Val (%s)",id,sub_id,val);
 	
 		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->items,id,sub_id);
 		if (!cwi) {
-			DBGX("Not item definition found for: %s/%s",id,sub_id);
+			//DBGX("Not item definition found for: %s/%s",id,sub_id);
 			continue;	
 		}
 

@@ -18,6 +18,8 @@
 /**
  *@file
  *@brief prototypes for format-functions
+ *@defgroup FormatFunctions FORMAT Functions
+ *@{
  */
 
 #ifndef __CW_FORMAT_H
@@ -86,5 +88,10 @@ static inline int cw_format_hdr_flags(char *dst,uint8_t *th)
 	return s-dst;
 
 }
+
+
+int cw_is_utf8(unsigned char *str, size_t len);
+
+/**@}*/
 
 #endif

@@ -63,9 +63,9 @@
 #define CW_ACTION_IN_STATISTICS_TIMER	 	\
 	CW_ELEM_STATISTICS_TIMER,	/* Element ID*/			\
 	cw_in_generic, 0,		/* start/end callback */	\
-	MBAG_DWORD, 		/* Type of element */		\
+	MBAG_WORD,	 		/* Type of element */		\
 	CW_ITEM_STATISTICS_TIMER,	/* ID to use store */		\
-	1, 1024				/* min/max length */
+	2, 2				/* min/max length */
 
 #define CW_ACTION_IN_WTP_REBOOT_STATISTICS	 	\
 	CW_ELEM_WTP_REBOOT_STATISTICS,	/* Element ID*/			\
@@ -188,7 +188,7 @@
 	CW_ELEM_MAXIMUM_MESSAGE_LENGTH,				/* Element ID*/			\
 	cw_in_generic, 0,				/* start/end callback */	\
 	MBAG_WORD, 				/* Type of element */		\
-	CW_ITEM_MAXIMUM_MESSAGE_LENGTH			/* ID to use store */		\
+	CW_ITEM_MAXIMUM_MESSAGE_LENGTH,			/* ID to use store */		\
 	2, 2						/* min/max length */
 
 
