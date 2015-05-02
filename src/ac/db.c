@@ -5,6 +5,7 @@
 #include "capwap/dbg.h"
 #include "capwap/capwap_items.h"
 #include "capwap/conn.h"
+#include "capwap/item.h"
 
 #include "conf.h"
 
@@ -16,21 +17,37 @@ const char * init_tables = "\
 	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
 	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT PRIMARY KEY, wtp_name TEXT,lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS wtpprops (\
-		wtpid TEXT,\
-		rid INTEGER,\
-		prop TEXT,\
+		wtpid TEXT NOT NULL,\
+		id TEXT NOT NULL,\
+		sub_id TEXT NOT NULL,\
 		val TEXT,\
 		upd INTEGER,\
-		PRIMARY KEY(wtpid,rid,prop)\
+		PRIMARY KEY(wtpid,id,sub_id)\
 	);\
 	";
 
 int db_init()
 {
+
+	int rc;
 	const char * filename="ac.sqlite3";
-	
 	cw_dbg(DBG_INFO,"Initializing Sqlite3 DB: %s, SQLite3 Version %s",filename,SQLITE_VERSION);
-	int rc = sqlite3_open(filename,&handle);
+
+	rc = sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+	if (rc!=SQLITE_OK){
+		cw_log(LOG_ERR,"Error configuring SQLite3: %s",sqlite3_errmsg(handle)); 
+		return 0;
+	} 
+	
+	rc = sqlite3_initialize();
+	if (rc!=SQLITE_OK){
+		cw_log(LOG_ERR,"Error initializing SQLite3 DB : %s",sqlite3_errmsg(handle)); 
+		return 0;
+	} 
+	
+
+	
+	rc = sqlite3_open(filename,&handle);
 	if (rc != SQLITE_OK)
 	{
 		cw_log(LOG_ERR,"Error opening SQLite3 DB %s: %s",filename,sqlite3_errmsg(handle)); 
@@ -80,7 +97,7 @@ int db_start()
 
 	/* Prepare statement to update a WTP property */
 	sql = "INSERT OR REPLACE INTO wtpprops\
-                (wtpid,rid,prop,val,upd)\
+                (wtpid,id,sub_id,val,upd)\
                 VALUES (?,?,?,?,?)";
 
 	rc = sqlite3_prepare_v2(handle, sql,-1, &put_wtp_prop_stmt,0);
@@ -89,7 +106,7 @@ int db_start()
 
 
 	
-	sql = "SELECT * FROM wtpprops WHERE upd>0 AND wtpid=?";
+	sql = "SELECT wtpid,id,sub_id,val FROM wtpprops WHERE upd>0 AND wtpid=?";
 	rc = sqlite3_prepare_v2(handle, sql,-1, &get_tasks_stmt,0);
 	if (rc) 
 		goto errX;
@@ -114,11 +131,11 @@ void db_ping()
 	}
 }
 
-void db_put_wtp_prop(const char *wtp_id,int rid, const char * prop,const char * val)
+void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const char * val)
 {
 	int rc;
 
-DBGX("Putting %s:%s",prop,val);
+DBGX("Putting %s/%s:%s",id,sub_id,val);
 
 	sqlite3_reset(put_wtp_prop_stmt);
 	sqlite3_clear_bindings(put_wtp_prop_stmt);
@@ -126,10 +143,14 @@ DBGX("Putting %s:%s",prop,val);
 	if(sqlite3_bind_text(put_wtp_prop_stmt,1,wtp_id,-1,SQLITE_STATIC))
 		goto errX;
 	
-	if(sqlite3_bind_int(put_wtp_prop_stmt,2,rid))
+	if(sqlite3_bind_text(put_wtp_prop_stmt,2,id,-1,SQLITE_STATIC))
 		goto errX;
 
-	if (sqlite3_bind_text(put_wtp_prop_stmt,3,prop,-1,SQLITE_STATIC))
+	if (!sub_id) 
+		sub_id=CW_ITEM_NONE;
+	
+
+	if (sqlite3_bind_text(put_wtp_prop_stmt,3,sub_id,-1,SQLITE_STATIC))
 		goto errX;
 
 	if (sqlite3_bind_text(put_wtp_prop_stmt,4,val,-1,SQLITE_STATIC))
@@ -151,11 +172,18 @@ errX:
 }
 
 
-int db_get_tasks(struct conn * conn,const char * wtpid)
+mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 {
 		
 	sqlite3_reset(get_tasks_stmt);
 	sqlite3_clear_bindings(get_tasks_stmt);
+
+	mavl_conststr_t r = mavl_create_conststr();
+	if (!r)
+		return NULL;
+
+
+
 
 	if(sqlite3_bind_text(get_tasks_stmt,1,wtpid,-1,SQLITE_STATIC))
 		goto errX;
@@ -163,51 +191,60 @@ int db_get_tasks(struct conn * conn,const char * wtpid)
 	int rc;
 
 
+
 	//rc = sqlite3_step(get_tasks_stmt);
 	while (SQLITE_ROW == sqlite3_step(get_tasks_stmt)) {
 
-		const char *prop =  (const char*)sqlite3_column_text(get_tasks_stmt,2);
+		int ii;
+		DBGX("-----------------------------------------------------","");
+		for (ii=0; ii<5; ii++){
+
+			DBGX("CVALL: %s",(const char*)sqlite3_column_text(get_tasks_stmt,ii));
+
+
+		}
+
+		const char *id =  (const char*)sqlite3_column_text(get_tasks_stmt,1);
+		if (!id) {
+			DBGX("::::::::::::::::::::::::::::::::::::::::::::::::::::NULL ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!","");
+			continue;
+		}
+
+		const char *sub_id =  (const char*)sqlite3_column_text(get_tasks_stmt,2);
+
 		const char *val =  (const char*)sqlite3_column_text(get_tasks_stmt,3);
 
-		DBGX("Prop: %s Val: %s",prop,val);
+		DBGX("ID: (%s), SubID (%s), Val (%s)",id,sub_id,val);
 	
-		struct cw_itemdef * cwi = cw_item_get_by_name(prop,capwap_itemdefs);
+		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->items,id,sub_id);
 		if (!cwi) {
-			DBGX("Not found: %s",prop);
-			return 0;
+			DBGX("Not item definition found for: %s/%s",id,sub_id);
+			continue;	
 		}
 
-		uint8_t data[1024];
-		printf("Type: %s\n",cwi->type->name);
+		uint8_t data[2048];
 
 		if (!cwi->type->from_str) {
-			cw_log(LOG_ERR,"Can't convert from SQL %s",prop);
-			return 1;
+			cw_log(LOG_ERR,"Can't convert from string %s/%s - No method defined.",id,sub_id);
+			continue;
 		}
-
 
 
 		mbag_item_t * i = cwi->type->from_str(val);
-i->id=cwi->id;
-DBGX("Item made: %s",i->id);
-DBGX("Item data: %s",i->data);
+		i->id=cwi->id;
 
 		mbag_set(conn->outgoing,i);
-
-
-	/*	
-		if (i->type == MBAG_STR) {
-			mbag_set_strn(conn->outgoing, a->item_id, (char *) data, len);
-			return 1;
-		}
-	*/
-
+	
+		mavl_add(r,(void*)cwi->id);
 	}
 
+	if (r->count)
+		return r;
 
+	
+	mavl_destroy(r);
+	return NULL;
 
-//	DBGX("The SQL RC: %d\n",rc);
-	return 1;
 
 errX:
 	if (rc) {
@@ -215,7 +252,11 @@ errX:
 			rc,sqlite3_errmsg(handle));
 	}
 
-	return 0;
+	if (r)
+		mavl_destroy(r);
+		
+
+	return NULL;
 
 }
 

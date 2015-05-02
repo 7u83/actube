@@ -318,7 +318,7 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 
 	/* -------------------------------------------------------------------------------
-	 * Echo Response
+	 * Echo Response OUT
 	 */
 
 	{CW_MSG_ECHO_RESPONSE, CW_ITEM_NONE}
@@ -326,14 +326,19 @@ cw_action_out_t capwap_actions_ac_out[] = {
 
 
 	/* -------------------------------------------------------------------------------
-	 * Update Request
+	 * Update Request OUT
 	 */
 	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_NONE}
 	,
 
 	/* Result Code */
 	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_WTP_NAME, 0,
-	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_outgoing, 1}
+	 CW_ELEM_WTP_NAME, NULL,cw_out_generic, cw_out_get_outgoing, 0}
+	,
+
+	/* Location Data */
+	{CW_MSG_CONFIGURATION_UPDATE_REQUEST, CW_ITEM_LOCATION_DATA, 0,
+	 CW_ELEM_LOCATION_DATA, NULL,cw_out_generic, cw_out_get_outgoing,0}
 	,
 
 

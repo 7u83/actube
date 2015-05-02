@@ -42,7 +42,7 @@ static struct mbag_item *  mbag_fromstr(const char *src)
 		return NULL;
 
 	i->type = MBAG_STR;
-	i->data = strdup(src);
+	i->data = strndup(src,2000);
 	return i;
 }
 

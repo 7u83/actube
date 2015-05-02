@@ -212,6 +212,12 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 
 
 
+typedef mavl_t mavl_conststr_t;
+extern mavl_conststr_t mavl_create_conststr();
+
+
+
+
 /*
 static inline void *mavl_replace_data(struct mavl *t, void *data, int len)
 {

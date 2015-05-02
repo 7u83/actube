@@ -163,6 +163,10 @@ cw_action_in_t capwap_actions_wtp_in[] = {
 	 CW_ACTION_IN_WTP_NAME, 0}
 	,
 
+	/* Location Data */
+	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+	CW_ACTION_IN_LOCATION_DATA, 0}
+	,
 
 
 	/* Element: Vendor Specific */

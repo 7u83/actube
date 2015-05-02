@@ -113,7 +113,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
  * alread initilaized in buffer 
  * Message alements are taken fom actiondef in #conn->action
  */
-int cw_put_custum_msg(struct conn *conn, uint8_t * rawout, mbag_t elems)
+int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems)
 {
 	/* rawout is already initialized, so we can get 
 	   msg type from buffer */
@@ -122,13 +122,21 @@ int cw_put_custum_msg(struct conn *conn, uint8_t * rawout, mbag_t elems)
 
 	MAVLITER_DEFINE(it,elems);
 	mavliter_foreach(&it){
-		mavliter_get(&it);
+		const char *i= mavliter_get(&it);
+		/* preapare action search */
+		cw_action_out_t as;
+		as.msg_id=msg_id;
+		as.item_id=i;
+		as.vendor_id=0;
+		
+		
+		
+		
 
 		
-	cw_action_out_t as;
+		
 
-	as.item_id = CW_ITEM_NONE;
-	as.vendor_id = 0;
+		
 
 
 

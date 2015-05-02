@@ -74,7 +74,7 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	//
 			    );
 		}
 		else{
-			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %d not found.",
+			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %s not found.",
 				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id),a->item_id);
