@@ -16,7 +16,14 @@
 */
 
 #include <stdio.h>
-#include <endian.h>
+
+#if __FreeBSD__
+	#include <sys/endian.h>
+#else
+	#include <endian.h>
+#endif
+
+
 
 #include "dot11.h"
 
