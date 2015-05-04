@@ -1,0 +1,80 @@
+/*!
+ \mainpage LIBCAWAP Documentation
+
+ \section IBCAPWAPInstall Installing
+ To install libcapwap you need the following things:
+ A computer, a keyboard, some software and time.
+
+\section MsgHandling Extending CAPWAP
+Probably the easies way to explain, how to extend the CAPWAP, is to show an example.\n
+Here we go ...
+\subsection SimpleExample A Simple Example
+Imagine you whant to implement a new vendor specific message element called 
+"WTP LED Status and Color". In the real world this could be a message element, that 
+is  used by a WTP to indicate it's LED status, and sent by the AC to set the WTP's
+LED status.\n
+There might be a specification where the message element is idefined as follows:
+
+
+\code
+
+Vendor Specific Element - WTP LED Status and Color
+
+   0                   1                   
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |    Status     |   Color       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Type: 17
+Length: 2
+ 
+Status: 
+   0=off
+   1=on
+   2=flashing
+
+Color:
+   0=blue
+   1=red
+   2=gren
+\endcode
+
+The first thing we have now to do, ist to define an item ID, that is interlnally 
+used by AC-Tube to store and find data associated with this message element. 
+This ID is simply a system-wide unique string constant.\n
+So let's create a file "mycapwap.c" and define the ID.
+
+\code 
+
+const char CW_MYITEM_WTP_LED_STATUS_AND_COLOR[]="wtp_led_status_and_color";
+
+\endcode
+
+The item ID is also used to identify message element data stored in a SQL 
+database or in json objects.\n
+Next we should provide some information about our item, which is done by
+creating an item definition, described by structure #cw_itemdef.\n
+Looking at the specification of our message element we see that the value
+is built of two bytes, which can be represented as word. There is a 
+pre-defined type MBAG_WORD which we will use.
+\code
+#include "capwap/mbag.h"
+const char CW_MYITEM_WTP_LED_STATUS_AND_COLOR[]="wtp_led_status_and_color";
+
+struct cw_itemdef_t myitemdefs[] = {
+	{CW_MYITEM_WTP_LED_STATUS,CW_ITEM_NONE,MBAG_WORD}
+};
+
+
+\endcode
+
+
+ \section ItemsElements Items, Elements, Messages ...
+
+
+ \subsection asd fdglksd
+ This is the text for the subsection.
+
+*/
+
