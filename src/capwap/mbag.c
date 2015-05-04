@@ -8,6 +8,7 @@
  * @{
  */ 
 
+/*
 static int mbag_bstr16str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
@@ -27,7 +28,7 @@ static int mbag_bstr16str(void *item,char *dst)
         }
 	return d-dst;	
 }
-
+*/
 
 static int mbag_strstr(void *item,char *dst)
 {
@@ -42,15 +43,17 @@ static struct mbag_item *  mbag_fromstr(const char *src)
 		return NULL;
 
 	i->type = MBAG_STR;
+	i->dynid=0;
 	i->data = strndup(src,2000);
 	return i;
 }
 
 
-
+/*
 const struct mbag_typedef mbag_type_byte = {
 	"byte",NULL
 };
+*/
 
 /*
 const struct mbag_typedef mbag_type_word = {
@@ -58,9 +61,11 @@ const struct mbag_typedef mbag_type_word = {
 };
 */
 
+/*
 const struct mbag_typedef mbag_type_dword = {
 	"dword",NULL
 };
+*/
 
 const struct mbag_typedef mbag_type_const_data = {
 	"data",NULL
@@ -70,13 +75,18 @@ const struct mbag_typedef mbag_type_bstr = {
 	"bstr",free
 };
 
+/*
 const struct mbag_typedef mbag_type_bstr16 = {
 	"bstr16",free,mbag_bstr16str
 };
 
+*/
+
 const struct mbag_typedef mbag_type_str = {
 	"str",free,mbag_strstr,mbag_fromstr
 };
+
+
 
 /*
 const struct mbag_typedef mbag_type_vendorstr = {
@@ -109,6 +119,10 @@ const struct mbag_typedef mbag_type_mbag = {
 	"mbag",mbag_type_mbag_del
 };
 
+const struct mbag_typedef mbag_type_mbag_dyn = {
+	"mbag",mbag_type_mbag_del
+};
+
 
 static void mbag_del_data(struct mbag_item *i)
 {
@@ -120,7 +134,11 @@ static void mbag_del_data(struct mbag_item *i)
 
 static void mbag_del_fun(void *e)
 {
-
+	mbag_item_t * i = (mbag_item_t*)e;
+	if (i->dynid){
+		free((void*)i->id);
+	}
+	
 	mbag_del_data(e);
 	free(e);
 }
@@ -158,6 +176,19 @@ mbag_t mbag_create()
 
 }
 
+
+
+mbag_item_t *mbag_item_new(mbagtype_t type)
+{
+	struct mbag_item *i= malloc(sizeof(mbag_item_t));
+	if (!i)
+		return NULL;
+
+	i->type = type;
+	i->dynid=0;
+	return i;
+}
+
 struct mbag_item *mbag_item_create(mbag_t s, const char *id)
 {
 	struct mbag_item is;
@@ -174,6 +205,7 @@ struct mbag_item *mbag_item_create(mbag_t s, const char *id)
 	if (!i)
 		return NULL;
 	i->id = id;
+	i->dynid=0;
 	return mavl_add(s, i);
 }
 
@@ -194,6 +226,7 @@ struct mbag_item *mbag_i_item_create(mbag_t s, uint32_t id)
 	if (!i)
 		return NULL;
 	i->iid = id;
+	i->dynid=0;
 	return mavl_add(s, i);
 }
 
