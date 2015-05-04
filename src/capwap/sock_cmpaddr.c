@@ -23,10 +23,10 @@
 #include "sock.h"
 
 
-/*
+/**
  * compare two sockaddrs
- * returns 0 if both addrs are equal
- *
+ * 
+ * @return 0 if both addriesses are equal
  */
 
 int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int cmpport)
@@ -52,7 +52,6 @@ int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int 
 			s2 = (uint8_t*)&(((struct sockaddr_in*)addr2)->sin_addr);
 			slen = sizeof(struct in_addr);
 			break;
-#ifdef WITH_IPV6			
 		case AF_INET6:
 			if (cmpport){
 				p1 = ((struct sockaddr_in6*)addr1)->sin6_port;
@@ -64,7 +63,6 @@ int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int 
 			s2 = (uint8_t*)&(((struct sockaddr_in6*)addr2)->sin6_addr);
 			slen = sizeof(struct in6_addr);
 			break;
-#endif			
 		default:
 
 			return -1;	
