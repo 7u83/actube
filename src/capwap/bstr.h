@@ -97,6 +97,8 @@ static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 	return str;
 }
 
+uint8_t * bstr16_create_from_str(const char *s);
+
 
 typedef uint8_t * vendorstr_t;
 
@@ -116,7 +118,7 @@ typedef uint8_t * vendorstr_t;
 	(((uint8_t*)(str))+6)
 
 #define vendorstr_size(n)\
-	(1+6+(len)*sizeof(uint8_t))
+	(1+6+(n)*sizeof(uint8_t))
 
 
 static inline uint8_t * vendorstr_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
@@ -132,6 +134,9 @@ static inline uint8_t * vendorstr_create(uint32_t vendor_id, uint8_t *data, uint
 	return str;
 
 }
+
+uint8_t * vendorstr_create_from_str(uint32_t vendor_id,const char *s);
+
 
 uint8_t * bstr16cfgstr(const char * s);
 
