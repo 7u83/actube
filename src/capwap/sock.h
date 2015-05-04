@@ -16,6 +16,13 @@
 
 */
 
+/**
+ *@file
+ *@breif
+ *@defgroup SockFunctions SOCK
+ *@{
+ */
+
 #ifndef __SOCK_H
 #define __SOCK_H
 
@@ -68,4 +75,6 @@ char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int add
 #define sock_addrfamily(addr) ( ((struct sockaddr_storage*)(addr))->ss_family )
 
 #endif /* __SOCK_H */
+
+/**@}*/
 
