@@ -84,11 +84,11 @@ bstr_t conf_board_revision;
 
 
 LONGSTRS conf_timer_cfgstrs[] = {
-	"max_discovery_interval",&conf_max_discovery_interval,
-	"discovery_interval",&conf_discovery_interval,
-	"max_discoveries",&conf_max_discoveries,
-	"silent_interval",&conf_silent_interval,
-	0,0
+	{"max_discovery_interval",&conf_max_discovery_interval},
+	{"discovery_interval",&conf_discovery_interval},
+	{"max_discoveries",&conf_max_discoveries},
+	{"silent_interval",&conf_silent_interval},
+	{0,0}
 };
 
 
