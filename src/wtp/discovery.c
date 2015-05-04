@@ -52,9 +52,14 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 	}
 
 
+//	mbag_t aclist = mbag_get_mbag(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
+
+
 	/* get the AC Name with Priority list */
 	cw_acpriolist_t priolist;
 	priolist = mbag_get_mavl(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
+//	if (priolist )
+		priolist=cw_acpriolist_create();
 
 	cw_aciplist_t resultlist=cw_aciplist_create();
 
