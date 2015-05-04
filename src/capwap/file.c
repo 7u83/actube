@@ -2,6 +2,26 @@
 #include <stdint.h>
 #include <stdio.h>
 
+/**
+ * @file
+ */
+
+/**
+ * Load a file from disk to memory
+ * @param filename name of file to load
+ * @param size variable which receives the size of the file in bytes
+ * @return a pointer to the memory where the file was loaded in \n 
+ * The memory must be freed using free.
+ *
+ * Eexample:
+ * \code
+   #include "capwap/file.h"
+   size_t bytes;
+   char * data = cw_load_file("file.txt",&bytes);
+   if (data)
+	free (data);
+   \endcode
+ */ 
 char *cw_load_file(const char *filename,size_t *size)
 {
 	FILE * infile = fopen(filename,"rb");
