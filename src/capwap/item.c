@@ -22,10 +22,11 @@
 
 
 const char CW_ITEM_NONE[] = "";
+const char CW_ITEM_ANY[] = "*";
+
 
 struct cw_itemdef *cw_item_get_by_name(const char *id, struct cw_itemdef *table)
 {
-	int i;
 	while (table->id != CW_ITEM_NONE) {
 		if (!strcmp(table->id, id))
 			return table;
@@ -42,6 +43,7 @@ static int cmp(const void *x1, const void *x2)
 	cw_itemdef_t *i1, *i2;
 	i1 = (cw_itemdef_t *) x1;
 	i2 = (cw_itemdef_t *) x2;
+
 	int rc = strcmp(i1->id, i2->id);
 	if (rc != 0)
 		return rc;
@@ -53,6 +55,7 @@ const cw_itemdef_t * cw_itemdef_get(cw_itemdefheap_t t, const char *id, const ch
 	cw_itemdef_t idef;
 	idef.id = id;
 	idef.sub_id = !sub_id ? CW_ITEM_NONE : sub_id;
+
 	return mavl_get(t, &idef);
 }
 

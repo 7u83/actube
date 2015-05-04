@@ -23,6 +23,8 @@
 #include "mbag.h"
 
 extern const char CW_ITEM_NONE[];
+extern const char CW_ITEM_ANY[];
+
 
 /* Definitions for CAPWAP Items */
 
@@ -49,6 +51,6 @@ extern const cw_itemdef_t * cw_itemdef_get(cw_itemdefheap_t t, const char *id,
 
 struct cw_itemdef *cw_item_get_by_name(const char *name, struct cw_itemdef *table);
 
-typedef const char *cw_item_t;
-
+typedef const char *cw_item_id_t;
+//
 #endif
