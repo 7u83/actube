@@ -41,8 +41,8 @@ struct mbag_typedef{
 	const char *name;
 	/** A pointer to a function to delete elements of this type */
 	void (*del)(void*);
-	/** A pointer to convert elements of this type to a string.
-	    This function is maily used to store elements to a SQL database
+	/** A pointer to a function to convert elements of this type to a string.
+	    This function is mainly used to store elements to an SQL database
 	    or to json strings */
 	int (*to_str)(void*,char *dst);
 	/** Cereate an item of this type from a string, which was previously
@@ -69,6 +69,10 @@ struct mbag_item{
 		uint32_t iid;
 		const char *id;
 	};
+	/** indicates if the key is dynamic oder static.
+	    If dynamic, the id will be freed using free 
+	    if mbag_item is deleted */
+	uint8_t dynid;
 	/** Type of this item */
 	const struct mbag_typedef * type;
 	/** Value of this item */
@@ -101,6 +105,7 @@ extern const struct mbag_typedef mbag_type_vendorstr;
 extern const struct mbag_typedef mbag_type_str;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
+extern const struct mbag_typedef mbag_type_mbag_dyn;
 
 /**
  *@defgroup MbagTypes  MBAG Types 
@@ -110,6 +115,7 @@ extern const struct mbag_typedef mbag_type_const_data;
 #define MBAG_WORD (&mbag_type_word)
 #define MBAG_DWORD (&mbag_type_dword)
 #define MBAG_MBAG (&mbag_type_mbag)
+#define MBAG_MBAG_DYN (&mbag_type_mbag_dyn)
 #define MBAG_BSTR (&mbag_type_bstr)
 #define MBAG_BSTR16 (&mbag_type_bstr16)
 #define MBAG_VENDORSTR (&mbag_type_vendorstr)
@@ -221,6 +227,8 @@ static inline vendorstr_t mbag_set_vendorstr(mbag_t s, const char *id, uint32_t 
 	return i->data;
 }
 
+
+mbag_item_t *mbag_item_new(mbagtype_t type);
 
 
 
@@ -405,6 +413,42 @@ static inline mavl_t mbag_get_mavl_c(mbag_t s, const char *id,
 	mbag_set_mavl(s, id, avltree);
 	return avltree;
 }
+
+
+static inline mavl_t mbag_get_mbag_c(mbag_t s, const char *id,
+							 mavl_t (creator) ())
+{
+	struct mbag_item *i = mbag_get(s, id);
+	if (i)
+		return i->data;
+
+	if (!creator)
+		return NULL;
+	mavl_t avltree = creator();
+	if (!avltree)
+		return NULL;
+	mbag_set_mbag(s, id, avltree);
+	return avltree;
+}
+
+static inline mavl_t mbag_i_get_mbag_c(mbag_t s, uint32_t iid,
+							 mavl_t (creator) ())
+{
+	struct mbag_item *i = mbag_i_get(s, iid);
+	if (i)
+		return i->data;
+
+	if (!creator)
+		return NULL;
+	mavl_t avltree = creator();
+	if (!avltree)
+		return NULL;
+	mbag_i_set_mbag(s, iid, avltree);
+	return avltree;
+}
+
+
+
 
 static inline mavl_t mbag_i_get_mavl(mbag_t s, uint32_t id,
 							 mavl_t (creator) ())
