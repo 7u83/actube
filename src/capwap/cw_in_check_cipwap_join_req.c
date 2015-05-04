@@ -35,18 +35,12 @@ int cw_detect_capwap(struct conn *conn)
 				cw_set_capwap_mode(conn,CW_MODE_CISCO);
 				break;
 			default:	
-				cw_set_capwap_mode(conn,CW_MODE_STD);
+				cw_set_capwap_mode(conn,CW_MODE_CAPWAP);
 				break;
 
-
 		}
-		
-
-
 	}
-	
 	return 0;
-
 }
 
 int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
