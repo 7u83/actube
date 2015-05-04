@@ -57,7 +57,7 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 	}
 	cw_dbg(DBG_INFO,"Saving configuration ...");
-	cfg_json_save();	
+	cfg_to_json();	
 	return 0;
 
 }
@@ -111,8 +111,6 @@ mavl_destroy(b);
 //	mbag_set_dword(r,CW_RADIO_TYPE,1);
 
 
-
-
 	cw_register_actions_cipwap_wtp(&capwap_actions);
 	cw_register_actions_capwap_80211_wtp(&capwap_actions);
 
@@ -133,7 +131,6 @@ mavl_destroy(b);
 	conn->local = mbag_create();
 	conn->base_rmac=get_base_rmac();
 
-conn->capwap_mode = CW_MODE_STD;
 conn->capwap_mode = CW_MODE_CISCO;
 
 the_conn->strict_capwap=0;
@@ -141,8 +138,9 @@ the_conn->strict_capwap=0;
 
 conn->config=mbag_create();
 
-	setup_conf(conn);
-	cfg_json_save();	
+//	setup_conf(conn);
+	cfg_from_json(conn);
+	cfg_to_json();	
 
 	mbag_t board_data = mbag_create();
 	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
