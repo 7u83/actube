@@ -19,26 +19,18 @@
 
 #include "mbag.h"
 
-
-static struct mbag_item *  from_str(const char *src)
+static void del_fun(void *i)
 {
-	mbag_item_t * i = mbag_item_new(MBAG_WORD);
-	if (!i)
-		return NULL;
-	i->word=atoi(src);
-	return i;
+	mbag_t x = (mbag_t)i;
+	mavl_destroy(x);
 }
 
-static int to_str(void *item,char *dst)
-{
-	mbag_item_t *i= item;
-        return sprintf(dst, "%d", i->word);
-}
+const struct mbag_typedef mbag_type_mbag = {
+	"Mbag",del_fun
+};
 
-
-/** Defines a word, two bytes. */
-const struct mbag_typedef mbag_type_word = {
-	"WORD",NULL,to_str,from_str
+const struct mbag_typedef mbag_type_mbag_dyn = {
+	"Mbag_Dyn",del_fun
 };
 
 

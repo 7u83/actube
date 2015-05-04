@@ -32,6 +32,7 @@
 #include "mbag.h"
 #include "format.h"
 
+/*
 static struct mbag_item *  from_str(const char *src)
 {
 	struct mbag_item *i= malloc(sizeof(struct sockaddr_storage));
@@ -48,7 +49,7 @@ static int to_str(void *item,char *dst)
 	mbag_item_t *i= item;
         return sprintf(dst, "%d", i->word);
 }
-
+*/
 
 /** 
  * MBAG items of this type hold an struct sockaddr element.
