@@ -1,39 +1,34 @@
 {
-	"ac_ip_list":[
-		"192.168.0.1",
-		"192.168.0.13",
-		"192.168.0.15",
-		"fe80::219:dbff:fee0:9327"
-	],
 	"ac_name_with_priority":{
 		"":"2",
 		"Master AC":"1"
 	},
-	"bssid":"",
 	"capwap_timers":"2590",
-	"cisco_ap_mode_and_type":"516",
+	"cisco_ap_mode_and_type":"512",
+	"cisco_board_data_options":".x00010000",
 	"idle_timeout":"300",
-	"radios":{
-		"0":{
-			"admin_state":"1",
-			"bssid":".x123456789abc"
-		},
-		"1":{
-			"admin_state":"1",
-			"bssid":".xaabbccddeeff"
-		},
-		"2":{
-			"admin_state":"1",
-			"bssid":".xaabbccddeeff"
-		}
-	},
+	"location_data":"Germany",
 	"wtp_board_data":{
 		"model_no":"AIR-LAP1131AG-E-K9",
 		"serial_no":"2045",
-		"vendor_id":"4232704"
+		"vendor_id":"38400"
 	},
 	"wtp_frame_tunnel_mode":"4",
 	"wtp_group_name":"tobias",
+	"wtp_hardware_version":"4232704,.x01000000",
 	"wtp_mac_type":"1",
-	"wtp_name":"Thomas Mann"
+	"wtp_name":"Kaffe-Point",
+	"wtp_software_version":"4232704,.x08007300",
+	"radios":{
+		"0":{
+			"admin_state":"1",
+			"bssid":".x123456789abc",
+			"radio_type":"1"
+		},
+		"1":{
+			"admin_state":"1",
+			"bssid":".xaabbccddeeff",
+			"radio_type":"4"
+		}
+	}
 }

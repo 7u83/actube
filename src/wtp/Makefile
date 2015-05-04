@@ -20,7 +20,7 @@ ifndef ARCH
 endif
 
 
-CFLAGS += -O0 -Werror -g
+CFLAGS += -O0 -Wall -Wno-unused-variable -Werror -g
 #CFLAGS += -Os -Wall 
 LDFLAGS += -L../contrib/jsmn -L../../src/capwap/$(ARCH) 
 
