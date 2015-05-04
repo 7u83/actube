@@ -199,7 +199,10 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 	mavliter_t i; mavliter_init(&i,t)
 
 
-
+/**
+ * Iterate through all elements of an MAVL Object using a MAVL Iterator.
+ * @param i pointer to MAVL Interator object
+ */ 
 #define mavliter_foreach(i)\
 	for (mavliter_seek_set(i); NULL != mavliter_get(i); mavliter_next(i))
 
