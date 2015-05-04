@@ -60,7 +60,6 @@ UTILOBJS= \
 	stravltree.o \
 	intavltree.o \
 	cw_util.o \
-	cw_format_version.o \
 	send.o
 
 MAVLOBJS= \
@@ -209,7 +208,11 @@ BSTROBJS= bstr_create.o \
 	bstr_create_from_cfgstr.o \
 	bstr_replace.o \
 	bstr_to_str.o \
-	bstr16cfgstr.o
+	bstr16cfgstr.o \
+	bstr16_create_from_str.o \
+	bstr_create_from_str.o \
+	vendorstr_create_from_str.o 
+
 	
 
 FRAGOBJS=fragman.o
@@ -235,8 +238,12 @@ CWACTION=action.o \
 	cisco.o \
 	mbag.o\
 	mbag_type_word.o\
+	mbag_type_byte.o\
 	mbag_type_vendorstr.o\
 	mbag_type_sockaddr.o\
+	mbag_type_dword.o\
+	mbag_type_bstr16.o\
+	mbag_type_mbag.o\
 	radio.o \
 	cw_out_radio_info.o \
 	capwap_items.o \
@@ -260,7 +267,7 @@ O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
-CFLAGS = -Werror -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
+CFLAGS = -Wall -Werror -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
 #CFLAGS = -Wall  -Os -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
