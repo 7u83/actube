@@ -30,6 +30,8 @@
 
 extern int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
 			   const uint8_t * src, int len);
+extern int cw_format_scan_hex_bytes(uint8_t *dst,const char *s, int len);
+
 
 
 /**
