@@ -63,7 +63,7 @@ exit(0);
 
 int cw_put_elem_cisco_ap_regulatory_domain(uint8_t *dst,int rid, mbag_t radio)
 {
-	int l=0;
+	//int l=0;
 	uint8_t *d=dst+10;
 	
 	d+=cw_put_byte(d,rid);		/* Band ID */
