@@ -16,7 +16,12 @@
 
 */
 
-
+/**
+ * @file
+ * @brief CAPWAP ACtions Header
+ * @defgroup ACTION CAPWAP/LWAP Actions
+ * @{
+ */ 
 #ifndef __ACTION_H
 #define __ACTION_H
 
@@ -110,18 +115,20 @@ extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_ou
  * Definition CAPWAP modes
  */
 enum capwapmodes {
-	/** Unknown -- means auto detect and 
-	    set as soon as possible */
-	CW_MODE_UNKNOWN,
-	/** Standard mode as specified in RFC 5415 */
-	CW_MODE_STD ,
+	/** Auto -- means auto detect the CAPWAP mode and 
+	    it set as soon as possible */
+	CW_MODE_AUTO,
+	/** Standard CAPWAP mode as specified in RFC 5415 */
+	CW_MODE_CAPWAP,
 	/** Cisco specific CAPWAP */
 	CW_MODE_CISCO,
 	/** CIPWAP, a mix of standard CAPWAP and some 
 	Cisco extension */
 	CW_MODE_CIPWAP,
 	/** Zyxel */
-	CW_MODE_ZYXEL
+	CW_MODE_ZYXEL,
+	/** Lancom */
+	CW_MODE_LANCOM
 };
 
 
@@ -133,6 +140,7 @@ struct cw_actiondef{
 	cw_strheap_t strmsg;
 	cw_strheap_t strelem;
 	cw_itemdefheap_t items;
+	cw_itemdefheap_t radioitems;
 
 	/** Supported Wireless Binding IDs (WBID) */
 	struct avltree * wbids;
@@ -141,6 +149,8 @@ struct cw_actiondef{
 
 
 #define cw_actionlist_get_node(t,a) avltree_get_node(t,a)
+
+/**@}*/
 
 #endif
 
