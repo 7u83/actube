@@ -22,23 +22,23 @@
 
 static struct mbag_item *  from_str(const char *src)
 {
-	mbag_item_t * i = mbag_item_new(MBAG_WORD);
+	mbag_item_t * i = mbag_item_new(MBAG_BYTE);
 	if (!i)
 		return NULL;
-	i->word=atoi(src);
+	i->byte=atoi(src);
 	return i;
 }
 
 static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "%d", i->word);
+        return sprintf(dst, "%d", i->byte);
 }
 
 
 /** Defines a word, two bytes. */
-const struct mbag_typedef mbag_type_word = {
-	"WORD",NULL,to_str,from_str
+const struct mbag_typedef mbag_type_byte = {
+	"Byte",NULL,to_str,from_str
 };
 
 
