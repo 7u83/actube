@@ -2,6 +2,7 @@
 #define __CW_RADIO_H
 
 #include "mbag.h"
+#include "item.h"
 
 
 
@@ -44,6 +45,8 @@ enum radiodata{
 
 
 int cw_radio_update_oper_states(mbag_t radios,int cause);
+extern struct cw_itemdef capwap_radioitemdefs[];
+
 
 
 #endif
