@@ -53,7 +53,7 @@ static int read_subelem(struct ac_info* acinfo,int subtype,uint8_t *elem, int le
 static int read_subeelms(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from)
 {
 	int sub=12;
-	int sublen;
+	//int sublen;
 
 
 	while (sub<len){
