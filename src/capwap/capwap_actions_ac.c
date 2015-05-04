@@ -22,6 +22,7 @@
 #include "capwap_items.h"
 #include "capwap_actions.h"
 #include "strheap.h"
+#include "radio.h"
 
 
 
@@ -372,6 +373,7 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 	def->strelem = cw_strheap_create();
 	def->wbids = intavltree_create();
 	def->items = cw_itemdefheap_create();
+	def->radioitems = cw_itemdefheap_create();
 
 	int rc;
 	rc = cw_actionlist_in_register_actions(def->in, capwap_actions_ac_in);
@@ -381,7 +383,7 @@ int cw_register_actions_capwap_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items,capwap_itemdefs);
-	
+	rc += cw_itemdefheap_register(def->radioitems,capwap_radioitemdefs);
 	
 	intavltree_add(def->wbids,0);
 
