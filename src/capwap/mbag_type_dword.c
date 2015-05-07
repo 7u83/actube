@@ -25,7 +25,7 @@ static struct mbag_item *  from_str(const char *src)
 	mbag_item_t * i = mbag_item_new(MBAG_DWORD);
 	if (!i)
 		return NULL;
-	i->word=atoi(src);
+	i->dword=atoi(src);
 	return i;
 }
 
