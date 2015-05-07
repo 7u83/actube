@@ -128,7 +128,9 @@ enum capwapmodes {
 	/** Zyxel */
 	CW_MODE_ZYXEL,
 	/** Lancom */
-	CW_MODE_LANCOM
+	CW_MODE_LANCOM,
+	/** Fortinet */
+	CW_MODE_FORTINET
 };
 
 
