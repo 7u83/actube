@@ -13,6 +13,8 @@ const char CW_RADIO_REG_DOMAIN[]="reg_domain";
 const char CW_RADIO_BSSID[]="bssid";
 const char CW_RADIO_SHORT_PREAMBLE[]="short_preamble";
 const char CW_RADIO_COUNTRY_STRING[]="country_string";
+const char CW_RADIO_DECRYPTION_ERROR_REPORT_PERIOD[]="decryption_error_report_period";
+
 
 /* Cisco */
 
@@ -22,8 +24,10 @@ const char CW_RADIO_CFP_MAX_DURATION[]="cfp_max_duration";
 	
 
 struct cw_itemdef capwap_radioitemdefs[] = {
-{CW_RADIO_ADMIN_STATE,CW_ITEM_NONE,MBAG_WORD},
+{CW_RADIO_ADMIN_STATE,CW_ITEM_NONE,MBAG_BYTE},
 {CW_RADIO_TYPE,CW_ITEM_NONE,MBAG_DWORD},
+{CW_RADIO_DECRYPTION_ERROR_REPORT_PERIOD,CW_ITEM_NONE,MBAG_WORD},
+
 {CW_RADIO_BSSID,CW_ITEM_NONE,MBAG_BSTR16},
 
 {CW_ITEM_NONE}
