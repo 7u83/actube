@@ -379,7 +379,7 @@ int cfg_to_json()
 //	mbag_set_byte(conn->config, CW_ITEM_RADIOS, 1);
 
 	int n = mbag_tojson(dst, conn->config, NULL, 0);
-printf("DST: %s\n",dst);
+//printf("DST: %s\n",dst);
 //exit(0);
 
 
