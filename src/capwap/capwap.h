@@ -710,7 +710,7 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 #define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
 #define cw_set_msg_type(msgptr,t) cw_set_msg_id(msgptr,t)
 #define cw_set_msg_seqnum(msgptr,s) cw_put_byte( (msgptr) +4,s);
-#define cw_set_msg_elems_len(msgptr,n) (cw_put_word((msgptr)+5,(n+3)))
+#define cw_set_msg_elems_len(msgptr,n) (cw_put_word((msgptr)+5,((n)+3)))
 
 #define cw_set_msg_flags(msgptr,f) (cw_put_byte( (msgptr)+7,f))
 
