@@ -34,7 +34,7 @@ const char CW_ITEM_WTP_OTHERSOFTWARE_VENDOR,
 const char CW_ITEM_WTP_OTHERSOFTWARE_VERSION,
 */
 const char CW_ITEM_WTP_BOARD_DATA[]="wtp_board_data";
-const char CW_ITEM_WTP_DESCRIPTOR[]="wtp_descriptor";
+const char CW_ITEM_WTP_DESCRIPTOR[]="0wtp_descriptor";
 const char CW_ITEM_CAPWAP_TIMERS[]="capwap_timers";
 const char CW_ITEM_RADIO_ADMINISTRATIVE_STATE[]="radio_admin_state";
 
