@@ -5,13 +5,13 @@
 	},
 	"capwap_timers":"2590",
 	"cisco_ap_mode_and_type":"512",
-	"cisco_board_data_options":".x00010000",
+	"cisco_board_data_options":".x01010101",
 	"idle_timeout":"300",
 	"location_data":"Germany",
 	"wtp_board_data":{
 		"model_no":"AIR-LAP1131AG-E-K9",
 		"serial_no":"2045",
-		"vendor_id":"38400"
+		"vendor_id":"4232704"
 	},
 	"wtp_frame_tunnel_mode":"4",
 	"wtp_group_name":"tobias",
@@ -28,7 +28,7 @@
 		"1":{
 			"admin_state":"1",
 			"bssid":".xaabbccddeeff",
-			"radio_type":"4"
+			"radio_type":"2"
 		}
 	}
 }
