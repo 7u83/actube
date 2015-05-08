@@ -14,6 +14,7 @@ extern const char CW_RADIO_REG_DOMAIN[];
 extern const char CW_RADIO_BSSID[];
 extern const char CW_RADIO_SHORT_PREAMBLE[];
 extern const char CW_RADIO_COUNTRY_STRING[];
+extern const char CW_RADIO_DECRYPTION_ERROR_REPORT_PERIOD[];
 
 /* Cisco */
 
