@@ -55,6 +55,12 @@ AP = RAD = WTP
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |      QoS      |   Auth Type   |Broadcast SSID |  Reserved...  |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+      | WLAN name (33 bytes) ...
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
       |    SSID ...   |
       +-+-+-+-+-+-+-+-+
 
@@ -403,6 +409,7 @@ AP = RAD = WTP
    Type: 
      0x0133: FLEX_MCUC_GROUP_CFG (?)
      0x0184: Band Select  (?)
+     0x012e: Jumbo MTU Payload
  
  
 224. Cisco AP Log Facility
@@ -559,7 +566,7 @@ Length: 3
     0                   1             
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |      Type     |      Set      |  
+   |      Set      |     Type      |  
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    Type: 44
@@ -619,8 +626,10 @@ Length: 2
 	0: DTLS Data disabled
 	1: DTLS Data enabled
 
+132. Cisco MM MWAR Hash Config
 
-133. Cisco SSC Hash Validation
+
+133. Cisco SSC Hash Validation (LWAPP)
     0
     0 1 2 3 4 5 6 7
    +-+-+-+-+-+-+-+-+
