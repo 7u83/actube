@@ -382,7 +382,6 @@ int cfg_to_json()
 //printf("DST: %s\n",dst);
 //exit(0);
 
-
 	cw_save_file("cfg.json", dst, n);
 	return 1;
 }

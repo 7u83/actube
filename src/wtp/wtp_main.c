@@ -188,7 +188,7 @@ conn->incomming=conn->config;
 
 	//image_update();
 
-
+	return 0;
 }
 
 

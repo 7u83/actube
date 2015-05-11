@@ -45,16 +45,22 @@ cw_action_in_t cipwap_actions_wtp_in[] = {
 	cw_in_ac_name_with_priority, 0, MBAG_BSTR16,CW_ITEM_AC_NAME_WITH_PRIORITY,0,512}
 	,
 
-	/* AP Mode an Type */
-	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	/* AP Mode an Type IN */
+/*	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 	 CW_ACTION_IN_CISCO_AP_MODE_AND_TYPE,
 	 1}
 	,
-
+*/
 	/* Radio Administrative State */
-	/* Oveload CAPWAP action to handle a radio ID of 255 */
+	/* Overload CAPWAP action to handle a radio ID of 255 */
 	{0, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 	 CW_ACTION_IN_CISCO_RADIO_ADMINISTRATIVE_STATE_WTP, 0}
+	,
+
+
+	/* Add WLAN */
+	{CW_VENDOR_ID_CISCO, 0, CW_STATE_RUN, CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	 CW_ACTION_IN_CISCO_ADD_WLAN, 0}
 	,
 
 
