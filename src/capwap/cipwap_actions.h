@@ -33,4 +33,11 @@
 	0,						/* ID to use store */		\
 	0, 1114						/* min/max length */
 
+#define CW_ACTION_IN_CISCO_ADD_WLAN\
+	CW_CISCO_ADD_WLAN,				/* Element ID*/			\
+	cw_in_cisco_add_wlan, 0,			/* start/end callback */	\
+	NULL, 						/* Type of element */		\
+	0,						/* ID to use store */		\
+	0, 1114						/* min/max length */
+
 

@@ -177,8 +177,8 @@ AP = RAD = WTP
 
    Type: AP Type 
 
-      0 - ?
-      4 - ?
+      0 - ?  //  
+      4 - ?  // Legacy AP ?
 
 
  

@@ -233,5 +233,7 @@ int cw_in_cisco_radio_cfg(struct conn *conn, struct cw_action_in *a, uint8_t * d
 		  struct sockaddr *from);
 
 
+int cw_in_cisco_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
 
 #endif
