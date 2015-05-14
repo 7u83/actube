@@ -128,7 +128,8 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 		as.msg_id=msg_id;
 		as.item_id=i;
 		as.vendor_id=0;
-		
+		if(as.item_id) { /*FIXME: Ugly for avoid unused-variable warning */
+		}
 		
 		
 		
