@@ -190,10 +190,10 @@
 	(*(dst)=b,1)
 
 #define lw_put_word(dst,w)\
-	(*((uint16_t*)(dst)) = htons(w),2)
+	(*((uint16_t*)(dst)) = htons(w))
 
 #define lw_put_dword(dst,dw)\
-	(*((uint32_t*)(dst)) = htonl(dw),4)
+	(*((uint32_t*)(dst)) = htonl(dw))
 
 #define lw_set_byte(dst,b) \
 	(*(dst)=b);
