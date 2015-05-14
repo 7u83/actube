@@ -187,7 +187,7 @@
 
 
 #define lw_put_byte(dst,b) \
-	(*(dst)=b,1)
+	(*(dst)=b)
 
 #define lw_put_word(dst,w)\
 	(*((uint16_t*)(dst)) = htons(w))

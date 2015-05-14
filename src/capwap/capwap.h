@@ -818,7 +818,7 @@ static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
  */
 
 #define cw_put_elem_hdr(dst,type,len) \
-	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
+	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)))
 
 
 /** 
