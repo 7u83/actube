@@ -24,7 +24,12 @@ const char * init_tables = "\
 		upd INTEGER,\
 		PRIMARY KEY(wtpid,id,sub_id)\
 	);\
+	CREATE TABLE IF NOT EXISTS wlans (wlanid INTEGER PRIMARY KEY);\
+	CREATE TABLE IF NOT EXISTS wlanprops (wlanid INTEGER, id TEXT NOT NULL, val TEXT, PRIMARY KEY(wlanid,id));\
 	";
+	
+
+
 
 int db_init()
 {
