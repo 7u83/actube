@@ -972,7 +972,7 @@ extern struct cw_strlist_elem mbag_item_strings[];
 #define cw_strerror(rc) cw_strrc(rc)
 */
 
-static inline const char * cw_strerror(rc) {
+static inline const char * cw_strerror(int rc) {
 	if (rc<0){
 		if (errno==EAGAIN)
 			return "Timed out";
