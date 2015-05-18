@@ -33,7 +33,7 @@
 
 /**
  * Create a conn object
- * @param socket a socket
+ * @param sock a socket
  * @param addr the address associated
  * @param qsize size of packet queue
  * @return A pointer to the created object
