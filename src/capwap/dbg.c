@@ -41,6 +41,10 @@ void (*cw_dbg_vcb) (int level, const char *fromat, va_list args) = CW_LOG_DEFAUL
 
 
 uint32_t cw_dbg_opt_display = 0;
+
+/**
+ * Current debug level
+ */ 
 uint32_t cw_dbg_opt_level = 0;
 
 
@@ -248,8 +252,8 @@ abort:
  * Create an ASCII hex dump of binary data
  * 
  * @param data data to dump
- * @len number of bytes data contains
- * @return a character string with the created data ASCII dump ( must be release with free)
+ * @param len number of bytes to dump (size of data)
+ * @return a character string with the created data ASCII dump (must be released with free)
  */ 
 char * cw_dbg_mkdmp( const uint8_t * data, int len)
 {
