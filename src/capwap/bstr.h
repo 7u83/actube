@@ -19,7 +19,9 @@
 /**
  * @file
  * @brief Definitions for bstr functions
- * @defgroup Bstr BSTR Functions
+ * @defgroup Bstr BSTR 
+ * @brief BSTR is used to store binary strings.
+ * We can see them anywhere.
  * @{
  */
 
@@ -33,7 +35,7 @@
 /**
  * bstr type
  *
- * bstr_t serves as binary string where the first byte cponntains
+ * bstr_t serves as binary string where the first byte contains
  * the length of the string.
  */
 typedef uint8_t* bstr_t;
@@ -62,9 +64,15 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
 #define bstr_size(len) (len+1)
 
 /**
- * Max. length of a bstr_t string.
+ *@defgroup BstrConstants Types & Constants
+ *@{
+ */
+
+/**
+ * Maximum length of a bstr_t string.
  */ 
 #define BSTR_MAX_LEN 254
+
 
 /**
   * The same as #bstr_t, but there are two bytes used
@@ -72,9 +80,26 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
   */  
 typedef uint8_t *bstr16_t;
 
+/**@}*/
+
+
+/**
+ * Return the length of a bstr16_t string.
+ */ 
 #define bstr16_len(s) ( *((uint16_t*)(s)) )
+/**
+ * Return a pointer to the data of a bstr16_t string.
+ */ 
 #define bstr16_data(s) (((uint8_t*)s)+2)
+
+/**
+ * Return the actual size of a bstr16_t string. That's the
+ * this objects needs in memory to be stored.
+ */ 
 #define bstr16_size(l) (l+2)
+/**
+   Maximum length of a #bstr16_t string 
+*/
 #define BSTR16_MAX_LEN (0xffff-2)
 
 /*
