@@ -13,7 +13,6 @@
 
     You should have received a copy of the GNU General Public License
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 /**
@@ -74,11 +73,10 @@ struct mavl {
 typedef struct mavl * mavl_t;
 
 
-//extern void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
 struct mavl *mavl_create(int (*cmp) (const void *, const void *),
 			       void (*del) (void *));
-//void mavl_destroy(struct mavl *t);
+
 void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
 void mavl_del_all(struct mavl *t);
