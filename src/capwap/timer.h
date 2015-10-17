@@ -24,7 +24,7 @@
 #include <sys/time.h>
 
 /** 
- * @defgroup TimerFunctions Timer Functions
+ * @defgroup TimerFunctions Timer & Clock Functions
  * @{
  */
 
@@ -58,24 +58,33 @@ typedef time_t cw_timer_t;
 
 /**
  * Define a clock variable to measure runtime (not CPU runtime, but
- * real time). This  variable can be used with #cw_clock_start 
+ * real time). The created variable can be used with #cw_clock_start 
  * and #cw_clock_lap.
- * 
  * @param c name of the variable
+ *
+ * Example:
+ * @code
+ * CW_CLOCK_DEFINE(clk);
+ * cw_clock_start(clk);
+ * // do something ...
+ * int t = cw_clock_lap(clk);
+ * printf("Caclulation took %d seconds\n",t);
+ * @endcode
+ * 
  */
-#define CLOCK_DEFINE(c)\
+#define CW_CLOCK_DEFINE(c)\
 	struct timeval c;
 
 /**
  * Start the clock (stop watch), start measuring time
- * @param c a pounter to a variable defined with #DEFINE_CLOCK
+ * @param c a pouiter to a variable defined with #CW_CLOCK_DEFINE
  */
 #define cw_clock_start(c)\
 	gettimeofday(c,NULL);
 
 /**
  * Get lap time. (stop watch)
- * @param tv pointer to a clock variable defined with #CLOCK_DEFINE
+ * @param tv pointer to a clock variable defined with #CW_CLOCK_DEFINE
  * @return lap time in seconds.
  */
 static inline double cw_clock_lap(struct timeval *tv)
