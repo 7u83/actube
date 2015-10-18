@@ -65,11 +65,16 @@
  */
 enum capwap_states {
 	CW_STATE_NONE = 0,
+	/** Discovery State */
 	CW_STATE_DISCOVERY,
+	/** Join State */
 	CW_STATE_JOIN,
+	/** Config State */
 	CW_STATE_CONFIGURE,
+	/** Image Data Upload */
 	CW_STATE_IMAGE_DATA,
 	CW_STATE_UPDATE,
+	/** Run State */
 	CW_STATE_RUN
 };
 
@@ -141,14 +146,17 @@ struct capwap_ctrlhdr
  */
 enum cw_message_types{
 
-/**Discovery Request */
+/**Discovery Request = 1*/
 CW_MSG_DISCOVERY_REQUEST = 			1,
-/** DIscovery Response */
+/** Discovery Response = 2 */
 CW_MSG_DISCOVERY_RESPONSE = 			2,
+/** Join Request = 3 */
 CW_MSG_JOIN_REQUEST = 				3,
+/** Join Response = 4 */
 CW_MSG_JOIN_RESPONSE = 				4,
-
+/** Config. Status Request = 5*/
 CW_MSG_CONFIGURATION_STATUS_REQUEST = 		5,
+/** Config. Status Response = 6 */
 CW_MSG_CONFIGURATION_STATUS_RESPONSE = 		6,
 
 CW_MSG_CONFIGURATION_UPDATE_REQUEST = 		7,
@@ -233,7 +241,7 @@ CW_MSG_MAXMSG	=				26
 #define CW_MSG_MAXMSG					26
 */
 
-/*
+/**
 * CAPWAP message elements as defined in  RFC 5415
 */
 
