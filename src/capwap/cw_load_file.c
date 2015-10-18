@@ -1,5 +1,24 @@
+/*
+    This file is part of libcapwap.
+
+    libcapwap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with libcapwap.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "file.h"
 
 /**
  * @file
@@ -38,19 +57,6 @@ char *cw_load_file(const char *filename, size_t * size)
 	*size = fread(buf, 1, *size, infile);
       errX:
 	fclose(infile);
-
-
 	return buf;
 }
 
-
-int cw_save_file(const char *filename, char *data, int len)
-{
-	FILE *outfile = fopen(filename, "wb");
-	if (!outfile)
-		return 0;
-
-	int bytes = fwrite(data, 1, len, outfile);
-	fclose(outfile);
-	return bytes;
-}
