@@ -18,6 +18,9 @@ struct cw_strlist_elem {
 	const char *str;
 };
 
+typedef struct cw_strlist_elem* cw_strlist_t;
+
+
 /** Stopper, indicates the last element in a strlist */
 #define CW_STR_STOP	0xffffffff
 
