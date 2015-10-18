@@ -63,7 +63,6 @@ UTILOBJS= \
 	send.o
 
 MAVLOBJS= \
-	mavl.o \
 	mavl_del.o \
 	mavl_add.o \
 	mavl_create.o\
@@ -80,6 +79,7 @@ MAVLOBJS= \
 	file.o
 
 #	cw_foreach_msgelem.o \
+#	mavl.o \
 
 
 # LWAPP objs
