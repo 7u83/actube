@@ -51,7 +51,7 @@ typedef time_t cw_timer_t;
 
 /**
  * Check if a timer is expired.
- * @param t an time_t variable intializes by #cw_timer_start
+ * @param t a variable of type time_t intialized by #cw_timer_start
  * @return 0=timer is not expired\n 1=timer is expired.
  */
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
