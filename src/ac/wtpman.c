@@ -91,7 +91,7 @@ static void wtpman_remove(struct wtpman *wtpman)
 }
 
 
-
+/*
 int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len)
 {
 	printf("Discovery END!!!\n");
@@ -100,9 +100,10 @@ int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, i
 
 }
 
+*/
+
 static void wtpman_run_discovery(void *arg)
 {
-
 
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	//struct cwrmsg *cwrmsg;
@@ -301,7 +302,7 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 
 
-		CLOCK_DEFINE(clk);
+		CW_CLOCK_DEFINE(clk);
 		cw_clock_start(&clk);
 
 		mbag_item_t *eof = mbag_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
