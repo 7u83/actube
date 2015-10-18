@@ -30,9 +30,11 @@
  *@{
  */
 
+
 /**
  * Debug strings
  */
+
 struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_INFO, "info" },
 	{ DBG_PKT_IN,   "pkt_in" },
