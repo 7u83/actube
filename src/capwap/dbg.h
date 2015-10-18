@@ -35,6 +35,11 @@
 #define CW_LOG_DUMP_ROW_TAB_LEN 8
 #endif
 
+/**
+ *@defgroup DBG DBG
+ *@{
+ */
+
 
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
 void cw_dbg_missing_mand(int level,struct conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
@@ -66,7 +71,7 @@ void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
 /**
  * Debug levels
  */ 
-enum debug_levels{
+enum cw_dbg_levels{
 	/** Show headers of incomming CAPWAP packets */
 	DBG_PKT_IN=0,
 	/** Show headers of outgoing CAPWAP packets */
@@ -97,7 +102,7 @@ enum debug_levels{
 	/** Show subelements */
 	DBG_SUBELEM,
 
-	/** Show subelements */
+	/** Show dump of subelements */
 	DBG_SUBELEM_DMP,
 
 	/** hex dump elements */	
@@ -178,7 +183,11 @@ char * cw_dbg_mkdmp(const uint8_t * data, int len);
 void cw_dbg_version_subelem(int level,const char*context,int subtype,vendorstr_t vstr);
 
 
-
+/**
+  * Set debug level
+  * @param level debug level to set, allowed values are enumberated in #cw_dbg_levels structure.
+  * @param on 1: turns the specified debug level on, 0: turns the specified debug level off.
+  */
 #define cw_dbg_set_level(level,on)\
 	(on ? cw_dbg_opt_level |= (1<<(level)) : (cw_dbg_opt_level &= (-1)^(1<<(level))))
 
@@ -187,4 +196,6 @@ void cw_dbg_version_subelem(int level,const char*context,int subtype,vendorstr_t
 
 
 
-
+/**
+ *@}
+ */
