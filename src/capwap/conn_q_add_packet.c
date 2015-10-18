@@ -32,7 +32,7 @@ void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len)
 
 	if (conn->qrpos==qwpos){
 		/* no buffers, discard packet */
-		cw_dbg(DBG_PKT_ERR, "Discarding packe from %s, no queue buffers left",
+		cw_dbg(DBG_PKT_ERR, "Discarding packet from %s, no queue buffers left",
 			sock_addr2str(&conn->addr));
 		return;
 	}
