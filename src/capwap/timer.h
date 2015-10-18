@@ -37,11 +37,11 @@ typedef time_t cw_timer_t;
 /**
  * Start a timer.
  * @param t number of seconds until the timer expires
- * @return timer value to initialize a variable of time_t
+ * @return timer value to initialize a variable of #cw_timer_t
  *
  * Example: 
  * @code 
- * time_t timer = cw_timer_start(60);
+ * cw_timer_t timer = cw_timer_start(60);
  * while (!cw_timer_timeout(timer)){
  *   // Do something for max. 60 seconds ...
  * }
@@ -51,7 +51,7 @@ typedef time_t cw_timer_t;
 
 /**
  * Check if a timer is expired.
- * @param t a variable of type time_t intialized by #cw_timer_start
+ * @param t a variable of type #cw_timer_t intialized by #cw_timer_start
  * @return 0=timer is not expired\n 1=timer is expired.
  */
 #define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
