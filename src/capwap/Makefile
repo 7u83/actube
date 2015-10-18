@@ -76,7 +76,8 @@ MAVLOBJS= \
 	mavl_merge.o \
 	mavl_create_conststr.o \
 	utf8.o \
-	cw_load_file.o
+	cw_load_file.o \
+	cw_save_file.o
 
 #	cw_foreach_msgelem.o \
 #	mavl.o \
