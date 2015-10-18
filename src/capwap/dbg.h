@@ -64,7 +64,7 @@ void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
 #endif
 
 /** 
- * @defgroup DebugOptions Debug Options
+ * @defgroup DbgOptions Debug Options
  * @{
  */
 
@@ -157,7 +157,7 @@ enum cw_dbg_levels{
 
 extern uint32_t cw_dbg_opt_display;
 extern uint32_t cw_dbg_opt_level;
-extern struct cw_str cw_dbg_strings[];
+extern struct cw_strlist_elem cw_dbg_strings[];
 
 
 

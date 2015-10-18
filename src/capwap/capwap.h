@@ -942,12 +942,12 @@ static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
 /* Message to text stuff */
 
 /* Constants to string conversion lists */
-extern struct cw_str capwap_strings_msg[];
-extern struct cw_str capwap_strings_state[];
-extern struct cw_str capwap_strings_vendor[];
-extern struct cw_str capwap_strings_elem[];
-extern struct cw_str capwap_strings_result[];
-extern struct cw_str mbag_item_strings[];
+extern struct cw_strlist_elem capwap_strings_msg[];
+extern struct cw_strlist_elem capwap_strings_state[];
+extern struct cw_strlist_elem capwap_strings_vendor[];
+extern struct cw_strlist_elem capwap_strings_elem[];
+extern struct cw_strlist_elem capwap_strings_result[];
+extern struct cw_strlist_elem mbag_item_strings[];
 
 
 

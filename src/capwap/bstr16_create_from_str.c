@@ -28,4 +28,3 @@ uint8_t * bstr16_create_from_str(const char *s)
 	return mem;		
 }
 
-

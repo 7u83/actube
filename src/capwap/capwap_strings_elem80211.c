@@ -1,7 +1,7 @@
 #include "capwap_80211.h"
 
 
-struct cw_str capwap_strings_elem80211[] = {
+struct cw_strlist_elem capwap_strings_elem80211[] = {
 
 	{CW_ELEM80211_ADD_WLAN, "802.11 Add WLAN"},
 	{CW_ELEM80211_ANTENNA, "802.11 Antenna"},

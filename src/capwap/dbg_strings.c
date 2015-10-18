@@ -16,13 +16,24 @@
 
 */
 
+/**
+ *@file
+ *@brief 
+ */
 
-#include <string.h>
+//#include <string.h>
 
 #include "dbg.h"
 
+/**
+ *@addtogroup DbgOptions 
+ *@{
+ */
 
-struct cw_str cw_dbg_strings[] = {
+/**
+ * Debug strings
+ */
+struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_INFO, "info" },
 	{ DBG_PKT_IN,   "pkt_in" },
 	{ DBG_PKT_OUT, "pkt_out" },
@@ -45,6 +56,9 @@ struct cw_str cw_dbg_strings[] = {
 	{ CW_STR_STOP, NULL } 
 };
 
+/**
+ *@}
+ */
 
 
 
