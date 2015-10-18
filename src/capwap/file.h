@@ -1,6 +1,8 @@
 #ifndef __CW_FILE_H
 #define __CW_FILE_H
 
+#include <stdlib.h>
+
 /**
  *@defgroup FileFunctions File Functions
  *@{
