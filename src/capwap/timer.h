@@ -39,7 +39,13 @@ typedef time_t cw_timer_t;
  * @param t number of seconds until the timer expires
  * @return timer value to initialize a variable of time_t
  *
- * Example: time_t timer = cw_timer_start(60);
+ * Example: 
+ * @code 
+ * time_t timer = cw_timer_start(60);
+ * while (!cw_timer_timeout(timer)){
+ *   // Do something for max. 60 seconds ...
+ * }
+ * @endcode
  */
 #define cw_timer_start(t) (time(NULL)+t)
 
@@ -77,7 +83,7 @@ typedef time_t cw_timer_t;
 
 /**
  * Start the clock (stop watch), start measuring time
- * @param c a pouiter to a variable defined with #CW_CLOCK_DEFINE
+ * @param c a pointer to a variable defined with #CW_CLOCK_DEFINE
  */
 #define cw_clock_start(c)\
 	gettimeofday(c,NULL);
