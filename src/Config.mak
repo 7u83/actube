@@ -5,8 +5,7 @@
 #OPENSSL_VERSION=openssl-1.0.1l # doesn't work
 #OPENSSL_VERSION=openssl-1.0.2	# doesn't work
 OPENSSL_VERSION=openssl-1.0.1i
-USE_CONTRIB_OPENSSL=1
-
+USE_CONTRIB_OPENSSL=0
 
 # GnuTLS definitions
 GNUTLS_VERSION=3.3.9
