@@ -16,12 +16,15 @@
 
 */
 
+
+
+
+
+
 /**
  * @file Debugging Functions
  * @brief Various debug functions.
- * @defgroup DebugFunctions Debug Functions
- * @{
- */ 
+ */
 
 #include "capwap.h"
 #include "dbg.h"
@@ -33,6 +36,17 @@
 #include "capwap.h"
 #include "capwap_cisco.h"
 #include "lwapp_cisco.h"
+
+/**
+ *@addtogroup DBG
+ *@{
+ */
+
+ /*
+ * @defgroup DebugFunctions Debug Functions
+ * @{
+ */ 
+
 
 
 void (*cw_dbg_cb) (int level, const char *format, ...) = CW_LOG_DEFAULT_LOG;
@@ -596,6 +610,9 @@ void dbg_istore_dmp(mbag_t s)
 
 }
 */
+
+
+/**@}*/
 
 
 /**@}*/
