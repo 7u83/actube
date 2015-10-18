@@ -71,7 +71,7 @@ uint32_t cw_dbg_opt_level = 0;
 #define DBG_CLR_CYAN	"\x1b[36m"
 
 
-static struct cw_str color_on[] = {
+static struct cw_strlist_elem color_on[] = {
 	{ DBG_PKT_IN, DBG_CLR_YELLO },
 	{ DBG_PKT_OUT, DBG_CLR_YELLO_I },
 
@@ -90,19 +90,19 @@ static struct cw_str color_on[] = {
 	{ DBG_WARN, DBG_CLR_CYAN },
 	{ CW_STR_STOP, "" } 
 };
-static struct cw_str color_ontext[] = {
+static struct cw_strlist_elem color_ontext[] = {
 
 	{ DBG_ELEM_DMP, "\x1b[30m"},
 	{ CW_STR_STOP, "" } 
 };
 
 
-static struct cw_str color_off[] = {
+static struct cw_strlist_elem color_off[] = {
 
 	{ CW_STR_STOP, "\x1b[22;39m\x1b[23m" } 
 };
 
-static struct cw_str prefix[] = {
+static struct cw_strlist_elem prefix[] = {
 	{ DBG_INFO, " Info -" },
 	{ DBG_PKT_IN, " Pkt IN -" },
 	{ DBG_PKT_OUT, " Pkt Out -" },

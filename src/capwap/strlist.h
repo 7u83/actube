@@ -7,14 +7,14 @@
  */ 
 
 
-#include "stdio.h"
-
 /** 
  *Key/String pair, used for string tables, 
  *to display message element names and so on...
  */
-struct cw_str {
+struct cw_strlist_elem {
+	/** ID, an integer value */
 	int id;
+	/** a pointer to the string */
 	const char *str;
 };
 
@@ -22,8 +22,8 @@ struct cw_str {
 #define CW_STR_STOP	0xffffffff
 
 
-extern const char *cw_strlist_get_str(struct cw_str *s, int id);
-extern int cw_strlist_get_id(struct cw_str *s, const char *str);
+extern const char *cw_strlist_get_str(struct cw_strlist_elem *s, int id);
+extern int cw_strlist_get_id(struct cw_strlist_elem *s, const char *str);
 
 #endif
 

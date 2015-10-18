@@ -12,10 +12,6 @@ void cw_init(struct conn * conn, uint8_t *buffer, int type, int seqnum, struct r
 
 
 
-
-
-
-
 void cw_init_response(struct conn * conn, uint8_t *req)
 {
 	uint8_t *buffer=conn->resp_buffer;
