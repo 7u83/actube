@@ -63,7 +63,7 @@ static int parse_args(int argc, char *argv[])
 	int getopt_ret, option_index;
 
 	static struct option long_options[] = {
-		{"version", optional_argument, 0, 'v'},
+		{"version", optional_argument, NULL, 'v'},
 		{0, 0, 0, 0}
 	};
 	int o;
