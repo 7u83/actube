@@ -45,12 +45,19 @@ CFLAGS += -DWITH_IPV6
 
 RM = /bin/rm -f 
 
+AC_MODULES = mod_cipwap.o
+
+
 # list of generated object files for AC. 
-AC_OBJS =   wtplist.o wtpman.o conf.o ac_main.o \
-	    ac_interface.o \
-	    socklist.o \
-	    db.o \
-	ac_global.o
+AC_OBJS = \
+	wtplist.o wtpman.o conf.o ac_main.o \
+	ac_interface.o \
+	socklist.o \
+	db.o \
+	ac_global.o \
+	${AC_MODULES}
+
+
 
 AC_SRCS = $(AC_OBJS:.o=.c) 
 AC_DEPS := $(AC_OBJS:.o=.d)
