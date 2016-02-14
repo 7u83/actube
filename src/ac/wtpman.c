@@ -105,6 +105,7 @@ int check_discovery(struct conn *conn, struct cw_action_in *a, uint8_t * data, i
 static void wtpman_run_discovery(void *arg)
 {
 
+
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	//struct cwrmsg *cwrmsg;
 
@@ -583,12 +584,14 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
+
 	if (dtlsmode) {
 		cw_dbg(DBG_INFO, "Starting wtpman in DTLS mode");
 		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run,
 			       (void *) wtpman);
 	} else {
 		cw_dbg(DBG_INFO, "Starting wtpman in non-dtls mode");
+
 		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run_discovery,
 			       (void *) wtpman);
 	}
