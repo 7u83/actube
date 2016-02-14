@@ -34,11 +34,9 @@ int sock_create(const struct sockaddr * sa)
 		case AF_INET:
 			salen = sizeof(struct sockaddr_in);
 			break;
-#ifdef WITH_IPV6
 		case AF_INET6:	
 			salen = sizeof(struct sockaddr_in6);
 			break;
-#endif
 		default:
 			return -1;
 	}
