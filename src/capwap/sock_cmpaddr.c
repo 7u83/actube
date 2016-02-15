@@ -34,11 +34,10 @@
  * @param addr1 first address to compare
  * @param addr2 second address to compare
  * @param cmpport if not zero, also compare the port
- * @return 0 if both addriesses are equal, otherwise a value grater 
+ * @return 0 if both addresses are equal, otherwise a value grater 
  * or less than zero, depending of the result
  *
- * Currently there are there are only AF_INET and AF_INET6 
- * suppoorted
+ * Currently there are only AF_INET and AF_INET6 suppoorted.
  */
 
 int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int cmpport)
@@ -81,5 +80,3 @@ int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int 
 	}
 	return memcmp(s1,s2,slen);
 }
-
-
