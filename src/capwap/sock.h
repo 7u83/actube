@@ -40,31 +40,41 @@
 
 
 
-extern int sock_create(const struct sockaddr * sa);
-extern int sock_mwait(int * socklist, int socklistlen,fd_set * fset);
-extern void sock_copyaddr(struct sockaddr_storage *dst, const struct sockaddr * src);
-extern int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int cmpport);
-extern int sock_addrlen(const struct sockaddr * sa);
-extern int sock_receive(int sock,void *buf, size_t len, int flags, struct sockaddr * srcaddr,socklen_t *addrlen);
-extern int sock_mreceive(int * socklist, int socklistlen, void(*callback) (int * socklist,int index,struct sockaddr*,uint8_t*buf,int len));
-extern int sock_getifaddr(const char * ifname,int family, int type, struct sockaddr * sa);
+extern int sock_create(const struct sockaddr *sa);
+extern int sock_mwait(int *socklist, int socklistlen, fd_set * fset);
+extern void sock_copyaddr(struct sockaddr_storage *dst, const struct sockaddr *src);
+extern int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,
+			int cmpport);
+extern int sock_addrlen(const struct sockaddr *sa);
+extern int sock_receive(int sock, void *buf, size_t len, int flags,
+			struct sockaddr *srcaddr, socklen_t * addrlen);
+extern int sock_mreceive(int *socklist, int socklistlen,
+			 void (*callback) (int *socklist, int index, struct sockaddr *,
+					   uint8_t * buf, int len));
+extern int sock_getifaddr(const char *ifname, int family, int type, struct sockaddr *sa);
 extern int sock_getifhwaddr(const char *ifname, uint8_t * hwaddr, uint8_t * addrlen);
-extern char *sock_hwaddrtostr(const uint8_t *haddr,int len,char *dst,const char *separator);
+extern char *sock_hwaddrtostr(const uint8_t * haddr, int len, char *dst,
+			      const char *separator);
 extern char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen);
-extern int sock_strtoaddr( const char * s,struct sockaddr * saout);
+extern int sock_strtoaddr(const char *s, struct sockaddr *saout);
 extern int sock_set_recvtimeout(int sock, int seconds);
 
 extern int sock_getport(struct sockaddr *addr);
 extern int sock_setport(struct sockaddr *addr, int port);
-extern int sock_getbroadcastaddr(const struct sockaddr * addr,struct sockaddr * broadcastaddr);
-extern void sock_addrinit(struct sockaddr *addr,int type);
-extern int sock_set_dontfrag(int sock,int val);
+extern int sock_getbroadcastaddr(const struct sockaddr *addr,
+				 struct sockaddr *broadcastaddr);
+extern void sock_addrinit(struct sockaddr *addr, int type);
+extern int sock_set_dontfrag(int sock, int val);
 
 
-extern char * sock_get_primary_if(int family);
+extern char *sock_get_primary_if(int family);
+//extern char * sock_getifinfo(const struct sockaddr *sa,struct ifaddrs *result);
+extern int sock_getifinfo(const struct sockaddr *addr, char *ifname,
+			  struct sockaddr *broadcast, struct sockaddr *netmask);
 
 
-char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int addport);
+
+char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen, int addport);
 
 
 #define sock_addr2str(s) ( sock_strsockaddr( (struct sockaddr*)s, (char[64]){0}, 64,0 ) )
@@ -74,7 +84,6 @@ char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen,int add
 
 #define sock_addrfamily(addr) ( ((struct sockaddr_storage*)(addr))->ss_family )
 
-#endif /* __SOCK_H */
+#endif				/* __SOCK_H */
 
 /**@}*/
-
