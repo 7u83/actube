@@ -37,13 +37,6 @@
 #include "conf.h"
 #include "capwap/log.h"
 
-/*
-static struct wtpman ** wtplist = 0;
-static pthread_mutex_t wtplist_mutex;
-
-static int max_wtp_connections;
-*/
-
 
 static struct connlist * connlist;
 
@@ -73,11 +66,6 @@ void wtplist_unlock()
 void wtplist_destroy()
 {
 	connlist_destroy(connlist);
-
-/*	if (wtplist)
-		free (wtplist);
-	pthread_mutex_destroy(&wtplist_mutex);
-*/	
 }
 
 
@@ -89,20 +77,6 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 		return 0;
 	return conn->data;
 
-/*
-	int i;
-	for (i=0; i<max_wtp_connections; i++){
-		if (!wtplist[i])
-			continue;
-
-		if ( sock_cmpaddr(&wtplist[i]->conn->addr,addr,1))
-			continue;
-		struct wtpman * wtpman = wtplist[i];
-		return wtpman;
-
-	}
-	return NULL;
-*/	
 }
 
 
@@ -110,19 +84,6 @@ struct wtpman * wtplist_add(struct wtpman * wtpman)
 {
 	wtpman->conn->data=wtpman;	
 	return (struct wtpman*)connlist_add(connlist,wtpman->conn);
-
-
-/*
-	int i;
-	for (i=0; i<max_wtp_connections; i++){
-		if (!wtplist[i]){
-			wtplist[i]=wtpman;
-			return wtpman;
-		}
-	}
-	return NULL;
-*/
-
 }
 
 
@@ -130,18 +91,6 @@ void wtplist_remove(struct wtpman * wtpman)
 {
 	connlist_remove(connlist,wtpman->conn);
 	return;
-
-/*
-	printf("Remove wtpman %p\n",wtpman);
-	int i;
-	for (i=0; i<max_wtp_connections; i++){
-		if (wtplist[i]==wtpman){
-			printf("wtpman removed\n");
-			wtplist[i]=0;
-			break;
-		}
-	}
-*/
 
 }
 	
