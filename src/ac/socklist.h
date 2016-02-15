@@ -33,6 +33,8 @@ struct socklistelem{
 	int family;
 	int wtpcount;
 	int ac_proto;
+	struct sockaddr netmask;
+	struct sockaddr addr;
 };
 
 
