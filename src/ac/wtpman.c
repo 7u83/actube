@@ -498,7 +498,24 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		return 0;
 	memset(wtpman, 0, sizeof(struct wtpman));
 
-	int sockfd = socklist[socklistindex].reply_sockfd;
+
+	int replyfd;
+	if (srcaddr->sa_family == AF_INET && socklist[socklistindex].type!=SOCKLIST_UNICAST_SOCKET) {
+		extern int socklist_find_reply_socket(struct sockaddr *sa);
+		replyfd = socklist_find_reply_socket(srcaddr);
+		if (replyfd==-1){
+			cw_log(LOG_ERR,"Can't find reply socket for request from %s",sock_addr2str(srcaddr));
+			free(wtpman);
+			return NULL;
+		}
+	}
+	else{
+		replyfd = socklist[socklistindex].sockfd;
+	}
+
+	
+
+	int sockfd = replyfd; //socklist[socklistindex].reply_sockfd;
 
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	if (!wtpman->conn) {
