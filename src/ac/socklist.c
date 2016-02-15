@@ -79,6 +79,50 @@ void socklist_destroy()
 
 }
 
+/**
+ * Find a good reply socket (only for IPv4)
+ * @param sa source address
+ * @return socket or -1 if no socket was found
+ */
+int socklist_find_reply_socket(struct sockaddr *sa)
+{
+	int bestsockfd=-1;
+	int i;
+
+
+	for (i=0; i<socklist_len;i++){
+		/* we can only determine a reply socket for IPv4 */
+		if (socklist[i].addr.sa_family != AF_INET)
+			continue;
+		/* and we want only a unicast socket for reply */
+		if (socklist[i].type != SOCKLIST_UNICAST_SOCKET)
+			continue;
+		/* the first fd would be always the best if don't
+		 * find later a better one */
+		if (bestsockfd == -1){
+			bestsockfd = socklist[i].sockfd;
+			continue;
+		}
+
+
+
+		/* get our source address and nemask */
+		uint32_t addr = ((struct sockaddr_in*)&socklist[i].addr)->sin_addr.s_addr;
+		uint32_t mask = ((struct sockaddr_in*)&socklist[i].netmask)->sin_addr.s_addr;
+
+		/* get source of requested addres */
+		uint32_t saddr = ((struct sockaddr_in*)sa)->sin_addr.s_addr;
+
+
+		if ( (addr & mask)== (saddr & mask) ){
+			bestsockfd = socklist[i].sockfd;
+		}
+			
+
+	}
+
+	return bestsockfd;
+}
 
 static int find_reply_socket(struct sockaddr *sa,int bc)
 {
@@ -254,11 +298,22 @@ int socklist_add_unicast(const char *addr, const char * port, int ac_proto)
 
 	int rc = getaddrinfo(addr,port,&hints,&res0);
 	if (rc!=0) {
-		cw_log(LOG_ERR,"Can't bind multicast address '%s': %s",addr,gai_strerror(rc));
+		cw_log(LOG_ERR,"Can't bind unicast address '%s': %s",addr,gai_strerror(rc));
 		return 0;
 	}
 
 	for(res=res0; res; res=res->ai_next){
+		char ifname[64];
+		struct sockaddr netmask;
+		struct sockaddr broadcast;
+
+		ifname[0]=0;
+		rc = sock_getifinfo(res->ai_addr,ifname,&broadcast,&netmask);
+		if (!rc) {
+			cw_log(LOG_ERR,"No inerface found for %s, can't bind.",addr);
+			continue;
+		}
+
 		struct sockaddr *sa = res->ai_addr;
 		int sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 		/* create socket */
@@ -281,8 +336,17 @@ int socklist_add_unicast(const char *addr, const char * port, int ac_proto)
 		socklist[socklist_len].type=SOCKLIST_UNICAST_SOCKET;
 		socklist[socklist_len].ac_proto=ac_proto;
 	
+
+		if (res->ai_addr->sa_family == AF_INET ) {
+			memcpy(&socklist[socklist_len].netmask,&netmask,sock_addrlen(&netmask));
+			memcpy(&socklist[socklist_len].addr,res->ai_addr,sock_addrlen(res->ai_addr));
+			cw_log(LOG_INFO,"Bound to: %s (%i) on interface %s, netmask %s",addr,sockfd,ifname,sock_addr2str(&netmask));
+		}
+		else{
+			cw_log(LOG_INFO,"Bound to: %s (%i) on interface %s",addr,sockfd,ifname);
+		}
 		socklist_len++;
-		cw_log(LOG_INFO,"Bound to: %s (%i)",addr,sockfd);
+
 	}
 
 	freeaddrinfo(res0);	
