@@ -39,6 +39,7 @@ SOCKOBJS=\
 	sock_set_dontfrag.o \
 	sock_get_primary_if.o \
 	sock_receive.o  \
+	sock_getifinfo.o
 
 
 LOGOBJS=log.o \
