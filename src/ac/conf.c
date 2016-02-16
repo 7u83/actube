@@ -345,6 +345,7 @@ static int init_listen_addrs()
 	for (ifa=ifap; ifa!=0; ifa=ifa->ifa_next){
 		char str[100];
 
+		/** ignore loopback interfaces if configured*/
 		if(!conf_use_loopback){
 			if ((ifa->ifa_flags & IFF_LOOPBACK)){
 				continue;

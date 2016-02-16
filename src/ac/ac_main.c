@@ -215,7 +215,7 @@ int ac_run()
 
 	}
 
-	/* broadcast sockety ipv4 only */
+	/* broadcast socket ipv4 only */
 	for (i = 0; i < conf_bcast_addrs_len; i++) {
 		socklist_add_broadcast(conf_bcast_addrs[i], conf_control_port,
 				       AC_PROTO_CAPWAP);

@@ -109,7 +109,7 @@ static void wtpman_run_discovery(void *arg)
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	//struct cwrmsg *cwrmsg;
 
-	struct conn * conn = wtpman->conn;
+	struct conn *conn = wtpman->conn;
 
 
 //conn->config = mbag_create();
@@ -175,8 +175,7 @@ static int wtpman_establish_dtls(void *arg)
 		wtpman->conn->dtls_key_pass = conf_sslkeypass;
 		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
 		cw_dbg(DBG_DTLS, "Using key file %s", wtpman->conn->dtls_key_file);
-		cw_dbg(DBG_DTLS, "Using cert file %s",
-		       wtpman->conn->dtls_cert_file);
+		cw_dbg(DBG_DTLS, "Using cert file %s", wtpman->conn->dtls_cert_file);
 		dtls_ok = 1;
 	}
 
@@ -211,8 +210,8 @@ static int wtpman_establish_dtls(void *arg)
 
 	cert = dtls_get_peers_cert(wtpman->conn, 0);
 
-//	printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
-//	fwrite(cert.data, 1, cert.size, f);
+//      printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
+//      fwrite(cert.data, 1, cert.size, f);
 	fclose(f);
 
 
@@ -222,14 +221,14 @@ static int wtpman_establish_dtls(void *arg)
 static int wtpman_join(void *arg, time_t timer)
 {
 	struct wtpman *wtpman = (struct wtpman *) arg;
-	struct conn * conn = wtpman->conn;
+	struct conn *conn = wtpman->conn;
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
-	conn->config=conn->incomming;
-//	wtpman->conn->local = ac_config;
+	conn->config = conn->incomming;
+//      wtpman->conn->local = ac_config;
 
-	mbag_set_str(conn->local,CW_ITEM_AC_NAME,conf_acname);
+	mbag_set_str(conn->local, CW_ITEM_AC_NAME, conf_acname);
 
 
 
@@ -249,7 +248,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 
 
-	cw_dbg(DBG_INFO,"Join State - %s",sock_addr2str(&conn->addr));
+	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr));
 
 	int rc;
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
@@ -259,8 +258,8 @@ static int wtpman_join(void *arg, time_t timer)
 		}
 	}
 
-	if (rc != 0  ) {
-		cw_log(LOG_ERR,"Error joining WTP %s",cw_strerror(rc));
+	if (rc != 0) {
+		cw_log(LOG_ERR, "Error joining WTP %s", cw_strerror(rc));
 		return 0;
 
 	}
@@ -281,52 +280,51 @@ static int wtpman_join(void *arg, time_t timer)
 
 static void wtpman_image_data(struct wtpman *wtpman)
 {
-	struct conn * conn = wtpman->conn;
+	struct conn *conn = wtpman->conn;
 
-		/* Image upload */
-		const char *filename =
-		    mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME,NULL);
-		if (!filename) {
-			cw_log(LOG_ERR,
-			       "Can't send image to %s. No Image Filename Item found.",
-			       sock_addr2str(&conn->addr));
-			return;
-		}
-		cw_dbg(DBG_INFO, "Sending image file '%s' to '%s'.", filename,
+	/* Image upload */
+	const char *filename = mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME, NULL);
+	if (!filename) {
+		cw_log(LOG_ERR,
+		       "Can't send image to %s. No Image Filename Item found.",
 		       sock_addr2str(&conn->addr));
-		FILE *infile = fopen(filename, "rb");
-		if (infile == NULL) {
-			cw_log(LOG_ERR, "Can't open image %s: %s",
-			       sock_addr2str(&conn->addr), strerror(errno));
-			return;
-		}
+		return;
+	}
+	cw_dbg(DBG_INFO, "Sending image file '%s' to '%s'.", filename,
+	       sock_addr2str(&conn->addr));
+	FILE *infile = fopen(filename, "rb");
+	if (infile == NULL) {
+		cw_log(LOG_ERR, "Can't open image %s: %s",
+		       sock_addr2str(&conn->addr), strerror(errno));
+		return;
+	}
 
 
 
-		CW_CLOCK_DEFINE(clk);
-		cw_clock_start(&clk);
+	CW_CLOCK_DEFINE(clk);
+	cw_clock_start(&clk);
 
-		mbag_item_t *eof = mbag_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
-					   infile);
+	mbag_item_t *eof = mbag_set_const_ptr(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE,
+					      infile);
 
-		int rc=0;
-	        while (conn->capwap_state == CW_STATE_IMAGE_DATA && rc==0 && eof!=NULL) {
-			rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
-			eof = mbag_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
-		}
+	int rc = 0;
+	while (conn->capwap_state == CW_STATE_IMAGE_DATA && rc == 0 && eof != NULL) {
+		rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
+		eof = mbag_get(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE);
+	}
 
 
-		if (rc) {
-			cw_log(LOG_ERR,"Error sending image to %s: %s",sock_addr2str(&conn->addr),cw_strrc(rc));
-		}
-		else {
-			cw_dbg(DBG_INFO,"Image '%s' sucessful sent to %s in %0.1f seconds.",
-				filename,sock_addr2str(&conn->addr),cw_clock_stop(&clk));
-			conn->capwap_state=CW_STATE_NONE;
-		}
-			
-		fclose(infile);
-		wtpman_remove(wtpman);
+	if (rc) {
+		cw_log(LOG_ERR, "Error sending image to %s: %s",
+		       sock_addr2str(&conn->addr), cw_strrc(rc));
+	} else {
+		cw_dbg(DBG_INFO, "Image '%s' sucessful sent to %s in %0.1f seconds.",
+		       filename, sock_addr2str(&conn->addr), cw_clock_stop(&clk));
+		conn->capwap_state = CW_STATE_NONE;
+	}
+
+	fclose(infile);
+	wtpman_remove(wtpman);
 
 
 }
@@ -335,32 +333,31 @@ static void wtpman_image_data(struct wtpman *wtpman)
 void config_to_sql(struct conn *conn)
 {
 	// XXX for the moment we use just the IP adress as ID
-	char *wtp_id=sock_addr2str(&conn->addr);
+	char *wtp_id = sock_addr2str(&conn->addr);
 
-	MAVLITER_DEFINE(it,conn->incomming);
-	mavliter_foreach(&it){
-		mbag_item_t * i = mavliter_get(&it);
-		
-		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->items,i->id,NULL);
-		if (cwi){
-			DBGX("ID %s,%s",i->id,cwi->id);
-			DBGX("Typei %s,Typecwd %s",i->type->name,cwi->type->name);
+	MAVLITER_DEFINE(it, conn->incomming);
+	mavliter_foreach(&it) {
+		mbag_item_t *i = mavliter_get(&it);
 
-	//		printf("%s != %s ?\n",i->type->name,cwi->type->name);
+		const struct cw_itemdef *cwi =
+		    cw_itemdef_get(conn->actions->items, i->id, NULL);
+		if (cwi) {
+			DBGX("ID %s,%s", i->id, cwi->id);
+			DBGX("Typei %s,Typecwd %s", i->type->name, cwi->type->name);
+
+			//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
-			if (i->type->to_str){
-				i->type->to_str(i,str);
-				db_put_wtp_prop(wtp_id,cwi->id,cwi->sub_id,str);
-			}
-			else{
-				cw_log(LOG_ERR,"Can't converto to str");
+			if (i->type->to_str) {
+				i->type->to_str(i, str);
+				db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
+			} else {
+				cw_log(LOG_ERR, "Can't converto to str");
 
 			}
-			
 
-		}
-		else{
-		//	DBGX("ID %d",i->id);
+
+		} else {
+			//      DBGX("ID %d",i->id);
 
 		}
 
@@ -434,14 +431,14 @@ static void wtpman_run(void *arg)
 
 
 
-	conn->capwap_state=CW_STATE_RUN;
+	conn->capwap_state = CW_STATE_RUN;
 
 	// XXX testing ...
-	DBGX("Cofig to sql","");
+	DBGX("Cofig to sql", "");
 	config_to_sql(conn);
 
 
-	
+
 	rc = 0;
 	while (wtpman->conn->capwap_state == CW_STATE_RUN) {
 		rc = cw_read_messages(wtpman->conn);
@@ -452,25 +449,25 @@ static void wtpman_run(void *arg)
 
 		mavl_del_all(conn->outgoing);
 
-		mavl_conststr_t r = db_get_update_tasks(conn,sock_addr2str(&conn->addr));
+		mavl_conststr_t r = db_get_update_tasks(conn, sock_addr2str(&conn->addr));
 
-		if ( !r )
+		if (!r)
 			continue;
 
 		if (!conn->outgoing->count)
 			continue;
 
-//		DBGX("Have %d tasks",r->count);
+//              DBGX("Have %d tasks",r->count);
 
 		rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-		mavl_merge(conn->config,conn->outgoing);
+		mavl_merge(conn->config, conn->outgoing);
 		mavl_destroy(conn->outgoing);
-		conn->outgoing=mbag_create();
+		conn->outgoing = mbag_create();
 		config_to_sql(conn);
 		mavl_destroy(r);
 
-			
-	
+
+
 	}
 
 
@@ -500,22 +497,23 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 
 	int replyfd;
-	if (srcaddr->sa_family == AF_INET && socklist[socklistindex].type!=SOCKLIST_UNICAST_SOCKET) {
+	if (srcaddr->sa_family == AF_INET
+	    && socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 		extern int socklist_find_reply_socket(struct sockaddr *sa);
 		replyfd = socklist_find_reply_socket(srcaddr);
-		if (replyfd==-1){
-			cw_log(LOG_ERR,"Can't find reply socket for request from %s",sock_addr2str(srcaddr));
+		if (replyfd == -1) {
+			cw_log(LOG_ERR, "Can't find reply socket for request from %s",
+			       sock_addr2str(srcaddr));
 			free(wtpman);
 			return NULL;
 		}
-	}
-	else{
+	} else {
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-	
 
-	int sockfd = replyfd; //socklist[socklistindex].reply_sockfd;
+
+	int sockfd = replyfd;	//socklist[socklistindex].reply_sockfd;
 
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	if (!wtpman->conn) {
@@ -525,10 +523,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
-	wtpman->conn->radios=mbag_i_create();
+	wtpman->conn->radios = mbag_i_create();
 	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
-wtpman->conn->capwap_mode=CW_MODE_CISCO;
+	wtpman->conn->capwap_mode = CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
 
 	return wtpman;
@@ -581,9 +579,9 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 	}
 */
 
-//	char wi[4096];
-//	wtpinfo_print(wi, &wtpman->wtpinfo);
-//	printf("WTPINFO: \n%s\n", wi);
+//      char wi[4096];
+//      wtpinfo_print(wi, &wtpman->wtpinfo);
+//      printf("WTPINFO: \n%s\n", wi);
 
 
 

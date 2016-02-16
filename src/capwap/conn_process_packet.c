@@ -30,13 +30,6 @@
 #include "conn.h"
 #include "sock.h"
 
-#include <stdio.h>		//tube
-
-
-
-
-
-
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
@@ -114,7 +107,7 @@ int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
 
 /**
  * Special case error message, which is sent when an unexpected messages 
- * was received or somethin else happened.
+ * was received or something else happened.
  * @param conn conection
  * @param rawmsg the received request message, which the response belongs to
  * @pqram result_code result code to send

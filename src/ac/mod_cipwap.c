@@ -5,6 +5,7 @@
 
 static int init()
 {
+//	regn = cw_register_actions_cipwap_ac(&capwap_actions);
 	return 1;
 }
 
