@@ -704,7 +704,7 @@ int read_config(const char *filename)
 		CFG_STR_LIST("dbg", "{}", CFGF_NONE),
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
-		CFG_STR_LIST("bcast_addrs", "{}", CFGF_NONE),
+		CFG_STR_LIST("broadcast_listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("ac_ips", "{}", CFGF_NONE),
 		CFG_SIMPLE_STR("control_port", &conf_control_port),
 
@@ -763,7 +763,7 @@ int read_config(const char *filename)
 			  &conf_mcast_groups_len);
 
 	/* read ipv4 broadcast addresses */
-	conf_read_strings(cfg, "bcast_addrs", &conf_bcast_addrs, &conf_bcast_addrs_len);
+	conf_read_strings(cfg, "broadcast_listen", &conf_bcast_addrs, &conf_bcast_addrs_len);
 
 
 
