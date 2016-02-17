@@ -31,31 +31,31 @@
 #include "capwap/bstr.h"
 
 #ifndef CONF_DEFAULT_ACNAME
-	#define CONF_DEFAULT_ACNAME "AC"
+#define CONF_DEFAULT_ACNAME "AC"
 #endif
 
-#ifndef CONF_DEFAULT_MAXWTPS 
-	#define CONF_DEFAULT_MAXWTPS 200
+#ifndef CONF_DEFAULT_MAXWTPS
+#define CONF_DEFAULT_MAXWTPS 200
 #endif
 
 #ifndef CONF_DEFAULT_LOGFILENAME
-	#define CONF_DEFAULT_LOGFILENAME NULL
+#define CONF_DEFAULT_LOGFILENAME NULL
 #endif
 
 #ifndef CONF_DEFAULT_CONFIGFILENAME
-	#define CONF_DEFAULT_CONFIGFILENAME "ac.conf"
+#define CONF_DEFAULT_CONFIGFILENAME "ac.conf"
 #endif
 
 #ifndef CONF_DEFAULT_VENDOR_ID
-	#define CONF_DEFAULT_VENDOR_ID CW_VENDOR_ID_FSF
+#define CONF_DEFAULT_VENDOR_ID CW_VENDOR_ID_FSF
 #endif
 
 #ifndef CONF_DEFAULT_SOFTWARE_VERSION
-	#define CONF_DEFAULT_SOFTWARE_VERSION "AC-Tube 0.01"
+#define CONF_DEFAULT_SOFTWARE_VERSION "AC-Tube 0.01"
 #endif
 
 #ifndef CONF_DEFAULT_HARDWARE_VERSION
-	#define CONF_DEFAULT_HARDWARE_VERSION "Unknown"
+#define CONF_DEFAULT_HARDWARE_VERSION "Unknown"
 #endif
 
 #define CONF_DEFAULT_CISCO_HARDWARE_VERSION ".x01000001"
@@ -64,20 +64,20 @@
 
 
 #ifndef CONF_DEFAULT_CONTROL_PORT
-	#define	CONF_DEFAULT_CONTROL_PORT CAPWAP_CONTROL_PORT
+#define	CONF_DEFAULT_CONTROL_PORT CAPWAP_CONTROL_PORT
 #endif
 
 #ifndef CONF_DEFAULT_LW_CONTROL_PORT
-	#define	CONF_DEFAULT_LW_CONTROL_PORT LWAPP_CONTROL_PORT
+#define	CONF_DEFAULT_LW_CONTROL_PORT LWAPP_CONTROL_PORT
 #endif
 
 
-extern const char * conf_acname;
-extern char * conf_acid;
+extern const char *conf_acname;
+extern char *conf_acid;
 extern int conf_acname_len;
 extern long conf_max_wtps;
-extern char * conf_logfilename;
-extern struct sockaddr_storage * conf_salist;
+extern char *conf_logfilename;
+extern struct sockaddr_storage *conf_salist;
 extern int conf_salist_len;
 
 extern long conf_vendor_id;
@@ -89,36 +89,36 @@ extern bstr_t conf_cisco_software_version;
 
 
 
-extern char ** conf_listen_addrs;
+extern char **conf_listen_addrs;
 extern int conf_listen_addrs_len;
 
-extern struct sockaddr * conf_ac_ips;
+extern struct sockaddr *conf_ac_ips;
 extern int conf_ac_ips_len;
 
 
-extern int read_config(const char * filename);
+extern int read_config(const char *filename);
 
-extern char * conf_control_port;
+extern char *conf_control_port;
 #ifdef WITH_LWAPP
-extern char * conf_lw_control_port;
+extern char *conf_lw_control_port;
 extern int conf_lwapp;
 #endif
 
-extern char * conf_dtls_psk;
-extern char * conf_sslcertfilename;
-extern char * conf_sslkeyfilename;
-extern char * conf_sslkeypass;
-extern char * conf_dtls_psk;
+extern char *conf_dtls_psk;
+extern char *conf_sslcertfilename;
+extern char *conf_sslkeyfilename;
+extern char *conf_sslkeypass;
+extern char *conf_dtls_psk;
 extern int conf_dtls_verify_peer;
-char * conf_sslcipher;
+char *conf_sslcipher;
 
 extern char *conf_image_dir;
 
 
-extern char ** conf_mcast_groups;
+extern char **conf_mcast_groups;
 extern int conf_mcast_groups_len;
 
-extern char ** conf_bcast_addrs;
+extern char **conf_bcast_addrs;
 extern int conf_bcast_addrs_len;
 
 extern long conf_debug_level;
@@ -128,6 +128,11 @@ extern uint8_t conf_macaddress_len;
 extern long conf_strict_capwap;
 extern long conf_strict_headers;
 extern int conf_capwap_mode;
+
+
+
+extern int conf_parse_listen_addr(const char *addr, char *saddr, char *port, int *proto);
+
 
 
 #endif
