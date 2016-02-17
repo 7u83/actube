@@ -46,9 +46,10 @@ extern struct cw_actiondef capwap_actions;
 
 #define CLIENT_IP (sock_addr2str(&wtpman->conn->addr))
 
-void conn_handle_change_state_event_request(struct conn *conn)
+/*void conn_handle_change_state_event_request(struct conn *conn)
 {
 }
+*/
 
 /*
 struct rh_param {
@@ -141,7 +142,8 @@ static void wtpman_run_discovery(void *arg)
 	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
 	if (wn) {
-		//printf("WTP Name: %s\n", wn->data);
+//		printf("WTP Name: %s\n", wn->data);
+//		exit(0);
 	}
 
 	wtpman_remove(wtpman);
@@ -149,12 +151,6 @@ static void wtpman_run_discovery(void *arg)
 
 }
 
-
-static void wtpman_run_run(void *arg)
-{
-
-
-}
 
 
 
@@ -612,8 +608,9 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 	}
 }
 
-
+/*
 void wtpman_lw_start(struct wtpman *wtpman)
 {
 
 }
+*/
