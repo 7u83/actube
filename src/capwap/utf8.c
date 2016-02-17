@@ -3,11 +3,9 @@
 int cw_is_utf8(unsigned char *str, size_t len)
 {
 	size_t i = 0;
-	size_t j = 0;
 	size_t bytes = 0;
 
 	while (i < len) {
-		j = i;
 		if (str[i] < 0x20) {
 			return 0;
 		}

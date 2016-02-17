@@ -255,7 +255,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 		if (af->mand && afrc) {
 			/* add found mandatory message element 
 			   to mand list */
-			intavltree_add(conn->mand, (int)af->item_id);
+			intavltree_add(conn->mand, (intptr_t)af->item_id);
 		}
 
 	}

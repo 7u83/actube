@@ -824,7 +824,7 @@ static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
  */
 
 #define cw_put_elem_hdr(dst,type,len) \
-	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
+	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)))
 
 
 /** 
@@ -972,7 +972,7 @@ extern struct cw_strlist_elem mbag_item_strings[];
 #define cw_strerror(rc) cw_strrc(rc)
 */
 
-static inline const char * cw_strerror(rc) {
+static inline const char * cw_strerror(int rc) {
 	if (rc<0){
 		if (errno==EAGAIN)
 			return "Timed out";
