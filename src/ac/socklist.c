@@ -106,11 +106,11 @@ int socklist_find_reply_socket(struct sockaddr *sa)
 
 
 
-		/* get our source address and nemask */
+		/* get our source address and netmask */
 		uint32_t addr = ((struct sockaddr_in*)&socklist[i].addr)->sin_addr.s_addr;
 		uint32_t mask = ((struct sockaddr_in*)&socklist[i].netmask)->sin_addr.s_addr;
 
-		/* get source of requested addres */
+		/* get source of requested address */
 		uint32_t saddr = ((struct sockaddr_in*)sa)->sin_addr.s_addr;
 
 
@@ -310,7 +310,7 @@ int socklist_add_unicast(const char *addr, const char * port, int ac_proto)
 		ifname[0]=0;
 		rc = sock_getifinfo(res->ai_addr,ifname,&broadcast,&netmask);
 		if (!rc) {
-			cw_log(LOG_ERR,"No inerface found for %s, can't bind.",addr);
+			cw_log(LOG_ERR,"No interface found for %s, can't bind.",addr);
 			continue;
 		}
 
