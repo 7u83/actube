@@ -214,6 +214,7 @@ int ac_run()
 
 	/* create multicast sockets */
 	for (i = 0; i < conf_mcast_groups_len; i++) {
+
 		socklist_add_multicast(conf_mcast_groups[i], conf_control_port,
 				       AC_PROTO_CAPWAP);
 #ifdef WITH_LWAPP
@@ -226,8 +227,12 @@ int ac_run()
 
 	/* broadcast socket ipv4 only */
 	for (i = 0; i < conf_bcast_addrs_len; i++) {
-		socklist_add_broadcast(conf_bcast_addrs[i], conf_control_port,
-				       AC_PROTO_CAPWAP);
+
+		char addr[50],port[50];
+		int proto;
+		conf_parse_listen_addr(conf_bcast_addrs[i], addr, port, &proto);
+
+		socklist_add_broadcast(addr,port,proto);
 #ifdef WITH_LWAPP
 //              printf("Adding %d\n",socklist_len);
 		if (conf_lwapp)
