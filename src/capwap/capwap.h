@@ -659,7 +659,7 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 /**
  * Set the HLEN field of a CAWAP Header
  * @param th pointer to the header
- * @param hlen velue to set (max. 5 bits)
+ * @param hlen value to set (Header Length)
  */
 static inline void cw_set_hdr_hlen(uint8_t * th, int hlen)
 {
@@ -672,7 +672,7 @@ static inline void cw_set_hdr_hlen(uint8_t * th, int hlen)
 /**
  * Set the WBID field of a CAWAP Header
  * @param th pointer to the header
- * @param hlen velue to set (max. 5 bits)
+ * @param wbid value to set (Wireless ID)
  */
 static inline void cw_set_hdr_wbid(uint8_t * th, int wbid)
 {
@@ -685,7 +685,7 @@ static inline void cw_set_hdr_wbid(uint8_t * th, int wbid)
 /**
  * Set the RID field of a CAWAP Header
  * @param th pointer to the header
- * @param hlen velue to set (max. 5 bits)
+ * @param rid value to set (Radio ID)
  */
 static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 {
@@ -831,7 +831,7 @@ static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
  * Put a message element header for a message to contain a vendor specific payload
  * @param dst pointer to destination buffer
  * @param vendorid vendorid
- * @param elementid element id of vendor specific data
+ * @param elemid element id of vendor specific data
  * @len length of vendor specific data 
  * @return the number of bytes put (always 10)
  */
