@@ -58,6 +58,12 @@
 /** CAPWAP Control Port as String */
 #define CAPWAP_CONTROL_PORT_STR "5246"
 
+/** CAPWAP Data Port */
+#define CAPWAP_DATA_PPORT 5247
+
+/** CAWPAP DataPort as String */
+#define CAPWAP_DATA_PPORT_STR "5247"
+
 
 
 /**
