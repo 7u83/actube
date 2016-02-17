@@ -45,7 +45,7 @@
 #define LWAPP_DATA_PRT 12223
 
 /** LWAPP Data Port as String */
-#define LWAPP_CONTROL_PORT_STR "12223"
+#define LWAPP_DATA_PORT_STR "12223"
 
 /** Block Size for Image Data */
 #define LW_BLOCKSIZE_IMAGE_DATA 1024
