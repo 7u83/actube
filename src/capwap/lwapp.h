@@ -27,11 +27,6 @@
 
 #include "bstr.h"
 
-
-//#include "wtpinfo.h"
-
-
-
 /** 
  * @defgroup LWAPPConstants LWAPP Constats
  * @{
@@ -42,8 +37,14 @@
 #define LW_VERSION 0
 
 /** LWAPP Control Port */
-#define LWAPP_CONTROL_PORT 12223
+#define LWAPP_CONTROL_PORT 12222
 /** LWAPP Control Port as string */
+#define LWAPP_CONTROL_PORT_STR "12222"
+
+/** LWAPP Data Port */
+#define LWAPP_DATA_PRT 12223
+
+/** LWAPP Data Port as String */
 #define LWAPP_CONTROL_PORT_STR "12223"
 
 /** Block Size for Image Data */
