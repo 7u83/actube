@@ -493,10 +493,13 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 
 	int replyfd;
-	if (srcaddr->sa_family == AF_INET
-	    && socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
-		extern int socklist_find_reply_socket(struct sockaddr *sa);
-		replyfd = socklist_find_reply_socket(srcaddr);
+	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+		extern int socklist_find_reply_socket(struct sockaddr *sa,int port);
+
+
+		int port=sock_getport(&socklist[socklistindex].addr);
+		replyfd = socklist_find_reply_socket(srcaddr,port);
+
 		if (replyfd == -1) {
 			cw_log(LOG_ERR, "Can't find reply socket for request from %s",
 			       sock_addr2str(srcaddr));
@@ -510,6 +513,13 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 
 	int sockfd = replyfd;	//socklist[socklistindex].reply_sockfd;
+
+
+	struct sockaddr dbgaddr;
+	socklen_t dbgaddrl=sizeof(dbgaddr);
+	getsockname(sockfd,&dbgaddr,&dbgaddrl);
+
+	cw_dbg(DBG_INFO,"Creating wtpman with socket %d, %s:%d",sockfd,sock_addr2str(&dbgaddr),sock_getport(&dbgaddr));
 
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	if (!wtpman->conn) {
