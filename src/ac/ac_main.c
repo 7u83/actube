@@ -166,9 +166,6 @@ int main(int argc, char *argv[])
 
 
 void process_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len);
-#define AC_PROTO_CAPWAP 0
-#define AC_PROTO_LWAPP 1
-
 
 
 
@@ -189,14 +186,26 @@ int ac_run()
 
 	int i;
 	for (i = 0; i < conf_listen_addrs_len; i++) {
-		socklist_add_unicast(conf_listen_addrs[i], conf_control_port,
-				     AC_PROTO_CAPWAP);
-#ifdef WITH_LWAPP
-		if (conf_lwapp)
-			socklist_add_unicast(conf_listen_addrs[i], conf_lw_control_port,
-					     AC_PROTO_LWAPP);
-#endif
+		char addr[100];
+		char port[50];
+		int proto;
+
+		conf_parse_listen_addr(conf_listen_addrs[i], addr, port, &proto);
+
+
+		struct sockaddr sa;
+
+
+		socklist_add_unicast(addr, port,proto);
+
+//#ifdef WITH_LWAPP
+//		if (conf_lwapp)
+//			socklist_add_unicast(conf_listen_addrs[i], conf_lw_control_port,
+//					     AC_PROTO_LWAPP);
+//#endif
 	}
+
+
 
 	if (socklist_len == 0) {
 		cw_log(LOG_ERR, "Fatal error: Could not setup any listen socket");
