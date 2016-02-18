@@ -19,10 +19,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/socket.h>
 #include <netdb.h>
-#include <netinet/in.h>
 #include <pthread.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 
 #include "capwap/log.h"
@@ -30,9 +30,6 @@
 
 
 #include "socklist.h"
-
-
-#include "stdio.h"
 
 
 struct socklistelem *socklist = 0;
@@ -88,7 +85,7 @@ void socklist_destroy()
  * @param sa source address
  * @return socket or -1 if no socket was found
  */
-int socklist_find_reply_socket(struct sockaddr *sa,int port)
+int socklist_find_reply_socket(struct sockaddr *sa, int port)
 {
 	int bestindex = -1;
 	int i;
@@ -111,24 +108,20 @@ int socklist_find_reply_socket(struct sockaddr *sa,int port)
 			continue;
 		}
 
-
 		/* we want first the same port */
-		if( sock_getport(&socklist[i].addr) != port){
+		if (sock_getport(&socklist[i].addr) != port) {
 			continue;
 		}
 
 		/* if we havn't already found a socket with same port
 		 * this is now our best socket*/
-		if( sock_getport(&socklist[bestindex].addr) != port){
-			bestindex=i;
+		if (sock_getport(&socklist[bestindex].addr) != port) {
+			bestindex = i;
 		}
-
-
 
 		/* the next checks only aply to IPv4 */
 		if (socklist[i].addr.sa_family != AF_INET)
 			continue;
-
 
 		/* get our source address and netmask */
 		uint32_t addr =
@@ -139,12 +132,12 @@ int socklist_find_reply_socket(struct sockaddr *sa,int port)
 		/* get source of requested address */
 		uint32_t saddr = ((struct sockaddr_in *) sa)->sin_addr.s_addr;
 
-
+		/* if the request comes from the same subnet where our
+		 * socket is cconnected, this is our new best socked.
+		 * So we can serve AP's w*here no deault route is configured */
 		if ((addr & mask) == (saddr & mask)) {
 			bestindex = i;
 		}
-
-
 	}
 
 	if (bestindex != -1)
@@ -323,9 +316,29 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 	return 1;
 }
 
+static int socklist_check_size()
+{
+	if (socklist_len>0 && (socklist_len % SOCKLIST_SIZE)==0){
+		struct socklistelem *newsocklist;
+		newsocklist = realloc(socklist, sizeof(struct socklistelem)*(socklist_len+SOCKLIST_SIZE));
+		if (!newsocklist) {
+			cw_log(LOG_ERR,"Can't increase socklist size, realoc failed");
+			return 0;
+		}
+		socklist = newsocklist;
+	}
+	return 1;
+}
+
+
 
 int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 {
+
+	if (!socklist_check_size())
+		return 0;
+	
+
 	struct addrinfo hints;
 	struct addrinfo *res, *res0;
 	memset(&hints, 0, sizeof(hints));
@@ -400,6 +413,9 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 
 int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 {
+	if (!socklist_check_size())
+		return 0;
+
 	struct addrinfo hints;
 	struct addrinfo *res, *res0;
 	memset(&hints, 0, sizeof(hints));
@@ -459,7 +475,7 @@ int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 		socklist[socklist_len].ac_proto = ac_proto;
 
 		memcpy(&socklist[socklist_len].addr, res->ai_addr,
-			       sock_addrlen(res->ai_addr));
+		       sock_addrlen(res->ai_addr));
 
 //              printf ("AC INIT PROTO : %d, i %i\n",ac_proto,socklist_len);
 //              printf ("sock proto %d\n",socklist[socklist_len].ac_proto);
