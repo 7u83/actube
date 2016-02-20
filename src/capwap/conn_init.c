@@ -43,6 +43,8 @@ void conn_init(struct conn * conn)
 	conn->strict_capwap=1;
 
 	conn->remote = mbag_create();
+
+	conn->process_packet=conn_process_packet;
 }
 
 
