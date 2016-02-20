@@ -184,7 +184,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 		/* Throw away unexpected response messages */
 		if (!(as.msg_id & 1)) {
 			cw_dbg(DBG_MSG_ERR,
-			       "Message type %d (%s) unexpected/illigal in %s State, discarding.",
+			       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
 			       as.msg_id, cw_strmsg(as.msg_id),
 			       cw_strstate(conn->capwap_state));
 			errno = EAGAIN;
@@ -474,7 +474,7 @@ int cw_read_messages(struct conn *conn)
 		return n;
 
 	if (n > 0) {
-		return conn_process_packet(conn, buf, n,(struct sockaddr*)&conn->addr);
+		return conn->process_packet(conn, buf, n,(struct sockaddr*)&conn->addr);
 	}
 	errno = EAGAIN;
 	return -1;
