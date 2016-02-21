@@ -45,6 +45,7 @@ void conn_init(struct conn * conn)
 	conn->remote = mbag_create();
 
 	conn->process_packet=conn_process_packet;
+	conn->process_message=process_message;
 }
 
 

@@ -47,9 +47,9 @@ void cw_init_response(struct conn *conn, uint8_t * req)
 	memcpy(buffer, req, shbytes);
 
 
-	cw_set_hdr_rmac(buffer,conn->base_rmac);
-//	cw_set_hdr_hlen(buffer, 2);
-//	cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
+	cw_set_hdr_rmac(buffer, conn->base_rmac);
+//      cw_set_hdr_hlen(buffer, 2);
+//      cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
 
 
 
@@ -73,8 +73,8 @@ void cw_init_request(struct conn *conn, int msg_id)
 
 	/* unencrypted */
 	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
-	
-	cw_set_hdr_rmac(buffer,conn->base_rmac);
+
+	cw_set_hdr_rmac(buffer, conn->base_rmac);
 	//cw_set_hdr_hlen(buffer, 2);
 
 
@@ -86,8 +86,6 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_set_msg_type(msgptr, msg_id);
 	cw_set_msg_flags(msgptr, 0);
 	cw_set_msg_elems_len(msgptr, 0);
-
-
 }
 
 /**
@@ -130,40 +128,41 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_
 }
 
 
-static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct sockaddr *from)
+static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
+			    struct sockaddr *from)
 {
 	struct cw_action_in as, *af, *afm;
 
- 	int offset = cw_get_hdr_msg_offset(rawmsg);
+	int offset = cw_get_hdr_msg_offset(rawmsg);
 
 	uint8_t *msg_ptr = rawmsg + offset;
 
 	int elems_len = cw_get_msg_elems_len(msg_ptr);
 
-	int payloadlen=len-offset;
-	
+	int payloadlen = len - offset;
+
 	/* pre-check message */
-	if (payloadlen-8 !=  elems_len ) {
+	if (payloadlen - 8 != elems_len) {
 
 		if (conn->strict_hdr) {
 			cw_dbg(DBG_MSG_ERR,
 			       "Discarding message from %s, msgelems len=%d, payload len=%d, (Strict CAPWAP) ",
-			       sock_addr2str(&conn->addr), elems_len, payloadlen-8);
-			errno=EAGAIN;	
+			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
+			errno = EAGAIN;
 			return -1;
 		}
-		if (elems_len < payloadlen-8 ) {
+		if (elems_len < payloadlen - 8) {
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has %d bytes of extra data, ignoring.",
-			       sock_addr2str(&conn->addr), payloadlen-8 - elems_len);
+			       sock_addr2str(&conn->addr), payloadlen - 8 - elems_len);
 			elems_len = len - 8;
 		}
 
-		if (elems_len > payloadlen-8) {
+		if (elems_len > payloadlen - 8) {
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has msgelems len of %d bytes, but has only %d bytes of data, truncating.",
 			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
-			elems_len=payloadlen-8;
+			elems_len = payloadlen - 8;
 		}
 	}
 
@@ -217,7 +216,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 
 	/* Execute start processor for message */
 	if (afm->start) {
-		afm->start(conn, afm, rawmsg, len,from);
+		afm->start(conn, afm, rawmsg, len, from);
 	}
 
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
@@ -241,21 +240,22 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 		if (!af) {
 			cw_dbg(DBG_ELEM_ERR,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
-			       as.elem_id, cw_strelemp(conn->actions,as.elem_id), as.msg_id,
-			       cw_strmsg(as.msg_id));
+			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
+			       as.msg_id, cw_strmsg(as.msg_id));
 			continue;
 		}
 
 		int afrc = 1;
 		if (af->start) {
-			afrc = af->start(conn, af, cw_get_elem_data(elem), elem_len,from);
+			afrc =
+			    af->start(conn, af, cw_get_elem_data(elem), elem_len, from);
 
 		}
 
 		if (af->mand && afrc) {
 			/* add found mandatory message element 
 			   to mand list */
-			intavltree_add(conn->mand, (int)af->item_id);
+			intavltree_add(conn->mand, (int) af->item_id);
 		}
 
 	}
@@ -265,7 +265,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 
 	int result_code = 0;
 	if (afm->end) {
-		result_code = afm->end(conn, afm, rawmsg, len,from);
+		result_code = afm->end(conn, afm, rawmsg, len, from);
 	}
 
 	/* if we've got a request message, we always have to send a response message */
@@ -274,13 +274,13 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 			/* the end method gave us an result code>0, so
 			   send an error message */
 			cw_send_error_response(conn, rawmsg, result_code);
-		} else if ( result_code == 0 ){
+		} else if (result_code == 0) {
 			/* All ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);
 		} else {
 			/* the request message is ignored, no response
 			   will be sent */
-			errno=EAGAIN;	
+			errno = EAGAIN;
 		}
 	} else {
 		/* 
@@ -302,7 +302,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,struct 
 
 
 
-static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,struct sockaddr *from)
+int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+			   struct sockaddr *from)
 {
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
@@ -326,7 +327,7 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,struc
 	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
 		conn->last_seqnum_received = seqnum;
-		return process_elements(conn, rawmsg, rawlen,from);
+		return process_elements(conn, rawmsg, rawlen, from);
 	}
 
 	if (sd != 0) {
@@ -369,10 +370,11 @@ static int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,struc
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
-int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
+int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+			struct sockaddr *from)
 {
 	/* show this packet in debug output */
-	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len,from);
+	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len, from);
 
 
 	if (len < 8) {
@@ -419,7 +421,7 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sock
 		return -1;
 	}
 
-	/* Check if Radio MAC is preset */
+	/* Check if Radio MAC is present */
 	if (cw_get_hdr_flag_m(packet)) {
 
 		if (cw_get_hdr_rmac_len(packet) + 8 > offs) {
@@ -438,26 +440,26 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sock
 		/* fragmented, add the packet to fragman */
 		uint8_t *f;
 		f = fragman_add(conn->fragman, packet, offs, payloadlen);
-		if (f == NULL){
-			errno=EAGAIN;
+		if (f == NULL) {
+			errno = EAGAIN;
 			return -1;
 		}
 
 
-		cw_dbg_pkt(DBG_PKT_IN, conn, f+4, *(uint32_t*)f,from);
-		cw_dbg_msg(DBG_MSG_IN, conn, f+4, *(uint32_t*)f,from);
+		cw_dbg_pkt(DBG_PKT_IN, conn, f + 4, *(uint32_t *) f, from);
+		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);
 
 		// XXX: Modify fragman to not throw away CAPWAP headers
 
-		int rc = process_message(conn, f + 4, *(uint32_t *) f, from);
+		int rc = conn->process_message(conn, f + 4, *(uint32_t *) f, from);
 
 		free(f);
 		return rc;
 	}
 
 	/* not fragmented, we have a complete message */
-	cw_dbg_msg(DBG_MSG_IN, conn, packet, len,from);
-	return process_message(conn, packet, len, from);
+	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);
+	return conn->process_message(conn, packet, len, from);
 }
 
 
@@ -474,16 +476,17 @@ int cw_read_messages(struct conn *conn)
 		return n;
 
 	if (n > 0) {
-		return conn->process_packet(conn, buf, n,(struct sockaddr*)&conn->addr);
+		return conn->process_packet(conn, buf, n,
+					    (struct sockaddr *) &conn->addr);
 	}
 	errno = EAGAIN;
 	return -1;
 }
 
-int cw_read_from(struct conn * conn)
+int cw_read_from(struct conn *conn)
 {
-	if (!conn->readfrom){
-		cw_log(LOG_ERR,"Fatal error, no readfrom method available.");
+	if (!conn->readfrom) {
+		cw_log(LOG_ERR, "Fatal error, no readfrom method available.");
 		errno = EPROTO;
 		return -1;
 	}
@@ -491,15 +494,13 @@ int cw_read_from(struct conn * conn)
 	int len = 2024;
 
 	struct sockaddr_storage from;
-	int n = conn->readfrom(conn, buf, len,&from);
+	int n = conn->readfrom(conn, buf, len, &from);
 	if (n < 0)
 		return n;
 
 	if (n > 0) {
-		return conn_process_packet(conn, buf, n,(struct sockaddr*)&from);
+		return conn->process_packet(conn, buf, n, (struct sockaddr *) &from);
 	}
 	errno = EAGAIN;
 	return -1;
-
-
 }

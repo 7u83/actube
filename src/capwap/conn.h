@@ -179,6 +179,8 @@ struct conn {
 
 
 	int (*process_packet)(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+	int (*process_message)(struct conn *conn, uint8_t * rawmsg, int rawlen,
+			   struct sockaddr *from);
 	
 
 
@@ -199,6 +201,8 @@ extern int conn_send_cwmsg(struct conn *conn, struct cwmsg *cwmsg);
 //				int (*cb) (void *, uint8_t *,int len), void *cbarg);
 
 extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+extern int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+			   struct sockaddr *from);
 
 extern uint8_t *conn_get_message(struct conn *conn);
 
