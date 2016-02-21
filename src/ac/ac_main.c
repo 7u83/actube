@@ -291,12 +291,6 @@ int ac_run()
 
 	}
 
-
-	/* close and free all sockts */
-	for (i = 0; i < socklist_len; i++) {
-//              close(socklist[i]);
-	}
-	free(socklist);
 	return 0;
 }
 
