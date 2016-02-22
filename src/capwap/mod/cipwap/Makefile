@@ -19,3 +19,6 @@ $(ARCH)/%.o:%.c
 
 
 all: $(OBJS)
+
+clean: 
+	rm -rf $(ARCH)
