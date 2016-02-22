@@ -77,7 +77,6 @@ void socklist_destroy()
 	free(socklist);
 	socklist = 0;
 	pthread_mutex_destroy(&socklist_mutex);
-
 }
 
 /**

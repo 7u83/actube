@@ -510,8 +510,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-
-
 	int sockfd = replyfd;	//socklist[socklistindex].reply_sockfd;
 
 
@@ -519,7 +517,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	socklen_t dbgaddrl=sizeof(dbgaddr);
 	getsockname(sockfd,&dbgaddr,&dbgaddrl);
 
-	cw_dbg(DBG_INFO,"Creating wtpman with socket %d, %s:%d",sockfd,sock_addr2str(&dbgaddr),sock_getport(&dbgaddr));
+	cw_dbg(DBG_INFO,"Creating wtpman on socket %d, %s:%d",sockfd,sock_addr2str(&dbgaddr),sock_getport(&dbgaddr));
 
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	if (!wtpman->conn) {

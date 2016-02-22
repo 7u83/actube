@@ -29,6 +29,10 @@
 #include "capwap/capwap.h"
 #include "capwap/lwapp.h"
 #include "capwap/bstr.h"
+#include "capwap/mod.h"
+
+
+extern struct mod_ac * conf_mods[10];
 
 #ifndef CONF_DEFAULT_ACNAME
 #define CONF_DEFAULT_ACNAME "AC"

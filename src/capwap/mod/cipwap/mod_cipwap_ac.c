@@ -11,8 +11,8 @@ int cipwap_init()
 
 
 static struct mod_ac cipwap_ac = {
-//	.init = cipwap_init()
-
+	.init = cipwap_init,
+	.name ="cipwap"
 };
 
 struct mod_ac * mod_cipwap_ac(){

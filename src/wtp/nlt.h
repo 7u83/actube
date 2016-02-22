@@ -2,6 +2,7 @@
 #define __NLT_H
 
 #include "nl80211.h"
+#include <netlink/socket.h>
 
 extern const char * nlt_attrnames[];
 extern const char * nlt_cmdnames[];
