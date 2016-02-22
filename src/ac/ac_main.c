@@ -87,9 +87,9 @@ int main(int argc, char *argv[])
 {
 	int rc = 0;
 
-struct mod_ac *m = cw_get_mod_ac("capwap");
-m->init();
-exit(0);
+//struct mod_ac *m = cw_get_mod_ac("capwap");
+//m->init();
+//exit(0);
 
 
 	/* parse arguments */
