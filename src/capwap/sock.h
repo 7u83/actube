@@ -75,6 +75,9 @@ extern int sock_getifinfo(const struct sockaddr *addr, char *ifname,
 
 
 char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen, int addport);
+int sock_parse_ip_address ( const char** ppszText, 
+		unsigned char* abyAddr, int* pnPort, int* pbIsIPv6 );
+
 
 
 #define sock_addr2str(s) ( sock_strsockaddr( (struct sockaddr*)s, (char[64]){0}, 64,0 ) )

@@ -18,3 +18,10 @@ GNUTLS_LIBS=
 GNUTLS_LDFLAGS=-lgnutls -lnettle -lgmp
 
 endif
+
+
+ifndef ARCH
+	ARCH = $(shell $(CC) -dumpmachine)
+endif
+
+
