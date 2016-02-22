@@ -9,9 +9,9 @@ ifndef AR
 	AR = ar
 endif
 
-ifndef ARCH
-	ARCH = $(shell $(CC) -dumpmachine)
-endif
+#ifndef ARCH
+#	ARCH = $(shell $(CC) -dumpmachine)
+#endif
 
 
 
@@ -39,14 +39,15 @@ SOCKOBJS=\
 	sock_set_dontfrag.o \
 	sock_get_primary_if.o \
 	sock_receive.o  \
-	sock_getifinfo.o
+	sock_getifinfo.o \
 
 
 LOGOBJS=log.o \
         log_syslog.o \
 	log_file.o \
 	dbg_strings.o\
-	dbg.o
+	dbg.o \
+	cw_get_mods.o
 
 
 WTPINFOOBJS =\
@@ -262,7 +263,7 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LWAPPOBJS) \
 	$(LWAPPCISCOOBJS) \
 	$(CWACTION) \
-	$(MAVLOBJS) 
+	$(MAVLOBJS) \
 
 #include $(OBJS:.o=.d)
 
@@ -270,7 +271,11 @@ O:=$(OBJS);
 
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
-CFLAGS = -Wall -Werror -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
+
+
+
+
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
 #CFLAGS = -Wall  -Os -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
@@ -280,6 +285,8 @@ CFLAGS += $(GNUTLS_CFLAGS) \
 	  $(XINCLUDE)\
 	  -I $(OPENSSLINC)\
 	-Werror 
+
+
 
 
 #SRCS = $(OBJS:.o=.c) 
@@ -292,17 +299,24 @@ $(ARCH)/%.o:%.c
 
 $(ARCH)/$(NAME) : $(OBJS)
 	@echo "  AR $(ARCH)/$(NAME)"
-	@$(AR) rcs $(ARCH)/$(NAME) $(OBJS)
+	@$(AR) rcs $(ARCH)/$(NAME) $(OBJS) $(MODOBJS)
 
 
 SRCS = $(OBJS:.o=.c) 
 DEPS := $(OBJS:.o=.d)
+
+mod_cipwap:
+	$(MAKE) -C mod/cipwap
 
 
 .PHONY: deps clean clean_libs libs
 
 # top-level rule, to compile everything. 
 all: $(ARCH)/$(NAME) 
+	$(MAKE) mod_cipwap
+
+
+
 
 
 clean: 

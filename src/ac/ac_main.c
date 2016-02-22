@@ -79,9 +79,18 @@ static int parse_args(int argc, char *argv[])
 	return 0;
 }
 
+
+#include "capwap/mod.h"
+extern struct mod_ac * cw_get_mod_ac(const char *name);
+
 int main(int argc, char *argv[])
 {
 	int rc = 0;
+
+struct mod_ac *m = cw_get_mod_ac("capwap");
+m->init();
+exit(0);
+
 
 	/* parse arguments */
 	parse_args(argc, argv);
