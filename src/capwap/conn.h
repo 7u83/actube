@@ -40,6 +40,7 @@
 #include "intavltree.h"
 
 #include "mbag.h"
+#include "mod.h"
 
 /**
  * Connection Object
@@ -181,8 +182,10 @@ struct conn {
 	int (*process_packet)(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 	int (*process_message)(struct conn *conn, uint8_t * rawmsg, int rawlen,
 			   struct sockaddr *from);
+
 	
 
+	void  * mods;
 
 };
 

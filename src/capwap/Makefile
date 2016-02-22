@@ -47,7 +47,7 @@ LOGOBJS=log.o \
 	log_file.o \
 	dbg_strings.o\
 	dbg.o \
-	cw_get_mods.o
+	cw_get_mod_ac.o
 
 
 WTPINFOOBJS =\
@@ -290,6 +290,7 @@ CFLAGS += $(GNUTLS_CFLAGS) \
 
 
 #SRCS = $(OBJS:.o=.c) 
+MODOBJS=$(wildcard ./mod/cipwap/$(ARCH)/*.o)
 
 $(ARCH)/%.o:%.c
 	@mkdir -p $(ARCH)
@@ -297,7 +298,7 @@ $(ARCH)/%.o:%.c
 	@$(CC) -c $(CFLAGS) $< -o $@
 #	@$(CC) -MM $(CFLAGS) $< > $*.d
 
-$(ARCH)/$(NAME) : $(OBJS)
+$(ARCH)/$(NAME) : $(OBJS) $(MODOBJS)
 	@echo "  AR $(ARCH)/$(NAME)"
 	@$(AR) rcs $(ARCH)/$(NAME) $(OBJS) $(MODOBJS)
 
@@ -305,17 +306,23 @@ $(ARCH)/$(NAME) : $(OBJS)
 SRCS = $(OBJS:.o=.c) 
 DEPS := $(OBJS:.o=.d)
 
-mod_cipwap:
-	$(MAKE) -C mod/cipwap
-
 
 .PHONY: deps clean clean_libs libs
 
+
 # top-level rule, to compile everything. 
-all: $(ARCH)/$(NAME) 
+all:
 	$(MAKE) mod_cipwap
+	$(MAKE) capwap
 
 
+capwap: $(ARCH)/$(NAME)
+
+
+
+
+mod_cipwap:
+	$(MAKE) -C mod/cipwap
 
 
 

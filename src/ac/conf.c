@@ -134,6 +134,20 @@ static int init_acname()
 	return 1;
 }
 
+#include "capwap/mod.h"
+
+
+struct mod_ac * conf_mods[10];
+
+static int init_mods()
+{
+	
+	conf_mods[0]=cw_get_mod_ac("cipwap");
+	conf_mods[1]=NULL;
+
+	return 0;
+}
+
 static int init_acid()
 {
 
@@ -810,6 +824,8 @@ int read_config(const char *filename)
 
 	if (!conf_image_dir)
 		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
+
+	init_mods();
 
 	conf_init_capwap_mode();
 

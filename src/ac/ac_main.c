@@ -86,11 +86,12 @@ extern struct mod_ac * cw_get_mod_ac(const char *name);
 int main(int argc, char *argv[])
 {
 	int rc = 0;
+/*
+struct mod_ac *m = cw_get_mod_ac("cipwap");
+printf("Ptr: %p\n",m);
 
-//struct mod_ac *m = cw_get_mod_ac("capwap");
-//m->init();
-//exit(0);
-
+m->init();
+*/
 
 	/* parse arguments */
 	parse_args(argc, argv);

@@ -12,6 +12,7 @@ cp libubox.so /usr/local/lib
 ldconfig
 cd ../..
 
+
 git clone git://nbd.name/uci.git uci
 cd uci
 mkdir build
