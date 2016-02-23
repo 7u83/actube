@@ -189,7 +189,6 @@ DTLSOBJS+=dtls_bio.o
 
 CONNOBJS= conn_create.o \
 	conn_process_packet.o \
-	conn_process_packet_x.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \
@@ -228,6 +227,7 @@ CWACTION=action.o \
 	capwap_80211_actions_wtp.o \
 	capwap_80211_actions_ac.o \
 	cw_in_generic.o \
+	cw_in_generic2.o \
 	cw_in_wtp_descriptor.o \
 	cw_out_wtp_board_data.o \
 	cw_out_ac_name_with_priority.o \
