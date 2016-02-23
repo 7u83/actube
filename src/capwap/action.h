@@ -19,7 +19,7 @@
 /**
  * @file
  * @brief CAPWAP ACtions Header
- * @defgroup ACTION CAPWAP/LWAP Actions
+ * @defgroup ACTION CAPWAP/LWAPP Actions
  * @{
  */ 
 #ifndef __ACTION_H

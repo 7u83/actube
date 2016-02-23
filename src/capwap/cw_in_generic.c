@@ -11,7 +11,7 @@ int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 {
 	if (len < a->min_len) {
 		cw_dbg(DBG_ELEM_ERR,
-		       "%d (%s) message element too short, lan=%d, min len=%d",
+		       "%d (%s) message element too short, len=%d, min len=%d",
 		       a->elem_id, cw_strelemp(conn->actions, a->elem_id), len,
 		       a->min_len);
 		return 0;

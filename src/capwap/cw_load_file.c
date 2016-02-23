@@ -59,4 +59,3 @@ char *cw_load_file(const char *filename, size_t * size)
 	fclose(infile);
 	return buf;
 }
-

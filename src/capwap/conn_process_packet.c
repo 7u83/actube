@@ -173,10 +173,20 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			int i;
 			for (i=0; mods[i]; i++){
 				if (mods[i]->detect){
-					mods[i]->detect(conn,rawmsg,len,from);
+					if (mods[i]->detect(conn,rawmsg,len,from)){
+						cw_dbg(DBG_INFO,"Using mod '%s' to handle connection from %s",mods[i]->name,sock_addr2str(from)); 
+						break;
+					}
 				}
 			}
 		}
+	}
+
+	if (!conn->detected){
+		cw_dbg(DBG_INFO,"Cant't detect capwap, discarding message from %s",sock_addr2str(from));
+		errno=EAGAIN;
+		return -1;
+		
 	}
 
 

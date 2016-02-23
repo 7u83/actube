@@ -189,6 +189,7 @@ DTLSOBJS+=dtls_bio.o
 
 CONNOBJS= conn_create.o \
 	conn_process_packet.o \
+	conn_process_packet_x.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \
@@ -291,6 +292,7 @@ CFLAGS += $(GNUTLS_CFLAGS) \
 
 #SRCS = $(OBJS:.o=.c) 
 MODOBJS=$(wildcard ./mod/cipwap/$(ARCH)/*.o)
+MODOBJS+=$(wildcard ./mod/capwap/$(ARCH)/*.o)
 
 $(ARCH)/%.o:%.c
 	@mkdir -p $(ARCH)
@@ -323,7 +325,6 @@ capwap: $(ARCH)/$(NAME)
 
 mod_cipwap:
 	$(MAKE) -C mod/cipwap
-
 
 
 clean: 

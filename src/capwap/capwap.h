@@ -991,6 +991,10 @@ static inline int cw_rcok(int rc)
 }
 
 
+/**
+ *@defgroup CW CW 
+ *@{ 
+ */
 
 static inline const char *cw_strelemp_(cw_strheap_t h, int msg_id)
 {
@@ -999,6 +1003,8 @@ static inline const char *cw_strelemp_(cw_strheap_t h, int msg_id)
 		return rc;
 	return cw_strheap_get(h, CW_STR_STOP);
 }
+
+/**@}*/
 
 #define cw_strelemp(p,id) cw_strelemp_((p)->strelem,id)
 

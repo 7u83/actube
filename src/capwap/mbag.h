@@ -50,7 +50,7 @@ struct mbag_typedef{
 	struct mbag_item * (*from_str)(const char *src);
 };
 
-/** The type for an mbag typedf */
+/** The type for an mbag typedef */
 typedef const struct mbag_typedef * mbagtype_t;
 
 
@@ -59,24 +59,27 @@ typedef const struct mbag_typedef * mbagtype_t;
  * The MBAG item 
  */ 
 struct mbag_item{
+	union {
+		uint32_t iid;
 	/** 
 	 * Key of this item 
+	 *
 	 * This could be either a string (default) or an integer uint32_t value.
 	 * If you whant to use with uint32_t keys, use the mbag_i_* functions, to 
 	 * create mbags. 
 	 */
-	union {
-		uint32_t iid;
 		const char *id;
 	};
-	/** indicates if the key is dynamic oder static.
-	    If dynamic, the id will be freed using free 
-	    if mbag_item is deleted */
+	/** 
+	 * Indicates if the key is dynamic oder static.
+	 * If dynamic, the id will be freed using free,
+	 * if mbag_item is deleted 
+	 */
 	uint8_t dynid;
 	/** Type of this item */
 	const struct mbag_typedef * type;
-	/** Value of this item */
 	union {
+		/** Value of this item */
 		void *data;
 		uint8_t byte;
 		uint16_t word;

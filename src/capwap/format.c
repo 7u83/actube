@@ -27,16 +27,17 @@
 
 /**
  * Format bytes as hex string.
- * @param dst destination buffer
- * @param format format to use when writing a byte.
- * @param delim delimiter
- * @param src bytes to format
- * @param len number of bytes to format
- * @return the number character written to dst
+ * @param dst Destination buffer
+ * @param format Format to use, when writing a byte. Use the same format syntax as for printf,
+ * e.g. the string "%02X" would format a byte as upper case hexadeciaml string.
+ * @param delim Delimiter string. The given string is placed between bytes.
+ * @param src Bytes to format
+ * @param len Number of bytes to format
+ * @return the number of characters written to dst
  *
  * This function is used by macros like #cw_format_hexl, #cw_format_hex ... \n
  * The size of the destination buffer must be at least x * len + strlen(delim) * (len-1) +1,
- * where x is the number of characters a formatted hex byte needs (typically 2).
+ * where x is the number of characters. A formatted hex byte needs (typically 2).
  *
  */
 int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
