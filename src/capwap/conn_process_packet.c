@@ -167,6 +167,19 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	}
 
 
+	if (!conn->detected) {
+		if (conn->mods){
+			struct mod_ac ** mods = (struct mod_ac **)conn->mods;
+			int i;
+			for (i=0; mods[i]; i++){
+				if (mods[i]->detect){
+					mods[i]->detect(conn,rawmsg,len,from);
+				}
+			}
+		}
+	}
+
+
 
 	/* prepare struct for search operation */
 	as.capwap_state = conn->capwap_state;

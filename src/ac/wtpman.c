@@ -525,6 +525,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		return NULL;
 	}
 
+	wtpman->conn->mods = conf_mods;
+
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
 	wtpman->conn->radios = mbag_i_create();

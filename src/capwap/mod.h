@@ -2,6 +2,7 @@
 #define __MOD_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "sock.h"
 #include "conn.h"
@@ -16,7 +17,7 @@ struct mod_ac
 	This function ifter receiving and disassembling a complete 
 	CAPWAP message. Either on Discovery Request or Join Request
 	**/
-	int (*detect)(struct conn *conn,const char *rawmsg, int rawlen,struct sockaddr *from);
+	int (*detect)(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct sockaddr *from);
 };
 
 

@@ -184,7 +184,7 @@ struct conn {
 			   struct sockaddr *from);
 
 	
-
+	int detected;
 	void  * mods;
 
 };
