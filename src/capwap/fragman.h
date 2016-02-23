@@ -17,6 +17,15 @@
 */
 
 
+/**
+ *@defgroup Fragman FRAGMAN
+ *@breif Frgaman functions
+ *
+ * Detailed esription
+ *@{
+ */
+
+
 #ifndef __FRAGMAN_H
 #define __FRAGMAN_H
 
@@ -24,6 +33,7 @@
 #include <time.h>
 
 #ifndef FRAG_MAXSIZE
+	/** maximaum size of a fragment */
 	#define FRAG_MAXSIZE 65536+4
 #endif
 
@@ -60,6 +70,8 @@ extern void fragman_destroy(frag_t * frags);
 //extern frag_init(struct frag ** frag[]);
 extern void fragman_free(frag_t * frags,struct frag * f);
 
+
+/**@}*/
 
 #endif
 

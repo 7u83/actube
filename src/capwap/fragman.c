@@ -16,8 +16,12 @@
 
 */
 
+/**
+ * @addtogroup Fragman
+ * @{
+ */
 
-/* 
+/**
  * @file
  * @brief This file implements a simple fragment management system for the capwap protocol.
  *
@@ -110,6 +114,14 @@ void fragman_free(frag_t * frags,struct frag * f)
 }
 */
 
+/**
+ * Add a fragment
+ * @pram frags Fragman object
+ * @param packet Pointer to data of the packet to add
+ * @param hlen Length of the header od the packet
+ * @param payloadlen Number of bytes in payload
+ * @return NULL if someting went wrong
+ */
 uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen) 
 {
 	struct frag * f;
@@ -199,4 +211,9 @@ void fragman_destroy(frag_t * frags)
 	}
 	free (frags);	
 }
+
+
+/**
+ * @}
+ */
 
