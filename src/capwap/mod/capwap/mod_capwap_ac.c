@@ -28,6 +28,7 @@ static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct soc
 {
 	cw_log(LOG_INFO,"Detecting ...");
 	conn->detected=1;
+	conn->actions=&actions;
 	return 1;
 }
 

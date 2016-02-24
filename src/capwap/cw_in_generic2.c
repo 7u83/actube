@@ -5,6 +5,8 @@
 #include "mbag.h"
 #include "capwap.h"
 
+#include "item.h"
+
 
 int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		     struct sockaddr *from)
@@ -68,6 +70,19 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 		return 1;
 	}
 
+
+	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
+
+	if (!idef) {
+		cw_log(LOG_ERR,"No itemdef found for %s",a->item_id);
+		return 0;
+	}
+
+
+//	printf("Idef: %s\n",idef->type->name);
+
+
+
 	cw_log(LOG_ERR,
 	       "Can't handle item type %d in definition for incomming msg %d (%s) - %d, cw_in_generic.",
 	       a->itemtype, a->msg_id, cw_strmsg(a->msg_id), a->elem_id);
@@ -79,9 +94,6 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
-
-	printf("Here is cw in generic 2\n");
-	exit(0);
 
 	if (!check_len(conn, a, data, len, from))
 		return 0;
