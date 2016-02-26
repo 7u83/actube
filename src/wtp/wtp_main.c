@@ -131,7 +131,8 @@ mavl_destroy(b);
 	conn->local = mbag_create();
 	conn->base_rmac=get_base_rmac();
 
-conn->capwap_mode = CW_MODE_CISCO;
+conn->capwap_mode = CW_MODE_CAPWAP;
+//conn->capwap_mode = CW_MODE_CISCO;
 
 the_conn->strict_capwap=0;
 

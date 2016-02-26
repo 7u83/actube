@@ -33,44 +33,6 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 		   uint8_t * data, int len, struct sockaddr *from)
 {
 
-	if (a->itemtype == MBAG_BYTE) {
-		mbag_set_byte(itemstore, a->item_id, *data);
-		return 1;
-	}
-	if (a->itemtype == MBAG_WORD) {
-		mbag_set_word(itemstore, a->item_id, cw_get_word(data));
-		return 1;
-	}
-	if (a->itemtype == MBAG_DWORD) {
-		mbag_set_dword(itemstore, a->item_id, cw_get_dword(data));
-		return 1;
-	}
-	if (a->itemtype == MBAG_STR) {
-		mbag_set_strn(itemstore, a->item_id, (char *) data, len);
-		return 1;
-	}
-	if (a->itemtype == MBAG_BSTR) {
-		mbag_set_bstrn(itemstore, a->item_id, data, len);
-		return 1;
-	}
-
-	if (a->itemtype == MBAG_BSTR16) {
-		mbag_set_bstr16n(itemstore, a->item_id, data, len);
-		return 1;
-	}
-
-/*	if (a->itemtype == MBAG_DATA) {
-		mbag_set_data(itemstore, a->item_id, data, len);
-		return 1;
-	}
-*/
-	if (a->itemtype == MBAG_VENDORSTR) {
-		mbag_set_vendorstr(itemstore, a->item_id,
-				   cw_get_dword(data), data + 4, len - 4);
-		return 1;
-	}
-
-
 	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
 
 	if (!idef) {
@@ -79,13 +41,54 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 	}
 
 
+
+
+	if (idef->type == MBAG_BYTE) {
+		mbag_set_byte(itemstore, a->item_id, *data);
+		return 1;
+	}
+	if (idef->type == MBAG_WORD) {
+		mbag_set_word(itemstore, a->item_id, cw_get_word(data));
+		return 1;
+	}
+	if (idef->type == MBAG_DWORD) {
+		mbag_set_dword(itemstore, a->item_id, cw_get_dword(data));
+		return 1;
+	}
+	if (idef->type == MBAG_STR) {
+		mbag_set_strn(itemstore, a->item_id, (char *) data, len);
+		return 1;
+	}
+	if (idef->type == MBAG_BSTR) {
+		mbag_set_bstrn(itemstore, a->item_id, data, len);
+		return 1;
+	}
+
+	if (idef->type == MBAG_BSTR16) {
+		mbag_set_bstr16n(itemstore, a->item_id, data, len);
+		return 1;
+	}
+
+/*	if (idef->type == MBAG_DATA) {
+		mbag_set_data(itemstore, a->item_id, data, len);
+		return 1;
+	}
+*/
+	if (idef->type == MBAG_VENDORSTR) {
+		mbag_set_vendorstr(itemstore, a->item_id,
+				   cw_get_dword(data), data + 4, len - 4);
+		return 1;
+	}
+
+
+
 //	printf("Idef: %s\n",idef->type->name);
 
 
 
 	cw_log(LOG_ERR,
 	       "Can't handle item type %d in definition for incomming msg %d (%s) - %d, cw_in_generic.",
-	       a->itemtype, a->msg_id, cw_strmsg(a->msg_id), a->elem_id);
+	       idef->type, a->msg_id, cw_strmsg(a->msg_id), a->elem_id);
 	return 0;
 
 

@@ -24,7 +24,7 @@
 #include "capwap/strheap.h"
 #include "capwap/radio.h"
 
-
+#include "mod_capwap.h"
 
 cw_action_in_t _capwap_actions_ac_in[] = {
 
@@ -51,6 +51,70 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 	}
 	,
 
+	/* Element WTP Frame Tunnel Mode */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+	 	.start = cw_in_generic2, 
+		.item_id = "wtp_frame_tunnel_mode", 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
+	/* Element WTP Mac Type */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_MAC_TYPE,
+	 	.start = cw_in_generic2, 
+		.item_id = "wtp_mac_type", 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
+
+	/* Element WTP Descriptor */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+	 	.start = capwap_in_wtp_descriptor, 
+		.item_id = "wtp_descriptor", 
+		.mand = 1, 
+	}
+
+	,
+
+	/* Element WTP Board Data */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+	 	.start = capwap_in_wtp_board_data, 
+		.item_id = "wtp_board_data", 
+		.mand = 1, 
+	}
+//	,
+
+	/* Element WTP Board Data */
+//	{0, 0, CW_STATE_CONFIGURE, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
+//	 1}
+	,
+
+
+	/* Vendor Specific Payload */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+	},
+	
+
 	/* Element WTP Name */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
@@ -58,7 +122,7 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 		.elem_id = CW_ELEM_WTP_NAME,
 	 	.start = cw_in_generic2, 
 		.item_id = "wtp_name", 
-		.mand = 1, 
+		.mand = 0, 
 		.min_len = 1, 
 		.max_len = 1024
 	}
@@ -76,6 +140,7 @@ static struct cw_itemdef _capwap_itemdefs[] = {
 	{"wtp_name",CW_ITEM_NONE,MBAG_STR},
 	{"wtp_mac_type",CW_ITEM_NONE,MBAG_BYTE},
 	{"discovery_type",CW_ITEM_NONE,MBAG_BYTE},
+	{"wtp_frame_tunnel_mode",CW_ITEM_NONE,MBAG_BYTE},
 	{CW_ITEM_NONE}
 
 };
