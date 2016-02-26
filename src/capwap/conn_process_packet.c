@@ -30,6 +30,8 @@
 #include "conn.h"
 #include "sock.h"
 
+#include "stravltree.h"
+
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
@@ -246,7 +248,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	uint8_t *elem;
 
 	/* Create an avltree to catch the found mandatory elements */
-	conn->mand = intavltree_create();
+	conn->mand = stravltree_create();
 
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -278,7 +280,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (af->mand && afrc) {
 			/* add found mandatory message element 
 			   to mand list */
-			intavltree_add(conn->mand, (int) af->item_id);
+			stravltree_add(conn->mand, af->item_id);
 		}
 
 	}
@@ -312,7 +314,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		 */
 	}
 
-	intavltree_destroy(conn->mand);
+	stravltree_destroy(conn->mand);
 
 	return result_code;
 

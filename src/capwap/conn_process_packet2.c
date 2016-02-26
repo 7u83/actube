@@ -393,7 +393,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
-int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
 	/* show this packet in debug output */

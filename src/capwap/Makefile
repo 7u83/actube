@@ -189,6 +189,7 @@ DTLSOBJS+=dtls_bio.o
 
 CONNOBJS= conn_create.o \
 	conn_process_packet.o \
+	conn_process_packet2.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \

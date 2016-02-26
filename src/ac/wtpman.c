@@ -519,7 +519,13 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	cw_dbg(DBG_INFO,"Creating wtpman on socket %d, %s:%d",sockfd,sock_addr2str(&dbgaddr),sock_getport(&dbgaddr));
 
+extern int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
+                        struct sockaddr *from);
+
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
+
+//	wtpman->conn->process_packet = conn_process_packet2;
+
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
