@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "sock.h"
-#include "conn.h"
+#include "capwap/sock.h"
+#include "capwap/conn.h"
 
 struct mod_ac
 {
@@ -24,13 +24,13 @@ struct mod_ac
 };
 
 
-#include "mod/cipwap/mod_cipwap.h"
-#include "mod/capwap/mod_capwap.h"
+//#include "cipwap/mod_cipwap.h"
+//#include "capwap/mod_capwap.h"
 
 
-#define MODS_AC { mod_capwap_ac,mod_cipwap_ac,NULL }
+//#define MODS_AC { mod_capwap_ac,mod_cipwap_ac,NULL }
 
 
-extern struct mod_ac * cw_get_mod_ac(const char *name);
+//extern struct mod_ac * cw_get_mod_ac(const char *name);
 
 #endif

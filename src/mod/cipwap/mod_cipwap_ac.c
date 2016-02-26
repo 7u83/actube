@@ -1,5 +1,5 @@
 
-#include "capwap/mod.h"
+#include "mod.h"
 #include "capwap/log.h"
 
 #include "mod_cipwap.h"

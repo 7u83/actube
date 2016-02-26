@@ -18,7 +18,8 @@ endif
 #OPENSSLINC=$(OPENSSLINC) 
 #../contrib/openssl-1.0.1i/include
 
-NAME=libcapwap.a
+NAME=libcw.a
+LIBDIR=../lib/$(ARCH)
 
 SOCKOBJS=\
 	sock_create.o\
@@ -47,7 +48,6 @@ LOGOBJS=log.o \
 	log_file.o \
 	dbg_strings.o\
 	dbg.o \
-	cw_get_mod_ac.o
 
 
 WTPINFOOBJS =\
@@ -277,7 +277,7 @@ OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
 
 
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
 #CFLAGS = -Wall  -Os -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
 
 CFLAGS += $(GNUTLS_CFLAGS) \
@@ -292,8 +292,8 @@ CFLAGS += $(GNUTLS_CFLAGS) \
 
 
 #SRCS = $(OBJS:.o=.c) 
-MODOBJS=$(wildcard ./mod/cipwap/$(ARCH)/*.o)
-MODOBJS+=$(wildcard ./mod/capwap/$(ARCH)/*.o)
+#MODOBJS=$(wildcard ./mod/cipwap/$(ARCH)/*.o)
+#MODOBJS+=$(wildcard ./mod/capwap/$(ARCH)/*.o)
 
 $(ARCH)/%.o:%.c
 	@mkdir -p $(ARCH)
@@ -301,9 +301,10 @@ $(ARCH)/%.o:%.c
 	@$(CC) -c $(CFLAGS) $< -o $@
 #	@$(CC) -MM $(CFLAGS) $< > $*.d
 
-$(ARCH)/$(NAME) : $(OBJS) $(MODOBJS)
-	@echo "  AR $(ARCH)/$(NAME)"
-	@$(AR) rcs $(ARCH)/$(NAME) $(OBJS) $(MODOBJS)
+$(LIBDIR)/$(NAME) : $(OBJS) $(MODOBJS)
+	@mkdir -p $(LIBDIR)
+	@echo "  AR $(LIBDIR)/$(NAME)"
+	@$(AR) rcs $(LIBDIR)/$(NAME) $(OBJS) $(MODOBJS)
 
 
 SRCS = $(OBJS:.o=.c) 
@@ -314,18 +315,10 @@ DEPS := $(OBJS:.o=.d)
 
 
 # top-level rule, to compile everything. 
-all:
-	$(MAKE) mod_cipwap
-	$(MAKE) capwap
-
-
-capwap: $(ARCH)/$(NAME)
+all: $(ARCH)/$(NAME)
 
 
 
-
-mod_cipwap:
-	$(MAKE) -C mod/cipwap
 
 
 clean: 
