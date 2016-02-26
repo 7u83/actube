@@ -134,7 +134,7 @@ static int init_acname()
 	return 1;
 }
 
-#include "capwap/mod.h"
+#include "../mod/modload.h"
 
 
 struct mod_ac * conf_mods[10];
@@ -142,8 +142,8 @@ struct mod_ac * conf_mods[10];
 static int init_mods()
 {
 	
-	conf_mods[0]=cw_get_mod_ac("cipwap");
-	conf_mods[1]=cw_get_mod_ac("capwap");
+	conf_mods[0]=modload_ac("cipwap");
+	conf_mods[1]=modload_ac("capwap");
 	conf_mods[2]=NULL;
 
 
