@@ -6,6 +6,9 @@
 
 #include "capwap/sock.h"
 #include "capwap/conn.h"
+#include "action.h"
+
+struct cw_actiondef;
 
 struct mod_ac
 {
@@ -21,6 +24,9 @@ struct mod_ac
 
 	/** used for private data */
 	void *data;
+
+	int (*register_actions)(struct cw_actiondef *def);
+
 };
 
 

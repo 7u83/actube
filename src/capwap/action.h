@@ -34,8 +34,7 @@
 #include "intavltree.h"
 #include "item.h"
 
-
-
+struct conn;
 
 /* Generic functions and structs */
 void * cw_actionlist_add(struct avltree *t, void *a, size_t s);
