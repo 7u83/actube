@@ -1,4 +1,6 @@
 
+#include "capwap/cw.h"
+
 #include "capwap/mod.h"
 #include "capwap/log.h"
 #include "capwap/dbg.h"
@@ -26,6 +28,10 @@ static int init()
 
 static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct sockaddr *from)
 {
+	cw_foreach_elem(elem, elems_ptr, elems_len) {
+	}
+
+
 	cw_log(LOG_INFO,"Detecting ...");
 	conn->detected=1;
 	conn->actions=&actions;
