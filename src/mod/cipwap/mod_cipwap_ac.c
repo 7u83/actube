@@ -12,7 +12,7 @@ int cipwap_init()
 }
 
 
-static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct sockaddr *from)
+static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from)
 {
 	cw_log(LOG_INFO,"Detecting ...");
 	return 0;

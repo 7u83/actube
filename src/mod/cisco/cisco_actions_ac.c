@@ -23,6 +23,7 @@
 #include "capwap_actions.h"
 #include "capwap/strheap.h"
 #include "capwap/radio.h"
+#include "capwap/capwap_cisco.h"
 
 #include "mod_cisco.h"
 
@@ -38,74 +39,30 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element Discovery Type */
+	/* Element WTP Descriptor */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_DISCOVERY_TYPE,
-	 	.start = cw_in_generic2, 
-		.item_id = "discovery_type", 
+		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+	 	.start = cisco_in_wtp_descriptor, 
+		.item_id = "wtp_descriptor", 
 		.mand = 1, 
-		.min_len = 1, 
-		.max_len = 1
 	}
 	,
 
-	/* Element WTP Frame Tunnel Mode */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
-	 	.start = cw_in_generic2, 
-		.item_id = "wtp_frame_tunnel_mode", 
-		.mand = 1, 
-		.min_len = 1, 
-		.max_len = 1
-	}
-	,
-
-	/* Element WTP Mac Type */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_MAC_TYPE,
-	 	.start = cw_in_generic2, 
-		.item_id = "wtp_mac_type", 
-		.mand = 1, 
-		.min_len = 1, 
-		.max_len = 1
-	}
-	,
-
-
-
-//	,
-
-	/* Element WTP Board Data */
-//	{0, 0, CW_STATE_CONFIGURE, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
-//	 1}
-
-
-	/* Vendor Specific Payload */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-	},
-	
-
-	/* Element WTP Name */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_NAME,
-	 	.start = cw_in_generic2, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_RAD_NAME, 
+		.start=cw_in_generic2, 
 		.item_id = "wtp_name", 
-		.mand = 0, 
-		.min_len = 1, 
-		.max_len = 1024
+		.min_len=1,
+		.max_len=512
 	}
 	,
+
+
 
 	/* End of list */
 	{0, 0}
