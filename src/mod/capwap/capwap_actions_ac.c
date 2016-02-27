@@ -51,6 +51,29 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 	}
 	,
 
+	/* Element WTP Board Data */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+	 	.start = capwap_in_wtp_board_data, 
+		.item_id = "wtp_board_data", 
+		.mand = 1, 
+	}
+	,
+
+	/* Element WTP Descriptor */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+	 	.start = capwap_in_wtp_descriptor, 
+		.item_id = "wtp_descriptor", 
+		.mand = 1, 
+	}
+	,
+
+
 	/* Element WTP Frame Tunnel Mode */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
@@ -78,45 +101,17 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 	,
 
 
-	/* Element WTP Descriptor */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
-	 	.start = capwap_in_wtp_descriptor, 
-		.item_id = "wtp_descriptor", 
-		.mand = 1, 
-	}
-
-	,
-
-	/* Element WTP Board Data */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_BOARD_DATA,
-	 	.start = capwap_in_wtp_board_data, 
-		.item_id = "wtp_board_data", 
-		.mand = 1, 
-	}
-//	,
-
-	/* Element WTP Board Data */
-//	{0, 0, CW_STATE_CONFIGURE, CW_MSG_DISCOVERY_REQUEST, CW_ACTION_IN_WTP_BOARD_DATA,
-//	 1}
-	,
-
-
 	/* Vendor Specific Payload */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
 	},
 	
 
 	/* Element WTP Name */
-	{
+/*	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_NAME,
@@ -127,6 +122,7 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 		.max_len = 1024
 	}
 	,
+*/
 
 	/* End of list */
 	{0, 0}
