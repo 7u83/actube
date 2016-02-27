@@ -1,5 +1,5 @@
 
-#include "mod.h"
+#include "capwap/mod.h"
 #include "capwap/log.h"
 #include "capwap/dbg.h"
 
@@ -35,7 +35,8 @@ static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct soc
 static struct mod_ac capwap_ac = {
 	.name ="capwap",
 	.init = init,
-	.detect = detect
+	.detect = detect,
+	.register_actions = capwap_register_actions_ac
 
 };
 

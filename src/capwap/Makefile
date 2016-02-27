@@ -62,7 +62,7 @@ UTILOBJS= \
 	stravltree.o \
 	intavltree.o \
 	cw_util.o \
-	send.o
+	send.o \
 
 MAVLOBJS= \
 	mavl_del.o \

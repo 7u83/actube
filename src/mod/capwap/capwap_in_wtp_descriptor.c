@@ -156,9 +156,11 @@ static int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
 int capwap_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
+
 	mbag_t mbag = conn->incomming;
 
-	return cw_read_wtp_descriptor(mbag, conn, a, data, len, 0);
+	int rc =cw_read_wtp_descriptor(mbag, conn, a, data, len, 0);
+	return rc;
 }
 
 

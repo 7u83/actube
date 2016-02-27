@@ -170,13 +170,16 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 	if (!conn->detected) {
-		if (conn->mods){
-			struct mod_ac ** mods = (struct mod_ac **)conn->mods;
+		if (conn->mods) {
+			struct mod_ac **mods = (struct mod_ac **) conn->mods;
 			int i;
-			for (i=0; mods[i]; i++){
-				if (mods[i]->detect){
-					if (mods[i]->detect(conn,rawmsg,len,from)){
-						cw_dbg(DBG_INFO,"Using mod '%s' to handle connection from %s",mods[i]->name,sock_addr2str(from)); 
+			for (i = 0; mods[i]; i++) {
+				if (mods[i]->detect) {
+					if (mods[i]->detect(conn, rawmsg, len, from)) {
+						cw_dbg(DBG_INFO,
+						       "Using mod '%s' to handle connection from %s",
+						       mods[i]->name,
+						       sock_addr2str(from));
 						break;
 					}
 				}
@@ -184,11 +187,12 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 	}
 
-	if (!conn->detected){
-		cw_dbg(DBG_INFO,"Cant't detect capwap, discarding message from %s",sock_addr2str(from));
-		errno=EAGAIN;
+	if (!conn->detected) {
+		cw_dbg(DBG_INFO, "Cant't detect capwap, discarding message from %s",
+		       sock_addr2str(from));
+		errno = EAGAIN;
 		return -1;
-		
+
 	}
 
 
@@ -328,7 +332,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
-			   struct sockaddr *from)
+		    struct sockaddr *from)
 {
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
