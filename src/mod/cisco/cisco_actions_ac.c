@@ -50,6 +50,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Element Cisco RAD Name */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
@@ -58,7 +59,8 @@ static cw_action_in_t actions_in[] = {
 		.start=cw_in_generic2, 
 		.item_id = "wtp_name", 
 		.min_len=1,
-		.max_len=512
+		.max_len=512,
+		.mand=1
 	}
 	,
 
@@ -73,11 +75,12 @@ static cw_action_in_t actions_in[] = {
 
 static struct cw_itemdef _capwap_itemdefs[] = {
 
-	{"wtp_name",CW_ITEM_NONE,MBAG_STR},
-	{"wtp_mac_type",CW_ITEM_NONE,MBAG_BYTE},
+	{"wtp_name_cisco",CW_ITEM_NONE,MBAG_STR},
+
+	/*	{"wtp_mac_type",CW_ITEM_NONE,MBAG_BYTE},
 	{"discovery_type",CW_ITEM_NONE,MBAG_BYTE},
 	{"wtp_frame_tunnel_mode",CW_ITEM_NONE,MBAG_BYTE},
-	{CW_ITEM_NONE}
+*/	{CW_ITEM_NONE}
 
 };
 
@@ -104,7 +107,7 @@ int cisco_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
-//	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
+	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
 	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
 
 	intavltree_add(def->wbids, 0);

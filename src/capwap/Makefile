@@ -63,6 +63,7 @@ UTILOBJS= \
 	intavltree.o \
 	cw_util.o \
 	send.o \
+	cw_read_wtp_descriptor.o \
 	cw_read_wtp_descriptor_7.o \
 	cw_read_wtp_descriptor_versions.o
 
