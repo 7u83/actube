@@ -20,7 +20,7 @@ struct mod_ac
 	This function ifter receiving and disassembling a complete 
 	CAPWAP message. Either on Discovery Request or Join Request
 	**/
-	int (*detect)(struct conn *conn,const uint8_t *rawmsg, int rawlen,struct sockaddr *from);
+	int (*detect)(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from);
 
 	/** used for private data */
 	void *data;
