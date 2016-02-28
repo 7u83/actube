@@ -27,21 +27,32 @@
 
 #include <stdint.h>
 
-#include "avltree.h"
+#include "mavl.h"
 #include "conn.h"
 #include "mbag.h"
 #include "strheap.h"
 #include "intavltree.h"
 #include "item.h"
+#include "mlist.h"
+
 
 struct conn;
 
-/* Generic functions and structs */
-void * cw_actionlist_add(struct avltree *t, void *a, size_t s);
+
+/**
+ * @file action.h
+ * @brief Header for actions
+ */
 
 
+/**
+ * @defgroup ACTION Action
+ * @{
+ */
 
-/* Definitions for incomming messages */
+/**
+ * Definition of an action for incomming messages 
+ */
 struct cw_action_in{
 	uint32_t vendor_id;
 	uint8_t proto;
@@ -57,32 +68,24 @@ struct cw_action_in{
 	uint8_t mand;
 };
 
-typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int ,struct sockaddr *);
 
+/** a handy type for incomming actions */
 typedef struct cw_action_in cw_action_in_t;
 
-extern cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
-		int capwap_state,int msg_id, cw_action_fun_t callback);
+/** Definition of an action list for incomming messages */
+typedef mavl_t cw_actionlist_in_t;
 
-
-typedef struct avltree * cw_actionlist_in_t;
 
 extern cw_actionlist_in_t cw_actionlist_in_create();
 extern cw_action_in_t * cw_actionlist_in_get(cw_actionlist_in_t t,cw_action_in_t *a);
-extern cw_action_in_t * cw_actionlist_in_add(cw_actionlist_in_t t,cw_action_in_t *a);
+//extern cw_action_in_t * cw_actionlist_in_add(cw_actionlist_in_t t,cw_action_in_t *a);
 extern int cw_actionlist_in_register_actions(cw_actionlist_in_t t,cw_action_in_t * actions);
-extern cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a, 
-				      uint8_t capwap_state,
-					uint32_t msg_id,
-				      int (*fun) (struct conn * conn,
-						  struct cw_action_in * a, uint8_t * data,
-						  int len,struct sockaddr *from));
 
 
-cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
-                int capwap_state,int msg_id, cw_action_fun_t callback);
 
-/* Definitions for outgoing messages */
+/**
+ * Definitioni of an action  foroutgoing messages 
+ * */
 struct cw_action_out{
 	uint32_t msg_id;
 	const char * item_id;
@@ -93,30 +96,36 @@ struct cw_action_out{
 	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	struct mbag_item *(*get)(struct conn *conn,struct cw_action_out *a);
 	uint8_t mand;
-//	uint8_t itemtype;
 	struct mbag_typedef * itemtype;
-	
 	void *defval;
-//	int xopt;
-
 };
 
 
-
-
-
-
-
 typedef struct cw_action_out cw_action_out_t;
-
 typedef struct mavl *cw_actionlist_out_t;
+
+
+extern cw_actionlist_out_t cw_actionlist_out_create();
+extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_out_t * actions);
+mlist_t * cw_actionlist_out_get(cw_actionlist_out_t,int msg_id);
+
+//extern cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a);
+
+/**
+ * @}
+ */
+
+
+
+
+
+
 
 
 
 extern cw_actionlist_out_t cw_actionlist_out_create();
 extern cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a);
 extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_out_t * actions);
-#define cw_actionlist_out_get(t,a) avltree_get(t,a);
 
 /**
  * Definition CAPWAP modes
@@ -141,7 +150,6 @@ enum capwapmodes {
 };
 
 
-#include "mlist.h"
 
 
 
@@ -158,11 +166,6 @@ struct cw_actiondef{
 
 	/** Supported Wireless Binding IDs (WBID) */
 	struct avltree * wbids;
-};
-
-struct outelem{
-	uint32_t msg_id;
-	mlist_t * mlist;
 };
 
 

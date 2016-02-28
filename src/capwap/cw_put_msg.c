@@ -53,25 +53,21 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	uint8_t *dst = msgptr+8;
 
+	mlist_t *m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
 
-	struct outelem *o;
-
-	o = cw_actionlist_out_get_mlist(conn->actions->out,cw_get_msg_type(msgptr));
-
-	if (!o)
+	if (!m){
+		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
+			as.msg_id,cw_strmsg(as.msg_id));
 		return -1;
-	mlist_t *m;
-	m=o->mlist;
+	}
+
 
 	struct mlist_elem *e;
 
 	int len = 0;
 
 	for (e=m->list; e; e=e->next) {
-		printf("E: %p\n",e);
 		cw_action_out_t *ae=(cw_action_out_t*)e->data;
-
-
 
 		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
 		DBGX("Elem ID %s",ae->item_id);

@@ -62,12 +62,11 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 
 
 		
-
+/*
 cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
 		int capwap_state,int msg_id, cw_action_fun_t callback)
 {
 	cw_action_in_t as;
-	/* prepare struct for search operation */
 	as.capwap_state = capwap_state;
 	as.msg_id = msg_id;
 	as.vendor_id = 0;
@@ -88,12 +87,28 @@ cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
 
 }
 
-
+*/
 
 
 cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in * a)
 {
-	return cw_actionlist_add(t, a, sizeof(struct cw_action_in));
+	int s = sizeof(struct cw_action_in);
+
+	void *r = mavl_replace_data(t, a, s);
+	if (r) 
+		return r;
+
+	void *an = malloc(s);
+	if (!an)
+		return NULL;
+
+	memcpy(an, a, s);
+	return mavl_add(t, an);
+
+
+
+
+//	return cw_actionlist_add(t, a, sizeof(struct cw_action_in));
 }
 
 
@@ -103,12 +118,19 @@ struct cw_action_in *cw_actionlist_in_get(cw_actionlist_in_t t, struct cw_action
 }
 
 
+/**
+ * Create an action list for incomming messages
+ */
 cw_actionlist_in_t cw_actionlist_in_create()
 {
-	return avltree_create(cw_action_in_cmp, free);
+	return mavl_create(cw_action_in_cmp, free);
 }
 
-
+/**
+ * Register actions in an action list for incommin messages 
+ * @param t action list, where messaes will be registered
+ * @param actions an array of actions to reggister
+ */
 int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * actions)
 {
 	int n=0;
@@ -140,49 +162,22 @@ int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * 
 
 
 
+struct outelem{
+	uint32_t msg_id;
+	mlist_t * mlist;
+};
+
+
+
+
 /* 
  * Compare function for actionlist_out_t lists
  */
 static int cw_action_out_cmp(const void *elem1, const void *elem2)
 {
-
-
-
 	struct outelem *e1 = (struct outelem *) elem1;
 	struct outelem *e2 = (struct outelem *) elem2;
-
-
-	//printf("cmp %d and %d\n",e1->msg_id,e2->msg_id);
 	return e1->msg_id - e2->msg_id;
-
-/*
-	r = e1->msg_id - e2->msg_id;
-	if (r != 0)
-		return r;
-
-	if (!e1->item_id && !e2->item_id){
-		r=0;
-	}
-	else{
-		if (!e1->item_id) {
-			r = strcmp(CW_ITEM_NONE, e2->item_id);
-		}
-		else if (!e2->item_id){
-			r = strcmp(e1->item_id,CW_ITEM_NONE);
-		}
-		else{
-			r = strcmp(e1->item_id, e2->item_id);
-		}
-	}
-	if (r != 0)
-		return r;
-*/
-
-/*
-	r = e1->vendor_id - e2->vendor_id;
-	if (r != 0)
-		return r;
-*/
 	return 0;
 }
 
@@ -259,13 +254,21 @@ cw_actionlist_out_t cw_actionlist_out_create()
 }
 
 
-struct outelem * cw_actionlist_out_get_mlist(cw_actionlist_out_t t, int msg_id)
+static struct outelem * cw_actionlist_out_get_outelem(cw_actionlist_out_t t, int msg_id)
 {
 	struct outelem search;
 	search.msg_id=msg_id;
 	//printf("Searching for %d\n",msg_id);
 	return mavl_get(t,&search);
 	
+}
+
+mlist_t * cw_actionlist_out_get(cw_actionlist_out_t t,int msg_id)
+{
+	struct outelem *o = cw_actionlist_out_get_outelem(t,msg_id);
+	if (!o)
+		return NULL;
+	return o->mlist;
 }
 
 struct outelem * cw_actionlist_mout_create(int msg_id)
@@ -295,7 +298,7 @@ cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_o
 	}
 */
 
-	struct outelem * o =  cw_actionlist_out_get_mlist(t,a->msg_id);
+	struct outelem * o =  cw_actionlist_out_get_outelem(t,a->msg_id);
 
 
 	if (!o){
@@ -327,7 +330,7 @@ cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_o
 }
 
 
-
+/*
 cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a, 
 				      uint8_t capwap_state,
 					uint32_t msg_id,
@@ -351,6 +354,6 @@ cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a,
 }
 
 
-
+*/
 
 
