@@ -142,7 +142,6 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-
 	/* Discovery Response Elem AC_NAME */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
@@ -153,6 +152,7 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
 	{0,0}
 };
 
