@@ -53,6 +53,67 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	uint8_t *dst = msgptr+8;
 
+
+	struct outelem *o;
+
+	o = cw_actionlist_out_get_mlist(conn->actions->out,cw_get_msg_type(msgptr));
+
+	if (!o)
+		return -1;
+	mlist_t *m;
+	m=o->mlist;
+
+	struct mlist_elem *e;
+
+	int len = 0;
+
+	for (e=m->list; e; e=e->next) {
+		printf("E: %p\n",e);
+		cw_action_out_t *ae=(cw_action_out_t*)e->data;
+
+
+
+		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
+		DBGX("Elem ID %s",ae->item_id);
+		if ( ae->item_id ) {
+			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
+		}
+
+		if (ae->msg_id != as.msg_id) {
+			/* Element is from next msg, close action */
+			break;
+		}
+		if (ae->out) {
+			int l=0;
+			l= ae->out(conn, ae, dst+len); 
+
+
+			len +=l;
+
+		}
+		
+
+	}
+
+
+	cw_set_msg_elems_len(msgptr, len);
+
+	if (as.msg_id & 1) {
+		/* It's a request, so we have to set seqnum */
+		int s = conn_get_next_seqnum(conn);
+		cw_set_msg_seqnum(msgptr,s);	
+//		printf("Set seqnum to : %d\n",s);
+
+	}
+
+
+	return len;
+
+
+	exit(0);
+
+
+
 	DEFINE_AVLITER(i,conn->actions->out);
 
 	cw_action_out_t *am;
@@ -64,7 +125,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	}
 
 	cw_action_out_t *ae;
-	int len = 0;
 	while(NULL != (ae=avliter_next(&i))) {
 
 		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
@@ -81,8 +141,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 			int l=0;
 			l= ae->out(conn, ae, dst+len); 
 			len +=l;
-//			cw_dbg_elem_colored(DBG_ELEM, conn, ae->msg_id, ae->elem_id,
-//				 dst+len-l,l);
 
 		}
 		

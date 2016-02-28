@@ -27,6 +27,8 @@
 
 #include "action.h"
 
+
+
 static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 {
 	struct cw_action_in *e1 = (struct cw_action_in *) elem1;
@@ -112,7 +114,7 @@ int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * act
 	int n=0;
 	while (actions->capwap_state) {
 		cw_action_in_t *rc = cw_actionlist_in_add(t, actions);
-		if (rc == 0)
+		if (!rc)
 			return 0;
 		actions++;
 		n++;
@@ -122,6 +124,9 @@ int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * act
 
 int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * actions)
 {
+
+
+
 	int n=0;
 	while (actions->msg_id != 0) {
 		cw_action_out_t *rc = cw_actionlist_out_add(t, actions);
@@ -135,16 +140,22 @@ int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * 
 
 
 
-
 /* 
  * Compare function for actionlist_out_t lists
  */
 static int cw_action_out_cmp(const void *elem1, const void *elem2)
 {
-	struct cw_action_out *e1 = (struct cw_action_out *) elem1;
-	struct cw_action_out *e2 = (struct cw_action_out *) elem2;
-	int r;
 
+
+
+	struct outelem *e1 = (struct outelem *) elem1;
+	struct outelem *e2 = (struct outelem *) elem2;
+
+
+	//printf("cmp %d and %d\n",e1->msg_id,e2->msg_id);
+	return e1->msg_id - e2->msg_id;
+
+/*
 	r = e1->msg_id - e2->msg_id;
 	if (r != 0)
 		return r;
@@ -165,7 +176,7 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
 	}
 	if (r != 0)
 		return r;
-
+*/
 
 /*
 	r = e1->vendor_id - e2->vendor_id;
@@ -174,6 +185,41 @@ static int cw_action_out_cmp(const void *elem1, const void *elem2)
 */
 	return 0;
 }
+
+
+
+static int mout_cmp(void *elem1,void *elem2)
+{
+
+	struct cw_action_out *e1 = (struct cw_action_out *) elem1;
+	struct cw_action_out *e2 = (struct cw_action_out *) elem2;
+	int r;
+
+	r = e1->msg_id - e2->msg_id;
+	if (r )
+		return r;
+
+	r = e1->elem_id - e2->elem_id;
+	if (r )
+		return r;
+
+
+	r = e1->vendor_id - e2->vendor_id;
+	if (r )
+		return r;
+
+	if (e1->item_id == e1->item_id)
+		return 0;
+
+	if (e1->item_id && e2->item_id)
+		return strcmp(e1->item_id,e2->item_id);
+
+	
+	return 1;	
+
+}
+
+
 
 
 
@@ -209,13 +255,75 @@ void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
  */
 cw_actionlist_out_t cw_actionlist_out_create()
 {
-	return avltree_create(cw_action_out_cmp, free);
+	return mavl_create(cw_action_out_cmp, free);
 }
 
 
+struct outelem * cw_actionlist_out_get_mlist(cw_actionlist_out_t t, int msg_id)
+{
+	struct outelem search;
+	search.msg_id=msg_id;
+	//printf("Searching for %d\n",msg_id);
+	return mavl_get(t,&search);
+	
+}
+
+struct outelem * cw_actionlist_mout_create(int msg_id)
+{
+	struct outelem * o = malloc(sizeof(struct outelem));
+	if (!o)
+		return NULL;
+
+	o->mlist= mlist_create(mout_cmp);
+	if (!o->mlist){
+		free(o);
+		return NULL;
+	}
+	o->msg_id=msg_id;
+	return o;
+}
+
+
+
+
+#include "capwap.h"
+
 cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a)
 {
-	return cw_actionlist_add(t, a, sizeof(struct cw_action_out));
+/*	if (a->msg_id==CW_MSG_DISCOVERY_RESPONSE){
+		printf("Add discovery response\n");
+	}
+*/
+
+	struct outelem * o =  cw_actionlist_out_get_mlist(t,a->msg_id);
+
+
+	if (!o){
+	/*	if (a->msg_id==CW_MSG_DISCOVERY_RESPONSE){
+			printf("m was 0 creating \n");
+		}
+		*/
+		o = cw_actionlist_mout_create(a->msg_id);
+		if (!o) {
+			return NULL;
+		}
+		mavl_add(t,o);
+
+
+	}
+
+	
+
+	struct mlist_elem * e = mlist_replace(o->mlist,NULL,a);
+	if (!e)
+		e = mlist_append(o->mlist,a);
+
+	if (e)
+		return a;
+
+	return 0;
+
+
 }
 
 

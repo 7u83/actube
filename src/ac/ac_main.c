@@ -83,9 +83,35 @@ static int parse_args(int argc, char *argv[])
 #include "capwap/mod.h"
 extern struct mod_ac * cw_get_mod_ac(const char *name);
 
+#include "capwap/mlist.h"
+
+static int mcmp(void *v1,void*v2)
+{
+	return strcmp((char*)v1,(char*)v2);
+}
+
 int main(int argc, char *argv[])
 {
+
 	int rc = 0;
+
+	/*
+	struct mlist_elem *e;
+
+	mlist_t * l = mlist_create(mcmp);
+
+	mlist_append(l,"Hallo");
+
+	mlist_append(l,"Welt");
+
+	e = mlist_find(l,NULL,"Welt");
+
+	printf("Found: %p\n",e);
+
+	exit(0);
+	*/
+
+
 /*
 struct mod_ac *m = cw_get_mod_ac("cipwap");
 printf("Ptr: %p\n",m);
@@ -99,6 +125,7 @@ m->init();
 	cw_log_name = "AC-Tube";
 
 	read_config("ac.conf");
+
 
 	/* Show debug options if there are any set */
 	if (cw_dbg_opt_level)
@@ -134,13 +161,27 @@ m->init();
 	int regn;
 
 	/* Load CAPWAP base protocol */
-	if (conf_capwap_mode == CW_MODE_CIPWAP) {
+/*	if (conf_capwap_mode == CW_MODE_CIPWAP) {
 		cw_dbg(DBG_INFO, "Loading CIPWAP Actions ...");
 		regn = cw_register_actions_cipwap_ac(&capwap_actions);
 	} else {
 		cw_dbg(DBG_INFO, "Loading standard CAPWAP Actions ...");
 		regn = cw_register_actions_capwap_ac(&capwap_actions);
 	}
+*/
+
+	regn = cw_register_actions_capwap_ac(&capwap_actions);
+
+
+	struct outelem * l = cw_actionlist_out_get_mlist(capwap_actions.out,CW_MSG_DISCOVERY_RESPONSE);
+
+	printf("List got: %p\n",l);
+
+
+
+
+//	exit(0);
+
 
 	/* Load bindings */
 	cw_dbg(DBG_INFO, "Loading 802.11 Bindings ...");

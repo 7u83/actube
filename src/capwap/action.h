@@ -55,8 +55,6 @@ struct cw_action_in{
 	uint16_t min_len;
 	uint16_t max_len;
 	uint8_t mand;
-//	mbag_t (*target)(struct conn *conn,struct cw_action_in *a);
-	
 };
 
 typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int ,struct sockaddr *);
@@ -90,6 +88,7 @@ struct cw_action_out{
 	const char * item_id;
 	uint32_t vendor_id;
 	uint16_t elem_id;
+
 	int (*init)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	int (*out)(struct conn * conn, struct cw_action_out *a, uint8_t * dst); 
 	struct mbag_item *(*get)(struct conn *conn,struct cw_action_out *a);
@@ -102,9 +101,18 @@ struct cw_action_out{
 
 };
 
+
+
+
+
+
+
 typedef struct cw_action_out cw_action_out_t;
 
-typedef struct avltree *cw_actionlist_out_t;
+typedef struct mavl *cw_actionlist_out_t;
+
+
+
 extern cw_actionlist_out_t cw_actionlist_out_create();
 extern cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a);
 extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_out_t * actions);
@@ -133,6 +141,9 @@ enum capwapmodes {
 };
 
 
+#include "mlist.h"
+
+
 
 
 struct cw_actiondef{
@@ -143,9 +154,21 @@ struct cw_actiondef{
 	cw_itemdefheap_t items;
 	cw_itemdefheap_t radioitems;
 
+	mlist_t * mout; 
+
 	/** Supported Wireless Binding IDs (WBID) */
 	struct avltree * wbids;
 };
+
+struct outelem{
+	uint32_t msg_id;
+	mlist_t * mlist;
+};
+
+
+
+extern struct outelem * cw_actionlist_out_get_mlist(cw_actionlist_out_t t, int msg_id);
+
 
 
 

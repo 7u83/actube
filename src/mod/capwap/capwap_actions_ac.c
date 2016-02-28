@@ -26,7 +26,7 @@
 
 #include "mod_capwap.h"
 
-cw_action_in_t _capwap_actions_ac_in[] = {
+static cw_action_in_t actions_in[] = {
 
 
 	/* ------------------------------------------------------------------------------- */
@@ -128,6 +128,34 @@ cw_action_in_t _capwap_actions_ac_in[] = {
 	{0, 0}
 };
 
+static cw_action_out_t actions_out[]={
+
+	/* Message Discovery Response */
+
+	/* Discovery Response AC Descriptor */
+	{
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.out = cw_out_ac_descriptor,
+		.mand = 1
+	}
+	,
+
+
+	/* Discovery Response Elem AC_NAME */
+	{
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.elem_id = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME,
+		.out = cw_out_generic,
+	       	.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+	{0,0}
+};
+
 
 #include "capwap/item.h"
 
@@ -153,8 +181,8 @@ int capwap_register_actions_ac(struct cw_actiondef *def)
 	def->radioitems = cw_itemdefheap_create();
 
 	int rc;
-	rc = cw_actionlist_in_register_actions(def->in, _capwap_actions_ac_in);
-//	rc += cw_actionlist_out_register_actions(def->out, capwap_actions_ac_out);
+	rc = cw_actionlist_in_register_actions(def->in, actions_in);
+	rc += cw_actionlist_out_register_actions(def->out, actions_out);
 
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
