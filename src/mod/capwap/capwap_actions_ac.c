@@ -142,7 +142,7 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-	/* Discovery Response Elem AC_NAME */
+	/* Discovery Response Elem AC Name */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
 		.elem_id = CW_ELEM_AC_NAME,
@@ -152,6 +152,18 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
+	/* List of CAPWAP Control IPv4 and IPv6 addresses */
+	{
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
+	 	.out = cw_out_capwap_control_ip_addr_list, 
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
+
+
 
 	{0,0}
 };

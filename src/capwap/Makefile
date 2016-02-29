@@ -146,7 +146,6 @@ CAPWAPOBJS= \
 	cw_out_ac_descriptor.o \
 	cw_out_wtp_descriptor.o \
 	cw_out_cisco_ac_descriptor.o \
-	cw_out_cisco_ap_timesync.o \
 	cw_in_cisco_image_identifier.o\
 	cw_out_radio_operational_state.o\
 	cw_in_ac_descriptor.o\
