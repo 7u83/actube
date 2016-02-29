@@ -26,6 +26,7 @@
 #include "capwap/capwap_cisco.h"
 
 #include "mod_cisco.h"
+#include "cisco.h"
 
 static cw_action_in_t actions_in[] = {
 
@@ -64,11 +65,31 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-
-
 	/* End of list */
 	{0, 0}
 };
+
+
+static cw_action_out_t actions_out[]={
+
+	/* Message Discovery Response */
+
+	/* Discovery Response AC Descriptor */
+	{
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.item_id = CW_ITEM_AC_TIMESTAMP, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id  = CW_CISCO_AP_TIMESYNC,
+		.out = cisco_out_ap_timesync,
+		.mand = 1
+	}
+
+	,
+
+	{0,0}
+
+};
+
 
 
 #include "capwap/item.h"
@@ -89,20 +110,10 @@ static struct cw_itemdef _capwap_itemdefs[] = {
 
 int cisco_register_actions_ac(struct cw_actiondef *def)
 {
-	/*
-	def->in = cw_actionlist_in_create();
-	def->out = cw_actionlist_out_create();
-	def->strmsg = cw_strheap_create();
-	def->strelem = cw_strheap_create();
-	def->wbids = intavltree_create();
-	def->items = cw_itemdefheap_create();
-	def->radioitems = cw_itemdefheap_create();
-*/
-
 
 	int rc;
 	rc = cw_actionlist_in_register_actions(def->in, actions_in);
-//	rc += cw_actionlist_out_register_actions(def->out, capwap_actions_ac_out);
+	rc += cw_actionlist_out_register_actions(def->out, actions_out);
 
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
