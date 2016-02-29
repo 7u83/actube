@@ -43,6 +43,8 @@ static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_
 	const uint8_t *elem;
 	
 
+	/* To detect a Cisco AP we look for any vendor 
+	 * specific payload Cisco identifier */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 		int id = cw_get_elem_id(elem);
 		if (id==CW_ELEM_VENDOR_SPECIFIC_PAYLOAD){
