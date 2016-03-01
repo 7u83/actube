@@ -38,7 +38,7 @@ createcert()
        		 -subj "$SUBJ"
 
 
-	$OPENSSL ca -config openssl-crt.cnf  \
+	$OPENSSL ca -config openssl.cnf  \
 		   -keyfile $INT_CA_DIR/${PREF}int-ca.key \
 		   -cert $INT_CA_DIR/${PREF}int-ca.crt \
 		   -batch \

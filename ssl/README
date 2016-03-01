@@ -31,7 +31,7 @@ Creating SSL certificates to test AC-Tube and it's WTP's
    on Cisco's AP must be at least 7.3.
 
    EXAMPLE:
-     ./mkcert ac-cisco cisco-ap
+     ./mkcert.sh ac-cisco cisco-ap
      will create the files ./certs/ac-cisco.pem and and ./certs/ac-cisco.key
 
    On a Cisco AP you might have to reset the config over terminal,
