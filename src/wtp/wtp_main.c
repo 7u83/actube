@@ -132,7 +132,7 @@ mavl_destroy(b);
 	conn->base_rmac=get_base_rmac();
 
 conn->capwap_mode = CW_MODE_CAPWAP;
-//conn->capwap_mode = CW_MODE_CISCO;
+conn->capwap_mode = CW_MODE_CISCO;
 
 the_conn->strict_capwap=0;
 
@@ -169,8 +169,8 @@ conn->config=mbag_create();
 
 
 
-cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
-cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESPONSE,handle_update_req);
+//cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
+//cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESPONSE,handle_update_req);
 
 
 
