@@ -107,7 +107,8 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
-	},
+	}
+	,
 	
 
 	/* Element WTP Name */
@@ -123,6 +124,32 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 */
+
+
+	/* ---------------------------------------------------------------------------
+	 * Join Request 
+	 */
+
+	
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST,
+		.end = cw_in_check_join_req
+	}
+	,
+
+	/* Location Data - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id =CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_LOCATION_DATA, 
+		.item_id = "location_data",
+		.start = cw_in_generic,
+		.max_len = 1024,
+		.min_len = 1
+	}
+	,
+	
 
 	/* End of list */
 	{0, 0}
