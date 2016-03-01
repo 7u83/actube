@@ -190,6 +190,9 @@ static int wtpman_establish_dtls(void *arg)
 
 	/* try to accept the connection */
 	if (!dtls_accept(wtpman->conn)) {
+
+
+
 		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s", CLIENT_IP);
 		return 0;
 	}
@@ -198,6 +201,7 @@ static int wtpman_establish_dtls(void *arg)
 	       dtls_get_cipher(wtpman->conn));
 	/* DTLS handshake done */
 
+/*
 	int cert_len;
 	struct dtls_ssl_cert cert;
 
@@ -206,9 +210,11 @@ static int wtpman_establish_dtls(void *arg)
 
 	cert = dtls_get_peers_cert(wtpman->conn, 0);
 
-//      printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
-//      fwrite(cert.data, 1, cert.size, f);
+      printf("Have Peers Cert: %p, %d\n", cert.data, cert.size);
+      fwrite(cert.data, 1, cert.size, f);
 	fclose(f);
+*/
+
 
 
 	return 1;
