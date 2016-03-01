@@ -22,10 +22,10 @@ endif
 
 CFLAGS += -O0 -Wall -Wno-unused-variable -Werror -g
 #CFLAGS += -Os -Wall 
-LDFLAGS += -L../contrib/jsmn -L../../src/capwap/$(ARCH) 
+LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH) 
 
 
-LIBS+=-lcapwap
+LIBS+=-lcw
 LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
 LIBS+=-ljsmn

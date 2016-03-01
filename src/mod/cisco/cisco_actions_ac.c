@@ -90,7 +90,7 @@ static cw_action_out_t actions_out[]={
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
 		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
-		.out = cw_out_cisco_ac_descriptor,
+		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}
 
