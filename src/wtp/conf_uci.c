@@ -43,9 +43,15 @@ static struct uci_section  * get_anon_section(struct uci_package * pkg, const ch
 
 static void set_dbg_opt(struct uci_context *ctx,struct uci_section * section,int opt,const char * optstr)
 {
+printf("Setting debug  opt: %s %d - ",optstr, opt);
+
 	const char *str = uci_lookup_option_string(ctx,section,optstr);
-	if (!str)
+	if (!str){
+printf("no\n");
 		return;
+	}
+
+printf("%s\n",str);
 	if ((strcmp(str,"1")==0) || (strcmp(str,"true")==0))
 		//conf_dbg_level |= opt;
 		cw_dbg_set_level(opt,1);

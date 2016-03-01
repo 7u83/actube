@@ -143,6 +143,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 	int payloadlen = len - offset;
 
+
 	/* pre-check message */
 	if (payloadlen - 8 != elems_len) {
 
@@ -153,6 +154,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			errno = EAGAIN;
 			return -1;
 		}
+
+
 		if (elems_len < payloadlen - 8) {
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has %d bytes of extra data, ignoring.",
@@ -161,12 +164,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 
 		if (elems_len > payloadlen - 8) {
+
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has msgelems len of %d bytes, but has only %d bytes of data, truncating.",
 			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
 			elems_len = payloadlen - 8;
 		}
 	}
+
 
 
 	if (!conn->detected) {
@@ -187,11 +192,13 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 	}
 
+
 	if (!conn->detected) {
-		cw_dbg(DBG_INFO, "Cant't detect capwap, discarding message from %s",
+
+		cw_dbg(DBG_MSG_ERR, "Cant't detect capwap, discarding message from %s",
 		       sock_addr2str(from));
-		errno = EAGAIN;
-		return -1;
+//		errno = EAGAIN;
+//		return -1;
 
 	}
 
@@ -334,6 +341,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 		    struct sockaddr *from)
 {
+
+
+
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
 
@@ -369,6 +379,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 	/* the received request message was retransmittet by our peer,
 	 * let's retransmit our response message if we have one*/
+
 
 	cw_dbg(DBG_MSG_ERR,
 	       "Retransmitted request message from %s detected, seqnum=%d, type=%d",

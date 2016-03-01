@@ -6,12 +6,12 @@
 #include "sock.h"
 
 
-static int put_ip(void *priv, void *data)
+static int put_ip(uint8_t *dst /*void *priv*/, cw_acip_t * acip /*void *data*/)
 {
-	uint8_t ** dptr = (uint8_t **)priv; 
-	cw_acip_t *acip=(cw_acip_t*)data;
+//	uint8_t ** dptr = (uint8_t **)priv; 
+//	cw_acip_t *acip=(cw_acip_t*)data;
 
-	uint8_t * dst = *dptr;
+//	uint8_t * dst = *dptr;
 
 	uint8_t *d = dst+4;
 
@@ -34,10 +34,14 @@ static int put_ip(void *priv, void *data)
 
 	if (elem_id != -1 ) {
 		d+=cw_put_elem_hdr(dst,elem_id,d-dst-4);
-		*dptr = d-4;
+		return 0;
+//		*dptr = d-4;
 	}
 
-	return 1;
+
+	return d-4-dst;
+
+//	return 1;
 }
 
 
@@ -55,7 +59,17 @@ int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a
 
 
 	uint8_t *d = dst;
-	cw_aciplist_foreach(aciplist, put_ip, &d);
+
+	MAVLITER_DEFINE(i,aciplist);
+	mavliter_foreach(&i){
+		struct cw_acip  * acip = mavliter_get(&i);
+
+		d+=put_ip(d,acip);
+		
+	}
+
+
+//	cw_aciplist_foreach(aciplist, put_ip, &d);
 
 	mbag_item_release_data_ptr(item,aciplist);	
 	return  d-dst;
