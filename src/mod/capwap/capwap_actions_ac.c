@@ -197,7 +197,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* WTP Frame Tunnel Mode - Join Request */
+	/* WTP Mac Type - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
@@ -221,6 +221,19 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 	
+	/* Maximum Message Length - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
+		.mand = 0, 
+		.min_len = 2, 
+		.max_len = 2
+	}
+	,
+
 
 
 	/* End of list */

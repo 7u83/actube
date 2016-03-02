@@ -25,6 +25,8 @@ CFLAGS += -O0 -Wall -Wno-unused-variable -Werror -g
 LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH) 
 
 
+LIBS+=-lcapwap
+LIBS+=-lcisco
 LIBS+=-lcw
 LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
@@ -122,7 +124,7 @@ endif
 
 
 wtp: $(BCHECK) $(OBJS)
-	$(Q)$(CC) $(OBJS) -o wtp $(LDFLAGS) $(LIBS)
+	$(Q)$(CC) $(OBJS) ../mod/modload_wtp.o -o wtp $(LDFLAGS) $(LIBS)
 	@$(E) "  LD " $@
 
 clean:
