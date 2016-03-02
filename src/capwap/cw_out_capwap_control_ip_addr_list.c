@@ -32,11 +32,12 @@ static int put_ip(uint8_t *dst /*void *priv*/, cw_acip_t * acip /*void *data*/)
 			break;
 	}
 
-	if (elem_id != -1 ) {
-		d+=cw_put_elem_hdr(dst,elem_id,d-dst-4);
+	if (elem_id ==-1)
 		return 0;
+
+	d+=cw_put_elem_hdr(dst,elem_id,d-dst-4);
+//		return 0;
 //		*dptr = d-4;
-	}
 
 
 	return d-4-dst;

@@ -65,6 +65,38 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* ----------------------------------
+	 * Join Request
+	 */
+
+	/* Element WTP Descriptor - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+	 	.start = cisco_in_wtp_descriptor, 
+		.item_id = "wtp_descriptor", 
+		.mand = 1, 
+	}
+	,
+
+	/* Element Session ID - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_SESSION_ID,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_SESSION_ID, 
+		.mand = 1, 
+		.min_len = 4, 
+		.max_len = 16
+	}
+	,
+
+
+
+		
+
 	/* End of list */
 	{0, 0}
 };
@@ -93,6 +125,8 @@ static cw_action_out_t actions_out[]={
 		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}
+
+
 
 
 	,
