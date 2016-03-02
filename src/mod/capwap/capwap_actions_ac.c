@@ -51,7 +51,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element WTP Board Data */
+	/* Element WTP Board Data - Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
@@ -62,7 +62,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element WTP Descriptor */
+	/* Element WTP Descriptor - Discovery */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
@@ -111,20 +111,6 @@ static cw_action_in_t actions_in[] = {
 	,
 	
 
-	/* Element WTP Name */
-/*	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_NAME,
-	 	.start = cw_in_generic2, 
-		.item_id = "wtp_name", 
-		.mand = 0, 
-		.min_len = 1, 
-		.max_len = 1024
-	}
-	,
-*/
-
 
 	/* ---------------------------------------------------------------------------
 	 * Join Request 
@@ -143,13 +129,99 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id =CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_LOCATION_DATA, 
-		.item_id = "location_data",
-		.start = cw_in_generic,
+		.item_id = CW_ITEM_LOCATION_DATA,
+		.start = cw_in_generic2,
 		.max_len = 1024,
 		.min_len = 1
 	}
 	,
 	
+	/* Element WTP Board Data - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+	 	.start = capwap_in_wtp_board_data, 
+		.item_id = "wtp_board_data", 
+		.mand = 1, 
+	}
+	,
+
+	/* Element WTP Descriptor - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+	 	.start = capwap_in_wtp_descriptor, 
+		.item_id = "wtp_descriptor", 
+		.mand = 1, 
+	}
+	,
+
+	/* Element WTP Name - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_NAME,
+	 	.start = cw_in_generic2, 
+		.item_id = "wtp_name", 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1024
+	}
+	,
+
+	/* Element Session ID - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_SESSION_ID,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_SESSION_ID, 
+		.mand = 1, 
+		.min_len = 16, 
+		.max_len = 16
+	}
+	,
+
+	/* WTP Frame Tunnel Mode - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
+	/* WTP Frame Tunnel Mode - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_MAC_TYPE,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_WTP_MAC_TYPE, 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
+
+
+	/* Vendor Specific Payload - Join Request*/
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
+	
+
 
 	/* End of list */
 	{0, 0}
@@ -204,6 +276,8 @@ static struct cw_itemdef _capwap_itemdefs[] = {
 	{"wtp_mac_type",CW_ITEM_NONE,MBAG_BYTE},
 	{"discovery_type",CW_ITEM_NONE,MBAG_BYTE},
 	{"wtp_frame_tunnel_mode",CW_ITEM_NONE,MBAG_BYTE},
+	{ CW_ITEM_LOCATION_DATA, CW_ITEM_NONE,MBAG_STR},
+	{ CW_ITEM_SESSION_ID,CW_ITEM_NONE,MBAG_BSTR},
 	{CW_ITEM_NONE}
 
 };
