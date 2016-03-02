@@ -27,6 +27,54 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
+	/* WTP Frame TunnelMode - Discovery Request */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
+		.out = cw_out_generic,
+		.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+
+	/* WTP Mac Type - Discovery Request */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
+		.item_id = CW_ITEM_WTP_MAC_TYPE, 
+		.out = cw_out_generic,
+		.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+
+
+	/* WTP Board Data - Discovery Request */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
+		.item_id = CW_ITEM_WTP_BOARD_DATA, 
+		.out = cw_out_wtp_board_data,
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
+
+
+	/* WTP Descriptor */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
+		.out = cw_out_wtp_descriptor,
+		//.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+
+
+
+
 
 
 //	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_DISCOVERY_TYPE, 0,
