@@ -1,3 +1,21 @@
+/*
+    This file is part of actube.
+
+    actube is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 #ifndef __MOD_H
 #define __MOD_H
 
@@ -25,18 +43,17 @@ struct mod_ac
 	/** used for private data */
 	void *data;
 
+	/** Register actions */
 	int (*register_actions)(struct cw_actiondef *def);
-
 };
 
 
-//#include "cipwap/mod_cipwap.h"
-//#include "capwap/mod_capwap.h"
+/**
+ * We define here struct mod_wtp in case we need 
+ * different methods for WTP and AC later
+ */
+#define mod_wtp mod_ac
 
 
-//#define MODS_AC { mod_capwap_ac,mod_cipwap_ac,NULL }
-
-
-//extern struct mod_ac * cw_get_mod_ac(const char *name);
 
 #endif
