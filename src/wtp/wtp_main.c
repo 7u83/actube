@@ -13,6 +13,9 @@
 #include "capwap/capwap_80211.h"
 #include "capwap/radio.h"
 
+#include "capwap/mod.h"
+
+
 #include "wtp.h"
 #include "wtp_conf.h"
 
@@ -24,7 +27,7 @@
 #include "cfg.h"
 
 
-
+#include "../mod/modload.h"
 
 
 
@@ -111,8 +114,19 @@ mavl_destroy(b);
 //	mbag_set_dword(r,CW_RADIO_TYPE,1);
 
 
-	cw_register_actions_cipwap_wtp(&capwap_actions);
-	cw_register_actions_capwap_80211_wtp(&capwap_actions);
+//	cw_register_actions_cipwap_wtp(&capwap_actions);
+//	cw_register_actions_capwap_80211_wtp(&capwap_actions);
+
+	struct mod_wtp * mod = modload_wtp ("capwap");
+	if (!mod) {
+		printf ("Can't load mod capwap\n");
+		exit(0);
+	}
+	conn->detected=1;
+
+	mod->register_actions(&capwap_actions);	
+
+	
 
 
 /*
