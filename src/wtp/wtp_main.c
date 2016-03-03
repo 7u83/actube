@@ -166,8 +166,17 @@ conn->config=mbag_create();
 	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO, 
 			bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
+	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_MODELNO, bstr_data(conf_model_no),bstr_len(conf_model_no));
+
+
 	
-	mbag_set_mavl(conn->outgoing, CW_ITEM_WTP_BOARD_DATA, board_data);
+	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
+
+printf("Board_data %p\n",board_data);
+
+mbag_t  mb = mbag_get_mbag(conn->config,CW_ITEM_WTP_BOARD_DATA,NULL);
+printf("mbag %p\n",mb);
+
 
 	cw_acpriolist_t acprios = cw_acpriolist_create();
 	cw_acpriolist_set(acprios,"Master AC",strlen("Master AC"),1);
