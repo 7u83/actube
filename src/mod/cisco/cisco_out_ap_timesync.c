@@ -2,7 +2,7 @@
 #include <time.h>
 #include "cisco.h"
 
-#include "capwap/capwap_cisco.h"
+#include "cw/capwap_cisco.h"
 
 int cisco_out_ap_timesync(struct conn *conn,struct cw_action_out * a,uint8_t *dst)
 {

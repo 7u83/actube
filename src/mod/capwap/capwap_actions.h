@@ -20,8 +20,8 @@
 #define __CAPWAP_ACTIONS_H
 
 
-#include "capwap/capwap.h"
-#include "capwap/capwap_items.h"
+#include "cw/capwap.h"
+#include "cw/capwap_items.h"
 
 
 #define CW_ACTION_IN_LOCATION_DATA 	\

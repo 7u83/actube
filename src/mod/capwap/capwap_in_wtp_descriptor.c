@@ -18,8 +18,8 @@
 
 
 
-#include "capwap/sock.h"
-#include "capwap/cw.h"
+#include "cw/sock.h"
+#include "cw/cw.h"
 
 int capwap_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)

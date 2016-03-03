@@ -25,25 +25,25 @@
 
 #include "actube.h"
 #include "wtplist.h"
-#include "capwap/dtls.h"
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/sock.h"
+#include "cw/dtls.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/sock.h"
 #include "conf.h"
 
 #include "socklist.h"
 
 #include "db.h"
-#include "capwap/capwap_items.h"
-#include "capwap/capwap_cisco.h"
-#include "capwap/capwap_80211.h"
-#include "capwap/action.h"
-#include "capwap/capwap_crypto.h"
-#include "capwap/mbag.h"
+#include "cw/capwap_items.h"
+#include "cw/capwap_cisco.h"
+#include "cw/capwap_80211.h"
+#include "cw/action.h"
+#include "cw/capwap_crypto.h"
+#include "cw/mbag.h"
 
 
 #include "ac.h"
-#include "capwap/format.h"
+#include "cw/format.h"
 
 int ac_run();
 
@@ -80,10 +80,10 @@ static int parse_args(int argc, char *argv[])
 }
 
 
-#include "capwap/mod.h"
+#include "cw/mod.h"
 extern struct mod_ac * cw_get_mod_ac(const char *name);
 
-#include "capwap/mlist.h"
+#include "cw/mlist.h"
 
 static int mcmp(void *v1,void*v2)
 {

@@ -22,13 +22,13 @@
 
 
 
-#include "capwap/capwap.h"
-#include "capwap/capwap_items.h"
+#include "cw/capwap.h"
+#include "cw/capwap_items.h"
 
-#include "capwap/mbag.h"
+#include "cw/mbag.h"
 
-#include "capwap/cw_util.h"
-#include "capwap/dbg.h"
+#include "cw/cw_util.h"
+#include "cw/dbg.h"
 
 
 

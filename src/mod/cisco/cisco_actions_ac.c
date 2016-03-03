@@ -17,13 +17,13 @@
 */
 
 
-#include "capwap/capwap.h"
-#include "capwap/action.h"
-#include "capwap/capwap_items.h"
+#include "cw/capwap.h"
+#include "cw/action.h"
+#include "cw/capwap_items.h"
 #include "capwap_actions.h"
-#include "capwap/strheap.h"
-#include "capwap/radio.h"
-#include "capwap/capwap_cisco.h"
+#include "cw/strheap.h"
+#include "cw/radio.h"
+#include "cw/capwap_cisco.h"
 
 #include "mod_cisco.h"
 #include "cisco.h"
@@ -137,7 +137,7 @@ static cw_action_out_t actions_out[]={
 
 
 
-#include "capwap/item.h"
+#include "cw/item.h"
 
 static struct cw_itemdef _capwap_itemdefs[] = {
 

@@ -3,11 +3,11 @@
 
 #include "ac.h"
 #include "conf.h"
-#include "capwap/capwap.h"
-#include "capwap/capwap_items.h"
-#include "capwap/aciplist.h"
+#include "cw/capwap.h"
+#include "cw/capwap_items.h"
+#include "cw/aciplist.h"
 #include "socklist.h"
-#include "capwap/sock.h"
+#include "cw/sock.h"
 
 struct cw_ac_status ac_status;
 

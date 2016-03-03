@@ -30,12 +30,12 @@
 #include <stdio.h>
 
 #include "wtplist.h"
-#include "capwap/conn.h"
-#include "capwap/sock.h"
+#include "cw/conn.h"
+#include "cw/sock.h"
 
 
 #include "conf.h"
-#include "capwap/log.h"
+#include "cw/log.h"
 
 
 static struct connlist * connlist;

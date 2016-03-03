@@ -25,8 +25,8 @@
 #include <netinet/in.h>
 
 
-#include "capwap/log.h"
-#include "capwap/sock.h"
+#include "cw/log.h"
+#include "cw/sock.h"
 
 
 #include "socklist.h"
