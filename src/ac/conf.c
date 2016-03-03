@@ -21,15 +21,15 @@
 
 #include <confuse.h>
 
-#include "capwap/capwap.h"
-#include "capwap/sock.h"
+#include "cw/capwap.h"
+#include "cw/sock.h"
 
 #include "conf.h"
 
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/cw_util.h"
-#include "capwap/action.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/cw_util.h"
+#include "cw/action.h"
 
 #include "ac.h"
 
@@ -440,7 +440,7 @@ static char *conf_default_mcast_groups_ipv6[] = {
 #endif
 
 //#include "avltree"
-#include "capwap/stravltree.h"
+#include "cw/stravltree.h"
 
 
 

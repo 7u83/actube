@@ -1,7 +1,7 @@
 #ifndef CW_MAVL_H
 #define CW_MAVL_H
 
-#include "capwap/mavl.h"
+#include "cw/mavl.h"
 
 extern void db_ping();
 extern int db_init();

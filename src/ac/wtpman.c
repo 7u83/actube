@@ -7,35 +7,35 @@
 
 #include "wtplist.h"
 
-#include "capwap/capwap.h"
-#include "capwap/sock.h"
+#include "cw/capwap.h"
+#include "cw/sock.h"
 #include "socklist.h"
 
-#include "capwap/conn.h"
+#include "cw/conn.h"
 #include "wtpman.h"
 #include "conf.h"
-#include "capwap/log.h"
-#include "capwap/timer.h"
+#include "cw/log.h"
+#include "cw/timer.h"
 
 
 
-#include "capwap/lwmsg.h"
-#include "capwap/lwapp.h"
+#include "cw/lwmsg.h"
+#include "cw/lwapp.h"
 
 
 #include <errno.h>
 
-#include "capwap/capwap_80211.h"
-#include "capwap/capwap_cisco.h"
+#include "cw/capwap_80211.h"
+#include "cw/capwap_cisco.h"
 
-#include "capwap/cw_util.h"
+#include "cw/cw_util.h"
 
-#include "capwap/capwap_items.h"
+#include "cw/capwap_items.h"
 #include "ac.h"
 
-#include "capwap/dtls.h"
+#include "cw/dtls.h"
 
-#include "capwap/dbg.h"
+#include "cw/dbg.h"
 
 
 extern struct cw_actiondef capwap_actions;

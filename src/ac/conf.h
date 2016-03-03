@@ -26,10 +26,10 @@
 #include <net/if.h>
 
 
-#include "capwap/capwap.h"
-#include "capwap/lwapp.h"
-#include "capwap/bstr.h"
-#include "capwap/mod.h"
+#include "cw/capwap.h"
+#include "cw/lwapp.h"
+#include "cw/bstr.h"
+#include "cw/mod.h"
 
 
 extern struct mod_ac * conf_mods[10];

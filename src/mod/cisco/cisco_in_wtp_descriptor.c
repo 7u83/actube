@@ -17,7 +17,7 @@
 */
 
 
-#include "capwap/cw.h"
+#include "cw/cw.h"
 
 
 int cisco_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,

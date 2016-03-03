@@ -1,6 +1,6 @@
-#include "capwap/capwap.h"
-#include "capwap/action.h"
-#include "capwap/capwap_items.h"
+#include "cw/capwap.h"
+#include "cw/action.h"
+#include "cw/capwap_items.h"
 
 
 static cw_action_in_t actions_in[] = {

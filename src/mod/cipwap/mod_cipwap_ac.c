@@ -1,6 +1,6 @@
 
-#include "capwap/mod.h"
-#include "capwap/log.h"
+#include "cw/mod.h"
+#include "cw/log.h"
 
 #include "mod_cipwap.h"
 

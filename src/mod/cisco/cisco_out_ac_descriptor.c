@@ -1,9 +1,9 @@
-#include "capwap/log.h"
-#include "capwap/conn.h"
+#include "cw/log.h"
+#include "cw/conn.h"
 
-#include "capwap/mbag.h"
-#include "capwap/capwap_items.h"
-#include "capwap/capwap.h"
+#include "cw/mbag.h"
+#include "cw/capwap_items.h"
+#include "cw/capwap.h"
 
 
 int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 

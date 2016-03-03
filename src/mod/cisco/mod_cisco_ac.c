@@ -1,10 +1,10 @@
 
-#include "capwap/capwap.h"
-#include "capwap/mod.h"
-#include "capwap/log.h"
-#include "capwap/dbg.h"
+#include "cw/capwap.h"
+#include "cw/mod.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
 
-#include "capwap/action.h"
+#include "cw/action.h"
 
 #include "mod_cisco.h"
 #include "../modload.h"

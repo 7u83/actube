@@ -1,4 +1,4 @@
-#include "../capwap/mod.h"
+#include "../cw/mod.h"
 
 
 #include "cipwap/mod_cipwap.h"

@@ -22,8 +22,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "capwap/sock.h"
-#include "capwap/conn.h"
+#include "sock.h"
+#include "conn.h"
 #include "action.h"
 
 struct cw_actiondef;

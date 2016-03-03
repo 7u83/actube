@@ -1,11 +1,11 @@
 
 #include <sqlite3.h>
 
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/capwap_items.h"
-#include "capwap/conn.h"
-#include "capwap/item.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/capwap_items.h"
+#include "cw/conn.h"
+#include "cw/item.h"
 
 #include "conf.h"
 
