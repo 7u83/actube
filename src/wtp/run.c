@@ -3,25 +3,25 @@
 #include <errno.h>
 #include <string.h>
 
-#include "capwap/capwap.h"
-#include "capwap/conn.h"
-#include "capwap/radioinfo.h"
-#include "capwap/log.h"
-#include "capwap/dtls.h"
-#include "capwap/sock.h"
-#include "capwap/cw_util.h"
-#include "capwap/capwap_items.h"
+#include "cw/capwap.h"
+#include "cw/conn.h"
+#include "cw/radioinfo.h"
+#include "cw/log.h"
+#include "cw/dtls.h"
+#include "cw/sock.h"
+#include "cw/cw_util.h"
+#include "cw/capwap_items.h"
 
 
 #include "wtp_conf.h"
 
 
-#include "capwap/timer.h"
+#include "cw/timer.h"
 
 
 
-#include "capwap/capwap.h"
-#include "capwap/conn.h"
+#include "cw/capwap.h"
+#include "cw/conn.h"
 #include "wtp_interface.h"
 
 

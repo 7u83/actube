@@ -1,6 +1,6 @@
-#include "capwap/capwap.h"
-#include "capwap/conn.h"
-#include "capwap/radio.h"
+#include "cw/capwap.h"
+#include "cw/conn.h"
+#include "cw/radio.h"
 
 #include "wtp_interface.h"
 

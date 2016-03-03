@@ -3,24 +3,24 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "capwap/capwap.h"
-#include "capwap/cipwap.h"
-#include "capwap/capwap_items.h"
-#include "capwap/conn.h"
-#include "capwap/log.h"
-#include "capwap/dtls.h"
-#include "capwap/acpriolist.h"
-#include "capwap/capwap_80211.h"
-#include "capwap/radio.h"
+#include "cw/capwap.h"
+#include "cw/cipwap.h"
+#include "cw/capwap_items.h"
+#include "cw/conn.h"
+#include "cw/log.h"
+#include "cw/dtls.h"
+#include "cw/acpriolist.h"
+#include "cw/capwap_80211.h"
+#include "cw/radio.h"
 
-#include "capwap/mod.h"
+#include "cw/mod.h"
 
 
 #include "wtp.h"
 #include "wtp_conf.h"
 
-#include "capwap/dbg.h"
-#include "capwap/mavl.h"
+#include "cw/dbg.h"
+#include "cw/mavl.h"
 
 #include "jsmn.h"
 

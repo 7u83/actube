@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include "capwap/dbg.h"
+#include "cw/dbg.h"
 
 #include "wtp.h"
 #include "wtp_conf.h"

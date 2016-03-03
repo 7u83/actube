@@ -1,10 +1,10 @@
 #include <errno.h>
 #include "wtp.h"
 
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/capwap.h"
-#include "capwap/capwap_items.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/capwap.h"
+#include "cw/capwap_items.h"
 
 
 int image_update()

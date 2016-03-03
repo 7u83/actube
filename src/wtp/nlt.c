@@ -3,9 +3,9 @@
 #include "netlink/genl/ctrl.h"
 #include <netlink/msg.h>
 
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/avltree.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/avltree.h"
 
 #include "nlt.h"
 

@@ -1,25 +1,25 @@
-#include "capwap/mbag.h"
-#include "capwap/capwap_items.h"
-#include "capwap/radio.h"
+#include "cw/mbag.h"
+#include "cw/capwap_items.h"
+#include "cw/radio.h"
 
-#include "capwap/conn.h"
-#include "capwap/bstr.h"
+#include "cw/conn.h"
+#include "cw/bstr.h"
 
 #include <errno.h>
 #include <stdio.h>
 
 #include "jsmn.h"
 #include "wtp.h"
-#include "capwap/bstr.h"
+#include "cw/bstr.h"
 
-#include "capwap/mavl.h"
-#include "capwap/format.h"
-#include "capwap/file.h"
-//#include "capwap/aciplist.h"
-//#include "capwap/acpriolist.h"
-#include "capwap/sock.h"
-#include "capwap/item.h"
-#include "capwap/action.h"
+#include "cw/mavl.h"
+#include "cw/format.h"
+#include "cw/file.h"
+//#include "cw/aciplist.h"
+//#include "cw/acpriolist.h"
+#include "cw/sock.h"
+#include "cw/item.h"
+#include "cw/action.h"
 
 
 

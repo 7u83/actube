@@ -12,11 +12,11 @@
 //#include "nlt.h"
 
 
-#include "capwap/log.h"
-#include "capwap/radioinfo.h"
-#include "capwap/sock.h"
-#include "capwap/capwap_80211.h"
-#include "capwap/dbg.h"
+#include "cw/log.h"
+#include "cw/radioinfo.h"
+#include "cw/sock.h"
+#include "cw/capwap_80211.h"
+#include "cw/dbg.h"
 
 /*
 int wpa_printf()

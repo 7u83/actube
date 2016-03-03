@@ -11,19 +11,19 @@
 #include <net/if.h>
 
 
-#include "capwap/capwap.h"
-#include "capwap/log.h"
-#include "capwap/dbg.h"
+#include "cw/capwap.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
 
-#include "capwap/cw_util.h"
+#include "cw/cw_util.h"
 
 #include "wtp_conf.h"
 
 
-#include "capwap/sock.h"
-#include "capwap/log.h"
+#include "cw/sock.h"
+#include "cw/log.h"
 
-#include "capwap/bstr.h"
+#include "cw/bstr.h"
 
 
 char * conf_primary_if=0;

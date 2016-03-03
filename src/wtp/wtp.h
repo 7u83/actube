@@ -1,7 +1,7 @@
 #ifndef __WTP_H
 #define __WTP_H
 
-#include "capwap/conn.h"
+#include "cw/conn.h"
 
 
 
