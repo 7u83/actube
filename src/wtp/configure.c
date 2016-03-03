@@ -1,6 +1,6 @@
 
-#include "capwap/capwap.h"
-#include "capwap/conn.h"
+#include "cw/capwap.h"
+#include "cw/conn.h"
 #include "wtp_interface.h"
 
 int configure()

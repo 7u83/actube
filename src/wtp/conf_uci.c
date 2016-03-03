@@ -11,14 +11,14 @@
 
 #include <uci.h>
 
-#include "capwap/capwap.h"
-#include "capwap/log.h"
+#include "cw/capwap.h"
+#include "cw/log.h"
 #include "wtp_conf.h"
 
-#include "capwap/log.h"
-#include "capwap/dbg.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
 
-#include "capwap/bstr.h"
+#include "cw/bstr.h"
 
 
 static struct uci_section  * get_anon_section(struct uci_package * pkg, const char *type)

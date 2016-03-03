@@ -8,14 +8,14 @@
 #include "wtp_interface.h"
 #include "wtp_conf.h"
 
-#include "capwap/dtls.h"
-#include "capwap/log.h"
-#include "capwap/dbg.h"
-#include "capwap/sock.h"
-#include "capwap/dtls.h"
-#include "capwap/aciplist.h"
-#include "capwap/capwap_items.h"
-#include "capwap/mbag.h"
+#include "cw/dtls.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/sock.h"
+#include "cw/dtls.h"
+#include "cw/aciplist.h"
+#include "cw/capwap_items.h"
+#include "cw/mbag.h"
 
 /*
 #define acinfo_log acinfo_log_

@@ -24,14 +24,14 @@
 #include <sys/socket.h>
 
 
-#include "capwap/capwap.h"
-#include "capwap/capwap_items.h"
-#include "capwap/log.h"
-#include "capwap/sock.h"
-#include "capwap/cw_util.h"
-#include "capwap/aciplist.h"
-#include "capwap/acpriolist.h"
-#include "capwap/timer.h"
+#include "cw/capwap.h"
+#include "cw/capwap_items.h"
+#include "cw/log.h"
+#include "cw/sock.h"
+#include "cw/cw_util.h"
+#include "cw/aciplist.h"
+#include "cw/acpriolist.h"
+#include "cw/timer.h"
 
 
 #include "wtp.h"

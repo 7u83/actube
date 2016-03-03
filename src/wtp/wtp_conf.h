@@ -3,8 +3,8 @@
 
 #include <sys/socket.h>
 
-#include "capwap/capwap.h"
-#include "capwap/bstr.h"
+#include "cw/capwap.h"
+#include "cw/bstr.h"
 
 
 

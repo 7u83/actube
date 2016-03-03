@@ -2,9 +2,9 @@
 #include <string.h>
 
 
-#include "capwap/conn.h"
-#include "capwap/capwap_80211.h"
-#include "capwap/log.h"
+#include "cw/conn.h"
+#include "cw/capwap_80211.h"
+#include "cw/log.h"
 
 #include "wtp_conf.h"
 #include "wtp_interface.h"
