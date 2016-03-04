@@ -1,4 +1,5 @@
 #include "lwapp.h"
+#include "lw.h"
 
 int lw_put_image_data(uint8_t *dst,FILE *infile)
 {

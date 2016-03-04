@@ -6,6 +6,9 @@
 #include "capwap.h"
 
 
+#include "cw.h"
+
+
 /*
 int cw_put_subelem_version(uint8_t *dst,uint16_t subelem_id, uint32_t vendor_id,bstr16_t data)
 {

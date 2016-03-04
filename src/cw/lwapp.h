@@ -186,6 +186,7 @@
 
 #define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
 
+/*
 
 #define lw_put_byte(dst,b) \
 	(*(dst)=b,1)
@@ -214,18 +215,23 @@
 
 #define lw_get_dword(src) \
 	(ntohl(  *((uint32_t*)(src))))
+*/
+
 
 
 /* the following functions are defined as static inline and not as 
    macro to avoid any side effects */
 
 
+/*
 static inline int lw_put_data(uint8_t*dst,const uint8_t*data,uint16_t len)
 {
 	memcpy(dst,data,len); 
 	return len;
 }
+*/
 
+/*
 static inline int lw_put_bstr(uint8_t * dst, const bstr_t b){
 	lw_put_data(dst,bstr_data(b),bstr_len(b));
 	return bstr_len(b);
@@ -237,7 +243,9 @@ static inline int lw_put_bstr16(uint8_t * dst, const bstr16_t b){
 }
 
 
+*/
 
+/*
 static inline int lw_put_str(uint8_t*dst,const uint8_t *str) {
 	return lw_put_data(dst,str,strlen((char*)str));
 }
@@ -248,6 +256,8 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 	*((uint16_t*)(dst+1)) = htons(len);
 	return 3;
 }
+
+*/
 
 /**@}*/
 
