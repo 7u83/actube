@@ -105,58 +105,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	return len;
 
-
-	exit(0);
-
-
-
-	DEFINE_AVLITER(i,conn->actions->out);
-
-	cw_action_out_t *am;
-
-	if (! (am=avliter_seek(&i,&as))){
-		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
-			as.msg_id,cw_strmsg(as.msg_id));
-		return -1;
-	}
-
-	cw_action_out_t *ae;
-	while(NULL != (ae=avliter_next(&i))) {
-
-		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
-		DBGX("Elem ID %s",ae->item_id);
-		if ( ae->item_id ) {
-			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
-		}
-
-		if (ae->msg_id != as.msg_id) {
-			/* Element is from next msg, close action */
-			break;
-		}
-		if (ae->out) {
-			int l=0;
-			l= ae->out(conn, ae, dst+len); 
-			len +=l;
-
-		}
-		
-//cw_dbg_elem_colored(DBG_ELEM,"Adding element %d to msg %d, len = %d",ae->msg_id,ae->elem_id,l);
-
-	};
-
-
-	cw_set_msg_elems_len(msgptr, len);
-
-	if (as.msg_id & 1) {
-		/* It's a request, so we have to set seqnum */
-		int s = conn_get_next_seqnum(conn);
-		cw_set_msg_seqnum(msgptr,s);	
-//		printf("Set seqnum to : %d\n",s);
-
-	}
-
-
-	return len;
 }
 
 
