@@ -31,7 +31,7 @@
 
 /**
  * Put a message to a buffer
- * This functions assumes, that a message header with is
+ * This functions assumes, that a message header is
  * alread initilaized in buffer 
  * Message alements are taken fom actiondef in #conn->action
  */
@@ -58,6 +58,9 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	if (!m){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
 			as.msg_id,cw_strmsg(as.msg_id));
+
+		/* invalidate the cache */
+		cw_set_msg_type(msgptr,0);
 		return -1;
 	}
 
@@ -98,10 +101,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		/* It's a request, so we have to set seqnum */
 		int s = conn_get_next_seqnum(conn);
 		cw_set_msg_seqnum(msgptr,s);	
-//		printf("Set seqnum to : %d\n",s);
-
 	}
-
 
 	return len;
 
