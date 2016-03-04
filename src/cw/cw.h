@@ -5,6 +5,7 @@
 #include "conn.h"
 #include "action.h"
 
+#include "lw.h"
 
 extern int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
 			   struct cw_action_in *a, uint8_t * data, int len);
