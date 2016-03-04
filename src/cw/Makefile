@@ -326,6 +326,7 @@ all: $(ARCH)/$(NAME)
 
 clean: 
 	$(RM) $(ARCH)/*
+	$(RM) $(LIBDIR)/$(NAME)
 #	$(RM) $(OBJS)
 #	$(RM) $(DEPS)
 #	$(RM) $(ARCH)/$(NAME) 
