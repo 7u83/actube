@@ -111,8 +111,8 @@ typedef uint8_t *bstr16_t;
 #define bstr16_data(s) (((uint8_t*)s)+2)
 
 /**
- * Return the actual size of a bstr16_t string. That's the
- * this objects needs in memory to be stored.
+ * Return the actual size of a bstr16_t string. That's the 
+ * size this objects needs in memory to be stored.
  */ 
 #define bstr16_size(l) (l+2)
 /**
@@ -142,6 +142,8 @@ static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 
 uint8_t * bstr16_create_from_str(const char *s);
 extern uint8_t * bstr16_create_from_cfgstr(const char * s);
+
+#define bstr16_replace bstr_replace
 
 
 /**

@@ -179,8 +179,8 @@ int read_config(const char * filename){
 
 	str = uci_lookup_option_string(ctx,section,"software_version");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_software_version,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_software_version,s);
 	}
 
 	str = uci_lookup_option_string(ctx,section,"hardware_version");
@@ -191,8 +191,8 @@ int read_config(const char * filename){
 
 	str = uci_lookup_option_string(ctx,section,"bootloader_version");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_bootloader_version,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_bootloader_version,s);
 	}
 
 
