@@ -45,20 +45,20 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 
 		switch (subtype) {
 			case CW_SUBELEM_WTP_HARDWARE_VERSION:
-				mbag_set_vendorstr(mbag,
+				mbag_set_bstrv(mbag,
 						   CW_ITEM_WTP_HARDWARE_VERSION,
 						   vendor_id, data + i, sublen);
 
 				break;
 			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
 
-				mbag_set_vendorstr(mbag,
+				mbag_set_bstrv(mbag,
 						   CW_ITEM_WTP_SOFTWARE_VERSION,
 						   vendor_id, data + i, sublen);
 				break;
 			case CW_SUBELEM_WTP_BOOTLOADER_VERSION:
 
-				mbag_set_vendorstr(mbag,
+				mbag_set_bstrv(mbag,
 						   CW_ITEM_WTP_BOOTLOADER_VERSION,
 						   vendor_id, data + i, sublen);
 

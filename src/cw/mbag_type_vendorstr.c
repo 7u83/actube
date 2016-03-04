@@ -18,7 +18,7 @@
 
 /**
  *@file 
- *@brief Implementation of mbag_type vendorstr
+ *@brief Implementation of mbag_type bstrv
  *@addtogroup MbagFunctions
  *@{
  */
@@ -33,14 +33,14 @@ static int to_str(void *item,char *dst)
 	mbag_item_t *i= item;
 	
 	char *d=dst;
-	d+=sprintf(d,"%d,",vendorstr_get_vendor_id(i->data));
+	d+=sprintf(d,"%d,",bstrv_get_vendor_id(i->data));
 
-	if (cw_is_utf8(vendorstr_data(i->data), vendorstr_len(i->data))) {
-		d += sprintf(d, "%.*s", vendorstr_len(i->data),
-			     vendorstr_data(i->data));
+	if (cw_is_utf8(bstrv_data(i->data), bstrv_len(i->data))) {
+		d += sprintf(d, "%.*s", bstrv_len(i->data),
+			     bstrv_data(i->data));
 	} else {
 		d += sprintf(d, ".x");
-		d += cw_format_hex(d, vendorstr_data(i->data), vendorstr_len(i->data));
+		d += cw_format_hex(d, bstrv_data(i->data), bstrv_len(i->data));
 	}
 
 	return d-dst;
@@ -58,10 +58,10 @@ static struct mbag_item *  from_str(const char *src)
 
 
 	if (s){
-		i->data=vendorstr_create_from_str(vendor_id,s+1);	
+		i->data=bstrv_create_from_str(vendor_id,s+1);	
 	}
 	else{
-		i->data=vendorstr_create_from_str(vendor_id,"");	
+		i->data=bstrv_create_from_str(vendor_id,"");	
 	}
 
 	return i;
@@ -70,9 +70,9 @@ static struct mbag_item *  from_str(const char *src)
 /**
  * Defines the VendorStr type. 
  * 
- * MBAG items of this type containing a variable of type #vendorstr_t.
+ * MBAG items of this type containing a variable of type #bstrv_t.
  */
-const struct mbag_typedef mbag_type_vendorstr = {
+const struct mbag_typedef mbag_type_bstrv = {
 	"VendorStr",free,to_str,from_str
 };
 

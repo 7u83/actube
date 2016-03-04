@@ -7,11 +7,6 @@
 
 static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {
-	if (capwap_mode==CW_MODE_CISCO){
-		cw_put_word(dst,0x01);
-		return 2;
-	}
-
 	int n=2;
 	
 	dst+=cw_put_byte(dst,n);	
@@ -28,7 +23,7 @@ static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 
 
 
-int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
+int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 
 	mbag_t mbag = conn->config;

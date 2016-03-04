@@ -33,12 +33,21 @@
 #include <stdint.h>
 
 /**
+ * @defgroup BSTRTypes Types
+ * @{
+ */
+
+/**
  * bstr type
  *
- * bstr_t serves as binary string where the first byte contains
+ * bstr_t serves as binary string, where the first byte contains
  * the length of the string.
  */
 typedef uint8_t* bstr_t;
+
+/**
+ *@}
+ */
 
 extern uint8_t * bstr_create(uint8_t *data, uint8_t len);
 extern uint8_t * bstr_create_from_cfgstr(const char * s);
@@ -64,7 +73,7 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
 #define bstr_size(len) (len+1)
 
 /**
- *@defgroup BstrConstants Types & Constants
+ *@defgroup BSTRConstants Constants
  *@{
  */
 
@@ -73,6 +82,13 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
  */ 
 #define BSTR_MAX_LEN 254
 
+/**@}*/
+
+
+/**
+ *@addtogroup BSTRTypes 
+ *@{
+ */
 
 /**
   * The same as #bstr_t, but there are two bytes used
@@ -80,7 +96,9 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
   */  
 typedef uint8_t *bstr16_t;
 
-/**@}*/
+/**
+ *@}
+ */
 
 
 /**
@@ -125,42 +143,57 @@ static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 uint8_t * bstr16_create_from_str(const char *s);
 
 
-typedef uint8_t * vendorstr_t;
+/**
+ *@addtogroup BSTRTypes 
+ *@{
+ */
 
-#define vendorstr_get_vendor_id(str)\
+/**
+ * The bstrv_t type is basicly a #bstr16_t and can be 
+ * handeld like a bstr16_t.
+ * The difference is, that the first four bytes of the 
+ * string data containing a vendor id.
+ */
+typedef uint8_t * bstrv_t;
+
+/**
+ *@}
+ */
+
+#define bstrv_get_vendor_id(str)\
 	( *((uint32_t*)((str)+2)))
 
-#define vendorstr_set_vendor_id(str,id)\
+#define bstrv_set_vendor_id(str,id)\
 	( *((uint32_t*)((str)+2)) = id)
 
-#define vendorstr_len(str)\
+#define bstrv_len(str)\
 	(*((uint16_t*)((str)+0)))
 
-#define vendorstr_set_len(str,len)\
+#define bstrv_set_len(str,len)\
 	(*((uint16_t*)((str)+0))=len)
 
-#define vendorstr_data(str)\
+#define bstrv_data(str)\
 	(((uint8_t*)(str))+6)
 
-#define vendorstr_size(n)\
+#define bstrv_size(n)\
 	(1+6+(n)*sizeof(uint8_t))
 
 
-static inline uint8_t * vendorstr_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
+static inline uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
 {
-	uint8_t * str = malloc(vendorstr_size(len));
+	uint8_t * str = malloc(bstrv_size(len));
 	if (!str)	
 		return 0;
 
-	vendorstr_set_vendor_id(str,vendor_id);
-	vendorstr_set_len(str,len);
-	memcpy(vendorstr_data(str),data,len);
-	*(vendorstr_data(str)+vendorstr_len(str))=0;
+	bstrv_set_vendor_id(str,vendor_id);
+	bstrv_set_len(str,len);
+	memcpy(bstrv_data(str),data,len);
+	*(bstrv_data(str)+bstrv_len(str))=0;
 	return str;
 
 }
 
-uint8_t * vendorstr_create_from_str(uint32_t vendor_id,const char *s);
+uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s);
 
 
 uint8_t * bstr16cfgstr(const char * s);

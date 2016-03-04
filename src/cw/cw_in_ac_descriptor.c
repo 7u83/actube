@@ -66,18 +66,18 @@ static int read_subeelms(struct conn *conn,struct cw_action_in * a,uint8_t *data
 		int subtype = cw_get_word(data+sub+4);
 printf("substart : %d\n",sub);
 
-		vendorstr_t vstr=NULL;
+		bstrv_t vstr=NULL;
 		switch (subtype){
 			case 0:
 			case 4:
 				/* hardware version */
-				vstr = mbag_set_vendorstr(conn->incomming,CW_ITEM_AC_HARDWARE_VERSION,
+				vstr = mbag_set_bstrv(conn->incomming,CW_ITEM_AC_HARDWARE_VERSION,
 					vendor_id,data+sub+8,sublen);
 				break;
 			case 1:
 			case 5:
 				/* software version */
-				vstr = mbag_set_vendorstr(conn->incomming,CW_ITEM_AC_SOFTWARE_VERSION,
+				vstr = mbag_set_bstrv(conn->incomming,CW_ITEM_AC_SOFTWARE_VERSION,
 					vendor_id,data+sub+8,sublen);
 				break;
 		}

@@ -90,9 +90,9 @@ int ac_global_init()
 	ac_status.dtls_policy = CW_FLAG_DTLS_POLICY_C | CW_FLAG_DTLS_POLICY_D;
 
 
-	mbag_set_vendorstr(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
+	mbag_set_bstrv(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
 				 bstr_data(conf_hardware_version), bstr_len(conf_hardware_version));
-	mbag_set_vendorstr(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
+	mbag_set_bstrv(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
 				 bstr_data(conf_software_version), bstr_len(conf_software_version));
 
 

@@ -33,8 +33,8 @@ int cw_put_item(uint8_t * dst, struct mbag_item *item)
 	if (MBAG_VENDORSTR == item->type)
 	{
 		int l=0;
-		l+=cw_put_dword(dst, vendorstr_get_vendor_id(item->data));
-		l+=cw_put_data(dst+4, vendorstr_data(item->data),vendorstr_len(item->data));
+		l+=cw_put_dword(dst, bstrv_get_vendor_id(item->data));
+		l+=cw_put_data(dst+4, bstrv_data(item->data),bstrv_len(item->data));
 		return l;
 	}
 	cw_log(LOG_ERR,"No method to put items of type %d",item->type);
