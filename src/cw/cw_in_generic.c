@@ -63,7 +63,7 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 	}
 */
 	if (a->itemtype == MBAG_VENDORSTR) {
-		mbag_set_vendorstr(itemstore, a->item_id,
+		mbag_set_bstrv(itemstore, a->item_id,
 				   cw_get_dword(data), data + 4, len - 4);
 		return 1;
 	}

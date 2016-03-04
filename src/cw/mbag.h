@@ -104,7 +104,7 @@ extern const struct mbag_typedef mbag_type_dword;
 extern const struct mbag_typedef mbag_type_mbag;
 extern const struct mbag_typedef mbag_type_bstr;
 extern const struct mbag_typedef mbag_type_bstr16;
-extern const struct mbag_typedef mbag_type_vendorstr;
+extern const struct mbag_typedef mbag_type_bstrv;
 extern const struct mbag_typedef mbag_type_str;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
@@ -121,7 +121,7 @@ extern const struct mbag_typedef mbag_type_mbag_dyn;
 #define MBAG_MBAG_DYN (&mbag_type_mbag_dyn)
 #define MBAG_BSTR (&mbag_type_bstr)
 #define MBAG_BSTR16 (&mbag_type_bstr16)
-#define MBAG_VENDORSTR (&mbag_type_vendorstr)
+#define MBAG_VENDORSTR (&mbag_type_bstrv)
 #define MBAG_STR (&mbag_type_str)
 #define MBAG_DATA MBAG_STR
 #define MBAG_AVLTREE (&mbag_type_avltree)
@@ -218,15 +218,15 @@ static inline int mbag_set_data(mbag_t s, const char *id, const struct mbag_type
 }
 
 
-static inline vendorstr_t mbag_set_vendorstr(mbag_t s, const char *id, uint32_t vendor_id,
-			     uint8_t * vendorstr, int len)
+static inline bstrv_t mbag_set_bstrv(mbag_t s, const char *id, uint32_t vendor_id,
+			     uint8_t * bstrv, int len)
 {
 	mbag_item_t *i = mbag_item_create(s, id);
 	if (!i)
 		return NULL;
 	
 	i->type = MBAG_VENDORSTR;
-	i->data = vendorstr_create(vendor_id,vendorstr,len);
+	i->data = bstrv_create(vendor_id,bstrv,len);
 	return i->data;
 }
 

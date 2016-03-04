@@ -1084,9 +1084,9 @@ static inline int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s)
 static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, uint8_t * v)
 {
 	uint8_t *d = dst;
-	d += cw_put_dword(d, vendorstr_get_vendor_id(v));
-	d += cw_put_dword(d, (subelem_id << 16) | vendorstr_len(v));
-	d += cw_put_data(d, vendorstr_data(v), vendorstr_len(v));
+	d += cw_put_dword(d, bstrv_get_vendor_id(v));
+	d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
+	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
 	return d - dst;
 }
 

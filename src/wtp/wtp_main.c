@@ -172,6 +172,10 @@ conn->config=mbag_create();
 	
 	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
 
+//	hw = vendorstr_create(conf_vendor_id,conf_hardware_version
+	//mbag_set_bstr16(conn->config, CW_ITEM_WTP_HARDWARE_VERSION,conf_hardware_version);
+	//mbag_set_bstr16(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION,conf_software_version);
+
 printf("Board_data %p\n",board_data);
 
 mbag_t  mb = mbag_get_mbag(conn->config,CW_ITEM_WTP_BOARD_DATA,NULL);

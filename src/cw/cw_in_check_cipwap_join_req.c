@@ -27,8 +27,8 @@ int cw_detect_capwap(struct conn *conn)
 
 	mbag_item_t * item = mbag_get(is,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if (item) {
-		vendorstr_t s = item->data;
-		uint32_t v = vendorstr_get_vendor_id(s);
+		bstrv_t s = item->data;
+		uint32_t v = bstrv_get_vendor_id(s);
 		
 		switch(v) {
 			case CW_VENDOR_ID_CISCO:

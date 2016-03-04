@@ -529,14 +529,14 @@ int cw_format_item(char *dst,mbag_item_t * item)
 	return 0;
 }
 
-static int cw_format_version(char *s, vendorstr_t ver, char * def)
+static int cw_format_version(char *s, bstrv_t ver, char * def)
 {
 	if (!ver)
 		return sprintf(s,"%s",def);
 
 
-	uint8_t * version = vendorstr_data(ver);
-	int len = vendorstr_len(ver);
+	uint8_t * version = bstrv_data(ver);
+	int len = bstrv_len(ver);
 	
 
 
@@ -567,14 +567,14 @@ static int cw_format_version(char *s, vendorstr_t ver, char * def)
 		rs+=sprintf(s+rs,")");
 	}
 
-	uint32_t vendor = vendorstr_get_vendor_id(ver);
+	uint32_t vendor = bstrv_get_vendor_id(ver);
 	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_strvendor(vendor));
 	return rs;	
 }
 
 
 
-void cw_dbg_version_subelem(int level,const char*context,int subtype,vendorstr_t vstr)
+void cw_dbg_version_subelem(int level,const char*context,int subtype,bstrv_t vstr)
 {
 	if ( !cw_dbg_is_level(level))
 		return;
