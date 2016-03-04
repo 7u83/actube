@@ -170,7 +170,7 @@ m->init();
 	}
 */
 
-	regn = cw_register_actions_capwap_ac(&capwap_actions);
+	//regn = cw_register_actions_capwap_ac(&capwap_actions);
 
 
 	//struct outelem * l = cw_actionlist_out_get_mlist(capwap_actions.out,CW_MSG_DISCOVERY_RESPONSE);
