@@ -172,13 +172,25 @@ mavl_destroy(b);
 
 	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
 
-	bstrv_t hw =
-	    bstrv_create(conf_vendor_id, bstr16_data(conf_hardware_version),
-			 bstr16_len(conf_hardware_version));
+
+	mbag_set_bstrv(conn->config, CW_ITEM_WTP_HARDWARE_VERSION,
+			0,
+		       bstr16_data(conf_hardware_version),
+		       bstr16_len(conf_hardware_version));
+
+	mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION,
+			0,
+		       bstr16_data(conf_software_version),
+		       bstr16_len(conf_software_version));
+
+	mbag_set_bstrv(conn->config, CW_ITEM_WTP_BOOTLOADER_VERSION,
+			0,
+		       bstr16_data(conf_bootloader_version),
+		       bstr16_len(conf_bootloader_version));
 
 
-	mbag_set_bstr16(conn->config, CW_ITEM_WTP_HARDWARE_VERSION, hw);
-	//mbag_set_bstr16(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION,conf_software_version);
+
+//      mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION, sw);
 
 	printf("Board_data %p\n", board_data);
 

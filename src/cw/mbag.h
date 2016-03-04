@@ -219,14 +219,14 @@ static inline int mbag_set_data(mbag_t s, const char *id, const struct mbag_type
 
 
 static inline bstrv_t mbag_set_bstrv(mbag_t s, const char *id, uint32_t vendor_id,
-			     uint8_t * bstrv, int len)
+			     uint8_t * version, int len)
 {
 	mbag_item_t *i = mbag_item_create(s, id);
 	if (!i)
 		return NULL;
 	
 	i->type = MBAG_VENDORSTR;
-	i->data = bstrv_create(vendor_id,bstrv,len);
+	i->data = bstrv_create(vendor_id,version,len);
 	return i->data;
 }
 
