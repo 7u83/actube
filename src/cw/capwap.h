@@ -39,7 +39,7 @@
 #include "lwapp.h"
 #include "strlist.h"
 
-
+#include "cw.h"
 
 /* capwap version and iana number */
 
@@ -605,6 +605,7 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 
 /* Use some macros from LWAPP */
 
+/*
 #define cw_put_byte lw_put_byte
 #define cw_put_word lw_put_word
 #define cw_put_dword lw_put_dword
@@ -618,6 +619,8 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 #define cw_get_byte lw_get_byte
 #define cw_get_word lw_get_word
 #define cw_get_dword lw_get_dword
+
+*/
 
 
 /* macro to isolate bits from a dword */
@@ -1080,15 +1083,6 @@ static inline int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s)
 	return d - dst;
 }
 
-
-static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, uint8_t * v)
-{
-	uint8_t *d = dst;
-	d += cw_put_dword(d, bstrv_get_vendor_id(v));
-	d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
-	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
-	return d - dst;
-}
 
 
 

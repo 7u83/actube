@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "lwapp.h"
+#include "lw.h"
 
 int lw_put_ac_descriptor(uint8_t * dst)
 {

@@ -224,6 +224,8 @@ BSTROBJS= bstr_create.o \
 
 FRAGOBJS=fragman.o
 
+#	cw_in_wtp_descriptor.o \
+
 CWACTION=action.o \
 	capwap_actions_ac.o \
 	capwap_actions_wtp.o \
@@ -231,7 +233,6 @@ CWACTION=action.o \
 	capwap_80211_actions_ac.o \
 	cw_in_generic.o \
 	cw_in_generic2.o \
-	cw_in_wtp_descriptor.o \
 	cw_out_wtp_board_data.o \
 	cw_out_ac_name_with_priority.o \
 	cw_in_ac_name_with_priority.o \

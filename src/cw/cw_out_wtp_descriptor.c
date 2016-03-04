@@ -5,6 +5,9 @@
 #include "capwap_items.h"
 #include "capwap.h"
 
+#include "cw.h"
+
+
 static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {
 	if (capwap_mode==CW_MODE_CISCO){

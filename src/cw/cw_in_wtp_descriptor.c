@@ -27,7 +27,7 @@
 #include "sock.h"
 
 
-static int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data,
+static int _cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data,
 					   int len, int silent)
 {
 	int i = 0;
@@ -164,7 +164,7 @@ static int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
 		pos += 3;
 	}
 
-	return cw_read_wtp_descriptor_versions(mbag, data + pos, len - pos, silent);
+	return _cw_read_wtp_descriptor_versions(mbag, data + pos, len - pos, silent);
 
 }
 
@@ -190,7 +190,7 @@ static int cw_read_cisco_wtp_descriptor(mbag_t mbag, struct conn *conn,
 	cw_get_word(data + pos + 2);
 	pos += 2;
 
-	return cw_read_wtp_descriptor_versions(mbag, data + pos, len - pos, silent);
+	return _cw_read_wtp_descriptor_versions(mbag, data + pos, len - pos, silent);
 
 }
 
