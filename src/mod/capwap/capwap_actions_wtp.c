@@ -3,6 +3,9 @@
 #include "cw/capwap_items.h"
 
 
+#include "mod_capwap.h"
+
+
 static cw_action_in_t actions_in[] = {
 
 
@@ -67,7 +70,7 @@ static cw_action_out_t actions_out[] = {
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
-		.out = cw_out_wtp_descriptor,
+		.out = capwap_out_wtp_descriptor,
 		//.get = cw_out_get_outgoing,
 		.mand = 1
 	}
