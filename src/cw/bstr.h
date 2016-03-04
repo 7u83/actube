@@ -141,6 +141,7 @@ static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
 }
 
 uint8_t * bstr16_create_from_str(const char *s);
+extern uint8_t * bstr16_create_from_cfgstr(const char * s);
 
 
 /**
