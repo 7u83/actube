@@ -23,7 +23,8 @@
  *@{
  */ 
 
-#include "lwapp.h"
+#include "lw.h"
+
 
 /**
  * Calculate the 16-bit checksum for LWAPP Image Data message 
