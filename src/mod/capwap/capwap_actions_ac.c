@@ -115,8 +115,6 @@ static cw_action_in_t actions_in[] = {
 	/* ---------------------------------------------------------------------------
 	 * Join Request 
 	 */
-
-	
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST,
@@ -237,6 +235,19 @@ static cw_action_in_t actions_in[] = {
 
 
 
+	/* ---------------------------------------------------------------------------
+	 * Configuration Status Request 
+	 */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+//		.end = cw_in_check_join_req
+	}
+	,
+
+
+
+
 	/* End of list */
 	{0, 0}
 };
@@ -286,6 +297,8 @@ static cw_action_out_t actions_out[]={
 	 * Join Response Message
 	 */
 
+	/* Result Code - Join Response */
+
 	{
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_RESULT_CODE,
@@ -295,6 +308,22 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
+	/* ---------------------------------------------------
+	 * Configuration Status Response Message
+	 */
+
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id = CW_ELEM_IDLE_TIMEOUT,
+		.item_id = CW_ITEM_IDLE_TIMEOUT,
+	 	.out = cw_out_generic, 
+		.get = capwap_out_get_idle_timeout,
+		.mand = 1
+	}
+	,
+
+	
 
 
 	{0,0}

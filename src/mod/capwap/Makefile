@@ -8,7 +8,8 @@ OBJS=\
 	capwap_in_wtp_board_data.o \
 	capwap_out_wtp_descriptor.o \
 	capwap_out_ac_descriptor.o \
-	capwap_out_get_session_id.o
+	capwap_out_get_session_id.o \
+	capwap_out_get_idle_timeout.o 
 
 
 NAME=libcapwap.a
