@@ -161,7 +161,10 @@ int read_config(const char * filename){
 	str = uci_lookup_option_string(ctx,section,"ssl_cert");
 	if (str) 
 		conf_sslcertfilename=strdup(str);
-
+	
+	str = uci_lookup_option_string(ctx,section,"dtls_psk");
+	if (str)
+		conf_dtls_psk=strdup(str);
 
 	str = uci_lookup_option_string(ctx,section,"ssl_cipher");
 	if (str) 
