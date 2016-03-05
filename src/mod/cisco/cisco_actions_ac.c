@@ -106,8 +106,9 @@ static cw_action_out_t actions_out[]={
 
 	/* Message Discovery Response */
 
-	/* Cisco AP Timesync - Important to get the WTP a DTLS 
-	 * connection established*/
+	/* Cisco AP Timesync - Discovery Request
+	 * Important to get the WTP a DTLS connection established
+	 */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
@@ -117,7 +118,7 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
-	/* Discovery Response AC Descriptor */
+	/* AC Descriptor - Discovery Response */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,

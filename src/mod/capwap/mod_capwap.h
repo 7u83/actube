@@ -14,5 +14,7 @@ extern int capwap_in_wtp_board_data(struct conn *conn, struct cw_action_in *a,
 extern int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 				     uint8_t * dst);
 
+extern int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
+
 
 #endif
