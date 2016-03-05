@@ -199,7 +199,7 @@ static inline uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t 
 uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s);
 
 
-uint8_t * bstr16cfgstr(const char * s);
+//uint8_t * bstr16cfgstr(const char * s);
 
 
 #endif

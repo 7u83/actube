@@ -132,7 +132,8 @@ static cw_action_in_t actions_in[] = {
 		.item_id = CW_ITEM_LOCATION_DATA,
 		.start = cw_in_generic2,
 		.max_len = 1024,
-		.min_len = 1
+		.min_len = 1,
+		.mand = 1
 	}
 	,
 	
@@ -242,14 +243,16 @@ static cw_action_in_t actions_in[] = {
 
 static cw_action_out_t actions_out[]={
 
-	/* Message Discovery Response */
+	/* ---------------------------------------------------
+	 * Discovery Response Message
+	 */
 
 	/* Discovery Response AC Descriptor */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
-		.out = cw_out_ac_descriptor,
+		.out = capwap_out_ac_descriptor,
 		.mand = 1
 	}
 	,
@@ -265,7 +268,11 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-	/* List of CAPWAP Control IPv4 and IPv6 addresses */
+	/* List of CAPWAP Control IPv4 and IPv6 addresses 
+	 * The handler cw_out_capwap_control_ip_addr_list puts
+	 * ipv4 and ipv6 message elements, so the definition
+	 * of .elem_id isn't needed.
+	 */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
@@ -275,6 +282,19 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	/* ---------------------------------------------------
+	 * Join Response Message
+	 */
+
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
 
 
 	{0,0}

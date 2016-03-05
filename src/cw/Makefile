@@ -143,7 +143,6 @@ CAPWAPOBJS= \
 	cw_in_check_img_data_req_wtp.o \
 	cw_in_check_img_data_resp.o \
 	cw_out_generic.o \
-	cw_out_ac_descriptor.o \
 	cw_out_wtp_descriptor.o \
 	cw_in_cisco_image_identifier.o\
 	cw_out_radio_operational_state.o\
@@ -159,6 +158,7 @@ CAPWAPOBJS= \
 	format.o \
 	cw_in_cisco_add_wlan.o
 
+#	cw_out_ac_descriptor.o \
 
 
 

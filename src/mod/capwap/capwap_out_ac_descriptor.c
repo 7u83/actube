@@ -1,28 +1,16 @@
-#include "log.h"
-#include "conn.h"
+#include "cw/log.h"
+#include "cw/conn.h"
 
-#include "mbag.h"
-#include "capwap_items.h"
-#include "capwap.h"
-
-
-#include "cw.h"
+#include "cw/mbag.h"
+#include "cw/capwap_items.h"
+#include "cw/capwap.h"
 
 
-/*
-int cw_put_subelem_version(uint8_t *dst,uint16_t subelem_id, uint32_t vendor_id,bstr16_t data)
-{
-
-	uint8_t *d=dst;
-	d += cw_put_dword(d,vendor_id);
-	d += cw_put_dword(d, (subelem_id<<16) | bstr16_len(data));
-	d += cw_put_data(d,bstr16_data(data),bstr16_len(data));
-	return d-dst;
-}
-*/
+#include "cw/cw.h"
 
 
-int cw_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 
+
+int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 
 {
 
 	uint8_t *d = dst+4;
