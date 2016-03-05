@@ -105,13 +105,17 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 	int rc;
 
 	/* Set credentials */
-	rc = gnutls_certificate_set_x509_key_file(d->x509_cred, conn->dtls_cert_file,
-						  conn->dtls_key_file, GNUTLS_X509_FMT_PEM);
 
-	if (rc < 0) {
-		cw_log(LOG_ERR, "DTLS - Can't set cert/key: %s", gnutls_strerror(rc));
-		dtls_gnutls_data_destroy(d);
-		return 0;
+	if (conn->dtls_cert_file && conn->dtls_key_file){
+
+		rc = gnutls_certificate_set_x509_key_file(d->x509_cred, conn->dtls_cert_file,
+							  conn->dtls_key_file, GNUTLS_X509_FMT_PEM);
+
+		if (rc < 0) {
+			cw_log(LOG_ERR, "DTLS - Can't set cert/key: %s", gnutls_strerror(rc));
+			dtls_gnutls_data_destroy(d);
+			return 0;
+		}
 	}
 
 
