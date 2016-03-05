@@ -1,6 +1,12 @@
 #ifndef __LW_H
 #define __LW_H
 
+#include <stdint.h>
+#include <arpa/inet.h>
+
+#include "bstr.h"
+
+
 /** 
  * @defgroup LW LWAPP Functions
  * @{
