@@ -1,10 +1,3 @@
-#include "cw/mbag.h"
-#include "cw/capwap_items.h"
-#include "cw/radio.h"
-
-#include "cw/conn.h"
-#include "cw/bstr.h"
-
 #include <errno.h>
 #include <stdio.h>
 
@@ -15,11 +8,14 @@
 #include "cw/mavl.h"
 #include "cw/format.h"
 #include "cw/file.h"
-//#include "cw/aciplist.h"
-//#include "cw/acpriolist.h"
 #include "cw/sock.h"
 #include "cw/item.h"
 #include "cw/action.h"
+#include "cw/mbag.h"
+#include "cw/capwap_items.h"
+#include "cw/radio.h"
+#include "cw/conn.h"
+#include "cw/bstr.h"
 
 
 
@@ -59,8 +55,6 @@ void set_cfg(mbag_t mbag, cw_itemdefheap_t defs, const char *id, const char *sub
 			if (idef)
 				dyn=1;
 		}
-
-
 	}
 
 	if (!idef) {
@@ -246,16 +240,12 @@ int cfg_json_put_radios(char *dst, const char *name, mbag_item_t * i, int n)
 	const char *comma = "";
 	mavliter_foreach(&radios) {
 		mbag_item_t *i = mavliter_get(&radios);
-//		int rid = i->iid;
-		//mbag_t radio = i->data;
 
 		d += sprintf(d, "%s", comma);
 		comma = ",\n";
 		memset(d, '\t', n + 1);
 		d += n + 1;
 		d += sprintf(d, "\"%d\":", i->iid);
-
-		//d += mbag_tojson(d, i->data, radio_cfg, n + 1);
 	}
 
 	d += sprintf(d, "\n");

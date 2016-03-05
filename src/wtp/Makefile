@@ -98,6 +98,7 @@ OBJS += run.o
 OBJS += sulking.o
 OBJS += configure.o
 OBJS += changestate.o
+OBJS += setup_conf.o
 OBJS += $(CONFOBJS)
 
 
