@@ -44,11 +44,12 @@
 
 cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 {
+
 	/* create a list for results */
 	cw_aciplist_t resultlist=cw_aciplist_create();
 	if (!resultlist)
 		return NULL;
-	if (dis)
+	if (!dis)
 		return resultlist;
 
 
