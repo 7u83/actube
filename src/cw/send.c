@@ -76,8 +76,10 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 int cw_send_request(struct conn *conn,int msg_id)
 {
 	cw_init_request(conn, msg_id);
-	if ( cw_put_msg(conn, conn->req_buffer) == -1 )
-		return 0;
+	if ( cw_put_msg(conn, conn->req_buffer) == -1 ){
+		errno=ENOMSG;
+		return -1;
+	}
 	conn_send_msg(conn, conn->req_buffer);
 
 	
