@@ -174,14 +174,14 @@ static inline int mbag_set_word(mbag_t s, const char *id, uint16_t word)
 
 
 
-static inline int mbag_set_dword(mbag_t s, const char *id, uint32_t dword)
+static inline struct mbag_item * mbag_set_dword(mbag_t s, const char *id, uint32_t dword)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
-		return 0;
+		return NULL;
 	i->dword = dword;
 	i->type = &mbag_type_dword;
-	return 1;
+	return i;
 }
 
 
