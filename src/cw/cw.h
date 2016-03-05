@@ -16,7 +16,6 @@
  */
 
 
-
 /* Use some macros from LWAPP */
 
 /**
@@ -43,9 +42,22 @@
  */
 #define cw_put_data lw_put_data
 
+/**
+ * Put a bstr_t object
+ * see #lw_put_bstr
+ */
 #define cw_put_bstr lw_put_bstr
+
+/**
+ * Put bstr16_t object
+ * see #lw_put_bstr16
+ */
 #define cw_put_bstr16 lw_put_bstr16
 
+/**
+ * Set dword
+ * see #lw_set_dword
+ */
 #define cw_set_dword lw_set_dword
 
 #define cw_get_byte lw_get_byte
