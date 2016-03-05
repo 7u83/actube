@@ -144,6 +144,22 @@ static cw_action_out_t actions_out[] = {
 		.mand = 1
 	}
 
+	,
+
+	/* ---------------------------------------------------------------
+	 * Join Request 
+	 */
+
+	/* Discovery Type - Discovery Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_LOCATION_DATA,
+		.item_id = CW_ITEM_LOCATION_DATA, 
+		.out = cw_out_generic,
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
 
 
 
