@@ -3,11 +3,22 @@
 
 #include "mavl.h"
 #include "mbag.h"
-//#include "mavl.h"
 
+/**
+ * Used to store AC Name With Priority elements.
+ */
 struct cw_acprio{
+	/**
+	 * AC Name
+	 */
 	char *name;
+	/**
+	 * IP of AC
+	 */
 	struct sockaddr_storage * addr;
+	/**
+	 * Priority
+	 */
 	uint8_t prio;
 };
 

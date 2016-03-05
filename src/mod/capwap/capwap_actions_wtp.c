@@ -8,7 +8,76 @@
 
 static cw_action_in_t actions_in[] = {
 
+	/* Message Discovery Response */
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.end = cw_in_check_disc_resp
+	}
+	,
 
+	/* AC Descriptor - Discovery Response */
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.start  = cw_in_ac_descriptor,
+		.min_len = 12,
+		.max_len = 8192,
+		.mand = 1
+	}
+	,
+
+	/* AC Name - Discovery Response */
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 512,
+		.mand = 1
+	}
+	,
+	
+	/* CAPWAP Control IPv4 Address - Discovery Response*/
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
+		.start  = cw_in_capwap_control_ipv4_address,
+		.min_len = 6,
+		.max_len = 6,
+		.mand = 1
+	}
+
+	,
+	
+	/* CAPWAP Control IPv6 Address - Discovery Response*/
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
+		.start  = cw_in_capwap_control_ipv4_address, // Change to v6 handler
+		.min_len = 6,
+		.max_len = 6,
+		.mand = 1
+	}
+	,	
+
+	/* Vendor Specific Payload - Discovery Response*/
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
+	
 
 	
 

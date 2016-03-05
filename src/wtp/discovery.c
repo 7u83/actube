@@ -44,6 +44,13 @@
 
 cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 {
+	/* create a list for results */
+	cw_aciplist_t resultlist=cw_aciplist_create();
+	if (!resultlist)
+		return NULL;
+	if (dis)
+		return resultlist;
+
 
 	cw_aciplist_t aciplist = cw_aciplist_create();
 	if (!aciplist) {
@@ -61,7 +68,6 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 //	if (priolist )
 		priolist=cw_acpriolist_create();
 
-	cw_aciplist_t resultlist=cw_aciplist_create();
 
 
 	DEFINE_AVLITER(i, dis);
