@@ -51,7 +51,7 @@ extern int cw_format_scan_hex_bytes(uint8_t *dst,const char *s, int len);
  * Format bytes as hex string. Same as #cw_format_hexl, but
  * hexadecimal letters are upper-case.
  */
-#define cw_format_hexu\
+#define cw_format_hexu(dst,bytes,len)\
 	cw_format_hex_bytes(dst,"%02X","",bytes,len)
 
 /**
