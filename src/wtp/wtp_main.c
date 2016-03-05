@@ -36,14 +36,6 @@ struct conn *the_conn;
 struct cw_actiondef capwap_actions;
 
 
-bstr_t get_base_rmac()
-{
-//      static  uint8_t rm[8]={0x00,0x4a,0x99,0x02,0xfa,0xc0};
-
-	static uint8_t rm[8] = { 0x00, 0x4a, 0x99, 0x02, 0xfa, 0xc0 };
-	return bstr_create(rm, 6);
-}
-
 
 int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 		      int len, struct sockaddr *from)
@@ -142,9 +134,10 @@ mavl_destroy(b);
 	conn->outgoing = mbag_create();
 	conn->incomming = mbag_create();
 	conn->local = mbag_create();
-	conn->base_rmac = get_base_rmac();
 
-	conn->capwap_mode = CW_MODE_CAPWAP;
+//	conn->base_rmac = get_base_rmac();
+
+//	conn->capwap_mode = CW_MODE_CAPWAP;
 	//conn->capwap_mode = CW_MODE_CISCO;
 
 	the_conn->strict_capwap = 1;
@@ -152,8 +145,8 @@ mavl_destroy(b);
 
 	conn->config = mbag_create();
 
-//      setup_conf(conn);
 	cfg_from_json(conn);
+	setup_conf(conn);
 	cfg_to_json();
 
 	mbag_t board_data = mbag_create();
@@ -173,23 +166,6 @@ mavl_destroy(b);
 	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 
-	mbag_set_bstrv(conn->config, CW_ITEM_WTP_HARDWARE_VERSION,
-			0,
-		       bstr16_data(conf_hardware_version),
-		       bstr16_len(conf_hardware_version));
-
-	mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION,
-			0,
-		       bstr16_data(conf_software_version),
-		       bstr16_len(conf_software_version));
-
-	mbag_set_bstrv(conn->config, CW_ITEM_WTP_BOOTLOADER_VERSION,
-			0,
-		       bstr16_data(conf_bootloader_version),
-		       bstr16_len(conf_bootloader_version));
-
-
-
 //      mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION, sw);
 
 	printf("Board_data %p\n", board_data);
@@ -203,8 +179,8 @@ mavl_destroy(b);
 	cw_acpriolist_set(acprios, "AC8new", strlen("AC8new"), 12);
 
 
-      mbag_set_str(conn->config,CW_ITEM_LOCATION_DATA,"Berlin");
-      mbag_set_str(conn->config,CW_ITEM_WTP_NAME,"WTP Tube");
+      //mbag_set_str(conn->config,CW_ITEM_LOCATION_DATA,"Berlin");
+      //mbag_set_str(conn->config,CW_ITEM_WTP_NAME,"WTP Tube");
 
 	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, 0);
 	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0);

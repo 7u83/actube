@@ -142,6 +142,7 @@ CAPWAPOBJS= \
 	cw_in_check_img_data_req_ac.o \
 	cw_in_check_img_data_req_wtp.o \
 	cw_in_check_img_data_resp.o \
+	cw_in_check_generic_resp.o \
 	cw_out_generic.o \
 	cw_out_wtp_descriptor.o \
 	cw_in_cisco_image_identifier.o\

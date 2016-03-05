@@ -146,4 +146,7 @@ int wtpconf_preinit();
 int wtpconf_init();
 
 
+#define WTP_DEFAULT_NAME_PREFIX "WFAT-"
+#define WTP_DEFAULT_LOCATION_DATA "Superposition"
+
 #endif

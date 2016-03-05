@@ -85,7 +85,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN,
 		.msg_id = CW_MSG_JOIN_RESPONSE,
-		.end = cw_in_check_join_resp
+		.end = cw_in_check_generic_resp
 	}
 	,
 	/* Result Code - Join Response */
@@ -101,7 +101,30 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 	
+	/* ----------------------------------------------------------------
+	 * Message Configuration Status Response - IN
+	 */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.end = cw_in_check_generic_resp
+	}
+	,
+
+	/* Result Code - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 0
+	}
+	,
 	
+		
 
 };
 
@@ -248,6 +271,19 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
+
+	/* ---------------------------------------------------------------
+	 * Configuration Status Request  - Out
+	 */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME,
+		.out = cw_out_generic,
+	       	.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
 
 
 
