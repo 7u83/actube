@@ -211,7 +211,12 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 	while(NULL != (val = mavliter_next(iter)))
 
 
-
+/**
+ * Get the number of elements stored in a mavl object
+ * @param m mavl object
+ * @return Number of elemenst
+ */
+#define mavl_get_count(m) (m->count)
 
 typedef mavl_t mavl_conststr_t;
 extern mavl_conststr_t mavl_create_conststr();
