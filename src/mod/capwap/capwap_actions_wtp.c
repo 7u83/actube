@@ -79,13 +79,35 @@ static cw_action_in_t actions_in[] = {
 	,
 	
 
+	/* ----------------------------------------------------------------
+	 * Message Join Response 
+	 */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.end = cw_in_check_join_resp
+	}
+	,
+	/* Result Code - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 1
+	}
+	,
+	
 	
 
 };
 
 static cw_action_out_t actions_out[] = {
 	/* ---------------------------------------------------------------
-	 * Discovery Request 
+	 * Discovery Request - Out
 	 */
 
 	/* Discovery Type - Discovery Request */
@@ -147,16 +169,81 @@ static cw_action_out_t actions_out[] = {
 	,
 
 	/* ---------------------------------------------------------------
-	 * Join Request 
+	 * Join Request - Out
 	 */
 
-	/* Discovery Type - Discovery Request */
+	/* Location Data - Join Request  */
 	{
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id  = CW_ELEM_LOCATION_DATA,
 		.item_id = CW_ITEM_LOCATION_DATA, 
 		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+	/* WTP Board Data - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
+		.item_id = CW_ITEM_WTP_BOARD_DATA, 
+		.out = cw_out_wtp_board_data,
 		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
+
+	/* WTP Descriptor - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
+		.out = cw_out_wtp_descriptor,
+		.mand = 1
+	}
+	,
+
+	/* WTP Name - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_NAME,
+		.item_id = CW_ITEM_WTP_NAME, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+	/* WTP MAC Type - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
+		.item_id = CW_ITEM_WTP_MAC_TYPE, 
+		.out = cw_out_generic,
+		.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+
+	/* WTP Frame Tunnel Mode - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
+		.out = cw_out_generic,
+		.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+
+	/* Session ID - Join Request  */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_SESSION_ID,
+		.item_id = CW_ITEM_SESSION_ID, 
+		.out = cw_out_generic,
+		.get = cw_out_get_session_id,
 		.mand = 1
 	}
 	,
@@ -165,9 +252,12 @@ static cw_action_out_t actions_out[] = {
 
 
 
-//	{CW_MSG_DISCOVERY_REQUEST, CW_ITEM_DISCOVERY_TYPE, 0,
-//	 CW_ELEM_DISCOVERY_TYPE, NULL,cw_out_generic, cw_out_get_outgoing}
 
+	/* WTP Descriptor */
+//	{CW_MSG_JOIN_REQUEST, CW_ITEM_WTP_DESCRIPTOR, 0, 
+//	 CW_ELEM_WTP_DESCRIPTOR, NULL,cw_out_wtp_descriptor, NULL,1}
+//	,
+	
 };
 
 

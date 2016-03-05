@@ -16,5 +16,7 @@ extern int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 
 extern int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
 
+extern struct mbag_item * capwap_out_get_session_id(struct conn *conn,struct cw_action_out * a);
+
 
 #endif

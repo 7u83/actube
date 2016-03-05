@@ -203,8 +203,8 @@ mavl_destroy(b);
 	cw_acpriolist_set(acprios, "AC8new", strlen("AC8new"), 12);
 
 
-//      mbag_set_str(conn->local,CW_ITEM_LOCATION_DATA,"Berlin");
-//      mbag_set_str(conn->local,CW_ITEM_WTP_NAME,"WTP Tube");
+      mbag_set_str(conn->config,CW_ITEM_LOCATION_DATA,"Berlin");
+      mbag_set_str(conn->config,CW_ITEM_WTP_NAME,"WTP Tube");
 
 	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, 0);
 	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0);
