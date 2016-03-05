@@ -111,6 +111,19 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Idle Timeout - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_IDLE_TIMEOUT,
+		.item_id = CW_ITEM_IDLE_TIMEOUT, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 0
+	}
+	,
+
 	/* Result Code - Config Status Resp */
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
@@ -275,6 +288,8 @@ static cw_action_out_t actions_out[] = {
 	/* ---------------------------------------------------------------
 	 * Configuration Status Request  - Out
 	 */
+
+	/* AC Name - Config Status Request */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
@@ -284,8 +299,40 @@ static cw_action_out_t actions_out[] = {
 		.mand = 1
 	}
 	,
+	/* Radio Admin State - Config Status Request */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
+		.out = cw_out_radio_administrative_states,
+	       	.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+//	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_ADMINISTRATIVE_STATE, 0,
+//	CW_ELEM_RADIO_ADMINISTRATIVE_STATE, NULL, cw_out_radio_administrative_states, cw_out_get_config,1}
 
 
+
+	/* ---------------------------------------------------------------
+	 * Change State Event Request  - Out
+	 */
+	{
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.item_id = CW_ITEM_RADIO_OPER_STATE,
+		.out = cw_out_radio_operational_states,
+	       	.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+
+
+
+	/* Radio Ooerational State */
+//	{CW_MSG_CHANGE_STATE_EVENT_REQUEST, CW_ITEM_RADIO_OPER_STATE, 0,
+//	0, NULL, cw_out_radio_operational_states, cw_out_get_config,1}
+//	,
 
 
 

@@ -5,6 +5,11 @@
 	"wtp_name":"WFAT-004A9902FAC0",
 	"wtp_software_version":"11591,0.1",
 	"radios":{
-
+		"0":{
+			"radio_type":"1"
+		},
+		"1":{
+			"radio_type":"2"
+		}
 	}
 }
