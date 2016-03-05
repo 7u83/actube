@@ -8,16 +8,18 @@
 int configure()
 {
 
-	struct conn * conn = get_conn();
-	int rc = cw_send_request(conn,CW_MSG_CONFIGURATION_STATUS_REQUEST);
+	struct conn *conn = get_conn();
+	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
 
 	if (!cw_rcok(rc)) {
 		if (rc > 0) {
-			cw_log(LOG_ERR, "Error sending Configuration Status Request to AC at %s, AC said: %d - %s.",
+			cw_log(LOG_ERR,
+			       "Error sending Configuration Status Request to AC at %s, AC said: %d - %s.",
 			       sock_addr2str(&conn->addr), rc, cw_strerror(rc));
 
 		} else {
-			cw_log(LOG_ERR, "Error sending Configuration Status Request to AC at %s: %d - %s.",
+			cw_log(LOG_ERR,
+			       "Error sending Configuration Status Request to AC at %s: %d - %s.",
 			       sock_addr2str(&conn->addr), errno, cw_strerror(rc));
 		}
 		return 0;
@@ -25,4 +27,3 @@ int configure()
 
 	return 1;
 }
-
