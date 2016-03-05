@@ -272,7 +272,7 @@ extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);
 
 /* function proto types */
 
-extern uint16_t lw_checksum(uint8_t *d,int len);
+//extern uint16_t lw_checksum(uint8_t *d,int len);
 //extern int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len);
 extern int lw_readelem_wtp_name(bstr_t * dst, int type, uint8_t * msgelem, int len);
 

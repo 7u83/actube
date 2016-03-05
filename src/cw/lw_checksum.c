@@ -19,7 +19,7 @@
 /**
  *@file
  *@brief Implements lw_checksum.
- *@addtogroup LWAPPFunctions 
+ *@addtogroup LW 
  *@{
  */ 
 
