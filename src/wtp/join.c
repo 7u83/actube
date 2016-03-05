@@ -182,8 +182,6 @@ int run_join(struct conn *conn)
 
 	int rc = cw_send_request(conn, CW_MSG_JOIN_REQUEST);
 
-
-
 	if (!cw_rcok(rc)) {
 		if (rc > 0) {
 			cw_log(LOG_ERR, "Can't Join AC at %s, AC said: %d - %s.",
@@ -244,7 +242,6 @@ int join()
 
 	}
 
-	printf("Nudel\n");
 
 	return 0;
 
