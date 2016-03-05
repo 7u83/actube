@@ -4,6 +4,7 @@
 #include "cw/log.h"
 
 #include "wtp_interface.h"
+#include "cfg.h"
 
 int configure()
 {
@@ -22,6 +23,8 @@ int configure()
 			       "Error sending Configuration Status Request to AC at %s: %d - %s.",
 			       sock_addr2str(&conn->addr), errno, cw_strerror(rc));
 		}
+
+		cfg_to_json();
 		return 0;
 	}
 

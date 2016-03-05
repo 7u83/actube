@@ -75,32 +75,22 @@ int main()
 
 	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
-
-
-/*
-mbag_t b = mbag_create();
-
-mbag_set_byte(b,1,99);
-mbag_set_avltree(b,2,mbag_create());
-mavl_destroy(b);
-*/
-
 	dtls_init();
 
 	the_conn = conn_create_noq(-1, NULL);
 	struct conn *conn = the_conn;
 
 	conn->radios = mbag_i_create();
-//      mbag_set_mbag(conn->radios,0,mbag_create());
-//      mbag_set_mbag(conn->radios,1,mbag_create());
+	mbag_i_set_mbag(conn->radios,0,mbag_create());
+	mbag_i_set_mbag(conn->radios,1,mbag_create());
 //      mbag_set_mbag(conn->radios,0xff,mbag_create());
 
 
-//      mbag_t r;
-//      r  = mbag_get_mbag(conn->radios,0,NULL);
-//      mbag_set_dword(r,CW_RADIO_TYPE,1);
-//      r  = mbag_get_mbag(conn->radios,1,NULL);
-//      mbag_set_dword(r,CW_RADIO_TYPE,2);
+	mbag_t r;
+	r  = mbag_i_get_mbag(conn->radios,0,NULL);
+	mbag_set_dword(r,CW_RADIO_TYPE,1);
+	r  = mbag_i_get_mbag(conn->radios,1,NULL);
+	mbag_set_dword(r,CW_RADIO_TYPE,2);
 //      r  = mbag_get_mbag(conn->radios,1,NULL);
 //      mbag_set_dword(r,CW_RADIO_TYPE,1);
 
@@ -114,7 +104,6 @@ mavl_destroy(b);
 		exit(0);
 	}
 	conn->detected = 1;
-
 	mod->register_actions(&capwap_actions);
 
 

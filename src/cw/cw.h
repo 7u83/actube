@@ -24,13 +24,25 @@
  * see #lw_put_byte 
  */
 #define cw_put_byte lw_put_byte
+
 /**
  * Put a word to an output buffer.
  * see #lw_put_word
  */
 #define cw_put_word lw_put_word
+
+/**
+ * Put a dword 
+ * see #lw_put_dword
+ */
 #define cw_put_dword lw_put_dword
+
+/**
+ * Put some bytes
+ * See #lw_put_data
+ */
 #define cw_put_data lw_put_data
+
 #define cw_put_bstr lw_put_bstr
 #define cw_put_bstr16 lw_put_bstr16
 
@@ -65,6 +77,8 @@ extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
 				    uint8_t * data, int len, struct sockaddr *from);
 
 
+extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
+					 uint8_t * data, int len,struct sockaddr *from);
 
 
 /**

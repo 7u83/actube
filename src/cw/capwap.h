@@ -930,11 +930,11 @@ extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
 						 struct radioinfo *radioinfo);
 */
 
-#define cw_addelem_ac_name(dst,name) \
-	cw_addelem(dst,CW_ELEM_AC_NAME,name,strlen((char*)(name)))
+//#define cw_addelem_ac_name(dst,name) \
+//	cw_addelem(dst,CW_ELEM_AC_NAME,name,strlen((char*)(name)))
 
-#define cw_addelem_session_id(dst,sessid)\
-	cw_addelem_bstr(dst,CW_ELEM_SESSION_ID,sessid)
+//#define cw_addelem_session_id(dst,sessid)\
+//	cw_addelem_bstr(dst,CW_ELEM_SESSION_ID,sessid)
 
 
 

@@ -19,6 +19,7 @@ int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, 
 	
 	MAVLITER_DEFINE(it,conn->radios);
 	mavliter_foreach(&it){
+
 		mbag_item_t * radioitem = mavliter_get(&it);
 		mbag_item_t *ositem = mbag_get(radioitem->data,CW_RADIO_OPER_STATE);
 		if (!ositem){
