@@ -224,7 +224,8 @@ mavl_destroy(b);
 
 	mavl_destroy(conn->incomming);
 	conn->incomming = conn->config;
-	configure();
+	if (!configure())
+		return -1;
 	changestate();
 
 
