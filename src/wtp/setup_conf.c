@@ -59,6 +59,7 @@ int setup_conf(struct conn *  conn)
 
 
 
+	mbag_set_byte(conn->config,CW_ITEM_ECN_SUPPORT,get_ecn_support());
 
 
 	return 0;
