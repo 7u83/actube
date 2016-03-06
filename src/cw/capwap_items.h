@@ -170,7 +170,7 @@ extern const char CW_ITEM_WTP_BOOTLOADER_VERSION[];
 extern const char CW_ITEM_WTP_RADIOS_IN_USE[];
 extern const char CW_ITEM_WTP_MAX_RADIOS[];
 extern const char CW_ITEM_RADIO_INFOS[];
-
+extern const char CW_ITEM_ECN_SUPPORT[];
 
 
 
