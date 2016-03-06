@@ -261,6 +261,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* Create an avltree to catch the found mandatory elements */
 	conn->mand = stravltree_create();
 
+	int unrecognized=0;
+
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
@@ -274,6 +276,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		af = cw_actionlist_in_get(conn->actions->in, &as);
 
 		if (!af) {
+			unrecognized++;
 			cw_dbg(DBG_ELEM_ERR,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
 			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
@@ -302,6 +305,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	int result_code = 0;
 	if (afm->end) {
 		result_code = afm->end(conn, afm, rawmsg, len, from);
+	}
+
+	if (unrecognized){
+		cw_dbg(DBG_RFC,"Message has %d unrecognized message elements.",unrecognized);
+		if (!result_code) {
+			result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
+		}
+
 	}
 
 	/* if we've got a request message, we always have to send a response message */

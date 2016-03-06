@@ -575,10 +575,10 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 #define CW_RESULT_MSG_UNRECOGNIZED				19
 #define CW_RESULT_MISSING_MAND_ELEM				20
 
-/*
-      21 Failure - Unrecognized Message Element
 
-      22 Data Transfer Error (No Information to Transfer)
+#define CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT			21
+
+/*      22 Data Transfer Error (No Information to Transfer)
 
 */
 
