@@ -24,6 +24,7 @@
 #include "cw/strheap.h"
 #include "cw/radio.h"
 
+
 #include "mod_capwap.h"
 
 static cw_action_in_t actions_in[] = {
@@ -208,6 +209,33 @@ static cw_action_in_t actions_in[] = {
 		.max_len = 1
 	}
 	,
+
+	/* Local IPv4 Address - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
+	 	.start = cw_in_capwap_local_ipv4_address, 
+		.mand = 1, 
+		.min_len = 4, 
+		.max_len = 4
+	}
+	,
+
+	/* Local IPv6 Address - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
+	 	.start = cw_in_capwap_local_ipv4_address, 
+		.mand = 1, 
+		.min_len = 16, 
+		.max_len = 16
+	}
+	,
+
 
 
 

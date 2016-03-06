@@ -151,6 +151,8 @@ CAPWAPOBJS= \
 	cw_out_capwap_local_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ip_address.o\
+	cw_in_capwap_local_ipv4_address.o \
+	cw_in_capwap_local_ipv6_address.o \
 	cw_in_radio_administrative_state.o \
 	cw_in_radio_administrative_state_wtp.o \
 	strheap.o \

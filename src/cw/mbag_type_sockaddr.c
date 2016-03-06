@@ -18,44 +18,18 @@
 
 /**
  * @file
- * @brief Implementation of mbag_type_word
+ * @brief Implementation of mbag_type_sockaddr
  * @addtogroup MbagFunctions
  * @{
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-
-
 #include "mbag.h"
-#include "format.h"
-
-/*
-static struct mbag_item *  from_str(const char *src)
-{
-	struct mbag_item *i= malloc(sizeof(struct sockaddr_storage));
-	if (!i)
-		return NULL;
-
-	i->type = MBAG_WORD;
-	i->word=atoi(src);
-	return i;
-}
-
-static int to_str(void *item,char *dst)
-{
-	mbag_item_t *i= item;
-        return sprintf(dst, "%d", i->word);
-}
-*/
 
 /** 
  * MBAG items of this type hold an struct sockaddr element.
  */
 const struct mbag_typedef mbag_type_sockaddr = {
-	"WORD",free,
+	"SocakAddr",free,
 };
 
 
