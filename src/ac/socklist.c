@@ -245,7 +245,7 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 		/* bind address */
 		if (bind(sockfd, sa, sock_addrlen(sa)) < 0) {
 			close(sockfd);
-			cw_log(LOG_ERR, "Can't bind  multicast %s: %s", addr,
+			cw_log(LOG_ERR, "Can't bind multicast %s: %s", addr,
 			       strerror(errno));
 			continue;
 		}
@@ -330,9 +330,9 @@ static int socklist_check_size()
 }
 
 
-
 int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 {
+
 
 	if (!socklist_check_size())
 		return 0;
@@ -377,7 +377,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		/* bind address */
 		if (bind(sockfd, sa, sock_addrlen(sa)) < 0) {
 			close(sockfd);
-			cw_log(LOG_ERR, "Can't bind  unicast socket %s: %s", addr,
+			cw_log(LOG_ERR, "Can't bind unicast socket %s: %s", addr,
 			       strerror(errno));
 			continue;
 		}
@@ -399,7 +399,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 			       "Bound to: %s:%s (%i) on interface %s, netmask %s", addr,
 			       port, sockfd, ifname, sock_addr2str(&netmask));
 		} else {
-			cw_log(LOG_INFO, "Bound to: %s:%s (%i) on interface %s", addr,
+			cw_log(LOG_INFO, "Bound to: [%s]:%s (%i) on interface %s", addr,
 			       port, sockfd, ifname);
 		}
 		socklist_len++;
