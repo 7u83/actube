@@ -45,7 +45,7 @@ int sock_setport(struct sockaddr *addr, int port)
 			((struct sockaddr_in*)addr)->sin_port=htons(port);
 			break;
 		case AF_INET6:
-			((struct sockaddr_in6*)addr)->sin6_port=htonl(port);
+			((struct sockaddr_in6*)addr)->sin6_port=htons(port);
 			break;
 		default:
 			return 0;
