@@ -89,12 +89,20 @@ extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
 				    uint8_t * data, int len, struct sockaddr *from);
 
 
+/**
+ * @defgroup CWELEMIN Input Handlers for Message Elements
+ * @{
+ */
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len, struct sockaddr *from);
 
 extern int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,
 					   struct sockaddr *from);
+/**
+ * @}
+ */
+
 
 /**
  * @defgroup CWELEMOUT Output Handlers for Message Elements
