@@ -73,6 +73,9 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
 
 	DEFINE_AVLITER(i, dis);
 	avliter_foreach(&i){
+
+
+
 		mbag_t ac = ((mbag_item_t *) (avliter_get(&i)))->data;
 
 		char *ac_name = mbag_get_str(ac, CW_ITEM_AC_NAME,NULL);
@@ -92,9 +95,17 @@ printf("nprio: %d\n",priolist->count);
 		cw_aciplist_t acips =
 		    mbag_get_mavl(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 
+printf("Number of acips =%d\n",acips->count);
+
+
 		DEFINE_AVLITER(i2, acips);
 		avliter_foreach(&i2){
+
+
 			cw_acip_t *acip = avliter_get(&i2);
+
+printf("The acip: %s\n",sock_addr2str(&acip->ip));
+
 			cw_acip_t *n = malloc(sizeof(cw_acip_t));
 			memcpy(n,acip,sizeof(cw_acip_t));
 			

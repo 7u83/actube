@@ -389,7 +389,7 @@ static int init_listen_addrs()
 		}
 
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4) {
-			sock_addrtostr(ifa->ifa_addr, str, 100);
+			sock_addrtostr(ifa->ifa_addr, str, 100,1);
 			*strchr(str, ':') = 0;
 			conf_listen_addrs[ctr] =
 			    (char *) cw_setstr((uint8_t **) & conf_listen_addrs[ctr],
@@ -400,7 +400,7 @@ static int init_listen_addrs()
 		}
 #ifdef WITH_IPV6
 		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6) {
-			sock_addrtostr(ifa->ifa_addr, str, 100);
+			sock_addrtostr(ifa->ifa_addr, str, 100,1);
 			if (strncmp(str, "fe80:", 5) == 0) {
 				strcat(str, "%");
 				strcat(str, ifa->ifa_name);
@@ -496,7 +496,7 @@ int init_bcast_addrs()
 
 		char str[100];
 		if (ifa->ifa_broadaddr) {
-			sock_addrtostr(ifa->ifa_broadaddr, str, 100);
+			sock_addrtostr(ifa->ifa_broadaddr, str, 100,1);
 			*strchr(str, ':') = 0;
 			stravltree_add(t, str);
 		}

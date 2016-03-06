@@ -50,6 +50,10 @@
 #define lw_set_word(dst,b) \
 	(*((uint16_t*)(dst)) = htons(w))
 
+/**
+ * Same as #lw_put_dword, but the return value
+ * is unspecified.
+ */
 #define lw_set_dword(dst,dw)\
 	(*((uint32_t*)(dst)) = htonl(dw))
 

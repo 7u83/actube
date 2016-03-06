@@ -102,14 +102,16 @@ int run_join_d(struct sockaddr *sa)
 	int sockfd;
 	int rc;
 
-	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+	sockfd = socket(sa->sa_family, SOCK_DGRAM, 0);
 	if (sockfd == -1) {
 		cw_log(LOG_ERR, "Can't create socket: %s\n", strerror(errno));
 		return -1;
 	}
 	sock_set_recvtimeout(sockfd, 1);
+	conn->sock = sockfd;
+	sock_copyaddr(&conn->addr, sa);
 
-	rc = connect(sockfd, (struct sockaddr *) sa,
+/*	rc = connect(sockfd, (struct sockaddr *) sa,
 		     sock_addrlen((struct sockaddr *) sa));
 
 	if (rc < 0) {
@@ -118,9 +120,7 @@ int run_join_d(struct sockaddr *sa)
 		close(sockfd);
 		return -1;
 	}
-
-	conn->sock = sockfd;
-	sock_copyaddr(&conn->addr, sa);
+*/
 
 	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa));
 
@@ -153,7 +153,7 @@ int run_join_d(struct sockaddr *sa)
 	rc = dtls_connect(conn);
 	if (rc != 1) {
 		dtls_shutdown(conn);
-		cw_log(LOG_ERR, "Can't establish DTLS connection to %s",
+		cw_log(LOG_ERR, "Can't establish DTLS connection with %s",
 		       sock_addr2str(sa));
 		close(sockfd);
 		return 0;
@@ -226,12 +226,15 @@ int join()
 
 		cw_acip_t *ip = avliter_get(&ii);
 
+
 		cw_dbg(DBG_INFO, "Going to join CAWAP controller on %s",
-		       sock_addr2str(&ip->ip));
+		       sock_addr2str_p(&ip->ip));
 
 		int rc = run_join_d((struct sockaddr *) &ip->ip);
-		if (!rc)
+
+		if (rc<=0)
 			continue;
+
 		rc = run_join(conn);
 		if (rc) {
 			conn->capwap_state = CW_STATE_CONFIGURE;
