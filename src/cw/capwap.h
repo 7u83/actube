@@ -588,8 +588,8 @@ extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int
 
 //extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
 //				     int len);
-extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
-					    uint8_t * msgelem, int len);
+//extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
+//					    uint8_t * msgelem, int len);
 
 
 

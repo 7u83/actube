@@ -29,6 +29,7 @@
 #include <stdint.h>
 #include "mavl.h"
 #include "bstr.h"
+#include "sock.h"
 
 
 struct mbag_item;
@@ -109,6 +110,7 @@ extern const struct mbag_typedef mbag_type_str;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
 extern const struct mbag_typedef mbag_type_mbag_dyn;
+extern const struct mbag_typedef mbag_type_sockaddr;
 
 /**
  *@defgroup MbagTypes  MBAG Types 
@@ -127,6 +129,7 @@ extern const struct mbag_typedef mbag_type_mbag_dyn;
 #define MBAG_AVLTREE (&mbag_type_avltree)
 #define MBAG_FUN MBAG_STR
 #define MBAG_CONST_DATA (&mbag_type_const_data)
+#define MBAG_SOCKADDR (&mbag_type_sockaddr)
 /**@}*/
 
 extern mbag_t mbag_create();
@@ -494,6 +497,24 @@ static inline int mbag_set_str(mbag_t s, const char *id, const char *str)
 	i->type = MBAG_STR;
 	i->data = strdup(str);
 	return 1;
+}
+
+
+static inline int mbag_set_sockaddr(mbag_t s, const char *id, const struct sockaddr * sa)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	struct sockaddr_storage * sad = malloc(sizeof(struct sockaddr_storage));
+	if (!sad){
+		free(i);
+		return 0;
+	}
+	sock_copyaddr(sad,sa);
+	i->type = MBAG_SOCKADDR;
+	i->data = sad;
+	return 1;
+
 }
 
 
