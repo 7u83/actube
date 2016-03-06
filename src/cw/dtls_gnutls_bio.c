@@ -15,6 +15,13 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+
+/**
+ * @file
+ * @brief DTLS functions specific to gnutls
+ */
+
 #include <stdio.h>
 #include <errno.h>
 
@@ -42,7 +49,6 @@ ssize_t dtls_gnutls_bio_read(gnutls_transport_ptr_t b, void *out, size_t maxlen)
 
 ssize_t dtls_gnutls_bio_write(gnutls_transport_ptr_t b, const void *data, size_t len)
 {
-
 	struct conn *conn = (struct conn*)b;
 	return dtls_bio_write(conn,data,len);
 }
