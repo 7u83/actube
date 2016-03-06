@@ -264,7 +264,7 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 			optlen = sizeof(mreq);
 
 			char sinin[100];
-			sock_addrtostr((struct sockaddr *) sain, sinin, 100);
+			sock_addrtostr((struct sockaddr *) sain, sinin, 100,1);
 
 			if (setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, opt, optlen)
 			    < 0) {
