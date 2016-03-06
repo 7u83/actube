@@ -16,6 +16,10 @@
 
 */
 
+/**
+ * @file
+ * @brief Implements some aciplist functions
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -69,10 +73,12 @@ static void acip_del(void *d)
 	free(d);
 }
 
+/**
+ * Create a cw_aciplist_t object
+ * @return The created aciplist or NULL if an error has occured.
+ */
 cw_aciplist_t cw_aciplist_create()
 {
 	return  avltree_create(acip_cmp, acip_del);
 }
 
-
- 
