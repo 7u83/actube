@@ -36,13 +36,30 @@ int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
 			return 0;
 	}
 
-	struct sockaddr_in addr;
-	memcpy(&addr.sin_addr,data,4);
-	addr.sin_family=AF_INET;
-	sock_setport((struct sockaddr*)&addr,CAPWAP_CONTROL_PORT);
-	memcpy(&acip->ip,&addr,sizeof(addr));
+	
+	if (a->elem_id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
+		struct sockaddr_in addr;
+		memcpy(&addr.sin_addr,data,4);
+		addr.sin_family=AF_INET;
+		sock_setport((struct sockaddr*)&addr,CAPWAP_CONTROL_PORT);
+		memcpy(&acip->ip,&addr,sizeof(addr));
+		acip->wtp_count = cw_get_word(data+4);
+	}
 
-	acip->wtp_count = cw_get_word(data+4);
+	if (a->elem_id == CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS) {
+		struct sockaddr_in6 addr;
+		memset (&addr,0,sizeof(addr));
+		memcpy(&addr.sin6_addr,data,16);
+		addr.sin6_family=AF_INET6;
+		sock_setport((struct sockaddr*)&addr,CAPWAP_CONTROL_PORT);
+		memcpy(&acip->ip,&addr,sizeof(addr));
+		acip->wtp_count = cw_get_word(data+16);
+	}
+
+
+
+
+
 	cw_aciplist_replace(list,acip);
 
 
