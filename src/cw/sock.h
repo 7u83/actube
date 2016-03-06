@@ -1,7 +1,7 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -15,6 +15,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 
 /**
  *@file
@@ -55,7 +56,7 @@ extern int sock_getifaddr(const char *ifname, int family, int type, struct socka
 extern int sock_getifhwaddr(const char *ifname, uint8_t * hwaddr, uint8_t * addrlen);
 extern char *sock_hwaddrtostr(const uint8_t * haddr, int len, char *dst,
 			      const char *separator);
-extern char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen);
+//extern char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen);
 extern int sock_strtoaddr(const char *s, struct sockaddr *saout);
 extern int sock_set_recvtimeout(int sock, int seconds);
 
@@ -74,16 +75,37 @@ extern int sock_getifinfo(const struct sockaddr *addr, char *ifname,
 
 
 
-char *sock_strsockaddr(const struct sockaddr *sa, char *s, size_t maxlen, int addport);
-int sock_parse_ip_address ( const char** ppszText, 
-		unsigned char* abyAddr, int* pnPort, int* pbIsIPv6 );
+char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addport);
+
+
+/**
+ * Convert a sockaddr structure to a human readable string
+ * @param s sockaddr
+ * @return A char* pointer to converted address
+ *
+ * The returned string is pushed on the stack (unnamed variable), so this macro should
+ * only be used as function argument.
+ *
+ * Example:
+ * \code
+   struct sockaddr sa;
+   // Initialize sa ...
+   sprintf("Adress: %s",sock_addr2str(&sa));
+   \endcode 
+ */
+#define sock_addr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64, 0 ) )
+
+/**
+ * Same as #sock_addr2str, but also the port number is appended to the result
+ * @see #sock_addr2str
+ */
+#define sock_addr2str_p(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64,1 ) )
 
 
 
-#define sock_addr2str(s) ( sock_strsockaddr( (struct sockaddr*)s, (char[64]){0}, 64,0 ) )
 #define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
 #define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
-#define sock_addrtostr(s,str,n) sock_strsockaddr(s,str,n,1)
+//#define sock_addrtostr(s,str,n) sock_addrtostr(s,str,n,1)
 
 #define sock_addrfamily(addr) ( ((struct sockaddr_storage*)(addr))->ss_family )
 
