@@ -6,7 +6,7 @@
 const char CW_ITEM_IDLE_TIMEOUT[]="idle_timeout";
 const char CW_ITEM_DISCOVERY_TYPE[]="discovery_type";
 const char CW_ITEM_WTP_NAME[]="wtp_name";
-
+const char CW_ITEM_ECN_SUPPORT[]="ecn_support";
 
 
 const char CW_ITEM_WTP_MAC_TYPE[]="wtp_mac_type";
