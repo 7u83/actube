@@ -35,10 +35,10 @@
 #include <netinet/in.h>
 
 #ifdef AF_LINK
-#   include <net/if_dl.h>
+#include <net/if_dl.h>
 #endif
 #ifdef AF_PACKET
-#   include <netpacket/packet.h>
+#include <netpacket/packet.h>
 #endif
 
 #include "sock.h"
@@ -49,62 +49,64 @@
  * @param s Destination buffer
  * @param maxlen Size of destination buffer
  * @param addport If true then the port number wil be added to the output
+ *
  * Works only for sockaddrs of type AF_INET, AF_INET6, AF_PACKET, AF_LINK.
  */
-char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen,int addport)
+char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addport)
 {
 	char d[maxlen];
 	int port;
 
 
-	switch(sa->sa_family) {
+	switch (sa->sa_family) {
 		case AF_INET:
-			inet_ntop(AF_INET, &(((struct sockaddr_in *)sa)->sin_addr), d, maxlen);
-			if (addport){
-				port = ((struct sockaddr_in *)sa)->sin_port;
-				sprintf(s,"%s:%i",d,ntohs(port));
-			}
-			else
-				sprintf(s,"%s",d);
+			inet_ntop(AF_INET, &(((struct sockaddr_in *) sa)->sin_addr), d,
+				  maxlen);
+			if (addport) {
+				port = ((struct sockaddr_in *) sa)->sin_port;
+				sprintf(s, "%s:%i", d, ntohs(port));
+			} else
+				sprintf(s, "%s", d);
 			break;
 
-	        case AF_INET6:
-			inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)sa)->sin6_addr), d, maxlen);
-			if (addport){
-				port = ((struct sockaddr_in6 *)sa)->sin6_port;
-				sprintf(s,"[%s]:%i",d,ntohs(port));
-			}
-			else
-				sprintf(s,"%s",d);
-	break;
+		case AF_INET6:
+			inet_ntop(AF_INET6, &(((struct sockaddr_in6 *) sa)->sin6_addr), d,
+				  maxlen);
+			if (addport) {
+				port = ((struct sockaddr_in6 *) sa)->sin6_port;
+				sprintf(s, "[%s]:%i", d, ntohs(port));
+			} else
+				sprintf(s, "%s", d);
+			break;
 #ifdef AF_LINK
 		case AF_LINK:
-			{
-				struct sockaddr_dl *sl=(struct sockaddr_dl*)sa;
-				sock_hwaddrtostr(((uint8_t*)sl->sdl_data)+sl->sdl_nlen,sl->sdl_alen,s,":");
+		{
+			struct sockaddr_dl *sl = (struct sockaddr_dl *) sa;
+			sock_hwaddrtostr(((uint8_t *) sl->sdl_data) + sl->sdl_nlen,
+					 sl->sdl_alen, s, ":");
 
-			}
+		}
 			break;
 
-#endif	/* AF_LINLK */
+#endif				/* AF_LINLK */
 
 #ifdef AF_PACKET
 		case AF_PACKET:
-			{
-				int i;
-				char *sp=s;
-				struct sockaddr_ll *sl=(struct sockaddr_ll*)sa;
-				for (i=0; i<sl->sll_halen-1; i++){
-					sprintf(sp,"%02X:",sl->sll_addr[i]);
-					sp+=3;
-				}
-				sprintf(sp,"%02X",sl->sll_addr[i]);
+		{
+			int i;
+			char *sp = s;
+			struct sockaddr_ll *sl = (struct sockaddr_ll *) sa;
+			for (i = 0; i < sl->sll_halen - 1; i++) {
+				sprintf(sp, "%02X:", sl->sll_addr[i]);
+				sp += 3;
 			}
+			sprintf(sp, "%02X", sl->sll_addr[i]);
+		}
 			break;
-#endif /* AF_PACKET */
+#endif				/* AF_PACKET */
 
 
-        	default:
+		default:
 			strncpy(s, "Unknown AF", maxlen);
 			return NULL;
 	}
@@ -114,4 +116,3 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen,int addpo
 /**
  * @}
  */
-
