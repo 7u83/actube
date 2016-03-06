@@ -48,7 +48,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
-		.start  = cw_in_capwap_control_ipv4_address,
+		.start  = cw_in_capwap_control_ip_address,
 		.min_len = 6,
 		.max_len = 6,
 		.mand = 1
@@ -62,7 +62,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
-		.start  = cw_in_capwap_control_ipv4_address, // Change to v6 handler
+		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
 		.min_len = 6,
 		.max_len = 6,
 		.mand = 1
@@ -251,13 +251,13 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
-	/* WTP MAC Type - Join Request  */
+	/* Session ID - Join Request  */
 	{
 		.msg_id = CW_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
-		.item_id = CW_ITEM_WTP_MAC_TYPE, 
+		.elem_id  = CW_ELEM_SESSION_ID,
+		.item_id = CW_ITEM_SESSION_ID, 
 		.out = cw_out_generic,
-		.get = cw_out_get_local,
+		.get = cw_out_get_session_id,
 		.mand = 1
 	}
 	,
@@ -273,16 +273,41 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
-	/* Session ID - Join Request  */
+
+	/* WTP MAC Type - Join Request  */
 	{
 		.msg_id = CW_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_SESSION_ID,
-		.item_id = CW_ITEM_SESSION_ID, 
+		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
+		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
-		.get = cw_out_get_session_id,
+		.get = cw_out_get_local,
 		.mand = 1
 	}
 	,
+
+	/* ECN Support - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+	/* CAPWAP Local IP Address - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 
+		.out = cw_out_capwap_local_ip_address,
+	//	.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+
+
 
 
 	/* ---------------------------------------------------------------

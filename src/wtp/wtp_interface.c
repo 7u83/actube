@@ -21,3 +21,7 @@ bstr_t get_base_rmac()
 }
 
 
+uint8_t get_ecn_support()
+{
+	return 0;
+}

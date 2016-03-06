@@ -164,7 +164,7 @@ CW_MSG_JOIN_RESPONSE = 				4,
 CW_MSG_CONFIGURATION_STATUS_REQUEST = 		5,
 /** Config. Status Response = 6 */
 CW_MSG_CONFIGURATION_STATUS_RESPONSE = 		6,
-
+/** Config. Update Request = 7 */
 CW_MSG_CONFIGURATION_UPDATE_REQUEST = 		7,
 CW_MSG_CONFIGURATION_UPDATE_RESPONSE = 		8,
 
@@ -278,7 +278,7 @@ CW_MSG_MAXMSG	=				26
 #define CW_ELEM_DISCOVERY_TYPE				20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
-#define CWMSGELEM_ECN_SUPPORT				53
+#define CW_ELEM_ECN_SUPPORT				53
 #define CW_ELEM_IDLE_TIMEOUT				23
 #define CW_ELEM_IMAGE_DATA				24
 #define CW_ELEM_IMAGE_IDENTIFIER			25
@@ -1031,9 +1031,6 @@ extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8
 				int len,struct sockaddr *from);
 extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len,struct sockaddr *from);
-extern int cw_in_capwap_control_ipv4_address(struct conn *conn, struct cw_action_in *a,
-					     uint8_t * data, int len, struct sockaddr *from);
-
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//, struct mbag_item *item);
 
@@ -1140,7 +1137,7 @@ int cw_in_ac_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data,
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
-int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
+//int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
 
 int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from);
