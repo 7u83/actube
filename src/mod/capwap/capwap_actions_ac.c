@@ -236,6 +236,19 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* ECN Support - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT,
+	 	.start = cw_in_generic2, 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
 
 
 
@@ -360,6 +373,7 @@ static cw_action_out_t actions_out[]={
 
 #include "cw/item.h"
 
+/*
 static struct cw_itemdef _capwap_itemdefs[] = {
 
 	{"wtp_name",CW_ITEM_NONE,MBAG_STR},
@@ -371,6 +385,7 @@ static struct cw_itemdef _capwap_itemdefs[] = {
 	{CW_ITEM_NONE}
 
 };
+*/
 
 
 int capwap_register_actions_ac(struct cw_actiondef *def)
@@ -390,7 +405,7 @@ int capwap_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
-	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
+	rc += cw_itemdefheap_register(def->items, capwap_itemdefs);
 	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
 
 	intavltree_add(def->wbids, 0);
