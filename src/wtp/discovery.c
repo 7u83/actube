@@ -42,74 +42,67 @@
 
 
 
-cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t dis)
+cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t discs)
 {
 
 	/* create a list for results */
 	cw_aciplist_t resultlist=cw_aciplist_create();
 	if (!resultlist)
 		return NULL;
-	if (!dis)
+	if (!discs)
 		return resultlist;
 
-
+/*
 	cw_aciplist_t aciplist = cw_aciplist_create();
 	if (!aciplist) {
 		cw_log(LOG_ERROR, "Can't allocate aciplist");
 		return NULL;
 	}
 
-
-//	mbag_t aclist = mbag_get_mbag(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
-
+*/
 
 	/* get the AC Name with Priority list */
 	cw_acpriolist_t priolist;
 	priolist = mbag_get_mavl(conn->config, CW_ITEM_AC_NAME_WITH_PRIORITY);
-//	if (priolist )
+	if (!priolist )
 		priolist=cw_acpriolist_create();
 
 
-
-	DEFINE_AVLITER(i, dis);
+	/* for each discovery reponse */
+	DEFINE_AVLITER(i, discs);
 	avliter_foreach(&i){
-
-
 
 		mbag_t ac = ((mbag_item_t *) (avliter_get(&i)))->data;
 
+		/* get the ac name */
 		char *ac_name = mbag_get_str(ac, CW_ITEM_AC_NAME,NULL);
-
 		int prio = 256;
+
 		if (ac_name) {
 			/* See if we can find AC Name in Priority List */
 			if (priolist)
 				prio = cw_acpriolist_get(priolist, ac_name);
-			else
-				prio = 256;
-printf("Prio for %s is %d\n",ac_name,prio);
-printf("nprio: %d\n",priolist->count);
-
 		}
 
+		/* get the IP list, the current AC has sent */
 		cw_aciplist_t acips =
 		    mbag_get_mavl(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 
-printf("Number of acips =%d\n",acips->count);
-
-
+		/* for each IP from the current AC add it to the result list
+		 * and give it the priority whe have determined */
 		DEFINE_AVLITER(i2, acips);
 		avliter_foreach(&i2){
 
 
 			cw_acip_t *acip = avliter_get(&i2);
 
-printf("The acip: %s\n",sock_addr2str(&acip->ip));
-
 			cw_acip_t *n = malloc(sizeof(cw_acip_t));
 			memcpy(n,acip,sizeof(cw_acip_t));
-			
+		
+			/* we missuse the wtp_count to sort by 
+			 * priority and wp_count */	
 			n->wtp_count |= prio<<16; 
+
 			cw_aciplist_del(resultlist,n);
 			cw_aciplist_add(resultlist,n);
 		}
@@ -117,7 +110,6 @@ printf("The acip: %s\n",sock_addr2str(&acip->ip));
 	}
 
 	return resultlist;
-
 }
 
 
