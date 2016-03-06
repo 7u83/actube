@@ -1,4 +1,5 @@
 {
+	"ecn_support":"0",
 	"location_data":"Superposition",
 	"wtp_bootloader_version":"11591,W-FAT-BL-0.1",
 	"wtp_hardware_version":"11591,0.1",
