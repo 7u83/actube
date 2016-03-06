@@ -47,9 +47,13 @@
  * Defines the structure of an AVL Node.
  */
 struct mavlnode {
+	/** Pointer to data, thant belongs to the node */
 	void *data;
+	/** Pointer to left son*/
 	struct mavlnode *left;
+	/** Pointer to right son*/
 	struct mavlnode *right;
+	/** AVL balance */
 	int bal;
 };
 
