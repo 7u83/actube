@@ -334,9 +334,6 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
-//	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_ADMINISTRATIVE_STATE, 0,
-//	CW_ELEM_RADIO_ADMINISTRATIVE_STATE, NULL, cw_out_radio_administrative_states, cw_out_get_config,1}
-
 
 
 	/* ---------------------------------------------------------------
