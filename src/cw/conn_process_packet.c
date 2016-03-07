@@ -332,22 +332,18 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	int result_code = 0;
 	if (afm->end) {
 		result_code = afm->end(conn, afm, rawmsg, len, from);
-printf("result code comes from afm->end %d\n",result_code);
 
 	}
 
-printf("Unrecognized = %d\n",unrecognized);
 
 	if (unrecognized){
 		cw_dbg(DBG_RFC,"Message has %d unrecognized message elements.",unrecognized);
 		if (!result_code) {
-printf("Seeting result code to unrec");
 			result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 		}
 
 	}
 
-printf("The Result COde is here %d\n",result_code);
 	/* if we've got a request message, we always have to send a response message */
 	if (as.msg_id & 1) {
 		if (result_code > 0) {
