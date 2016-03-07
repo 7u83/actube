@@ -129,6 +129,29 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_
 	return 1;
 }
 
+static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		     struct sockaddr *from)
+{
+	if (!a->max_len)
+		return 1;
+
+	if (len < a->min_len) {
+		cw_dbg(DBG_ELEM_ERR,
+		       "%d (%s) message element too short, len=%d, min len=%d",
+		       a->elem_id, cw_strelemp(conn->actions, a->elem_id), len,
+		       a->min_len);
+		return 0;
+	}
+	if (len > a->max_len) {
+		cw_dbg(DBG_ELEM_ERR,
+		       "%d (%s) message element too big, len=%d, max len=%d", a->elem_id,
+		       cw_strelemp(conn->actions, a->elem_id), len, a->max_len);
+		return 0;
+	}
+
+	return 1;
+}
+
 
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
@@ -281,6 +304,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
 			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
 			       as.msg_id, cw_strmsg(as.msg_id));
+			continue;
+		}
+
+		if (!check_len(conn,af,cw_get_elem_data(elem), elem_len,from)){
 			continue;
 		}
 
