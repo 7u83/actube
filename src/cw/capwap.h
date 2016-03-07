@@ -128,20 +128,6 @@ enum capwap_states {
  * control header stuff
  */
 
-/*
-struct capwap_ctrlhdr
-{
-	int msgtype;
-	int seqnum;
-	int flags;
-	uint8_t * msgelems;
-	int msgelemslen;
-};
-*/
-
-//extern int capwap_parse_trnsprthdr(struct capwap_trnsprthdr * cwh,uint8_t *msg, int msglen);
-//extern int capwap_parse_ctrlhdr(struct capwap_ctrlhdr * ch,uint8_t * msg, int len);
-
 /** 
  *@addtogroup CAPWAPConstants 
  *@{
@@ -362,8 +348,6 @@ CW_MSG_MAXMSG	=				26
 
 #include "radioinfo.h"
 
-//#include "wtpinfo.h"
-
 
 #define CW_DISCOVERY_TYPE_UNKNOWN	0
 #define CW_DISCOVERY_TYPE_STATIC	1
@@ -372,10 +356,6 @@ CW_MSG_MAXMSG	=				26
 #define CW_DISCOVERY_TYPE_AC_REFERRAL	4
 
 
-
-/* wtpinfo methods */
-//extern void wtpinfo_set_location(struct wtpinfo *wtpinfo, uint8_t * str, int len);
-//extern int wtpinfo_set_radioinfo(struct wtpinfo *wtpinfo, uint8_t * msgelem, int len);
 
 
 /* wtp mac types */
@@ -443,13 +423,6 @@ struct cwimage_identifier{
 
 
 
-/*
-extern void cwmsg_addelem_wtp_descriptor(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo);
-extern void cwmsg_addelem_ctrl_ip_addrs(struct cwmsg *msg, struct ac_info *acinfo);
-extern void cwmsg_addelem_wtp_board_data(struct cwmsg *cwmsg, struct wtpinfo *wtpinfo);
-extern void cwmsg_addelem_cw_local_ip_addr(struct cwmsg *msg, struct conn *conn);
-*/
-
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
 					  struct radioinfo *radioinfos);
@@ -458,51 +431,7 @@ extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
 extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id,
 						  int type, uint8_t * payload, int len);
 
-//extern void cwsend_discovery_reponse(struct conn * conn, struct ac_info * acinfo);
-//extern int process_msgelems(uint8_t * msgelems,  int len,
-//              int (*callback)(void*,int,uint8_t*,int),void *arg );
 
-
-
-
-//void cwsend_discovery_response(struct conn * conn,int seqnum, struct radioinfo * radioinfo,  struct ac_info * acinfo, struct wtpinfo * wtpinfo);
-//
-
-/*
-extern void cwsend_discovery_response(struct conn *conn, int seqnum,
-				      struct radioinfo *radioinfo, struct ac_info *acinfo,
-				      struct wtpinfo *wtpinfo);
-extern int cwsend_discovery_request(struct conn *conn, struct radioinfo *radioinfo,
-				    struct wtpinfo *wtpinfo);
-extern void cwsend_join_response(struct conn *conn, int seqnum, int rc,
-				 struct radioinfo *radioinfo, struct ac_info *acinfo,
-				 struct wtpinfo *wtpinfo);
-
-*/
-
-//extern void cwread_discovery_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-//extern void process_join_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-//extern void process_conf_status_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-
-/*
-extern void cwread_discovery_response(struct ac_info *acinfo, uint8_t * msg, int len);
-extern void cwsend_image_data_response(struct conn *conn, int seqnum, int rc);
-extern int cwsend_image_data_request(struct conn *conn, struct cwimage_data *data,
-				     struct image_identifier *id);
-extern int cwread_change_state_event_request(struct wtpinfo *wtpinfo, uint8_t * msg,
-					     int len);
-extern void cwsend_change_state_event_response(struct conn *conn, int seqnum,
-					       struct radioinfo *radioinfo);
-extern int cwread_wtp_event_request(struct wtpinfo *wtpinfo, uint8_t * msg, int len);
-extern void cwread_configuration_status_request(struct wtpinfo *wtpinfo, uint8_t * msg,
-						int len);
-extern void cwsend_conf_status_response(struct conn *conn, int seqnum, int rc,
-					struct radioinfo *radioinfo,
-					struct ac_info *acinfo, struct wtpinfo *wtpinfo);
-
-extern void cwsend_unknown_response(struct conn *conn, int seqnum, int unknow_request);
-
-*/
 
 extern int hdr_print(char *str, uint8_t * packet, int len);
 
