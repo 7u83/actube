@@ -20,7 +20,7 @@
 /**
  *@file
  *@breif
- *@defgroup SockFunctions SOCK
+ *@defgroup SOCK SOCK
  *@{
  */
 
