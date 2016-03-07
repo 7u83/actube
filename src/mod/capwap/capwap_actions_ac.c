@@ -250,8 +250,6 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
-
-
 	/* Vendor Specific Payload - Join Request*/
 	{
 		.capwap_state = CW_STATE_JOIN, 
@@ -268,7 +266,6 @@ static cw_action_in_t actions_in[] = {
 		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
-		.mand = 0, 
 		.min_len = 2, 
 		.max_len = 2
 	}
@@ -282,10 +279,22 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
-//		.end = cw_in_check_join_req
+		.end = cw_in_check_generic_resp
 	}
 	,
 
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME,
+		.start = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 512,
+		.mand = 1
+
+	}
+	,
 
 
 

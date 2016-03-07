@@ -1,13 +1,6 @@
 {
 	"ecn_support":"0",
 	"location_data":"Superposition",
-	"result_code":"21",
-	"wtp_board_data":{
-		"model_no":"W-FAT",
-		"serial_no":"0000",
-		"vendor_id":"11591",
-		"wtp_board_macadddress":""
-	},
 	"wtp_bootloader_version":"11591,W-FAT-BL-0.1",
 	"wtp_hardware_version":"11591,0.1",
 	"wtp_name":"WFAT-004A9902FAC0",
