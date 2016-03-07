@@ -279,7 +279,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
-		.end = cw_in_check_generic_resp
+		.end = cw_in_check_generic_req
 	}
 	,
 
