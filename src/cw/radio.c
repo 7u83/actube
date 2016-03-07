@@ -36,7 +36,7 @@ struct cw_itemdef capwap_radioitemdefs[] = {
 
 /** 
  * Update all radio operational states.
- * @param radios definitiion of radios
+ * @param radios definition of radios
  * @param cause cause to set
  */ 
 int cw_radio_update_oper_states(mbag_t radios,int cause)
