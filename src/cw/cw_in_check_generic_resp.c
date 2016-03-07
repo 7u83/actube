@@ -11,7 +11,6 @@ int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a, uint8_t 
 			 int len,struct sockaddr *from)
 {
 
-	cw_action_in_t * mlist[60];
 
 	/* Check if the message contains a result code and
 	   if it indicates an errror */
@@ -22,6 +21,7 @@ int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a, uint8_t 
 		}
 	}
 
+	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */
 	int n = cw_check_missing_mand(mlist,conn,a);
