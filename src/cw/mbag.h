@@ -622,6 +622,11 @@ static inline int mbag_set_fun(mbag_t s, const char *id,
 
 	return 1;
 }
-
+/**
+ * Delete all objects in ab mbag.
+ *
+ * @see #mavl_del_all
+ */ 
+#define mbag_del_all mavl_del_all
 
 #endif
