@@ -402,8 +402,6 @@ static int init_listen_addrs()
 		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
 
-//			printf("The converter has %s\n",str);
-
 			if (strncmp(str, "fe80:", 5) == 0) {
 				strcat(str, "%");
 				strcat(str, ifa->ifa_name);
@@ -738,6 +736,7 @@ int read_config(const char *filename)
 
 		CFG_SIMPLE_BOOL("strict_capwap", &conf_strict_capwap),
 		CFG_SIMPLE_BOOL("strict_headers", &conf_strict_headers),
+		CFG_SIMPLE_BOOL("use_loopback", &conf_use_loopback),
 		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),
 
 
