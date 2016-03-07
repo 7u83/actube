@@ -66,24 +66,6 @@
 
 
 
-/**
- * CAWAP States
- */
-enum capwap_states {
-	CW_STATE_NONE = 0,
-	/** Discovery State */
-	CW_STATE_DISCOVERY,
-	/** Join State */
-	CW_STATE_JOIN,
-	/** Config State */
-	CW_STATE_CONFIGURE,
-	/** Image Data Upload */
-	CW_STATE_IMAGE_DATA,
-	CW_STATE_UPDATE,
-	/** Run State */
-	CW_STATE_RUN
-};
-
 /**@}*/
 
 
