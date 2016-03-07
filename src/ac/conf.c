@@ -390,7 +390,7 @@ static int init_listen_addrs()
 
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
-			printf("The converter has %s\n",str);
+//			printf("The converter has %s\n",str);
 //			*strchr(str, ':') = 0;
 			conf_listen_addrs[ctr] =
 			    (char *) cw_setstr((uint8_t **) & conf_listen_addrs[ctr],
@@ -402,7 +402,7 @@ static int init_listen_addrs()
 		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
 
-			printf("The converter has %s\n",str);
+//			printf("The converter has %s\n",str);
 
 			if (strncmp(str, "fe80:", 5) == 0) {
 				strcat(str, "%");
