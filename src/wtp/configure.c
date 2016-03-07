@@ -2,6 +2,7 @@
 #include "cw/capwap.h"
 #include "cw/conn.h"
 #include "cw/log.h"
+#include "cw/mbag.h"
 
 #include "wtp_interface.h"
 #include "cfg.h"
@@ -10,7 +11,12 @@ int configure()
 {
 
 	struct conn *conn = get_conn();
+
+	mbag_del_all(conn->incomming);
+
 	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
+
+printf("Configure RC: %d\n",rc);
 
 	if (!cw_rcok(rc)) {
 		if (rc > 0) {
