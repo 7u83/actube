@@ -36,6 +36,7 @@
  * @param addr sockaddr where the port will be set
  * @param port number
  * @return 1 if successful, otherwise 0
+ *
  * Ports can only be set for sockaddrs of type AF_INET and AF_INET6
  */
 int sock_setport(struct sockaddr *addr, int port)
