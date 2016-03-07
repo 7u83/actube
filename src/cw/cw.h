@@ -88,6 +88,10 @@ extern int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
 				    uint8_t * data, int len, struct sockaddr *from);
 
+extern int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a,
+				    uint8_t * data, int len, struct sockaddr *from);
+
+
 
 /**
  * @defgroup CWELEMIN Input Handlers for Message Elements
