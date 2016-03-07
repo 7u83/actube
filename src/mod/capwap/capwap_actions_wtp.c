@@ -63,8 +63,8 @@ static cw_action_in_t actions_in[] = {
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
-		.min_len = 6,
-		.max_len = 6,
+		.min_len = 18,
+		.max_len = 18,
 		.mand = 1
 	}
 	,	
