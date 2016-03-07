@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief Implements mavl_del_all 
+ */
+
 #include "mavl.h"
 
 static void mavl_del_all0(struct mavl *t ,struct mavlnode * n)
@@ -27,10 +32,13 @@ static void mavl_del_all0(struct mavl *t ,struct mavlnode * n)
 	mavlnode_destroy(t,n);
 }
 
+/**
+ * Delete all elemets of a mavl object
+ * @parm t mavl object 
+ */
 void mavl_del_all(struct mavl *t)
 {
 	mavl_del_all0(t,t->root);		
 	t->root=NULL;
 }
-
 
