@@ -31,6 +31,7 @@
 #include "sock.h"
 
 #include "stravltree.h"
+#include "mod.h"
 
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
@@ -152,6 +153,78 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 	return 1;
 }
 
+static struct mod_ac * detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
+				 int elems_len, struct sockaddr *from, int mode)
+{
+	if (conn->mods) {
+		struct mod_ac **mods = (struct mod_ac **) conn->mods;
+		int i;
+		for (i = 0; mods[i]; i++) {
+			if (mods[i]->detect) {
+				if (mods[i]->
+				    detect(conn, rawmsg, len, elems_len, from, mode)) {
+					return mods[i];
+
+				}
+			}
+		}
+	}
+
+	return MOD_NULL;
+}
+
+static struct cw_actiondef * load_mods(struct conn *conn, uint8_t * rawmsg, int len,
+				 int elems_len, struct sockaddr *from)
+{
+
+	struct mod_ac * cmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_CAPWAP);
+	if (cmod == MOD_NULL) {
+		cw_dbg(DBG_MSG_ERR, "Cant't find mod to handle connection from %s , discarding message",
+		       sock_addr2str_p(from));
+		return NULL;
+	}
+
+	struct mod_ac * bmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_BINDINGS);
+
+	cw_dbg(DBG_INFO,"Mods deteced: %s,%s",cmod->name,bmod->name);
+
+	struct cw_actiondef  * ad = mod_cache_add(cmod,bmod);
+
+	return ad;
+
+
+
+
+/*
+	if (bindins_mod) {
+		cw_dbg(DBG_INFO, "Using mod '%s' to handle CAWPAP for %s", mod->name,
+		       sock_addr2str_p(from));
+		conn->detected=1;
+	}
+	else{
+//              errno = EAGAIN;
+//              return -1;
+	}
+
+
+	mod = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_BINDINGS);
+	if (mod) {
+		cw_dbg(DBG_INFO, "Using bindings '%s' to handle %s", mod->name,
+		       sock_addr2str_p(from));
+		conn->detected=1;
+	}
+	else{
+		cw_dbg(DBG_MSG_ERR, "Cant't detect bindings ... for %s",
+		       sock_addr2str_p(from));
+	}
+
+	
+	return 0;
+	*/
+}
+
+
+
 
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
@@ -198,30 +271,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 	if (!conn->detected) {
-		if (conn->mods) {
-			struct mod_ac **mods = (struct mod_ac **) conn->mods;
-			int i;
-			for (i = 0; mods[i]; i++) {
-				if (mods[i]->detect) {
-					if (mods[i]->detect(conn, rawmsg, len, elems_len, from)) {
-						cw_dbg(DBG_INFO,
-						       "Using mod '%s' to handle connection from %s",
-						       mods[i]->name,
-						       sock_addr2str(from));
-						break;
-					}
-				}
-			}
+		//struct mod_ac *mod;
+		struct cw_actiondef * ad = load_mods(conn, rawmsg, len, elems_len, from);
+		if (!ad) {
+			cw_log(LOG_ERR,"Eror");
+			errno=EAGAIN;
+			return -1;
 		}
-	}
-
-
-	if (!conn->detected) {
-
-		cw_dbg(DBG_MSG_ERR, "Cant't detect capwap, discarding message from %s",
-		       sock_addr2str(from));
-//		errno = EAGAIN;
-//		return -1;
+		conn->actions = ad;
 
 	}
 
@@ -284,7 +341,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* Create an avltree to catch the found mandatory elements */
 	conn->mand = stravltree_create();
 
-	int unrecognized=0;
+	int unrecognized = 0;
 
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -307,7 +364,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			continue;
 		}
 
-		if (!check_len(conn,af,cw_get_elem_data(elem), elem_len,from)){
+		if (!check_len(conn, af, cw_get_elem_data(elem), elem_len, from)) {
 			continue;
 		}
 
@@ -336,8 +393,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	}
 
 
-	if (unrecognized){
-		cw_dbg(DBG_RFC,"Message has %d unrecognized message elements.",unrecognized);
+	if (unrecognized) {
+		cw_dbg(DBG_RFC, "Message has %d unrecognized message elements.",
+		       unrecognized);
 		if (!result_code) {
 			result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 		}

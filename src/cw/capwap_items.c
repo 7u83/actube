@@ -117,7 +117,7 @@ struct cw_itemdef capwap_itemdefs[] = {
 
 
 
-{CW_ITEM_AP_MODE_AND_TYPE,CW_ITEM_NONE,MBAG_WORD},
+//{CW_ITEM_AP_MODE_AND_TYPE,CW_ITEM_NONE,MBAG_WORD},
 
 /* Board Data */
 {CW_ITEM_WTP_BOARD_DATA,CW_ITEM_NONE,MBAG_MBAG},

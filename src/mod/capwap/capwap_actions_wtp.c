@@ -325,7 +325,7 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 	/* Radio Admin State - Config Status Request */
-/*	{
+	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
 		.out = cw_out_radio_administrative_states,
@@ -333,7 +333,7 @@ static cw_action_out_t actions_out[] = {
 		.mand = 1
 	}
 	,
-*/
+
 
 
 

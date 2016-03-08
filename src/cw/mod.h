@@ -28,23 +28,30 @@
 
 struct cw_actiondef;
 
-struct mod_ac
-{
+#define MOD_MAXMODS 8
+
+enum {
+	MOD_DETECT_CAPWAP,
+	MOD_DETECT_BINDINGS
+};
+
+struct mod_ac {
 	/** Name of the mod */
 	const char *name;
 	/** Initializion method */
-	int (*init)();
+	int (*init) ();
 	/** Detect capwap 
-	This function ifter receiving and disassembling a complete 
+	This function is called after receiving and disassembling a complete 
 	CAPWAP message. Either on Discovery Request or Join Request
 	**/
-	int (*detect)(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from);
+	int (*detect) (struct conn * conn, const uint8_t * rawmsg, int rawlen,
+		       int elems_len, struct sockaddr * from, int mode);
 
 	/** used for private data */
 	void *data;
 
 	/** Register actions */
-	int (*register_actions)(struct cw_actiondef *def);
+	int (*register_actions) (struct cw_actiondef * def);
 };
 
 
@@ -54,6 +61,12 @@ struct mod_ac
  */
 #define mod_wtp mod_ac
 
+
+extern struct mod_ac mod_null;
+
+#define MOD_NULL (&mod_null)
+
+struct cw_actiondef * mod_cache_add(struct mod_ac *c, struct mod_ac *b);
 
 
 #endif
