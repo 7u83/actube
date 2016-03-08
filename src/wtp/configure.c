@@ -3,6 +3,7 @@
 #include "cw/conn.h"
 #include "cw/log.h"
 #include "cw/mbag.h"
+#include "cw/capwap_items.h"
 
 #include "wtp_interface.h"
 #include "cfg.h"
@@ -14,9 +15,11 @@ int configure()
 
 	mbag_del_all(conn->incomming);
 
-	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
+	printf("Putting AC NAME\n");
+	mbag_set_str(conn->local,CW_ITEM_AC_NAME,"abc");
 
-printf("Configure RC: %d\n",rc);
+
+	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
 
 	if (!cw_rcok(rc)) {
 		if (rc > 0) {

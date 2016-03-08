@@ -195,7 +195,6 @@ DTLSOBJS+=dtls_bio.o
 
 CONNOBJS= conn_create.o \
 	conn_process_packet.o \
-	conn_process_packet2.o \
 	conn_q_add_packet.o \
 	conn_q_get_packet.o \
 	conn_q_recv_packet.o \
@@ -261,7 +260,8 @@ CWACTION=action.o \
 	radio.o \
 	cw_out_radio_info.o \
 	capwap_items.o \
-	item.o
+	item.o \
+	mod.o
 
 #	cw_process_msg.o \
 #	item_strings.o \
