@@ -35,8 +35,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 static int register_actions(struct cw_actiondef *actions)
 {
-
-	return 0;
+	return capwap80211_register_actions_ac(actions);
 }
 
 static struct mod_ac capwap80211_ac = {
