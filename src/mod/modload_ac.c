@@ -4,8 +4,9 @@
 #include "cipwap/mod_cipwap.h"
 #include "capwap/mod_capwap.h"
 #include "cisco/mod_cisco.h"
+#include "capwap80211/mod_capwap80211.h"
 
-#define MODS_AC { mod_capwap_ac,mod_cipwap_ac, mod_cisco_ac, NULL }
+#define MODS_AC { mod_capwap_ac,mod_cipwap_ac, mod_cisco_ac, mod_capwap80211_ac, NULL }
 
 
 struct mod_ac *(*mods_ac[])() = MODS_AC;

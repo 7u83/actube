@@ -16,21 +16,29 @@ static struct cw_actiondef actions;
 
 extern int cisco_register_actions_ac(struct cw_actiondef *def);
 
-
-static int init()
+static int register_actions(struct cw_actiondef *actions)
 {
-	cw_dbg(DBG_INFO, "Initialiazing mod_cisco ...");
 	struct mod_ac *cmod = modload_ac("capwap");
-	cmod->register_actions(&actions);
 	if (!cmod) {
 		cw_log(LOG_ERR,
 		       "Can't initzialize mod_cisco, failed to load base mod mod_capwap");
 		return 1;
 	}
-
-	int rc = cisco_register_actions_ac(&actions);
+	cmod->register_actions(actions);
+	int rc = cisco_register_actions_ac(actions);
 	cw_dbg(DBG_INFO, "Initialized mod cisco with %d actions", rc);
 	return 0;
+
+
+}
+
+
+
+static int init()
+{
+	cw_dbg(DBG_INFO, "Initialiazing mod_cisco ...");
+//	struct mod_ac *cmod = modload_ac("capwap");
+	return 1;
 }
 
 
@@ -70,7 +78,7 @@ static struct mod_ac capwap_ac = {
 	.name = "cisco",
 	.init = init,
 	.detect = detect,
-	.register_actions = cisco_register_actions_ac
+	.register_actions = register_actions
 };
 
 struct mod_ac *mod_cisco_ac()
