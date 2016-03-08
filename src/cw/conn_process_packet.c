@@ -279,6 +279,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			return -1;
 		}
 		conn->actions = ad;
+		conn->detected =1;
 
 	}
 
