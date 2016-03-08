@@ -7,6 +7,8 @@
 //#include "bstr.h"
 //#include "action.h"
 
+#include "strlist.h"
+
 /**
  *@file 
  *@brief Definition for CAPWAP IEEE 802.11 bindings as 
