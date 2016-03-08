@@ -25,7 +25,7 @@
 
 #include <errno.h>
 
-#include "cw/capwap_80211.h"
+//#include "cw/capwap_80211.h"
 #include "cw/capwap_cisco.h"
 
 #include "cw/cw_util.h"

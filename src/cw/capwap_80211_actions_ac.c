@@ -2,7 +2,7 @@
 
 #include "action.h"
 #include "capwap_80211_actions.h"
-#include "capwap_80211.h"
+#include "capwap80211.h"
 #include "capwap.h"
 
 
