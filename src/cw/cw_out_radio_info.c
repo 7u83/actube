@@ -1,7 +1,7 @@
 
 #include "capwap.h"
 #include "capwap_items.h"
-#include "capwap_80211.h"
+#include "capwap80211.h"
 #include "radio.h"
 
 #include "dbg.h"

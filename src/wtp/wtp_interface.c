@@ -3,7 +3,7 @@
 
 
 #include "cw/conn.h"
-#include "cw/capwap_80211.h"
+//#include "cw/capwap_80211.h"
 #include "cw/log.h"
 
 #include "wtp_conf.h"

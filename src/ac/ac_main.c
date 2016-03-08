@@ -36,7 +36,7 @@
 #include "db.h"
 #include "cw/capwap_items.h"
 #include "cw/capwap_cisco.h"
-#include "cw/capwap_80211.h"
+//#include "cw/capwap_80211.h"
 #include "cw/action.h"
 #include "cw/capwap_crypto.h"
 #include "cw/mbag.h"

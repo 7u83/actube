@@ -1,5 +1,5 @@
-#include "capwap_80211.h"
-
+#include "capwap80211.h"
+#include "strlist.h"
 
 struct cw_strlist_elem capwap_strings_elem80211[] = {
 

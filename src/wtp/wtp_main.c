@@ -10,7 +10,7 @@
 #include "cw/log.h"
 #include "cw/dtls.h"
 #include "cw/acpriolist.h"
-#include "cw/capwap_80211.h"
+//#include "cw/capwap_80211.h"
 #include "cw/radio.h"
 
 #include "cw/mod.h"

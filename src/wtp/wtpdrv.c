@@ -15,7 +15,7 @@
 #include "cw/log.h"
 #include "cw/radioinfo.h"
 #include "cw/sock.h"
-#include "cw/capwap_80211.h"
+//#include "cw/capwap_80211.h"
 #include "cw/dbg.h"
 
 /*
