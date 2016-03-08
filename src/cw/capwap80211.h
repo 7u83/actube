@@ -110,7 +110,7 @@ struct cw_wlan {
 
 
 //extern int cw_register_actions_capwap_80211_wtp(struct cw_actiondef *def);
-//extern struct cw_strlist_elem capwap_strings_elem80211[];
+extern struct cw_strlist_elem capwap_strings_elem80211[];
 //extern int cw_register_actions_capwap_80211_ac(struct cw_actiondef *def);
 
 /**
