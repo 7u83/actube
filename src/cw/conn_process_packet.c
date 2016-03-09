@@ -81,7 +81,9 @@ void cw_init_request(struct conn *conn, int msg_id)
 	//cw_set_hdr_hlen(buffer, 2);
 
 
-	cw_set_hdr_wbid(buffer, 1);
+
+	cw_set_hdr_wbid(buffer, conn->wbid);
+
 	cw_set_hdr_rid(buffer, 0);
 
 
