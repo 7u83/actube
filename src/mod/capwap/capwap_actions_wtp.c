@@ -137,7 +137,36 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 	
+
+
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE,
+	 	.end =	cw_in_check_cfg_update_req  
+	}
+	,
+
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 
+		.elem_id  = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 1
+	}
+	,
+
+
+
 		
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_ECHO_RESPONSE,
+	}
+	,
+
 
 };
 
@@ -349,6 +378,16 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
+
+	/* ---------------------------------------------------------------
+	 * Echo Request - Out
+	 */
+
+	/* Echo Request  */
+	{
+		.msg_id = CW_MSG_ECHO_REQUEST, 
+	}
+	,
 
 
 

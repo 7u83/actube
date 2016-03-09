@@ -29,7 +29,6 @@ int run()
 {
 
 
-
 	struct conn *conn = get_conn();
 	conn->capwap_state = CW_STATE_RUN;
 

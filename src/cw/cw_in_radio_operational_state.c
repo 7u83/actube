@@ -12,6 +12,6 @@ int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in *a, uin
 {
 
 
-
+	return 1;
 }
 
