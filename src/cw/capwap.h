@@ -604,7 +604,7 @@ static inline void cw_set_hdr_wbid(uint8_t * th, int wbid)
 static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 {
 	uint32_t d = cw_get_dword(th);
-	d &= (0x1f << 9) ^ 0xffffffff;
+	d &= (0x1f << 14) ^ 0xffffffff;
 	d |= ((rid) & 0x1f) << 14;
 	cw_set_dword(th, d);
 }
