@@ -52,6 +52,7 @@ struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_DTLS, "dtls" },
 	{ DBG_DTLS_BIO, "dtls_bio" },
 	{ DBG_WARN, "warn" },
+	{ DBG_MOD,"mod"},
 
 	{ DBG_X,"dbgx" },
 	{ CW_STR_STOP, NULL } 

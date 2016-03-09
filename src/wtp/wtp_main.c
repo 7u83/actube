@@ -185,6 +185,8 @@ int main()
 	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, 0);
 	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0);
 
+	conn->wbid=1;
+
 
 
 

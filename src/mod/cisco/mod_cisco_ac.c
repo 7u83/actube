@@ -48,6 +48,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	if (mode != MOD_DETECT_CAPWAP)
 		return 0;
 
+
 	int offset = cw_get_hdr_msg_offset(rawmsg);
 	const uint8_t *msg_ptr = rawmsg + offset;
 
@@ -63,6 +64,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_CISCO) {
 				conn->actions = &actions;
+				cw_dbg(DBG_MOD,"CISCO detected: yes");
 				return 1;
 
 			}
@@ -71,6 +73,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 	}
 
+	cw_dbg(DBG_MOD,"CISCO detected: no");
 	return 0;
 }
 
