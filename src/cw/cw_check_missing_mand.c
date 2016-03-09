@@ -19,7 +19,7 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 	avliter_foreach_from(&it,&as) {
 		cw_action_in_t * ai = avliter_get(&it);
 
-		if (ai->msg_id != as.msg_id && ai->capwap_state != as.capwap_state) 
+		if (ai->msg_id != as.msg_id || ai->capwap_state != as.capwap_state) 
 			break;
 		if (!ai->mand)
 			continue;
