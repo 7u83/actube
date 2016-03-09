@@ -4,6 +4,7 @@
 #include "cw/dbg.h"
 
 #include "cw/action.h"
+#include "cw/capwap.h"
 
 #include "mod_capwap80211.h"
 
@@ -29,7 +30,10 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	if (mode != MOD_DETECT_BINDINGS)
 		return 0;
 
-	cw_log(LOG_INFO, "Detecting 80211");
+	int wbid = cw_get_hdr_wbid(rawmsg);
+	if (wbid != CW_WBID_IEEE80211 )
+		return 0;
+
 	return 1;
 }
 
