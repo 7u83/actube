@@ -20,10 +20,28 @@ static cw_action_in_t actions_ac_in[] = {
 	 * Discovery Resquest 
 	 */
 
-	/* Element Discovery Type */
+	/* 802.11 Radio Inmformation - Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.item_id = "radio_information",
+	 	.start = cw_in_radio_generic, 
+		.mand = 1, 
+		.min_len = 5, 
+		.max_len = 5
+	}
+	,
+
+
+	/* --------------------------------------------------------
+	 * Join Resquest 
+	 */
+
+	/* 802.11 Radio Inmformation - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = "radio_information",
 	 	.start = cw_in_radio_generic, 

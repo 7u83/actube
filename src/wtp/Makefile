@@ -26,6 +26,7 @@ LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH)
 
 
 LIBS+=-lcapwap
+LIBS+=-lcapwap80211
 LIBS+=-lcisco
 LIBS+=-lcw
 LIBS+=-lnl-3

@@ -103,8 +103,19 @@ int main()
 		printf("Can't load mod capwap\n");
 		exit(0);
 	}
-	conn->detected = 1;
 	mod->register_actions(&capwap_actions);
+	mod = modload_wtp("capwap80211");
+	if (!mod) {
+		printf("Can't load mod capwap80211\n");
+		exit(0);
+	}
+
+	printf("add capwap80211\n");
+	int rc = mod->register_actions(&capwap_actions);
+
+	printf("Out reg = %d\n",rc);
+
+	conn->detected = 1;
 
 
 

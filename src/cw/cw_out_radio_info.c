@@ -29,6 +29,7 @@ int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radi
 
 int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
+
 	int l=0;
 	MAVLITER_DEFINE(it,conn->radios);
 	mavliter_foreach(&it){
