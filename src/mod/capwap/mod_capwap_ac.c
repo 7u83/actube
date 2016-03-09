@@ -17,7 +17,7 @@ extern int capwap_register_actions_ac(struct cw_actiondef *def);
 
 static int init()
 {
-	cw_dbg(DBG_INFO, "Initialiazing mod_capwap ...");
+	cw_dbg(DBG_MOD, "Initialiazing mod_capwap.");
 //	int rc = capwap_register_actions_ac(&actions);
 //	cw_dbg(DBG_INFO, "Initialized mod capwap with %d actions", rc);
 	return 0;
@@ -29,7 +29,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 {
 	if (mode != MOD_DETECT_CAPWAP)
 		return 0;
-
+	cw_dbg(DBG_MOD,"CAPWAP detected: yes");
 	return 1;
 }
 
