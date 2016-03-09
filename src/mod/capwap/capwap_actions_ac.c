@@ -309,6 +309,49 @@ static cw_action_in_t actions_in[] = {
 
 
 
+	/* Message: Change State Event Request  - in Config State */
+	{
+		.capwap_state=CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
+		.end = cw_in_check_chng_state_evnt_req
+	}
+	,
+
+	/* Element: Result Code */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+		.start = cw_in_generic2,
+		.min_len=4,
+		.max_len=4,
+		.mand = 1
+	}
+	,
+
+	/* Element: Radio Poprational State */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIO_OPER_STATE,
+		.start = cw_in_radio_operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
+
+	/* ------------------------------------------------------------------------------- */
+	/* ECHO REQUEST Request */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_ECHO_REQUEST,
+	}
+	,
+
 
 	/* End of list */
 	{0, 0}
@@ -386,6 +429,25 @@ static cw_action_out_t actions_out[]={
 	,
 
 	
+	/* Change State Event Response */
+
+	{
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
+
+
+	/* ECHO Response */
+
+	{
+		.msg_id = CW_MSG_ECHO_RESPONSE, 
+	}
+	,
 
 
 	{0,0}
