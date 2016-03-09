@@ -1,12 +1,6 @@
 #ifndef __CAPWAP80211_H
 #define __CAPWAP80211_H
 
-//#include "capwap.h"
-//#include <stdint.h>
-
-//#include "bstr.h"
-//#include "action.h"
-
 #include "strlist.h"
 
 /**
@@ -54,8 +48,12 @@ enum radioelems {
 	CW_ELEM80211_ODFM_CONTROL = 1033,
 	/** IEEE 802.11 Supported WLAN Rates */
 	CW_ELEM80211_RATE_SET = 1034,
+	/** IEEE 802.11 RSNA Error Report From Station */
+	CW_ELEM80211_RSNA_ERROR_REPORT_FROM_STATION=1035,
+   	/** IEEE 802.11 Station */
+	CW_ELEM80211_STATION=1036,
 
-/*   IEEE 802.11 RSNA Error Report From Station         1035
+/*   
    IEEE 802.11 Station                                1036
    IEEE 802.11 Station QoS Profile                    1037
    IEEE 802.11 Station Session Key                    1038
@@ -108,7 +106,9 @@ struct cw_wlan {
 
 */
 
-//int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+#include "action.h"
+
+int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
 //extern int cw_register_actions_capwap_80211_wtp(struct cw_actiondef *def);

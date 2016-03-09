@@ -1,3 +1,4 @@
+/*
 #include "../cw/mod.h"
 
 
@@ -7,6 +8,9 @@
 
 #define MODS_WTP { mod_capwap_wtp, NULL }
 
+*/
+
+#include "modload.h"
 
 struct mod_wtp *(*mods_wtp[])() = MODS_WTP;
 

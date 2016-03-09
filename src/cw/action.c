@@ -298,6 +298,8 @@ cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_o
 	}
 */
 
+	//printf("Add %d %d\n",a->msg_id,a->elem_id);
+
 	struct outelem * o =  cw_actionlist_out_get_outelem(t,a->msg_id);
 
 
