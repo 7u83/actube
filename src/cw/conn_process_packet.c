@@ -179,14 +179,14 @@ static struct cw_actiondef * load_mods(struct conn *conn, uint8_t * rawmsg, int 
 				 int elems_len, struct sockaddr *from)
 {
 
-	struct mod_ac * cmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_CAPWAP);
+	struct mod_ac * cmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR, "Cant't find mod to handle connection from %s , discarding message",
 		       sock_addr2str_p(from));
 		return NULL;
 	}
 
-	struct mod_ac * bmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_BINDINGS);
+	struct mod_ac * bmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
 
 	cw_dbg(DBG_INFO,"Mods deteced: %s,%s",cmod->name,bmod->name);
 
