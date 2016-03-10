@@ -16,15 +16,18 @@ static struct cw_actiondef actions;
 
 extern int cisco_register_actions_ac(struct cw_actiondef *def);
 
-static int register_actions(struct cw_actiondef *actions)
+static int register_actions(struct cw_actiondef *actions,int mode)
 {
+	if (mode != MOD_MODE_CAPWAP)
+		return 0;
+
 	struct mod_ac *cmod = modload_ac("capwap");
 	if (!cmod) {
 		cw_log(LOG_ERR,
 		       "Can't initzialize mod_cisco, failed to load base mod mod_capwap");
 		return 1;
 	}
-	cmod->register_actions(actions);
+	cmod->register_actions(actions,MOD_MODE_CAPWAP);
 	int rc = cisco_register_actions_ac(actions);
 	cw_dbg(DBG_INFO, "Initialized mod cisco with %d actions", rc);
 	return 0;
@@ -45,7 +48,7 @@ static int init()
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
-	if (mode != MOD_DETECT_CAPWAP)
+	if (mode != MOD_MODE_CAPWAP)
 		return 0;
 
 

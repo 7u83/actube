@@ -14,7 +14,7 @@ struct cache_item
 
 static struct mavl * cache = NULL;
 
-static int mod_null_register_actions(struct cw_actiondef *def)
+static int mod_null_register_actions(struct cw_actiondef *def,int mode)
 {
 	return 0;
 }
@@ -73,11 +73,11 @@ struct cw_actiondef * mod_cache_add(struct mod_ac *c, struct mod_ac *b)
 	memset (i,0,sizeof(struct cache_item));
 	if (c){
 		i->capwap=c->name;
-		c->register_actions(&(i->actions));
+		c->register_actions(&(i->actions),MOD_MODE_CAPWAP);
 	}
 	if (b){
 		i->bindings=b->name;
-		b->register_actions(&(i->actions));
+		b->register_actions(&(i->actions),MOD_MODE_BINDINGS);
 	}
 
 	mavl_add(cache,i);

@@ -15,7 +15,7 @@ int cipwap_init()
 
 static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from, int mode)
 {
-	if (mode != MOD_DETECT_CAPWAP)
+	if (mode != MOD_MODE_CAPWAP)
 		return 0;
 
 	cw_dbg(DBG_MOD,"CIPWAP detected: no");

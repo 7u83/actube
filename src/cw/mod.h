@@ -31,8 +31,8 @@ struct cw_actiondef;
 #define MOD_MAXMODS 8
 
 enum {
-	MOD_DETECT_CAPWAP,
-	MOD_DETECT_BINDINGS
+	MOD_MODE_CAPWAP,
+	MOD_MODE_BINDINGS
 };
 
 struct mod_ac {
@@ -51,7 +51,7 @@ struct mod_ac {
 	void *data;
 
 	/** Register actions */
-	int (*register_actions) (struct cw_actiondef * def);
+	int (*register_actions) (struct cw_actiondef * def,int mode);
 };
 
 
