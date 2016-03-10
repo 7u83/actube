@@ -48,8 +48,6 @@ static int init()
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
-	if (mode != MOD_MODE_CAPWAP)
-		return 0;
 
 
 	int offset = cw_get_hdr_msg_offset(rawmsg);
