@@ -30,8 +30,9 @@
 static cw_action_in_t actions_in[] = {
 
 
-	/* ------------------------------------------------------------------------------- */
-	/* Message Discovery Request */
+	/* --------------------------------------------------------------------------
+	 * Discovery Request 
+	 */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
 		.msg_id = CW_MSG_DISCOVERY_REQUEST,
@@ -123,7 +124,7 @@ static cw_action_in_t actions_in[] = {
 
 
 
-	/* ---------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
 	 * Join Request 
 	 */
 	{
@@ -283,7 +284,7 @@ static cw_action_in_t actions_in[] = {
 
 
 
-	/* ---------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
 	 * Configuration Status Request 
 	 */
 	{
@@ -317,9 +318,19 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Vendor Specific Payload - Echo Request*/
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+	}
+	,
+	
 
-
-	/* Message: Change State Event Request  - in Config State */
+	/* --------------------------------------------------------------------------
+	 * Change State Event Request (in configure state)
+	 */
 	{
 		.capwap_state=CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
@@ -327,7 +338,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element: Result Code */
+	/* Result Code */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
@@ -340,7 +351,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element: Radio Poprational State */
+	/* Radio Poprational State */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
@@ -354,26 +365,36 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
-	/* ------------------------------------------------------------------------------- */
-	/* ECHO REQUEST Request */
+
+	/* --------------------------------------------------------------------------
+	 * Echo Request 
+	 */
 	{
 		.capwap_state = CW_STATE_RUN,
 		.msg_id = CW_MSG_ECHO_REQUEST,
 	}
 	,
 
-
+	/* Vendor Specific Payload - Echo Request*/
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_ECHO_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+	}
+	,
+	
 	/* End of list */
 	{0, 0}
 };
 
 static cw_action_out_t actions_out[]={
 
-	/* ---------------------------------------------------
+	/* --------------------------------------------------------------------------
 	 * Discovery Response Message
 	 */
 
-	/* Discovery Response AC Descriptor */
+	/* AC Descriptor - Discovery Response */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -383,7 +404,7 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-	/* Discovery Response Elem AC Name */
+	/* AC Name - Discovery Response */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
 		.elem_id = CW_ELEM_AC_NAME,
