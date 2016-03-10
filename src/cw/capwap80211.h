@@ -16,8 +16,8 @@
 
 #define CW80211IANA_ENTERPRISE_NUMBER		 13277
 
-#define CWMSG_80211_WLAN_CONFIGURATION_REQUEST	3398913
-#define CWMSG_80211_WLAN_CONFIGURATION_REPONSE	3398914
+#define CW_MSG80211_WLAN_CONFIGURATION_REQUEST	3398913
+#define CW_MSG80211_WLAN_CONFIGURATION_REPONSE	3398914
 
 /**
  *@defgroup Msg Elements
@@ -52,13 +52,16 @@ enum radioelems {
 	CW_ELEM80211_RSNA_ERROR_REPORT_FROM_STATION=1035,
    	/** IEEE 802.11 Station */
 	CW_ELEM80211_STATION=1036,
+   	/** IEEE 802.11 Station QoS Profile */
+	CW_ELEM80211_STATION_QOS_PROFILE=1037,
+  	/**  IEEE 802.11 Station Session Key */
+	CW_ELEM80211_STATIONN_SESSION_KEY=1038,
+   	/** IEEE 802.11 Statistics  */
+	CW_ELEM80211_STATISTICS=1039,
+	/** IEEE 802.11 Supported Rates */
+	CW_ELEM80211_SUPORTED_RATES=1040,
 
 /*   
-   IEEE 802.11 Station                                1036
-   IEEE 802.11 Station QoS Profile                    1037
-   IEEE 802.11 Station Session Key                    1038
-   IEEE 802.11 Statistics                             1039
-   IEEE 802.11 Supported Rates                        1040
    IEEE 802.11 Tx Power                               1041
    IEEE 802.11 Tx Power Level                         1042
    IEEE 802.11 Update Station QoS                     1043

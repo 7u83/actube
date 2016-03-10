@@ -131,6 +131,7 @@ CAPWAPOBJS= \
 	capwap_strings_vendor.o \
 	capwap_strings_elem.o \
 	cw_in_vendor_specific_payload.o \
+	cw_in_mtu_discovery_padding.o\
 	cw_in_wtp_board_data.o \
 	cw_in_check_disc_req.o \
 	cw_in_check_chng_state_evnt_req.o\
