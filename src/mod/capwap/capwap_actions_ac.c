@@ -107,10 +107,20 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-		.start = cw_in_vendor_specific_payload
+		.start = cw_in_vendor_specific_payload,
+		.min_len=7
 	}
 	,
 	
+	/* MTU Discovery Padding  */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_MTU_DISCOVERY_PADDING,
+	 	.start = cw_in_mtu_discovery_padding, 
+	}
+	,
+
 
 
 	/* ---------------------------------------------------------------------------
@@ -249,13 +259,13 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-
 	/* Vendor Specific Payload - Join Request*/
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-		.start = cw_in_vendor_specific_payload
+		.start = cw_in_vendor_specific_payload,
+		.min_len=7
 	}
 	,
 	

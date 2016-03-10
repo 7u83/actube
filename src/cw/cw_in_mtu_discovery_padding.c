@@ -17,24 +17,25 @@
 */
 
 
-#include "capwap.h"
-#include "cw_log.h"
+#include "cw.h"
+#include "dbg.h"
 
-int cw_readelem_mtu_discovery_padding(int type, uint8_t * msgelem, int len)
+
+int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a,
+				 uint8_t * data, int len,struct sockaddr *from)
+
 {
-	if (type != CWMSGELEM_MTU_DISCOVERY_PADDING)
-		return 0;
-	if (!cw_dbg_is_level(DBG_CW_RFC))
-		return 1;
-
 	int i, n = 0;
 	for (i = 0; i < len; i++) {
-		if (msgelem[i] != 0xff)
+		if (data[i] != 0xff)
 			n++;
 	}
-	if (n)
-		cw_dbg(DBG_CW_RFC,
-		       "MTU discovery padding msgelem contains %d non-0xFF byte(s) out of %d, See RFC 5415.",
+	if (n){
+		cw_dbg(DBG_RFC,
+		       "MTU discovery padding msg elem contains %d non-0xFF byte(s) out of %d, See RFC 5415.",
 		       n, len);
+		if (conn->strict_capwap)
+			return 0;
+	}
 	return 1;
 }
