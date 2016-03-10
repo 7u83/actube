@@ -18,6 +18,8 @@
 
 
 #include "cw/capwap.h"
+#include "cw/cipwap.h"
+
 #include "cw/action.h"
 #include "cw/capwap_items.h"
 #include "capwap_actions.h"
@@ -93,6 +95,47 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Local IPv4 Address - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_IPV4_IP_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
+	 	.start = cw_in_capwap_local_ipv4_address, 
+		.mand = 1,
+		.min_len = 4, 
+		.max_len = 4
+	}
+	,
+
+	/* Local IPv6 Address - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_IPV6_IP_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
+	 	.start = cw_in_capwap_local_ipv4_address, 
+		.mand = 1,
+		.min_len = 16, 
+		.max_len = 16
+	}
+	,
+
+	/* ECN Support - Join Request */
+	{
+		/* Cisco (using draft 7) does nothing know 
+		 * about ECN support, so make it non-mandatory */
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT,
+	 	.start = cw_in_generic2, 
+		.mand = 0, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
 
 
 		
@@ -162,7 +205,7 @@ int cisco_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_actionlist_out_register_actions(def->out, actions_out);
 
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
-	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
+	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
 	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
