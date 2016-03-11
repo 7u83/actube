@@ -22,10 +22,10 @@
 
 #include "cw/action.h"
 #include "cw/capwap_items.h"
-#include "capwap_actions.h"
 #include "cw/strheap.h"
 #include "cw/radio.h"
 #include "cw/capwap_cisco.h"
+#include "cw/capwap80211.h"
 
 #include "mod_cisco.h"
 #include "cisco.h"
@@ -33,7 +33,10 @@
 static cw_action_in_t actions_in[] = {
 
 
-	/* ------------------------------------------------------------------------------- */
+	/* --------------------------------------------------------
+	 * Discovery Resquest 
+	 */
+
 	/* Message Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
@@ -67,11 +70,15 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* ----------------------------------
-	 * Join Request
+
+
+
+
+	/* --------------------------------------------------------
+	 * Discovery Resquest 
 	 */
 
-	/* Element WTP Descriptor - Join Request */
+	/* WTP Descriptor - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
@@ -82,8 +89,9 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element Session ID - Join Request */
+	/* Session ID - Join Request */
 	{
+		/* Cisco uses 4 byte session ids */
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_SESSION_ID,
@@ -137,6 +145,24 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
+	/* --------------------------------------------------------
+	 * Configuration Status Request 
+	 */
+
+	/* AC Name - Config Status Request */	
+	{
+		/* We have to deal with zero-length strings */
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME,
+		.start = cw_in_generic2,
+		.min_len = 0,
+		.max_len = 512,
+		.mand = 1
+
+	}
+	,
 
 		
 
@@ -179,6 +205,29 @@ static cw_action_out_t actions_out[]={
 
 };
 
+static cw_action_in_t actions80211_in[] = {
+	/* --------------------------------------------------------
+	 * Discovery Resquest 
+	 */
+
+	/* 802.11 Radio Inmformation - Discovery Request */
+	{
+		/* Cisco doe't sned this message element in discovery request,
+		   so make it non-mandatory */
+
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.item_id = "radio_information",
+	 	.start = cw_in_radio_generic, 
+		.mand = 0, 
+		.min_len = 5, 
+		.max_len = 5
+	}
+	,
+
+
+};
 
 
 #include "cw/item.h"
@@ -216,3 +265,28 @@ int cisco_register_actions_ac(struct cw_actiondef *def)
 
 	return rc;
 }
+
+
+
+int cisco_register_actions80211_ac(struct cw_actiondef *def)
+{
+
+	int rc;
+	rc=0;
+	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
+/*	rc += cw_actionlist_out_register_actions(def->out, actions_out);
+
+	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
+	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
+
+	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
+
+	intavltree_add(def->wbids, 0);
+*/
+
+
+	return rc;
+}
+
+

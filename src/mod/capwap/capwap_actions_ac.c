@@ -338,7 +338,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Result Code */
+	/* Result Code - Change State Event Req */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
@@ -351,7 +351,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Radio Poprational State */
+	/* Radio Poprational State - Change State Event Req */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
@@ -363,6 +363,18 @@ static cw_action_in_t actions_in[] = {
 		.mand = 0
 	}
 	,
+
+
+	/* Vendor Specific Payload - Change State Req*/
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+		.min_len=7
+	}
+	,
+	
 
 
 
