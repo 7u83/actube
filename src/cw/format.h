@@ -25,7 +25,7 @@
 #ifndef __CW_FORMAT_H
 #define __CW_FORMAT_H
 
-#include "capwap.h"
+#include "cw.h"
 
 
 extern int cw_format_hex_bytes(char *dst, const char *format, const char *delim,

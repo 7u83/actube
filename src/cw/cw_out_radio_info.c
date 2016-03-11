@@ -1,5 +1,5 @@
 
-#include "capwap.h"
+#include "cw.h"
 #include "capwap_items.h"
 #include "capwap80211.h"
 #include "radio.h"

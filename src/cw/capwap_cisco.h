@@ -28,7 +28,7 @@
 #include <time.h>
 
 #include "lwapp.h"
-#include "capwap.h"
+#include "cw.h"
 
 #define CW_CISCO_MWAR_ADDR			LW_ELEM_AC_ADDRESS			/* 2 */
 #define CW_CISCO_RAD				3

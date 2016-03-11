@@ -1,7 +1,7 @@
 
 #include "log.h"
 
-#include "capwap.h"
+#include "cw.h"
 #include "aciplist.h"
 #include "sock.h"
 

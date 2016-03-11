@@ -17,7 +17,7 @@
 */
 
 
-#include "cw/capwap.h"
+#include "cw/cw.h"
 #include "cw/action.h"
 #include "cw/capwap_items.h"
 #include "cw/strheap.h"

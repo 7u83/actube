@@ -443,10 +443,10 @@ static inline mavl_t mbag_get_mbag_c(mbag_t s, const char *id,
 
 
 
-static inline int mbag_inc_word(mbag_t s, const char * id)
+static inline int mbag_inc_word(mbag_t s, const char * id,int n)
 {
 	uint16_t w = mbag_get_word(s,id,0);
-	mbag_set_word(s,id,w+1);
+	mbag_set_word(s,id,w+n);
 	return 1;
 }
 

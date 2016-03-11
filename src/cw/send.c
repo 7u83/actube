@@ -1,7 +1,7 @@
 #include <errno.h>
 
 #include "conn.h"
-#include "capwap.h"
+#include "cw.h"
 #include "log.h"
 #include "dbg.h"
 #include "sock.h"

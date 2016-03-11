@@ -21,7 +21,7 @@
  * @brief implementation of cw_put_msg.
  */ 
 
-#include "capwap.h"
+#include "cw.h"
 #include "capwap_items.h"
 #include "conn.h"
 
@@ -73,6 +73,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		cw_action_out_t *ae=(cw_action_out_t*)e->data;
 
 		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
+		printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);
 		DBGX("Elem ID %s",ae->item_id);
 		if ( ae->item_id ) {
 			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
@@ -84,7 +85,12 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		}
 		if (ae->out) {
 			int l=0;
+
+			printf("Out Call with len =%d\n",len);
+
 			l= ae->out(conn, ae, dst+len); 
+
+			printf("Returned len = %d\n",l);
 
 
 			len +=l;

@@ -240,6 +240,9 @@ static int cw_run_discovery(struct conn *conn, const char *acaddr)
 int discovery()
 {
 	struct conn *conn = get_conn();
+
+	printf("Raqddios = %d\n",conn->radios->count);
+
 	cw_run_discovery(conn, "255.255.255.255");
 	conn->capwap_state=CW_STATE_JOIN;
 	return 1;

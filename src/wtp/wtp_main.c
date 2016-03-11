@@ -69,22 +69,23 @@ void update_reboot_stats(struct conn * conn, int cause)
 
 
 	mbag_t rs = mbag_get_mbag(conn->config,CW_ITEM_WTP_REBOOT_STATISTICS,NULL);
-	uint16_t rv;
 
-	printf("Loaded mbag %p\n",rs);
 	switch (cause){
 		case CW_REBOOT_TYPE_NOT_SUPPORTED:
 			break;
 		case CW_REBOOT_TYPE_AC_INITIATED:
-			mbag_inc_word(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT);
+			mbag_inc_word(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT,1);
 			break;
 		case CW_REBOOT_TYPE_OTHER_FAILURE:
-			mbag_inc_word(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT);
+			mbag_inc_word(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT,1);
 			break;
 			
 		
 
 	}
+
+	mbag_inc_word(rs,CW_ITEM_REBOOT_COUNT,1);
+	mbag_set_byte(rs,CW_ITEM_REBOOT_LAST_FAILURE_TYPE,cause);
 	cfg_to_json();
 }
 
@@ -92,7 +93,6 @@ void update_reboot_stats(struct conn * conn, int cause)
 static void sig_handler(int sig)
 {
 	struct conn * conn = the_conn; //get_conn();
-	printf("Ctrl+C pressed, updating reboot statistics for %p\n",conn);	
 
 	update_reboot_stats(conn, CW_REBOOT_TYPE_OTHER_FAILURE);
 	exit(0);
@@ -206,8 +206,6 @@ int main()
 
 	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
 
-	mbag_t reboot_statistics = mbag_create();
-	mbag_set_mbag(conn->config, CW_ITEM_WTP_REBOOT_STATISTICS,reboot_statistics);
 
 
 
@@ -245,7 +243,7 @@ int main()
 	if (!join())
 		return -1;
 
-	mavl_destroy(conn->incomming);
+//	mavl_del_all(conn->incomming);
 	conn->incomming = conn->config;
 	if (!configure())
 		return -1;
