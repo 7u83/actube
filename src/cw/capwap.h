@@ -449,6 +449,17 @@ extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elem
 #define CW_VENDOR_ID_FORTINET	12356
 
 
+enum cw_reboot_failure_types {
+	CW_REBOOT_FAILURE_TYPE_NOT_SUPPORTED=0,
+	CW_REBOOT_FAILURE_TYPE_AC_INITIATED=1,
+	CW_REBOOT_FAILURE_TYPE_LINK_FAILURE=2,
+	CW_REBOOT_FAILURE_TYPE_SOFTWARE_FAILURE=3,
+	CW_REBOOT_FAILURE_TYPE_HARDWARE_FAILURE=4,
+	CW_REBOOT_FAILURE_TYPE_OTHER_FAILURE=5,
+	CW_REBOOT_FAILURE_ONKNOWN
+
+};
+
 
 #define CW_RESULT_SUCCESS					0
 #define CW_RESULT_MISSING_AC_LIST				1
@@ -1064,6 +1075,7 @@ int cw_radio_set_admin_state(mbag_t radios,int rid, int state,int cause);
 
 int cw_in_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
+
 
 
 
