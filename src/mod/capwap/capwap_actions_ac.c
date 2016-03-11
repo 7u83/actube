@@ -20,7 +20,6 @@
 #include "cw/capwap.h"
 #include "cw/action.h"
 #include "cw/capwap_items.h"
-#include "capwap_actions.h"
 #include "cw/strheap.h"
 #include "cw/radio.h"
 
