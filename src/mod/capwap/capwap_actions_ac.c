@@ -331,6 +331,36 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Statistics Timer  - Config Status Request */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_STATISTICS_TIMER,
+		.item_id = CW_ITEM_STATISTICS_TIMER,
+		.start = cw_in_generic2,
+		.min_len = 2,
+		.max_len = 2,
+		.mand = 1
+
+	}
+	,
+
+
+	/* WTP Reboot Statistics - Config Status Request */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+	 	.start = cw_in_wtp_reboot_statistics, 
+		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
+		.min_len = 15, 
+		.max_len = 15,
+		.mand =1
+	}
+	,
+
+
+
 	/* Vendor Specific Payload - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
@@ -364,7 +394,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Radio Poprational State - Change State Event Req */
+	/* Radio Operational State - Change State Event Req */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
