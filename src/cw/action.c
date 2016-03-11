@@ -203,7 +203,7 @@ static int mout_cmp(void *elem1,void *elem2)
 	if (r )
 		return r;
 
-	if (e1->item_id == e1->item_id)
+	if (e1->item_id == e2->item_id)
 		return 0;
 
 	if (e1->item_id && e2->item_id)
