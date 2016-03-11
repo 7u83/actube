@@ -205,23 +205,23 @@ static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
 
 
 
-static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
+static inline int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 {
-	if (!rmac){
-		cw_set_hdr_flags(th,CW_FLAG_HDR_M,0);
+	if (!rmac) {
+		cw_set_hdr_flags(th, CW_FLAG_HDR_M, 0);
 		cw_set_hdr_hlen(th, 2);
 		return 0;
 	}
 	int rmac_len = bstr_len(rmac);
-	memcpy(cw_get_hdr_rmac(th),rmac,rmac_len+1);
-	cw_set_hdr_flags(th,CW_FLAG_HDR_M,1);
+	memcpy(cw_get_hdr_rmac(th), rmac, rmac_len + 1);
+	cw_set_hdr_flags(th, CW_FLAG_HDR_M, 1);
 
-	int hlen =  4+rmac_len/4;
-	
-	if (rmac_len %4 != 0) {
+	int hlen = 4 + rmac_len / 4;
+
+	if (rmac_len % 4 != 0) {
 		hlen++;
 	}
-	cw_set_hdr_hlen(th,hlen);
+	cw_set_hdr_hlen(th, hlen);
 	return 1;
 }
 
@@ -307,7 +307,7 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 
 #define cw_put_sockaddr lw_put_sockaddr
 
-int cw_put_image_data(uint8_t *dst,FILE *infile);
+int cw_put_image_data(uint8_t * dst, FILE * infile);
 
 /**
  * Add a message element to a buffer
@@ -387,10 +387,10 @@ extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
 				    uint8_t * data, int len, struct sockaddr *from);
 
 extern int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a,
-				    uint8_t * data, int len, struct sockaddr *from);
+				   uint8_t * data, int len, struct sockaddr *from);
 
 extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from);
+				       uint8_t * data, int len, struct sockaddr *from);
 
 
 
@@ -398,6 +398,13 @@ extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a
  * @defgroup CWELEMIN Input Handlers for Message Elements
  * @{
  */
+extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len, struct sockaddr *from);
+
+
+extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len, struct sockaddr *from);
+
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len, struct sockaddr *from);
 
@@ -406,13 +413,15 @@ extern int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_i
 					   struct sockaddr *from);
 
 extern int cw_in_capwap_local_ipv4_address(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from);
+					   uint8_t * data, int len,
+					   struct sockaddr *from);
 
 extern int cw_in_capwap_local_ipv6_address(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from);
+					   uint8_t * data, int len,
+					   struct sockaddr *from);
 
-extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			int len, struct sockaddr *from);
+extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in *a,
+					 uint8_t * data, int len, struct sockaddr *from);
 
 
 /**
@@ -426,6 +435,9 @@ extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in 
  */
 extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action,
 					  uint8_t * dst);
+extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
+					uint8_t * dst);
+
 /**
  * @}
  */

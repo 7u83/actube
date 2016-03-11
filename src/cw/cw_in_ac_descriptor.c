@@ -64,7 +64,7 @@ static int read_subeelms(struct conn *conn,struct cw_action_in * a,uint8_t *data
 		uint32_t vendor_id = cw_get_dword(data+sub);
 		int sublen = cw_get_word(data+sub+6);
 		int subtype = cw_get_word(data+sub+4);
-printf("substart : %d\n",sub);
+//printf("substart : %d\n",sub);
 
 		bstrv_t vstr=NULL;
 		switch (subtype){
