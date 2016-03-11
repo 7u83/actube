@@ -329,8 +329,18 @@ static cw_action_out_t actions_out[] = {
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 
 		.out = cw_out_capwap_local_ip_address,
-	//	.get = cw_out_get_config,
 		.mand = 1
+	}
+	,
+
+	/* WTP Reboot Statistics - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
+		.out = cw_out_wtp_reboot_statistics,
+		.get = cw_out_get_config,
+		.mand = 0
 	}
 	,
 

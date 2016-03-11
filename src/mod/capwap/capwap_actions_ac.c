@@ -281,6 +281,18 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* WTP Reboot Statistics - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+	 	.start = cw_in_wtp_reboot_statistics, 
+		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
+		.min_len = 15, 
+		.max_len = 15
+	}
+	,
+
 
 
 	/* --------------------------------------------------------------------------
