@@ -293,6 +293,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* AC Name - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
@@ -306,6 +307,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/*  Radio Admin State - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
@@ -317,7 +319,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Vendor Specific Payload - Echo Request*/
+	/* Vendor Specific Payload - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 

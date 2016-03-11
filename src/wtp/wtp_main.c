@@ -60,9 +60,50 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 const char *t = CW_ITEM_WTP_NAME;
 
+#include <signal.h>
+
+
+
+void update_reboot_stats(struct conn * conn, int cause)
+{
+
+
+	mbag_t rs = mbag_get_mbag(conn->config,CW_ITEM_WTP_REBOOT_STATISTICS,NULL);
+	uint16_t rv;
+
+	printf("Loaded mbag %p\n",rs);
+	switch (cause){
+		case CW_REBOOT_TYPE_NOT_SUPPORTED:
+			break;
+		case CW_REBOOT_TYPE_AC_INITIATED:
+			mbag_inc_word(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT);
+			break;
+		case CW_REBOOT_TYPE_OTHER_FAILURE:
+			mbag_inc_word(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT);
+			break;
+			
+		
+
+	}
+	cfg_to_json();
+}
+
+
+static void sig_handler(int sig)
+{
+	struct conn * conn = the_conn; //get_conn();
+	printf("Ctrl+C pressed, updating reboot statistics for %p\n",conn);	
+
+	update_reboot_stats(conn, CW_REBOOT_TYPE_OTHER_FAILURE);
+	exit(0);
+}
+
 
 int main()
 {
+	signal (SIGINT, sig_handler);
+
+
 
 	wtpconf_preinit();
 
@@ -164,6 +205,10 @@ int main()
 
 
 	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
+
+	mbag_t reboot_statistics = mbag_create();
+	mbag_set_mbag(conn->config, CW_ITEM_WTP_REBOOT_STATISTICS,reboot_statistics);
+
 
 
 //      mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION, sw);

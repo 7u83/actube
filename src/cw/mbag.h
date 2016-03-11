@@ -177,6 +177,7 @@ static inline int mbag_set_word(mbag_t s, const char *id, uint16_t word)
 
 
 
+
 static inline struct mbag_item * mbag_set_dword(mbag_t s, const char *id, uint32_t dword)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
@@ -439,6 +440,17 @@ static inline mavl_t mbag_get_mbag_c(mbag_t s, const char *id,
 	mbag_set_mbag(s, id, avltree);
 	return avltree;
 }
+
+
+
+static inline int mbag_inc_word(mbag_t s, const char * id)
+{
+	uint16_t w = mbag_get_word(s,id,0);
+	mbag_set_word(s,id,w+1);
+	return 1;
+}
+
+
 
 static inline mavl_t mbag_i_get_mbag_c(mbag_t s, uint32_t iid,
 							 mavl_t (creator) ())

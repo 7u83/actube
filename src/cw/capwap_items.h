@@ -173,6 +173,15 @@ extern const char CW_ITEM_RADIO_INFOS[];
 extern const char CW_ITEM_ECN_SUPPORT[];
 
 
+#define CW_ITEM_REBOOT_COUNT "reboot_count"
+#define CW_ITEM_REBOOT_AC_INITIATED_COUNT "ac_initiated"
+#define CW_ITEM_REBOOT_LINK_FAILURE_COUNT "link_failure"
+#define CW_ITEM_REBOOT_SW_FAILURE_COUNT "sw_failure"
+#define CW_ITEM_REBOOT_HW_FAILURE_COUNT "hw_failure"
+#define CW_ITEM_REBOOT_OTHER_FAILURE_COUNT "other_failure"
+#define CW_ITEM_REBOOT_UNKNOWN_FAILURE_COUNT "unknown_failure"
+#define CW_ITEM_REBOOT_LAST_FAILURE_TYPE "last_failure"
+
 
 
 extern struct cw_itemdef capwap_itemdefs[];
