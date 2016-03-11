@@ -46,6 +46,7 @@ int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a, uin
 	uint8_t *d = dst + 4;
 	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_COUNT,0));
 	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT,0));
+	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_LINK_FAILURE_COUNT,0));
 	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_SW_FAILURE_COUNT,0));
 	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_HW_FAILURE_COUNT,0));
 	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT,0));
