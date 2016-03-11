@@ -3,11 +3,12 @@
 
 #include "mbag.h"
 #include "capwap_items.h"
-#include "capwap.h"
+#include "cw.h"
 
 
 int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
+
 	mbag_t board_data =
 	    mbag_get_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA,NULL);
 

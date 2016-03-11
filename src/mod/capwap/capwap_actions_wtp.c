@@ -1,4 +1,4 @@
-#include "cw/capwap.h"
+#include "cw/cw.h"
 #include "cw/action.h"
 #include "cw/capwap_items.h"
 
@@ -215,11 +215,10 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.out = cw_out_wtp_board_data,
-		.get = cw_out_get_outgoing,
+	//	.get = cw_out_get_config,
 		.mand = 1
 	}
 	,
-
 
 	/* WTP Descriptor */
 	{
@@ -227,7 +226,7 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = capwap_out_wtp_descriptor,
-		//.get = cw_out_get_outgoing,
+		//.get = cw_out_get_config,
 		.mand = 1
 	}
 

@@ -9,6 +9,7 @@
 #include "action.h"
 
 #include "lw.h"
+#include "capwap.h"
 
 /**
  * @defgroup CW CW
@@ -66,6 +67,280 @@
 
 
 
+
+
+/** 
+ * Macro to isolate bits from a dword 
+ * @param src dword to isolate bits from
+ * @param start start position
+ * @len number of bits
+ */
+#define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
+
+/* macros to acces transport header values */
+
+#define cw_get_hdr_preamble(th) (th[0])
+#define cw_get_hdr_fragid(th) ((ntohl((((uint32_t*)th)[1]) >> 16) & 0xffff))
+#define cw_get_hdr_fragoffset(th) ((ntohl((((uint32_t*)th)[1]) >> 3) & 0x1fff))
+#define cw_get_hdr_rid(th) ((ntohl((((uint32_t*)th)[0]) >> 14) & 0x1f))
+#define cw_get_hdr_wbid(th) ((ntohl(((uint32_t*)th)[0]) >> 9) & 0x1f)
+#define cw_get_hdr_hlen(th) ((ntohl(((uint32_t*)th)[0]) >> 19) & 0x1f)
+
+#define cw_get_hdr_rmac(th) (th+8)
+#define cw_get_hdr_rmac_len(th) (*(th+8))
+#define cw_get_hdr_rmac_size(th) cw_get_hdr_rmac_len(th)
+#define cw_get_hdr_rmac_data(th) (th+9)
+
+#define cw_get_hdr_flag_r1(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_R1 ) ? 1:0)
+#define cw_get_hdr_flag_r2(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_R2 ) ? 1:0)
+#define cw_get_hdr_flag_r3(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_R3 ) ? 1:0)
+
+#define cw_get_hdr_flag_k(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_K ) ? 1:0)
+#define cw_get_hdr_flag_m(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_M ) ? 1:0)
+#define cw_get_hdr_flag_w(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_W ) ? 1:0)
+#define cw_get_hdr_flag_l(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_L ) ? 1:0)
+#define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_F ) ? 1:0)
+#define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CWTH_FLAGS_T ) ? 1:0)
+
+#define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
+#define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
+
+#define cw_set_hdr_preamble(th,v) ((*th)=v)
+
+
+
+
+/**
+ * Set the HLEN field of a CAWAP Header
+ * @param th pointer to the header
+ * @param hlen value to set (Header Length)
+ */
+static inline void cw_set_hdr_hlen(uint8_t * th, int hlen)
+{
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 19) ^ 0xffffffff;
+	d |= ((hlen) & 0x1f) << 19;
+	cw_set_dword(th, d);
+}
+
+/**
+ * Set the WBID field of a CAWAP Header
+ * @param th pointer to the header
+ * @param wbid value to set (Wireless ID)
+ */
+static inline void cw_set_hdr_wbid(uint8_t * th, int wbid)
+{
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 9) ^ 0xffffffff;
+	d |= ((wbid) & 0x1f) << 9;
+	cw_set_dword(th, d);
+}
+
+/**
+ * Set the RID field of a CAWAP Header
+ * @param th pointer to the header
+ * @param rid value to set (Radio ID)
+ */
+static inline void cw_set_hdr_rid(uint8_t * th, int rid)
+{
+	uint32_t d = cw_get_dword(th);
+	d &= (0x1f << 14) ^ 0xffffffff;
+	d |= ((rid) & 0x1f) << 14;
+	cw_set_dword(th, d);
+}
+
+
+
+
+/**
+ * Set CAPWAP header flags
+ * @param th pointer to header
+ * @param flags list of flags to set or unset
+ * @param set 1=set flag, 0=unset flag
+ */
+#define cw_set_hdr_flags(th,flags,set) \
+	( set ? ((*((uint32_t*)th)) |= htonl(flags)) : ((*((uint32_t*)th)) &= (0xffffffff^htonl(flags))) )
+
+#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CW_FLAG_HDR_F)
+
+
+
+/* Macros for message headers */
+
+#define cw_get_msg_id(msgptr) (cw_get_dword(msgptr))
+#define cw_get_msg_type(msgptr) cw_get_msg_id(msgptr)
+
+#define cw_get_msg_seqnum(msgptr) cw_get_byte( (msgptr) +4 )
+#define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
+#define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
+
+
+#define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
+#define cw_set_msg_type(msgptr,t) cw_set_msg_id(msgptr,t)
+#define cw_set_msg_seqnum(msgptr,s) cw_put_byte( (msgptr) +4,s);
+#define cw_set_msg_elems_len(msgptr,n) (cw_put_word((msgptr)+5,((n)+3)))
+
+#define cw_set_msg_flags(msgptr,f) (cw_put_byte( (msgptr)+7,f))
+
+static inline uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m)
+{
+	return cw_get_msg_elems_ptr(m + cw_get_hdr_msg_offset(m));
+}
+
+static inline uint8_t *cw_get_hdr_msg_ptr(uint8_t * rawmsg)
+{
+	return rawmsg + cw_get_hdr_msg_offset(rawmsg);
+}
+
+#define cw_get_hdr_msg_id(ptr)\
+	cw_get_msg_id(cw_get_hdr_msg_ptr(ptr))
+#define cw_get_hdr_msg_type cw_get_hdr_msg_id
+
+static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
+{
+
+	int offset = cw_get_hdr_msg_offset(rawmsg);
+	return offset + cw_get_msg_elems_len(rawmsg + offset) + 8;
+}
+
+
+
+static inline int cw_set_hdr_rmac(uint8_t * th,bstr_t rmac)
+{
+	if (!rmac){
+		cw_set_hdr_flags(th,CW_FLAG_HDR_M,0);
+		cw_set_hdr_hlen(th, 2);
+		return 0;
+	}
+	int rmac_len = bstr_len(rmac);
+	memcpy(cw_get_hdr_rmac(th),rmac,rmac_len+1);
+	cw_set_hdr_flags(th,CW_FLAG_HDR_M,1);
+
+	int hlen =  4+rmac_len/4;
+	
+	if (rmac_len %4 != 0) {
+		hlen++;
+	}
+	cw_set_hdr_hlen(th,hlen);
+	return 1;
+}
+
+
+
+
+
+/**
+ * Get length of a CAPWAP message elemet 
+ * @param e pointer to element (uint8_t*)
+ * @return length of element
+ */
+#define cw_get_elem_type(e) cw_get_word(e)
+
+/**
+ * Alias for #cw_get_elem_type
+ */
+#define cw_get_elem_id(e) cw_get_elem_type(e)
+
+/**
+ * Get type of a CAPWAP message element
+ * @pram e pointer to element (uint8_t*)
+ * @return type of element
+ */
+#define cw_get_elem_len(e) cw_get_word((e)+2)
+
+/**
+ * Get a pointer to the data of a CAPWAP message element 
+ * @param e pointer to message element 
+ * @return pointer to data
+ */
+#define cw_get_elem_data(e) ((e)+4)
+
+/** 
+ * Iterate through message elements of a CAPWAP message
+ * @param i iterator witch points to the current element (uint8_t*)
+ * @param elems pointer to message elements (uint8_t*)
+ * @param len length of message element buffer
+ * 
+ * You can use this macro like a for loop.
+ * 
+ * uint8_t * i
+ * cw_foreach_elem(i,elem,len){
+ *   ...
+ *   print_message(i);
+ *   ...
+ * }
+ */
+#define cw_foreach_elem(i,elems,len) for(i=elems; i<elems+len; i=i+4+cw_get_elem_len(i))
+
+
+/**
+ * Put a message element header to buffer
+ * @param dst pointer to buffer (uint8_t)
+ * @param type tpe of message element
+ * @param len length of message element data
+ * @return the number bytes put (always 4)
+ */
+
+#define cw_put_elem_hdr(dst,type,len) \
+	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
+
+
+/** 
+ * Put a message element header for a message to contain a vendor specific payload
+ * @param dst pointer to destination buffer
+ * @param vendorid vendorid
+ * @param elemid element id of vendor specific data
+ * @len length of vendor specific data 
+ * @return the number of bytes put (always 10)
+ */
+static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
+					 uint16_t elemid, uint16_t len)
+{
+
+	cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
+	cw_put_dword(dst + 4, vendorid);
+	cw_put_word(dst + 8, elemid);
+	return 10;
+}
+
+
+
+#define cw_put_sockaddr lw_put_sockaddr
+
+int cw_put_image_data(uint8_t *dst,FILE *infile);
+
+/**
+ * Add a message element to a buffer
+ * @param dst pointer to buffer
+ * @type message element type
+ * @data pointer to data
+ * @length of message element 
+ * @return the number of bytes put
+ */
+static inline int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len)
+{
+	int l = cw_put_elem_hdr(dst, type, len);
+	return l + cw_put_data(dst + l, data, len);
+}
+
+
+static inline int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr)
+{
+	return cw_addelem(dst, type, bstr_data(bstr), bstr_len(bstr));
+}
+
+
+static inline int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
+{
+	cw_put_dword(dst + 4, code);
+	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
+}
+
+
+
+
+
+
 static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 {
 	uint8_t *d = dst;
@@ -74,6 +349,29 @@ static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
 	return d - dst;
 }
+
+
+
+/**
+ * Put an cw_ac_stauts structure to a buffer
+ * @param dst destination buffer
+ * @param s #cw_ac_status to put
+ * @return number of bytes put
+ * This function is only useful (used) in conjunction with 
+ * putting AC Descriptor message elements.
+ */
+static inline int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s)
+{
+	uint8_t *d = dst;
+
+	d += cw_put_dword(d, (s->stations << 16) | (s->limit));
+	d += cw_put_dword(d, (s->active_wtps << 16) | (s->max_wtps));
+	d += cw_put_dword(d,
+			  (s->security << 24) | (s->rmac_field << 16) | (s->dtls_policy));
+	return d - dst;
+}
+
+
 
 
 extern int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
@@ -132,33 +430,6 @@ extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_ou
  * @}
  */
 
-
-/**
- *@defgroup CAPWAP CAPWAP
- *@{
- */
-
-/**
- * CAWAP States
- */
-enum capwap_states {
-	CW_STATE_NONE = 0,
-	/** Discovery State */
-	CW_STATE_DISCOVERY,
-	/** Join State */
-	CW_STATE_JOIN,
-	/** Config State */
-	CW_STATE_CONFIGURE,
-	/** Image Data Upload */
-	CW_STATE_IMAGE_DATA,
-	CW_STATE_UPDATE,
-	/** Run State */
-	CW_STATE_RUN
-};
-
-/**
- *@}
- */
 
 
 

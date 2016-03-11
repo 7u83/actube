@@ -31,6 +31,10 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 	// XXX Dummy WTP Descriptor Header
 	uint8_t *d = dst+4;
 
+
+int n =conn->radios->count;
+printf("radio count %d\n",n);
+
 	d+=cw_put_byte(d,conn->radios->count);	//max radios
 	d+=cw_put_byte(d,2);	//radios in use
 

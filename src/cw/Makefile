@@ -116,11 +116,11 @@ LWAPPCISCOOBJS = \
 # cw_tohex.o\
 #capwap_parse_ctrlhdr.o \
 
+#	   hdr_print.o \
 
 CAPWAPOBJS= \
 	   aciplist.o \
 	   lwmsg_init.o \
-	   hdr_print.o \
 	cw_cisco_id_to_str.o\
 	cw_strlist_get_str.o \
 	cw_strlist_get_id.o \
@@ -147,6 +147,7 @@ CAPWAPOBJS= \
 	cw_in_check_generic_req.o \
 	cw_out_generic.o \
 	cw_out_wtp_descriptor.o \
+	cw_out_wtp_reboot_statistics.o \
 	cw_in_cisco_image_identifier.o\
 	cw_out_radio_operational_state.o\
 	cw_in_ac_descriptor.o\
@@ -233,10 +234,10 @@ FRAGOBJS=fragman.o
 #	cw_in_wtp_descriptor.o \
 #	capwap_80211_actions_wtp.o \
 #	capwap_80211_actions_ac.o \
+#	capwap_actions_ac.o \
+	#capwap_actions_wtp.o \
 
 CWACTION=action.o \
-	capwap_actions_ac.o \
-	capwap_actions_wtp.o \
 	cw_in_generic.o \
 	cw_in_generic2.o \
 	cw_out_wtp_board_data.o \

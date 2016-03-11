@@ -17,7 +17,7 @@ int cw_read_wtp_descriptor_7(mbag_t mbag, struct conn *conn,
 	int pos = 2;
 
 	/* Encryption element, for now dumy XXX */
-	cw_get_word(data + pos + 2);
+	//cw_get_word(data + pos + 2);
 	pos += 2;
 
 	return cw_read_wtp_descriptor_versions(mbag, data + pos, len - pos);

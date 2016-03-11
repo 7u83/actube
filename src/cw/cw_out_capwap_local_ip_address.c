@@ -27,12 +27,11 @@
 #include <arpa/inet.h>
 
 #include <string.h>
-#include "capwap.h"
+#include "cw.h"
 #include "capwap_items.h"
 
 #include "dbg.h"
 #include "log.h"
-#include "capwap.h"
 #include "conn.h"
 
 

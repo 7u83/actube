@@ -3,7 +3,7 @@
 #include "dbg.h"
 #include "log.h"
 #include "mbag.h"
-#include "capwap.h"
+#include "cw.h"
 
 
 int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,

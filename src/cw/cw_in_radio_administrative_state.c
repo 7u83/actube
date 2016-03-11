@@ -3,7 +3,7 @@
 #include "dbg.h"
 #include "log.h"
 #include "mbag.h"
-#include "capwap.h"
+#include "cw.h"
 #include "radio.h"
 
 

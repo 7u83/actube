@@ -3,7 +3,7 @@
 
 #include "cw/mbag.h"
 #include "cw/capwap_items.h"
-#include "cw/capwap.h"
+#include "cw/cw.h"
 
 
 int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 

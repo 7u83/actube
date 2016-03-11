@@ -1,5 +1,5 @@
 
-#include "cw/capwap.h"
+#include "cw/cw.h"
 #include "cw/mod.h"
 #include "cw/log.h"
 #include "cw/dbg.h"

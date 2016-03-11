@@ -25,6 +25,8 @@ CFLAGS += -O0 -Wall -Wno-unused-variable -Werror -g
 LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH) 
 
 
+CONFOBJS = wtp_conf.o
+
 LIBS+=-lcapwap
 LIBS+=-lcapwap80211
 LIBS+=-lcisco
@@ -33,7 +35,7 @@ LIBS+=-lnl-3
 LIBS+=-lnl-genl-3
 LIBS+=-ljsmn
 
-CONFOBJS = wtp_conf.o
+
 
 ifeq ($(CONF_LIBRARY),UCI)
 CFLAGS+=-DWITH_UCI
@@ -60,7 +62,6 @@ CFLAGS+=$(OPESSL_CFLAGS)
 LDFLAGS+=$(OPENSSL_LDFLAGS)
 LIBS+=$(OPENSSL_LIBS)
 endif
-
 
 
 

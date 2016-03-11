@@ -4,7 +4,7 @@
 #include "cw/dbg.h"
 
 #include "cw/action.h"
-#include "cw/capwap.h"
+#include "cw/cw.h"
 
 #include "mod_capwap80211.h"
 
