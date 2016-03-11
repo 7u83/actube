@@ -61,6 +61,23 @@ int setup_conf(struct conn *  conn)
 
 	mbag_set_byte(conn->config,CW_ITEM_ECN_SUPPORT,get_ecn_support());
 
+	n = mbag_get(conn->config,CW_ITEM_WTP_REBOOT_STATISTICS);
+	if (!n){
+		mbag_t rs =mbag_create();
+		mbag_set_mbag(conn->config, CW_ITEM_WTP_REBOOT_STATISTICS,rs);
+
+
+		mbag_set_dword(rs,CW_ITEM_REBOOT_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_LINK_FAILURE_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_SW_FAILURE_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_HW_FAILURE_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_UNKNOWN_FAILURE_COUNT,0);
+		mbag_set_dword(rs,CW_ITEM_REBOOT_LAST_FAILURE_TYPE, CW_REBOOT_TYPE_NOT_SUPPORTED);
+	}
+
+
 
 	return 0;
 }
