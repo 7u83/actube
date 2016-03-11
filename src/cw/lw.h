@@ -44,9 +44,15 @@
 #define lw_put_dword(dst,dw)\
 	(*((uint32_t*)(dst)) = htonl(dw),4)
 
+/** 
+ * Same as #lw_set_byte, but w/o return value
+ */
 #define lw_set_byte(dst,b) \
 	(*(dst)=b);
 
+/**
+ * Same as #lw_set_word, but no return value
+ */
 #define lw_set_word(dst,b) \
 	(*((uint16_t*)(dst)) = htons(w))
 
@@ -57,16 +63,31 @@
 #define lw_set_dword(dst,dw)\
 	(*((uint32_t*)(dst)) = htonl(dw))
 
-
+/**
+ * Read a byte from input buffer
+ * @param src Pointer to input buffer
+ * @return the byte red
+ */
 #define lw_get_byte(src)\
 	(*(uint8_t*)(src))
 
+/** 
+ * Read a word from input buffer and convert it from 
+ * network format to local format.
+ * @param src Pointer to input buffer
+ * @return word 
+ */
 #define lw_get_word(src) \
 	(ntohs(  *((uint16_t*)(src))))
 
+/**
+ * Read a dword from input buffer and convert it from
+ * network format to local
+ * @param src Pointer to input bufffer
+ * @return the dword red
+ */
 #define lw_get_dword(src) \
 	(ntohl(  *((uint32_t*)(src))))
-
 
 
 
