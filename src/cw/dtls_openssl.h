@@ -48,5 +48,6 @@ extern int dtls_openssl_log_error_queue(const char *txt);
 
 extern BIO_METHOD * dtls_openssl_bio_method();
 
+extern int dtls_openssl_shutdown(struct conn *conn);
 
 #endif
