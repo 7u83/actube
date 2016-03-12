@@ -262,7 +262,6 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 /**@}*/
 
 
-extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
 
 
 extern int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding);

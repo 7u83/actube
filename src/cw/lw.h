@@ -152,6 +152,7 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 
 
 extern uint16_t lw_checksum(uint8_t *d,int len);
+extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
 
 
 /**

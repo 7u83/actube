@@ -17,7 +17,6 @@
 */
 
 
-#include "cw/capwap.h"
 #include "cw/cipwap.h"
 
 #include "cw/action.h"
@@ -29,6 +28,7 @@
 
 #include "mod_cisco.h"
 #include "cisco.h"
+
 
 static cw_action_in_t actions_in[] = {
 
@@ -43,7 +43,16 @@ static cw_action_in_t actions_in[] = {
 static cw_action_out_t actions_out[]={
 
 
+	/* WTP Descriptor */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
+		.out = cisco_out_wtp_descriptor,
+		.mand = 1
+	}
 
+	,
 
 
 	{0,0}
