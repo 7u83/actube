@@ -217,12 +217,12 @@ CONNOBJS= conn_create.o \
 	conn_prepare_configuration_update_request.o \
 
 
+	#bstr_to_str.o \
 
 BSTROBJS= bstr_create.o \
 	bstr_create_from_cfgstr.o \
 	bstr16_create_from_cfgstr.o \
 	bstr_replace.o \
-	bstr_to_str.o \
 	bstr16cfgstr.o \
 	bstr16_create_from_str.o \
 	bstr_create_from_str.o \

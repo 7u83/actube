@@ -49,7 +49,6 @@ static const char * ssl_version2str(int version)
 			return "DTLSv1";
 //		case DTLS1_2_VERSION:
 //			return "DTLSv1.2";
-		
 	}
 	return "Version unknown";
 }
@@ -63,12 +62,31 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 		s += sprintf(s,"SSL msg out: ");
 	else
 		s += sprintf(s,"SSL msg in: ");
-	
+
 	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
 //	cw_dbg(DBG_DTLS_DETAIL,buffer);
 }
 #endif
 
+
+static void dtls_info_cb (const SSL *ssl, int where, int ret)
+{
+	const char *str = NULL;
+	int w;
+
+	w = where & ~SSL_ST_MASK;
+
+	str = where & SSL_ST_CONNECT ? "connect" : where & SSL_ST_ACCEPT ? "accept" : "undefined";
+	if (where & SSL_CB_LOOP)
+	{
+		cw_dbg (DBG_DTLS_DETAIL,"SSL state [\"%s\"]: %s", str, SSL_state_string_long (ssl));
+	}
+	else if (where & SSL_CB_ALERT)
+	{
+		cw_dbg (DBG_DTLS_DETAIL,"SSL: alert [\"%s\"]: %s : %s", where & SSL_CB_READ ? "read" : "write", \
+			SSL_alert_type_string_long (ret), SSL_alert_desc_string_long (ret));
+	}
+}
 
 int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 {
@@ -76,7 +94,7 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 		cw_dbg(DBG_DTLS, "DTLS - No password given to decrypt privat key");
 		return 0;
 	}
-			
+
 	strncpy(buf, (char *)(password), size);
 	buf[size - 1] = '\0';
 	return(strlen(buf));
@@ -125,8 +143,10 @@ int dtls_openssl_init()
 {
 	const char * version = SSLeay_version(SSLEAY_VERSION);
 	cw_dbg(DBG_INFO,"Init SSL library - %s",version);
-	SSL_load_error_strings();
 	int rc = SSL_library_init();
+	ERR_clear_error();
+	SSL_load_error_strings();
+	OpenSSL_add_all_algorithms();
 	return rc;
 }
 
@@ -238,7 +258,7 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 */
 
 
-//	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");
+	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");
 	const char * sessid = "9123456789";
 	memcpy(id,sessid,strlen(sessid));
 	*id_len=strlen(sessid);
@@ -280,18 +300,22 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 }
 
 
+
+
+
+
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
 	struct dtls_openssl_data * d = malloc(sizeof(struct dtls_openssl_data));
 	if (!d)
-		return 0;
+		return NULL;
 	memset(d,0,sizeof(struct dtls_openssl_data));
 
 	/* create new SSL ctx. (In future this should not be done for every connection) */
 	d->ctx = SSL_CTX_new(method);
 	if (!d->ctx){
 		dtls_openssl_data_destroy(d);	
-		return 0;
+		return NULL;
 	}
 
 	
@@ -333,11 +357,13 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	/* setup debugging */
 #ifdef WITH_CW_LOG_DEBUG
 	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
+	SSL_CTX_set_info_callback (d->ctx, &dtls_info_cb);
+	
 #endif
 
 
 
-	SSL_CTX_set_read_ahead(d->ctx, 0);
+	SSL_CTX_set_read_ahead(d->ctx, 1);
 
 
 
@@ -347,7 +373,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 //	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
-//	SSL_CTX_set_options(d->ctx, SSL_OP_ALL);
+	SSL_CTX_set_options(d->ctx, SSL_OP_NO_SSLv2 |SSL_OP_NO_SSLv3 );
 //	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
 
 
@@ -424,7 +450,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 /* 
- * Convert the PSK key (psk_key) in ascii to binary (psk).
+ * Convert the PSK key (psk_key) from ascii to binary (psk).
  */
 int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned int max_psk_len) {
 

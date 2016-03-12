@@ -87,6 +87,7 @@ static struct cw_strlist_elem color_on[] = {
 	{ DBG_ELEM_ERR, "\x1b[31m" },
 	{ DBG_SUBELEM, "\x1b[30m"},
 	{ DBG_DTLS, DBG_CLR_MAGENTA },
+	{ DBG_DTLS_DETAIL, DBG_CLR_MAGENTA },
 
 	{ DBG_RFC, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
@@ -120,6 +121,7 @@ static struct cw_strlist_elem prefix[] = {
 	{ DBG_RFC,    " RFC Violation -" },
 	{ DBG_SUBELEM," Sub-Element - "},
 	{ DBG_DTLS, " DTLS - "},
+	{ DBG_DTLS_DETAIL, " DTLS - "},
 	{ DBG_WARN, " Warning - "},
 	{ DBG_MOD, " Mod - "},
 	{ DBG_X, "XXXXX - "},
@@ -379,6 +381,24 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct so
 	else
 		cw_dbg(level,"%s",buf);
 }
+
+
+
+void cw_dbg_dmp_(int level, const char *file, int line,
+		     const uint8_t * data, int len, const char *format, ...)
+{
+	if (!cw_dbg_is_level(level))
+		return;
+
+
+	char  *dmp = cw_dbg_mkdmp(data,len);
+	cw_dbg(level,"%s%s",format,dmp);
+	free(dmp);
+
+
+}
+
+
 
 
 void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
