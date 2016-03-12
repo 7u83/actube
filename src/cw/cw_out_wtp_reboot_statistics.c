@@ -24,36 +24,42 @@
 #include "cw.h"
 
 
-int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
+int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
+				 uint8_t * dst)
 {
 
-	if (!a->get){
-		cw_log(LOG_ERROR,"Can't set WTP resboot stats. No get method");
+	if (!a->get) {
+		cw_log(LOG_ERROR, "Can't set WTP resboot stats. No get method");
 		return 0;
 	}
-	
 
-	struct mbag_item * i = a->get(conn,a);
-	if (!i){
-		if (!a->mand){
-			cw_log(LOG_ERR,"Can't put mandatory element WTP_REBOOT_STATISTICS");
+
+	struct mbag_item *i = a->get(conn, a);
+
+
+	if (!i) {
+		if (a->mand) {
+			cw_log(LOG_ERR,
+			       "Can't put mandatory element WTP_REBOOT_STATISTICS");
+			printf("retu 0 err\n");
 			return 0;
 		}
-	}	
+		return 0;
+	}
 
-	mbag_t rs = (mbag_t)i->data;
+	mbag_t rs = (mbag_t) i->data;
 
 	uint8_t *d = dst + 4;
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_AC_INITIATED_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_LINK_FAILURE_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_SW_FAILURE_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_HW_FAILURE_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_OTHER_FAILURE_COUNT,0));
-	d+=cw_put_word( d, mbag_get_word(rs,CW_ITEM_REBOOT_UNKNOWN_FAILURE_COUNT,0));
-	d+=cw_put_byte( d, mbag_get_byte(rs,CW_ITEM_REBOOT_LAST_FAILURE_TYPE,255));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_AC_INITIATED_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_LINK_FAILURE_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_SW_FAILURE_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_HW_FAILURE_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_OTHER_FAILURE_COUNT, 0));
+	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_UNKNOWN_FAILURE_COUNT, 0));
+	d += cw_put_byte(d, mbag_get_byte(rs, CW_ITEM_REBOOT_LAST_FAILURE_TYPE, 255));
 
-	int l = d - dst-4;
-	return l + cw_put_elem_hdr(dst, a->elem_id, l );
+	int l = d - dst - 4;
+	return l + cw_put_elem_hdr(dst, a->elem_id, l);
 
 }
