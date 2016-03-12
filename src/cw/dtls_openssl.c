@@ -357,7 +357,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	/* setup debugging */
 #ifdef WITH_CW_LOG_DEBUG
 	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
-	SSL_CTX_set_info_callback (d->ctx, &dtls_info_cb);
+	SSL_CTX_set_info_callback (d->ctx, dtls_info_cb);
 	
 #endif
 
@@ -371,6 +371,8 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	rc = SSL_CTX_load_verify_locations(d->ctx,"../../ssl/root-ca.pem",NULL);
 
+	
+
 
 //	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
 	SSL_CTX_set_options(d->ctx, SSL_OP_NO_SSLv2 |SSL_OP_NO_SSLv3 );
@@ -378,6 +380,9 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 	SSL_CTX_set_timeout(d->ctx,30);
+
+//	rc =SSL_CTX_set_max_proto_version (d->ctx,DTLS1_VERSION);
+//	printf("MAXMAMX = %d\n",rc);
 
 
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
