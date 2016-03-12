@@ -139,10 +139,10 @@ int main()
 //      cw_register_actions_cipwap_wtp(&capwap_actions);
 //      cw_register_actions_capwap_80211_wtp(&capwap_actions);
 //
-#define CWMOD "cisco"
-#define CWBIND "cisco"
-//#define CWMOD "capwap"
-//#define CWBIND "capwap80211"
+//#define CWMOD "cisco"
+//#define CWBIND "cisco"
+#define CWMOD "capwap"
+#define CWBIND "capwap80211"
 
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
@@ -164,6 +164,7 @@ int main()
 
 	conn->detected = 1;
 	conn->dtls_verify_peer=0;
+	conn->dtls_mtu = 22180;
 
 
 
@@ -250,7 +251,7 @@ int main()
 		return -1;
 
 //	mavl_del_all(conn->incomming);
-	conn->incomming = conn->config;
+//	conn->incomming = conn->config;
 	if (!configure())
 		return -1;
 	changestate();
