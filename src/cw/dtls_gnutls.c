@@ -93,11 +93,45 @@ int dtls_gnutls_read(struct conn * conn, uint8_t *buffer, int len)
 }
 
 
+static int verify_cert(gnutls_session_t sess)
+{
+	cw_dbg(DBG_DTLS,"Verify cert");
+	return 0;
+}
+
+
+static void dtls_log_cb(int level, const char * str)
+{
+	if (!cw_dbg_is_level(DBG_DTLS_DETAIL))
+		return;
+
+	switch (level){
+		case 2:
+		case 6:
+		case 4:
+			return;
+
+
+	}
+
+
+	
+	
+	char buf[2048];
+	strcpy(buf,str);
+	char *c = strchr(buf,'\n');
+	*c=0;
+	cw_dbg(DBG_DTLS_DETAIL,"%s",buf);
+}
+
 struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 {
 	struct dtls_gnutls_data *d = malloc(sizeof(struct dtls_gnutls_data));
 	if (!d)
 		return 0;
+
+	gnutls_global_set_log_level(10);
+	gnutls_global_set_log_function(dtls_log_cb);
 
 	gnutls_certificate_allocate_credentials(&d->x509_cred);
 
@@ -173,6 +207,8 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 		dtls_gnutls_data_destroy(d);
 		return 0;
 	}
+
+	gnutls_certificate_set_verify_function(d->x509_cred,verify_cert);
 
 
 	gnutls_transport_set_pull_function(d->session, dtls_gnutls_bio_read);

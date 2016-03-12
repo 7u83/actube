@@ -141,6 +141,9 @@ int main()
 //
 #define CWMOD "cisco"
 #define CWBIND "cisco"
+//#define CWMOD "capwap"
+//#define CWBIND "capwap80211"
+
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
 	if (!mod) {
@@ -160,7 +163,7 @@ int main()
 	printf("Out reg = %d\n",rc);
 
 	conn->detected = 1;
-
+	conn->dtls_verify_peer=0;
 
 
 

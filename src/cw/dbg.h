@@ -126,6 +126,9 @@ enum cw_dbg_levels{
 	/** Dump DTLS BIO i/o */
 	DBG_DTLS_BIO_DMP,
 
+	/** Show DTLS Details */
+	DBG_DTLS_DETAIL,
+
 	/** Debug Mods */
 	DBG_MOD,
 	

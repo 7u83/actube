@@ -74,6 +74,7 @@ int dtls_gnutls_accept(struct conn *conn)
 		rc = gnutls_dtls_cookie_verify(&cookie_key,
 					       &conn->addr,
 					       sizeof(conn->addr), buffer+4, tlen-4, &prestate);
+
 		if (rc<0){
 			cw_dbg(DBG_DTLS, "Cookie couldn't be verified: %s", gnutls_strerror(rc));
 			dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
