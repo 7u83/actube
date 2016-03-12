@@ -63,6 +63,15 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 #define DBG_CLR_MAGENTA "\x1b[35m"
+#define DBG_CLR_MAGENTA_L "\x1b[95m"
+
+#define DBG_CLR_MAGENTA_B "\x1b[1;35m"
+#define DBG_CLR_MAGENTA_F "\x1b[2;35m"
+#define DBG_CLR_MAGENTA_I "\x1b[3;35m"
+
+#define DBG_CLR_BLUE	"\x1b[34m"
+#define DBG_CLR_BLUE_B	"\x1b[1;34m"
+#define DBG_CLR_BLUE_F	"\x1b[2;34m"
 #define DBG_CLR_BLUE_I	"\x1b[3;34m"
 
 #define DBG_CLR_YELLO	"\x1b[33m"
@@ -78,7 +87,7 @@ static struct cw_strlist_elem color_on[] = {
 	{ DBG_PKT_IN, DBG_CLR_YELLO },
 	{ DBG_PKT_OUT, DBG_CLR_YELLO_I },
 
-	{ DBG_MSG_IN, "\x1b[34m" },
+	{ DBG_MSG_IN, DBG_CLR_BLUE },
 	{ DBG_MSG_OUT, DBG_CLR_BLUE_I },
 
 	{ DBG_ELEM, "\x1b[39m" },
@@ -86,8 +95,10 @@ static struct cw_strlist_elem color_on[] = {
 	{ DBG_PKT_ERR, "\x1b[31m" },
 	{ DBG_ELEM_ERR, "\x1b[31m" },
 	{ DBG_SUBELEM, "\x1b[30m"},
-	{ DBG_DTLS, DBG_CLR_MAGENTA },
+	{ DBG_DTLS, DBG_CLR_MAGENTA_B },
 	{ DBG_DTLS_DETAIL, DBG_CLR_MAGENTA },
+	{ DBG_DTLS_BIO,DBG_CLR_MAGENTA_L},
+
 
 	{ DBG_RFC, "\x1b[31m" },
 	{ DBG_X, "\x1b[31m" },
