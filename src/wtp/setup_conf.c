@@ -18,7 +18,7 @@ int setup_conf(struct conn *  conn)
 		 * base rmac */
 		char name[32];
 		strcpy(name,WTP_DEFAULT_NAME_PREFIX);
-		int l = cw_format_hexu(name+strlen(WTP_DEFAULT_NAME_PREFIX),
+		int l = format_hexu(name+strlen(WTP_DEFAULT_NAME_PREFIX),
 				bstr_data(conn->base_rmac),bstr_len(conn->base_rmac));
 
 		name[l+strlen(WTP_DEFAULT_NAME_PREFIX)]=0;

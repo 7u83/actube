@@ -1,7 +1,7 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -51,6 +51,7 @@ struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_ELEM_ERR, "elem_err" },
 	{ DBG_DTLS, "dtls" },
 	{ DBG_DTLS_BIO, "dtls_bio" },
+	{ DBG_DTLS_BIO_DMP, "dtls_bio_dmp"},
 	{ DBG_WARN, "warn" },
 	{ DBG_MOD,"mod"},
 
@@ -96,14 +97,4 @@ struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 };
 */
 
-/*
-int cw_log_str2dbglevel(const char * str)
-{
-	int i;
-	for (i=0; cw_dbg_cfgstrs[i].name; i++) {
-		if (!strcmp(str,cw_dbg_cfgstrs[i].name))
-			return cw_dbg_cfgstrs[i].level;
-	}
-	return 0;
-}
-*/
+

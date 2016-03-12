@@ -40,7 +40,7 @@
  * where x is the number of characters. A formatted hex byte needs (typically 2).
  *
  */
-int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
+int format_hex_bytes(char *dst, const char *format, const char *delim,
 			const uint8_t * src, int len)
 {
 	char *d = dst;
@@ -68,7 +68,7 @@ int cw_format_hex_bytes(char *dst, const char *format, const char *delim,
  * @return 0 if all was ok \n 1 if an error has occured.
  */
 
-int cw_format_scan_hex_bytes(uint8_t *dst,const char *s, int len)
+int format_scan_hex_bytes(uint8_t *dst,const char *s, int len)
 {
 	int rc ;
 	int err=0;

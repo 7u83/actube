@@ -233,7 +233,7 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 
 
 	s+=sprintf(s," Flgs:");
-	s+=cw_format_hdr_flags(s,packet);
+	s+=format_hdr_flags(s,packet);
 
 	if (len<8)
 		goto abort;
@@ -252,7 +252,7 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 			plen=10;
 		
 		s+=sprintf(s," R-MAC:");
-		s+=cw_format_mac(s,cw_get_hdr_rmac_data(packet),plen);
+		s+=format_mac(s,cw_get_hdr_rmac_data(packet),plen);
 		if (rmac_len>10){
 			s+=sprintf(s," ... (len=%d)",rmac_len);
 		}
