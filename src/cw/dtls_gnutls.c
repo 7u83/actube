@@ -20,6 +20,7 @@
 #include <errno.h>
 
 #include <gnutls/gnutls.h>
+#include <gnutls/dtls.h>
 
 #include "dtls_gnutls.h"
 
@@ -214,6 +215,17 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 	gnutls_transport_set_pull_function(d->session, dtls_gnutls_bio_read);
 	gnutls_transport_set_push_function(d->session, dtls_gnutls_bio_write);
 	gnutls_transport_set_pull_timeout_function(d->session, dtls_gnutls_bio_wait);
+
+
+#if GNUTLS_VERSION_NUMBER >= 0x030100
+	gnutls_handshake_set_timeout(d->session, GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);
+
+	gnutls_dtls_set_data_mtu(d->session, conn->dtls_mtu);
+#endif
+	gnutls_dtls_set_mtu(d->session, conn->dtls_mtu);
+
+
+
 
 	return d;
 }
