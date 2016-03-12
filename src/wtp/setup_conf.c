@@ -77,7 +77,11 @@ int setup_conf(struct conn *  conn)
 		mbag_set_dword(rs,CW_ITEM_REBOOT_LAST_FAILURE_TYPE, CW_REBOOT_TYPE_NOT_SUPPORTED);
 	}
 
-
+	n = mbag_get(conn->config,CW_ITEM_STATISTICS_TIMER);
+	if (!n) {
+		mbag_set_word(conn->config, CW_ITEM_STATISTICS_TIMER, 120);
+	}
+	
 
 	return 0;
 }
