@@ -17,6 +17,9 @@ int dtls_gnutls_connect(struct conn *conn)
 	d = dtls_gnutls_data_create(conn,
 				    GNUTLS_CLIENT | GNUTLS_DATAGRAM | GNUTLS_NONBLOCK);
 
+	if (!d)
+		return 0;
+
 //      gnutls_dh_set_prime_bits(d->session, 512);
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	gnutls_handshake_set_timeout(d->session, GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);
