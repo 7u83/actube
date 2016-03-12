@@ -95,6 +95,7 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 	conn->write = conn->send_packet;
 	conn->read = conn->recv_packet;
 
+	conn->dtls_mtu = 1500;
 
 	return conn;
 }
