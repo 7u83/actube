@@ -45,12 +45,13 @@ int dtls_gnutls_connect(struct conn *conn)
 		return 0;
 
 //      gnutls_dh_set_prime_bits(d->session, 512);
-#if GNUTLS_VERSION_NUMBER >= 0x030100
+/*#if GNUTLS_VERSION_NUMBER >= 0x030100
 	gnutls_handshake_set_timeout(d->session, GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);
 
 	gnutls_dtls_set_data_mtu(d->session, 1500);
 #endif
 	gnutls_dtls_set_mtu(d->session, 1500);
+*/
 
 	int rc;
 	cw_dbg(DBG_DTLS,"Starting handshake");
