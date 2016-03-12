@@ -1,3 +1,26 @@
+/*
+    This file is part of actube.
+
+    actube is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * @file
+ * @brief Functions for OpenSSL BIO
+ */
+
 #include <errno.h>
 #include <arpa/inet.h>
 #include "dtls_openssl.h"
@@ -28,28 +51,27 @@ BIO_METHOD *dtls_openssl_bio_method()
 
 int dtls_openssl_bio_write(BIO * b, const char *data, int len)
 {
-
 	struct conn *conn = b->ptr;
-	return dtls_bio_write(conn,data,len);
+	return dtls_bio_write(conn, data, len);
 }
 
 
 int dtls_openssl_bio_read(BIO * b, char *out, int maxlen)
 {
-
 	struct conn *conn = b->ptr;
-	return dtls_bio_read(conn,out,maxlen);
+	return dtls_bio_read(conn, out, maxlen);
 }
 
 
 
 int dtls_openssl_bio_new(BIO * bi)
 {
+
 	bi->init = 1;
 	bi->num = 0;
 	bi->flags = 0;
 	bi->ptr = NULL;
-	cw_dbg(DBG_DTLS_BIO, "SSL BIO new");
+	cw_dbg(DBG_DTLS_BIO, "Creating new OpenSSL BIO");
 	return 1;
 }
 
@@ -72,39 +94,10 @@ int dtls_openssl_bio_free(BIO * bio)
 
 long dtls_openssl_bio_ctrl(BIO * b, int cmd, long num, void *ptr)
 {
+	struct conn *conn = b->ptr;
+
 	long ret = 1;
-//      long sockopt_val = 0;
-//      unsigned int sockopt_len = 0;
-//      BIO_memory_data* pData = (BIO_memory_data*)b->ptr;
-//
-//      printf("BIO CONTROL cmd=%d,num=%d\n",cmd,num);
-//      exit(1);        
-
 	switch (cmd) {
-		case BIO_CTRL_RESET:
-		case BIO_CTRL_EOF:
-			ret = 0;
-			break;
-
-		case BIO_CTRL_INFO:
-			ret = 0;
-			break;
-
-		case BIO_CTRL_GET_CLOSE:
-			ret = 0;
-			break;
-
-		case BIO_CTRL_SET_CLOSE:
-			break;
-
-		case BIO_CTRL_WPENDING:
-			ret = 0;
-			break;
-
-		case BIO_CTRL_PENDING:
-			ret = 0;
-			break;
-
 		case BIO_CTRL_DUP:
 			ret = 1;
 			break;
@@ -113,41 +106,13 @@ long dtls_openssl_bio_ctrl(BIO * b, int cmd, long num, void *ptr)
 			ret = 1;
 			break;
 
-		case BIO_CTRL_PUSH:
-			ret = 0;
-			break;
-
-		case BIO_CTRL_POP:
-			ret = 0;
-
 		case BIO_CTRL_DGRAM_QUERY_MTU:
-			{
-				ret = 1300;
-				break;
-
-/*         	sockopt_len = sizeof(sockopt_val);
-			if ((ret = getsockopt(pData->sock, IPPROTO_IP, IP_MTU, (void *)&sockopt_val, &sockopt_len)) < 0 || sockopt_val < 0)
-			{ 
-				ret = 0; 
-			}
-			else
-			{
-				pData->nMtu = sockopt_val;
-				ret = sockopt_val;
-			}
-
-			break;	
-
-*/ }
-
 		case BIO_CTRL_DGRAM_GET_MTU:
-			ret = 1500;
-//                      ret = pData->nMtu;
+			ret = conn->dtls_mtu;
 			break;
 
 		case BIO_CTRL_DGRAM_SET_MTU:
-//                      pData->nMtu = num;
-//                      ret = num;
+			ret = 1;
 			break;
 
 		default:
