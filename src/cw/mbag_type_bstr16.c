@@ -15,7 +15,7 @@ static int to_str(void *item,char *dst)
 
 
 	char *d = dst;
-	int utf8 = cw_is_utf8(bstr16_data(i->data), bstr16_len(i->data));
+	int utf8 = format_is_utf8(bstr16_data(i->data), bstr16_len(i->data));
 
 
         if (utf8) {

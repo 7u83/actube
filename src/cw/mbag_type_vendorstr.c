@@ -35,7 +35,7 @@ static int to_str(void *item,char *dst)
 	char *d=dst;
 	d+=sprintf(d,"%d,",bstrv_get_vendor_id(i->data));
 
-	if (cw_is_utf8(bstrv_data(i->data), bstrv_len(i->data))) {
+	if (format_is_utf8(bstrv_data(i->data), bstrv_len(i->data))) {
 		d += sprintf(d, "%.*s", bstrv_len(i->data),
 			     bstrv_data(i->data));
 	} else {
