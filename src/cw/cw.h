@@ -305,9 +305,22 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 
 
 
+
 #define cw_put_sockaddr lw_put_sockaddr
 
 int cw_put_image_data(uint8_t * dst, FILE * infile);
+
+
+
+/**
+ * Put encryption capabilities as described in CAWAP 
+ * draft 7 fpr WTP Descriptor
+ * @param dst Destination buffer
+ * @param cap Capability
+ * @return number of bytes put
+ */
+#define cw_put_encryption_capabilities_7(dst,cap) cw_put_word(dst,cap)
+
 
 /**
  * Add a message element to a buffer
@@ -422,6 +435,9 @@ extern int cw_in_capwap_local_ipv6_address(struct conn *conn, struct cw_action_i
 
 extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len, struct sockaddr *from);
+
+
+
 
 
 /**
