@@ -362,6 +362,7 @@ static cw_action_out_t actions_out[] = {
 		.mand = 1
 	}
 	,
+
 	/* Radio Admin State - Config Status Request */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
@@ -371,6 +372,32 @@ static cw_action_out_t actions_out[] = {
 		.mand = 1
 	}
 	,
+
+
+
+	/* WTP Reboot Statistics - Config Status Request */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
+		.out = cw_out_wtp_reboot_statistics,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+
+	/* ECN Support - Join Request */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id  = CW_ELEM_STATISTICS_TIMER,
+		.item_id = CW_ITEM_STATISTICS_TIMER, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
 
 
 
