@@ -136,6 +136,7 @@ struct conn {
 	char *dtls_psk;
 	int dtls_psk_len;
 
+
 	char *dtls_cert_file;
 	char *dtls_key_file;
 	char *dtls_key_pass;
@@ -147,6 +148,8 @@ struct conn {
 	uint8_t dtls_cookie[8];
 
 	int dtls_verify_peer;
+
+	int dtls_mtu;
 
 	uint8_t dtls_buffer[2048];
 	int dtls_buffer_len;
