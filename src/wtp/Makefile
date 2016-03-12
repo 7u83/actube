@@ -27,6 +27,7 @@ LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH)
 
 CONFOBJS = wtp_conf.o
 
+
 LIBS+=-lcapwap
 LIBS+=-lcapwap80211
 LIBS+=-lcisco
@@ -62,6 +63,7 @@ CFLAGS+=$(OPESSL_CFLAGS)
 LDFLAGS+=$(OPENSSL_LDFLAGS)
 LIBS+=$(OPENSSL_LIBS)
 endif
+
 
 
 
@@ -126,7 +128,7 @@ endif
 	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
 
 
-wtp: $(BCHECK) $(OBJS)
+wtp: $(OBJS)
 	$(Q)$(CC) $(OBJS) ../mod/modload_wtp.o -o wtp $(LDFLAGS) $(LIBS)
 	@$(E) "  LD " $@
 
