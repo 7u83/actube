@@ -3,8 +3,6 @@
 #include "cw/capwap_items.h"
 #include "cw/cw.h"
 
-#include "cw/capwap.h"
-
 static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {
 	int n=2;
@@ -32,8 +30,8 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 	uint8_t *d = dst+4;
 
 
-int n =conn->radios->count;
-printf("radio count %d\n",n);
+//int n =conn->radios->count;
+//printf("radio count %d\n",n);
 
 	d+=cw_put_byte(d,conn->radios->count);	//max radios
 	d+=cw_put_byte(d,2);	//radios in use

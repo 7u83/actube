@@ -12,6 +12,6 @@ struct mod_wtp * modload_wtp(const char *name);
 #include "capwap80211/mod_capwap80211.h"
 
 #define MODS_AC { mod_capwap_ac,mod_cipwap_ac, mod_cisco_ac, mod_capwap80211_ac, NULL }
-#define MODS_WTP { mod_capwap_wtp,mod_capwap80211_wtp, NULL }
+#define MODS_WTP { mod_capwap_wtp,mod_cisco_wtp, mod_capwap80211_wtp, NULL }
 
 

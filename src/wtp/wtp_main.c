@@ -138,14 +138,17 @@ int main()
 
 //      cw_register_actions_cipwap_wtp(&capwap_actions);
 //      cw_register_actions_capwap_80211_wtp(&capwap_actions);
+//
+#define CWMOD "cisco"
+#define CWBIND "cisco"
 
-	struct mod_wtp *mod = modload_wtp("capwap");
+	struct mod_wtp *mod = modload_wtp(CWMOD);
 	if (!mod) {
 		printf("Can't load mod capwap\n");
 		exit(0);
 	}
 	mod->register_actions(&capwap_actions,MOD_MODE_CAPWAP);
-	mod = modload_wtp("capwap80211");
+	mod = modload_wtp(CWBIND);
 	if (!mod) {
 		printf("Can't load mod capwap80211\n");
 		exit(0);
