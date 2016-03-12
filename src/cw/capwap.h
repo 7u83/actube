@@ -769,7 +769,7 @@ extern int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_
 int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 int cw_send_request(struct conn *conn, int msg_id);
-int cw_is_utf8(unsigned char *str, size_t len);
+//int cw_is_utf8(unsigned char *str, size_t len);
 
 int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);

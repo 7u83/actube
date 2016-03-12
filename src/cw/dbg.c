@@ -518,7 +518,7 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 
 }
 
-int cw_is_utf8(unsigned char *str, size_t len);
+//int cw_is_utf8(unsigned char *str, size_t len);
 
 
 int cw_format_item(char *dst,mbag_item_t * item)
@@ -549,7 +549,7 @@ static int cw_format_version(char *s, bstrv_t ver, char * def)
 	int i;
 
 
-	if ( cw_is_utf8(version,len)  ){
+	if ( format_is_utf8(version,len)  ){
 		if (len != 0 )
 			rs+=sprintf(s+rs,"%.*s",len,version);
 		else

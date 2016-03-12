@@ -81,7 +81,7 @@ MAVLOBJS= \
 	mavl_merge.o \
 	mavl_create_conststr.o \
 	mlist.o \
-	utf8.o \
+	format_is_utf8.o \
 	cw_load_file.o \
 	cw_save_file.o
 
