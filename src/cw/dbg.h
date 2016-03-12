@@ -194,6 +194,11 @@ void cw_dbg_version_subelem(int level,const char*context,int subtype,bstrv_t vst
 #define cw_dbg_set_level(level,on)\
 	(on ? cw_dbg_opt_level |= (1<<(level)) : (cw_dbg_opt_level &= (-1)^(1<<(level))))
 
+/**
+ * Check if a specific debug level is set.
+ * @param level Level to check
+ * @return 0 if leveln is not set, otherwise level is set
+ */
 #define cw_dbg_is_level(level)\
 	(cw_dbg_opt_level & (1<<level))
 

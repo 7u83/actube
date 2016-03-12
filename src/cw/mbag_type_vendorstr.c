@@ -40,7 +40,7 @@ static int to_str(void *item,char *dst)
 			     bstrv_data(i->data));
 	} else {
 		d += sprintf(d, ".x");
-		d += cw_format_hex(d, bstrv_data(i->data), bstrv_len(i->data));
+		d += format_hex(d, bstrv_data(i->data), bstrv_len(i->data));
 	}
 
 	return d-dst;

@@ -22,7 +22,7 @@ static int to_str(void *item,char *dst)
                 d += sprintf(d, "%.*s", bstr16_len(i->data), bstr16_data(i->data));
         } else {
                 d += sprintf(d, ".x");
-                d += cw_format_hex(d, bstr16_data(i->data), bstr16_len(i->data));
+                d += format_hex(d, bstr16_data(i->data), bstr16_len(i->data));
         }
 	return d-dst;	
 }

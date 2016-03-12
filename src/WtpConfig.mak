@@ -2,7 +2,7 @@ include ../Config.mak
 
 #
 SSL_LIBRARY=GNUTLS
-
+#WITH_OPENSSL=1
 
 
 CFLAGS += -I/usr/include/libnl3
