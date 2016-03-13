@@ -33,6 +33,7 @@
  */
 
 
+
 /** LWAPP Version */
 #define LW_VERSION 0
 
@@ -54,7 +55,6 @@
 /**@}*/
 
 
-#define LW_VENDOR_ID_CISCO	4232704
 
 
 
