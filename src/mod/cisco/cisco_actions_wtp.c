@@ -76,7 +76,7 @@ static cw_action_out_t actions_out[]={
 		/* use draft 7 elem ids */
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 
-		.out = cw_out_capwap_local_ip_address,
+		.out = cw_out_capwap_local_ip_address_7,
 		.mand = 1
 	}
 	,
@@ -102,6 +102,19 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
+	/* ECN Support - Join Request */
+	{
+		/* Cisco doesn't know ECN support, so we 
+		   defaine  no output method */
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT, 
+		.mand = 0
+	}
+	,
+
+
 
 	{0,0}
 
