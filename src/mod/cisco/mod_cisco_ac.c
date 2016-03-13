@@ -9,6 +9,8 @@
 #include "mod_cisco.h"
 #include "../modload.h"
 
+#include "cw/vendors.h"
+
 
 extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
 extern int cisco_register_actions_ac(struct cw_actiondef *def);
