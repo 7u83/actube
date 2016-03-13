@@ -153,6 +153,7 @@ CAPWAPOBJS= \
 	cw_out_radio_operational_state.o\
 	cw_in_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\
+	cw_out_wtp_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
 	cw_in_capwap_control_ip_address.o\
 	cw_in_capwap_local_ipv4_address.o \
@@ -250,6 +251,7 @@ CWACTION=action.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
 	cw_put_msg.o \
+	cw_put_local_ip_address.o \
 	capwap_action_helpers.o \
 	cw_put_image_data.o \
 	cisco.o \
