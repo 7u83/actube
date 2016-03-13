@@ -155,7 +155,7 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 	return 1;
 }
 
-static struct mod_ac * detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
+static struct mod_ac *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 				 int elems_len, struct sockaddr *from, int mode)
 {
 	if (conn->mods) {
@@ -163,8 +163,8 @@ static struct mod_ac * detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 		int i;
 		for (i = 0; mods[i]; i++) {
 			if (mods[i]->detect) {
-				if (mods[i]->
-				    detect(conn, rawmsg, len, elems_len, from, mode)) {
+				if (mods[i]->detect
+				    (conn, rawmsg, len, elems_len, from, mode)) {
 					return mods[i];
 
 				}
@@ -175,22 +175,25 @@ static struct mod_ac * detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 	return MOD_NULL;
 }
 
-static struct cw_actiondef * load_mods(struct conn *conn, uint8_t * rawmsg, int len,
-				 int elems_len, struct sockaddr *from)
+static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int len,
+				      int elems_len, struct sockaddr *from)
 {
 
-	struct mod_ac * cmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
+	struct mod_ac *cmod =
+	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
-		cw_dbg(DBG_MSG_ERR, "Cant't find mod to handle connection from %s , discarding message",
+		cw_dbg(DBG_MSG_ERR,
+		       "Cant't find mod to handle connection from %s , discarding message",
 		       sock_addr2str_p(from));
 		return NULL;
 	}
 
-	struct mod_ac * bmod  = detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
+	struct mod_ac *bmod =
+	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
 
-	cw_dbg(DBG_INFO,"Mods deteced: %s,%s",cmod->name,bmod->name);
+	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
-	struct cw_actiondef  * ad = mod_cache_add(cmod,bmod);
+	struct cw_actiondef *ad = mod_cache_add(cmod, bmod);
 
 	return ad;
 
@@ -274,14 +277,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 	if (!conn->detected) {
 		//struct mod_ac *mod;
-		struct cw_actiondef * ad = load_mods(conn, rawmsg, len, elems_len, from);
+		struct cw_actiondef *ad = load_mods(conn, rawmsg, len, elems_len, from);
 		if (!ad) {
-			cw_log(LOG_ERR,"Eror");
-			errno=EAGAIN;
+			cw_log(LOG_ERR, "Eror");
+			errno = EAGAIN;
 			return -1;
 		}
 		conn->actions = ad;
-		conn->detected =1;
+		conn->detected = 1;
 
 	}
 
@@ -395,11 +398,12 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 	}
 
-
 	if (unrecognized) {
 		cw_dbg(DBG_RFC, "Message has %d unrecognized message elements.",
 		       unrecognized);
-		if (!result_code) {
+		/* set only resultcode for request messages */
+
+		if ( (!result_code) && ((afm->msg_id & 1))) {
 			result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 		}
 
