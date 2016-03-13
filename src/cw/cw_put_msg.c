@@ -83,12 +83,13 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 			/* Element is from next msg, close action */
 			break;
 		}
+		int l=0;
 		if (ae->out) {
-			int l=0;
 
 		//	printf("Out Call with len =%d\n",len);
 
 			l= ae->out(conn, ae, dst+len); 
+//			cw_dbg_elem(DBG_ELEM, conn, ae->msg_id, ae->elem_id, dst+len,l);
 
 		//	printf("Returned len = %d\n",l);
 
@@ -169,6 +170,11 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 
 		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
 		DBGX("Elem ID %s",ae->item_id);
+
+
+
+
+		
 		if ( ae->item_id ) {
 			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
 		}
@@ -177,14 +183,18 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 			/* Element is from next msg, close action */
 			break;
 		}
+		int l=0;
 		if (ae->out) {
-			int l=0;
 			l= ae->out(conn, ae, dst+len); 
 			len +=l;
 //			cw_dbg_elem_colored(DBG_ELEM, conn, ae->msg_id, ae->elem_id,
 //				 dst+len-l,l);
 
 		}
+
+//		printf("DEBUGGER\n");
+//		cw_dbg_elem(DBG_ELEM, conn, ae->msg_id, ae->elem_id, 0,l);
+		
 		
 //cw_dbg_elem_colored(DBG_ELEM,"Adding element %d to msg %d, len = %d",ae->msg_id,ae->elem_id,l);
 

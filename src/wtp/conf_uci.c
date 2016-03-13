@@ -198,28 +198,28 @@ int read_config(const char * filename){
 
 	str = uci_lookup_option_string(ctx,section,"board_id");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_board_id,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_board_id,s);
 	}
 
 	str = uci_lookup_option_string(ctx,section,"board_revision");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_board_revision,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_board_revision,s);
 	}
 
 
 	str = uci_lookup_option_string(ctx,section,"serial_no");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_serial_no,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_serial_no,s);
 	}
 
 
 	str = uci_lookup_option_string(ctx,section,"model_no");
 	if (str){
-		uint8_t * s = bstr_create_from_cfgstr(str);
-		bstr_replace(&conf_model_no,s);
+		uint8_t * s = bstr16_create_from_cfgstr(str);
+		bstr16_replace(&conf_model_no,s);
 	}
 
 	

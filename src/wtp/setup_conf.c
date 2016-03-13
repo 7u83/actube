@@ -83,7 +83,49 @@ int setup_conf(struct conn *  conn)
 	if (!n) {
 		mbag_set_word(conn->config, CW_ITEM_STATISTICS_TIMER, 120);
 	}
-	
+
+
+
+
+	mbag_t board_data=mbag_get_mbag_c(conn->config,CW_ITEM_WTP_BOARD_DATA,mbag_create);
+
+	printf("We have bd %p\n",board_data);
+
+//	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
+
+
+	uint32_t vendor = mbag_get_dword(board_data,CW_ITEM_WTP_BOARD_VENDOR,conf_vendor_id);
+	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, vendor);
+
+
+	mbag_set_bstrn(board_data, CW_ITEM_WTP_BOARD_MACADDRESS, 
+			 conf_macaddress, conf_macaddress_len);
+
+//	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_MODELNO, bstr_data(conf_model_no),
+//			 bstr_len(conf_model_no));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	return 0;
 }

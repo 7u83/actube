@@ -28,6 +28,7 @@ struct mbag_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a)
 
 struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a)
 {
+//	printf("cw get config (%d %d %s) %p\n",a->msg_id, a->elem_id,a->item_id, conn->config);
 	return mbag_get(conn->config,a->item_id);
 }
 
