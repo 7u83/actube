@@ -40,6 +40,10 @@ struct mod_ac {
 	const char *name;
 	/** Initializion method */
 	int (*init) ();
+
+	/** init_config */
+	int (*init_config) (mbag_t config);
+
 	/** Detect capwap 
 	This function is called after receiving and disassembling a complete 
 	CAPWAP message. Either on Discovery Request or Join Request
@@ -52,6 +56,8 @@ struct mod_ac {
 
 	/** Register actions */
 	int (*register_actions) (struct cw_actiondef * def,int mode);
+
+	
 };
 
 
@@ -61,12 +67,14 @@ struct mod_ac {
  */
 #define mod_wtp mod_ac
 
-
 extern struct mod_ac mod_null;
+
 
 #define MOD_NULL (&mod_null)
 
 struct cw_actiondef * mod_cache_add(struct mod_ac *c, struct mod_ac *b);
 
+
+#define mod_init_config(mod,cfg) (mod->init_config ? mod->init_config(cfg):1)
 
 #endif
