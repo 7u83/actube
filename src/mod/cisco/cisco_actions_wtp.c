@@ -43,7 +43,7 @@ static cw_action_in_t actions_in[] = {
 static cw_action_out_t actions_out[]={
 
 
-	/* WTP Descriptor */
+	/* WTP Descriptor - Discovery */
 	{
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
@@ -54,6 +54,54 @@ static cw_action_out_t actions_out[]={
 
 	,
 
+	/* Cisco RAD Name (WTP Name) - Discovery */
+	{
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id  = CW_CISCO_RAD_NAME,
+		.item_id = CW_ITEM_WTP_NAME, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+
+	/* ----------------------------------------------------------------
+	 * Message Join Rquest 
+	 */
+
+	/* CAPWAP Local IP Address - Join Request */
+	{
+		/* use draft 7 elem ids */
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 
+		.out = cw_out_capwap_local_ip_address,
+		.mand = 1
+	}
+	,
+
+	/* WTP Descriptor - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
+		.out = cisco_out_wtp_descriptor,
+		.mand = 1
+	}
+	,
+
+	/* WTP Group Name (WTP Name) - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id  = CW_CISCO_AP_GROUP_NAME,
+		.item_id = CW_ITEM_WTP_GROUP_NAME, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
 
 	{0,0}
 
