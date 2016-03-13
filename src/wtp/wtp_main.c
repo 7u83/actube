@@ -139,10 +139,10 @@ int main()
 //      cw_register_actions_cipwap_wtp(&capwap_actions);
 //      cw_register_actions_capwap_80211_wtp(&capwap_actions);
 //
-//#define CWMOD "cisco"
-//#define CWBIND "cisco"
-#define CWMOD "capwap"
-#define CWBIND "capwap80211"
+#define CWMOD "cisco"
+#define CWBIND "cisco"
+//#define CWMOD "capwap"
+//#define CWBIND "capwap80211"
 
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
@@ -150,6 +150,8 @@ int main()
 		printf("Can't load mod capwap\n");
 		exit(0);
 	}
+	mod->init();
+
 	mod->register_actions(&capwap_actions,MOD_MODE_CAPWAP);
 	mod = modload_wtp(CWBIND);
 	if (!mod) {
@@ -195,6 +197,7 @@ int main()
 
 	cfg_from_json(conn);
 	setup_conf(conn);
+	mod_init_config(mod,conn->config);
 	cfg_to_json();
 
 	mbag_t board_data = mbag_create();
