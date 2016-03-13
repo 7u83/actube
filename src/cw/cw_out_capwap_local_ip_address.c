@@ -49,51 +49,6 @@
 int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action,
 				   uint8_t * dst)
 {
-	struct sockaddr_storage a;
-	socklen_t alen = sizeof(struct sockaddr_storage);
-	int rc = getsockname(conn->sock, (struct sockaddr *) &a, &alen);
-
-	if (rc != 0){
-		cw_log(LOG_ERR,"Can't determine sock IP address - %s\n",strerror(errno));
-		return 0;
-	}
-
-
-	int id; 
-
-	switch (((struct sockaddr *) &a)->sa_family) {
-		case AF_INET:
-		{
-			struct sockaddr_in *sain = (struct sockaddr_in *) &a;
-
-			id  = CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
-
-/*			if (conn->capwap_mode == CW_MODE_CISCO)
-				id = CW_ELEM_WTP_IPV4_IP_ADDRESS;
-			else
-				id = CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS;
-*/
-			cw_put_data(dst + 4, (uint8_t *) & sain->sin_addr, 4);
-			return 4 + cw_put_elem_hdr(dst, id, 4);
-		}
-
-		case AF_INET6:
-		{
-			id  = CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
-
-/*			if (conn->capwap_mode == CW_MODE_CISCO)
-				id = CW_ELEM_WTP_IPV6_IP_ADDRESS;
-			else
-				id = CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS;
-*/
-
-			struct sockaddr_in6 *sain = (struct sockaddr_in6 *) &a;
-			cw_put_data(dst + 4, (uint8_t *) & sain->sin6_addr, 16);
-			return 16 + cw_put_elem_hdr(dst, id, 16);
-
-		}
-	}
-
-	cw_log(DBG_MSG_ERR, "Can't determine CAPWAP Local IP Adress");
-	return 0;
+	return cw_put_local_ip_address(conn->sock,dst,CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS);
 }
+
