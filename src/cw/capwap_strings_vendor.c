@@ -1,5 +1,5 @@
 #include "capwap.h"
-
+#include "vendors.h"
 
 struct cw_strlist_elem capwap_strings_vendor[] = {
 { CW_VENDOR_ID_CISCO, "Cisco" },

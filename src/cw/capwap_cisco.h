@@ -29,6 +29,7 @@
 
 #include "lwapp.h"
 #include "cw.h"
+#include "vendors.h"
 
 #define CW_CISCO_MWAR_ADDR			LW_ELEM_AC_ADDRESS			/* 2 */
 #define CW_CISCO_RAD				3
