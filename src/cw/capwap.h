@@ -291,12 +291,18 @@ CW_MSG_MAXMSG	=				26
 
 
 
-/* wtp board data subelements */
+/**
+ * @defgrpup BOARD_SUBELEMS Board Data Sub-Elements
+ * @{
+ */
 #define CW_BOARDDATA_MODELNO		0
 #define CW_BOARDDATA_SERIALNO		1
 #define CW_BOARDDATA_BOARDID		2
 #define CW_BOARDDATA_REVISION		3
 #define CW_BOARDDATA_MACADDRESS		4
+/**
+ * @}
+ */
 
 
 /* AC Security flags for authentication  */
@@ -593,7 +599,10 @@ extern struct cw_strlist_elem capwap_strings_state[];
 extern struct cw_strlist_elem capwap_strings_vendor[];
 extern struct cw_strlist_elem capwap_strings_elem[];
 extern struct cw_strlist_elem capwap_strings_result[];
+extern struct cw_strlist_elem capwap_strings_board[];
 extern struct cw_strlist_elem mbag_item_strings[];
+
+
 
 
 
@@ -602,7 +611,8 @@ extern struct cw_strlist_elem mbag_item_strings[];
 #define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
-#define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,(id))
+#define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,id)
+#define cw_strboardelem(id) cw_strlist_get_str(capwap_strings_board,id)
 
 #define cw_stritem(id) cw_strlist_get_str(mbag_item_strings,(id))
 
