@@ -7,6 +7,7 @@
 #include "bstr.h"
 #include "sock.h" //tube
 
+#include "vendors.h"
 
 void cw_get_wtp_name(struct conn *conn,struct sockaddr *addr)
 {
