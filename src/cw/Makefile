@@ -250,7 +250,9 @@ CWACTION=action.o \
 	cipwap_actions_wtp.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
+	capwap_strings_board.o \
 	cw_put_msg.o \
+	cw_put_mbag_item.o \
 	cw_put_local_ip_address.o \
 	capwap_action_helpers.o \
 	cw_put_image_data.o \
