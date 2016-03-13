@@ -7,7 +7,7 @@
 #include "dbg.h"
 #include "cw.h"
 
-int cw_put_local_ip_adress(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id)
+int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id)
 {
 	struct sockaddr_storage a;
 	socklen_t alen = sizeof(struct sockaddr_storage);
