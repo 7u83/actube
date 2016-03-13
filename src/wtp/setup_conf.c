@@ -6,6 +6,8 @@
 #include "wtp_conf.h"
 #include "wtp_interface.h"
 
+#include "cw/vendors.h"
+
 
 int setup_conf(struct conn *  conn)
 {
