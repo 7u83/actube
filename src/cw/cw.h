@@ -451,8 +451,14 @@ extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in 
  */
 extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action,
 					  uint8_t * dst);
+int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
+				   uint8_t * dst);
+
 extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 					uint8_t * dst);
+
+/* helpers */
+extern int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id);
 
 /**
  * @}
