@@ -72,7 +72,7 @@ static cw_action_in_t actions_in[] = {
 	/* Vendor Specific Payload - Discovery Response*/
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
