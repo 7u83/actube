@@ -227,7 +227,7 @@ BSTROBJS= bstr_create.o \
 	bstr16cfgstr.o \
 	bstr16_create_from_str.o \
 	bstr_create_from_str.o \
-	vendorstr_create_from_str.o 
+	bstrv_create_from_str.o 
 
 	
 
