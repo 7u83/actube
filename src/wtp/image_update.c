@@ -5,6 +5,7 @@
 #include "cw/dbg.h"
 #include "cw/capwap.h"
 #include "cw/capwap_items.h"
+#include "cw/vendors.h"
 
 
 int image_update()

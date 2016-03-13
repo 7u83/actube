@@ -24,7 +24,7 @@
 #include "cw/log.h"
 
 #include "cw/bstr.h"
-
+#include "cw/vendors.h"
 
 char * conf_primary_if=0;
 char * conf_wtpname=0;
