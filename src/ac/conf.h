@@ -30,6 +30,7 @@
 #include "cw/lwapp.h"
 #include "cw/bstr.h"
 #include "cw/mod.h"
+#include "cw/vendors.h"
 
 
 extern struct mod_ac * conf_mods[10];
