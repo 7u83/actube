@@ -57,8 +57,8 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_BOARD_DATA,
-	 	.start = capwap_in_wtp_board_data, 
-		.item_id = "wtp_board_data", 
+	 	.start = cw_in_wtp_board_data, 
+		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.mand = 1, 
 	}
 	,
@@ -151,8 +151,8 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_BOARD_DATA,
-	 	.start = capwap_in_wtp_board_data, 
-		.item_id = "wtp_board_data", 
+	 	.start = cw_in_wtp_board_data, 
+		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.mand = 1, 
 	}
 	,
