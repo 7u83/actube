@@ -3,12 +3,14 @@
 #include "cw/mod.h"
 #include "cw/log.h"
 #include "cw/dbg.h"
+#include "cw/capwap_items.h"
 
 #include "cw/action.h"
 
 #include "mod_cisco.h"
 #include "../modload.h"
 
+#include "cw/vendors.h"
 
 extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
 extern int cisco_register_actions_wtp(struct cw_actiondef *def);
@@ -19,24 +21,20 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		case MOD_MODE_CAPWAP:
 		{
 
-			struct mod_ac *cmod = modload_wtp("capwap");
+			struct mod_wtp *cmod = modload_wtp("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initzialize mod_cisco, failed to load base mod mod_capwap");
 				return 1;
 			}
 			
-			printf("Nax\n");
 			cmod->register_actions(actions, MOD_MODE_CAPWAP);
-
-			printf("No\n");
 
 			int rc = cisco_register_actions_wtp(actions);
 
-			printf("Nuex\n");
 
 			cw_dbg(DBG_INFO, "Initialized mod cisco with %d actions", rc);
-			return 0;
+			return rc;
 		}
 		case MOD_MODE_BINDINGS:
 		{
@@ -61,12 +59,38 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 
 }
 
+#include "cw/capwap_items.h"
+mbag_t cisco_config_wtp;
 
 
 static int init()
 {
 	cw_dbg(DBG_INFO, "Initialiazing mod_cisco ...");
+
+	cisco_config_wtp = mbag_create();
+
+	bstrv_t v;  
+	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x01000000");
+	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_HARDWARE_VERSION,v);
+
+	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x08007900");
+	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_SOFTWARE_VERSION,v);
+
+	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x0C030800");
+	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_BOOTLOADER_VERSION,v);
+
+
 //      struct mod_ac *cmod = modload_ac("capwap");
+	return 1;
+}
+
+static int init_config(mbag_t config)
+{
+	bstr16_t gname = mbag_get_bstr16(config,CW_ITEM_WTP_GROUP_NAME,NULL);
+	if (!gname){
+		gname = bstr16_create_from_str("Entangled");
+		mbag_set_bstr16(config,CW_ITEM_WTP_GROUP_NAME,gname);
+	}
 	return 1;
 }
 
@@ -117,6 +141,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 static struct mod_ac cisco_wtp = {
 	.name = "cisco",
 	.init = init,
+	.init_config = init_config,
 	.detect = detect,
 	.register_actions = register_actions
 };
