@@ -1,3 +1,26 @@
+/*
+    This file is part of actube.
+
+    actube is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * @file 
+ * @brief Functions for mods
+ */
+
 #include <string.h>
 
 #include "action.h"
@@ -18,6 +41,10 @@ static int mod_null_register_actions(struct cw_actiondef *def,int mode)
 {
 	return 0;
 }
+
+/**
+ * mod_null 
+ */
 struct mod_ac mod_null={
 	.name="none",
 	.register_actions=mod_null_register_actions
@@ -26,7 +53,7 @@ struct mod_ac mod_null={
 
 
 
-int cmp(const void *p1, const void *p2)
+static int cmp(const void *p1, const void *p2)
 {
 	struct cache_item * c1 = (struct cache_item *)p1;
 	struct cache_item * c2 = (struct cache_item *)p2;
