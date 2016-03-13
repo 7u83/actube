@@ -538,7 +538,7 @@ Type: 34
 Length: 3
 
 
-36. Cisco AP Lohohost and Last Joined Controller (LWAPP 104)
+36. Cisco AP Loghohost and Last Joined Controller (LWAPP 104)
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
