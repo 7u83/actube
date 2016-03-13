@@ -23,6 +23,7 @@
 
 #include "lwapp_cisco.h"
 #include "lw.h"
+#include "vendors.h"
 
 /** 
  * Put message element data for Cisco vendor specific LWAPP message
