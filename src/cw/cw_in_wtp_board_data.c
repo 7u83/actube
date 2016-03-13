@@ -39,11 +39,14 @@ static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 		return;
 
 	int i = 0;
-	uint32_t val;
+//	uint32_t val;
 	do {
-		val = ntohl(*((uint32_t *) (msgelem + i)));
-		int subtype = (val >> 16) & 0xffff;
-		int sublen = val & 0xffff;
+//		val = ntohl(*((uint32_t *) (msgelem + i)));
+//		int subtype = (val >> 16) & 0xffff;
+//		int sublen = val & 0xffff;
+//
+		int subtype = cw_get_word(msgelem+i);
+		int sublen = cw_get_word(msgelem+i+2);
 		i += 4;
 		if (sublen + i > len) {
 			cw_dbg(DBG_ELEM_ERR,
@@ -52,8 +55,10 @@ static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 			return;
 		}
 
-		cw_dbg(DBG_SUBELEM, "Reading WTP board data sub-element, type=%d, len=%d",
-		       subtype, sublen);
+		cw_dbg(DBG_SUBELEM, "board data sub-element, type=%d (%s), len=%d",
+		       subtype, cw_strboardelem(subtype),sublen);
+
+		cw_dbg_dmp(DBG_SUBELEM,msgelem+i,sublen,"Dump...");
 
 		switch (subtype) {
 			case CW_BOARDDATA_MODELNO:
