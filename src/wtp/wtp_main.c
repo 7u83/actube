@@ -200,28 +200,28 @@ int main()
 	mod_init_config(mod,conn->config);
 	cfg_to_json();
 
-	mbag_t board_data = mbag_create();
-	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
+//	mbag_t board_data = mbag_create();
+//	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR, conf_vendor_id);
 
 
-	mbag_set_bstrn(board_data, CW_ITEM_WTP_BOARD_MACADDRESS, conf_macaddress,
-		       conf_macaddress_len);
-	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO,
-			 bstr_data(conf_serial_no), bstr_len(conf_serial_no));
+//	mbag_set_bstrn(board_data, CW_ITEM_WTP_BOARD_MACADDRESS, conf_macaddress,
+//		       conf_macaddress_len);
+//	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_SERIALNO,
+//			 bstr_data(conf_serial_no), bstr_len(conf_serial_no));
 
-	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_MODELNO, bstr_data(conf_model_no),
-			 bstr_len(conf_model_no));
+//	mbag_set_bstr16n(board_data, CW_ITEM_WTP_BOARD_MODELNO, bstr_data(conf_model_no),
+//			 bstr_len(conf_model_no));
 
 
 
-	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
+//	mbag_set_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, board_data);
 
 
 
 
 //      mbag_set_bstrv(conn->config, CW_ITEM_WTP_SOFTWARE_VERSION, sw);
 
-	printf("Board_data %p\n", board_data);
+//	printf("Board_data %p\n", board_data);
 
 	mbag_t mb = mbag_get_mbag(conn->config, CW_ITEM_WTP_BOARD_DATA, NULL);
 	printf("mbag %p\n", mb);

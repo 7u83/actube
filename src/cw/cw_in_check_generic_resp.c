@@ -15,6 +15,7 @@ int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a, uint8_t 
 	/* Check if the message contains a result code and
 	   if it indicates an errror */
 	mbag_item_t * result = mbag_get(conn->incomming,CW_ITEM_RESULT_CODE);
+	
 	if  (result ) {
 		if (!cw_rcok(result->dword)){
 			return result->dword;
@@ -35,8 +36,9 @@ int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a, uint8_t 
 	}
 
 	/* if we hava a result code, return it */
-	if ( result ) 
+	if ( result ) {
 		return result->dword;
+	}
 
 	return 0;
 }

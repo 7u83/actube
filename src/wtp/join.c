@@ -182,7 +182,7 @@ int run_join(struct conn *conn)
 //      conn_send_msg(conn, conn->req_buffer);
 
 
-
+	mbag_del_all(conn->incomming);
 	int rc = cw_send_request(conn, CW_MSG_JOIN_REQUEST);
 
 	if (!cw_rcok(rc)) {
@@ -210,6 +210,8 @@ int join()
 	struct conn *conn = get_conn();
 
 	printf("Join\n");
+
+	mbag_del_all(conn->incomming);
 
 	cw_aciplist_t iplist =
 	    mbag_get_mavl(conn->local, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);

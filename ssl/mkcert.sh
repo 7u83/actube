@@ -74,7 +74,7 @@ fi
 if [ "$TYPE" = "cisco-ap" ]
 then
 	PREF="$2-"
-	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-0019dbe09327/emailAddress=support@cisco.com"
+	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Systems/CN=C1130-902b34de9ef1/emailAddress=support@cisco.com"
 
        openssl req -nodes -new -x509 \
                 -sha1 \
