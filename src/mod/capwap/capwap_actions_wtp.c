@@ -100,6 +100,47 @@ static cw_action_in_t actions_in[] = {
 		.mand = 1
 	}
 	,
+
+	/* AC Descriptor - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.start  = cw_in_ac_descriptor,
+		.min_len = 12,
+		.max_len = 8192,
+		.mand = 1
+	}
+	,
+
+	/* AC Name - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 512,
+		.mand = 1
+	}
+	,
+
+	/* ECN Support - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_ECN_SUÜPPRT,
+		.item_id = CW_ITEM_ECN_SUPPORT, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 1,
+		.mand = 1
+	}
+	,
+
+
 	
 	/* ----------------------------------------------------------------
 	 * Message Configuration Status Response - IN
@@ -387,7 +428,7 @@ static cw_action_out_t actions_out[] = {
 	,
 
 
-	/* ECN Support - Join Request */
+	/* Statistics Timer - Join Request */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id  = CW_ELEM_STATISTICS_TIMER,
