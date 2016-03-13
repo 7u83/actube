@@ -182,6 +182,21 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 
 #define cw_set_msg_flags(msgptr,f) (cw_put_byte( (msgptr)+7,f))
 
+/**
+ * Check if a message id is from request msg 
+ * @param msg_id id to check
+ * @return 1 if it msg id is a request msg id, otherwise 0
+ */
+#define cw_is_request(msg) (msg_id & 1)
+
+/**
+ * Check if message id is from a response msg
+ * @see #cw_is_request
+ */
+
+#define cw_is_response(msg_id) (!is_response(msg_id))
+
+
 static inline uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m)
 {
 	return cw_get_msg_elems_ptr(m + cw_get_hdr_msg_offset(m));
@@ -224,7 +239,6 @@ static inline int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 	cw_set_hdr_hlen(th, hlen);
 	return 1;
 }
-
 
 
 
@@ -310,6 +324,7 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 
 int cw_put_image_data(uint8_t * dst, FILE * infile);
 
+extern int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item);
 
 
 /**
