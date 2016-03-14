@@ -133,6 +133,7 @@ extern const char CW_ITEM_AC_HASH_VALUE[];
 	
 extern const char CW_ITEM_AC_NAME_WITH_PRIORITY[];
 extern const char CW_ITEM_MAXIMUM_MESSAGE_LENGTH[];
+extern const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[];
 
 
 	/* CIPWAP and Cisco */
