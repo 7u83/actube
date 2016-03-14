@@ -110,7 +110,7 @@ int setup_conf(struct conn *  conn)
 
 
 
-
+	mbag_set_byte(conn->config,CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,0);
 
 
 
