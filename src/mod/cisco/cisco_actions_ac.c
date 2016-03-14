@@ -195,7 +195,27 @@ static cw_action_out_t actions_out[]={
 		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}
+	,
 
+
+	/* AC Descriptor - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.item_id = CW_ITEM_AC_DESCRIPTOR,
+		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
+		.out = cisco_out_ac_descriptor,
+		.mand = 1
+	}
+	,
+
+
+
+	/* ECN Support - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT
+	}
 
 
 

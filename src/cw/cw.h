@@ -400,13 +400,24 @@ static inline int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s)
 }
 
 
+struct cw_descriptor_subelem_def {
+	int vendor_id;
+	int type;
+	const char *item_id;
+	int maxlen;
+	int mand;
+};
 
+
+extern int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len, struct cw_descriptor_subelem_def *elems);
 
 extern int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
-				  struct cw_action_in *a, uint8_t * data, int len);
+				  struct cw_action_in *a, uint8_t * data, int len,struct cw_descriptor_subelem_def *allowed);
 
 extern int cw_read_wtp_descriptor_7(mbag_t mbag, struct conn *conn,
-				    struct cw_action_in *a, uint8_t * data, int len);
+				    struct cw_action_in *a, uint8_t * data, int len,struct cw_descriptor_subelem_def *allowed);
+
+extern int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, struct cw_descriptor_subelem_def *allowed);
 
 extern int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len);
 
