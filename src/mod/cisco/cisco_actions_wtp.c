@@ -33,6 +33,19 @@
 static cw_action_in_t actions_in[] = {
 
 
+	/* ECN Support - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT,
+	 	.start = cw_in_generic2, 
+		.mand = 0, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+
 	
 
 	/* End of list */

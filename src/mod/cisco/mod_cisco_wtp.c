@@ -12,7 +12,7 @@
 
 #include "cw/vendors.h"
 
-extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
+extern int cisco_register_actions80211_wtp(struct cw_actiondef *def);
 extern int cisco_register_actions_wtp(struct cw_actiondef *def);
 
 static int register_actions(struct cw_actiondef *actions, int mode)
@@ -45,7 +45,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 				return 1;
 			}
 			cmod->register_actions(actions, MOD_MODE_BINDINGS);
-			int rc = cisco_register_actions80211_ac(actions);
+			int rc = cisco_register_actions80211_wtp(actions);
 			cw_dbg(DBG_INFO, "Initialized mod cisco 80211 with %d actions", rc);
 			return 0;
 		}
