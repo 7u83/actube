@@ -27,7 +27,7 @@ int capwap_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t 
 
 	mbag_t mbag = conn->incomming;
 
-	int rc =cw_read_wtp_descriptor(mbag, conn, a, data, len);
+	int rc =cw_read_wtp_descriptor(mbag, conn, a, data, len, NULL);
 	return rc;
 }
 

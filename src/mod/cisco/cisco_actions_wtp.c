@@ -32,8 +32,22 @@
 
 static cw_action_in_t actions_in[] = {
 
+	/* AC Descriptor - Discovery Response */
+	{
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.start  = cisco_in_ac_descriptor,
+		.min_len = 12,
+		.max_len = 8192,
+		.mand = 1
+	}
+	,
 
-	/* ECN Support - Join Request */
+
+
+	/* ECN Support - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
@@ -43,6 +57,19 @@ static cw_action_in_t actions_in[] = {
 		.mand = 0, 
 		.min_len = 1, 
 		.max_len = 1
+	}
+	,
+
+	/* AC Descriptor - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.start  = cisco_in_ac_descriptor,
+		.min_len = 12,
+		.max_len = 8192,
+		.mand = 1
 	}
 	,
 

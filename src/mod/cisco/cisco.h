@@ -11,5 +11,7 @@ extern int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,ui
 extern int cisco_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
+extern int cisco_in_ac_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			int len, struct sockaddr *from);
 
 #endif

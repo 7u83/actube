@@ -65,7 +65,8 @@ UTILOBJS= \
 	send.o \
 	cw_read_wtp_descriptor.o \
 	cw_read_wtp_descriptor_7.o \
-	cw_read_wtp_descriptor_versions.o
+	cw_read_wtp_descriptor_versions.o \
+	cw_read_descriptor_subelems.o
 
 MAVLOBJS= \
 	mavl_del.o \
@@ -152,6 +153,7 @@ CAPWAPOBJS= \
 	cw_in_cisco_image_identifier.o\
 	cw_out_radio_operational_state.o\
 	cw_in_ac_descriptor.o\
+	cw_read_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\
 	cw_out_wtp_ip_address.o\
 	cw_out_capwap_control_ip_addr_list.o \
