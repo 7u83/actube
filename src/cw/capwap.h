@@ -82,7 +82,7 @@
 
 
 /**
- * CAWAP header flags.
+ * CAPWAP header flags.
  */
 #define CW_FLAG_HDR_R1 0x01	/* bit 0 reserved 1 */
 #define CW_FLAG_HDR_R2 0x02	/* bit 1 reserved 2 */
@@ -284,9 +284,9 @@ CW_MSG_MAXMSG	=				26
 
 /* pseudo message elements, defined for libcapwap */
 
-#define XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS	0x10000	/* means LOCAL_IPV4 or IPV6 ADRESS */
-#define XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS	0x20000	/* means LOCAL_IPV4 or IPV6 ADRESS */
-#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x30000	/* a radio info element  */
+//#define XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS	0x10000	/* means LOCAL_IPV4 or IPV6 ADRESS */
+//#define XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS	0x20000	/* means LOCAL_IPV4 or IPV6 ADRESS */
+//#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x30000	/* a radio info element  */
 
 
 
