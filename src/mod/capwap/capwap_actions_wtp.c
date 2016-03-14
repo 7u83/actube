@@ -131,7 +131,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN,
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
-		.elem_id  = CW_ELEM_ECN_SUÜPPRT,
+		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -140,6 +140,44 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* CAPWAP Control IPv4 Address - Join Response*/
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
+		.start  = cw_in_capwap_control_ip_address,
+		.min_len = 6,
+		.max_len = 6,
+		.mand = 1
+	}
+	,
+			
+	/* CAPWAP Control IPv6 Address - Join Response*/
+	{
+		.capwap_state = CW_STATE_JOIN,
+		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
+		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
+		.min_len = 18,
+		.max_len = 18,
+		.mand = 1
+	}
+	,	
+
+
+	/* Maximum Message Length - Join Response */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
+	 	.start = cw_in_generic2, 
+		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
+		.min_len = 2, 
+		.max_len = 2
+	}
+	,
 
 	
 	/* ----------------------------------------------------------------
