@@ -500,6 +500,51 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	/* AC Name - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.elem_id = CW_ELEM_AC_NAME,
+		.item_id = CW_ITEM_AC_NAME,
+		.out = cw_out_generic,
+	       	.get = cw_out_get_local,
+		.mand = 1
+	}
+	,
+
+	/* AC Descriptor - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.item_id = CW_ITEM_AC_DESCRIPTOR, 
+		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.out = capwap_out_ac_descriptor,
+		.mand = 1
+	}
+	,
+
+
+	/* Capwap Local IPv4/IPv6 Address - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
+	 	.out = cw_out_capwap_control_ip_addr_list, 
+		.get = cw_out_get_outgoing,
+		.mand = 1
+	}
+	,
+
+	/* ECN Support - Join Response */
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT, 
+		.out = cw_out_generic,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+
+
 	/* ---------------------------------------------------
 	 * Configuration Status Response Message
 	 */
