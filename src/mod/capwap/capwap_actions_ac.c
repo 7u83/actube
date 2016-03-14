@@ -81,7 +81,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
-		.item_id = "wtp_frame_tunnel_mode", 
+		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
 		.mand = 1, 
 		.min_len = 1, 
 		.max_len = 1
@@ -101,6 +101,14 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* MTU Discovery Padding  */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_MTU_DISCOVERY_PADDING,
+	 	.start = cw_in_mtu_discovery_padding, 
+	}
+	,
 
 	/* Vendor Specific Payload */
 	{
@@ -112,16 +120,6 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 	
-	/* MTU Discovery Padding  */
-	{
-		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_MTU_DISCOVERY_PADDING,
-	 	.start = cw_in_mtu_discovery_padding, 
-	}
-	,
-
-
 
 	/* --------------------------------------------------------------------------
 	 * Join Request 
@@ -163,7 +161,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
 	 	.start = capwap_in_wtp_descriptor, 
-		.item_id = "wtp_descriptor", 
+		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.mand = 1, 
 	}
 	,
@@ -220,6 +218,25 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* The mandatory WTP Radio Information message elements,
+	   described in RFC5145 are inserted by the apropriate
+	   bindings mod */
+
+
+	/* ECN Support - Join Request */
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.item_id = CW_ITEM_ECN_SUPPORT,
+	 	.start = cw_in_generic2, 
+		.mand = 1, 
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+	   
+
 	/* Local IPv4 Address - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
@@ -246,29 +263,20 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* ECN Support - Join Request */
+	/* The following elements are not mandatory */
+
+	/* CAPWAP Transport Protocol - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_ECN_SUPPORT,
-		.item_id = CW_ITEM_ECN_SUPPORT,
+		.elem_id = CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL,
+		.item_id = CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,
 	 	.start = cw_in_generic2, 
-		.mand = 1, 
 		.min_len = 1, 
 		.max_len = 1
 	}
 	,
 
-	/* Vendor Specific Payload - Join Request*/
-	{
-		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-		.start = cw_in_vendor_specific_payload,
-		.min_len=7
-	}
-	,
-	
 	/* Maximum Message Length - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
@@ -293,6 +301,16 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Vendor Specific Payload - Join Request*/
+	{
+		.capwap_state = CW_STATE_JOIN, 
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+		.min_len=7
+	}
+	,
+	
 
 
 	/* --------------------------------------------------------------------------
