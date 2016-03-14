@@ -3,6 +3,7 @@
 #include "capwap_items.h"
 
 
+const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[]="capwap_transport_protocol";
 const char CW_ITEM_IDLE_TIMEOUT[]="idle_timeout";
 const char CW_ITEM_DISCOVERY_TYPE[]="discovery_type";
 const char CW_ITEM_WTP_NAME[]="wtp_name";
@@ -95,6 +96,8 @@ const char CW_ITEM_RADIO_INFOS[]="radio_infos";
 
 
 struct cw_itemdef capwap_itemdefs[] = {
+
+{CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,CW_ITEM_NONE,MBAG_BYTE},
 
 {CW_ITEM_WTP_NAME,CW_ITEM_NONE,MBAG_STR},
 {CW_ITEM_WTP_MAC_TYPE,CW_ITEM_NONE,MBAG_BYTE},
