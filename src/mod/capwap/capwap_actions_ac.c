@@ -502,7 +502,9 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-	/* ---------------------------------------------------
+
+
+	/* --------------------------------------------------------------------------
 	 * Join Response Message
 	 */
 
@@ -562,9 +564,8 @@ static cw_action_out_t actions_out[]={
 	,
 
 
-
-	/* ---------------------------------------------------
-	 * Configuration Status Response Message
+	/* --------------------------------------------------------------------------
+	 * Configuration Status Response Message - OUT
 	 */
 
 	{

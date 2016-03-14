@@ -15,7 +15,6 @@ int configure()
 
 	mbag_del_all(conn->incomming);
 
-	printf("Putting AC NAME\n");
 	mbag_set_str(conn->local,CW_ITEM_AC_NAME,"abc");
 
 

@@ -199,9 +199,25 @@ static cw_action_in_t actions_in[] = {
 		.start  = cw_in_generic2,
 		.min_len = 4,
 		.max_len = 4,
-		.mand = 0
+		.mand = 1
 	}
 	,
+
+	/* Capwap Timers - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_CAPWAP_TIMERS,
+		.item_id = CW_ITEM_CAPWAP_TIMERS, 
+		.start  = cw_in_generic2,
+		.min_len = 2,
+		.max_len = 2,
+		.mand = 1
+	}
+	,
+
+
+
 
 	/* Result Code - Config Status Resp */
 	{
