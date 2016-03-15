@@ -20,5 +20,6 @@ extern struct mbag_item * capwap_out_get_session_id(struct conn *conn,struct cw_
 
 extern struct mbag_item * capwap_out_get_idle_timeout(struct conn *conn,struct cw_action_out * a);
 
+extern struct mbag_item * capwap_out_get_capwap_timers(struct conn *conn,struct cw_action_out * a);
 
 #endif

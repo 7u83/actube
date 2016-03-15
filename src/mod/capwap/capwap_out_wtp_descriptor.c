@@ -42,6 +42,13 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->data);
+		if (bstrv_get_vendor_id(i->data)){
+			d += cw_put_dword(d, 0);
+			d += cw_put_word(d, CW_SUBELEM_WTP_HARDWARE_VERSION);
+			d += cw_put_word(d, bstrv_len(i->data));
+			d += cw_put_data(d, bstrv_data(i->data), bstrv_len(i->data));
+
+		}
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Hardware Version in WTP Descriptor, not set.");
