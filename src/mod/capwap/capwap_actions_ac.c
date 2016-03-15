@@ -578,6 +578,18 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id = CW_ELEM_CAPWAP_TIMERS,
+		.item_id = CW_ITEM_CAPWAP_TIMERS,
+	 	.out = cw_out_generic, 
+		.get = capwap_out_get_capwap_timers,
+		.mand = 1
+	}
+	,
+
+
+
 	
 	/* Change State Event Response */
 
