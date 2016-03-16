@@ -378,22 +378,22 @@ static void wtpman_run(void *arg)
 
 
 	/* reject connections to our multi- or broadcast sockets */
-	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+/*	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
 		       CLIENT_IP);
 		wtpman_remove(wtpman);
 		return;
 	}
-
+*/
 
 	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
 
 	/* establish dtls session */
-	if (!wtpman_establish_dtls(wtpman)) {
+/*	if (!wtpman_establish_dtls(wtpman)) {
 		wtpman_remove(wtpman);
 		return;
 	}
-
+*/
 
 	/* dtls is established, goto join state */
 	if (!wtpman_join(wtpman, timer)) {
@@ -478,6 +478,38 @@ static void wtpman_run(void *arg)
 	wtpman_remove(wtpman);
 	return;
 }
+
+
+static void wtpman_run_dtls(void *arg)
+{
+
+	struct wtpman *wtpman = (struct wtpman *) arg;
+
+
+
+	/* reject connections to our multi- or broadcast sockets */
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
+		       CLIENT_IP);
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+	/* establish dtls session */
+	if (!wtpman_establish_dtls(wtpman)) {
+		wtpman_remove(wtpman);
+		return;
+	}
+
+
+
+
+	wtpman_run(arg);
+}
+
 
 
 void wtpman_destroy(struct wtpman *wtpman)
@@ -620,12 +652,12 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 
 	if (dtlsmode) {
 		cw_dbg(DBG_INFO, "Starting wtpman in DTLS mode");
-		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run,
+		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_dtls,
 			       (void *) wtpman);
 	} else {
 		cw_dbg(DBG_INFO, "Starting wtpman in non-dtls mode");
 
-		pthread_create(&wtpman->thread, NULL, (void *) &wtpman_run_discovery,
+		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_discovery,
 			       (void *) wtpman);
 	}
 }
