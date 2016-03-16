@@ -1,6 +1,14 @@
 pre-requisites
 --------------
 
+On a fresh FreeBSD 10.2:
+
+pkg install gmake
+pkg install gnutls
+pkg install libconfuse
+pkg install sqlite3
+
+
 On a fresh Ubuntu 14.04:
 
 apt-get install git
