@@ -139,10 +139,10 @@ int main()
 //      cw_register_actions_cipwap_wtp(&capwap_actions);
 //      cw_register_actions_capwap_80211_wtp(&capwap_actions);
 //
-//#define CWMOD "cisco"
-//#define CWBIND "cisco"
-#define CWMOD "capwap"
-#define CWBIND "capwap80211"
+#define CWMOD "cisco"
+#define CWBIND "cisco"
+//#define CWMOD "capwap"
+//#define CWBIND "capwap80211"
 
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
@@ -190,7 +190,7 @@ int main()
 //	conn->capwap_mode = CW_MODE_CAPWAP;
 	//conn->capwap_mode = CW_MODE_CISCO;
 
-	the_conn->strict_capwap = 1;
+	the_conn->strict_capwap = 0;
 
 
 	conn->config = mbag_create();
