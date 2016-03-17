@@ -573,7 +573,7 @@ Length: 3
    Length: 2
 
    Type: 
-        0=Telnet?
+        0=Telnet
         1=SSH
    Set:
         0=Disable

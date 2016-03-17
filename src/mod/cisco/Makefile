@@ -9,6 +9,7 @@ OBJS=\
 	cisco_out_ac_descriptor.o \
 	cisco_out_wtp_descriptor.o \
 	cisco_in_ac_descriptor.o\
+	cisco80211.o
 	
 
 NAME=libcisco.a
