@@ -29,6 +29,8 @@
 #include "mod_cisco.h"
 #include "cisco.h"
 
+#include "cisco80211.h"
+
 
 static cw_action_in_t actions_in[] = {
 
@@ -146,13 +148,30 @@ static cw_action_out_t actions_out[]={
 	/* ECN Support - Join Request */
 	{
 		/* Cisco doesn't know ECN support, so we 
-		   defaine  no output method */
+		   define no output method */
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.mand = 0
 	}
 	,
+
+
+	/* ----------------------------------------------------------------
+	 * Configuration Status Request
+	 */
+	{
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.item_id = CW_ITEM_RADIO_CFG,
+		.out = cisco_out_80211_wtp_radio_cfg,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+//	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_CFG, CW_VENDOR_ID_CISCO,
+//	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_cisco_wtp_radio_cfg, cw_out_get_config, 1}
+//	,
 
 
 
