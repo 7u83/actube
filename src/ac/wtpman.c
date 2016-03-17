@@ -151,6 +151,18 @@ static void wtpman_run_discovery(void *arg)
 
 }
 
+int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+		    struct sockaddr *from)
+{
+	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+	uint32_t type = cw_get_msg_type(msgptr);
+	cw_log(LOG_ERR,"Hey: %d",type);
+	if (type == CW_MSG_DISCOVERY_REQUEST) 
+		conn->capwap_state=CW_STATE_DISCOVERY;
+
+
+	return process_message(conn,rawmsg,rawlen,from);
+}
 
 
 
@@ -646,6 +658,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 
 }
 
+int nodtls=0;
 
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
@@ -656,6 +669,14 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 			       (void *) wtpman);
 	} else {
 		cw_dbg(DBG_INFO, "Starting wtpman in non-dtls mode");
+
+		if (nodtls){
+			wtpman->conn->process_message=xprocess_message;
+			pthread_create(&wtpman->thread, NULL, (void *) wtpman_run,
+				       (void *) wtpman);
+			return;
+
+		}
 
 		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_discovery,
 			       (void *) wtpman);

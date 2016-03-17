@@ -14,8 +14,8 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 	cw_action_in_t *mlist[120];
 	int n = cw_check_missing_mand(mlist, conn, a);
 
-
 	conn->capwap_state = CW_STATE_NONE;
+
 
 	if (n && conn->strict_capwap) {
 		cw_dbg_missing_mand(DBG_MSG_ERR, conn, mlist, n, a);
@@ -35,6 +35,7 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		
 
 	/* ok, send response */
+	conn->capwap_state = CW_STATE_JOIN;
 
 	return 0;
 }
