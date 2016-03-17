@@ -509,6 +509,16 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
+	{
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+		.out = cw_out_generic,
+	       	.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
 
 	/* ---------------------------------------------------------------
 	 * Echo Request - Out
