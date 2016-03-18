@@ -75,6 +75,15 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+
+	/* Vendor Specific Payload - Cponfiguration Status Response */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
 	
 
 	/* End of list */
@@ -162,6 +171,8 @@ static cw_action_out_t actions_out[]={
 	 */
 	{
 		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_ITEM_RADIO_CFG,
 		.out = cisco_out_80211_wtp_radio_cfg,
 		.get = cw_out_get_config,
@@ -172,6 +183,7 @@ static cw_action_out_t actions_out[]={
 //	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_CFG, CW_VENDOR_ID_CISCO,
 //	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_cisco_wtp_radio_cfg, cw_out_get_config, 1}
 //	,
+
 
 
 

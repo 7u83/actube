@@ -256,13 +256,45 @@ static cw_action_in_t actions_in[] = {
 
 
 		
+	/* ----------------------------------------------------------------
+	 * Message Echo Response - IN
+	 */
 	{
 		.capwap_state = CW_STATE_RUN,
 		.msg_id = CW_MSG_ECHO_RESPONSE,
 	}
 	,
 
+	/* Vendor Specific Payload - Echo Response */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_ECHO_RESPONSE, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
 
+
+
+	/* ----------------------------------------------------------------
+	 * Configuration Update Request  - IN
+	 */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+	}
+	,
+
+	/* Vendor Specific Payload - Echo Response */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
+		
+	
 };
 
 static cw_action_out_t actions_out[] = {
@@ -527,6 +559,18 @@ static cw_action_out_t actions_out[] = {
 	/* Echo Request  */
 	{
 		.msg_id = CW_MSG_ECHO_REQUEST, 
+	}
+	,
+
+
+
+
+	/* ---------------------------------------------------------------
+	 * Configuration Update REsponse  - Out
+	 */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_RESPONSE,
+		.mand = 1
 	}
 	,
 
