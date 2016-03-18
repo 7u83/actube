@@ -151,6 +151,11 @@ int read_config(const char * filename){
 	if (str)
 		conf_mtu_discovery = atoi(str);
 
+	str = uci_lookup_option_string(ctx,section,"interface");
+	if (str) 
+		conf_primary_if=strdup(str);
+
+
 	str = uci_lookup_option_string(ctx,section,"ssl_key");
 	if (str) 
 		conf_sslkeyfilename=strdup(str);
