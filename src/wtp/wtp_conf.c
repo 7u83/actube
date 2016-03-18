@@ -94,14 +94,12 @@ LONGSTRS conf_timer_cfgstrs[] = {
 
 int wtpconf_primary_if()
 {
+	if (!conf_primary_if ) {
+	        conf_primary_if  = sock_get_primary_if(AF_INET6);
+	        if (!conf_primary_if)
+	                conf_primary_if = sock_get_primary_if(AF_INET);
+	}
 
-#ifdef WITH_IPV6
-        conf_primary_if  = sock_get_primary_if(AF_INET6);
-        if (!conf_primary_if)
-                conf_primary_if = sock_get_primary_if(AF_INET);
-#else   
-        conf_primary_if = get_primary_if(AF_INET);
-#endif
 
         if (!conf_primary_if){
                 cw_log(LOG_ERR,"Fatal: Unable to detect primary interface");
@@ -117,10 +115,7 @@ int wtpconf_primary_if()
 			conf_primary_if,
 			sock_hwaddr2str(conf_macaddress,conf_macaddress_len)
 			);
-
-
 	return 1;
-
 }
 
 int wtpconf_name()
@@ -192,6 +187,7 @@ int wtpconf_ac_list()
 	}
 
 	conf_ac_list_len=len;
+
 #ifdef WITH_CW_LOG_DEBUG
 	for (i=0; i<conf_ac_list_len; i++){
 		cw_dbg(DBG_INFO,"Using AC: %s",conf_ac_list[i]);
