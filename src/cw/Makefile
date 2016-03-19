@@ -267,6 +267,7 @@ CWACTION=action.o \
 	mbag_type_dword.o\
 	mbag_type_bstr16.o\
 	mbag_type_mbag.o\
+	mbag_set_from_buf.o\
 	radio.o \
 	cw_out_radio_info.o \
 	capwap_items.o \
