@@ -151,7 +151,9 @@ CAPWAPOBJS= \
 	cw_out_wtp_reboot_statistics.o \
 	cw_in_wtp_reboot_statistics.o\
 	cw_in_cisco_image_identifier.o\
-	cw_out_radio_operational_state.o\
+	cw_out_radio_operational_states.o\
+	cw_out_radio_operational_states_7.o\
+	cw_put_radio_operational_states.o \
 	cw_in_ac_descriptor.o\
 	cw_read_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\

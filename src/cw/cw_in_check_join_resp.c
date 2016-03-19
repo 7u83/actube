@@ -18,8 +18,6 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 		if (!cw_rcok(jresult->dword)){
 			return jresult->dword;
 		}
-
-
 	}
 
 

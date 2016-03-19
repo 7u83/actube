@@ -480,6 +480,10 @@ extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_ou
 extern int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
 				   uint8_t * dst);
 
+extern int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+extern int cw_out_radio_operational_states_7(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
 /**
  * With this alias for #cw_out_wtp_ip_address we can
  * can hav more consitent naming, when implement draft 7 
@@ -492,6 +496,8 @@ extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out 
 
 /* helpers */
 extern int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id);
+extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, int d7mode);
+
 
 /**
  * @}

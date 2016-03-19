@@ -189,6 +189,20 @@ static cw_action_in_t actions_in[] = {
 		.end = cw_in_check_generic_resp
 	}
 	,
+	/* Capwap Timers - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_CAPWAP_TIMERS,
+		.item_id = CW_ITEM_CAPWAP_TIMERS, 
+		.start  = cw_in_generic2,
+		.min_len = 2,
+		.max_len = 2,
+		.mand = 1
+	}
+	,
+
+		
 
 	/* Idle Timeout - Config Status Resp */
 	{
@@ -199,19 +213,6 @@ static cw_action_in_t actions_in[] = {
 		.start  = cw_in_generic2,
 		.min_len = 4,
 		.max_len = 4,
-		.mand = 1
-	}
-	,
-
-	/* Capwap Timers - Config Status Resp */
-	{
-		.capwap_state = CW_STATE_CONFIGURE,
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id  = CW_ELEM_CAPWAP_TIMERS,
-		.item_id = CW_ITEM_CAPWAP_TIMERS, 
-		.start  = cw_in_generic2,
-		.min_len = 2,
-		.max_len = 2,
 		.mand = 1
 	}
 	,
@@ -233,6 +234,18 @@ static cw_action_in_t actions_in[] = {
 	,
 	
 
+	/* Vendor Specific Payload - Cponfig Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload
+	}
+	,
+	
+	/* ----------------------------------------------------------------
+	 * Change State Event Response - IN
+	 */
 
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
@@ -285,7 +298,50 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Vendor Specific Payload - Echo Response */
+
+	/* WTP Name - Config Update Req */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.elem_id  = CW_ELEM_WTP_NAME,
+		.item_id = CW_ITEM_WTP_NAME, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 1024,
+		.mand = 0
+	}
+	,
+
+
+
+
+	/* Location Data - Config Update Req */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.elem_id  = CW_ELEM_LOCATION_DATA,
+		.item_id = CW_ITEM_LOCATION_DATA, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 1024,
+		.mand = 0
+	}
+	,
+
+
+	/*  Radio Admin State - Config Status Request */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
+		.start = cw_in_radio_administrative_state,
+		.mand = 1
+	}
+	,
+
+
+	/* Vendor Specific Payload - Config Update Req */
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 

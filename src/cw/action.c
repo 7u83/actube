@@ -60,9 +60,9 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 	return 0;
 }
 
+//typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int,struct sockaddr *);
 
-		
-/*
+
 cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
 		int capwap_state,int msg_id, cw_action_fun_t callback)
 {
@@ -83,11 +83,10 @@ cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
 	cw_action_fun_t  old = af->end;
 	af->end =callback;
 	return old;
-		
 
 }
 
-*/
+
 
 
 cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in * a)

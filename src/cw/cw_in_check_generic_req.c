@@ -10,7 +10,6 @@
 int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
-
 	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */
