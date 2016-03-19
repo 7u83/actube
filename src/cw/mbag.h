@@ -31,8 +31,17 @@
 #include "bstr.h"
 #include "sock.h"
 
-
+/* Forward declaration */
 struct mbag_item;
+
+/** 
+ * The MBAG Type
+ *
+ * It's simply an #mavl AVL Tree.
+ */ 
+typedef mavl_t mbag_t;
+
+
 
 /** 
  * Definition for MABG data types 
@@ -90,14 +99,6 @@ struct mbag_item{
 
 
 typedef struct mbag_item mbag_item_t;
-
-/** 
- * The MBAG Type
- *
- * It's simply an #mavl AVL Tree.
- */ 
-typedef mavl_t mbag_t;
-
 
 extern const struct mbag_typedef mbag_type_byte;
 extern const struct mbag_typedef mbag_type_word;
@@ -634,6 +635,12 @@ static inline int mbag_set_fun(mbag_t s, const char *id,
 
 	return 1;
 }
+
+
+int mbag_set_from_buf(mbag_t dst, mbagtype_t type, const char *item_id, uint8_t *data, int len);
+
+
+
 /**
  * Delete all objects in ab mbag.
  *
