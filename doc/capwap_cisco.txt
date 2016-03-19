@@ -499,7 +499,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    Username: 
-	0-terminated username, the field has to fillid up with zeros.
+	0-terminated username, the field has to filled up with zeros.
 
    Password 1: 
 	Password
@@ -625,6 +625,17 @@ Length: 2
    DTLS Data en
 	0: DTLS Data disabled
 	1: DTLS Data enabled
+
+85. Cisco Primed Join Timeout (LWAPP)
+    0                   1                   
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Tiemout                       |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+Type: 85
+
+   Timeout: Timeout in seconds
+
 
 132. Cisco MM MWAR Hash Config
 

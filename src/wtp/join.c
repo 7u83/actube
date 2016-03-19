@@ -183,6 +183,9 @@ int run_join(struct conn *conn)
 
 
 	mbag_del_all(conn->incomming);
+
+	//mbag_del (conn->incomming,CW_ITEM_RESULT_CODE);
+
 	int rc = cw_send_request(conn, CW_MSG_JOIN_REQUEST);
 
 	if (!cw_rcok(rc)) {

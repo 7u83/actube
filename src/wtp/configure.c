@@ -13,7 +13,9 @@ int configure()
 
 	struct conn *conn = get_conn();
 
-	mbag_del_all(conn->incomming);
+//	mbag_del_all(conn->incomming);
+	conn->incomming=conn->config;
+	mbag_del(conn->incomming,CW_ITEM_RESULT_CODE);
 
 	mbag_set_str(conn->local,CW_ITEM_AC_NAME,"abc");
 

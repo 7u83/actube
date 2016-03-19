@@ -33,6 +33,9 @@ const char * lw_cisco_id_to_str(int elem_id)
 		case LW_CISCO_AP_DTLS_DATA_CFG:
 			return "AP DTLS Data Config";
 
+		case LW_CISCO_PRIMED_JOIN_TIMEOUT:
+			return "Primed Join Timeout";			
+
 		default: 
 			return "Unknown";
 

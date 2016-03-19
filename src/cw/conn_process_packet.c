@@ -228,6 +228,15 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 	*/
 }
 
+int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from)
+{
+	if (cw_is_request(a->msg_id)){
+		return cw_in_check_generic_req(conn,a,data,len,from);
+	}
+	return cw_in_check_generic_resp(conn,a,data,len,from);
+	
+}
 
 
 
@@ -393,9 +402,19 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	   by calling the "end" function for the message */
 
 	int result_code = 0;
-	if (afm->end) {
-		result_code = afm->end(conn, afm, rawmsg, len, from);
 
+
+	int rct = cw_in_check_generic_req(conn, afm, rawmsg, len, from);
+	if (rct && conn->strict_capwap)
+	{
+		result_code = rct;
+	}
+	else {
+
+		if (afm->end) {
+			result_code = afm->end(conn, afm, rawmsg, len, from);
+
+		}
 	}
 
 	if (unrecognized) {
@@ -404,7 +423,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		/* set only resultcode for request messages */
 
 		if ( (!result_code) && ((afm->msg_id & 1))) {
-			result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
+			if (conn->strict_capwap) {
+				result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
+			}
 		}
 
 	}

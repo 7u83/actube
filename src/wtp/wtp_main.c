@@ -45,14 +45,17 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 	mavliter_foreach(&it) {
 		mbag_item_t *item = mavliter_get(&it);
 
-//              printf("MBAG ITEM GOT: %d\n",item->id);
-		if (item->id == CW_ITEM_WTP_NAME) {
-
+//		printf("MBAG ITEM GOT: %s\n",item->id);
+		if (item->id == CW_ITEM_LOCATION_DATA) {
+			printf("Location Data %s\n",mbag_get_str(conn->incomming,CW_ITEM_LOCATION_DATA,"ups"));
+			
 		}
 
 	}
 	cw_dbg(DBG_INFO, "Saving configuration ...");
 	cfg_to_json();
+
+//	exit(0);
 	return 0;
 
 }
@@ -243,7 +246,7 @@ int main()
 
 
 
-//cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
+cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
 //cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESPONSE,handle_update_req);
 
 
@@ -257,6 +260,10 @@ int main()
 //	conn->incomming = conn->config;
 	if (!configure())
 		return -1;
+
+
+	cfg_to_json();
+
 	changestate();
 
 

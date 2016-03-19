@@ -34,6 +34,11 @@
 
 static cw_action_in_t actions_in[] = {
 
+	/* ----------------------------------------------------------------
+	 * Discovery Response
+	 */
+
+
 	/* AC Descriptor - Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
@@ -48,9 +53,14 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
+	/* ----------------------------------------------------------------
+	 * Join Response
+	 */
+
 
 	/* ECN Support - Join Response */
 	{
+		/* Make ECN Support non-mand */
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
@@ -64,6 +74,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Descriptor - Join Response */
 	{
+		/* Cisco's AC Descriptor */
 		.capwap_state = CW_STATE_JOIN,
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
@@ -76,15 +87,50 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
-	/* Vendor Specific Payload - Cponfiguration Status Response */
+	/* ----------------------------------------------------------------
+	 * Configuration Update Request
+	 */
+
+	/* Location Data - Conf Update Req */
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-		.start = cw_in_vendor_specific_payload
+		.capwap_state = CW_STATE_RUN,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id  = LW_ELEM_LOCATION_DATA,
+		.item_id = CW_ITEM_LOCATION_DATA, 
+		.start  = cw_in_generic2,
+		.min_len = 0,
+		.max_len = 1024,
+		.mand = 0
 	}
 	,
-	
+
+	/* WTP Name - Conf Update Req */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id  = CW_CISCO_RAD_NAME,
+		.item_id = CW_ITEM_WTP_NAME, 
+		.start  = cw_in_generic2,
+		.min_len = 0,
+		.max_len = 1024,
+		.mand = 0
+	}
+	,
+
+	/*  Radio Admin State - Config Status Request */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
+		.start = cisco_in_radio_administrative_state_wtp,
+		.mand = 1
+	}
+	,
+
+
 
 	/* End of list */
 	{0, 0}
