@@ -187,7 +187,7 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
  * @param msg_id id to check
  * @return 1 if it msg id is a request msg id, otherwise 0
  */
-#define cw_is_request(msg) (msg_id & 1)
+#define cw_is_request(msg_id) (msg_id & 1)
 
 /**
  * Check if message id is from a response msg
