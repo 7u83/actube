@@ -192,10 +192,10 @@ static inline void * mavliter_get(mavliter_t *i){
 extern void * mavliter_seek(mavliter_t *i,void *d);
 
 /** 
- * Define a AVL Iterator Varialble and acciciate it with 
+ * Define a AVL Iterator varialble and accociate it with 
  * an AVL Tree.
- * @param i Name of Variable to define
- * @param t #mavl_t Tree to associate.
+ * @param i Name of the variable to define
+ * @param t #mavl_t Tree to associate
  */ 
 #define MAVLITER_DEFINE(i,t)\
 	mavliter_t i; mavliter_init(&i,t)
