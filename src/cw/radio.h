@@ -47,6 +47,7 @@ enum radiodata{
 
 int cw_radio_update_oper_states(mbag_t radios,int cause);
 extern struct cw_itemdef capwap_radioitemdefs[];
+extern int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause);
 
 
 
