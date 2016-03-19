@@ -7,7 +7,7 @@
 
 #include "item.h"
 
-
+/*
 int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		     struct sockaddr *from)
 {
@@ -27,12 +27,11 @@ int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 
 	return 1;
 }
-
+*/
 
 int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 		   uint8_t * data, int len, struct sockaddr *from)
 {
-
 	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
 
 	if (!idef) {
@@ -97,19 +96,25 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
+	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
 
-	if (!check_len(conn, a, data, len, from))
+	if (!idef) {
+		cw_log(LOG_ERR,"No itemdef found for %s",a->item_id);
 		return 0;
+	}
 
 
-	mbag_t itemstore;
-///	if (!a->target)
-		itemstore = conn->incomming;
-//	else
-//		itemstore = a->target(conn, a);
+	int rc = mbag_set_from_buf(conn->incomming,idef->type,a->item_id,data,len);
+	if (!rc){
+		cw_log(LOG_ERR,
+		       "Can't handle item type %d in definition for incomming msg %d (%s) - %d, cw_in_generic.",
+		       idef->type, a->msg_id, cw_strmsg(a->msg_id), a->elem_id);
+	}
+
+	return rc;
 
 
-	return do_save(itemstore, conn, a, data, len, from);
+//	return do_save(itemstore, conn, a, data, len, from);
 
 
 
