@@ -218,6 +218,7 @@ m->init();
 
 void process_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
+void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
 
 int ac_run()
@@ -308,6 +309,11 @@ int ac_run()
 			FD_SET(socklist[i].sockfd, &fset);
 			if (socklist[i].sockfd > max)
 				max = socklist[i].sockfd;
+			if (socklist[i].data_sockfd) {
+				FD_SET(socklist[i].data_sockfd,&fset);
+				if (socklist[i].sockfd > max)
+					max = socklist[i].sockfd;
+			}
 		}
 
 		/* wait for an event */
@@ -320,29 +326,49 @@ int ac_run()
 
 		/* process the received packet */
 		for (i = 0; i < socklist_len; i++) {
-
-			if (!FD_ISSET(socklist[i].sockfd, &fset))
-				continue;
-
-			struct sockaddr_storage srcaddr;
-			socklen_t sockaddrlen;
-
-			memset(&srcaddr, 0, sizeof(struct sockaddr_storage));
-			sockaddrlen = sizeof(struct sockaddr_storage);
-
 			uint8_t buffer[4096];
-			int len = sock_receive(socklist[i].sockfd,
-					       buffer, sizeof(buffer),
-					       0,
-					       (struct sockaddr *) &srcaddr,
-					       &sockaddrlen);
+			struct sockaddr_storage srcaddr;
+			socklen_t srcaddrlen;
 
-			process_ctrl_packet(i, (struct sockaddr *) &srcaddr, buffer, len);
+			
+			if (FD_ISSET(socklist[i].data_sockfd, &fset)){
+				
+				int len = sock_receive(socklist[i].data_sockfd,
+						       buffer, sizeof(buffer),
+						       0,
+						       (struct sockaddr *) &srcaddr,
+						       &srcaddrlen);
+
+				process_cw_data_packet(i, (struct sockaddr *) &srcaddr, buffer, len);
+				
+			}
+			
+
+			if (FD_ISSET(socklist[i].sockfd, &fset)){
+
+//				memset(&srcaddr, 0, sizeof(struct sockaddr_storage));
+//				sockaddrlen = sizeof(struct sockaddr_storage);
+
+				int len = sock_receive(socklist[i].sockfd,
+						       buffer, sizeof(buffer),
+						       0,
+						       (struct sockaddr *) &srcaddr,
+						       &srcaddrlen);
+
+				process_ctrl_packet(i, (struct sockaddr *) &srcaddr, buffer, len);
+			}
+			
 		}
 
 	}
 
 	return 0;
+}
+
+
+void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
+{
+	printf("Data packet received len = %d\n",len);
 }
 
 
