@@ -418,7 +418,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 		/* create socket */
 		if (sockfd == -1) {
-			cw_log(LOG_ERR, "Can't create unicast socket: %s",
+			cw_log(LOG_ERR, "Can't create unicast data socket: %s",
 			       strerror(errno));
 			continue;
 		}
@@ -426,11 +426,13 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		/* bind address */
 		if (bind(sockfd, sa, sock_addrlen(sa)) < 0) {
 			close(sockfd);
-			cw_log(LOG_ERR, "Can't bind unicast socket %s: %s", addr,
+			cw_log(LOG_ERR, "Can't bind unicast data socket %s: %s", addr,
 			       strerror(errno));
 			continue;
 		}
 
+		cw_log(LOG_INFO, "Bound to data port: [%s]:%s (%i) on interface %s", addr,
+			       "5247", sockfd, ifname);
 
 		socklist[socklist_len].data_sockfd = sockfd;
 
