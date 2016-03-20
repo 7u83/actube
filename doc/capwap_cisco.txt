@@ -636,6 +636,9 @@ Type: 85
 
    Timeout: Timeout in seconds
 
+128. Cisco Add WLAN Name (?)
+
+
 
 132. Cisco MM MWAR Hash Config
 
