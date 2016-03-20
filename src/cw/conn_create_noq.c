@@ -58,7 +58,7 @@ struct conn * conn_create_noq(int sock, struct sockaddr * addr)
 		return NULL;
 	}
 
-	/* set packet recieve and send methods */
+	/* set packet receive and send methods */
 	conn->recv_packet = conn_recv_packet;
 	conn->recv_packet_peek = conn_recv_packet_peek;
 	conn->send_packet = conn_send_packet;
