@@ -1,7 +1,7 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file
+ * @brief Implementation of sock_receive
+ */
+
 #include <errno.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -23,37 +28,29 @@
 
 #include "sock.h"
 
-int
-sock_receive (int sock, void *buf, size_t len, int flags,
-	      struct sockaddr *srcaddr, socklen_t * addrlen)
+/**
+ * Receive data from a socket
+ * @param sock the socket
+ * @param buf destination buffer
+ * @param len length of destination buffer
+ * @srcaddr receives the source address
+ * @srcaddrlen receives the length of the source address
+ * @return the number of bytes read oder -1 if an error has occured.
+ *
+ * If the return value is -1, errno is set to the appropriate error
+ */
+int sock_receive(int sock, void *buf, size_t len, int flags,
+		 struct sockaddr *srcaddr, socklen_t * srcaddrlen)
 {
+//	socklen_t al = sizeof(struct sockaddr_storage);
+	*srcaddrlen=sizeof(struct sockaddr);	
+	memset(srcaddr, 0, sizeof(struct sockaddr));
 
-  //unsigned int al;
-  socklen_t al;
-
-  al = sizeof (struct sockaddr_storage);
-
-  memset (srcaddr, 0, sizeof (struct sockaddr));
-//      srcaddr->sa_port=999;
-
-  int n;
-  while ((n = recvfrom (sock, (char *) buf, len, flags, srcaddr, &al)) < 0)
-    {
-      if (errno != EINTR)
+	int n;
+	while ((n = recvfrom(sock, (char *) buf, len, flags, srcaddr, srcaddrlen)) < 0) {
+		if (errno != EINTR)
+			return n;
+	}
 	return n;
-    }
-//      printf("Received betes %d\n",n);
-//      char str[8000];
-//      sock_addrtostr(srcaddr,str,1000);
-//      printf("RECFROM: %s\n",str);
-
-//      struct sockaddr_in * s = (struct sockaddr_in*)srcaddr;
-//      s->sin_port=htons(78);
-//      sock_addrtostr(srcaddr,str,1000);
-//      printf("RECFROMset: %s\n",str);
-
-
-
-//      exit(9);
-  return n;
 }
+
