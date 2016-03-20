@@ -154,6 +154,8 @@
 #define LW_ELEM_QOS					57
 
 #define LW_ELEM_AC_IPV4_LIST				59
+
+#define LW_ELEM_LWAPP_TIMERS				68
 #define LW_ELEM_AP_IP_ADDR				82
 
 #define LW_ELEM_VENDOR_SPECIFIC				104
