@@ -18,6 +18,7 @@ int configure()
 	mbag_del(conn->incomming,CW_ITEM_RESULT_CODE);
 
 	mbag_set_str(conn->local,CW_ITEM_AC_NAME,"abc");
+	mbag_set_byte(conn->config,CW_ITEM_WTP_MAC_TYPE,WTP_MAC_TYPE_BOTH);
 
 
 	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
