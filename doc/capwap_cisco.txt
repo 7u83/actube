@@ -580,6 +580,18 @@ Length: 3
 	1=Enable
 
 
+50. Cisco Primed Discovery Timeout (LWAPP)
+    0                   1                   
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Primed Discovery Tiemout      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+Type: 50
+
+   Preimed Discovery Timeout: Timeout in seconds
+
+
+
 
 
 67. AP Submode (LWAPP)
