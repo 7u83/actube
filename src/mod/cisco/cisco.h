@@ -12,6 +12,9 @@ extern int cisco_out_ac_descriptor(struct conn *conn, struct cw_action_out *a,
 				   uint8_t * dst);
 extern int cisco_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 				    uint8_t * dst);
+extern int cisco_out_board_data_options(struct conn *conn, struct cw_action_out *a,
+				    uint8_t * dst);
+
 
 
 extern int cisco_in_ac_descriptor(struct conn *conn, struct cw_action_in *a,
