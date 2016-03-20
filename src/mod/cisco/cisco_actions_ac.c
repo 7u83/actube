@@ -173,7 +173,10 @@ static cw_action_in_t actions_in[] = {
 
 static cw_action_out_t actions_out[]={
 
-	/* Message Discovery Response */
+	/* --------------------------------------------------------
+	 * Discovery Response 
+	 */
+
 
 	/* Cisco AP Timesync - Discovery Request
 	 * Important to get the WTP a DTLS connection established
@@ -216,9 +219,20 @@ static cw_action_out_t actions_out[]={
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT
 	}
+	,
 
-
-
+	/* --------------------------------------------------------
+	 * Echo Response 
+	 */
+	/* AP Time Sync - Echo Response */
+	{
+		.msg_id = CW_MSG_ECHO_RESPONSE, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.item_id = CW_ITEM_AC_TIMESTAMP, 
+		.elem_id  = CW_CISCO_AP_TIMESYNC,
+		.out = cisco_out_ap_timesync,
+		.mand = 1
+	}
 	,
 
 	{0,0}
