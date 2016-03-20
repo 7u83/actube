@@ -409,7 +409,7 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
-		.get = cw_out_get_local,
+		.get = cw_out_get_config,
 		.mand = 1
 	}
 	,
@@ -491,7 +491,7 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
-		.get = cw_out_get_local,
+		.get = cw_out_get_config,
 		.mand = 1
 	}
 	,
@@ -588,21 +588,24 @@ static cw_action_out_t actions_out[] = {
 	/* ---------------------------------------------------------------
 	 * Change State Event Request  - Out
 	 */
+
+	/* Radio Operational State(s) - Change State Event */
 	{
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
-		.item_id = CW_ITEM_RADIO_OPER_STATE,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+	//	.item_id = CW_RADIO_OPERATIONAL_STATE,
 		.out = cw_out_radio_operational_states,
-	       	.get = cw_out_get_config,
 		.mand = 1
 	}
 	,
+
 
 	{
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE,
 		.out = cw_out_generic,
-	       	.get = cw_out_get_config,
+	       	.get = cw_out_get_outgoing,
 		.mand = 1
 	}
 	,
