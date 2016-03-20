@@ -28,7 +28,9 @@ enum {
 
 struct socklistelem{
 	int sockfd;
-	int reply_sockfd;
+//	int reply_sockfd;
+	int data_sockfd;
+
 	int type;
 	int family;
 	int wtpcount;
