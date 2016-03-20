@@ -27,8 +27,8 @@
 #include "cw/capwap80211.h"
 
 #include "mod_cisco.h"
-#include "cisco.h"
 
+#include "cisco.h"
 #include "cisco80211.h"
 
 
@@ -139,6 +139,10 @@ static cw_action_in_t actions_in[] = {
 
 static cw_action_out_t actions_out[]={
 
+	/* ----------------------------------------------------------------
+	 * Message Discover Request 
+	 */
+
 
 	/* WTP Descriptor - Discovery */
 	{
@@ -199,6 +203,20 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
+	/* WTP Board Data Options - Join Request */
+	{
+		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id  = CW_CISCO_BOARD_DATA_OPTIONS,
+		.item_id = CW_ITEM_CISCO_BOARD_DATA_OPTIONS, 
+		.out = cisco_out_board_data_options,
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+		
 
 	/* ECN Support - Join Request */
 	{
