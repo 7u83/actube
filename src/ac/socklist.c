@@ -300,7 +300,7 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 		int rfd = find_reply_socket(sa, 0);
 
 		socklist[socklist_len].sockfd = sockfd;
-		socklist[socklist_len].reply_sockfd = rfd;
+//		socklist[socklist_len].reply_sockfd = rfd;
 		socklist[socklist_len].type = SOCKLIST_BCASTMCAST_SOCKET;
 		socklist[socklist_len].family = sa->sa_family;
 		socklist[socklist_len].ac_proto = ac_proto;
@@ -365,6 +365,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 			continue;
 		}
 
+		/* Bind the control port */
 		struct sockaddr *sa = res->ai_addr;
 		int sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 		/* create socket */
@@ -384,10 +385,14 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 
 
 		socklist[socklist_len].sockfd = sockfd;
-		socklist[socklist_len].reply_sockfd = sockfd;
+//		socklist[socklist_len].reply_sockfd = sockfd;
 		socklist[socklist_len].family = sa->sa_family;
 		socklist[socklist_len].type = SOCKLIST_UNICAST_SOCKET;
 		socklist[socklist_len].ac_proto = ac_proto;
+
+
+		
+
 
 
 		if (res->ai_addr->sa_family == AF_INET) {
@@ -402,6 +407,33 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 			cw_log(LOG_INFO, "Bound to: [%s]:%s (%i) on interface %s", addr,
 			       port, sockfd, ifname);
 		}
+
+		
+		/* Bind the data port */
+		sa = res->ai_addr;
+
+		/* XXX data port is currently hard coded */
+		sock_setport(sa,5247);
+
+		sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
+		/* create socket */
+		if (sockfd == -1) {
+			cw_log(LOG_ERR, "Can't create unicast socket: %s",
+			       strerror(errno));
+			continue;
+		}
+
+		/* bind address */
+		if (bind(sockfd, sa, sock_addrlen(sa)) < 0) {
+			close(sockfd);
+			cw_log(LOG_ERR, "Can't bind unicast socket %s: %s", addr,
+			       strerror(errno));
+			continue;
+		}
+
+
+		socklist[socklist_len].data_sockfd = sockfd;
+
 		socklist_len++;
 
 	}
@@ -468,7 +500,7 @@ int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 		int rfd = find_reply_socket(sa, 1);
 
 		socklist[socklist_len].sockfd = sockfd;
-		socklist[socklist_len].reply_sockfd = rfd;
+//		socklist[socklist_len].reply_sockfd = rfd;
 		socklist[socklist_len].type = SOCKLIST_BCASTMCAST_SOCKET;
 		socklist[socklist_len].family = sa->sa_family;
 		socklist[socklist_len].ac_proto = ac_proto;
