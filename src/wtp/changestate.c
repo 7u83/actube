@@ -1,4 +1,5 @@
 #include "cw/capwap.h"
+#include "cw/capwap_items.h"
 #include "cw/conn.h"
 #include "cw/radio.h"
 
@@ -13,6 +14,9 @@ int changestate()
 	/* Update operational states, so they will be included
 	   in the change Change State Event Request message. */
 	cw_radio_update_oper_states(conn->radios,0);
+
+	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
+
 
 	
 	/* Change State ... */
