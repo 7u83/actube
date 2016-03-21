@@ -136,6 +136,9 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Backup Software Version";
 		case CW_CISCO_AP_LOG_FACILITY:
 			return "AP Log Facility";
+
+		case CW_CISCO_CAPWAP_TIMERS:
+			return "Capwap Timers";
 		
 		default:
 			return "Unknown";
