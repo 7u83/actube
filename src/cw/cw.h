@@ -102,6 +102,36 @@
 #define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_F ) ? 1:0)
 #define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_T ) ? 1:0)
 
+/** 
+ * Get length wireless specific data
+ * @param th Pointer to packet
+ * @return length of wireless specific data
+ *
+ * Call this function only if the W flag is set
+ */
+static inline int cw_get_hdr_ws_len(uint8_t * th)
+{
+	if (!cw_get_hdr_flag_m(th)){
+		return *(th + 8);
+	}
+	return *(th + 9 + cw_get_hdr_rmac_len(th));
+}
+
+/** 
+ * Get pointer to wireless specific data
+ * @param th Pointer to packet
+ * @return Pointer to data
+ *
+ * Call this function only if the W flag is set
+ */
+static inline uint8_t *cw_get_hdr_ws_data(uint8_t * th)
+{
+	if (!cw_get_hdr_flag_m(th))
+		return th + 9;
+	return (th + 10 + cw_get_hdr_rmac_len(th));
+}
+
+
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
 #define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
 
@@ -379,7 +409,7 @@ static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 }
 
 
-extern  int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn * conn);
+extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);
 
 
 struct cw_descriptor_subelem_def {
@@ -391,15 +421,19 @@ struct cw_descriptor_subelem_def {
 };
 
 
-extern int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len, struct cw_descriptor_subelem_def *elems);
+extern int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,
+				       struct cw_descriptor_subelem_def *elems);
 
 extern int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
-				  struct cw_action_in *a, uint8_t * data, int len,struct cw_descriptor_subelem_def *allowed);
+				  struct cw_action_in *a, uint8_t * data, int len,
+				  struct cw_descriptor_subelem_def *allowed);
 
 extern int cw_read_wtp_descriptor_7(mbag_t mbag, struct conn *conn,
-				    struct cw_action_in *a, uint8_t * data, int len,struct cw_descriptor_subelem_def *allowed);
+				    struct cw_action_in *a, uint8_t * data, int len,
+				    struct cw_descriptor_subelem_def *allowed);
 
-extern int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, struct cw_descriptor_subelem_def *allowed);
+extern int cw_read_ac_descriptor(mbag_t store, uint8_t * data, int len,
+				 struct cw_descriptor_subelem_def *allowed);
 
 extern int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len);
 
@@ -419,12 +453,12 @@ extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a
  * @defgroup CWELEMIN Input Handlers for Message Elements
  * @{
  */
-extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len, struct sockaddr *from);
+extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a,
+				       uint8_t * data, int len, struct sockaddr *from);
 
 
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len, struct sockaddr *from);
+				int len, struct sockaddr *from);
 
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len, struct sockaddr *from);
@@ -460,10 +494,12 @@ extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in 
 extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action,
 					  uint8_t * dst);
 extern int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
-				   uint8_t * dst);
+				 uint8_t * dst);
 
-extern int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-extern int cw_out_radio_operational_states_7(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+extern int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a,
+					   uint8_t * dst);
+extern int cw_out_radio_operational_states_7(struct conn *conn, struct cw_action_out *a,
+					     uint8_t * dst);
 
 
 /**
@@ -477,8 +513,10 @@ extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out 
 					uint8_t * dst);
 
 /* helpers */
-extern int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id);
-extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, int d7mode);
+extern int cw_put_local_ip_address(int sock, uint8_t * dst, int ipv4elem_id,
+				   int ipv6elem_id);
+extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
+					   int d7mode);
 
 
 /**
