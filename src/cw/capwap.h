@@ -294,11 +294,6 @@ CW_MSG_MAXMSG	=				26
  */
 
 
-/* AC Security flags for authentication  */
-#define CW_FLAG_AC_SECURITY_R		1	/* Reserved */
-#define CW_FLAG_AC_SECURITY_X		2	/* X.509 */
-#define CW_FLAG_AC_SECURITY_S		4	/* DTLS psk */
-
 
 #define CW_FLAG_RMAC_RESERVED		0
 #define CW_FLAG_RMAC_SUPPORTED		1
@@ -383,9 +378,9 @@ CW_MSG_MAXMSG	=				26
  * @{
  */
 /** X.509 Support */
-#define AC_SECURITY_X			2
+#define CW_FLAG_AC_SECURITY_X			2
 /* PSK Support */
-#define AC_SECURITY_S			4
+#define CW_FLAG_AC_SECURITY_S			4
 /**
  * @}
  */
