@@ -282,9 +282,7 @@ int cw_format_pkt_hdr(char *dst,int level,struct conn *conn, uint8_t * packet, i
 		}
 	}
 
-
-
-
+	
 
 	return s-dst;	
 
@@ -303,7 +301,7 @@ abort:
  * @param len number of bytes to dump (size of data)
  * @return a character string with the created data ASCII dump (must be released with free)
  */ 
-char * cw_dbg_mkdmp( const uint8_t * data, int len)
+char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 {
 
 	int maxtlen = 2048;
@@ -319,7 +317,7 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 		md = 1;
 
 
-
+	
 	char *dst = malloc(2*(md * (len * 3 + (rows * 2) + 8 + maxtlen)));
 	if (!dst)
 		return NULL;
@@ -335,9 +333,16 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 	char asc_buffer[128];
 	char *ascdst = asc_buffer;
 
-	for (i = 0; i < len; i++) {
-		sprintf(pdst, "%02X ", data[i] & 0xff);
+	if (invlen) {
+		pdst+=sprintf(pdst,"\x1b[7m");
+	}
 
+	for (i = 0; i < len; i++) {
+		if (i==invlen){
+			pdst+=sprintf(pdst,"\x1b[27m");
+		}
+
+		pdst+=sprintf(pdst, "%02X ", data[i] & 0xff);
 		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
 			int c = data[i] & 0xff;
 			if (c < 0x20 || c > 0x7f)
@@ -346,7 +351,7 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 			ascdst++;
 		}
 
-		pdst += 3;
+//		pdst += 3;
 		if ((i + 1) % rowlen == 0) {
 			int l;
 			if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
@@ -375,6 +380,10 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 
 
 
+char * cw_dbg_mkdmp( const uint8_t * data, int len)
+{
+	return cw_dbg_mkdmp_c(data,len,0);
+}
 
 
 
@@ -400,8 +409,10 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct so
 	char buf[1024];
 	cw_format_pkt_hdr(buf,level,conn,packet,len,from);
 
+	int hlen = cw_get_hdr_msg_offset(packet);
+
 	if (cw_dbg_is_level(DBG_PKT_DMP)){
-		char  *dmp = cw_dbg_mkdmp(packet,len);
+		char  *dmp = cw_dbg_mkdmp_c(packet,len,hlen);
 		cw_dbg(level,"%s%s",buf,dmp);
 		free(dmp);
 	}
