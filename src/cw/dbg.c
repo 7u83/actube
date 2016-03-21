@@ -208,10 +208,10 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 	switch (level) {
 		case DBG_PKT_IN:
 			if (cw_get_hdr_flag_f(packet)){
-				s+=sprintf(s,"Fragment from %s",sock_addr2str(from));
+				s+=sprintf(s,"Fragment from %s",sock_addr2str_p(from));
 			}
 			else{
-				s+=sprintf(s,"From %s",sock_addr2str(from));
+				s+=sprintf(s,"From %s",sock_addr2str_p(from));
 			}
 			break;
 		case DBG_PKT_OUT:
