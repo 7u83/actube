@@ -61,11 +61,48 @@ int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 
 }
 
+#include "log.h"
+
+int conn_recv_packet_x(struct conn *conn, uint8_t * buf, int len, int flags)
+{
+	socklen_t al;
+	struct sockaddr_storage from;
+
+
+	al = sizeof(struct sockaddr_storage);
+	memset(&from, 0, sizeof(struct sockaddr_storage));
+
+	int n;
+	while ((n = recvfrom(conn->sock, (char *) buf, len, flags, (struct sockaddr*)&from, &al)) < 0) {
+		if (errno != EINTR) {
+			if (errno == EAGAIN)
+				return n;
+
+		}
+
+	}
+
+
+
+//	cw_log(LOG_ERR,"Received a packet from %s, len = %d\n",sock_addr2str_p(&from),n);
+
+
+	int port = sock_getport((struct sockaddr*)&from);
+
+	if (port == 5247){
+		conn->process_packet(conn,buf,n,(struct sockaddr*)&from);
+	}
+	return n;
+
+}
+
+
+
 /* yes, these functions could be better defined as macros in a .h file */
 
 int conn_recv_packet(struct conn *conn, uint8_t * buf, int len)
 {
-	return conn_recv_packet_(conn, buf, len, 0);
+	return conn_recv_packet_x(conn, buf, len, 0);
 }
 
 int conn_recv_packet_peek(struct conn *conn, uint8_t * buf, int len)
