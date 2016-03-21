@@ -202,7 +202,7 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 /**
  * Format a Packet Header
  */
-int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
+int cw_format_pkt_hdr(char *dst,int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
 {
 	char *s=dst;
 	switch (level) {
@@ -270,6 +270,22 @@ int cw_format_pkt(char *dst,int level,struct conn *conn, uint8_t * packet, int l
 			s+=sprintf(s," ... (len=%d)",rmac_len);
 		}
 	}
+
+	if (cw_get_hdr_flag_w(packet)){
+		/* print wireless specific info */
+		int ws_len = cw_get_hdr_ws_len(packet);
+		int plen = ws_len > 20 ? 20:ws_len;
+		s+=sprintf(s," WS:");
+		s+=format_hexu(s,cw_get_hdr_ws_data(packet),plen);
+		if (ws_len>20){
+			s+=sprintf(s," ... (len=%d)",ws_len);
+		}
+	}
+
+
+
+
+
 	return s-dst;	
 
 
@@ -382,7 +398,7 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct so
 		return;
 
 	char buf[1024];
-	cw_format_pkt(buf,level,conn,packet,len,from);
+	cw_format_pkt_hdr(buf,level,conn,packet,len,from);
 
 	if (cw_dbg_is_level(DBG_PKT_DMP)){
 		char  *dmp = cw_dbg_mkdmp(packet,len);
