@@ -18,7 +18,7 @@ int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *
 		return 0; 
 	}
 
-	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->data));
+	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->data),conn);
 
 	
 	/* Send back the same software as the WTP has,
