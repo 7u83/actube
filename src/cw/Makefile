@@ -154,6 +154,7 @@ CAPWAPOBJS= \
 	cw_out_radio_operational_states.o\
 	cw_out_radio_operational_states_7.o\
 	cw_put_radio_operational_states.o \
+	cw_put_ac_status.o \
 	cw_in_ac_descriptor.o\
 	cw_read_ac_descriptor.o\
 	cw_out_capwap_local_ip_address.o\
