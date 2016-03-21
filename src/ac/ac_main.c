@@ -369,6 +369,7 @@ int ac_run()
 void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	printf("Data packet received len = %d\n",len);
+	exit(0);
 }
 
 
