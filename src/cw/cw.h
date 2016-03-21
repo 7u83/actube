@@ -379,25 +379,7 @@ static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 }
 
 
-
-/**
- * Put an cw_ac_stauts structure to a buffer
- * @param dst destination buffer
- * @param s #cw_ac_status to put
- * @return number of bytes put
- * This function is only useful (used) in conjunction with 
- * putting AC Descriptor message elements.
- */
-static inline int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s)
-{
-	uint8_t *d = dst;
-
-	d += cw_put_dword(d, (s->stations << 16) | (s->limit));
-	d += cw_put_dword(d, (s->active_wtps << 16) | (s->max_wtps));
-	d += cw_put_dword(d,
-			  (s->security << 24) | (s->rmac_field << 16) | (s->dtls_policy));
-	return d - dst;
-}
+extern  int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn * conn);
 
 
 struct cw_descriptor_subelem_def {
