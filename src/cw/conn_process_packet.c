@@ -192,7 +192,7 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
-		       "Cant't find mod to handle connection from %s , discarding message",
+		       "Can't find mod to handle connection from %s , discarding message",
 		       sock_addr2str_p(from));
 		return NULL;
 	}
@@ -228,7 +228,7 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 		conn->detected=1;
 	}
 	else{
-		cw_dbg(DBG_MSG_ERR, "Cant't detect bindings ... for %s",
+		cw_dbg(DBG_MSG_ERR, "Can't detect bindings ... for %s",
 		       sock_addr2str_p(from));
 	}
 
