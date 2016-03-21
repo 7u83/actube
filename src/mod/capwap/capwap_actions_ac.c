@@ -390,7 +390,7 @@ static cw_action_in_t actions_in[] = {
 	
 
 	/* --------------------------------------------------------------------------
-	 * Change State Event Request (in configure state)
+	 * Change State Event Request IN (in configure state)
 	 */
 	{
 		.capwap_state=CW_STATE_CONFIGURE, 
@@ -437,6 +437,54 @@ static cw_action_in_t actions_in[] = {
 	,
 	
 
+	/* --------------------------------------------------------------------------
+	 * Change State Event Request IN (in run state)
+	 */
+	{
+		.capwap_state=CW_STATE_RUN, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
+		.end = cw_in_check_chng_state_evnt_req
+	}
+	,
+
+	/* Result Code - Change State Event Req */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+		.start = cw_in_generic2,
+		.min_len=4,
+		.max_len=4,
+		.mand = 1
+	}
+	,
+
+	/* Radio Operational State - Change State Event Req */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIO_OPER_STATE,
+		.start = cw_in_radio_operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
+
+	/* Vendor Specific Payload - Change State Req*/
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+		.min_len=7
+	}
+	,
+	
+
 
 
 	/* --------------------------------------------------------------------------
@@ -456,6 +504,28 @@ static cw_action_in_t actions_in[] = {
 		.start = cw_in_vendor_specific_payload,
 	}
 	,
+
+
+	/* --------------------------------------------------------------------------
+	 * WTP Event Request IN (run state)
+	 */
+	{
+		.capwap_state=CW_STATE_RUN, 
+		.msg_id = CW_MSG_WTP_EVENT_REQUEST, 
+		.end = cw_in_check_chng_state_evnt_req
+	}
+	,
+
+	/* Vendor Specific Payload - WTP Event Request*/
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_WTP_EVENT_REQUEST, 
+		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.start = cw_in_vendor_specific_payload,
+	}
+	,
+
+		
 	
 	/* End of list */
 	{0, 0}
@@ -608,6 +678,18 @@ static cw_action_out_t actions_out[]={
 
 	{
 		.msg_id = CW_MSG_ECHO_RESPONSE, 
+	}
+	,
+
+	/* Change State Event Response */
+
+	{
+		.msg_id = CW_MSG_WTP_EVENT_RESPONSE, 
+		.elem_id = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
+		.mand = 1
 	}
 	,
 
