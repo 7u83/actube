@@ -378,9 +378,18 @@ CW_MSG_MAXMSG	=				26
 
 
 
-/* AC descriptor security flags */
-#define AC_SECURITY_X			2	/* X.509 */
-#define AC_SECURITY_S			4	/* PSK support */
+/**
+ * @defgroup  ACSECURITY Security Flags used in AC Descriptor 
+ * @{
+ */
+/** X.509 Support */
+#define AC_SECURITY_X			2
+/* PSK Support */
+#define AC_SECURITY_S			4
+/**
+ * @}
+ */
+
 
 /**
  * @defgroup ACDTLSPOLICY AC DTLS Policy Flags  
