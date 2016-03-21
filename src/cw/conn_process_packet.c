@@ -83,7 +83,6 @@ void cw_init_request(struct conn *conn, int msg_id)
 
 
 	cw_set_hdr_wbid(buffer, conn->wbid);
-
 	cw_set_hdr_rid(buffer, 0);
 
 
@@ -92,6 +91,16 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_set_msg_flags(msgptr, 0);
 	cw_set_msg_elems_len(msgptr, 0);
 }
+
+void cw_init_keepalive(struct conn *conn)
+{
+	uint8_t *buffer = conn->req_buffer;
+	cw_put_dword(buffer + 0, 0);
+	cw_put_dword(buffer + 4, 0);
+
+
+}
+
 
 /**
  * send a response 
