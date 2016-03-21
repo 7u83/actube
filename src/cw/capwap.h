@@ -382,10 +382,19 @@ CW_MSG_MAXMSG	=				26
 #define AC_SECURITY_X			2	/* X.509 */
 #define AC_SECURITY_S			4	/* PSK support */
 
-/* AC dtls policy flags */
-#define CW_FLAG_DTLS_POLICY_R		1	/* Clear data channel support */
-#define CW_FLAG_DTLS_POLICY_C		2	/* Clear data channel support */
-#define CW_FLAG_DTLS_POLICY_D		4	/* DTLS Data channel support */
+/**
+ * @defgroup ACDTLSPOLICY AC DTLS Policy Flags  
+ * @{
+ */
+/** Reserved */
+#define CW_FLAG_DTLS_POLICY_R		1
+/** Clear Text Data Channel Support  */
+#define CW_FLAG_DTLS_POLICY_C		2
+/** DTLS Data Channel Support */
+#define CW_FLAG_DTLS_POLICY_D		4
+/**
+ * @}
+ */
 
 
 
