@@ -170,7 +170,8 @@ CAPWAPOBJS= \
 	cw_check_missing_mand.o \
 	md5sum.o \
 	format.o \
-	cw_in_cisco_add_wlan.o
+	cw_in_cisco_add_wlan.o \
+	dot11.o
 
 #	cw_out_ac_descriptor.o \
 
