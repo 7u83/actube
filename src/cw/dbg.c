@@ -333,16 +333,19 @@ char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 	char asc_buffer[128];
 	char *ascdst = asc_buffer;
 
-	if (invlen) {
-		pdst+=sprintf(pdst,"\x1b[7m");
-	}
+//	if (invlen) {
+//		pdst+=sprintf(pdst,"\x1b[7m");
+//	}
 
 	for (i = 0; i < len; i++) {
-		if (i==invlen){
-			pdst+=sprintf(pdst,"\x1b[27m");
-		}
+		char * sp=" ";
+		if(i==invlen-1)
+			sp="|";
+//		if (i==invlen){
+//			pdst+=sprintf(pdst,"\x1b[27m");
+//		}
 
-		pdst+=sprintf(pdst, "%02X ", data[i] & 0xff);
+		pdst+=sprintf(pdst, "%02X%s", data[i] & 0xff,sp);
 		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
 			int c = data[i] & 0xff;
 			if (c < 0x20 || c > 0x7f)
