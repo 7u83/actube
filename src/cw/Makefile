@@ -83,6 +83,7 @@ MAVLOBJS= \
 	mavl_create_conststr.o \
 	mlist.o \
 	format_is_utf8.o \
+	format_dot11_fc.o \
 	cw_load_file.o \
 	cw_save_file.o
 
