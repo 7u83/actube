@@ -81,7 +81,12 @@ static inline int format_hdr_flags(char *dst,uint8_t *th)
 }
 
 
+
 int format_is_utf8(unsigned char *str, size_t len);
+
+int format_dot11_fc(char *dst, uint16_t fc);
+
+
 
 /**@}*/
 
