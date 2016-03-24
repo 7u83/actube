@@ -29,7 +29,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 			}
 			cmod->register_actions(actions, MOD_MODE_CAPWAP);
 			int rc = cisco_register_actions_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod cisco with %d actions", rc);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d actions", rc);
 			return 0;
 		}
 		case MOD_MODE_BINDINGS:
@@ -42,7 +42,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 			}
 			cmod->register_actions(actions, MOD_MODE_BINDINGS);
 			int rc = cisco_register_actions80211_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod cisco 80211 with %d actions", rc);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", rc);
 			return 0;
 		}
 		
