@@ -15,14 +15,6 @@ before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
   - $CC --version
   - $CXX --version
-before_script:
-  - cd src/contrib
-  - sudo ./install_libuci.sh
-  - cd jsmn
-  - make
-  - cd ..
-  - cd ..
-  - cd ..
 script:
   - make
   - cd src
