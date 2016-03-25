@@ -21,6 +21,8 @@ const char CW_ITEM_WTP_HARDWARE_VENDOR=
 
 const char CW_ITEM_WTP_HARDWARE_VERSION[]="wtp_hardware_version";
 const char CW_ITEM_WTP_SOFTWARE_VERSION[]="wtp_software_version";
+const char CW_ITEM_WTP_BOOT_VERSION[]="wtp_boot_version";
+const char CW_ITEM_WTP_OTHER_VERSION[]="wtp_other_version";
 
 /*
 const char CW_ITEM_WTP_SOFTWARE_VENDOR,
@@ -53,26 +55,26 @@ const char CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS[]="capwap_local_ip_addr";
 
 const char CW_ITEM_LOCATION_DATA[]="location_data";
 const char CW_ITEM_SESSION_ID[]="session_id";
-	
+
 const char CW_ITEM_AC_TIMESTAMP[]="ac_timestamp";
 const char CW_ITEM_STATISTICS_TIMER[]="statistics_timer";
 const char CW_ITEM_WTP_REBOOT_STATISTICS[]="wtp_reboot_statistics";
 const char CW_ITEM_IMAGE_IDENTIFIER[]="image_identifier";
 const char CW_ITEM_AC_HASH_VALUE[]="ac_hash_value";
-	
+
 const char CW_ITEM_AC_NAME_WITH_PRIORITY[]="ac_name_with_priority";
 const char CW_ITEM_MAXIMUM_MESSAGE_LENGTH[]="maximum_message_length";
 
 
 	/* CIPWAP and Cisco */
 const char CW_ITEM_WTP_GROUP_NAME[]="wtp_group_name";
-	
+
 
 	/* Other Items */
 const char CW_ITEM_AC_IMAGE_DIR[]="ac_img_dir";		/* Path where WTP images are stored */
 const char CW_ITEM_IMAGE_FILENAME[]="img_filename";		/* Full path of image filename */
 const char CW_ITEM_DISCOVERIES[]="discoveries";
-	
+
 	/** FILE handle for uploading and downloading images  */
 const char CW_ITEM_IMAGE_FILEHANDLE[]="image_file_handle";
 
@@ -82,11 +84,11 @@ const char CW_ITEM_AP_MODE_AND_TYPE[]="cisco_ap_mode_and_type";
 const char CW_ITEM_CISCO_BOARD_DATA_OPTIONS[]="cisco_board_data_options";
 const char CW_ITEM_RADIOS[]="radios";
 const char CW_ITEM_RADIO_OPER_STATE[]="radio_oper_state";
-	
+
 
 const char CW_ITEM_WTP_BOARD_VENDOR[]="vendor_id";
 const char CW_ITEM_WTP_BOARD_MODELNO[]="model_no";
-const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macadddress";
+const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macaddress";
 const char CW_ITEM_WTP_BOARD_ID[]="wtp_board_id";
 const char CW_ITEM_WTP_BOARD_REVISION[]="wtp_board_revision";
 const char CW_ITEM_WTP_BOARD_SERIALNO[]="serial_no";
@@ -105,6 +107,8 @@ struct cw_itemdef capwap_itemdefs[] = {
 {CW_ITEM_LOCATION_DATA,CW_ITEM_NONE,MBAG_STR},
 {CW_ITEM_WTP_HARDWARE_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
 {CW_ITEM_WTP_SOFTWARE_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
+{CW_ITEM_WTP_BOOT_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
+{CW_ITEM_WTP_OTHER_VERSION,CW_ITEM_NONE,MBAG_VENDORSTR},
 {CW_ITEM_WTP_GROUP_NAME,CW_ITEM_NONE,MBAG_STR},
 {CW_ITEM_MAXIMUM_MESSAGE_LENGTH,CW_ITEM_NONE,MBAG_WORD},
 {CW_ITEM_STATISTICS_TIMER,CW_ITEM_NONE,MBAG_WORD},
@@ -129,7 +133,7 @@ struct cw_itemdef capwap_itemdefs[] = {
 {CW_ITEM_WTP_BOARD_DATA,CW_ITEM_WTP_BOARD_SERIALNO,MBAG_BSTR16},
 
 
-/* Cisco Specific items, should be moved to a file like 
+/* Cisco Specific items, should be moved to a file like
 cisco_items or so */
 
 {CW_ITEM_AP_MODE_AND_TYPE,CW_ITEM_NONE,MBAG_WORD},
@@ -154,9 +158,3 @@ struct cw_itemdef capwap_radiodefs[] = {
 
 {CW_ITEM_NONE}
 };
-
-
-
-
-
-

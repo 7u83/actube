@@ -45,25 +45,25 @@
 
 	CW_ITEM_LOCATION_DATA,
 	CW_ITEM_SESSION_ID,
-	
+
 	CW_ITEM_AC_TIMESTAMP,
 	CW_ITEM_STATISTICS_TIMER,
 	CW_ITEM_WTP_REBOOT_STATISTICS,
 	CW_ITEM_IMAGE_IDENTIFIER,
 	CW_ITEM_AC_HASH_VALUE,
-	
+
 	CW_ITEM_AC_NAME_WITH_PRIORITY,
 	CW_ITEM_MAXIMUM_MESSAGE_LENGTH,
 
 
 	CW_ITEM_WTP_GROUP_NAME,
-	
 
-	CW_ITEM_AC_IMAGE_DIR,	
+
+	CW_ITEM_AC_IMAGE_DIR,
 	CW_ITEM_IMAGE_FILENAME,
 	CW_ITEM_DISCOVERIES,
-	
-	CW_ITEM_IMAGE_FILEHANDLE,	
+
+	CW_ITEM_IMAGE_FILEHANDLE,
 
 	CW_ITEM_RADIO_CFG,
 	CW_ITEM_AP_MODE_AND_TYPE,
@@ -71,7 +71,7 @@
 	CW_ITEM_CISCO_BOARD_DATA_OPTIONS,
 	CW_ITEM_RADIOS,
 	CW_ITEM_RADIO_OPER_STATE,
-	
+
 
 */
 
@@ -124,13 +124,13 @@ extern const char CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS[];
 
 extern const char CW_ITEM_LOCATION_DATA[];
 extern const char CW_ITEM_SESSION_ID[];
-	
+
 extern const char CW_ITEM_AC_TIMESTAMP[];
 extern const char CW_ITEM_STATISTICS_TIMER[];
 extern const char CW_ITEM_WTP_REBOOT_STATISTICS[];
 extern const char CW_ITEM_IMAGE_IDENTIFIER[];
 extern const char CW_ITEM_AC_HASH_VALUE[];
-	
+
 extern const char CW_ITEM_AC_NAME_WITH_PRIORITY[];
 extern const char CW_ITEM_MAXIMUM_MESSAGE_LENGTH[];
 extern const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[];
@@ -138,13 +138,13 @@ extern const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[];
 
 	/* CIPWAP and Cisco */
 extern const char CW_ITEM_WTP_GROUP_NAME[];
-	
+
 
 	/* Other Items */
 extern const char CW_ITEM_AC_IMAGE_DIR[];		/* Path where WTP images are stored */
 extern const char CW_ITEM_IMAGE_FILENAME[];		/* Full path of image filename */
 extern const char CW_ITEM_DISCOVERIES[];
-	
+
 	/** FILE handle for uploading and downloading images  */
 extern const char CW_ITEM_IMAGE_FILEHANDLE[];
 
@@ -154,7 +154,7 @@ extern const char CW_ITEM_AP_MODE_AND_TYPE[];
 extern const char CW_ITEM_CISCO_BOARD_DATA_OPTIONS[];
 extern const char CW_ITEM_RADIOS[];
 extern const char CW_ITEM_RADIO_OPER_STATE[];
-	
+
 
 extern const char CW_ITEM_WTP_BOARD_VENDOR[];
 extern const char CW_ITEM_WTP_BOARD_MODELNO[];
@@ -165,6 +165,8 @@ extern const char CW_ITEM_WTP_BOARD_SERIALNO[];
 
 extern const char CW_ITEM_WTP_SOFTWARE_VERSION[];
 extern const char CW_ITEM_WTP_HARDWARE_VERSION[];
+extern const char CW_ITEM_WTP_BOOT_VERSION[];
+extern const char CW_ITEM_WTP_OTHER_VERSION[];
 
 extern const char CW_ITEM_WTP_BOOTLOADER_VERSION[];
 
