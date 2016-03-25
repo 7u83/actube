@@ -61,6 +61,21 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
 		cw_log(LOG_ERR, "Can't send Software Version in WTP descriptor, not set.");
 	}
 
+        i = mbag_get(mbag,CW_ITEM_WTP_BOOT_VERSION);
+        if ( i ) {
+                d += cw_put_version(d,CW_SUBELEM_WTP_BOOTLOADER_VERSION,i->data);
+        }
+        else {
+                cw_log(LOG_INFO, "Can't send Boot Version in WTP descriptor, not set.");
+        }
+
+        i = mbag_get(mbag,CW_ITEM_WTP_OTHER_VERSION);
+        if ( i ) {
+                d += cw_put_version(d,CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION,i->data);
+        }
+        else {
+                cw_log(LOG_INFO, "Can't send Other Version in WTP descriptor, not set.");
+        }
 
 	int len = d-dst-4;
 	return len + cw_put_elem_hdr(dst,a->elem_id,len);
