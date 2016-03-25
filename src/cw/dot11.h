@@ -106,11 +106,13 @@ static inline void dot11_get_address(uint8_t * dst, uint8_t *frame)
 
 extern uint64_t dot11_timer_offset;
 
+
 static inline uint64_t dot11_timer_get(){
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	return 1000000 * tv.tv_sec + tv.tv_usec - dot11_timer_offset;
 }
+
 
 static inline void dot11_timer_set(uint64_t val) {
 	struct timeval tv;
