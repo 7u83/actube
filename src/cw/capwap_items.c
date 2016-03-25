@@ -86,7 +86,7 @@ const char CW_ITEM_RADIO_OPER_STATE[]="radio_oper_state";
 
 const char CW_ITEM_WTP_BOARD_VENDOR[]="vendor_id";
 const char CW_ITEM_WTP_BOARD_MODELNO[]="model_no";
-const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macadddress";
+const char CW_ITEM_WTP_BOARD_MACADDRESS[]="wtp_board_macaddress";
 const char CW_ITEM_WTP_BOARD_ID[]="wtp_board_id";
 const char CW_ITEM_WTP_BOARD_REVISION[]="wtp_board_revision";
 const char CW_ITEM_WTP_BOARD_SERIALNO[]="serial_no";
