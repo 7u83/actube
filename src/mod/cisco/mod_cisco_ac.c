@@ -24,12 +24,12 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 			struct mod_ac *cmod = modload_ac("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
-				       "Can't initzialize mod_cisco, failed to load base mod mod_capwap");
+				       "Can't initialize mod_cisco, failed to load base mod mod_capwap");
 				return 1;
 			}
 			cmod->register_actions(actions, MOD_MODE_CAPWAP);
 			int rc = cisco_register_actions_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod cisco with %d actions", rc);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d actions", rc);
 			return 0;
 		}
 		case MOD_MODE_BINDINGS:
@@ -37,12 +37,12 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 			struct mod_ac *cmod = modload_ac("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
-				       "Can't initzialize mod_cisco, failed to load base mod mod_capwap80211");
+				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
 				return 1;
 			}
 			cmod->register_actions(actions, MOD_MODE_BINDINGS);
 			int rc = cisco_register_actions80211_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod cisco 80211 with %d actions", rc);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", rc);
 			return 0;
 		}
 		
