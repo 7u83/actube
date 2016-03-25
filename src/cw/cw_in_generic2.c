@@ -29,6 +29,7 @@ int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 }
 */
 
+#if 0
 int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 		   uint8_t * data, int len, struct sockaddr *from)
 {
@@ -92,6 +93,7 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 
 
 }
+#endif
 
 int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
