@@ -72,9 +72,6 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 static void dtls_info_cb (const SSL *ssl, int where, int ret)
 {
 	const char *str = NULL;
-	int w;
-
-	w = where & ~SSL_ST_MASK;
 
 	str = where & SSL_ST_CONNECT ? "connect" : where & SSL_ST_ACCEPT ? "accept" : "undefined";
 	if (where & SSL_CB_LOOP)
