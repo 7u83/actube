@@ -2,6 +2,7 @@
 #include "cw.h"
 #include "dbg.h"
 #include "log.h"
+#include "stravltree.h"
 
 /** 
  * @file 
