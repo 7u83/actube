@@ -141,12 +141,13 @@ struct mod_ac * conf_mods[10];
 
 static int init_mods()
 {
-	
+
 	conf_mods[0]=modload_ac("cisco");
-	conf_mods[1]=modload_ac("cipwap");
-	conf_mods[2]=modload_ac("capwap");
-	conf_mods[3]=modload_ac("capwap80211");
-	conf_mods[4]=NULL;
+	conf_mods[1]=modload_ac("fortinet");
+	conf_mods[2]=modload_ac("cipwap");
+	conf_mods[3]=modload_ac("capwap");
+	conf_mods[4]=modload_ac("capwap80211");
+	conf_mods[5]=NULL;
 
 
 
