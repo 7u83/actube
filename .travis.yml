@@ -3,46 +3,23 @@ compiler:
   - clang
   - gcc
 sudo: require
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-4.9
-    - libstdc++-4.9-dev
-    - autoconf
-    - automake
-    - autotools-dev
-    - libtool
-    - libgmp-dev
-    - libconfuse-dev
-    - lua5.1
-    - liblua5.1-0-dev
-# No yet whitelisted for Travis
-#    - libgnutls28-dev
-#    - libnl-3-dev
-#    - libnl-genl-3-dev
+dist: trusty
 before_install:
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+  - sudo apt-get -qq install g++-4.9 libstdc++-4.9-dev
+  - sudo apt-get -qq install cmake lua5.2 libnl-genl-3-dev
+  - sudo apt-get -qq install nettle-dev libgnutls28-dev libssl-dev
+  - sudo apt-get -qq install libconfuse-dev libsqlite3-dev
   - $CC --version
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
   - $CC --version
   - $CXX --version
-  - sudo apt-get install libgnutls28-dev libnl-genl-3-dev libnl-3-dev
-before_script:
-  - cd src/contrib
-  - sudo ./install_libuci.sh
-  - cd jsmn
-  - make
-  - cd ..
-  - cd ..
 script:
-  - cd capwap
   - make
+  - cd src
+  - cd ac 
+  - ./actube &
   - cd ..
   - cd wtp
-  - make
   - ./wtp &
-  - cd ..
-  - cd ac
-  - make
-  - ./actube &
