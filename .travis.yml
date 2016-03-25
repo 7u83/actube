@@ -3,6 +3,7 @@ compiler:
   - clang
   - gcc
 sudo: require
+dist: trusty
 addons:
   apt:
     sources:
