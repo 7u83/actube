@@ -165,6 +165,8 @@ extern const char CW_ITEM_WTP_BOARD_SERIALNO[];
 
 extern const char CW_ITEM_WTP_SOFTWARE_VERSION[];
 extern const char CW_ITEM_WTP_HARDWARE_VERSION[];
+extern const char CW_ITEM_WTP_BOOT_VERSION[];
+extern const char CW_ITEM_WTP_OTHER_VERSION[];
 
 extern const char CW_ITEM_WTP_BOOTLOADER_VERSION[];
 
