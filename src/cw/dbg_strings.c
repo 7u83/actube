@@ -56,7 +56,7 @@ struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_WARN, "warn" },
 	{ DBG_MOD,"mod"},
 
-	{ DBG_X,"dbgx" },
+	{ DBG_X,"x" },
 	{ CW_STR_STOP, NULL } 
 };
 
