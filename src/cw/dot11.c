@@ -6,6 +6,7 @@
 uint64_t dot11_timer_offset=0;
 
 
+uint8_t dot11_broadcast_address[6] = {0xff,0xff,0xff,0xff,0xff,0xff};
 
 
 const unsigned char dot11_tab_br[] = 

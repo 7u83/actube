@@ -171,8 +171,11 @@ CAPWAPOBJS= \
 	cw_check_missing_mand.o \
 	md5sum.o \
 	format.o \
-	cw_in_cisco_add_wlan.o \
-	dot11.o
+	cw_in_cisco_add_wlan.o 
+
+DOT11OBJS = \
+	dot11.o \
+	dot11_beacon.o
 
 #	cw_out_ac_descriptor.o \
 
@@ -290,6 +293,7 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LWAPPCISCOOBJS) \
 	$(CWACTION) \
 	$(MAVLOBJS) \
+	$(DOT11OBJS)
 
 #include $(OBJS:.o=.d)
 
@@ -356,7 +360,7 @@ clean:
 clean_deps:
 	$(DEPS) 
 	
-deps: $(SRCS) 
-	$(CC) -MD -E $(SRCS) $(CFLAGS) >/dev/null
+deps:  
+	$(CC) -MM -E *.c $(CFLAGS) > .depend
 
--include $(DEPS)
+include .depend
