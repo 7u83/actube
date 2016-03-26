@@ -42,6 +42,8 @@
 #include "mbag.h"
 #include "mod.h"
 
+#define CONN_MAX_MSG_LENGTH 65536
+
 /**
  * Connection Object
  */ 
@@ -54,9 +56,7 @@ struct conn {
 	mbag_t incomming;
 	mbag_t remote;
 	mbag_t local;
-
 	mbag_t radios;
-	uint8_t radio_create;
 	mbag_t config;
 
 
@@ -97,10 +97,10 @@ struct conn {
 	struct cwmsg resp_msg;
 
 	/** Buffer for outgoing request messages */
-	uint8_t req_buffer[65536];
+	uint8_t req_buffer[CONN_MAX_MSG_LENGTH];
 
 	/** Buffer for outgoing response messages */
-	uint8_t resp_buffer[65536];
+	uint8_t resp_buffer[CONN_MAX_MSG_LENGTH];
 	
 		
 
