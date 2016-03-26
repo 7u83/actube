@@ -50,6 +50,12 @@
 struct conn {
 	int sock;
 	struct sockaddr_storage addr;
+
+
+	int data_sock;
+	struct sockaddr_storage data_addr;
+
+
 	int recv_timeout;
 
 	mbag_t outgoing;
@@ -213,6 +219,8 @@ extern int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 extern uint8_t *conn_get_message(struct conn *conn);
 
 extern int conn_send_packet(struct conn *conn, const uint8_t * buffer, int len);
+extern int conn_send_data_packet(struct conn * conn, const uint8_t * buffer, int len);
+
 extern void conn_destroy(struct conn *conn);
 
 uint8_t *conn_q_get_packet(struct conn *conn);
