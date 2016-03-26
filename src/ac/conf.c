@@ -362,6 +362,9 @@ static int init_listen_addrs()
 	/* count the addresses */
 	int ctr = 0;
 	for (ifa = ifap; ifa != 0; ifa = ifa->ifa_next) {
+		if (!ifa->ifa_addr)
+			continue;
+
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4)
 			ctr++;
 #ifdef WITH_IPV6
@@ -389,6 +392,8 @@ static int init_listen_addrs()
 				continue;
 			}
 		}
+		if (!ifa->ifa_addr)
+			continue;
 
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
@@ -493,6 +498,8 @@ int init_bcast_addrs()
 
 
 		sa = ifa->ifa_addr;
+		if (!sa)
+			continue;
 		if (sa->sa_family != AF_INET)
 			continue;
 

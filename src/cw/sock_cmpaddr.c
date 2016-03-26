@@ -47,6 +47,14 @@ int sock_cmpaddr(const struct sockaddr *addr1, const struct sockaddr *addr2,int 
 	int p1,p2;
 	int slen;
 
+	if (!addr1){
+		return -1;
+	}
+
+	if (!addr2){
+		return -1;
+	}
+
 	if (addr1->sa_family != addr2->sa_family){
 		return addr1->sa_family - addr2->sa_family;
 	}
