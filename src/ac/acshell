@@ -1,0 +1,81 @@
+#!/usr/bin/php
+<?php
+
+$sqlfile="./ac.sqlite3";
+if (!file_exists($sqlfile))
+	die ("Can't open $sqlfile\n");
+
+
+class DB extends SQLite3
+{
+	function __construct()
+	{
+		global $sqlfile;
+		$this->open($sqlfile);
+	}
+}
+
+$db = new DB();
+
+
+function ls_acs()
+{
+	global $db;
+	echo "List of ACs\n";
+	echo "===========\n";
+	$results = $db->query("SELECT 
+			acid as id, 
+			acname as name,
+			lastseen>datetime('now','-10 second') as active 
+			FROM acs ORDER by active,id,name;"
+		);
+	while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+		$o = $row['active'] ? "yes" : "no";
+		echo "ID: $row[id], Name: $row[name] - Online: $o\n";
+	}	
+}
+
+function ls_wtps()
+{
+	global $db;
+	echo "List of WTPs\n";
+	echo "============\n";
+	
+	$result = $db->query("SELECT 
+			wtpid as wtpid,
+			wtps.acid as acid,
+			acs.acname as acname
+			FROM wtps 
+			LEFT join acs USING(acid)
+		");
+	while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+		$j  = $row['acid'] ? "Joined to $row[acid]" : "Not joined";
+
+		echo "ID: $row[wtpid], $j\n";
+	}	
+
+}
+
+function print_help()
+{
+	echo "acshell <cmd>\n";
+	echo "\n";
+	echo "acshell lsacs - list acs\n";
+	echo "acshell lswtp - list wtps\n";
+}
+
+//ls_wtps();
+//
+//var_dump($argv);
+if (count($argv)==1){
+	print_help();
+	exit(0);
+}
+
+if( $argv[1] == "lsacs" ) 
+	ls_acs();
+if( $argv[1] == "lswtps" ) 
+	ls_wtps();
+
+
+
