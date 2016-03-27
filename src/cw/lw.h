@@ -151,8 +151,48 @@ static inline int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 
 
 
+/** 
+ * Put a message element header for a message to contain a vendor specific payload
+ * @param dst pointer to destination buffer
+ * @param vendorid vendorid
+ * @param elemid element id of vendor specific data
+ * @len length of vendor specific data 
+ * @return the number of bytes put (always 10)
+ */
+static inline int lw_put_vendor(uint8_t * dst, uint32_t vendorid,
+					 uint16_t elemid, uint16_t len)
+{
+	lw_put_dword(dst + 0, vendorid);
+	lw_put_word(dst + 4, elemid);
+	return 6;
+}
+
+
+
+
+
+
+/**
+ * @defgroup LWAPP_IN_HANDLER Input Handlers
+ * @{
+ */
+int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
+				  uint8_t * data, int len, struct sockaddr *from);
+
+/**
+ * @}
+ */
+
+
+/**
+ * @defgroup LWAPP_MISC Misc Functions
+ * @{
+ */
 extern uint16_t lw_checksum(uint8_t *d,int len);
 extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
+/**
+ * @}
+ */
 
 
 /**
