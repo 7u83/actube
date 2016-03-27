@@ -1,9 +1,27 @@
+/*
+    This file is part of actube.
+
+    actube is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    libcapwap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
 
-#include <arpa/inet.h>
+//#include <arpa/inet.h>
 
 #include "wtplist.h"
 
@@ -19,8 +37,8 @@
 
 
 
-#include "cw/lwmsg.h"
-#include "cw/lwapp.h"
+//#include "cw/lwmsg.h"
+//#include "cw/lwapp.h"
 
 
 #include <errno.h>
@@ -39,13 +57,13 @@
 
 #include "db.h"
 
-extern struct cw_actiondef capwap_actions;
+//extern struct cw_actiondef capwap_actions;
 
 
 /* macro to convert our client ip to a string */
 //#define CLIENT_IP (sock_addrtostr((struct sockaddr*)&wtpman->conn->addr, (char[64]){0},64))
 
-#define CLIENT_IP (sock_addr2str(&wtpman->conn->addr))
+//#define CLIENT_IP (sock_addr2str(&wtpman->conn->addr))
 
 
 /*
@@ -54,14 +72,14 @@ struct ac_info *get_acinfo();
 
 
 
-static void reset_echointerval_timer(struct wtpman * wtpman)
+static void reset_echointerval_timer(struct wtpman *wtpman)
 {
-	uint16_t ct =
-	    mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
-			  CAPWAP_MAX_DISCOVERY_INTERVAL << 8 | CAPWAP_ECHO_INTERVAL);
+	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
+				    CAPWAP_MAX_DISCOVERY_INTERVAL << 8 |
+				    CAPWAP_ECHO_INTERVAL);
 
 	wtpman->echointerval_timer = cw_timer_start(ct & 0xff);
-	db_ping_wtp(sock_addr2str(&wtpman->conn->addr), conf_acname);
+	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr), conf_acname);
 	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
 
 }
@@ -186,15 +204,13 @@ static int wtpman_establish_dtls(void *arg)
 
 	/* try to accept the connection */
 	if (!dtls_accept(wtpman->conn)) {
-
-
-
-		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s", CLIENT_IP);
+		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s",
+		       sock_addr2str_p(&wtpman->conn->addr));
 		return 0;
 	}
 
-	cw_dbg(DBG_DTLS, "DTLS session established with %s, cipher=%s", CLIENT_IP,
-	       dtls_get_cipher(wtpman->conn));
+	cw_dbg(DBG_DTLS, "DTLS session established with %s, cipher=%s",
+	       sock_addr2str_p(&wtpman->conn->addr), dtls_get_cipher(wtpman->conn));
 	/* DTLS handshake done */
 
 /*
@@ -483,10 +499,12 @@ static void wtpman_run(void *arg)
 				break;
 		}
 
-		cw_dbg(DBG_X, "Time left: %d",cw_timer_timeleft(wtpman->echointerval_timer) );
-		if (cw_timer_timeout(wtpman->echointerval_timer)){
+		cw_dbg(DBG_X, "Time left: %d",
+		       cw_timer_timeleft(wtpman->echointerval_timer));
+		if (cw_timer_timeout(wtpman->echointerval_timer)) {
 
-			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",sock_addr2str_p(&conn->addr));
+			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",
+			       sock_addr2str_p(&conn->addr));
 			break;
 		}
 
@@ -501,7 +519,7 @@ static void wtpman_run(void *arg)
 			continue;
 
 
-		
+
 
 //              DBGX("Have %d tasks",r->count);
 
@@ -516,7 +534,7 @@ static void wtpman_run(void *arg)
 
 	}
 
-	db_ping_wtp(sock_addr2str(&conn->addr), "");
+	db_ping_wtp(sock_addr2str_p(&conn->addr), "");
 	wtpman_remove(wtpman);
 	return;
 }
@@ -532,11 +550,10 @@ static void wtpman_run_dtls(void *arg)
 	/* reject connections to our multi- or broadcast sockets */
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
-		       CLIENT_IP);
+		       sock_addr2str_p(&wtpman->conn->addr));
 		wtpman_remove(wtpman);
 		return;
 	}
-
 //      time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
 
 	/* establish dtls session */
