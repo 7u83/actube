@@ -46,14 +46,14 @@ typedef time_t cw_timer_t;
  * }
  * @endcode
  */
-#define cw_timer_start(t) (time(NULL)+t)
+#define cw_timer_start(t) (time(NULL)+(t))
 
 /**
  * Check if a timer is expired.
  * @param t a variable of type #cw_timer_t intialized by #cw_timer_start
  * @return 0=timer is not expired\n 1=timer is expired.
  */
-#define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
+#define cw_timer_timeout(t) (time(NULL)>(t) ? 1 : 0)
 
 /**
  * Get the number of nano seconds from a timeval.
