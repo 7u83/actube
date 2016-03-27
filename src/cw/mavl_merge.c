@@ -22,7 +22,6 @@
 /** 
  * @file
  * @brief Implementation if mavl_merge.
- * @addtogroup MavlFunctions 
  * @{
  */
 
@@ -75,4 +74,3 @@ void mavl_merge(mavl_t m, mavl_t t)
 }
 
 
-/** *@} */
