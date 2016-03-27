@@ -89,7 +89,7 @@ int db_start()
 	const char *sql="";
 
 	sqlite3_stmt *stmt;
-	int rc = sqlite3_prepare_v2(handle, "INSERT INTO acs (acid,acname) VALUES (?,?);",-1,&stmt,0);
+	int rc = sqlite3_prepare_v2(handle, "INSERT OR REPLACE INTO acs (acid,acname) VALUES (?,?);",-1,&stmt,0);
 	if (rc)
 		goto errX;
 
