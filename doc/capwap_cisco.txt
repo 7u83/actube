@@ -142,6 +142,13 @@ AP = RAD = WTP
 */
 
 
+10. IEEE 802.11 Multi-Domain Capability
+
+   Sames as element type 10 in RFC 5412 (LWAPP)
+
+11. for IEEE 802.11 MAC Operation
+   See msg element type 11 in RCF 5412
+
 
 28. IEEE 802.11 Delete WLAN
 
