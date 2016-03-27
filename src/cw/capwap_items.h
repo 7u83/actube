@@ -176,6 +176,12 @@ extern const char CW_ITEM_RADIO_INFOS[];
 extern const char CW_ITEM_ECN_SUPPORT[];
 
 
+extern const char CW_ITEM_SSH_ENABLE[];
+extern const char CW_ITEM_TELNET_ENABLE[];
+
+
+
+
 #define CW_ITEM_REBOOT_COUNT "reboot_count"
 #define CW_ITEM_REBOOT_AC_INITIATED_COUNT "ac_initiated"
 #define CW_ITEM_REBOOT_LINK_FAILURE_COUNT "link_failure"

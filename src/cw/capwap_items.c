@@ -15,6 +15,9 @@ const char CW_ITEM_WTP_FRAME_TUNNEL_MODE[]="wtp_frame_tunnel_mode";
 const char CW_ITEM_WTP_RADIOS_IN_USE[]="max_radios";
 const char CW_ITEM_WTP_MAX_RADIOS[]="radios_in_use";
 
+const char CW_ITEM_SSH_ENABLE[]="ssh_enable";
+const char CW_ITEM_TELNET_ENABLE[]="telnet_enable";
+
 /*
 const char CW_ITEM_WTP_HARDWARE_VENDOR=
 */
@@ -100,6 +103,10 @@ const char CW_ITEM_RADIO_INFOS[]="radio_infos";
 struct cw_itemdef capwap_itemdefs[] = {
 
 {CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,CW_ITEM_NONE,MBAG_BYTE},
+
+{CW_ITEM_TELNET_ENABLE,CW_ITEM_NONE,MBAG_BYTE},
+{CW_ITEM_SSH_ENABLE,CW_ITEM_NONE,MBAG_BYTE},
+
 
 {CW_ITEM_WTP_NAME,CW_ITEM_NONE,MBAG_STR},
 {CW_ITEM_WTP_MAC_TYPE,CW_ITEM_NONE,MBAG_BYTE},
