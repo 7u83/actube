@@ -176,7 +176,7 @@ extern struct outelem * cw_actionlist_out_get_mlist(cw_actionlist_out_t t, int m
 typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int,struct sockaddr *);
 
 
-cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
+cw_action_fun_t cw_set_msg_end_callback(struct cw_actiondef * actions, 
 		int capwap_state,int msg_id, cw_action_fun_t callback);
 
 
