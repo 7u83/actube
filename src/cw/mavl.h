@@ -23,7 +23,7 @@
 
 
 /** 
- * @defgroup MavlFunctions MAVL Functions
+ * @defgroup MAVL  MAVL
  * @{
  */
 
@@ -37,11 +37,21 @@
 
 #include <stdint.h>
 
+
+/**
+ * @defgroup MAV_CONSTANTS Constants
+ * @{
+ */
+
 /** Maximum AVL Tree depth. 
     The number of nodes is calculated by 2^depth.
     So a value of 32 should be enough for around 4 
     billion nodes. */
 #define MAVL_MAX_DEPTH	32
+
+/**
+ * @}
+ */
 
 /**
  * Defines the structure of an AVL Node.
@@ -77,7 +87,10 @@ struct mavl {
 typedef struct mavl * mavl_t;
 
 
-
+/**
+ * @defgroup MAVL_FUNCTIONS Functions
+ * @{
+ */
 struct mavl *mavl_create(int (*cmp) (const void *, const void *),
 			       void (*del) (void *));
 
@@ -98,6 +111,9 @@ extern int mavl_foreach_rl(struct mavlnode *n, int (*callback) (void *, void *),
 int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
 			    int (*callback) (void *, void *), void *cbpriv);
 
+/**
+ * @}
+ */
 
 //extern void mavl_foreach(struct mavl *t, int (*callback)(void *,void*),void *cbpriv,int dir);
 
@@ -196,6 +212,21 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
  * an AVL Tree.
  * @param i Name of the variable to define
  * @param t #mavl_t Tree to associate
+ * @see #mavliter_get #mavliter_foreach
+ *
+ * Example:
+ * \code 
+   mavl_t datatree = mavl_create();
+ 
+   // fill up datatree with some values
+ 
+   MAVLITER_DEFINE (i,datatree);
+   mavliter_foreach(&i) {
+	// Get the current value
+	void * value = mavliter_get(&i);
+   
+   }
+ * \endcode
  */ 
 #define MAVLITER_DEFINE(i,t)\
 	mavliter_t i; mavliter_init(&i,t)
