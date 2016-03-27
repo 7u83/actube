@@ -48,9 +48,11 @@ static void reset_echointerval_timer(struct wtpman *wtpman)
 				    CAPWAP_MAX_DISCOVERY_INTERVAL << 8 |
 				    CAPWAP_ECHO_INTERVAL);
 
-	wtpman->echointerval_timer = cw_timer_start(ct & 0xff);
+	/* start echinterval timer and put 2 seconds for "safety" on it */
+
+	wtpman->echointerval_timer = cw_timer_start(2+ (ct & 0xff));
 	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr), conf_acname);
-	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
+//	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
 
 }
 
@@ -276,7 +278,7 @@ void config_to_sql(struct conn *conn)
 	// XXX for the moment we use just the IP adress as ID
 	char *wtp_id = sock_addr2str(&conn->addr);
 
-	cw_dbg(DBG_X, "WTPID: %s\n", wtp_id);
+//	cw_dbg(DBG_X, "WTPID: %s\n", wtp_id);
 
 	MAVLITER_DEFINE(it, conn->incomming);
 	mavliter_foreach(&it) {
@@ -285,8 +287,8 @@ void config_to_sql(struct conn *conn)
 		const struct cw_itemdef *cwi =
 		    cw_itemdef_get(conn->actions->items, i->id, NULL);
 		if (cwi) {
-			DBGX("ID %s,%s", i->id, cwi->id);
-			DBGX("Type %s,Typecwd %s", i->type->name, cwi->type->name);
+	//		DBGX("ID %s,%s", i->id, cwi->id);
+	//		DBGX("Type %s,Typecwd %s", i->type->name, cwi->type->name);
 
 			//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
@@ -408,7 +410,7 @@ static void wtpman_run(void *arg)
 	conn->capwap_state = CW_STATE_RUN;
 
 	// XXX testing ...
-	DBGX("Cofig to sql", "");
+//	DBGX("Cofig to sql", "");
 	config_to_sql(conn);
 
 
@@ -423,8 +425,8 @@ static void wtpman_run(void *arg)
 				break;
 		}
 
-		cw_dbg(DBG_X, "Time left: %d",
-		       cw_timer_timeleft(wtpman->echointerval_timer));
+//		cw_dbg(DBG_X, "Time left: %d",
+//		       cw_timer_timeleft(wtpman->echointerval_timer));
 		if (cw_timer_timeout(wtpman->echointerval_timer)) {
 
 			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",
@@ -436,11 +438,14 @@ static void wtpman_run(void *arg)
 
 		mavl_conststr_t r = db_get_update_tasks(conn, sock_addr2str(&conn->addr));
 
+
 		if (!r)
 			continue;
 
 		if (!conn->outgoing->count)
 			continue;
+
+		cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr));
 
 		rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
 		mavl_merge(conn->config, conn->outgoing);
@@ -592,15 +597,6 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 			       (void *) wtpman);
 	}
 }
-
-
-
-
-
-
-
-
-
 
 
 
