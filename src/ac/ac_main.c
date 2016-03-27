@@ -57,10 +57,12 @@ static void *alive_thread(void *data)
 	}
 }
 
+
 #include <getopt.h>
 static int parse_args(int argc, char *argv[])
 {
-	int getopt_ret, option_index;
+//	int getopt_ret;
+	int option_index;
 
 	static struct option long_options[] = {
 		{"version", optional_argument, NULL, 'v'},
@@ -85,39 +87,11 @@ extern struct mod_ac * cw_get_mod_ac(const char *name);
 
 #include "cw/mlist.h"
 
-static int mcmp(void *v1,void*v2)
-{
-	return strcmp((char*)v1,(char*)v2);
-}
 
 int main(int argc, char *argv[])
 {
 
 	int rc = 0;
-
-	/*
-	struct mlist_elem *e;
-
-	mlist_t * l = mlist_create(mcmp);
-
-	mlist_append(l,"Hallo");
-
-	mlist_append(l,"Welt");
-
-	e = mlist_find(l,NULL,"Welt");
-
-	printf("Found: %p\n",e);
-
-	exit(0);
-	*/
-
-
-/*
-struct mod_ac *m = cw_get_mod_ac("cipwap");
-printf("Ptr: %p\n",m);
-
-m->init();
-*/
 
 	/* parse arguments */
 	parse_args(argc, argv);
@@ -136,7 +110,7 @@ m->init();
 
 	/* Warn, if the "secret" debugging feature for 
 	   developers is turned on ;) */
-	DBGX("Attention! %s", "DBGX is ON!");
+	DBGX("Attention! %s", "DBG X is ON!");
 
 
 	/* Initialize the database */
@@ -157,37 +131,6 @@ m->init();
 
 	/* Init DTLS library */
 	dtls_init();
-
-	int regn;
-
-	/* Load CAPWAP base protocol */
-/*	if (conf_capwap_mode == CW_MODE_CIPWAP) {
-		cw_dbg(DBG_INFO, "Loading CIPWAP Actions ...");
-		regn = cw_register_actions_cipwap_ac(&capwap_actions);
-	} else {
-		cw_dbg(DBG_INFO, "Loading standard CAPWAP Actions ...");
-		regn = cw_register_actions_capwap_ac(&capwap_actions);
-	}
-*/
-
-	//regn = cw_register_actions_capwap_ac(&capwap_actions);
-
-
-	//struct outelem * l = cw_actionlist_out_get_mlist(capwap_actions.out,CW_MSG_DISCOVERY_RESPONSE);
-
-	//printf("List got: %p\n",l);
-
-
-
-
-//	exit(0);
-
-
-	/* Load bindings */
-	cw_dbg(DBG_INFO, "Loading 802.11 Bindings ...");
-//      regn += cw_register_actions_capwap_80211_ac(&capwap_actions);
-
-	cw_dbg(DBG_INFO, "Registered %d protocol actions and strings.", regn);
 
 
 
@@ -245,7 +188,7 @@ int ac_run()
 		conf_parse_listen_addr(conf_listen_addrs[i], addr, port, &proto);
 
 
-		struct sockaddr sa;
+		//struct sockaddr sa;
 
 
 		socklist_add_unicast(addr, port,proto);
