@@ -29,6 +29,9 @@
 int conn_send_data_packet(struct conn * conn, const uint8_t * buffer, int len)
 {
 	int n;
+
+	cw_dbg(DBG_X,"Sending data packet to %s\n",sock_addr2str_p(&conn->data_addr));
+
 	while((n=sendto( conn->data_sock, buffer, len, 0, 
 				(struct sockaddr*)&conn->data_addr, 
 				sock_addrlen((struct sockaddr*)&conn->data_addr)))<0 ){
