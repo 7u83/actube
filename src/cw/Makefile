@@ -102,7 +102,9 @@ LWAPPOBJS = \
 	lw_msg_id_to_str.o \
 	lw_cisco_id_to_str.o \
 	lw_put_sockaddr.o \
-	lw_put_image_data.o
+	lw_put_image_data.o \
+	lw_in_vendor_specific.o
+
 
 	#lw_put_80211_wtp_wlan_radio_configuration.o \
 #	lw_readelem_wtp_name.o \
