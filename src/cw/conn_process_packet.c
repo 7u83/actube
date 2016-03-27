@@ -92,11 +92,15 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_set_msg_elems_len(msgptr, 0);
 }
 
-void cw_init_keepalive(struct conn *conn)
+void cw_init_data_msg(struct conn *conn)
 {
 	uint8_t *buffer = conn->req_buffer;
 	cw_put_dword(buffer + 0, 0);
 	cw_put_dword(buffer + 4, 0);
+
+	/* unencrypted */
+	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
+
 
 
 }
@@ -202,7 +206,7 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
-	struct cw_actiondef *ad = mod_cache_add(cmod, bmod);
+	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
 
 	return ad;
 
@@ -297,7 +301,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		//struct mod_ac *mod;
 		struct cw_actiondef *ad = load_mods(conn, rawmsg, len, elems_len, from);
 		if (!ad) {
-			cw_log(LOG_ERR, "Eror");
+			cw_log(LOG_ERR, "Error");
 			errno = EAGAIN;
 			return -1;
 		}
@@ -353,6 +357,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		return -1;
 	}
 
+	
+	if (conn->msg_start){
+		conn->msg_start(conn, afm, rawmsg, len, from);
+	}
 
 	/* Execute start processor for message */
 	if (afm->start) {
@@ -423,6 +431,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (afm->end) {
 			result_code = afm->end(conn, afm, rawmsg, len, from);
 
+		}
+		if (conn->msg_end){
+			conn->msg_end(conn, afm, rawmsg, len, from);
 		}
 	}
 
