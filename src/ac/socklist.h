@@ -28,7 +28,6 @@ enum {
 
 struct socklistelem{
 	int sockfd;
-//	int reply_sockfd;
 	int data_sockfd;
 
 	int type;
@@ -51,5 +50,7 @@ extern void socklist_lock();
 extern void socklist_unlock();
 void socklist_add_connection(int index);
 void socklist_del_connection(int index);
+extern int socklist_find_reply_socket(struct sockaddr *sa, int port);
+
 
 #endif
