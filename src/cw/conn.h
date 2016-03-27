@@ -31,8 +31,6 @@
 
 #include "fragman.h"
 #include "cwmsg.h"
-//#include "wtpinfo.h"
-
 
 #include "action.h"
 
@@ -41,6 +39,9 @@
 
 #include "mbag.h"
 #include "mod.h"
+
+
+struct cw_action_in;
 
 #define CONN_MAX_MSG_LENGTH 65536
 
@@ -120,10 +121,14 @@ struct conn {
 	int (*recv_packet) (struct conn *, uint8_t *, int);
 	int (*recv_packet_peek) (struct conn *, uint8_t *, int);
 	int (*send_packet) (struct conn *, const uint8_t *, int);
+	int (*send_data_packet) (struct conn *, const uint8_t *, int);
+	
 
 	int (*readfrom) (struct conn *, uint8_t *, int, struct sockaddr_storage *);
 	int (*read) (struct conn *, uint8_t *, int);
 	int (*write) (struct conn *, const uint8_t *, int);
+
+	int (*write_data) (struct conn *, const uint8_t *, int);
 
 	/* optional packet queue */
 	uint8_t **q;
@@ -154,7 +159,6 @@ struct conn {
 	uint8_t dtls_cookie[8];
 
 	int dtls_verify_peer;
-
 	int dtls_mtu;
 
 	uint8_t dtls_buffer[2048];
@@ -182,11 +186,6 @@ struct conn {
 	int strict_capwap;
 	int strict_hdr;
 
-/*
-	int (*request_handler) (void *);
-	void *request_handler_param;
-*/
-
 
 	int (*process_packet)(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 	int (*process_message)(struct conn *conn, uint8_t * rawmsg, int rawlen,
@@ -195,6 +194,13 @@ struct conn {
 	
 	int detected;
 	void  * mods;
+
+
+	int (*msg_start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
+	int (*msg_end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
+
+
+//	void (*actions_registered)(struct conn *conn);
 
 };
 
@@ -286,4 +292,4 @@ int cw_read_from(struct conn * conn);
 
 
 
-#endif				/* __CONLIST_H */
+#endif	/* __CONN_H */
