@@ -63,7 +63,7 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 //typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int,struct sockaddr *);
 
 
-cw_action_fun_t cw_set_msg_end_callback(struct conn *conn, 
+cw_action_fun_t cw_set_msg_end_callback(struct cw_actiondef *actions, 
 		int capwap_state,int msg_id, cw_action_fun_t callback)
 {
 	cw_action_in_t as;
@@ -76,7 +76,7 @@ cw_action_fun_t cw_set_msg_end_callback(struct conn *conn,
 	cw_action_in_t *af;
 	
 
-	af = cw_actionlist_in_get(conn->actions->in, &as);
+	af = cw_actionlist_in_get(actions->in, &as);
 	if (!af) 
 		return NULL;
 
