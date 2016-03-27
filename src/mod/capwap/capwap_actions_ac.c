@@ -493,6 +493,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN,
 		.msg_id = CW_MSG_ECHO_REQUEST,
+		.item_id = "echoreq"
 	}
 	,
 
