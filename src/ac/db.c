@@ -173,7 +173,7 @@ void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const
 {
 	int rc=0;
 
-	DBGX("Putting %s/%s:%s",id,sub_id,val);
+//	DBGX("Putting %s/%s:%s",id,sub_id,val);
 
 	sqlite3_reset(put_wtp_prop_stmt);
 	sqlite3_clear_bindings(put_wtp_prop_stmt);
@@ -197,18 +197,18 @@ void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const
 	if (sqlite3_bind_int(put_wtp_prop_stmt,5,0))
 		goto errX;
 
-	cw_dbg(DBG_X,"Her I am already, next is step");
+//	cw_dbg(DBG_X,"Her I am already, next is step");
 
 	rc = sqlite3_step(put_wtp_prop_stmt);
 	if (rc != SQLITE_DONE)
 		goto errX;
 
 
-	cw_dbg(DBG_X,"SQL schould be fine");
+//	cw_dbg(DBG_X,"SQL schould be fine");
 
 	return;
 errX:
-	cw_dbg (DBG_X, "Iam on err %d\n",rc);
+//	cw_dbg (DBG_X, "Iam on err %d\n",rc);
 
 
 	if (rc) {
