@@ -56,8 +56,6 @@ struct mod_ac {
 
 	/** Register actions */
 	int (*register_actions) (struct cw_actiondef * def,int mode);
-
-	
 };
 
 
@@ -72,9 +70,17 @@ extern struct mod_ac mod_null;
 
 #define MOD_NULL (&mod_null)
 
-struct cw_actiondef * mod_cache_add(struct mod_ac *c, struct mod_ac *b);
+struct cw_actiondef * mod_cache_add(struct conn *conn,struct mod_ac *c, struct mod_ac *b);
 
 
 #define mod_init_config(mod,cfg) (mod->init_config ? mod->init_config(cfg):1)
+
+void mod_set_actions_registered_cb(void (*fun) (struct mod_ac *, struct mod_ac *, struct cw_actiondef *));
+
+extern int mod_caching;
+
+#define mod_set_caching(var) (mod_caching=var)
+#define mod_get_caching() (mod_caching)
+
 
 #endif
