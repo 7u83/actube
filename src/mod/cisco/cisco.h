@@ -23,5 +23,12 @@ extern int cisco_in_ac_descriptor(struct conn *conn, struct cw_action_in *a,
 extern int cisco_in_radio_administrative_state_wtp(struct conn *conn,
 						   struct cw_action_in *a, uint8_t * data,
 						   int len, struct sockaddr *from);
+int cisco_in_spam_vendor_specific(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
+
+int cisco_in_telnet_ssh(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+		  struct sockaddr *from);
+
+int cisco_out_telnet_ssh(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
 
 #endif

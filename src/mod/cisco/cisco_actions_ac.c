@@ -27,6 +27,8 @@
 #include "cw/capwap_cisco.h"
 #include "cw/capwap80211.h"
 
+#include "cw/lwapp_cisco.h"
+
 #include "mod_cisco.h"
 #include "cisco.h"
 
@@ -164,7 +166,31 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-		
+	{
+		/* This is Cisco's Vendor specific encapsulation
+		 * of LWAPP elements */
+
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_SPAM_VENDOR_SPECIFIC,
+		.start = lw_in_vendor_specific,
+
+	}
+	,
+
+	/* LWAPP Vendor spec Messages */
+	{
+
+		.proto = CW_ACTION_PROTO_LWAPP,
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = LW_VENDOR_ID_CISCO,
+		.elem_id = LW_CISCO_TELNET_SSH,
+		.start = cisco_in_telnet_ssh
+	}
+
+	,	
 
 	/* End of list */
 	{0, 0}
@@ -234,6 +260,30 @@ static cw_action_out_t actions_out[]={
 		.mand = 1
 	}
 	,
+
+
+	/* --------------------------------------------------------
+	 * Configuration Update Request - Out
+	 */
+
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.out = cisco_out_telnet_ssh,
+	}
+	,
+
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.item_id = CW_ITEM_WTP_NAME, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_RAD_NAME,
+		.out=cw_out_generic, 
+		.get = cw_out_get_outgoing
+	}
+	,
+
+
+
 
 	{0,0}
 
