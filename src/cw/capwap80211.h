@@ -59,7 +59,7 @@ enum radioelems {
    	/** IEEE 802.11 Statistics  */
 	CW_ELEM80211_STATISTICS=1039,
 	/** IEEE 802.11 Supported Rates */
-	CW_ELEM80211_SUPORTED_RATES=1040,
+	CW_ELEM80211_SUPPORTED_RATES=1040,
 
 /*   
    IEEE 802.11 Tx Power                               1041
