@@ -41,7 +41,6 @@ int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 		if (a->mand) {
 			cw_log(LOG_ERR,
 			       "Can't put mandatory element WTP_REBOOT_STATISTICS");
-			printf("retu 0 err\n");
 			return 0;
 		}
 		return 0;
@@ -61,5 +60,4 @@ int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 
 	int l = d - dst - 4;
 	return l + cw_put_elem_hdr(dst, a->elem_id, l);
-
 }
