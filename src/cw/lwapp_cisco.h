@@ -23,13 +23,13 @@
 
 #include "lwapp.h"
 
-#define LW_VENDOR_CISCO				4232704
+//#define LW_VENDOR_CISCO				4232704
 
 
 /* Vendor specific message elements LWAPP Cisco */
 
 
-enum lwap_cisco_elems {
+enum lwapp_cisco_elems {
 
 LW_CISCO_AP_USERNAME_PASSWORD=18,
 
