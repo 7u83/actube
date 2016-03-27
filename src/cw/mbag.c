@@ -30,24 +30,6 @@ static int mbag_bstr16str(void *item,char *dst)
 }
 */
 
-static int mbag_strstr(void *item,char *dst)
-{
-	mbag_item_t *i= item;
-        return sprintf(dst, "%s", (char*)i->data);
-}
-
-static struct mbag_item *  mbag_fromstr(const char *src)
-{
-	struct mbag_item *i= malloc(sizeof(mbag_item_t));
-	if (!i)
-		return NULL;
-
-	i->type = MBAG_STR;
-	i->dynid=0;
-	i->data = strndup(src,2000);
-	return i;
-}
-
 
 /*
 const struct mbag_typedef mbag_type_byte = {
@@ -82,9 +64,6 @@ const struct mbag_typedef mbag_type_bstr16 = {
 
 */
 
-const struct mbag_typedef mbag_type_str = {
-	"str",free,mbag_strstr,mbag_fromstr
-};
 
 
 
