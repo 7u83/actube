@@ -11,7 +11,7 @@ ifndef ARCH
 endif
 
 LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib -L../lib/$(ARCH) 
-CFLAGS += -Werror -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
+CFLAGS += -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
 
 
 LIBS+=-lcapwap
