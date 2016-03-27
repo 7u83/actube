@@ -82,13 +82,14 @@ MAVLOBJS= \
 	mavl_merge.o \
 	mavl_create_conststr.o \
 	mlist.o \
-	format_is_utf8.o \
-	format_dot11_fc.o \
 	cw_load_file.o \
 	cw_save_file.o
 
-#	cw_foreach_msgelem.o \
-#	mavl.o \
+
+FORMATOBJS = \
+	format_is_utf8.o \
+	format_dot11_fc.o \
+
 
 
 # LWAPP objs
@@ -219,6 +220,7 @@ CONNOBJS= conn_create.o \
 	conn_create_noq.o \
 	conn_init.o \
 	conn_send_packet.o \
+	conn_send_data_packet.o
 
 #	conn_send_msg.o
 #conn_get_message.o  \
@@ -293,7 +295,8 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(LWAPPCISCOOBJS) \
 	$(CWACTION) \
 	$(MAVLOBJS) \
-	$(DOT11OBJS)
+	$(FORMATOBJS) \
+	$(DOT11OBJS) 
 
 #include $(OBJS:.o=.d)
 
