@@ -39,16 +39,25 @@
 struct conn;
 
 
+
 /**
  * @file action.h
  * @brief Header for actions
  */
 
 
+#define CW_ACTION_PROTO_CAPWAP	0
+#define CW_ACTION_PROTO_LWAPP	1
+
+
+
+
 /**
  * @defgroup ACTION Action
  * @{
  */
+
+
 
 /**
  * Definition of an action for incomming messages 
