@@ -15,7 +15,7 @@ static sqlite3 *handle;
 const char * init_tables = "\
 	CREATE TABLE IF NOT EXISTS acs (acid TEXT PRIMARY KEY, acname TEXT, lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
-	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT PRIMARY KEY, wtp_name TEXT,lastseen TIMESTAMP); \
+	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT PRIMARY KEY, acid TEXT,lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS wtpprops (\
 		wtpid TEXT NOT NULL,\
 		id TEXT NOT NULL,\
@@ -75,8 +75,11 @@ int db_init()
 
 static sqlite3_stmt * ping_stmt;
 static sqlite3_stmt * put_wtp_prop_stmt;
+
+
 static sqlite3_stmt * get_tasks_stmt;
 
+static sqlite3_stmt * stmt_ping_wtp;
 
 
 int db_start()
@@ -110,6 +113,13 @@ int db_start()
 		goto errX;
 
 
+	/* Prepare WTP ping statement */
+	sql = "INSERT OR REPLACE INTO wtps  (wtpid,acid,lastseen) VALUES(?,?,datetime('now'))";
+	rc = sqlite3_prepare_v2(handle, sql,-1, &stmt_ping_wtp,0);
+	if (rc) 
+		goto errX;
+
+
 	
 	sql = "SELECT wtpid,id,sub_id,val FROM wtpprops WHERE upd>0 AND wtpid=?";
 	rc = sqlite3_prepare_v2(handle, sql,-1, &get_tasks_stmt,0);
@@ -136,11 +146,34 @@ void db_ping()
 	}
 }
 
+
+void db_ping_wtp(const char *wtpid,const char *acid)
+{
+	int rc=0;
+	sqlite3_reset(stmt_ping_wtp);
+	sqlite3_clear_bindings(stmt_ping_wtp);
+	if(sqlite3_bind_text(stmt_ping_wtp,1,wtpid,-1,SQLITE_STATIC))
+		goto errX;
+	
+	if(sqlite3_bind_text(stmt_ping_wtp,2,acid,-1,SQLITE_STATIC))
+		goto errX;
+
+	rc = sqlite3_step(stmt_ping_wtp);
+errX:
+	if (rc!=SQLITE_DONE) {
+		cw_log(LOG_ERR,"Can't ping database for WTP: %d - %s",
+			rc,sqlite3_errmsg(handle));
+	}
+
+
+
+}
+
 void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const char * val)
 {
-	int rc;
+	int rc=0;
 
-//DBGX("Putting %s/%s:%s",id,sub_id,val);
+	DBGX("Putting %s/%s:%s",id,sub_id,val);
 
 	sqlite3_reset(put_wtp_prop_stmt);
 	sqlite3_clear_bindings(put_wtp_prop_stmt);
@@ -164,11 +197,20 @@ void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const
 	if (sqlite3_bind_int(put_wtp_prop_stmt,5,0))
 		goto errX;
 
+	cw_dbg(DBG_X,"Her I am already, next is step");
 
-	if (sqlite3_step(put_wtp_prop_stmt))
+	rc = sqlite3_step(put_wtp_prop_stmt);
+	if (rc != SQLITE_DONE)
 		goto errX;
+
+
+	cw_dbg(DBG_X,"SQL schould be fine");
+
 	return;
 errX:
+	cw_dbg (DBG_X, "Iam on err %d\n",rc);
+
+
 	if (rc) {
 		cw_log(LOG_ERR,"Can't update database with WTP props: %d - %s",
 			rc,sqlite3_errmsg(handle));
@@ -188,12 +230,12 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 		return NULL;
 
 
+	int rc=0;
 
 
 	if(sqlite3_bind_text(get_tasks_stmt,1,wtpid,-1,SQLITE_STATIC))
 		goto errX;
 
-	int rc;
 
 
 
@@ -227,7 +269,7 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 			continue;	
 		}
 
-		uint8_t data[2048];
+		//uint8_t data[2048];
 
 		if (!cwi->type->from_str) {
 			cw_log(LOG_ERR,"Can't convert from string %s/%s - No method defined.",id,sub_id);

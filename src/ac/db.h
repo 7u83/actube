@@ -4,6 +4,8 @@
 #include "cw/mavl.h"
 
 extern void db_ping();
+extern void db_ping_wtp(const char *wtpid,const char *acid);
+
 extern int db_init();
 int db_start();
 int db_get_tasks(struct conn * conn,const char * wtpid);
