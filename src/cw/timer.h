@@ -56,6 +56,13 @@ typedef time_t cw_timer_t;
 #define cw_timer_timeout(t) (time(NULL)>(t) ? 1 : 0)
 
 /**
+ * Get the number of seconds left in a timer
+ * @param t timer
+ * @return number of seconds
+ */
+#define cw_timer_timeleft(t) ((t)-time(NULL))
+
+/**
  * Get the number of nano seconds from a timeval.
  */
 #define cw_timevaltodouble(tv) \
