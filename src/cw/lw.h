@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 
+#include "conn.h"
 #include "bstr.h"
+
 
 
 /** 
