@@ -16,11 +16,12 @@ static const char * init_tables = "\
 	CREATE TABLE IF NOT EXISTS acs (acid TEXT PRIMARY KEY, acname TEXT, lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS radios (\
 		wtpid TEXT,\
-		radioid TEXT,\
+		rid TEXT,\
 		key TEXT,\
+		sub_key,\
 		val TEXT, \
 		upd INTEGER, \
-		PRIMARY KEY (wtpid,radioid)\
+		PRIMARY KEY (wtpid,rid,key,sub_key)\
 	);\
 	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
 	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT PRIMARY KEY, acid TEXT,lastseen TIMESTAMP); \
@@ -88,7 +89,7 @@ static sqlite3_stmt * put_wtp_prop_stmt;
 static sqlite3_stmt * get_tasks_stmt;
 
 static sqlite3_stmt * stmt_ping_wtp;
-
+static sqlite3_stmt * stmt_put_radio_prop;
 
 int db_start()
 {
@@ -121,6 +122,15 @@ int db_start()
 		goto errX;
 
 
+	sql = "INSERT OR REPLACE INTO radios\
+	       (wtpid,rid,key,sub_key,val,upd)\
+	       VALUES (?,?,?,?,?,0)";
+
+	rc = sqlite3_prepare_v2(handle, sql,-1, &stmt_put_radio_prop,0);
+	if (rc) 
+		goto errX;
+
+
 	/* Prepare WTP ping statement */
 	sql = "INSERT OR REPLACE INTO wtps  (wtpid,acid,lastseen) VALUES(?,?,datetime('now'))";
 	rc = sqlite3_prepare_v2(handle, sql,-1, &stmt_ping_wtp,0);
@@ -145,6 +155,67 @@ errX:
 
 
 }
+
+void db_put_radio_prop(const char *wtp_id,const char *rid, const char * key,const char *sub_key,const char * val)
+{
+	int rc=0;
+
+//	DBGX("Putting %s/%s:%s",id,sub_id,val);
+//	       (wtpid,rid,key,sub_key,val,upd)
+
+	sqlite3_reset(stmt_put_radio_prop);
+	sqlite3_clear_bindings(stmt_put_radio_prop);
+
+	if(sqlite3_bind_text(stmt_put_radio_prop,1,wtp_id,-1,SQLITE_STATIC))
+		goto errX;
+	
+	if(sqlite3_bind_text(stmt_put_radio_prop,2,rid,-1,SQLITE_STATIC))
+		goto errX;
+
+
+
+	if (sqlite3_bind_text(stmt_put_radio_prop,3,key,-1,SQLITE_STATIC))
+		goto errX;
+
+
+	if (!sub_key) 
+		sub_key=CW_ITEM_NONE;
+
+	if (sqlite3_bind_text(stmt_put_radio_prop,4,sub_key,-1,SQLITE_STATIC))
+		goto errX;
+
+	if (sqlite3_bind_text(stmt_put_radio_prop,5,val,-1,SQLITE_STATIC))
+		goto errX;
+
+	
+
+//	if (sqlite3_bind_int(put_wtp_prop_stmt,5,0))
+//		goto errX;
+
+//	cw_dbg(DBG_X,"Her I am already, next is step");
+
+	rc = sqlite3_step(stmt_put_radio_prop);
+	if (rc != SQLITE_DONE)
+		goto errX;
+
+
+//	cw_dbg(DBG_X,"SQL schould be fine");
+
+	return;
+errX:
+//	cw_dbg (DBG_X, "Iam on err %d\n",rc);
+
+
+	if (rc) {
+		cw_log(LOG_ERR,"Can't update database with WTP props: %d - %s",
+			rc,sqlite3_errmsg(handle));
+	}
+
+}
+
+
+
+
 
 void db_ping()
 {
