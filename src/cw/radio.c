@@ -16,6 +16,10 @@ const char CW_RADIO_COUNTRY_STRING[]="country_string";
 const char CW_RADIO_DECRYPTION_ERROR_REPORT_PERIOD[]="decryption_error_report_period";
 
 
+const char CW_RADIO_SUPPORTED_RATES[]="supported_rates";
+
+
+
 /* Cisco */
 
 const char CW_RADIO_OCCUPANCY_LIMIT[]="occupancy_limit";
@@ -29,6 +33,7 @@ struct cw_itemdef capwap_radioitemdefs[] = {
 {CW_RADIO_DECRYPTION_ERROR_REPORT_PERIOD,CW_ITEM_NONE,MBAG_WORD},
 
 {CW_RADIO_BSSID,CW_ITEM_NONE,MBAG_BSTR16},
+{CW_RADIO_SUPPORTED_RATES,CW_ITEM_NONE,MBAG_DATA},
 
 {CW_ITEM_NONE}
 };
@@ -89,4 +94,6 @@ int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause)
 	}
 	return 1;	
 }
+
+
 

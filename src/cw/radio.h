@@ -3,12 +3,17 @@
 
 #include "mbag.h"
 #include "item.h"
+#include "conn.h"
 
 
 
 
 extern const char CW_RADIO_ADMIN_STATE[];
 extern const char CW_RADIO_OPER_STATE[];
+
+extern const char CW_RADIO_SUPPORTED_RATES[];
+
+
 extern const char CW_RADIO_TYPE[];
 extern const char CW_RADIO_REG_DOMAIN[];
 extern const char CW_RADIO_BSSID[];
@@ -48,6 +53,8 @@ enum radiodata{
 int cw_radio_update_oper_states(mbag_t radios,int cause);
 extern struct cw_itemdef capwap_radioitemdefs[];
 extern int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause);
+
+int cw_out_80211_supported_rates(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
 
