@@ -21,7 +21,7 @@
 #define __MBAG_H
 
 /** 
- * @defgroup MbagFunctions MBAG 
+ * @defgroup MBAG MBAG 
  * @{
  */
 
@@ -108,28 +108,55 @@ extern const struct mbag_typedef mbag_type_bstr;
 extern const struct mbag_typedef mbag_type_bstr16;
 extern const struct mbag_typedef mbag_type_bstrv;
 extern const struct mbag_typedef mbag_type_str;
+extern const struct mbag_typedef mbag_type_ptr;
 extern const struct mbag_typedef mbag_type_avltree;
 extern const struct mbag_typedef mbag_type_const_data;
 extern const struct mbag_typedef mbag_type_mbag_dyn;
 extern const struct mbag_typedef mbag_type_sockaddr;
+extern const struct mbag_typedef mbag_type_data;
 
 /**
- *@defgroup MbagTypes  MBAG Types 
+ *@defgroup MBAG_TYPES  MBAG Types 
  *@{
  */
+/** MBAG_BYTE stores one byte */
 #define MBAG_BYTE (&mbag_type_byte)
+/** MBAG_WORD stores one word */
 #define MBAG_WORD (&mbag_type_word)
+/** MBAG_DWORD stores one dword */
 #define MBAG_DWORD (&mbag_type_dword)
+/** MBAG_MBAG stores an MBAG */ 
 #define MBAG_MBAG (&mbag_type_mbag)
 #define MBAG_MBAG_DYN (&mbag_type_mbag_dyn)
+/** 
+ * MBAG_BSTR stores a #bstr_t value 
+ * The to_str converts it either to a readable string
+ * if it detects utf8 or to an hex string otherwise 
+ */
 #define MBAG_BSTR (&mbag_type_bstr)
+/** 
+ * MBAG_BSTR16 holds an #bstr16_t value.
+ * @see MBAG_BSTR
+ */
 #define MBAG_BSTR16 (&mbag_type_bstr16)
+
+#define MBAG_DATA (&mbag_type_data)
+
+/** MBAG_BSTRV holds a #bstr_t value */
 #define MBAG_VENDORSTR (&mbag_type_bstrv)
+/** MBAG_STR holds a zero terminated string */
 #define MBAG_STR (&mbag_type_str)
-#define MBAG_DATA MBAG_STR
+/** 
+ * MBAG_PTR holds a pointer to some data.
+ * The data will be free'd when the object is destroyed.
+ * There is no to_str or from_str method defined.
+ */
+#define MBAG_PTR (&mbag_type_ptr)
+
 #define MBAG_AVLTREE (&mbag_type_avltree)
 #define MBAG_FUN MBAG_STR
 #define MBAG_CONST_DATA (&mbag_type_const_data)
+/** MBAG_SOCK_ADDR holds a sockkaddr structure */
 #define MBAG_SOCKADDR (&mbag_type_sockaddr)
 /**@}*/
 
@@ -601,17 +628,16 @@ static inline mbag_item_t * mbag_set_const_ptr(mbag_t s, const char *id, void *p
 	return i;
 }
 
-
+ 
 static inline int mbag_set_ptr(mbag_t s, const char *id, void *ptr)
 {
 	struct mbag_item *i = mbag_item_create(s, id);
 	if (!i)
 		return 0;
-	i->type = MBAG_DATA;
+	i->type = MBAG_PTR;
 	i->data = ptr;
 	return 1;
 }
-
 
 
 
