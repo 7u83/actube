@@ -58,6 +58,9 @@ struct mbag_typedef{
 	/** Cereate an item of this type from a string, which was previously
 	    created by the #del function. */
 	struct mbag_item * (*from_str)(const char *src);
+	
+	struct mbag_item * (*get)(const uint8_t*src, int len);
+
 	/** A method to put this object to a buffer */
 	int (*put)(void *,uint8_t*dst);
 
