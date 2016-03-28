@@ -29,6 +29,10 @@ int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 		return cw_put_data(dst, item->data, strlen((char *) item->data));
 	}
 
+	if (MBAG_DATA == item->type){
+		return cw_put_data(dst, item->data+1, *((uint8_t*)item->data));
+	}
+
 	if (MBAG_BYTE == item->type){
 		return cw_put_byte(dst, item->byte);
 	}
