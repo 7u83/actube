@@ -310,7 +310,59 @@ void config_to_sql(struct conn *conn)
 	}
 }
 
+void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
+{
+	MAVLITER_DEFINE(it, radio);
+	mavliter_foreach(&it) {
+		mbag_item_t *i = mavliter_get(&it);
 
+		const struct cw_itemdef *cwi =
+		    cw_itemdef_get(conn->actions->items, i->id, NULL);
+		if (cwi) {
+			char str[4096];
+			if (i->type->to_str) {
+				i->type->to_str(i, str);
+				printf("I would put RID: %d, %s=>%s\n",rid,cwi->id,str);
+
+				char srid[6];
+				sprintf(srid,"%d",rid);
+
+				db_put_radio_prop(wtp_id,srid,cwi->id,cwi->sub_id,str);
+
+//				db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
+			} else {
+				cw_log(LOG_ERR, "Can't converto to str for %s", cwi->id,
+				       cwi->sub_id);
+
+			}
+
+
+		} else {
+			//      DBGX("ID %d",i->id);
+
+		}
+
+	}
+
+
+//		int rid = ((struct mbag_item*)mavliter_get(&it))->iid;
+
+}
+
+
+void radios_to_sql(struct conn *conn)
+{
+	char *wtp_id = sock_addr2str(&conn->addr);
+	MAVLITER_DEFINE(it, conn->radios);
+	mavliter_foreach(&it) {
+		struct mbag_item * i = mavliter_get(&it);
+		int rid = i->iid;
+
+		radio_to_sql(conn,wtp_id,rid,i->data);
+
+
+	}
+}
 
 void wtpman_run_data(void *wtpman_arg)
 {
@@ -412,6 +464,7 @@ static void wtpman_run(void *arg)
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
 	config_to_sql(conn);
+	radios_to_sql(conn);
 
 
 	/* The main run loop */
@@ -452,6 +505,7 @@ static void wtpman_run(void *arg)
 		mavl_destroy(conn->outgoing);
 		conn->outgoing = mbag_create();
 		config_to_sql(conn);
+		radios_to_sql(conn);
 		mavl_destroy(r);
 
 	}
