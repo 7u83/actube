@@ -184,6 +184,10 @@ DOT11OBJS = \
 #	cw_out_ac_descriptor.o \
 
 
+CAPWAP80211OBJS=\
+		capwap80211_items.o\
+		capwap80211_type_rateset.o \
+
 
 #
 # SSL objects
@@ -273,6 +277,7 @@ CWACTION=action.o \
 	cw_put_image_data.o \
 	cisco.o \
 	radio.o \
+	cw_in_radio_generic.o\
 	cw_out_radio_info.o \
 	capwap_items.o \
 	item.o \
@@ -307,7 +312,8 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(MAVLOBJS) \
 	$(FORMATOBJS) \
 	$(DOT11OBJS)  \
-	$(MBAGOBJS) 
+	$(MBAGOBJS) \
+	$(CAPWAP80211OBJS)
 
 #include $(OBJS:.o=.d)
 
