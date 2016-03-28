@@ -77,7 +77,26 @@ static cw_action_in_t actions_in[] = {
 		.start = cw_in_vendor_specific_payload
 	}
 	,
-	
+
+
+	/* Result Code - Discovery Response */
+	{
+		/*
+		 * The Result Code is not defined as part
+		 * of Discovery Response
+		 */
+		.capwap_state = CW_STATE_DISCOVERY,
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.elem_id  = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 0
+	}
+		
+
+	,
 
 	/* ----------------------------------------------------------------
 	 * Message Join Response 
@@ -409,7 +428,7 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
-		.get = cw_out_get_config,
+		.get = cw_out_get_local,
 		.mand = 1
 	}
 	,
@@ -491,7 +510,7 @@ static cw_action_out_t actions_out[] = {
 		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
-		.get = cw_out_get_config,
+		.get = cw_out_get_local,
 		.mand = 1
 	}
 	,
