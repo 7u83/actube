@@ -1,8 +1,12 @@
-#ifndef __CAPWAP80211_H
-#define __CAPWAP80211_H
+#ifndef __CAPWAP80211_ITEMS_H
+#define __CAPWAP80211_ITEMS_H
 
-extern const char CW_ITEM_80211_SUPPORTED_RATES[];
+#include "item.h"
 
+extern const char CW_ITEM80211_SUPPORTED_RATES[];
+extern const char CW_ITEM80211_WTP_RADIO_INFORMATION[];
+
+extern struct cw_itemdef capwap80211_itemdefs[];
 
 #endif
 
