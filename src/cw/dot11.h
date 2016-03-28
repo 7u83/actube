@@ -238,15 +238,17 @@ static inline int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len){
 
 }
 
-#define dot11_rate(rate) ((int)(rate*2+0.5));
+#define dot11_float2rate(frate) ((int)(frate*2+0.5));
+#define dot11 rate2float(rate) ((float)(rate)/2.0)
+
 static inline int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates){
 	uint8_t *d = dst+2;
 	while(*basic != 0.0){
-		*d++ = 0x80 | dot11_rate(*basic);
+		*d++ = 0x80 | dot11_float2rate(*basic);
 		basic++;
 	}
 	while(*rates != 0.0){
-		*d++ = dot11_rate(*rates);
+		*d++ = dot11_float2rate(*rates);
 		rates++;
 	}
 	*(dst)=DOT11_ELEM_SUPPORTED_RATES;
