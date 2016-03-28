@@ -96,12 +96,12 @@ int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int
 
 
 }
-
+/*
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			int len, struct sockaddr *from)
 {
-	if (!check_len(conn, a, data, len, from))
-		return 0;
+//	if (!check_len(conn, a, data, len, from))
+//		return 0;
 
 	int rid = cw_get_byte(data);
 	mbag_t radio = mbag_i_get_mbag(conn->radios, rid, NULL);
@@ -119,3 +119,5 @@ int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 
 	return 1;
 }
+
+*/
