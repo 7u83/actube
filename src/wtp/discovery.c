@@ -88,6 +88,9 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t discs)
 		cw_aciplist_t acips =
 		    mbag_get_mavl(ac, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 
+		if (!acips)
+			continue;
+
 		/* for each IP from the current AC add it to the result list
 		 * and give it the priority whe have determined */
 		DEFINE_AVLITER(i2, acips);
