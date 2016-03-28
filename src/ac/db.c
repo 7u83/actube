@@ -12,8 +12,16 @@
 static sqlite3 *handle;
 
 
-const char * init_tables = "\
+static const char * init_tables = "\
 	CREATE TABLE IF NOT EXISTS acs (acid TEXT PRIMARY KEY, acname TEXT, lastseen TIMESTAMP); \
+	CREATE TABLE IF NOT EXISTS radios (\
+		wtpid TEXT,\
+		radioid TEXT,\
+		key TEXT,\
+		val TEXT, \
+		upd INTEGER, \
+		PRIMARY KEY (wtpid,radioid)\
+	);\
 	CREATE TABLE IF NOT EXISTS acips (acid TEXT,ip TEXT); \
 	CREATE TABLE IF NOT EXISTS wtps (wtpid TEXT PRIMARY KEY, acid TEXT,lastseen TIMESTAMP); \
 	CREATE TABLE IF NOT EXISTS wtpprops (\
