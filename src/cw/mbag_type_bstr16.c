@@ -8,12 +8,6 @@ static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
 
-//	bstr16_t src = i->data;
-//	printf("From str resul: '%.*s'\n",bstr16_len(src),bstr16_data(src));
-
-//	exit(0);
-
-
 	char *d = dst;
 	int utf8 = format_is_utf8(bstr16_data(i->data), bstr16_len(i->data));
 
