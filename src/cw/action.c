@@ -27,6 +27,9 @@
 
 #include "action.h"
 
+/* ---------------------------------------------
+ * cw_actionlist_in stuff 
+ */
 
 
 static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
@@ -55,40 +58,24 @@ static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
 	if (r != 0)
 		return r;
 
-
-
 	return 0;
 }
 
-//typedef int(*cw_action_fun_t)(struct conn *,struct cw_action_in *,uint8_t*,int,struct sockaddr *);
-
-
-cw_action_fun_t cw_set_msg_end_callback(struct cw_actiondef *actions, 
-		int capwap_state,int msg_id, cw_action_fun_t callback)
+/**
+ * Create an action list for incomming messages
+ * @return the create list or NULL if an error has occured
+ */
+cw_actionlist_in_t cw_actionlist_in_create()
 {
-	cw_action_in_t as;
-	as.capwap_state = capwap_state;
-	as.msg_id = msg_id;
-	as.vendor_id = 0;
-	as.elem_id = 0;
-	as.proto = 0;
-	
-	cw_action_in_t *af;
-	
-
-	af = cw_actionlist_in_get(actions->in, &as);
-	if (!af) 
-		return NULL;
-
-	cw_action_fun_t  old = af->end;
-	af->end =callback;
-	return old;
-
+	return mavl_create(cw_action_in_cmp, free);
 }
 
-
-
-
+/**
+ * Add an element to an "in-list"
+ * @param t action list to elem to
+ * @param a element to add
+ * @rturn a pointer to the added element 
+ */
 cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in * a)
 {
 	int s = sizeof(struct cw_action_in);
@@ -103,14 +90,14 @@ cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in *
 
 	memcpy(an, a, s);
 	return mavl_add(t, an);
-
-
-
-
-//	return cw_actionlist_add(t, a, sizeof(struct cw_action_in));
 }
 
-
+/**
+ * Get an element from an actionlist_in
+ * @param t action list
+ * @param a element to search for
+ * @return the elemen or NULL if not found
+ */
 struct cw_action_in *cw_actionlist_in_get(cw_actionlist_in_t t, struct cw_action_in *a)
 {
 	return avltree_get(t, a);
@@ -118,17 +105,10 @@ struct cw_action_in *cw_actionlist_in_get(cw_actionlist_in_t t, struct cw_action
 
 
 /**
- * Create an action list for incomming messages
- */
-cw_actionlist_in_t cw_actionlist_in_create()
-{
-	return mavl_create(cw_action_in_cmp, free);
-}
-
-/**
  * Register actions in an action list for incommin messages 
  * @param t action list, where messaes will be registered
  * @param actions an array of actions to reggister
+ * @return the number of registred actions
  */
 int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * actions)
 {
@@ -143,21 +123,9 @@ int cw_actionlist_in_register_actions(cw_actionlist_in_t t, cw_action_in_t * act
 	return n;
 }
 
-int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * actions)
-{
-
-
-
-	int n=0;
-	while (actions->msg_id != 0) {
-		cw_action_out_t *rc = cw_actionlist_out_add(t, actions);
-		if (rc == 0)
-			return 0;
-		actions++;
-		n++;
-	}
-	return n;
-}
+/* ---------------------------------------------
+ * cw_actionlist_out stuff 
+ */
 
 
 
@@ -165,21 +133,6 @@ struct outelem{
 	uint32_t msg_id;
 	mlist_t * mlist;
 };
-
-
-
-
-/* 
- * Compare function for actionlist_out_t lists
- */
-static int cw_action_out_cmp(const void *elem1, const void *elem2)
-{
-	struct outelem *e1 = (struct outelem *) elem1;
-	struct outelem *e2 = (struct outelem *) elem2;
-	return e1->msg_id - e2->msg_id;
-	return 0;
-}
-
 
 
 static int mout_cmp(void *elem1,void *elem2)
@@ -207,13 +160,96 @@ static int mout_cmp(void *elem1,void *elem2)
 
 	if (e1->item_id && e2->item_id)
 		return strcmp(e1->item_id,e2->item_id);
-
 	
 	return 1;	
-
 }
 
 
+
+struct outelem * cw_actionlist_mout_create(int msg_id)
+{
+	struct outelem * o = malloc(sizeof(struct outelem));
+	if (!o)
+		return NULL;
+
+	o->mlist= mlist_create(mout_cmp);
+	if (!o->mlist){
+		free(o);
+		return NULL;
+	}
+	o->msg_id=msg_id;
+	return o;
+}
+
+static struct outelem * cw_actionlist_out_get_outelem(cw_actionlist_out_t t, int msg_id)
+{
+	struct outelem search;
+	search.msg_id=msg_id;
+	return mavl_get(t,&search);
+}
+
+
+
+/* 
+ * Compare function for actionlist_out_t lists
+ */
+static int cw_action_out_cmp(const void *elem1, const void *elem2)
+{
+	struct outelem *e1 = (struct outelem *) elem1;
+	struct outelem *e2 = (struct outelem *) elem2;
+	return e1->msg_id - e2->msg_id;
+}
+
+
+
+/**
+ * Add an element to an actionlist_out
+ * @param t action list
+ * @param a element to add
+ */
+cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a)
+{
+	struct outelem * o =  cw_actionlist_out_get_outelem(t,a->msg_id);
+
+
+	if (!o){
+		o = cw_actionlist_mout_create(a->msg_id);
+		if (!o) {
+			return NULL;
+		}
+		mavl_add(t,o);
+	}
+
+	struct mlist_elem * e = mlist_replace(o->mlist,NULL,a);
+	if (!e)
+		e = mlist_append(o->mlist,a);
+
+	if (e)
+		return a;
+
+	return 0;
+}
+
+
+/**
+ * Register actions in an action list for incommin messages 
+ * @param t action list, where messaes will be registered
+ * @param actions an array of actions to reggister
+ * @return the number of registred actions
+ */
+
+int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * actions)
+{
+	int n=0;
+	while (actions->msg_id != 0) {
+		cw_action_out_t *rc = cw_actionlist_out_add(t, actions);
+		if (rc == 0)
+			return 0;
+		actions++;
+		n++;
+	}
+	return n;
+}
 
 
 
@@ -241,7 +277,6 @@ void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
 
 }
 
-#include "dbg.h" // Tube
 
 /**
  * Create an action list for outgoing message lements
@@ -253,14 +288,6 @@ cw_actionlist_out_t cw_actionlist_out_create()
 }
 
 
-static struct outelem * cw_actionlist_out_get_outelem(cw_actionlist_out_t t, int msg_id)
-{
-	struct outelem search;
-	search.msg_id=msg_id;
-	//printf("Searching for %d\n",msg_id);
-	return mavl_get(t,&search);
-	
-}
 
 mlist_t * cw_actionlist_out_get(cw_actionlist_out_t t,int msg_id)
 {
@@ -270,91 +297,36 @@ mlist_t * cw_actionlist_out_get(cw_actionlist_out_t t,int msg_id)
 	return o->mlist;
 }
 
-struct outelem * cw_actionlist_mout_create(int msg_id)
+
+
+
+
+
+/* misc stuff */
+
+
+cw_action_fun_t cw_set_msg_end_callback(struct cw_actiondef *actions, 
+		int capwap_state,int msg_id, cw_action_fun_t callback)
 {
-	struct outelem * o = malloc(sizeof(struct outelem));
-	if (!o)
-		return NULL;
-
-	o->mlist= mlist_create(mout_cmp);
-	if (!o->mlist){
-		free(o);
-		return NULL;
-	}
-	o->msg_id=msg_id;
-	return o;
-}
-
-
-
-
-#include "capwap.h"
-
-cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a)
-{
-/*	if (a->msg_id==CW_MSG_DISCOVERY_RESPONSE){
-		printf("Add discovery response\n");
-	}
-*/
-
-	//printf("Add %d %d\n",a->msg_id,a->elem_id);
-
-	struct outelem * o =  cw_actionlist_out_get_outelem(t,a->msg_id);
-
-
-	if (!o){
-	/*	if (a->msg_id==CW_MSG_DISCOVERY_RESPONSE){
-			printf("m was 0 creating \n");
-		}
-		*/
-		o = cw_actionlist_mout_create(a->msg_id);
-		if (!o) {
-			return NULL;
-		}
-		mavl_add(t,o);
-
-
-	}
-
+	cw_action_in_t as;
+	as.capwap_state = capwap_state;
+	as.msg_id = msg_id;
+	as.vendor_id = 0;
+	as.elem_id = 0;
+	as.proto = 0;
+	
+	cw_action_in_t *af;
 	
 
-	struct mlist_elem * e = mlist_replace(o->mlist,NULL,a);
-	if (!e)
-		e = mlist_append(o->mlist,a);
-
-	if (e)
-		return a;
-
-	return 0;
-
-
-}
-
-
-/*
-cw_action_in_t *cw_actionlist_in_set_msg_end_callback(cw_actionlist_in_t a, 
-				      uint8_t capwap_state,
-					uint32_t msg_id,
-				      int (*fun) (struct conn * conn,
-						  struct cw_action_in * a, uint8_t * data,
-						  int len,struct sockaddr *from))
-{
-	cw_action_in_t as,*ar;
-	as.vendor_id=0;
-	as.proto=0;
-	as.elem_id=-1;
-	as.msg_id=msg_id;
-	as.capwap_state=capwap_state;
-
-	ar = cw_actionlist_in_get(a,&as);
-	if (!ar)
+	af = cw_actionlist_in_get(actions->in, &as);
+	if (!af) 
 		return NULL;
 
-	ar->end=fun;		
-	return ar;
+	cw_action_fun_t  old = af->end;
+	af->end =callback;
+	return old;
+
 }
 
-
-*/
 
 
