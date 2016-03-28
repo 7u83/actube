@@ -26,6 +26,7 @@
 #include "cw/radio.h"
 #include "cw/capwap_cisco.h"
 #include "cw/capwap80211.h"
+#include "cw/capwap80211_items.h"
 
 #include "cw/lwapp_cisco.h"
 
@@ -151,6 +152,8 @@ static cw_action_in_t actions_in[] = {
 	 * Configuration Status Request 
 	 */
 
+			
+
 	/* AC Name - Config Status Request */	
 	{
 		/* We have to deal with zero-length strings */
@@ -165,6 +168,7 @@ static cw_action_in_t actions_in[] = {
 
 	}
 	,
+
 
 	{
 		/* This is Cisco's Vendor specific encapsulation
@@ -275,7 +279,7 @@ static cw_action_out_t actions_out[]={
 	{
 		/* Cisco's APs complain about msg elements of type
 		  45 (WTP Name). So it ist silenced here.
-		  But the method her used to licence the element
+		  But the method here used to silence the element
 		  isn't effective. TODO: There shuld be a way to remove
 		  or replace such elemenns */
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
@@ -284,9 +288,9 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-
-
+	/* WTP Name */
 	{
+		
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.item_id = CW_ITEM_WTP_NAME, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
@@ -308,7 +312,7 @@ static cw_action_in_t actions80211_in[] = {
 	 * Discovery Resquest 
 	 */
 
-	/* 802.11 Radio Inmformation - Discovery Request */
+	/* 802.11 Radio Information - Discovery Request */
 	{
 		/* Cisco doe't sned this message element in discovery request,
 		   so make it non-mandatory */
@@ -316,13 +320,26 @@ static cw_action_in_t actions80211_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = "radio_information",
+		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 0, 
 		.min_len = 5, 
 		.max_len = 5
 	}
 	,
+	
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_CISCO_SUPPORTED_RATES,
+		.item_id = CW_ITEM80211_SUPPORTED_RATES,
+	 	.start = cw_in_radio_generic, 
+		.mand = 0, 
+		.min_len = 5, 
+		.max_len = 5
+		
+	}
 
 
 };
