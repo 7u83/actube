@@ -66,7 +66,8 @@ UTILOBJS= \
 	cw_read_wtp_descriptor.o \
 	cw_read_wtp_descriptor_7.o \
 	cw_read_wtp_descriptor_versions.o \
-	cw_read_descriptor_subelems.o
+	cw_read_descriptor_subelems.o \
+	cw_out_80211_supported_rates.o
 
 MAVLOBJS= \
 	mavl_del.o \
@@ -271,6 +272,17 @@ CWACTION=action.o \
 	capwap_action_helpers.o \
 	cw_put_image_data.o \
 	cisco.o \
+	radio.o \
+	cw_out_radio_info.o \
+	capwap_items.o \
+	item.o \
+	mod.o
+
+#	cw_process_msg.o \
+#	item_strings.o \
+#
+
+MBAGOBJS = \
 	mbag.o\
 	mbag_type_word.o\
 	mbag_type_byte.o\
@@ -280,14 +292,10 @@ CWACTION=action.o \
 	mbag_type_bstr16.o\
 	mbag_type_mbag.o\
 	mbag_set_from_buf.o\
-	radio.o \
-	cw_out_radio_info.o \
-	capwap_items.o \
-	item.o \
-	mod.o
+	mbag_type_str.o \
+	mbag_type_ptr.o \
+	mbag_type_data.o
 
-#	cw_process_msg.o \
-#	item_strings.o \
 
 
 
@@ -298,7 +306,8 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(CWACTION) \
 	$(MAVLOBJS) \
 	$(FORMATOBJS) \
-	$(DOT11OBJS) 
+	$(DOT11OBJS)  \
+	$(MBAGOBJS) 
 
 #include $(OBJS:.o=.d)
 
