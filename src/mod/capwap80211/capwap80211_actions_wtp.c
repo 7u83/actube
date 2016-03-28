@@ -5,6 +5,7 @@
 #include "cw/capwap.h"
 #include "cw/capwap80211.h"
 #include "cw/capwap_items.h"
+#include "cw/capwap80211_items.h"
 #include "cw/radio.h"
 
 //#include "capwap_80211_actions.h"
@@ -126,6 +127,9 @@ int capwap80211_register_actions_wtp(struct cw_actiondef *def)
 	rc+=cw_actionlist_out_register_actions(def->out, actions_out);
 
 	rc+= cw_strheap_register_strings(def->strelem, capwap_strings_elem80211);
+
+	rc += cw_itemdefheap_register(def->items,capwap80211_itemdefs);
+
 	/*rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 */
 
