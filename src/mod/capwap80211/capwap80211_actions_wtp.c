@@ -5,6 +5,7 @@
 #include "cw/capwap.h"
 #include "cw/capwap80211.h"
 #include "cw/capwap_items.h"
+#include "cw/radio.h"
 
 //#include "capwap_80211_actions.h"
 //#include "capwap_80211.h"
@@ -93,15 +94,25 @@ cw_action_out_t actions_out[]={
 	}
 	,
 
+	/* --------------------------------------------------------
+	 * Config Status Request
+	 */
+	/* 802.11 Radio Information */ 
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.item_id = CW_RADIO_SUPPORTED_RATES ,
+	 	.elem_id = CW_ELEM80211_SUPPORTED_RATES, 
+		.out = cw_out_80211_supported_rates, 
+		.mand = 1
+	}
+	,
 
 
+	/* --------------------------------------------------------
+	 * Config Status Update Request
+	 */
 
-//	{CW_MSG_DISCOVERY_RESPONSE, NULL /*CW_ELEM80211_WTP_RADIO_INFORMATION*/, 0,
-//	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
 
-	/* Radio Infos */
-//	{CW_MSG_JOIN_RESPONSE, NULL /*CW_ELEM80211_WTP_RADIO_INFORMATION*/, 0,
-//	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
 
 	{0,0,0}
 };
