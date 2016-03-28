@@ -4,6 +4,7 @@
 #include "lwapp.h"
 #include "lwapp_cisco.h"
 #include "lw.h"
+#include "vendors.h"
 
 
 
@@ -34,7 +35,7 @@ int lw_addelem_vendor_specific(uint8_t *dst,uint32_t vendor_id,uint16_t elem_id,
  */ 
 int lw_addelem_cisco_padding(uint8_t *dst, int len)
 {
-	lw_put_dword(dst+3,LW_VENDOR_CISCO);
+	lw_put_dword(dst+3,LW_VENDOR_ID_CISCO);
 	lw_put_word(dst+7,LW_CISCO_PATH_MTU);
 	lw_put_word(dst+9,len);
 	memset(dst+11,0,len);
