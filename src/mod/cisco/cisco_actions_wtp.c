@@ -244,16 +244,30 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
-//	{CW_MSG_CONFIGURATION_STATUS_REQUEST, CW_ITEM_RADIO_CFG, CW_VENDOR_ID_CISCO,
-//	CW_CISCO_AP_GROUP_NAME, NULL,cw_out_cisco_wtp_radio_cfg, cw_out_get_config, 1}
-//	,
-
-
 
 
 	{0,0}
 
 };
+
+
+static cw_action_out_t actions80211_out[]={
+
+	/* ----------------------------------------------------------------
+	 * Configuration Status Request
+	 */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.item_id = CW_RADIO_SUPPORTED_RATES ,
+	 	.elem_id = CW_ELEM80211_SUPPORTED_RATES, 
+		.mand = 0,
+	}
+
+
+
+};
+
+
 
 
 #include "cw/item.h"
@@ -300,9 +314,9 @@ int cisco_register_actions80211_wtp(struct cw_actiondef *def)
 	int rc;
 	rc=0;
 //	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
-/*	rc += cw_actionlist_out_register_actions(def->out, actions_out);
+	rc += cw_actionlist_out_register_actions(def->out, actions80211_out);
 
-	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
+/*	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);

@@ -273,6 +273,20 @@ static cw_action_out_t actions_out[]={
 	,
 
 	{
+		/* Cisco's APs complain about msg elements of type
+		  45 (WTP Name). So it ist silenced here.
+		  But the method her used to licence the element
+		  isn't effective. TODO: There shuld be a way to remove
+		  or replace such elemenns */
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.item_id = CW_ITEM_WTP_NAME, 
+		.elem_id = CW_ELEM_WTP_NAME,
+	}
+	,
+
+
+
+	{
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.item_id = CW_ITEM_WTP_NAME, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
