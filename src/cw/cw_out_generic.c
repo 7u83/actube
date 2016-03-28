@@ -7,7 +7,7 @@
 #include "dbg.h"
 #include "log.h"
 
-
+/*
 int cw_put_item(uint8_t * dst, struct mbag_item *item)
 {
 	if (MBAG_STR == item->type ){
@@ -42,6 +42,8 @@ int cw_put_item(uint8_t * dst, struct mbag_item *item)
 
 	return 0;
 }
+*/
+
 
 int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	// ,struct mbag_item * item) 
 {
@@ -82,7 +84,7 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	//
 		}
 		return 0;
 	} else {
-		len = cw_put_item(dst + start, item);
+		len = cw_put_mbag_item(dst + start, item);
 	}
 
 
