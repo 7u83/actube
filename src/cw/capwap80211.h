@@ -16,11 +16,20 @@
 
 #define CW80211IANA_ENTERPRISE_NUMBER		 13277
 
+/**
+ * @defgroup CAPWAP80211_MSG Messages
+ * @{
+ */
+
 #define CW_MSG80211_WLAN_CONFIGURATION_REQUEST	3398913
-#define CW_MSG80211_WLAN_CONFIGURATION_REPONSE	3398914
+#define CW_MSG80211_WLAN_CONFIGURATION_RESPONSE	3398914
 
 /**
- *@defgroup Msg Elements
+ * @}
+ */
+
+/**
+ *@defgroup CAPWAP80211_ELEMS Message Elements
  *@{
  */
 
@@ -60,17 +69,20 @@ enum radioelems {
 	CW_ELEM80211_STATISTICS=1039,
 	/** IEEE 802.11 Supported Rates */
 	CW_ELEM80211_SUPPORTED_RATES=1040,
-
-/*   
-   IEEE 802.11 Tx Power                               1041
-   IEEE 802.11 Tx Power Level                         1042
-   IEEE 802.11 Update Station QoS                     1043
-   IEEE 802.11 Update WLAN                            1044
-   IEEE 802.11 WTP Quality of Service                 1045
-   IEEE 802.11 WTP Radio Configuration                1046
-   IEEE 802.11 WTP Radio Fail Alarm Indication        1047
-*/
-
+   	/** IEEE 802.11 Tx Power   */
+   	CW_ELEM80211_TX_POWER=1041,
+   	/** IEEE 802.11 Tx Power Level */
+   	CW_ELEM80211_TX_POWER_LEVEL=1042,
+   	/** IEEE 802.11 Update Station QoS  */
+	CW_ELEM80211_UPDATE_STATION_QOS=1043,
+   	/** IEEE 802.11 Update WLAN  */
+	CW_ELEM80211_UPDATE_WLAN=1044,
+   	/** IEEE 802.11 WTP Quality of Service */
+	CW_ELEM80211_WTP_QUALITY_OF_SERVICE=1045,
+   	/** IEEE 802.11 WTP Radio Configuration */
+	CW_ELEM80211_WTP_RADIO_CONFIGURATION=1046,
+	/** IEEE 802.11 WTP Radio Fail Alarm Indication */
+	CW_ELEM80211_WTP_RADIO_FAIL_ALARM_IDICATION=1047,
 	/** IEEE 802.11 Radio Information Message Element */
 	CW_ELEM80211_WTP_RADIO_INFORMATION = 1048
 };
