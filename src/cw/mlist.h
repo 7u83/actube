@@ -66,6 +66,15 @@ extern struct mlist_elem *mlist_replace(mlist_t *l, struct mlist_elem *start, vo
  * @}
  */
 
+
+
+
+#define mlist_foreach(i,l)\
+	for (i=l->data; i; i=i->next)
+
+
+
+
 /**
  * @}
  */
