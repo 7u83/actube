@@ -377,4 +377,4 @@ clean_deps:
 deps:  
 	$(CC) -MM -E *.c $(CFLAGS) > .depend
 
-include .depend
+-include .depend
