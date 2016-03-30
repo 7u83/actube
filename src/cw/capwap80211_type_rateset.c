@@ -97,6 +97,10 @@ static struct mbag_item *  get(const uint8_t *src,int len)
 		return NULL;
 
 	uint8_t *data = malloc(len+1);
+	if (!data){
+		free (item);
+		return NULL;
+	}
 	*data=len;
 	memcpy(data+1,src,len);
 	item->data=data;
