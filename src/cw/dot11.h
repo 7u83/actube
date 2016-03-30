@@ -238,7 +238,19 @@ static inline int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len){
 
 }
 
+/**
+ * Convert a rate, specified as float to an inzteger, used 
+ * in a dot11 rate set.
+ * @parame frate Rate as float
+ * @return converted rate
+ */
 #define dot11_float2rate(frate) ((int)(((frate)+0.49)*2.0))
+
+/**
+ * Convert a rate as used in a dot11 rate set to a float
+ * @param rate Rate
+ * @return rate converted to float
+ */
 #define dot11_rate2float(rate) (((float)(rate))/2.0)
 
 static inline int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates){
