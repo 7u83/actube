@@ -58,7 +58,7 @@ void set_cfg(mbag_t mbag, cw_itemdefheap_t defs, const char *id, const char *sub
 	}
 
 	if (!idef) {
-		fprintf(stderr,"No definition for item %s/%s not found\n",id,subid);
+		fprintf(stderr,"CFG: No definition for item %s/%s not found\n",id,subid);
 		return ;
 	}
 
