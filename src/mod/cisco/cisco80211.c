@@ -61,12 +61,12 @@ exit(0);
 
 
 
-int cw_put_elem_cisco_ap_regulatory_domain(uint8_t *dst,int rid, mbag_t radio)
+int cw_put_elem_cisco_ap_regulatory_domain(uint8_t *dst,int rid, mbag_t radio, int band)
 {
 	//int l=0;
 	uint8_t *d=dst+10;
 	
-	d+=cw_put_byte(d,rid);		/* Band ID */
+	d+=cw_put_byte(d,band);		/* Band ID */
 	d+=cw_put_byte(d,1);		/* Set True/False */
 	d+=cw_put_byte(d,rid);		/* Slot ID */
 	d+=cw_put_word(d,mbag_get_word(radio,CW_RADIO_REG_DOMAIN,1));
@@ -96,7 +96,9 @@ int cisco_out_80211_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, ui
 		}
 //		l+=cw_put_elem_radio_info(dst+l,i->id,i->data);
 		l+=cw_put_elem_cisco_radio_cfg(dst+l,i->iid,i->data);
-		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data);
+		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,0);
+//		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,1);
+//		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,2);
 
 	}
 	return l;

@@ -25,6 +25,7 @@
 #include "cw/radio.h"
 #include "cw/capwap_cisco.h"
 #include "cw/capwap80211.h"
+#include "cw/capwap80211_items.h"
 
 #include "mod_cisco.h"
 
@@ -237,7 +238,7 @@ static cw_action_out_t actions_out[]={
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM_RADIO_CFG,
+		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
 		.out = cisco_out_80211_wtp_radio_cfg,
 		.get = cw_out_get_config,
 		.mand = 1
