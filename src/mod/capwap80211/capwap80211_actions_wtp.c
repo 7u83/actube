@@ -28,7 +28,7 @@ static cw_action_in_t actions_wtp_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = "radio_information",
+		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 
@@ -45,7 +45,7 @@ static cw_action_in_t actions_wtp_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = "radio_information",
+		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 
@@ -104,7 +104,7 @@ cw_action_out_t actions_out[]={
 		.item_id = CW_RADIO_SUPPORTED_RATES ,
 	 	.elem_id = CW_ELEM80211_SUPPORTED_RATES, 
 		.out = cw_out_80211_supported_rates, 
-		.mand = 1
+		.mand = 0
 	}
 	,
 
