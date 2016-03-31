@@ -66,7 +66,7 @@ static cw_action_in_t actions_ac_in[] = {
 		.elem_id = CW_ELEM80211_SUPPORTED_RATES,
 		.item_id = CW_ITEM80211_SUPPORTED_RATES,
 	 	.start = cw_in_radio_generic, 
-		.mand = 1, 
+		.mand = 0, 
 		.min_len = 3, 
 		.max_len = 9
 	}
