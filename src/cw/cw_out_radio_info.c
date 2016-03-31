@@ -2,6 +2,8 @@
 #include "cw.h"
 #include "capwap_items.h"
 #include "capwap80211.h"
+#include "capwap80211_items.h"
+
 #include "radio.h"
 
 #include "dbg.h"
@@ -14,7 +16,7 @@
 int cw_put_elem_radio_info(uint8_t*dst,int radio_id,mbag_t radio)
 {
 	cw_put_byte(dst+4,radio_id);
-	cw_put_dword(dst+5,mbag_get_dword(radio,CW_RADIO_TYPE,0));
+	cw_put_dword(dst+5,mbag_get_dword(radio,CW_ITEM80211_WTP_RADIO_INFORMATION,0));
 	return 5 + cw_put_elem_hdr(dst,CW_ELEM80211_WTP_RADIO_INFORMATION,5);
 
 }
