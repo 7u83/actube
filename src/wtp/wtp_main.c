@@ -12,6 +12,7 @@
 #include "cw/acpriolist.h"
 //#include "cw/capwap_80211.h"
 #include "cw/radio.h"
+#include "cw/capwap80211_items.h"
 
 #include "cw/mod.h"
 
@@ -101,21 +102,27 @@ static void sig_handler(int sig)
 	exit(0);
 }
 
+#include "cw/dot11.h"
+#include "cw/format.h"
+
+#include "cw/capwap80211_types.h"
 
 int main()
 {
+
 	signal (SIGINT, sig_handler);
-
-
 
 	wtpconf_preinit();
 
 	if (!read_config("./wtp_uci.conf")) {
 		return 1;
 	}
-//      cw_dbg_opt_level = conf_dbg_level;
+//	cw_dbg_opt_level = conf_dbg_level;
 
-	wtpconf_init();
+
+	if (!wtpconf_init()){
+		return 1;
+	};
 
 	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 
@@ -126,22 +133,11 @@ int main()
 
 	conn->radios = mbag_i_create();
 	mbag_i_set_mbag(conn->radios,0,mbag_create());
-	mbag_i_set_mbag(conn->radios,1,mbag_create());
+//	mbag_i_set_mbag(conn->radios,1,mbag_create());
 //      mbag_set_mbag(conn->radios,0xff,mbag_create());
 
 
-	mbag_t r;
-	r  = mbag_i_get_mbag(conn->radios,0,NULL);
-	mbag_set_dword(r,CW_RADIO_TYPE,1);
-	r  = mbag_i_get_mbag(conn->radios,1,NULL);
-	mbag_set_dword(r,CW_RADIO_TYPE,2);
-//      r  = mbag_get_mbag(conn->radios,1,NULL);
-//      mbag_set_dword(r,CW_RADIO_TYPE,1);
 
-
-//      cw_register_actions_cipwap_wtp(&capwap_actions);
-//      cw_register_actions_capwap_80211_wtp(&capwap_actions);
-//
 #define CWMOD "cisco"
 #define CWBIND "cisco"
 //#define CWMOD "capwap"
@@ -169,7 +165,7 @@ int main()
 
 	conn->detected = 1;
 	conn->dtls_verify_peer=0;
-	conn->dtls_mtu = 22180;
+	conn->dtls_mtu = 2000;
 
 
 
@@ -200,6 +196,32 @@ int main()
 
 	cfg_from_json(conn);
 	setup_conf(conn);
+
+	mbag_t r;
+	r  = mbag_i_get_mbag(conn->radios,0,NULL);
+	MAVLITER_DEFINE(it,r);
+	mavliter_foreach(&it){
+		struct mbag_item *i=mavliter_get(&it);
+		printf("RID = %d\n",i->iid);
+		struct mbag * radio=
+		struct mbag_item *mri = mbag_get(radio,CW_ITEM80211_WTP_RADIO_INFORMATION);
+		
+	if (!mri){
+printf("Setting to 8 %p %p\n",mri,r);
+exit(0);
+		mbag_set_dword(r,CW_ITEM80211_WTP_RADIO_INFORMATION,8);
+	}
+	else{
+		printf("MRI %p\n",mri);
+	exit(0);
+	}
+
+		
+	}
+	
+
+
+
 	mod_init_config(mod,conn->config);
 	cfg_to_json();
 
@@ -246,7 +268,7 @@ int main()
 
 
 
-cw_set_msg_end_callback(conn,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
+cw_set_msg_end_callback(conn->actions,CW_STATE_RUN,CW_MSG_CONFIGURATION_UPDATE_REQUEST,handle_update_req);
 //cw_set_msg_end_callback(conn,CW_STATE_CONFIGURE,CW_MSG_CONFIGURATION_STATUS_RESPONSE,handle_update_req);
 
 
