@@ -7,11 +7,12 @@
 #include <errno.h>
 
 #include "sock.h"
-/*
- * convert a string to sockaddr struct.
- * the string can contain a ipv4 or ipv6 address including a port number.
- * returns 1 on success
- * otherwise no success
+/**
+ * Convert a string to an sockaddr struct.
+ * The string can contain an ipv4 or ipv6 address, including a port number.
+ * @param s address string
+ * @param saout output buffer
+ * @return 1 on success,  otherwise no success
  */
 int sock_strtoaddr(const char * s,struct sockaddr * saout){
 
