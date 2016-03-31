@@ -35,6 +35,7 @@ extern bstr_t conf_board_revision;
 
 extern struct sockaddr_storage * conf_preffered_ac_sa;
 extern char * conf_primary_if;
+extern char * conf_ip;
 
 extern char ** conf_ac_list;
 

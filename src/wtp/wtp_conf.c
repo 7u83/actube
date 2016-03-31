@@ -27,6 +27,7 @@
 #include "cw/vendors.h"
 
 char * conf_primary_if=0;
+char * conf_ip=0;
 char * conf_wtpname=0;
 char * conf_dtls_psk=0;
 char * conf_sslkeyfilename=0;
@@ -94,6 +95,7 @@ LONGSTRS conf_timer_cfgstrs[] = {
 
 int wtpconf_primary_if()
 {
+
 	if (!conf_primary_if ) {
 	        conf_primary_if  = sock_get_primary_if(AF_INET6);
 	        if (!conf_primary_if)
@@ -107,7 +109,10 @@ int wtpconf_primary_if()
         }               
 
         if (!sock_getifhwaddr(conf_primary_if,conf_macaddress,&conf_macaddress_len)){
-                cw_log(LOG_ERR,"Fatal: Unable to detect link layer address for %s.",conf_primary_if);
+
+
+                cw_log(LOG_ERR,"Fatal: Unable to detect link layer address for %s:",conf_primary_if, 
+				strerror(errno));
                 return 0;
         };
 	
@@ -222,6 +227,7 @@ int wtpconf_preinit()
 
 int wtpconf_init()
 {
+
 
 	if (!wtpconf_primary_if()){
 		cw_log(LOG_ERR,"Fatal: Error initialing primary interface.");
