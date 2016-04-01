@@ -198,22 +198,22 @@ int main()
 	setup_conf(conn);
 
 	mbag_t r;
-	r  = mbag_i_get_mbag(conn->radios,0,NULL);
+//	r  = mbag_i_get_mbag(conn->radios,0,NULL);
+	r = conn->radios;
 	MAVLITER_DEFINE(it,r);
 	mavliter_foreach(&it){
 		struct mbag_item *i=mavliter_get(&it);
 		printf("RID = %d\n",i->iid);
-		struct mbag * radio=
+		printf("DATA: %p\n",i->data);
+		mbag_t radio= (mbag_t)i->data;
 		struct mbag_item *mri = mbag_get(radio,CW_ITEM80211_WTP_RADIO_INFORMATION);
 		
 	if (!mri){
 printf("Setting to 8 %p %p\n",mri,r);
-exit(0);
-		mbag_set_dword(r,CW_ITEM80211_WTP_RADIO_INFORMATION,8);
+		mbag_set_dword(radio,CW_ITEM80211_WTP_RADIO_INFORMATION,8);
 	}
 	else{
 		printf("MRI %p\n",mri);
-	exit(0);
 	}
 
 		
