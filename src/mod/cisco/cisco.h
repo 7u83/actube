@@ -36,5 +36,7 @@ int cisco_out_radio_administrative_states(struct conn *conn, struct cw_action_ou
 int cisco80211_in_mac_operation(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 		                         int len, struct sockaddr *from);
 
+int cisco80211_in_wtp_radio_configuration(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len, struct sockaddr *from);
 
 #endif

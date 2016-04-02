@@ -13,10 +13,14 @@ struct cw_itemdef cisco_itemdefs[] = {
 
 
 const char CISCO_RADIOITEM80211_CFG_TYPE[]="cisco_radio_cfg_type";
+const char CISCO_RADIOITEM80211_COUNTRY_STR1[]="cisco_country_str1";
+const char CISCO_RADIOITEM80211_COUNTRY_STR2[]="cisco_country_str2";
 
-struct cw_itemdef cisco_iradioitemdefs[] = {
+struct cw_itemdef cisco_radioitemdefs[] = {
 
 	{CISCO_RADIOITEM80211_CFG_TYPE,CW_ITEM_NONE,MBAG_BYTE},
+	{CISCO_RADIOITEM80211_COUNTRY_STR1,CW_ITEM_NONE,MBAG_BSTR},
+	{CISCO_RADIOITEM80211_COUNTRY_STR2,CW_ITEM_NONE,MBAG_BSTR},
 
 	{CW_ITEM_NONE}
 };

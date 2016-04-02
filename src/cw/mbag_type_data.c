@@ -36,8 +36,32 @@ static struct mbag_item *  from_str(const char *src)
 	
 }
 
+static struct mbag_item *  get(const uint8_t *src,int len)
+{
+
+	mbag_item_t * item = mbag_item_new(MBAG_DATA);
+	if (!item)
+		return NULL;
+
+	uint8_t *data = malloc(len+1);
+	if (!data){
+		free (item);
+		return NULL;
+	}
+	*data=len;
+	memcpy(data+1,src,len);
+	item->data=data;
+	return item;
+}
+
+
 
 
 const struct mbag_typedef mbag_type_data = {
-	"Data",free,to_str,from_str
+	.name = "Binary Data",
+	.del = free,
+	.from_str = from_str,
+	.to_str = to_str,
+	.get = get
+
 };

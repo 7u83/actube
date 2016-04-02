@@ -19,6 +19,14 @@ extern const char CW_RADIOITEM80211_LONG_RETRY[];
 extern const char CW_RADIOITEM80211_TX_MSDU_LIFETIME[];
 extern const char CW_RADIOITEM80211_RX_MSDU_LIFETIME[];
 
+/* Radio Config Items */
+extern const char CW_RADIOITEM80211_SHORT_PREAMBLE[];
+extern const char CW_RADIOITEM80211_NUM_BSS_IDS[];
+extern const char CW_RADIOITEM80211_DTIM_PERIOD[];
+extern const char CW_RADIOITEM80211_BSSID[];
+extern const char CW_RADIOITEM80211_BEACON_PERIOD[];
+extern const char CW_RADIOITEM80211_COUNTRY_STRING[];
+
 
 #endif
 
