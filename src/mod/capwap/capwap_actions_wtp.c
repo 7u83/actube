@@ -208,6 +208,8 @@ static cw_action_in_t actions_in[] = {
 		.end = cw_in_check_generic_resp
 	}
 	,
+
+		
 	/* Capwap Timers - Config Status Resp */
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
@@ -221,8 +223,20 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-		
+	/* Decryption Error Report - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,
+		.item_id = CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD, 
+		.start  = cw_in_radio_generic,
+		.min_len = 3,
+		.max_len = 3,
+		.mand = 1
+	}
+	,
 
+	
 	/* Idle Timeout - Config Status Resp */
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
@@ -232,6 +246,20 @@ static cw_action_in_t actions_in[] = {
 		.start  = cw_in_generic2,
 		.min_len = 4,
 		.max_len = 4,
+		.mand = 1
+	}
+	,
+
+
+	/* WTP Fallback - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.elem_id  = CW_ELEM_WTP_FALLBACK,
+		.item_id = CW_ITEM_WTP_FALLBACK, 
+		.start  = cw_in_generic2,
+		.min_len = 1,
+		.max_len = 1,
 		.mand = 1
 	}
 	,

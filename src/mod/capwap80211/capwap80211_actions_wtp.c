@@ -47,18 +47,21 @@ static cw_action_in_t actions_wtp_in[] = {
 	}
 	,
 
-
-
-//	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_REQUEST,
-//	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
 	/* --------------------------------------------------------
-	 * Discovery Resquest 
+	 * Configuration Status Response 
 	 */
 
-//	{0, 0, CW_STATE_JOIN, CW_MSG_JOIN_REQUEST,
-//	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
+	/* Rate Set - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.elem_id = CW_ELEM80211_RATE_SET,
+		.item_id = CW_RADIOITEM80211_RATE_SET,
+		.start = cw_in_radio_generic
+	}
+	
 
-
+	,
 
 	{0, 0, 0}
 };
@@ -123,6 +126,7 @@ int capwap80211_register_actions_wtp(struct cw_actiondef *def)
 	rc+= cw_strheap_register_strings(def->strelem, capwap_strings_elem80211);
 
 	rc += cw_itemdefheap_register(def->items,capwap80211_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems,capwap80211_radioitemdefs);
 
 	/*rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 */

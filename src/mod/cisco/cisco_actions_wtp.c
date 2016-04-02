@@ -26,6 +26,8 @@
 #include "cw/capwap_cisco.h"
 #include "cw/capwap80211.h"
 #include "cw/capwap80211_items.h"
+#include "cw/cipwap_items.h"
+#include "cw/lwapp_cisco.h"
 
 #include "mod_cisco.h"
 
@@ -133,6 +135,38 @@ static cw_action_in_t actions_in[] = {
 
 
 
+	/* ----------------------------------------------------------------
+	 * Configuration Status Response
+	 */
+
+
+	{
+		/* Cisco's Vendor specific encapsulation
+		 * of LWAPP elements */
+
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_SPAM_VENDOR_SPECIFIC,
+		.start = lw_in_vendor_specific,
+
+	}
+	,
+
+
+	/* LWAPP Vendor spec Messages */
+	{
+
+		.proto = CW_ACTION_PROTO_LWAPP,
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.vendor_id = LW_VENDOR_ID_CISCO,
+		.elem_id = LW_CISCO_MWAR_HASH_VALUE,
+		.item_id = CIPWAP_ITEM_AP_HASH_VALUE,
+		.start = cw_in_generic2, //cisco_in_telnet_ssh
+	}
+
+	,
 	/* End of list */
 	{0, 0}
 };
