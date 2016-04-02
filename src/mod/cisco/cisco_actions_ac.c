@@ -173,6 +173,18 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_WTP_RADIO_CFG, 
+		.start=cisco80211_in_wtp_radio_configuration, 
+		.item_id = "cisco_radio_cfg", 
+	}
+	,
+
+
+
 
 	{
 		/* This is Cisco's Vendor specific encapsulation
@@ -410,7 +422,7 @@ int cisco_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
-	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
+//	rc += cw_itemdefheap_register(def->radioitems, cisco_radioitemdefs);
 
 	intavltree_add(def->wbids, 0);
 
