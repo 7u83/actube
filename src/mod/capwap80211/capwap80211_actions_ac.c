@@ -2,6 +2,7 @@
 
 #include "cw/action.h"
 #include "cw/cw.h"
+#include "cw/cw_80211.h"
 #include "cw/capwap.h"
 #include "cw/capwap_items.h"
 
@@ -69,6 +70,19 @@ static cw_action_in_t actions_ac_in[] = {
 		.mand = 0, 
 		.min_len = 3, 
 		.max_len = 9
+	}
+	,
+
+	/* 802.11 MAC Operation - Config Status Request */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_ELEM80211_MAC_OPERATION,
+		.item_id = "80111_mac_operation", //CW_iTEM80211_MAC_SUPPORTED_RATES,
+	 	.start = cw_in_80211_mac_operation,
+		.mand = 0, 
+		.min_len = 16, 
+		.max_len = 16
 	}
 	,
 

@@ -29,6 +29,7 @@
 #include "cw/capwap80211_items.h"
 
 #include "cw/lwapp_cisco.h"
+#include "cw/cw_80211.h"
 
 #include "mod_cisco.h"
 #include "cisco.h"
@@ -341,7 +342,11 @@ static cw_action_in_t actions80211_in[] = {
 		.max_len = 5
 	}
 	,
-	
+
+	/* --------------------------------------------------------
+	 * Configuration Status Resquest - IN
+	 */
+	/* Supported Rates - Configruati Status Request */	
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
@@ -354,6 +359,24 @@ static cw_action_in_t actions80211_in[] = {
 		.max_len = 5
 		
 	}
+
+	,
+
+	/* MAC Operation - Configruati Status Request */	
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.elem_id = CW_CISCO_MAC_OPERATION,
+		.item_id = "mac operation",
+	 	.start = cisco80211_in_mac_operation, 
+		.mand = 0, 
+		.min_len = 5, 
+		.max_len = 5
+		
+	}
+
+
 
 
 };

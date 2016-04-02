@@ -151,6 +151,8 @@ CAPWAPOBJS= \
 	cw_in_check_img_data_resp.o \
 	cw_in_check_generic_resp.o \
 	cw_in_check_generic_req.o \
+	cw_in_80211_mac_operation.o \
+	cw_read_80211_mac_operation.o \
 	cw_out_generic.o \
 	cw_out_wtp_descriptor.o \
 	cw_out_wtp_reboot_statistics.o \

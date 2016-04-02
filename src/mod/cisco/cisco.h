@@ -33,6 +33,8 @@ int cisco_out_telnet_ssh(struct conn *conn,struct cw_action_out * a,uint8_t *dst
 
 int cisco_out_radio_administrative_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
+int cisco80211_in_mac_operation(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+		                         int len, struct sockaddr *from);
 
 
 #endif
