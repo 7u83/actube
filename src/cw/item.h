@@ -35,8 +35,10 @@ struct cw_itemdef {
 	const char *sub_id;
 	/** Type */
 	mbagtype_t type;
-
-	const char *meta_id;
+	/** 
+	 * A category this item belongs to.
+	 */
+	const char *cat;
 
 };
 typedef struct cw_itemdef cw_itemdef_t;
