@@ -258,15 +258,6 @@ BSTROBJS= bstr_create.o \
 
 FRAGOBJS=fragman.o
 
-#	cw_in_wtp_descriptor.o \
-#	capwap_80211_actions_wtp.o \
-#	capwap_80211_actions_ac.o \
-#	capwap_actions_ac.o \
-	#capwap_actions_wtp.o \
-
-	#cipwap_actions_ac.o \
-	#cipwap_actions_wtp.o \
-
 CWACTION=action.o \
 	cw_in_generic.o \
 	cw_in_generic2.o \
@@ -277,7 +268,6 @@ CWACTION=action.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
 	capwap_strings_board.o \
-	cipwap_items.o\
 	cw_put_msg.o \
 	cw_put_mbag_item.o \
 	cw_put_local_ip_address.o \

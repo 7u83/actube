@@ -19,10 +19,10 @@
 
 #include "cw/cw.h"
 #include "cw/action.h"
-#include "cw/cipwap_items.h"
 #include "cw/strheap.h"
 #include "cw/radio.h"
 
+#include "cipwap_items.h"
 
 #include "mod_cipwap.h"
 

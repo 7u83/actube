@@ -1,7 +1,7 @@
 
 
 #include "cisco.h"
-#include "cw/cipwap_items.h"
+#include "include/cipwap_items.h"
 #include "cw/cw.h"
 #include "cw/dbg.h"
 

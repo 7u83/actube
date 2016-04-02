@@ -5,7 +5,7 @@ include ../../Config.mak
 OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
 
 
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT -I ../../ -I../
+CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT -I ../../ -I../ -I../../include
 
 LIBDIR=../../lib/$(ARCH)
 

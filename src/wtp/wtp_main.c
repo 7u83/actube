@@ -139,10 +139,10 @@ int main()
 
 
 
-//#define CWMOD "cisco"
-//#define CWBIND "cisco"
-#define CWMOD "capwap"
-#define CWBIND "capwap80211"
+#define CWMOD "cisco"
+#define CWBIND "cisco"
+//#define CWMOD "capwap"
+//#define CWBIND "capwap80211"
 
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
