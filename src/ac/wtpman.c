@@ -273,6 +273,62 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 }
 
+void props_to_sql(struct conn *conn, mbag_t  mb, const char *mid)
+{
+	// XXX for the now we use just the IP adress as ID
+	char *wtp_id = sock_addr2str(&conn->addr);
+
+//	cw_dbg(DBG_X, "WTPID: %s\n", wtp_id);
+
+	MAVLITER_DEFINE(it, mb);
+	mavliter_foreach(&it) {
+		mbag_item_t *i = mavliter_get(&it);
+
+		const struct cw_itemdef *cwi;
+
+		if (!mid){
+		    cwi = cw_itemdef_get(conn->actions->items, i->id, NULL);
+		}
+		else{
+		    cwi = cw_itemdef_get(conn->actions->items, mid,i->id);
+		}
+
+		if (!cwi){
+			cw_dbg(DBG_WARN,"No definition for item %s found.",i->id);
+			continue;
+		}
+
+		if (i->type==MBAG_MBAG){
+			if (mid){
+				cw_log(LOG_ERROR,"Depth for %s",i->id);
+				continue;
+			}
+
+			props_to_sql(conn,i->data,i->id);
+			continue;
+		}	
+
+
+		DBGX("SQL ID %s,%s", i->id, cwi->id);
+		DBGX("SQL Type %s,Typecwd %s", i->type->name, cwi->type->name);
+
+		//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
+		char str[256];
+		if (i->type->to_str) {
+			i->type->to_str(i, str);
+			db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
+		} else {
+			cw_log(LOG_ERR, "Can't converto to str for %s", cwi->id,
+			       cwi->sub_id);
+
+		}
+
+	}
+}
+
+
+
+
 void config_to_sql(struct conn *conn)
 {
 	// XXX for the moment we use just the IP adress as ID
@@ -286,9 +342,12 @@ void config_to_sql(struct conn *conn)
 
 		const struct cw_itemdef *cwi =
 		    cw_itemdef_get(conn->actions->items, i->id, NULL);
+
+		cw_dbg(DBG_X,"ID GOT: %s",i->id);
+
 		if (cwi) {
-	//		DBGX("ID %s,%s", i->id, cwi->id);
-	//		DBGX("Type %s,Typecwd %s", i->type->name, cwi->type->name);
+			DBGX("SQL ID %s,%s", i->id, cwi->id);
+			DBGX("SQL Type %s,Typecwd %s", i->type->name, cwi->type->name);
 
 			//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
 			char str[256];
@@ -463,7 +522,7 @@ static void wtpman_run(void *arg)
 
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
-	config_to_sql(conn);
+	props_to_sql(conn,conn->incomming,0);
 	radios_to_sql(conn);
 
 
@@ -502,7 +561,7 @@ static void wtpman_run(void *arg)
 			mavl_merge(conn->config, conn->outgoing);
 			mavl_destroy(conn->outgoing);
 			conn->outgoing = mbag_create();
-			config_to_sql(conn);
+			props_to_sql(conn,conn->incomming,0);
 			radios_to_sql(conn);
 			mavl_destroy(r);
 		}
