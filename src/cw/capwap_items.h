@@ -78,6 +78,7 @@
 extern const char CW_ITEM_IDLE_TIMEOUT[];
 extern const char CW_ITEM_DISCOVERY_TYPE[];
 extern const char CW_ITEM_WTP_NAME[];
+extern const char CW_ITEM_WTP_FALLBACK[];
 
 /*
 extern const char CW_ITEM_WTP_BOARD_VENDOR,
@@ -194,6 +195,7 @@ extern const char CW_ITEM_ECN_SUPPORT[];
 
 extern const char CW_RADIOITEM_ADMIN_STATE[];
 extern const char CW_RADIOITEM_OPER_STATE[];
+extern const char CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD[];
 
 
 extern struct cw_itemdef capwap_itemdefs[];

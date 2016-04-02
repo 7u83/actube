@@ -3,6 +3,7 @@
 
 extern const char CIPWAP_ITEM_SSH_ENABLE[];
 extern const char CIPWAP_ITEM_TELNET_ENABLE[];
+extern const char CIPWAP_ITEM_AP_HASH_VALUE[];
 
 extern struct cw_itemdef cipwap_itemdefs[];
 

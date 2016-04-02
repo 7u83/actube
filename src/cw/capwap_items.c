@@ -8,6 +8,8 @@ const char CW_ITEM_IDLE_TIMEOUT[]="idle_timeout";
 const char CW_ITEM_DISCOVERY_TYPE[]="discovery_type";
 const char CW_ITEM_WTP_NAME[]="wtp_name";
 const char CW_ITEM_ECN_SUPPORT[]="ecn_support";
+const char CW_ITEM_WTP_FALLBACK[]="wtp_fallback";
+
 
 
 const char CW_ITEM_WTP_MAC_TYPE[]="wtp_mac_type";
@@ -100,6 +102,7 @@ struct cw_itemdef capwap_itemdefs[] = {
 
 	{CW_ITEM_WTP_NAME,CW_ITEM_NONE,MBAG_STR},
 	{CW_ITEM_WTP_MAC_TYPE,CW_ITEM_NONE,MBAG_BYTE},
+	{CW_ITEM_WTP_FALLBACK,CW_ITEM_NONE,MBAG_BYTE},
 
 
 	/* Reboot Statistics */
@@ -162,11 +165,14 @@ cisco_items or so */
 
 const char CW_RADIOITEM_ADMIN_STATE[]="admin_state";
 const char CW_RADIOITEM_OPER_STATE[]="oper_state";
+const char CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD[]="decryption_error_report_period";
 
 
 struct cw_itemdef capwap_radiodefs[] = {
 	{CW_RADIOITEM_ADMIN_STATE,CW_ITEM_NONE,MBAG_BYTE},
 	{CW_RADIOITEM_OPER_STATE,CW_ITEM_NONE,MBAG_WORD},
+
+	{CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD},
 
 	{CW_ITEM_NONE}
 };
