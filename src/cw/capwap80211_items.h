@@ -4,6 +4,7 @@
 #include "item.h"
 
 extern const char CW_RADIOITEM80211_SUPPORTED_RATES[];
+extern const char CW_RADIOITEM80211_RATE_SET[];
 extern const char CW_RADIOITEM80211_WTP_RADIO_INFORMATION[];
 
 extern struct cw_itemdef capwap80211_itemdefs[];
