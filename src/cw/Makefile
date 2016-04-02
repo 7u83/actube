@@ -91,6 +91,7 @@ FORMATOBJS = \
 	format_is_utf8.o \
 	format_dot11_fc.o \
 
+#	lw_readelem_vendor_specific.o \
 
 
 # LWAPP objs
@@ -98,7 +99,6 @@ LWAPPOBJS = \
 	lw_checksum.o \
 	lw_put_ac_descriptor.o \
 	lw_put_cisco_path_mtu.o \
-	lw_readelem_vendor_specific.o \
 	lw_elem_id_to_str.o \
 	lw_msg_id_to_str.o \
 	lw_cisco_id_to_str.o \
