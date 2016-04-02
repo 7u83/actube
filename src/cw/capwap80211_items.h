@@ -10,5 +10,14 @@ extern struct cw_itemdef capwap80211_itemdefs[];
 extern struct cw_itemdef capwap80211_radioitemdefs[];
 
 
+/* MAC Operation Items */
+extern const char CW_RADIOITEM80211_RTS_THRESHOLD[];
+extern const char CW_RADIOITEM80211_FRAGMENTATION_THRESHOLD[];
+extern const char CW_RADIOITEM80211_SHORT_RETRY[];
+extern const char CW_RADIOITEM80211_LONG_RETRY[];
+extern const char CW_RADIOITEM80211_TX_MSDU_LIFETIME[];
+extern const char CW_RADIOITEM80211_RX_MSDU_LIFETIME[];
+
+
 #endif
 
