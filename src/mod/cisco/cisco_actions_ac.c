@@ -33,6 +33,9 @@
 #include "mod_cisco.h"
 #include "cisco.h"
 
+#include "cisco_items.h"
+
+
 static cw_action_in_t actions_in[] = {
 
 
@@ -401,12 +404,13 @@ int cisco_register_actions80211_ac(struct cw_actiondef *def)
 	int rc;
 	rc=0;
 	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
+	rc += cw_itemdefheap_register(def->items, cisco_itemdefs);
+	
 /*	rc += cw_actionlist_out_register_actions(def->out, actions_out);
 
 	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
 
-	rc += cw_itemdefheap_register(def->items, _capwap_itemdefs);
 	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
 
 	intavltree_add(def->wbids, 0);
