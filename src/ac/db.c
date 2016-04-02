@@ -6,6 +6,7 @@
 #include "cw/capwap_items.h"
 #include "cw/conn.h"
 #include "cw/item.h"
+#include "cw/mbag.h"
 
 #include "conf.h"
 
@@ -88,6 +89,8 @@ static sqlite3_stmt * put_wtp_prop_stmt;
 
 static sqlite3_stmt * get_tasks_stmt;
 
+static sqlite3_stmt * stmt_get_radio_tasks;
+
 static sqlite3_stmt * stmt_ping_wtp;
 static sqlite3_stmt * stmt_put_radio_prop;
 
@@ -145,6 +148,11 @@ int db_start()
 		goto errX;
 
  
+	sql = "SELECT wtpid,rid,key,sub_key,val FROM radios WHERE upd>0 AND wtpid=?";
+	rc = sqlite3_prepare_v2(handle, sql,-1, &stmt_get_radio_tasks,0);
+	if (rc) 
+		goto errX;
+
 
 
 	return 1;
@@ -315,10 +323,6 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 	if(sqlite3_bind_text(get_tasks_stmt,1,wtpid,-1,SQLITE_STATIC))
 		goto errX;
 
-
-
-
-	//rc = sqlite3_step(get_tasks_stmt);
 	while (SQLITE_ROW == sqlite3_step(get_tasks_stmt)) {
 
 		int ii;
@@ -332,7 +336,6 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 
 		const char *id =  (const char*)sqlite3_column_text(get_tasks_stmt,1);
 		if (!id) {
-			//DBGX("::::::::::::::::::::::::::::::::::::::::::::::::::::NULL ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!","");
 			continue;
 		}
 
@@ -366,7 +369,6 @@ mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 
 	if (r->count)
 		return r;
-
 	
 	mavl_destroy(r);
 	return NULL;
@@ -387,5 +389,97 @@ errX:
 }
 
 
+
+mavl_conststr_t db_get_radio_tasks(struct conn * conn,const char * wtpid)
+{
+
+//cw_dbg(DBG_X,"Get Radio Tasks for  %s",wtpid);
+
+	sqlite3_reset(stmt_get_radio_tasks);
+	sqlite3_clear_bindings(stmt_get_radio_tasks);
+
+	mavl_conststr_t r = mavl_create_conststr();
+	if (!r)
+		return NULL;
+
+
+	int rc=0;
+
+
+	if(sqlite3_bind_text(stmt_get_radio_tasks,1,wtpid,-1,SQLITE_STATIC))
+		goto errX;
+
+	while (SQLITE_ROW == sqlite3_step(stmt_get_radio_tasks)) {
+
+		int ii;
+		//DBGX("-----------------------------------------------------","");
+		for (ii=0; ii<6; ii++){
+
+			DBGX("CVALL: %s",(const char*)sqlite3_column_text(stmt_get_radio_tasks,ii));
+
+
+		}
+		const char *strrid=  (const char*)sqlite3_column_text(stmt_get_radio_tasks,1);
+
+		const char *id =  (const char*)sqlite3_column_text(stmt_get_radio_tasks,2);
+		if (!id) {
+			continue;
+		}
+
+		const char *sub_id =  (const char*)sqlite3_column_text(stmt_get_radio_tasks,3);
+
+		const char *val =  (const char*)sqlite3_column_text(stmt_get_radio_tasks,4);
+
+		//DBGX("ID: (%s), SubID (%s), Val (%s)",id,sub_id,val);
+	
+		const struct cw_itemdef * cwi = cw_itemdef_get(conn->actions->radioitems,id,sub_id);
+		if (!cwi) {
+			DBGX("No item definition found for: %s/%s",id,sub_id);
+			continue;	
+		}
+
+
+		if (!cwi->type->from_str) {
+			cw_log(LOG_ERR,"Can't convert from string %s/%s - No method defined.",id,sub_id);
+			continue;
+		}
+
+
+		mbag_item_t * i = cwi->type->from_str(val);
+		i->id=cwi->id;
+
+		int rid = atoi(strrid);			
+		cw_dbg(DBG_X,"RID: %d",rid);
+
+
+		mbag_t radio = mbag_i_get_mbag_c(conn->radios_upd,rid,mbag_create);
+		mbag_set(radio,i);
+
+
+		//mbag_set(conn->outgoing,i);
+	
+		mavl_add(r,(void*)cwi->id);
+	}
+
+	if (r->count)
+		return r;
+	
+	mavl_destroy(r);
+	return NULL;
+
+
+errX:
+	if (rc) {
+		cw_log(LOG_ERR,"Can't get tasks: %d - %s",
+			rc,sqlite3_errmsg(handle));
+	}
+
+	if (r)
+		mavl_destroy(r);
+		
+
+	return NULL;
+
+}
 
 

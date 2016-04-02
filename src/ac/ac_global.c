@@ -8,6 +8,9 @@
 #include "cw/aciplist.h"
 #include "socklist.h"
 #include "cw/sock.h"
+#include "cw/dbg.h"
+
+#include "wtpman.h"
 
 struct cw_ac_status ac_status;
 
@@ -78,8 +81,33 @@ void release_iplist(void *arg,void *data)
 {
 }
 
+
+
+/*
+int handle_echo_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+		                      int len, struct sockaddr *from)
+{
+	cw_dbg(DBG_X,"Handle Echo Request %p",conn->data);
+//	struct wtpman * wtpman = conn->data;
+//	wtpman_echo_req(wtpman);
+	return 0;
+}
+
+*/
+
+/*static void setup_actions (struct mod_ac *c, struct mod_ac *b, struct cw_actiondef *actions)
+{
+	cw_dbg(DBG_X,"Setup Actions! Yea");
+	cw_set_msg_end_callback(actions,CW_STATE_RUN,CW_MSG_ECHO_REQUEST,handle_echo_req);
+}
+*/
+
 int ac_global_init()
 {
+//	mod_set_actions_registered_cb(setup_actions);
+
+
+
 	ac_config = mbag_create();
 	mbag_set_str(ac_config, CW_ITEM_AC_NAME, conf_acname);
 	mbag_set_ptr(ac_config, CW_ITEM_AC_STATUS, &ac_status);

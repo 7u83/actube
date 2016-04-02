@@ -36,6 +36,8 @@ struct cw_itemdef {
 	/** Type */
 	mbagtype_t type;
 
+	const char *meta_id;
+
 };
 typedef struct cw_itemdef cw_itemdef_t;
 

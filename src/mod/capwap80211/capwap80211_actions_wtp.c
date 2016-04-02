@@ -8,12 +8,6 @@
 #include "cw/capwap80211_items.h"
 #include "cw/radio.h"
 
-//#include "capwap_80211_actions.h"
-//#include "capwap_80211.h"
-//#include "capwap.h"
-
-
-
 
 
 
@@ -28,7 +22,7 @@ static cw_action_in_t actions_wtp_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 //	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 
@@ -45,7 +39,7 @@ static cw_action_in_t actions_wtp_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 //	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 

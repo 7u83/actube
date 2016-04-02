@@ -31,4 +31,8 @@ int cisco_in_telnet_ssh(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 
 int cisco_out_telnet_ssh(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
 
+int cisco_out_radio_administrative_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
+
 #endif

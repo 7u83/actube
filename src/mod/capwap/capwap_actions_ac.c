@@ -94,7 +94,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
-		.item_id = "wtp_mac_type", 
+		.item_id = CW_ITEM_WTP_MAC_TYPE,
 		.mand = 1, 
 		.min_len = 1, 
 		.max_len = 1
@@ -314,7 +314,7 @@ static cw_action_in_t actions_in[] = {
 
 
 	/* --------------------------------------------------------------------------
-	 * Configuration Status Request 
+	 * Configuration Status Request - IN 
 	 */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
@@ -342,7 +342,7 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
-		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cw_in_radio_administrative_state,
 		.mand = 1
 
@@ -417,8 +417,8 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
-		.item_id = CW_RADIO_OPER_STATE,
-		.start = cw_in_radio_operational_state,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+		.start = cw_in_radio_generic, //operational_state,
 		.min_len=3,
 		.max_len=3,
 		.mand = 0
@@ -465,7 +465,7 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
-		.item_id = CW_RADIO_OPER_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
 		.start = cw_in_radio_operational_state,
 		.min_len=3,
 		.max_len=3,
@@ -730,6 +730,17 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	/* Radio Administrative State -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
+	 	.out = cw_out_radio_administrative_states, 
+		.get = cw_out_get_outgoing,
+		.mand = 0
+	}
+	,
+
 
 
 
@@ -772,7 +783,7 @@ int capwap_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items, capwap_itemdefs);
-	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
+	rc += cw_itemdefheap_register(def->radioitems, capwap_radiodefs);
 
 	intavltree_add(def->wbids, 0);
 

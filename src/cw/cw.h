@@ -524,6 +524,20 @@ extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *ne
  */
 
 
+/**
+ * @defgroup CAPWAP_RADIO Radio Operations
+ * @{
+ */
+extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause);
+extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
+extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
+
+
+
+/**
+ * @}
+ */
+
 
 
 /**

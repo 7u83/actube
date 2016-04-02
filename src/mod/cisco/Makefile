@@ -15,6 +15,7 @@ OBJS=\
 	cisco_in_radio_administrative_state.o \
 	cisco_in_spam_vendor_specific.o \
 	cisco_in_telnet_ssh.o \
+	cisco_out_radio_administrative_states.o
 
 
 	

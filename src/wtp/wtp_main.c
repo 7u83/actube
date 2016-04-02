@@ -132,16 +132,17 @@ int main()
 	struct conn *conn = the_conn;
 
 	conn->radios = mbag_i_create();
+	conn->radios_upd=conn->radios;
 	mbag_i_set_mbag(conn->radios,0,mbag_create());
 //	mbag_i_set_mbag(conn->radios,1,mbag_create());
 //      mbag_set_mbag(conn->radios,0xff,mbag_create());
 
 
 
-#define CWMOD "cisco"
-#define CWBIND "cisco"
-//#define CWMOD "capwap"
-//#define CWBIND "capwap80211"
+//#define CWMOD "cisco"
+//#define CWBIND "cisco"
+#define CWMOD "capwap"
+#define CWBIND "capwap80211"
 
 
 	struct mod_wtp *mod = modload_wtp(CWMOD);
@@ -206,11 +207,11 @@ int main()
 		printf("RID = %d\n",i->iid);
 		printf("DATA: %p\n",i->data);
 		mbag_t radio= (mbag_t)i->data;
-		struct mbag_item *mri = mbag_get(radio,CW_ITEM80211_WTP_RADIO_INFORMATION);
+		struct mbag_item *mri = mbag_get(radio,CW_RADIOITEM80211_WTP_RADIO_INFORMATION);
 		
 	if (!mri){
 printf("Setting to 8 %p %p\n",mri,r);
-		mbag_set_dword(radio,CW_ITEM80211_WTP_RADIO_INFORMATION,8);
+		mbag_set_dword(radio,CW_RADIOITEM80211_WTP_RADIO_INFORMATION,1);
 	}
 	else{
 		printf("MRI %p\n",mri);

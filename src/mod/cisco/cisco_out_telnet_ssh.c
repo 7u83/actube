@@ -1,6 +1,8 @@
 
 #include "cisco.h"
 #include "cw/capwap_items.h"
+#include "cw/cipwap_items.h"
+
 #include "cw/lwapp.h"
 #include "cw/cw.h"
 #include "cw/dbg.h"
@@ -56,8 +58,8 @@ int cw_cisco_put_telnet_ssh(struct conn *conn,uint8_t type,const char * item_id,
 int cisco_out_telnet_ssh(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 
 {
 	int l;
-	l=cw_cisco_put_telnet_ssh(conn,0,CW_ITEM_TELNET_ENABLE,dst);
-	l+=cw_cisco_put_telnet_ssh(conn,1,CW_ITEM_SSH_ENABLE,dst+l);
+	l=cw_cisco_put_telnet_ssh(conn,0,CIPWAP_ITEM_TELNET_ENABLE,dst);
+	l+=cw_cisco_put_telnet_ssh(conn,1,CIPWAP_ITEM_SSH_ENABLE,dst+l);
 	return l;
 	
 }

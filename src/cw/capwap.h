@@ -514,6 +514,10 @@ enum cw_reboot_failure_types {
 
 
 
+#define CW_RADIO_ADMIN_STATE_DISABLED	1
+#define CW_RADIO_ADMIN_STATE_ENABLED	2
+
+
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
 //extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,

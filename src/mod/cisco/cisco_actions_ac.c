@@ -300,6 +300,17 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	/* Radio Administrative State -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
+	 	.out = cisco_out_radio_administrative_states, 
+		.get = cw_out_get_outgoing,
+		.mand = 0
+	}
+	,
+
 
 
 
@@ -320,7 +331,7 @@ static cw_action_in_t actions80211_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 0, 
 		.min_len = 5, 
@@ -333,7 +344,7 @@ static cw_action_in_t actions80211_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_CISCO_SUPPORTED_RATES,
-		.item_id = CW_ITEM80211_SUPPORTED_RATES,
+		.item_id = CW_RADIOITEM80211_SUPPORTED_RATES,
 	 	.start = cw_in_radio_generic, 
 		.mand = 0, 
 		.min_len = 5, 
@@ -343,6 +354,7 @@ static cw_action_in_t actions80211_in[] = {
 
 
 };
+
 
 
 #include "cw/item.h"

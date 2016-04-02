@@ -1,5 +1,5 @@
-#ifndef __DOT11_H
-#define __DOT11_H
+#ifndef __DOT11X_H
+#define __DOT11X_H
 
 
 #include <stdint.h>

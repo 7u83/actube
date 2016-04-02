@@ -15,9 +15,9 @@ CFLAGS += -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH
 
 
 LIBS+=-lcapwap
+LIBS+=-lcipwap
 LIBS+=-lcisco
 LIBS+=-lfortinet
-LIBS+=-lcipwap
 LIBS+=-lcapwap80211
 LIBS+=-lcw
 LIBS+=-lrt

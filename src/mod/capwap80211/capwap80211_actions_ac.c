@@ -29,7 +29,7 @@ static cw_action_in_t actions_ac_in[] = {
 		.capwap_state = CW_STATE_DISCOVERY, 
 		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 
@@ -47,7 +47,7 @@ static cw_action_in_t actions_ac_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
 		.min_len = 5, 
@@ -64,7 +64,7 @@ static cw_action_in_t actions_ac_in[] = {
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_ELEM80211_SUPPORTED_RATES,
-		.item_id = CW_ITEM80211_SUPPORTED_RATES,
+		.item_id = CW_RADIOITEM80211_SUPPORTED_RATES,
 	 	.start = cw_in_radio_generic, 
 		.mand = 0, 
 		.min_len = 3, 
@@ -90,8 +90,8 @@ cw_action_out_t actions_ac_out[]={
 	/* 802.11 Radio Information - Discovery Response */
 	{
 		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION ,
 	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION ,
 		.out = cw_out_radio_infos, 
 		.mand = 1
 	}
@@ -105,8 +105,8 @@ cw_action_out_t actions_ac_out[]={
 	/* 802.11 Radio Information - Discovery Response */
 	{
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
 	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 		.out = cw_out_radio_infos, 
 		.mand = 1
 	}
@@ -135,6 +135,7 @@ int capwap80211_register_actions_ac(struct cw_actiondef *def)
 	rc+= cw_strheap_register_strings(def->strelem, capwap_strings_elem80211);
 
 	rc += cw_itemdefheap_register(def->items,capwap80211_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems,capwap80211_radioitemdefs);
 
 	/*rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 */

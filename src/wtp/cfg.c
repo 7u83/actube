@@ -136,7 +136,7 @@ static int scn_radios(char *js, jsmntok_t * t)
 			
 			printf("Radio id %d\n",rid);
 			mbag_t radio=mbag_i_get_mbag_c(conn->radios,rid,mbag_create);
-			scn_obj(js,to+1,radio,conn->actions->items /*radioitems*/,NULL);	
+			scn_obj(js,to+1,radio,conn->actions->radioitems /*radioitems*/,NULL);	
 
 		}
 

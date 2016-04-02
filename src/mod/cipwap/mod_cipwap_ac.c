@@ -1,4 +1,7 @@
 
+
+#include "../modload.h"
+
 #include "cw/mod.h"
 #include "cw/log.h"
 #include "cw/dbg.h"
@@ -15,11 +18,53 @@ int cipwap_init()
 
 static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from, int mode)
 {
-	if (mode != MOD_MODE_CAPWAP)
-		return 0;
+	if (mode == MOD_MODE_CAPWAP)
+		return 1;
 
-	cw_dbg(DBG_MOD,"CIPWAP detected: no");
 	return 0;
+}
+
+static int register_actions(struct cw_actiondef *actions, int mode)
+{
+	switch (mode) {
+		case MOD_MODE_CAPWAP:
+		{
+
+			struct mod_ac *cmod = modload_ac("capwap");
+			if (!cmod) {
+				cw_log(LOG_ERR,
+				       "Can't initialize mod_cisco, failed to load base mod mod_capwap");
+				return 1;
+			}
+			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			int rc = cipwap_register_actions_ac(actions);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d actions", rc);
+			return rc;
+		}
+
+/*		
+		case MOD_MODE_BINDINGS:
+		{
+			struct mod_ac *cmod = modload_ac("capwap80211");
+			if (!cmod) {
+				cw_log(LOG_ERR,
+				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
+				return 1;
+			}
+			cmod->register_actions(actions, MOD_MODE_BINDINGS);
+			int rc = cipwap_register_actions80211_ac(actions);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", rc);
+			return 0;
+		}
+*/		
+		
+
+	}
+
+
+	return 0;
+
+
 }
 
 
@@ -27,7 +72,8 @@ static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_
 static struct mod_ac cipwap_ac = {
 	.name ="cipwap",
 	.init = cipwap_init,
-	.detect = detect
+	.detect = detect,
+	.register_actions=register_actions
 
 };
 

@@ -15,9 +15,6 @@ const char CW_ITEM_WTP_FRAME_TUNNEL_MODE[]="wtp_frame_tunnel_mode";
 const char CW_ITEM_WTP_RADIOS_IN_USE[]="max_radios";
 const char CW_ITEM_WTP_MAX_RADIOS[]="radios_in_use";
 
-const char CW_ITEM_SSH_ENABLE[]="ssh_enable";
-const char CW_ITEM_TELNET_ENABLE[]="telnet_enable";
-
 /*
 const char CW_ITEM_WTP_HARDWARE_VENDOR=
 */
@@ -42,7 +39,7 @@ const char CW_ITEM_WTP_OTHERSOFTWARE_VERSION,
 const char CW_ITEM_WTP_BOARD_DATA[]="wtp_board_data";
 const char CW_ITEM_WTP_DESCRIPTOR[]="0wtp_descriptor";
 const char CW_ITEM_CAPWAP_TIMERS[]="capwap_timers";
-const char CW_ITEM_RADIO_ADMINISTRATIVE_STATE[]="radio_admin_state";
+//const char CW_ITEM_RADIO_ADMINISTRATIVE_STATE[]="radio_admin_state";
 
 const char CW_ITEM_AC_NAME[]="ac_name";
 const char CW_ITEM_AC_DESCRIPTOR[]="ac_descriptor";
@@ -104,10 +101,6 @@ struct cw_itemdef capwap_itemdefs[] = {
 
 {CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,CW_ITEM_NONE,MBAG_BYTE},
 
-{CW_ITEM_TELNET_ENABLE,CW_ITEM_NONE,MBAG_BYTE},
-{CW_ITEM_SSH_ENABLE,CW_ITEM_NONE,MBAG_BYTE},
-
-
 {CW_ITEM_WTP_NAME,CW_ITEM_NONE,MBAG_STR},
 {CW_ITEM_WTP_MAC_TYPE,CW_ITEM_NONE,MBAG_BYTE},
 {CW_ITEM_WTP_FRAME_TUNNEL_MODE,CW_ITEM_NONE,MBAG_BYTE},
@@ -158,10 +151,13 @@ cisco_items or so */
 };
 
 
+const char CW_RADIOITEM_ADMIN_STATE[]="admin_state";
+const char CW_RADIOITEM_OPER_STATE[]="oper_state";
 
 
 struct cw_itemdef capwap_radiodefs[] = {
+	{CW_RADIOITEM_ADMIN_STATE,CW_ITEM_NONE,MBAG_BYTE},
+	{CW_RADIOITEM_OPER_STATE,CW_ITEM_NONE,MBAG_WORD},
 
-
-{CW_ITEM_NONE}
+	{CW_ITEM_NONE}
 };

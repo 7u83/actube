@@ -176,8 +176,8 @@ extern const char CW_ITEM_RADIO_INFOS[];
 extern const char CW_ITEM_ECN_SUPPORT[];
 
 
-extern const char CW_ITEM_SSH_ENABLE[];
-extern const char CW_ITEM_TELNET_ENABLE[];
+//extern const char CW_ITEM_SSH_ENABLE[];
+//extern const char CW_ITEM_TELNET_ENABLE[];
 
 
 
@@ -192,7 +192,12 @@ extern const char CW_ITEM_TELNET_ENABLE[];
 #define CW_ITEM_REBOOT_LAST_FAILURE_TYPE "last_failure"
 
 
+extern const char CW_RADIOITEM_ADMIN_STATE[];
+extern const char CW_RADIOITEM_OPER_STATE[];
+
 
 extern struct cw_itemdef capwap_itemdefs[];
+extern struct cw_itemdef capwap_radiodefs[];
+
 
 #endif

@@ -8,8 +8,8 @@
 
 
 
-extern const char CW_RADIO_ADMIN_STATE[];
-extern const char CW_RADIO_OPER_STATE[];
+//extern const char CW_RADIO_ADMIN_STATE[];
+//extern const char CW_RADIO_OPER_STATE[];
 
 extern const char CW_RADIO_SUPPORTED_RATES[];
 

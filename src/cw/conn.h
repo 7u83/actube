@@ -63,8 +63,11 @@ struct conn {
 	mbag_t incomming;
 	mbag_t remote;
 	mbag_t local;
+
 	mbag_t radios;
+	mbag_t radios_upd;
 	mbag_t config;
+	mbag_t config_upd;
 
 
 	/** base_mac */

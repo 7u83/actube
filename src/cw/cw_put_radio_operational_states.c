@@ -46,7 +46,7 @@ int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, i
 	mavliter_foreach(&it){
 
 		mbag_item_t * radioitem = mavliter_get(&it);
-		mbag_item_t *ositem = mbag_get(radioitem->data,CW_RADIO_OPER_STATE);
+		mbag_item_t *ositem = mbag_get(radioitem->data,CW_RADIOITEM_OPER_STATE);
 		if (!ositem){
 			(*nerror)++;
 			continue;
@@ -77,7 +77,7 @@ int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, i
 		/* delete the operational state item, so it won't be 
 		   sent again, until it is set by a change through
 		   Set Radio Admin State */
-		mbag_del(radioitem->data,CW_RADIO_OPER_STATE);
+		mbag_del(radioitem->data,CW_RADIOITEM_OPER_STATE);
 
 	}
 

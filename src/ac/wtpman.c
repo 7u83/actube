@@ -317,7 +317,7 @@ void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
 		mbag_item_t *i = mavliter_get(&it);
 
 		const struct cw_itemdef *cwi =
-		    cw_itemdef_get(conn->actions->items, i->id, NULL);
+		    cw_itemdef_get(conn->actions->radioitems, i->id, NULL);
 		if (cwi) {
 			char str[4096];
 			if (i->type->to_str) {
@@ -376,11 +376,11 @@ void wtpman_run_data(void *wtpman_arg)
 	uint8_t data[1001];
 	memset(data, 0, 1000);
 
-	cw_log(LOG_ERR, "I am the data thread\n");
+	cw_log(LOG_ERR, "I am the data thread**********************************************************************\n");
 	while (1) {
 		sleep(5);
 		conn->write_data(conn, data, 100);
-		cw_log(LOG_ERR, "O was the data thread\n");
+		cw_log(LOG_ERR, "O was the data thread***********************************************************\n");
 	}
 
 
@@ -489,24 +489,50 @@ static void wtpman_run(void *arg)
 
 		mavl_del_all(conn->outgoing);
 
-		mavl_conststr_t r = db_get_update_tasks(conn, sock_addr2str(&conn->addr));
+		mavl_conststr_t r;
+		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr));
+		if (r) {
+
+			if (!conn->outgoing->count)
+				continue;
+
+			cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr));
+
+			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			mavl_merge(conn->config, conn->outgoing);
+			mavl_destroy(conn->outgoing);
+			conn->outgoing = mbag_create();
+			config_to_sql(conn);
+			radios_to_sql(conn);
+			mavl_destroy(r);
+		}
+
+		r = db_get_radio_tasks(conn, sock_addr2str(&conn->addr));
+		if (r) {
+
+			if (!conn->radios_upd->count)
+				continue;
+
+			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr));
+			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			mavl_destroy(conn->radios_upd);
+			conn->radios_upd=mbag_i_create();
 
 
-		if (!r)
-			continue;
+			radios_to_sql(conn);
 
-		if (!conn->outgoing->count)
-			continue;
+			/*
+			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			mavl_merge(conn->config, conn->outgoing);
+			mavl_destroy(conn->outgoing);
+			conn->outgoing = mbag_create();
+			config_to_sql(conn);
+			radios_to_sql(conn);
+			mavl_destroy(r);
+			*/
+		}
 
-		cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr));
 
-		rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-		mavl_merge(conn->config, conn->outgoing);
-		mavl_destroy(conn->outgoing);
-		conn->outgoing = mbag_create();
-		config_to_sql(conn);
-		radios_to_sql(conn);
-		mavl_destroy(r);
 
 	}
 
@@ -609,6 +635,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
 	wtpman->conn->radios = mbag_i_create();
+	wtpman->conn->radios_upd = mbag_i_create();
 	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
 	wtpman->conn->capwap_mode = CW_MODE_CISCO;

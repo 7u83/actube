@@ -114,7 +114,7 @@ int run_join_d(struct sockaddr *sa)
 
 	/* we call connect to bind this socket to a local IP address,
 	 * which we can later obtain by getsockname */
-	rc = connect(sockfd, (struct sockaddr *) sa,
+/*	rc = connect(sockfd, (struct sockaddr *) sa,
 		     sock_addrlen((struct sockaddr *) sa));
 
 	if (rc < 0) {
@@ -123,7 +123,7 @@ int run_join_d(struct sockaddr *sa)
 		close(sockfd);
 		return -1;
 	}
-
+*/
 
 	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa));
 

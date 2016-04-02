@@ -125,7 +125,7 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
-		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cisco_in_radio_administrative_state_wtp,
 		.mand = 1
 	}
@@ -238,7 +238,7 @@ static cw_action_out_t actions_out[]={
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
-		.item_id = CW_ITEM80211_WTP_RADIO_INFORMATION,
+		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 		.out = cisco_out_80211_wtp_radio_cfg,
 		.get = cw_out_get_config,
 		.mand = 1
