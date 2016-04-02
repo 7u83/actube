@@ -4,6 +4,19 @@
 
 
 
+const char CW_RADIOITEM80211_SUPPORTED_RATES[]="802.11 supported_rates";
+const char CW_RADIOITEM80211_WTP_RADIO_INFORMATION[]="802.11 radio_info";
+
+/* MAC Operation Items */
+const char CW_RADIOITEM80211_RTS_THRESHOLD[]="rts_threshold";
+const char CW_RADIOITEM80211_FRAGMENTATION_THRESHOLD[]="fragmentation_threshold";
+const char CW_RADIOITEM80211_SHORT_RETRY[]="short_retry";
+const char CW_RADIOITEM80211_LONG_RETRY[]="long_retry";
+const char CW_RADIOITEM80211_TX_MSDU_LIFETIME[]="tx_msdu_lifetime";
+const char CW_RADIOITEM80211_RX_MSDU_LIFETIME[]="rx_msdu_lifetime";
+
+
+
 
 struct cw_itemdef capwap80211_itemdefs[] = {
 
@@ -13,15 +26,6 @@ struct cw_itemdef capwap80211_itemdefs[] = {
 
 
 
-const char CW_RADIOITEM80211_SUPPORTED_RATES[]="802.11 supported_rates";
-const char CW_RADIOITEM80211_WTP_RADIO_INFORMATION[]="802.11 radio_info";
-
-/* MAC Operation Items */
-const char CW_RADIOITEM80211_RTS_THRESHOLD[]="rts_threshold";
-const char CW_RADIOITEM80211_FRAGMENTATION_THRESHOLD[]="fragmentation_threshold";
-const char CW_RADIOITEM80211_SHORT_RETRY[]="short_retry";
-const char CW_RADIOITEM80211_LONG_RETRY[]="long_retry";
-
 
 
 
@@ -29,5 +33,14 @@ struct cw_itemdef capwap80211_radioitemdefs[] = {
 
 	{CW_RADIOITEM80211_SUPPORTED_RATES,CW_ITEM_NONE,CAPWAP80211_TYPE_RATESET},
 	{CW_RADIOITEM80211_WTP_RADIO_INFORMATION,CW_ITEM_NONE,MBAG_DWORD},
+
+	/* MAC Operation */
+	{CW_RADIOITEM80211_RTS_THRESHOLD,CW_ITEM_NONE,MBAG_WORD},
+	{CW_RADIOITEM80211_SHORT_RETRY,CW_ITEM_NONE,MBAG_BYTE},
+	{CW_RADIOITEM80211_LONG_RETRY,CW_ITEM_NONE,MBAG_BYTE},
+	{CW_RADIOITEM80211_FRAGMENTATION_THRESHOLD,CW_ITEM_NONE,MBAG_WORD},
+	{CW_RADIOITEM80211_TX_MSDU_LIFETIME,CW_ITEM_NONE,MBAG_DWORD},
+	{CW_RADIOITEM80211_RX_MSDU_LIFETIME,CW_ITEM_NONE,MBAG_DWORD},
+	
 	{CW_ITEM_NONE}
 };
