@@ -428,6 +428,7 @@ int cisco_register_actions80211_ac(struct cw_actiondef *def)
 	rc=0;
 	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
 	rc += cw_itemdefheap_register(def->items, cisco_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems, cisco_radioitemdefs);
 	
 /*	rc += cw_actionlist_out_register_actions(def->out, actions_out);
 

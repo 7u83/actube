@@ -9,3 +9,14 @@ struct cw_itemdef cisco_itemdefs[] = {
 
 	{CW_ITEM_NONE}
 };
+
+
+
+const char CISCO_RADIOITEM80211_CFG_TYPE[]="cisco_radio_cfg_type";
+
+struct cw_itemdef cisco_iradioitemdefs[] = {
+
+	{CISCO_RADIOITEM80211_CFG_TYPE,CW_ITEM_NONE,MBAG_BYTE},
+
+	{CW_ITEM_NONE}
+};
