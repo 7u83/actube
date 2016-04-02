@@ -21,8 +21,8 @@ struct cw_itemdef cipwap_itemdefs[] = {
 
 };
 
-const char CIPWAP_RADIO80211ITEM_OCCUPANCY_LIMIT[]="occupancy_limit";
-const char CIPWAP_RADIO80211ITEM_CFP_PERIOD[]="cfp_period";
+const char CIPWAP_RADIOITEM80211_OCCUPANCY_LIMIT[]="occupancy_limit";
+const char CIPWAP_RADIOITEM80211_CFP_PERIOD[]="cfp_period";
 
 struct cw_itemdef cipwap_radioitemdefs[] = {
 
