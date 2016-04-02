@@ -30,6 +30,7 @@ CONFOBJS = wtp_conf.o
 
 LIBS+=-lcapwap
 LIBS+=-lcapwap80211
+LIBS+=-lcipwap
 LIBS+=-lcisco
 LIBS+=-lfortinet
 LIBS+=-lcw
