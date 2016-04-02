@@ -1,7 +1,7 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -23,42 +23,38 @@
 
 #include "lwapp.h"
 
-//#define LW_VENDOR_CISCO				4232704
 
+/**
+ * Vendor specific message elements LWAPP Cisco 
+ */
 
-/* Vendor specific message elements LWAPP Cisco */
+#define LW_CISCO_AP_USERNAME_PASSWORD		18
+#define LW_CISCO_RADIO_MODULE_INFO		21
+#define LW_CISCO_AC_IP_ADDR_WITH_INDEX		32
+#define LW_CISCO_AP_ETHERNET_PORT_SUBTYPE	34
+#define LW_CISCO_AP_LOGHOST_CONFIG		36
+#define LW_CISCO_MCAST_MGID_INFO		39
 
+#define LW_CISCO_TELNET_SSH			44
+#define LW_CISCO_AP_SUBMODE			67
+#define LW_CISCO_AP_HEARTBEAT_TIMEOUT		68
 
-enum lwapp_cisco_elems {
+#define LW_CISCO_PRIMED_DISCOVERY_TIMEOUT	50
+#define LW_CISCO_PATH_MTU			73
+#define LW_CISCO_PRIMED_JOIN_TIMEOUT		85
+#define LW_CISCO_AP_DTLS_DATA_CFG		74
 
-LW_CISCO_AP_USERNAME_PASSWORD=18,
+#define LW_CISCO_ADD_WLAN			128
 
-LW_CISCO_RADIO_MODULE_INFO=21,
-LW_CISCO_AC_IP_ADDR_WITH_INDEX=32,
-LW_CISCO_AP_ETHERNET_PORT_SUBTYPE=34,
-LW_CISCO_AP_LOGHOST_CONFIG=36,
-LW_CISCO_MCAST_MGID_INFO=39,
+#define LW_CISCO_SSC_HASH_VALIDATION		133
+#define LW_CISCO_MWAR_HASH_VALUE_1		132
+#define LW_CISCO_MWAR_HASH_VALUE		134
+#define LW_CISCO_DOT11R_WLC_MAC_AND_IP		135
 
-LW_CISCO_TELNET_SSH=44,
-LW_CISCO_AP_SUBMODE=67,
-LW_CISCO_AP_HEARTBEAT_TIMEOUT=68,
+#define LW_CISCO_HARDWARE_INFO			139
 
-LW_CISCO_PRIMED_DISCOVERY_TIMEOUT=50,
-LW_CISCO_PATH_MTU=73,
-LW_CISCO_PRIMED_JOIN_TIMEOUT=85,
-LW_CISCO_AP_DTLS_DATA_CFG=74,
+#define LW_CISCO_AP_JOIN_IP_PREF_MODE		166
 
-LW_CISCO_ADD_WLAN=128,
-
-LW_CISCO_SSC_HASH_VALIDATION=133,
-LW_CISCO_MWAR_HASH_VALUE=134,
-LW_CISCO_DOT11R_WLC_MAC_AND_IP=135,
-
-LW_CISCO_HARDWARE_INFO=139,
-
-LW_CISCO_AP_JOIN_IP_PREF_MODE=166
-
-};
 	
 
 /* function proto types */
