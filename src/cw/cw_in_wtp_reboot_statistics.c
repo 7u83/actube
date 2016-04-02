@@ -40,6 +40,9 @@ int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8
 	mbag_set_word( rs, CW_ITEM_REBOOT_UNKNOWN_FAILURE_COUNT,cw_get_word(data+10) );
 	mbag_set_byte( rs, CW_ITEM_REBOOT_LAST_FAILURE_TYPE,cw_get_byte(data+12) );
 
+
+	mbag_set_mbag(conn->incomming,CW_ITEM_WTP_REBOOT_STATISTICS,rs);
+
 	return 1;
 
 }
