@@ -115,8 +115,8 @@ LWAPPOBJS = \
 
 
 # LWAPP cisco vendor specific objs
-LWAPPCISCOOBJS = \
-	lw_addelem.o
+#//#LWAPPCISCOOBJS = \
+#	lw_addelem.o
  
 
 # cw_tohex.o\
