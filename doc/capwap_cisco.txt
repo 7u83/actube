@@ -689,6 +689,19 @@ Length: 1
        1=On   (?)
        0=Off  (?)
    
+132. Cisco MWAR Hash Value with Index (LWAPP)
+   
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Index (?)       |	 Hash ... 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+	
+   Index: 
+
+   Hash: ASCII string witch represents in hexadecimal notation 
+         the SHA1 hash of the device certificate.
+
 
 134. Cisco MWAR Hash Value (LWAPP)
    
