@@ -271,14 +271,6 @@ CW_MSG_MAXMSG	=				26
 #define	CW_ELEM_WTP_IPV6_IP_ADDRESS			43
 
 
-/* pseudo message elements, defined for libcapwap */
-
-//#define XCWMSGELEM_CAPWAP_LOCAL_IP_ADDRESS	0x10000	/* means LOCAL_IPV4 or IPV6 ADRESS */
-//#define XCWMSGELEM_CAPWAP_CONTROL_IP_ADDRESS	0x20000	/* means LOCAL_IPV4 or IPV6 ADRESS */
-//#define XCWMSGELEM_CAPWAP_RADIO_INFO		0x30000	/* a radio info element  */
-
-
-
 
 /**
  * @defgrpup BOARD_SUBELEMS Board Data Sub-Elements
@@ -308,9 +300,6 @@ CW_MSG_MAXMSG	=				26
 #define CW_SUBELEM_AC_HARDWARE_VERSION			4
 #define CW_SUBELEM_AC_SOFTWARE_VERSION			5
 
-
-//#include "wtpinfo.h"
-//#include "acinfo.h"
 
 /* Frame tunnnel mode bits */
 #define WTP_FRAME_TUNNEL_MODE_R	1	/* Reserved */
@@ -535,68 +524,6 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
 extern int cw_readmsg_configuration_status_response(uint8_t * elems, int elems_len);
 extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_len);
 
-
-
-
-/*
-static inline int cw_addelem_radio_operational_state(uint8_t * dst, struct radioinfo *ri)
-{
-	cw_put_byte(dst + 4 + 0, ri->rid);
-	cw_put_byte(dst + 4 + 1, ri->state);
-	cw_put_byte(dst + 4 + 2, ri->cause);
-	return 3 + cw_put_elem_hdr(dst, CW_ELEM_RADIO_OPERATIONAL_STATE, 3);
-}
-*/
-
-
-/*
-#define cw_put_elem_vendor_hdr(dst,vendorid,elemid,len)\
-	(cw_put_elem_hdr(dst,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,  \
-	cw_put_dword(dst+4,vendorid) + cw_put_word(dst+8,elemid) +len ))
-
-
-
-
-
-#define cw_addelem(dst,type,data,len)\
-	(cw_put_elem_hdr(dst,type,len)+cw_put_data(dst+4,data,len))
-*/
-
-/*
-#define cw_addelem_vendor_specific_payload(dst,vendorid,elemid,data,len)\
-	(cw_put_elem_vendor_hdr(dst,vendorid,elemid,len) + \
-	 cw_put_data(dst+10,data,len))
-*/
-
-/*
-extern int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendorid,
-					      uint16_t elemid, uint8_t * data,
-					      uint16_t len);
-
-
-extern void cw_prepare_configuration_status_request(struct conn *conn,
-						    struct radioinfo *radioinfo,
-						    struct wtpinfo *wtpinfo);
-extern void cw_prepare_change_state_event_request(struct conn *conn,
-						  struct radioinfo *radioinfo,
-						  struct wtpinfo *wtpinfo);
-
-extern int cw_send_configuration_update_response(struct conn *conn, int seqnum,
-						 struct radioinfo *radioinfo);
-*/
-
-
-
-
-
-/* cwmsg methods */
-/*
-static inline int cw_addelem_result_code(uint8_t * dst, uint32_t code)
-{
-	cw_put_dword(dst + 4, code);
-	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
-}
-*/
 
 
 /* Message to text stuff */
