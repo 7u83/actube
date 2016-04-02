@@ -52,6 +52,7 @@ int cipwap_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 */
 	rc += cw_itemdefheap_register(def->items, cipwap_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems, cipwap_radioitemdefs);
 
 /*	rc += cw_itemdefheap_register(def->radioitems, capwap_radiodefs);
 	intavltree_add(def->wbids, 0);
