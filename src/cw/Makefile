@@ -171,6 +171,10 @@ CAPWAPOBJS= \
 	cw_in_radio_administrative_state.o \
 	cw_in_radio_administrative_state_wtp.o \
 	cw_in_radio_operational_state.o\
+	cw_radio_set_admin_state.o \
+	cw_put_elem_radio_administrative_state.o\
+	cw_put_elem_radio_operational_state.o \
+	cw_out_radio_administrative_states.o\
 	strheap.o \
 	cw_check_missing_mand.o \
 	md5sum.o \
@@ -258,6 +262,9 @@ FRAGOBJS=fragman.o
 #	capwap_actions_ac.o \
 	#capwap_actions_wtp.o \
 
+	#cipwap_actions_ac.o \
+	#cipwap_actions_wtp.o \
+
 CWACTION=action.o \
 	cw_in_generic.o \
 	cw_in_generic2.o \
@@ -265,11 +272,10 @@ CWACTION=action.o \
 	cw_out_ac_name_with_priority.o \
 	cw_in_ac_name_with_priority.o \
 	cw_out_image_data.o \
-	cipwap_actions_ac.o \
-	cipwap_actions_wtp.o \
 	cipwap_strings_elem.o \
 	capwap_strings_result.o\
 	capwap_strings_board.o \
+	cipwap_items.o\
 	cw_put_msg.o \
 	cw_put_mbag_item.o \
 	cw_put_local_ip_address.o \
