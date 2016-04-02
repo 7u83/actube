@@ -79,7 +79,6 @@ const char CW_ITEM_DISCOVERIES[]="discoveries";
 const char CW_ITEM_IMAGE_FILEHANDLE[]="image_file_handle";
 
 const char CW_ITEM_RADIO_CFG[]="radio_cfg";
-const char CW_ITEM_AP_MODE_AND_TYPE[]="cisco_ap_mode_and_type";
 
 const char CW_ITEM_CISCO_BOARD_DATA_OPTIONS[]="cisco_board_data_options";
 const char CW_ITEM_RADIOS[]="radios";
@@ -136,7 +135,6 @@ struct cw_itemdef capwap_itemdefs[] = {
 /* Cisco Specific items, should be moved to a file like
 cisco_items or so */
 
-{CW_ITEM_AP_MODE_AND_TYPE,CW_ITEM_NONE,MBAG_WORD},
 {CW_ITEM_CISCO_BOARD_DATA_OPTIONS,CW_ITEM_NONE,MBAG_BSTR16},
 
 
