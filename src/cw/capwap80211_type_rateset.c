@@ -107,12 +107,19 @@ static struct mbag_item *  get(const uint8_t *src,int len)
 	return item;
 }
 
+static  int put(struct mbag_item *i,uint8_t *dst)
+{
+	int l=*((uint8_t*)(i->data));
+	memcpy(dst,i->data+1,l);
+	return l;
+}
+
 
 const struct mbag_typedef capwap80211_type_rateset = {
 	.name = "802.11 Rate Set",
 	.del = free,
 	.from_str = from_str,
 	.to_str = to_str,
-	.get = get
-
+	.get = get,
+	.put = put
 };
