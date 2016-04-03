@@ -16,7 +16,7 @@
 
 */
 
-
+#include "cw.h"
 #include "mbag.h"
 
 
@@ -35,9 +35,29 @@ static int to_str(void *item,char *dst)
         return sprintf(dst, "%d", i->dword);
 }
 
+static struct mbag_item * get(const uint8_t *src,int len)
+{
+	mbag_item_t * item = mbag_item_new(MBAG_DWORD);
+	if (!item)
+		return NULL;
+	item->dword=cw_get_dword(src);
+	return item;
+}
+
+
+static int put(struct mbag_item * i, uint8_t *dst)
+{
+	return cw_put_dword(dst,i->dword);
+}
+
 
 const struct mbag_typedef mbag_type_dword = {
-	"DWORD",NULL,to_str,from_str
+	.name = "Dword",
+	.del = NULL,
+	.to_str = to_str,
+	.from_str = from_str,
+	.get = get,
+	.put = put
 };
 
 

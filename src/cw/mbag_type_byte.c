@@ -16,7 +16,7 @@
 
 */
 
-
+#include "cw.h"
 #include "mbag.h"
 
 
@@ -35,10 +35,32 @@ static int to_str(void *item,char *dst)
         return sprintf(dst, "%d", i->byte);
 }
 
+static struct mbag_item * get(const uint8_t *src,int len)
+{
+	mbag_item_t * item = mbag_item_new(MBAG_BYTE);
+	if (!item)
+		return NULL;
+	item->byte=*src;
+	return item;
+}
+
+
+static int put(struct mbag_item * i, uint8_t *dst)
+{
+	return cw_put_byte(dst,i->byte);
+}
 
 /** Defines a word, two bytes. */
 const struct mbag_typedef mbag_type_byte = {
-	"Byte",NULL,to_str,from_str
+	.name =	"Byte",
+	.del = NULL,
+	.to_str = to_str,
+	.from_str = from_str,
+	.get = get,
+	.put = put
+
+
+
 };
 
 
