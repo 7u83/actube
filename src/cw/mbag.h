@@ -62,7 +62,9 @@ struct mbag_typedef{
 	struct mbag_item * (*get)(const uint8_t*src, int len);
 
 	/** A method to put this object to a buffer */
-	int (*put)(void *,uint8_t*dst);
+	int (*put)(struct mbag_item *i,uint8_t*dst);
+
+	int (*def)(void *, void *);
 
 };
 

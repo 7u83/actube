@@ -297,7 +297,8 @@ MBAGOBJS = \
 	mbag_set_from_buf.o\
 	mbag_type_str.o \
 	mbag_type_ptr.o \
-	mbag_type_data.o
+	mbag_type_data.o \
+	mbag_get_upd.o
 
 
 

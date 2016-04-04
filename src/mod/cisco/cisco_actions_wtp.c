@@ -134,6 +134,17 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Element Cisco 802.11 Radio Config - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_WTP_RADIO_CFG, 
+		.start=cisco80211_in_wtp_radio_configuration, 
+		.item_id = "cisco_radio_cfg", 
+	}
+	,
+
 
 
 	/* ----------------------------------------------------------------

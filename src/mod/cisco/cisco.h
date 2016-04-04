@@ -38,5 +38,6 @@ int cisco80211_in_mac_operation(struct conn *conn, struct cw_action_in *a, uint8
 
 int cisco80211_in_wtp_radio_configuration(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from);
+int cisco80211_out_wtp_radio_configuration(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 #endif

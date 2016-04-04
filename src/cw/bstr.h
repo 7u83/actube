@@ -130,7 +130,7 @@ static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
 */
 
 
-static inline uint8_t * bstr16_create(uint8_t *data, uint16_t len)
+static inline uint8_t * bstr16_create(const uint8_t *data, uint16_t len)
 {
 	uint8_t * str = malloc(2+len*sizeof(uint8_t));
 	if (!str)	
