@@ -642,11 +642,11 @@ Length: >=4
 
 
 74. Cisco DTLS Data Config (LWAPP)
-    0                   1                   
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | DTLS Data cap |DTLS Data en.  | 
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+0                   1                   
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| DTLS Data cap |DTLS Data en.  | 
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 Type: 74
 Length: 2 
@@ -659,6 +659,16 @@ Length: 2
 	0: DTLS Data disabled
 	1: DTLS Data enabled
 
+80. Auto Immune Payload (?)
+  0                   1                   
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+  +-+-+-+-+-+-+-+-+
+  | Auto Immune   | 
+  +-+-+-+-+-+-+-+-+
+
+  
+
+
 85. Cisco Primed Join Timeout (LWAPP)
     0                   1                   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
@@ -668,6 +678,24 @@ Length: 2
 Type: 85
 
    Timeout: Timeout in seconds
+
+
+111. RAD Extended Config
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Radio ID        |       Beracon Interval     |    Beacon      
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+     Range           | Multicast Buffer           |   Multicast
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+     Data Rate       | RX SenSop Threshold        |   Cccat
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
+     ....            |
+   +-+-+-+-+-+-+-+-+-+
+
+
+
 
 128. Cisco Add WLAN Name (?)
 

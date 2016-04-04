@@ -41,7 +41,8 @@ const char * lw_cisco_id_to_str(int elem_id)
 		case LW_CISCO_PRIMED_DISCOVERY_TIMEOUT:
 			return "Primed Discovery Timeout";
 
-
+		case LW_CISCO_RAD_EXTENDED_CONFIG:
+			return "RAD Extended Config";
 
 		default: 
 			return "Unknown";
