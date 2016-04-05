@@ -97,7 +97,8 @@ static int init_config(mbag_t config)
 
 	mbag_set_dword(board_data, CW_ITEM_WTP_BOARD_VENDOR,CW_VENDOR_ID_CISCO);
 
-	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_MODELNO,bstr16_create_from_str("AIR-LAP1131AG-E-K9"));
+//	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_MODELNO,bstr16_create_from_str("AIR-LAP1131AG-E-K9"));
+	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_MODELNO,bstr16_create_from_str("AIR-LAP1142N-E-K9"));
 	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_SERIALNO,bstr16_create_from_str("FCZ1441Q0XZ"));
 	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_ID,bstr16_create_from_cfgstr(".x0000"));
 	mbag_set_bstr16(board_data, CW_ITEM_WTP_BOARD_REVISION,bstr16_create_from_cfgstr(".x4230"));

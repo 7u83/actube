@@ -118,7 +118,7 @@ int ac_global_init()
 	ac_status.max_wtps = 200;
 	ac_status.security = CW_FLAG_AC_SECURITY_X | CW_FLAG_AC_SECURITY_S;
 	ac_status.rmac_field = CW_FLAG_RMAC_SUPPORTED;
-	ac_status.dtls_policy = CW_FLAG_DTLS_POLICY_C | CW_FLAG_DTLS_POLICY_D;
+	ac_status.dtls_policy = CW_FLAG_DTLS_POLICY_C; // | CW_FLAG_DTLS_POLICY_D;
 
 
 	mbag_set_bstrv(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,

@@ -139,6 +139,9 @@ const char * cw_cisco_id_to_str(int elem_id)
 
 		case CW_CISCO_CAPWAP_TIMERS:
 			return "Capwap Timers";
+
+		case CW_CISCO_AP_CORE_DUMP:
+			return "AP Core Dump";
 		
 		default:
 			return "Unknown";
