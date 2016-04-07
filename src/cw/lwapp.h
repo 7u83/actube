@@ -150,6 +150,7 @@
 
 #define LW_ELEM_CERTIFICATE				44
 #define LW_ELEM_WTP_BOARD_DATA				50
+#define LW_BCAST_SSID_MODE				51
 #define LW_ELEM_WTP_MODE_AND_TYPE			54
 #define LW_ELEM_QOS					57
 

@@ -168,6 +168,12 @@ AP = RAD = WTP
 
    Same as element type 28 specified in RFC 5412 (LWAPP)
  
+51. Cisco Broadcast SSID Mode
+    0               
+    0 1 2 3 4 5 6 7 
+   +-+-+-+-+-+-+-+-+
+   |     Mode      |
+   +-+-+-+-+-+-+-+-+
 
 
 
@@ -231,6 +237,15 @@ AP = RAD = WTP
        1=Static
        0=DHCP  
     Reserved: (?)
+
+88.  Cisco Airspace Capability
+
+      0                   1
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |   Radio ID    |   Capapab     |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 
 
 91.  Cisco AC Name with Index
@@ -543,7 +558,14 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
 	01 = Telnet/SSH Username and Password
 	02 = 802.1x Supplicant Credentials
 
+19. Manager IP Addr
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  IPv4 Addr                                                    |                       
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
 
+	
 
 
 21. Radio Module Info (?) (LWAPP 104)

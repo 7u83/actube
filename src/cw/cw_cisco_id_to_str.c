@@ -142,6 +142,11 @@ const char * cw_cisco_id_to_str(int elem_id)
 
 		case CW_CISCO_AP_CORE_DUMP:
 			return "AP Core Dump";
+
+		case CW_CISCO_AIRSPACE_CAPABILITY:
+			return "Airspace Capability";	
+		case CW_CISCO_BCAST_SSID_MODE:
+			return "Broadcast SSID Mode";
 		
 		default:
 			return "Unknown";
