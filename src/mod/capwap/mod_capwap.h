@@ -22,4 +22,8 @@ extern struct mbag_item * capwap_out_get_idle_timeout(struct conn *conn,struct c
 
 extern struct mbag_item * capwap_out_get_capwap_timers(struct conn *conn,struct cw_action_out * a);
 
+extern int capwap_out_ac_ip_list(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
+
 #endif

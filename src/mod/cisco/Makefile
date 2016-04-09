@@ -19,7 +19,10 @@ OBJS=\
 	cisco_items.o \
 	cisco80211_in_mac_operation.o \
 	cisco80211_in_wtp_radio_configuration.o \
-	cisco80211_out_wtp_radio_configuration.o
+	cisco80211_out_wtp_radio_configuration.o \
+	cisco_out_manager_ip_addr.o \
+	cisco_out_ac_ipv4_list.o \
+	cisco_out_capwap_up.o
 
 
 	

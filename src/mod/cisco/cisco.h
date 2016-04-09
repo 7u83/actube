@@ -40,4 +40,8 @@ int cisco80211_in_wtp_radio_configuration(struct conn *conn, struct cw_action_in
 			 int len, struct sockaddr *from);
 int cisco80211_out_wtp_radio_configuration(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
+int cisco_out_manager_ip_addr(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
+int cisco_out_ac_ipv4_list(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
 #endif

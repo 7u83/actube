@@ -584,6 +584,8 @@ static cw_action_out_t actions_out[]={
 
 
 
+
+
 	/* --------------------------------------------------------------------------
 	 * Join Response Message
 	 */
@@ -644,6 +646,15 @@ static cw_action_out_t actions_out[]={
 	,
 
 
+
+	{
+		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.elem_id = CW_ELEM_AC_IPV4_LIST,
+		.out = capwap_out_ac_ip_list
+
+	}
+	,
+
 	/* --------------------------------------------------------------------------
 	 * Configuration Status Response Message - OUT
 	 */
@@ -668,6 +679,13 @@ static cw_action_out_t actions_out[]={
 	}
 	,
 
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.elem_id = CW_ELEM_AC_IPV4_LIST,
+		.out = capwap_out_ac_ip_list
+
+	}
+	,
 
 
 	

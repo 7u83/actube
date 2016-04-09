@@ -437,6 +437,10 @@ static cw_action_in_t actions80211_in[] = {
 
 };
 
+
+
+extern int cisco_out_capwap_up(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
 static cw_action_out_t actions80211_out[]={
 
 	{
@@ -446,6 +450,12 @@ static cw_action_out_t actions80211_out[]={
 		.out = cisco80211_out_wtp_radio_configuration,
 	}
 	,
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.out = cisco_out_capwap_up,
+	}
+	,
+
 
 
 	{0,0}

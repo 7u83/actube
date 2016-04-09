@@ -9,7 +9,7 @@
  * @param d7mode puts the Operational Stae element in CAPWAP draft 7 mode.
  * @return Number of byes put
  */
-int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode)
+int xcw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode)
 {
 	uint8_t *d=dst;
 

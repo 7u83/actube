@@ -134,7 +134,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Element Cisco 802.11 Radio Config - Config Status Resp */
+	/* Element Cisco 802.11 Radio Config - Config Update Resp */
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
@@ -181,6 +181,8 @@ static cw_action_in_t actions_in[] = {
 
 
 	/* LWAPP Vendor spec Messages */
+
+	/* MWAR Hash Value */
 	{
 
 		.proto = CW_ACTION_PROTO_LWAPP,
@@ -291,6 +293,33 @@ static cw_action_out_t actions_out[]={
 	,
 
 
+
+
+	{0,0}
+
+};
+
+static cw_action_in_t actions80211_in[] = {
+
+
+	/* Radio Operational State - Change State Event Req */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id= CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+		.start = cw_in_radio_generic, //operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
+
+};
+
+static cw_action_out_t actions80211_out[]={
+
 	/* ----------------------------------------------------------------
 	 * Configuration Status Request
 	 */
@@ -307,16 +336,6 @@ static cw_action_out_t actions_out[]={
 
 
 
-	{0,0}
-
-};
-
-
-static cw_action_out_t actions80211_out[]={
-
-	/* ----------------------------------------------------------------
-	 * Configuration Status Request
-	 */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.item_id = CW_RADIO_SUPPORTED_RATES ,
@@ -374,7 +393,7 @@ int cisco_register_actions80211_wtp(struct cw_actiondef *def)
 
 	int rc;
 	rc=0;
-//	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
+	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
 	rc += cw_actionlist_out_register_actions(def->out, actions80211_out);
 
 /*	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
