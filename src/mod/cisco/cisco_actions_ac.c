@@ -185,7 +185,7 @@ static cw_action_in_t actions_in[] = {
 
 
 
-
+	
 	{
 		/* This is Cisco's Vendor specific encapsulation
 		 * of LWAPP elements */
@@ -200,6 +200,9 @@ static cw_action_in_t actions_in[] = {
 	,
 
 	/* LWAPP Vendor spec Messages */
+
+
+	/* Telent SSH */
 	{
 
 		.proto = CW_ACTION_PROTO_LWAPP,
@@ -211,6 +214,20 @@ static cw_action_in_t actions_in[] = {
 	}
 
 	,	
+
+	/* AP Mode and Type */
+	{
+
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
+		.start = cw_in_generic2
+	}
+	,
+
+		
 
 	/* End of list */
 	{0, 0}
@@ -277,6 +294,17 @@ static cw_action_out_t actions_out[]={
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
 		.elem_id  = CW_CISCO_AP_TIMESYNC,
 		.out = cisco_out_ap_timesync,
+		.mand = 1
+	}
+	,
+
+	/* --------------------------------------------------------
+	 * Configuration Status Response
+	 */
+	/* Manager IP Address */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.out = cisco_out_manager_ip_addr,
 		.mand = 1
 	}
 	,
@@ -374,7 +402,7 @@ static cw_action_in_t actions80211_in[] = {
 
 	,
 
-	/* MAC Operation - Configruati Status Request */	
+	/* MAC Operation - Configruation Status Request */	
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
