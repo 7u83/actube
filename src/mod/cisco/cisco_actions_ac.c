@@ -36,6 +36,8 @@
 
 #include "cisco_items.h"
 
+#include "include/cipwap_items.h"
+
 
 static cw_action_in_t actions_in[] = {
 
@@ -223,6 +225,18 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
+		.start = cw_in_generic2
+	}
+	,
+
+	/* AP Mode and Type */
+	{
+
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_AP_LOG_FACILITY,
+		.item_id = CIPWAP_ITEM_LOG_FACILITY,
 		.start = cw_in_generic2
 	}
 	,
