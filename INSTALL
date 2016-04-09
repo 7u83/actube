@@ -1,7 +1,8 @@
-pre-requisites
---------------
+pre-requisites to build actube
+==============================
 
-On a fresh FreeBSD 10.2:
+On FreeBSD 10.2
+----------------
 
 pkg install gmake
 pkg install gnutls
@@ -9,37 +10,28 @@ pkg install libconfuse
 pkg install sqlite3
 
 
-On a fresh Ubuntu 14.04:
+Ubuntu 14.04
+------------
 
-apt-get install git
-git clone https://github.com/7u83/actube.git
 apt-get install build-essential clang
+apt-get install nettle-dev
+apt-get install libgnutls28-dev
+apt-get install libssl-dev
+apt-get install libconfuse-dev
+apt-get install libsqlite3-dev
 
 
 
+pre-requisites to build wtp
+===========================
 
-libcapwap:
+Ubuntu 14.04
+------------
 
-nettle (http://www.lysator.liu.se/~nisse/nettle/)
-(apt-get install nettle-dev)
-gnutls (http://www.gnutls.org/)
-(apt-get install libgnutls28-dev)
-openssl (https://www.openssl.org/)
-(apt-get install libssl-dev)
+apt-get install cmake
+apt-get install libnl-genl-3-dev
+cd src/contrib
+sudo ./install_libuci.sh
 
-ac:
-libconfuse (http://www.nongnu.org/confuse/)
-(apt-get install libconfuse-dev)
-libsqlite3 (http://www.sqlite.org/)
-(apt-get install libsqlite3-dev)
 
-wtp:
-libuci (http://wiki.openwrt.org/doc/techref/uci)
 
-to build conten of contrib directory:
-cmake (http://www.cmake.org)
-(apt-get install cmake)
-lua (http://www.lua.org/)
-(apt-get install lua5.2)
-libnl3
-(apt-get install libnl-genl-3-dev)
