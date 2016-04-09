@@ -147,6 +147,8 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Airspace Capability";	
 		case CW_CISCO_BCAST_SSID_MODE:
 			return "Broadcast SSID Mode";
+		case CW_CISCO_AP_LED_FLASH_CONFIG:
+			return "Spam AP LED Flash Config";
 		
 		default:
 			return "Unknown";
