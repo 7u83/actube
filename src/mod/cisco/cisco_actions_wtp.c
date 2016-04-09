@@ -188,7 +188,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.vendor_id = LW_VENDOR_ID_CISCO,
 		.elem_id = LW_CISCO_MWAR_HASH_VALUE,
-		.item_id = CIPWAP_ITEM_AP_HASH_VALUE,
+		.item_id = CIPWAP_ITEM_AC_HASH_VALUE,
 		.start = cw_in_generic2, //cisco_in_telnet_ssh
 	}
 
