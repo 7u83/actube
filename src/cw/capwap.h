@@ -512,6 +512,15 @@ enum cw_reboot_failure_types {
 #define CW_RADIO_OPER_STATE_DISABLED_7	1
 
 
+#define CW_RADIO_OPER_CAUSE_NORMAL		0
+#define CW_RADIO_OPER_CAUSE_RADIO_FAILURE	1 
+#define CW_RADIO_OPER_CAUSE_SW_FAILURE		2
+#define CW_RADIO_OPER_CAUSE_ADMIN_SET		3
+
+
+
+
+
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
 //extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
