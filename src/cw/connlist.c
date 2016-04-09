@@ -29,6 +29,8 @@
 #include <stdio.h>
 
 #include "conn.h"
+#include "connlist.h"
+
 #include "sock.h"
 
 
