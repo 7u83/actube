@@ -95,9 +95,9 @@ void connlist_destroy(struct connlist * cl)
 
 struct conn * connlist_get(struct connlist * cl, const struct sockaddr * addr)
 {
-	struct conn dummy;
-	sock_copyaddr(&dummy.addr,addr);
-	return mavl_get(cl->t,&dummy);
+	struct conn search;
+	sock_copyaddr(&search.addr,addr);
+	return mavl_get(cl->t,&search);
 }
 
 
