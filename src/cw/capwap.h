@@ -361,7 +361,6 @@ CW_MSG_MAXMSG	=				26
 
 
 
-
 /**
  * @defgroup  ACSECURITY Security Flags used in AC Descriptor 
  * @{
@@ -503,8 +502,14 @@ enum cw_reboot_failure_types {
 
 
 
-#define CW_RADIO_ADMIN_STATE_DISABLED	1
-#define CW_RADIO_ADMIN_STATE_ENABLED	2
+#define CW_RADIO_ADMIN_STATE_ENABLED	1
+#define CW_RADIO_ADMIN_STATE_DISABLED	2
+
+#define CW_RADIO_OPER_STATE_ENABLED	1
+#define CW_RADIO_OPER_STATE_DISABLED	2
+
+#define CW_RADIO_OPER_STATE_ENABLED_7	2
+#define CW_RADIO_OPER_STATE_DISABLED_7	1
 
 
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
