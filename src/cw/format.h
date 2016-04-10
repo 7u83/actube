@@ -30,8 +30,19 @@
 
 extern int format_hex_bytes(char *dst, const char *format, const char *delim,
 			   const uint8_t * src, int len);
-extern int format_scan_hex_bytes(uint8_t *dst,const char *s, int len);
 
+static inline char * format_s_hex_bytes(char *dst, const char *format, const char *delim,
+			   const uint8_t * src, int len){
+	format_hex_bytes(dst,format,delim,src,len);
+	return dst;
+}
+
+#define format_bin2hex(src,len) (format_s_hex_bytes((char[(len)*2+1]){0},"%02X","",src,len))
+
+
+
+
+extern int format_scan_hex_bytes(uint8_t *dst,const char *s, int len);
 
 
 /**
