@@ -45,6 +45,10 @@
 #include "ac.h"
 #include "cw/format.h"
 
+
+#include "dataman.h"
+
+
 int ac_run();
 
 
@@ -134,6 +138,7 @@ int main(int argc, char *argv[])
 
 
 
+
 	ac_global_init();
 	if (!socklist_init())
 		goto errX;
@@ -141,7 +146,8 @@ int main(int argc, char *argv[])
 	if (!wtplist_init())
 		goto errX;
 
-
+	if (!dataman_list_init())
+		goto errX;
 
 
 	cw_log(LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
@@ -289,9 +295,6 @@ int ac_run()
 
 			if (FD_ISSET(socklist[i].sockfd, &fset)){
 
-//				memset(&srcaddr, 0, sizeof(struct sockaddr_storage));
-//				sockaddrlen = sizeof(struct sockaddr_storage);
-
 				int len = sock_receive(socklist[i].sockfd,
 						       buffer, sizeof(buffer),
 						       0,
@@ -311,8 +314,48 @@ int ac_run()
 
 void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
+	cw_dbg(DBG_X, "There is a data packet now");
+
+	dataman_list_lock();
+	cw_dbg(DBG_X, "Dataman list locked, now getting");
+	struct dataman * dm = dataman_list_get(socklist[index].data_sockfd,addr);
+	cw_dbg(DBG_X, "Dataman list locked, now gotted");
+
+	cw_dbg(DBG_INFO,"Packet for dataman %s,%d",sock_addr2str_p(addr),socklist[index].data_sockfd);
+	if (!dm) {
+		cw_dbg(DBG_INFO,"No dataman %s,%d",sock_addr2str_p(addr),socklist[index].data_sockfd);
+		dm = dataman_create(socklist[index].data_sockfd,addr);
+		if (!dm){
+			cw_log(LOG_ERR,"Can't create dataman for packet from %s",sock_addr2str_p(addr));
+			return;
+		}
+		dataman_list_add(dm);
+
+		dataman_start(dm);
+
+
+	}
+	dataman_list_unlock();
+
+	dataman_add_packet(dm,buffer,len);
+
+	return;
+
+	exit(0);
+
+
+
+
 	printf("Data packet received len = %d\n",len);
 	exit(0);
+	struct wtpman *wtpman = wtplist_get(addr);
+	if (!wtpman){
+		cw_dbg(DBG_PKT_ERR,"Discarding packet on data channel from %s - No wtpman found.",sock_addr2str(addr));
+		return;
+	}
+
+
+	wtpman_addpacket(wtpman, buffer, len);
 }
 
 

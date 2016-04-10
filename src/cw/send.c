@@ -86,7 +86,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
 
-		if (conn->write_data(conn,ptr,mtu)<0)
+//		if (conn->write_data(conn,ptr,mtu)<0)
 			return -1;
 
 		// XXX Fragmentation stuff..
@@ -108,7 +108,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 	cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,packetlen,(struct sockaddr*)&conn->addr);
 
-	return conn->write_data(conn,ptr,packetlen-0);
+//	return conn->write_data(conn,ptr,packetlen-0);
 
 
 }

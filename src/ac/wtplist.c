@@ -36,7 +36,7 @@
 
 #include "conf.h"
 #include "cw/log.h"
-
+#include "cw/connlist.h"
 
 static struct connlist * connlist;
 
@@ -77,6 +77,15 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 		return 0;
 	return conn->data;
 
+}
+
+struct wtpman * wtplist_get_by_session_id(uint8_t *session_id)
+{
+	struct conn  search;
+	memcpy (search.session_id, session_id,16);
+
+	struct conn * conn = connlist_get_by_session_id(connlist,&search);
+	return conn->data;
 }
 
 

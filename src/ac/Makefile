@@ -56,6 +56,7 @@ AC_MODULES = mod_cipwap.o
 # list of generated object files for AC. 
 AC_OBJS = \
 	wtplist.o wtpman.o conf.o ac_main.o \
+	dataman.o \
 	ac_interface.o \
 	socklist.o \
 	db.o \

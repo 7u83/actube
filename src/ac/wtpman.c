@@ -33,6 +33,7 @@
 #include "cw/dtls.h"
 #include "cw/dbg.h"
 #include "cw/conn.h"
+#include "cw/format.h"
 
 #include "ac.h"
 #include "conf.h"
@@ -438,7 +439,7 @@ void wtpman_run_data(void *wtpman_arg)
 	cw_log(LOG_ERR, "I am the data thread**********************************************************************\n");
 	while (1) {
 		sleep(5);
-		conn->write_data(conn, data, 100);
+//		conn->write_data(conn, data, 100);
 		cw_log(LOG_ERR, "O was the data thread***********************************************************\n");
 	}
 
@@ -481,7 +482,15 @@ static void wtpman_run(void *arg)
 		return;
 	}
 
+
 	conn->msg_start = msg_start_handler;
+
+
+	cw_dbg(DBG_INFO, "WTP from %s has joined with session id: %s",
+			sock_addr2str_p(&conn->addr),
+			format_bin2hex(conn->session_id,16));
+
+
 
 
 	cw_dbg(DBG_INFO, "Creating data thread");
