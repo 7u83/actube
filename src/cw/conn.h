@@ -45,6 +45,11 @@ struct cw_action_in;
 
 #define CONN_MAX_MSG_LENGTH 65536
 
+
+#include "netconn.h"
+#include "connlist.h"
+
+
 /**
  * Connection Object
  */ 
@@ -52,9 +57,13 @@ struct conn {
 	int sock;
 	struct sockaddr_storage addr;
 
+	struct connlist * connlist;
+
 
 	int data_sock;
 	struct sockaddr_storage data_addr;
+
+	struct netconn * data_nc;
 
 
 	int recv_timeout;
@@ -68,6 +77,9 @@ struct conn {
 	mbag_t radios_upd;
 	mbag_t config;
 	mbag_t config_upd;
+
+
+	uint8_t session_id[16];
 
 
 	/** base_mac */
@@ -124,14 +136,16 @@ struct conn {
 	int (*recv_packet) (struct conn *, uint8_t *, int);
 	int (*recv_packet_peek) (struct conn *, uint8_t *, int);
 	int (*send_packet) (struct conn *, const uint8_t *, int);
-	int (*send_data_packet) (struct conn *, const uint8_t *, int);
+
+//	int (*recv_data_packet) (struct conn *, uint8_t *,int);
+//	int (*send_data_packet) (struct conn *, const uint8_t *, int);
 	
 
 	int (*readfrom) (struct conn *, uint8_t *, int, struct sockaddr_storage *);
 	int (*read) (struct conn *, uint8_t *, int);
 	int (*write) (struct conn *, const uint8_t *, int);
 
-	int (*write_data) (struct conn *, const uint8_t *, int);
+//	int (*write_data) (struct conn *, const uint8_t *, int);
 
 	/* optional packet queue */
 	uint8_t **q;
