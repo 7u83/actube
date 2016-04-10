@@ -31,6 +31,8 @@
 #include "cw/lwapp_cisco.h"
 #include "cw/cw_80211.h"
 
+#include "include/capwap_actions.h"
+
 #include "mod_cisco.h"
 #include "cisco.h"
 
@@ -104,7 +106,7 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_SESSION_ID,
-	 	.start = cw_in_generic2, 
+	 	.start = capwap_in_session_id, 
 		.item_id = CW_ITEM_SESSION_ID, 
 		.mand = 1, 
 		.min_len = 4, 
