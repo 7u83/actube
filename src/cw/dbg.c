@@ -423,6 +423,28 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct so
 		cw_dbg(level,"%s",buf);
 }
 
+void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struct sockaddr *from)
+{
+	if (!cw_dbg_is_level(level))
+		return;
+
+	char buf[1024];
+	cw_format_pkt_hdr(buf,level,NULL,packet,len,from);
+
+	int hlen = cw_get_hdr_msg_offset(packet);
+
+	if (cw_dbg_is_level(DBG_PKT_DMP)){
+		char  *dmp = cw_dbg_mkdmp_c(packet,len,hlen);
+		cw_dbg(level,"%s%s",buf,dmp);
+		free(dmp);
+	}
+	else
+		cw_dbg(level,"%s",buf);
+}
+
+
+
+
 
 
 void cw_dbg_dmp_(int level, const char *file, int line,
