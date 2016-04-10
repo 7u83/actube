@@ -84,7 +84,8 @@ MAVLOBJS= \
 	mavl_create_conststr.o \
 	mlist.o \
 	cw_load_file.o \
-	cw_save_file.o
+	cw_save_file.o \
+
 
 
 FORMATOBJS = \
@@ -233,7 +234,10 @@ CONNOBJS= conn_create.o \
 	conn_create_noq.o \
 	conn_init.o \
 	conn_send_packet.o \
-	conn_send_data_packet.o
+	conn_send_data_packet.o \
+	netconn.o \
+	cw_init_data_keep_alive_msg.o
+
 
 #	conn_send_msg.o
 #conn_get_message.o  \
