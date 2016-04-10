@@ -49,7 +49,7 @@
  */
 
 /** CAPWAP Version */
-#define CAPWAP_VERSION ((uint8_t)0)
+#define CAPWAP_VERSION (0)
 
 #define CWIANA_ENTERPRISE_NUMBER 0
 
@@ -329,6 +329,10 @@ CW_MSG_MAXMSG	=				26
 
 //#define CWMSG_MAX_SIZE 65536
 #define CWMSG_MAX_SIZE 2048
+
+
+#define CW_SESSION_ID_LEN	16
+
 
 /* capwap timer default values */
 #define CAPWAP_DISCOVERY_INTERVAL	5
