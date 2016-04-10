@@ -133,6 +133,13 @@ static inline uint8_t *cw_get_hdr_ws_data(uint8_t * th)
 
 
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
+
+static inline uint8_t * cw_get_hdr_payload_ptr(uint8_t *th)
+{
+	return th+cw_get_hdr_msg_offset(th);
+}
+
+
 #define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
 
 #define cw_set_hdr_preamble(th,v) ((*th)=v)
@@ -204,6 +211,15 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 #define cw_get_msg_elems_len(msgptr) ( cw_get_word( (msgptr) +5 )-3)
 #define cw_get_msg_elems_ptr(msgptr) ((msgptr)+8)
 
+#define cw_get_datamsg_elems_len(msgptr) (cw_get_word(msgptr));
+#define cw_get_datamsg_elems_ptr(msgptr) ((msgptr)+2);
+
+/**
+ * Set the elems_len field of a data (keep-alive) msg
+ * @param msgptr Pointer to payload
+ * @param lem Value to set
+ */
+#define cw_set_datamsg_elems_len(msgptr,len) (cw_put_word(msgptr,len));
 
 #define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
 #define cw_set_msg_type(msgptr,t) cw_set_msg_id(msgptr,t)
@@ -540,8 +556,12 @@ static inline int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, in
 	return 3+cw_put_elem_hdr(dst,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
 }
 
+uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 
-
+static inline int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len){
+	memcpy(dst+4,session_id,len);
+	return len+cw_put_elem_hdr(dst,CW_ELEM_SESSION_ID,len);
+}
 
 /**
  * @}
