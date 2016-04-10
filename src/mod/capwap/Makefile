@@ -10,7 +10,8 @@ OBJS=\
 	capwap_out_get_idle_timeout.o \
 	capwap_out_wtp_descriptor.o \
 	capwap_in_wtp_descriptor.o \
-	capwap_out_ac_ip_list.o
+	capwap_out_ac_ip_list.o \
+	capwap_in_session_id.o
 
 
 NAME=libcapwap.a
