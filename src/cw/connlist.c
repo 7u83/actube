@@ -34,12 +34,22 @@
 #include "sock.h"
 
 
-static int connlist_cmp(const void * d1,const void *d2)
+
+
+
+static int cmp_by_addr(const void * d1,const void *d2)
 {
 	struct conn * c1=(struct conn *) d1;
 	struct conn * c2=(struct conn *) d2;
 
 	return sock_cmpaddr((struct sockaddr*)&c1->addr,(struct sockaddr*)&c2->addr,1);
+}
+
+static int cmp_by_session_id(const void *d1, const void *d2)
+{
+	struct conn * c1=(struct conn *) d1;
+	struct conn * c2=(struct conn *) d2;
+	return memcmp(c1->session_id,c2->session_id,16);	
 }
 
 
@@ -51,15 +61,18 @@ struct connlist * connlist_create(int len)
 		return 0;
 
 
-	cl->t = mavl_create(connlist_cmp,0);
+	cl->by_addr = mavl_create(cmp_by_addr,0);
 
-	if (!cl->t){
+	if (!cl->by_addr){
 		free(cl);
 		return 0;
 	}
 
+	cl->by_session_id = mavl_create(cmp_by_session_id,0);
+
+
 	if (pthread_mutex_init(&cl->connlist_mutex,NULL)){
-		mavl_destroy(cl->t);
+		mavl_destroy(cl->by_addr);
 		free(cl);
 		return 0;
 	};
@@ -85,8 +98,8 @@ void connlist_destroy(struct connlist * cl)
 	if (!cl)
 		return;
 
-	if (cl->t)
-		mavl_destroy(cl->t);
+	if (cl->by_addr)
+		mavl_destroy(cl->by_addr);
 	pthread_mutex_destroy(&cl->connlist_mutex);
 	free(cl);
 	
@@ -97,23 +110,33 @@ struct conn * connlist_get(struct connlist * cl, const struct sockaddr * addr)
 {
 	struct conn search;
 	sock_copyaddr(&search.addr,addr);
-	return mavl_get(cl->t,&search);
+	return mavl_get(cl->by_addr,&search);
 }
 
 
 struct conn * connlist_add(struct connlist * cl, struct conn * conn)
 {
 	if ( cl->len!=0)
-		if (cl->t->count>=cl->len)
-			return 0;
-
-	return mavl_add(cl->t,conn);
+		if (cl->by_addr->count>=cl->len)
+			return NULL;
+	conn->connlist=cl;
+	return mavl_add(cl->by_addr,conn);
 }
 
+struct conn * connlist_get_by_session_id(struct connlist *cl, struct conn * conn)
+{
+	return mavl_get(cl->by_session_id,conn);
+}
+
+struct conn * connlist_add_by_session_id(struct connlist * cl, struct conn * conn)
+{
+	return mavl_add(cl->by_session_id,conn);
+}
 
 void connlist_remove(struct connlist *cl,struct conn * conn)
 {
-	mavl_del(cl->t,conn);
+	mavl_del(cl->by_session_id,conn);
+	mavl_del(cl->by_addr,conn);
 }
 	
 
