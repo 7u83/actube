@@ -1,7 +1,7 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -13,13 +13,20 @@
 
     You should have received a copy of the GNU General Public License
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#include <stdlib.h>
+/**
+ * @file
+ * @brief Implements conn_destroy
+ */
 
+#include <stdlib.h>
 #include "conn.h"
 
+/**
+ * Destroy a conn object
+ * @param object to destroy
+ */
 void conn_destroy(struct conn * conn)
 {
 	if (conn->fragman)
