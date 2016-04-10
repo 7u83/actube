@@ -556,11 +556,9 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
-int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
-	/* show this packet in debug output */
-	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len, from);
 
 
 	if (len < 8) {
@@ -647,6 +645,36 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
 	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);
 	return conn->process_message(conn, packet, len, from);
 }
+
+int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+			struct sockaddr *from){
+
+	/* show this packet in debug output */
+	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len, from);
+
+	return conn_process_packet2(conn,packet,len,from);
+}
+
+
+int conn_process_data_packet(struct conn *conn, uint8_t * packet, int len,
+			struct sockaddr *from){
+
+	/* show this packet in debug output */
+	cw_dbg_pkt(DBG_PKT_IN, conn, packet, len, from);
+
+	return conn_process_packet2(conn,packet,len,from);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
