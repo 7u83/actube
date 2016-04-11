@@ -382,7 +382,8 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-		.start = cw_in_radio_administrative_state,
+		.start = cw_in_radio_generic,
+	//	.start = cw_in_radio_administrative_state,
 		.mand = 0
 	}
 	,
@@ -596,9 +597,11 @@ static cw_action_out_t actions_out[] = {
 	/* Radio Admin State - Config Status Request */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-		.out = cw_out_radio_administrative_states,
-	       	.get = cw_out_get_config,
+		.out = cw_out_radio_generic,
+//		.out = cw_out_radio_administrative_states,
+//	       	.get = cw_out_get_config,
 		.mand = 1
 	}
 	,
