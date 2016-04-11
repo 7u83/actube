@@ -22,9 +22,16 @@
 
 #include "cw.h"
 #include "log.h"
+#include "dbg.h"
 
 int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 {
+	if (item->type->put){
+		cw_dbg(DBG_X,"User put method to put ");
+		return item->type->put(item,dst);
+	}
+
+
 	if (MBAG_STR == item->type ){
 		return cw_put_data(dst, item->data, strlen((char *) item->data));
 	}
