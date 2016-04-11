@@ -2,6 +2,8 @@
 #define __CISCO_ITEMS_H
 
 extern const char CISCO_ITEM_AP_MODE_AND_TYPE[];
+extern const char CISCO_ITEM_AP_LED_STATE_CONFIG[];
+extern const char CISCO_ITEM_AP_LED_FLASH_CONFIG[];
 
 extern struct cw_itemdef cisco_itemdefs[];
 
