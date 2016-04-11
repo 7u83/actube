@@ -469,6 +469,15 @@ extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a
  * @defgroup CWELEMIN Input Handlers for Message Elements
  * @{
  */
+
+extern int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
+extern int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			 int len,struct sockaddr *from);
+
+
+
+
 extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a,
 				       uint8_t * data, int len, struct sockaddr *from);
 
