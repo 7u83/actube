@@ -1,12 +1,12 @@
 
-#include "action.h"
-#include "dbg.h"
-#include "log.h"
-#include "mbag.h"
-#include "cw.h"
-#include "capwap_items.h"
+#include "cw/action.h"
+#include "cw/dbg.h"
+#include "cw/log.h"
+#include "cw/mbag.h"
+#include "cw/cw.h"
+#include "cw/capwap_items.h"
 
-
+#include "cisco_items.h"
 
 int cw_cisco_get_wlan_legacy(mbag_t wlan, uint8_t *data, int len)
 {
@@ -108,7 +108,7 @@ int cw_cisco_get_wlan_(mbag_t wlan, uint8_t *data, int len)
 
 
 
-int cw_in_cisco_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
+int cisco_in_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
 
@@ -123,7 +123,7 @@ int cw_in_cisco_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * da
 	mbag_set_byte(wlan,"radio_id",rid);
 
 
-	int mytype=mbag_get_byte(conn->config,CW_ITEM_AP_MODE_AND_TYPE,77) & 0xff;
+	int mytype=mbag_get_byte(conn->config,CISCO_ITEM_AP_MODE_AND_TYPE,77) & 0xff;
 
 	printf("My type: %d\n",mytype);
 	exit(0);

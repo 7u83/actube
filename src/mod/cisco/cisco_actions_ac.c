@@ -188,6 +188,30 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
+	/* LED State Config */	
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG, 
+		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
+		.start = cw_in_generic2
+
+	}
+	,
+
+	/* LED Flash Config */	
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG, 
+		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
+		.start = cw_in_generic2
+
+	}
+	,
+
 
 	
 	{
@@ -368,6 +392,42 @@ static cw_action_out_t actions_out[]={
 	 	.out = cisco_out_radio_administrative_states, 
 		.get = cw_out_get_outgoing,
 		.mand = 0
+	}
+	,
+
+	/* LED State Config -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG,
+		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
+		.mand = 0
+	}
+	,
+
+
+	/* LED Flash Config -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG,
+		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
+		.mand = 0
+	}
+	,
+
+	/* AP Mode and Type -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_outgoing,
 	}
 	,
 

@@ -27,6 +27,7 @@
 #include "cw/capwap80211.h"
 #include "cw/capwap80211_items.h"
 #include "cw/lwapp_cisco.h"
+#include "cisco_items.h"
 
 #include "include/cipwap_items.h"
 
@@ -123,7 +124,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/*  Radio Admin State - Config Status Request */
+	/*  Radio Admin State - Config Update Request */
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
@@ -133,6 +134,34 @@ static cw_action_in_t actions_in[] = {
 		.mand = 1
 	}
 	,
+
+	/* AP Mode and Type */
+	{
+
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
+		.start = cw_in_generic2
+	}
+	,
+
+	/* Add WLAN */
+	{
+
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_ADD_WLAN,
+//		.item_id = CISCO_ITEM_ADD_WLAN,
+		.start = cisco_in_add_wlan
+	}
+	,
+
+
+		
+		
 
 	/* Element Cisco 802.11 Radio Config - Config Update Resp */
 	{
@@ -293,6 +322,20 @@ static cw_action_out_t actions_out[]={
 	,
 
 
+	/* AP Mode and Type -  Configuration Status Request OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
+	 	.out = cw_out_generic, 
+		.get = cw_out_get_config,
+		.mand = 1
+	}
+	,
+
+	
+
 
 
 	{0,0}
@@ -395,6 +438,8 @@ int cisco_register_actions80211_wtp(struct cw_actiondef *def)
 	rc=0;
 	rc = cw_actionlist_in_register_actions(def->in, actions80211_in);
 	rc += cw_actionlist_out_register_actions(def->out, actions80211_out);
+	rc += cw_itemdefheap_register(def->items, cisco_itemdefs);
+	rc += cw_itemdefheap_register(def->radioitems, cisco_radioitemdefs);
 
 /*	rc += cw_strheap_register_strings(def->strmsg, capwap_strings_msg);
 	rc += cw_strheap_register_strings(def->strelem, cipwap_strings_elem);
