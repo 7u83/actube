@@ -754,8 +754,9 @@ static cw_action_out_t actions_out[]={
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-	 	.out = cw_out_radio_administrative_states, 
-		.get = cw_out_get_outgoing,
+//	 	.out = cw_out_radio_administrative_states, 
+//		.get = cw_out_get_outgoing,
+		.out = cw_out_radio_generic,		
 		.mand = 0
 	}
 	,
