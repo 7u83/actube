@@ -343,7 +343,8 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-		.start = cw_in_radio_administrative_state,
+//		.start = cw_in_radio_administrative_state,
+		.start = cw_in_radio_generic,
 		.mand = 1
 
 	}
