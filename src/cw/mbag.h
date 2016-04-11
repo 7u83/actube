@@ -149,6 +149,7 @@ extern const struct mbag_typedef mbag_type_data;
 #define MBAG_BSTR16 (&mbag_type_bstr16)
 
 #define MBAG_DATA (&mbag_type_data)
+#define MBAG_BIN MBAG_DATA
 
 /** MBAG_BSTRV holds a #bstr_t value */
 #define MBAG_VENDORSTR (&mbag_type_bstrv)
