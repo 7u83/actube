@@ -69,10 +69,11 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	//
 		}
 		if (a->mand) {
 			cw_log(LOG_ERR,
-			       "Can't put mandatory element %s%d - (%s) into %s. No value found.",
+			       "Can't put mandatory element %s %d - (%s) into %s. No value for '%s' found.",
 				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id)
+			       , a->item_id
 			    );
 		}
 		else{
