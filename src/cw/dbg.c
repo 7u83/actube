@@ -129,7 +129,7 @@ static struct cw_strlist_elem prefix[] = {
 	{ DBG_MSG_ERR," Msg Error -" },
 	{ DBG_PKT_ERR," Pkt Error -" },
 	{ DBG_ELEM_ERR," Elem Error -" },
-	{ DBG_RFC,    " RFC Violation -" },
+	{ DBG_RFC,    " RFC -" },
 	{ DBG_SUBELEM," Sub-Element - "},
 	{ DBG_DTLS, " DTLS - "},
 	{ DBG_DTLS_DETAIL, " DTLS - "},
