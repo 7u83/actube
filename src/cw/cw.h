@@ -572,6 +572,9 @@ static inline int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int 
 	return len+cw_put_elem_hdr(dst,CW_ELEM_SESSION_ID,len);
 }
 
+int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+
 /**
  * @}
  */

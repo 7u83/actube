@@ -182,6 +182,7 @@ CAPWAPOBJS= \
 	cw_check_missing_mand.o \
 	md5sum.o \
 	format.o \
+#	action_sources.o \
 #	cw_in_cisco_add_wlan.o 
 
 DOT11OBJS = \
@@ -280,6 +281,7 @@ CWACTION=action.o \
 	cisco.o \
 	radio.o \
 	cw_in_radio_generic.o\
+	cw_out_radio_generic.o \
 	cw_out_radio_info.o \
 	capwap_items.o \
 	item.o \
