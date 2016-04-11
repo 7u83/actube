@@ -108,7 +108,7 @@ const char * cw_cisco_id_to_str(int elem_id)
 		case CW_CISCO_SPAM_DOMAIN_SECRET:
 			return "SPAM Domain Secret";
 
-		case CW_CISCO_SPAM_AP_LED_STATE:
+		case CW_CISCO_AP_LED_STATE_CONFIG:
 			return "SPAM AP LED State";
 		case CW_CISCO_AP_RETRANSMIT_PARAM:
 			return "AP Retransmit Param";
