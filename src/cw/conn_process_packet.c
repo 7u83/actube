@@ -381,9 +381,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-		cw_dbg_elem(DBG_ELEM, conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
-			    elem_len);
-
 
 		af = cw_actionlist_in_get(conn->actions->in, &as);
 
@@ -399,6 +396,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (!check_len(conn, af, cw_get_elem_data(elem), elem_len, from)) {
 			continue;
 		}
+		cw_dbg_elem(DBG_ELEM, conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
+			    elem_len);
+
+
 
 		int afrc = 1;
 		if (af->start) {
@@ -413,6 +414,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			stravltree_add(conn->mand, af->item_id);
 		}
 
+		if(conn->elem_end){
+			afrc = conn->elem_end(conn,af,afrc,cw_get_elem_data(elem), elem_len,from);
+		}
+
 	}
 
 	/* all message elements are processed, do now after processing
@@ -421,7 +426,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	int result_code = 0;
 
 
-	int rct = cw_in_check_generic_req(conn, afm, rawmsg, len, from);
+
+	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from);
+
 	if (rct && conn->strict_capwap)
 	{
 		result_code = rct;
