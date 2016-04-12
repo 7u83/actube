@@ -20,7 +20,7 @@ extern int cisco_out_board_data_options(struct conn *conn, struct cw_action_out 
 extern int cisco_in_ac_descriptor(struct conn *conn, struct cw_action_in *a,
 				  uint8_t * data, int len, struct sockaddr *from);
 
-extern int cisco_in_radio_administrative_state_wtp(struct conn *conn,
+extern int cisco_in_radio_administrative_state(struct conn *conn,
 						   struct cw_action_in *a, uint8_t * data,
 						   int len, struct sockaddr *from);
 int cisco_in_spam_vendor_specific(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
@@ -46,5 +46,6 @@ int cisco_out_ac_ipv4_list(struct conn *conn, struct cw_action_out *a, uint8_t *
 int cisco_in_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
+int cisco_out_wtp_administrative_state(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 #endif

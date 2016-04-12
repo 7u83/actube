@@ -554,7 +554,7 @@ extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *ne
  * @{
  */
 extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause);
-extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
+//extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
 //extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
 
 
@@ -564,6 +564,13 @@ static inline int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, in
 	cw_put_byte(dst+6,cause);
 	return 3+cw_put_elem_hdr(dst,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
 }
+
+static inline int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state) {
+	cw_put_byte(dst+4,rid);
+	cw_put_byte(dst+5,state);
+	return 2+cw_put_elem_hdr(dst,CW_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
+}
+
 
 uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 

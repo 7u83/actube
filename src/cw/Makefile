@@ -173,7 +173,6 @@ CAPWAPOBJS= \
 	cw_in_capwap_local_ipv6_address.o \
 	cw_in_radio_administrative_state.o \
 	cw_in_radio_administrative_state_wtp.o \
-	cw_in_radio_operational_state.o\
 	cw_radio_set_admin_state.o \
 	cw_put_elem_radio_administrative_state.o\
 	cw_put_elem_radio_operational_state.o \
@@ -184,6 +183,7 @@ CAPWAPOBJS= \
 	format.o \
 #	action_sources.o \
 #	cw_in_cisco_add_wlan.o 
+#	cw_in_radio_operational_state.o\
 
 DOT11OBJS = \
 	dot11.o \

@@ -493,6 +493,20 @@ static cw_action_in_t actions80211_in[] = {
 
 	,
 
+
+	/*  Radio Admin State (IN) - Config Status Request */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
+		.start = cisco_in_radio_administrative_state,
+		.mand = 1
+	}
+	,
+
+		
+
 	{0,0}
 
 

@@ -23,7 +23,8 @@ OBJS=\
 	cisco_out_manager_ip_addr.o \
 	cisco_out_ac_ipv4_list.o \
 	cisco_out_capwap_up.o \
-	cisco_in_add_wlan.o
+	cisco_in_add_wlan.o \
+	cisco_out_wtp_administrative_state.o
 
 
 	

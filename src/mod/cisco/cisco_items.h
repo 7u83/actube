@@ -4,6 +4,8 @@
 extern const char CISCO_ITEM_AP_MODE_AND_TYPE[];
 extern const char CISCO_ITEM_AP_LED_STATE_CONFIG[];
 extern const char CISCO_ITEM_AP_LED_FLASH_CONFIG[];
+extern const char CISCO_ITEM_WTP_OPER_STATE[];
+extern const char CISCO_ITEM_WTP_ADMIN_STATE[];
 
 extern struct cw_itemdef cisco_itemdefs[];
 
