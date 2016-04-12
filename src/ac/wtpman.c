@@ -68,6 +68,8 @@ static int msg_start_handler(struct conn *conn, struct cw_action_in *a, uint8_t 
 }
 
 
+
+
 static void wtpman_remove(struct wtpman *wtpman)
 {
 	wtplist_lock();
@@ -382,7 +384,7 @@ void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
 			char str[4096];
 			if (i->type->to_str) {
 				i->type->to_str(i, str);
-				printf("I would put RID: %d, %s=>%s\n",rid,cwi->id,str);
+//				printf("I would put RID: %d, %s=>%s\n",rid,cwi->id,str);
 
 				char srid[6];
 				sprintf(srid,"%d",rid);
@@ -424,6 +426,10 @@ void radios_to_sql(struct conn *conn)
 	}
 }
 
+
+
+
+
 void wtpman_run_data(void *wtpman_arg)
 {
 
@@ -447,6 +453,15 @@ void wtpman_run_data(void *wtpman_arg)
 }
 
 
+static int msg_end_handler(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+			     int len, struct sockaddr *from)
+{
+	if (a->msg_id ==CW_MSG_CHANGE_STATE_EVENT_REQUEST) {
+		props_to_sql(conn,conn->incomming,0);
+		radios_to_sql(conn);
+	}
+}
+
 
 static void wtpman_run(void *arg)
 {
@@ -456,6 +471,8 @@ static void wtpman_run(void *arg)
 
 	wtpman->conn->seqnum = 0;
 	struct conn *conn = wtpman->conn;
+
+
 
 
 	/* reject connections to our multi- or broadcast sockets */
@@ -493,9 +510,9 @@ static void wtpman_run(void *arg)
 
 
 
-	cw_dbg(DBG_INFO, "Creating data thread");
-	pthread_t thread;
-	pthread_create(&thread, NULL, (void *) wtpman_run_data, (void *) wtpman);
+//	cw_dbg(DBG_INFO, "Creating data thread");
+//	pthread_t thread;
+//	pthread_create(&thread, NULL, (void *) wtpman_run_data, (void *) wtpman);
 
 
 	/* here the WTP has joined, now we assume an image data request  
@@ -535,6 +552,7 @@ static void wtpman_run(void *arg)
 	radios_to_sql(conn);
 
 
+	conn->msg_end=msg_end_handler;
 	/* The main run loop */
 	reset_echointerval_timer(wtpman);
 
@@ -556,6 +574,12 @@ static void wtpman_run(void *arg)
 		}
 
 		mavl_del_all(conn->outgoing);
+		conn_clear_upd(conn,1);
+
+//	props_to_sql(conn,conn->incomming,0);
+//	radios_to_sql(conn);
+
+
 
 		mavl_conststr_t r;
 		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr));
@@ -583,8 +607,12 @@ static void wtpman_run(void *arg)
 
 			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr));
 			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-			mavl_destroy(conn->radios_upd);
-			conn->radios_upd=mbag_i_create();
+
+
+			conn_clear_upd(conn,1);
+
+//			mavl_destroy(conn->radios_upd);
+//			conn->radios_upd=mbag_i_create();
 
 
 			radios_to_sql(conn);
