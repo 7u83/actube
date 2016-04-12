@@ -72,11 +72,9 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	for (e=m->list; e; e=e->next) {
 		cw_action_out_t *ae=(cw_action_out_t*)e->data;
 
-		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
 		//printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);
-		DBGX("Elem ID %s",ae->item_id);
 		if ( ae->item_id ) {
-			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
+		//	DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
 		}
 
 		if (ae->msg_id != as.msg_id) {
@@ -168,15 +166,15 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 	int len = 0;
 	while(NULL != (ae=avliter_next(&i))) {
 
-		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
-		DBGX("Elem ID %s",ae->item_id);
+//		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
+//		DBGX("Elem ID %s",ae->item_id);
 
 
 
 
 		
 		if ( ae->item_id ) {
-			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
+//			DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
 		}
 
 		if (ae->msg_id != as.msg_id) {
