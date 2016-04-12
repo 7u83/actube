@@ -237,7 +237,8 @@ CONNOBJS= conn_create.o \
 	conn_send_packet.o \
 	conn_send_data_packet.o \
 	netconn.o \
-	cw_init_data_keep_alive_msg.o
+	cw_init_data_keep_alive_msg.o \
+	conn_clear_upd.o
 
 
 #	conn_send_msg.o
