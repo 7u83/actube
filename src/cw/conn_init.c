@@ -46,6 +46,10 @@ void conn_init(struct conn * conn)
 
 	conn->process_packet=conn_process_packet;
 	conn->process_message=process_message;
+
+
+	conn->config = mbag_create();
+	conn->config_upd=mbag_create();
 }
 
 
