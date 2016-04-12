@@ -130,8 +130,9 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-		.start = cisco_in_radio_administrative_state_wtp,
-		.mand = 1
+//		.start = cisco_in_radio_administrative_state_wtp,
+		.start = cw_in_radio_generic,	
+		.mand = 0
 	}
 	,
 
@@ -193,6 +194,17 @@ static cw_action_in_t actions_in[] = {
 	,
 
 		
+	/*  Radio Admin State - Config Status Response */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.item_id = CW_RADIOITEM_ADMIN_STATE,
+		.start = cw_in_radio_generic,
+		.mand = 1
+	}
+	,
+
 
 
 	{
