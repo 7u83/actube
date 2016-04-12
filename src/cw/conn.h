@@ -216,6 +216,7 @@ struct conn {
 	int (*msg_start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*msg_end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 
+	int (*elem_end)(struct conn *conn,struct cw_action_in *a,int afrc,uint8_t*elem,int len,struct sockaddr *from);
 
 //	void (*actions_registered)(struct conn *conn);
 
@@ -289,5 +290,6 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg);
 int cw_read_from(struct conn * conn);
 
 
+void conn_clear_upd(struct conn *conn, int merge);
 
 #endif	/* __CONN_H */
