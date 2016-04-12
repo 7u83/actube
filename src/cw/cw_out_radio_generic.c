@@ -19,6 +19,8 @@ int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * d
 		   vendor specific payload */
 		int start = a->vendor_id ? 10 : 4;
 
+		uint8_t * d = dst+l;
+
 
 
 		struct mbag_item * item = mbag_get(radio->data,a->item_id);
@@ -26,13 +28,13 @@ int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * d
 			continue;
 		}
 		int len=0;
-		len += cw_put_byte(dst+start,radio->iid);
-		len += cw_put_mbag_item(dst + start+1, item);
+		len += cw_put_byte(d+start,radio->iid);
+		len += cw_put_mbag_item(d + start+1, item);
 
 		if (a->vendor_id)
-			l+= len + cw_put_elem_vendor_hdr(dst, a->vendor_id, a->elem_id, len);
+			l+= len + cw_put_elem_vendor_hdr(d, a->vendor_id, a->elem_id, len);
 		else
-			l += len + cw_put_elem_hdr(dst, a->elem_id, len);
+			l += len + cw_put_elem_hdr(d, a->elem_id, len);
 
 
 
