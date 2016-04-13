@@ -19,6 +19,7 @@ LIBS+=-lcapwap80211
 LIBS+=-lcipwap
 LIBS+=-lcisco
 LIBS+=-lfortinet
+LIBS+=-lzyxel
 LIBS+=-lcw
 LIBS+=-lrt
 LIBS+=-lpthread
