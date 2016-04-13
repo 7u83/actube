@@ -177,6 +177,8 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+		
+
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
@@ -255,7 +257,7 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* AP Mode and Type */
+	/* Log Facility */
 	{
 
 		.capwap_state = CW_STATE_CONFIGURE, 
@@ -268,6 +270,35 @@ static cw_action_in_t actions_in[] = {
 	,
 
 		
+
+
+	/* Radio Operational State - Run State - Change State Event Req */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+		.start = cisco_in_radio_operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
+	/* Radio Operational State - Configure State - Change State Event Req */
+	{
+		.capwap_state = CW_STATE_CONFIGURE, 
+		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+		.start = cisco_in_radio_operational_state, //operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
+
 
 	/* End of list */
 	{0, 0}
@@ -389,7 +420,7 @@ static cw_action_out_t actions_out[]={
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
-	 	.out = cw_out_radio_generic,
+	 	.out = cisco_out_radio_operational_state,
 		.mand = 0
 	}
 	,
@@ -431,6 +462,17 @@ static cw_action_out_t actions_out[]={
 	,
 
 	
+	/* Cisco WTP Admin state -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+//		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_WTP_ADMIN_STATE,
+	 	.out = cisco_out_wtp_administrative_state, 
+//		.get = cw_out_get_outgoming,
+	}
+	,
+
 
 
 	{0,0}

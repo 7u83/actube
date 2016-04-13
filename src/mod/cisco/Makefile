@@ -24,7 +24,9 @@ OBJS=\
 	cisco_out_ac_ipv4_list.o \
 	cisco_out_capwap_up.o \
 	cisco_in_add_wlan.o \
-	cisco_out_wtp_administrative_state.o
+	cisco_out_wtp_administrative_state.o \
+	cisco_out_radio_operational_state.o \
+	cisco_in_radio_operational_state.o
 
 
 	
