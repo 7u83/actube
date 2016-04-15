@@ -5,6 +5,8 @@ extern const char CIPWAP_ITEM_SSH_ENABLE[];
 extern const char CIPWAP_ITEM_TELNET_ENABLE[];
 extern const char CIPWAP_ITEM_AC_HASH_VALUE[];
 extern const char CIPWAP_ITEM_LOG_FACILITY[];
+extern const char CIPWAP_ITEM_WTP_GROUP_NAME[];
+
 
 
 extern const char CIPWAP_RADIOITEM80211_OCCUPANCY_LIMIT[];
