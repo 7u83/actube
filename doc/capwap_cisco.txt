@@ -465,6 +465,17 @@ AP = RAD = WTP
    | Log Facility  | 
    +-+-+-+-+-+-+-+-+
 
+235. Cisco Radio Operational State Cause Detail
+  
+   Detailed cause for last radio operational state change.
+   This message element schould follow imediately a Radio Operational
+   State message element.
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | Detailed Cause                                                |    
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 240. Cisco AP Retransmit Param 
