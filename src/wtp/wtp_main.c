@@ -141,7 +141,7 @@ int main()
 
 	conn->detected = 1;
 	conn->dtls_verify_peer=0;
-	conn->dtls_mtu = 2000;
+	conn->dtls_mtu = 12000;
 
 
 	conn->actions = &capwap_actions;
@@ -194,8 +194,8 @@ printf("Setting to 8 %p %p\n",mri,r);
 
 
 
-	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, 0);
-	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, 0);
+	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, CW_WTP_MAC_TYPE_SPLIT);
+	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, CW_WTP_FRAME_TUNNEL_MODE_E);
 	conn->wbid=1;
 
 
@@ -212,6 +212,7 @@ printf("Setting to 8 %p %p\n",mri,r);
 	if (!configure())
 		return -1;
 
+	cw_dbg(DBG_X,"Saveing config 0");
 
 	cfg_to_json();
 

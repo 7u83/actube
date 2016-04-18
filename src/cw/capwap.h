@@ -302,10 +302,10 @@ CW_MSG_MAXMSG	=				26
 
 
 /* Frame tunnnel mode bits */
-#define WTP_FRAME_TUNNEL_MODE_R	1	/* Reserved */
-#define WTP_FRAME_TUNNEL_MODE_L	2	/* Local bridging */
-#define WTP_FRAME_TUNNEL_MODE_E	4	/* 802.3 mode */
-#define WTP_FRAME_TUNNEL_MODE_N	8	/* native mode */
+#define CW_WTP_FRAME_TUNNEL_MODE_R	1	/* Reserved */
+#define CW_WTP_FRAME_TUNNEL_MODE_L	2	/* Local bridging */
+#define CW_WTP_FRAME_TUNNEL_MODE_E	4	/* 802.3 mode */
+#define CW_WTP_FRAME_TUNNEL_MODE_N	8	/* native mode */
 
 #include "radioinfo.h"
 
@@ -320,9 +320,9 @@ CW_MSG_MAXMSG	=				26
 
 
 /* wtp mac types */
-#define WTP_MAC_TYPE_LOCAL	0
-#define WTP_MAC_TYPE_SPLIT	1
-#define WTP_MAC_TYPE_BOTH	2
+#define CW_WTP_MAC_TYPE_LOCAL	0
+#define CW_WTP_MAC_TYPE_SPLIT	1
+#define CW_WTP_MAC_TYPE_BOTH	2
 
 
 
@@ -745,7 +745,7 @@ int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, u
 			 int len,struct sockaddr *from);
 
 
-int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+//int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
 int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,

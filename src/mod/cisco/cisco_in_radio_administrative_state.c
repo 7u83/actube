@@ -1,12 +1,15 @@
 #include "cw/radio.h"
 #include "cw/action.h"
 #include "cw/cw.h"
+#include "cw/dbg.h"
 
 #include "cisco_items.h"
 
 int cisco_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
+
+	cw_dbg(DBG_X,"This is radio admin statie in for Cisco");
 
 	int rid = cw_get_byte(data);
 	if (rid != 255)

@@ -124,14 +124,32 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+
+	/* WTP Name - Conf Update Req */
+	{
+		.capwap_state = CW_STATE_RUN,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id  = CW_CISCO_AP_GROUP_NAME,
+		.item_id = CIPWAP_ITEM_WTP_GROUP_NAME, 
+		.start  = cw_in_generic2,
+		.min_len = 0,
+		.max_len = 1024,
+		.mand = 0
+	}
+	,
+
+
+
 	/*  Radio Admin State - Config Update Request */
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-//		.start = cisco_in_radio_administrative_state_wtp,
-		.start = cw_in_radio_generic,	
+		.start = cisco_in_radio_administrative_state,
+		.min_len=2,
+		.max_len=2,
 		.mand = 0
 	}
 	,
@@ -196,11 +214,12 @@ static cw_action_in_t actions_in[] = {
 		
 	/*  Radio Admin State - Config Status Response */
 	{
-		.capwap_state = CW_STATE_RUN, 
+		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
-		.start = cw_in_radio_generic,
+//		.start = cw_in_radio_generic,
+		.start = cisco_in_radio_administrative_state,
 		.mand = 1
 	}
 	,
@@ -301,7 +320,7 @@ static cw_action_out_t actions_out[]={
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_AP_GROUP_NAME,
-		.item_id = CW_ITEM_WTP_GROUP_NAME, 
+		.item_id = CIPWAP_ITEM_WTP_GROUP_NAME, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,
 		.mand = 1
@@ -347,6 +366,54 @@ static cw_action_out_t actions_out[]={
 	,
 
 	
+	/* Cisco WTP Admin state -  OUT */
+	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+		.item_id = CISCO_ITEM_WTP_ADMIN_STATE,
+	 	.out = cisco_out_wtp_administrative_state, 
+	}
+	,
+
+
+	/* Cisco Admin state -  OUT */
+/*	{
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+//		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_WTP_ADMIN_STATE,
+	 	.out = cisco_out_wtp_administrative_state, 
+//		.get = cw_out_get_outgoming,
+	}
+	,
+
+*/
+	
+	/* Cisco WTP Operational state -  OUT */
+	{
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO, 
+//		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
+		.item_id = CISCO_ITEM_WTP_OPER_STATE,
+	 	.out = cisco_out_wtp_operational_state, 
+//		.get = cw_out_get_outgoming,
+	}
+	,
+
+
+
+
+		
+	/* Radio Operational State  - OUT */
+	{
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+	 	.out = cisco_out_radio_operational_state,
+		.mand = 1
+	}
+	,
+
 
 
 
@@ -357,18 +424,34 @@ static cw_action_out_t actions_out[]={
 static cw_action_in_t actions80211_in[] = {
 
 
-	/* Radio Operational State - Change State Event Req */
+	/* Radio Operational State - Status Resp */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CW_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
-		.start = cw_in_radio_generic, //operational_state,
+//		.start = cw_in_radio_generic, //operational_state,
+		.start = cisco_in_radio_operational_state, //operational_state,
 		.min_len=3,
 		.max_len=3,
 		.mand = 0
 	}
 	,
+
+	/* Radio Operational State - Update Req */
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id= CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+//		.start = cw_in_radio_generic, //operational_state,
+		.start = cisco_in_radio_operational_state, //operational_state,
+		.min_len=3,
+		.max_len=3,
+		.mand = 0
+	}
+	,
+
 
 
 };

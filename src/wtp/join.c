@@ -107,7 +107,7 @@ int run_join_d(struct sockaddr *sa)
 		cw_log(LOG_ERR, "Can't create socket: %s\n", strerror(errno));
 		return -1;
 	}
-	sock_set_recvtimeout(sockfd, 15);
+	sock_set_recvtimeout(sockfd, 1);
 	conn->sock = sockfd;
 	sock_copyaddr(&conn->addr, sa);
 

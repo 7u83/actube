@@ -47,6 +47,7 @@ int cisco_in_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 		  struct sockaddr *from);
 
 int cisco_out_wtp_administrative_state(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+int cisco_out_wtp_operational_state(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 int cisco_in_radio_operational_state(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			int len, struct sockaddr *from);

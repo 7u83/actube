@@ -17,7 +17,7 @@
 #include "cw/conn.h"
 #include "cw/bstr.h"
 
-
+#include "cw/dbg.h"
 
 
 static int skip(jsmntok_t * t)
@@ -191,7 +191,7 @@ static int scn_obj(char *js, jsmntok_t * t,
 		*(js + (to + 1)->end) = 0;
 		const char * val = js+(to+1)->start;
 
-		//printf("Key: %s Val: %s\n",key,val);
+		printf("Key: %s Val: %s\n",key,val);
 		
 
 		if ((to+1)->type == JSMN_OBJECT) {
@@ -318,8 +318,17 @@ int mbag_tojson(char *dst, mbag_t m, cw_itemdef_t *defs, int n)
 			d+=sprintf(d,"\"");
 			if (i->type->to_str){
 				d+=i->type->to_str(i,d);
+
+//				char bu[1000];
+//				i->type->to_str(i,bu);
+//				cw_dbg(DBG_X,"Put: %s::: %s",i->id,bu);
+			}
+			else{
+				cw_dbg(DBG_X,"Noooooooooooooooooo to_str method for %s",i->id);
 			}
 			d+=sprintf(d,"\"");
+
+
 		}
 	}
 	if (n==0){

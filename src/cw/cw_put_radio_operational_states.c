@@ -29,7 +29,7 @@
 /**
  * Put all radio operational states 
  */
-int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, int d7mode)
+int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, int d7mode)
 {
 	uint8_t *d=dst;
 

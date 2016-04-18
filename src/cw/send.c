@@ -15,6 +15,8 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	int packetlen = cw_get_hdr_msg_total_len(rawmsg);
 
+cw_dbg(DBG_X,"Here is a conn_send_msg for anything");
+
 	cw_dbg_msg(DBG_MSG_OUT, conn,rawmsg, packetlen,(struct sockaddr*)&conn->addr);
 
 

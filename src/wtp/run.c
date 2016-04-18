@@ -46,6 +46,7 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 
 	}
+cw_dbg(DBG_X,"Saving configuration ...");	
 		cfg_to_json();
 
 	return 0;
@@ -58,8 +59,6 @@ int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 static void update_radio(struct conn * conn, int rid, mbag_t radio_upd, mbag_t radio,mbag_t iresult )
 {
-//	mbag_item * admin	mbag_get(radio_upd,CW_ITEM_RADIO_ADMIN_STATE,
-
 
 	printf("Updating radio with rid %d\n",rid);
 }
@@ -94,6 +93,14 @@ static void do_update(struct conn * conn)
 	update_radios(conn,result);
 	cw_dbg(DBG_INFO, "Saving configuration ...");
 	cfg_to_json();
+	/* Change State ... */
+	int rc = cw_send_request(conn,CW_MSG_CHANGE_STATE_EVENT_REQUEST);
+	if ( !cw_rcok(rc) ) {
+		cw_strresult(rc);
+		return ;
+	}
+
+
 
 }
 

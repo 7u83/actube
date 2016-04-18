@@ -25,7 +25,8 @@ OBJS=\
 	cisco_in_add_wlan.o \
 	cisco_out_wtp_administrative_state.o \
 	cisco_out_radio_operational_state.o \
-	cisco_in_radio_operational_state.o
+	cisco_in_radio_operational_state.o \
+	cisco_out_wtp_operational_state.o
 
 #	cisco_out_radio_administrative_state.o \
 

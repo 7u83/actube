@@ -159,8 +159,6 @@ CAPWAPOBJS= \
 	cw_out_wtp_reboot_statistics.o \
 	cw_in_wtp_reboot_statistics.o\
 	cw_in_cisco_image_identifier.o\
-	cw_out_radio_operational_states.o\
-	cw_out_radio_operational_states_7.o\
 	cw_put_radio_operational_states.o \
 	cw_put_ac_status.o \
 	cw_in_ac_descriptor.o\
@@ -196,6 +194,8 @@ CAPWAP80211OBJS=\
 		capwap80211_items.o\
 		capwap80211_type_rateset.o \
 
+#	cw_out_radio_operational_states.o\
+#	cw_out_radio_operational_states_7.o\
 
 #
 # SSL objects

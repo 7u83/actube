@@ -138,7 +138,7 @@ extern const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[];
 
 
 	/* CIPWAP and Cisco */
-extern const char CW_ITEM_WTP_GROUP_NAME[];
+//extern const char CW_ITEM_WTP_GROUP_NAME[];
 
 
 	/* Other Items */
@@ -199,7 +199,7 @@ extern const char CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD[];
 
 
 extern struct cw_itemdef capwap_itemdefs[];
-extern struct cw_itemdef capwap_radiodefs[];
+extern struct cw_itemdef capwap_radioitemdefs[];
 
 
 #endif

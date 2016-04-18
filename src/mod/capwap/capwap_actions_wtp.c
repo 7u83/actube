@@ -313,6 +313,30 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* ----------------------------------------------------------------
+	 * Change State Event Response - IN Run State
+	 */
+
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE,
+	 	.end =	cw_in_check_cfg_update_req  
+	}
+	,
+
+	{
+		.capwap_state = CW_STATE_RUN,
+		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 
+		.elem_id  = CW_ELEM_RESULT_CODE,
+		.item_id = CW_ITEM_RESULT_CODE, 
+		.start  = cw_in_generic2,
+		.min_len = 4,
+		.max_len = 4,
+		.mand = 1
+	}
+	,
+
+
 
 
 		
@@ -376,14 +400,15 @@ static cw_action_in_t actions_in[] = {
 	,
 
 
-	/*  Radio Admin State - Config Status Request */
+	/*  Radio Admin State - Config Update Request */
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cw_in_radio_generic,
-	//	.start = cw_in_radio_administrative_state,
+		.min_len=2,
+		.max_len=2,
 		.mand = 0
 	}
 	,
@@ -583,7 +608,7 @@ static cw_action_out_t actions_out[] = {
 	 * Configuration Status Request  - Out
 	 */
 
-	/* AC Name - Config Status Request */
+	/* AC Name - Config Status Request - OUT */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
@@ -594,7 +619,7 @@ static cw_action_out_t actions_out[] = {
 	}
 	,
 
-	/* Radio Admin State - Config Status Request */
+	/* Radio Admin State - Config Status Request - OUT */
 	{
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
@@ -643,8 +668,9 @@ static cw_action_out_t actions_out[] = {
 	{
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
-	//	.item_id = CW_RADIO_OPERATIONAL_STATE,
-		.out = cw_out_radio_operational_states,
+		.item_id = CW_RADIOITEM_OPER_STATE,
+//		.out = cw_out_radio_operational_state,
+		.out = cw_out_radio_generic,		
 		.mand = 1
 	}
 	,
@@ -720,7 +746,7 @@ int capwap_register_actions_wtp(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items,capwap_itemdefs);
-//	rc += cw_itemdefheap_register(def->radioitems,capwap_radioitemdefs);
+	rc += cw_itemdefheap_register(def->radioitems,capwap_radioitemdefs);
 
 	return rc;
 }

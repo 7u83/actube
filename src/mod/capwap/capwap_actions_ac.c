@@ -172,7 +172,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_NAME,
 	 	.start = cw_in_generic2, 
-		.item_id = "wtp_name", 
+		.item_id = CW_ITEM_WTP_NAME, 
 		.mand = 1, 
 		.min_len = 1, 
 		.max_len = 1024
@@ -801,7 +801,7 @@ int capwap_register_actions_ac(struct cw_actiondef *def)
 	rc += cw_strheap_register_strings(def->strelem, capwap_strings_elem);
 
 	rc += cw_itemdefheap_register(def->items, capwap_itemdefs);
-	rc += cw_itemdefheap_register(def->radioitems, capwap_radiodefs);
+	rc += cw_itemdefheap_register(def->radioitems, capwap_radioitemdefs);
 
 	intavltree_add(def->wbids, 0);
 

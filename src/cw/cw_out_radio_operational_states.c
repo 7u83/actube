@@ -24,7 +24,7 @@
 #include "radio.h"
 
 
-int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
+int xxcw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 	int nerror=0;
 	int l = cw_put_radio_operational_states(conn->radios,dst,&nerror,0);

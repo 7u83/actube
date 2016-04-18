@@ -12,6 +12,8 @@
 
 #include "cw/vendors.h"
 
+#include "include/cipwap_items.h"
+
 extern int cisco_register_actions80211_wtp(struct cw_actiondef *def);
 extern int cisco_register_actions_wtp(struct cw_actiondef *def);
 
@@ -86,10 +88,10 @@ static int init()
 
 static int init_config(mbag_t config)
 {
-	bstr16_t gname = mbag_get_bstr16(config,CW_ITEM_WTP_GROUP_NAME,NULL);
+	bstr16_t gname = mbag_get_bstr16(config,CIPWAP_ITEM_WTP_GROUP_NAME,NULL);
 	if (!gname){
 		gname = bstr16_create_from_str("Entangled");
-		mbag_set_bstr16(config,CW_ITEM_WTP_GROUP_NAME,gname);
+		mbag_set_bstr16(config,CIPWAP_ITEM_WTP_GROUP_NAME,gname);
 	}
 
 
