@@ -132,32 +132,6 @@ int cw_out_cisco_ap_timesync(struct conn *conn,struct cw_action_out * a,uint8_t 
 
 
 
-/**
- * Add a Cisco RAD Name message element to buffer
- * @param dst destination buffer
- * @param name RAD name, zero terminated
- * @return number of bytes put
- */
-//static inline int cw_addelem_cisco_rad_name(uint8_t * dst, uint8_t * name)
-//{
-//	return cw_addelem_vendor_specific_payload(dst, CW_VENDOR_ID_CISCO, CW_CISCO_RAD_NAME, name,
-//						  strlen((char *) name));
-//}
-
-/**
- * Add a Cisco Group Name message element to buffer
- * @param dst destination buffer
- * @param name Group name, zero terminated
- * @return number of bytes put
- */
-/*
-
-static inline int cw_addelem_cisco_ap_group_name(uint8_t * dst, uint8_t * name){
-	return cw_addelem_vendor_specific_payload(dst, CW_VENDOR_ID_CISCO, CW_CISCO_AP_GROUP_NAME, name,
-						  strlen((char *) name));
-}
-
-*/
 
 static inline int cw_addelem_cisco_ap_regulatory_domain(uint8_t *dst, struct radioinfo * ri){
 	uint8_t *d=dst+10;

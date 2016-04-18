@@ -521,11 +521,6 @@ extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_ou
 extern int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
 				 uint8_t * dst);
 
-extern int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a,
-					   uint8_t * dst);
-extern int cw_out_radio_operational_states_7(struct conn *conn, struct cw_action_out *a,
-					     uint8_t * dst);
-
 
 /**
  * With this alias for #cw_out_wtp_ip_address we can
