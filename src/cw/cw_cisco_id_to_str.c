@@ -149,6 +149,13 @@ const char * cw_cisco_id_to_str(int elem_id)
 			return "Broadcast SSID Mode";
 		case CW_CISCO_AP_LED_FLASH_CONFIG:
 			return "Spam AP LED Flash Config";
+
+		case CW_CISCO_OPER_STATE_DETAIL_CAUSE:
+			return "Radio Oper State Detail Cause";
+
+		case CW_CISCO_DOT11_CONFIG_CHECKER:
+			return "Dot11 Config Checker";
+
 		
 		default:
 			return "Unknown";
