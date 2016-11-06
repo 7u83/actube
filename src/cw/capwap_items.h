@@ -130,7 +130,7 @@ extern const char CW_ITEM_AC_TIMESTAMP[];
 extern const char CW_ITEM_STATISTICS_TIMER[];
 extern const char CW_ITEM_WTP_REBOOT_STATISTICS[];
 extern const char CW_ITEM_IMAGE_IDENTIFIER[];
-extern const char CW_ITEM_AC_HASH_VALUE[];
+//extern const char CW_ITEM_AC_HASH_VALUE[];
 
 extern const char CW_ITEM_AC_NAME_WITH_PRIORITY[];
 extern const char CW_ITEM_MAXIMUM_MESSAGE_LENGTH[];

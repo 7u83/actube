@@ -61,7 +61,7 @@ const char CW_ITEM_AC_TIMESTAMP[]="ac_timestamp";
 const char CW_ITEM_STATISTICS_TIMER[]="statistics_timer";
 const char CW_ITEM_WTP_REBOOT_STATISTICS[]="wtp_reboot_statistics";
 const char CW_ITEM_IMAGE_IDENTIFIER[]="image_identifier";
-const char CW_ITEM_AC_HASH_VALUE[]="ac_hash_value";
+//const char CW_ITEM_AC_HASH_VALUE[]="ac_hash_value";
 
 const char CW_ITEM_AC_NAME_WITH_PRIORITY[]="ac_name_with_priority";
 const char CW_ITEM_MAXIMUM_MESSAGE_LENGTH[]="maximum_message_length";
