@@ -279,6 +279,20 @@ static cw_action_in_t actions_in[] = {
 		.mand = 0
 	}
 	,
+
+
+	/* AC IPv4 List - Config Status Resp */
+	{
+		.capwap_state = CW_STATE_CONFIGURE,
+		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
+		.elem_id = CW_ELEM_AC_IPV4_LIST,
+		.item_id = CW_ITEM_AC_IP_LIST,
+		.start = NULL,
+		.min_len = 4,
+		.max_len = 1024*4,
+		.mand = 0
+	}	
+	,
 	
 
 	/* Vendor Specific Payload - Cponfig Status Resp */
@@ -289,6 +303,9 @@ static cw_action_in_t actions_in[] = {
 		.start = cw_in_vendor_specific_payload
 	}
 	,
+
+
+
 	
 	/* ----------------------------------------------------------------
 	 * Change State Event Response - IN

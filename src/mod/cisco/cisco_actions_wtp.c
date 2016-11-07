@@ -395,7 +395,7 @@ static cw_action_out_t actions_out[]={
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 //		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_WTP_OPER_STATE,
-	 	.out = cisco_out_wtp_operational_state, 
+//	 	.out = cisco_out_wtp_operational_state, 
 //		.get = cw_out_get_outgoming,
 	}
 	,
