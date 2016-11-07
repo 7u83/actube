@@ -47,9 +47,9 @@ cw_aciplist_t get_aciplist()
 
 		sock_copyaddr(&acip->ip,(struct sockaddr*)&sa);
 		if (acip->ip.ss_family == AF_INET)
-			acip->wtp_count=11;
+			acip->index=11;
 		else
-			acip->wtp_count=3;
+			acip->index=3;
 		
 
 //		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	

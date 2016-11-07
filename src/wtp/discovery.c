@@ -104,7 +104,7 @@ cw_aciplist_t cw_select_ac(struct conn *conn, mbag_t discs)
 		
 			/* we missuse the wtp_count to sort by 
 			 * priority and wp_count */	
-			n->wtp_count |= prio<<16; 
+			n->index |= prio<<16; 
 
 			cw_aciplist_del(resultlist,n);
 			cw_aciplist_add(resultlist,n);

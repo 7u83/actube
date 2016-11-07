@@ -5,7 +5,7 @@
 
 struct cw_acip{
 	struct sockaddr_storage ip;
-	uint32_t wtp_count;
+	uint32_t index;
 };
 
 typedef struct cw_acip cw_acip_t;

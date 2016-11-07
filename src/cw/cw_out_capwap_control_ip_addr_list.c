@@ -16,7 +16,7 @@ static int put_ip(uint8_t *dst /*void *priv*/, cw_acip_t * acip /*void *data*/)
 	uint8_t *d = dst+4;
 
 	d+=cw_put_sockaddr(d,&acip->ip);
-	d+=cw_put_word(d,acip->wtp_count);
+	d+=cw_put_word(d,acip->index);
 
 	int fam = sock_addrfamily(&acip->ip);
 	int elem_id=-1;

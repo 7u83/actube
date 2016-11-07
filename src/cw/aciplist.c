@@ -37,7 +37,7 @@ static int acip_cmp(const void *x1, const void *x2)
 	struct cw_acip *ip1 = (struct cw_acip *) x1;
 	struct cw_acip *ip2 = (struct cw_acip *) x2;
 		
-	int r = ip1->wtp_count - ip2->wtp_count;
+	int r = ip1->index - ip2->index;
 	if (r!=0)
 		return r;
 
