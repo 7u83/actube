@@ -582,6 +582,7 @@ int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * d
  */
 
 
+/*
 struct cw_ip{
 	struct sockaddr_storage ip;
 	uint32_t wtp_count;
@@ -599,7 +600,7 @@ extern cw_iplist_t cw_aciplist_create();
 #define cw_aciplist_foreach(l,callback,cbpriv) mavl_foreach_asc(l,callback,cbpriv)
 #define cw_aciplist_replace(l,r) mavl_replace(l,r)
 
-
+*/
 
 
 

@@ -126,6 +126,7 @@ LWAPPOBJS = \
 #	   hdr_print.o \
 
 CAPWAPOBJS= \
+	cw_iplist.o \
 	   aciplist.o \
 	   lwmsg_init.o \
 	cw_cisco_id_to_str.o\
