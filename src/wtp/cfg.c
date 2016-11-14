@@ -324,7 +324,7 @@ int mbag_tojson(char *dst, mbag_t m, cw_itemdef_t *defs, int n)
 //				cw_dbg(DBG_X,"Put: %s::: %s",i->id,bu);
 			}
 			else{
-				cw_dbg(DBG_X,"Noooooooooooooooooo to_str method for %s",i->id);
+				cw_dbg(DBG_X,"No to_str method for %s",i->id);
 			}
 			d+=sprintf(d,"\"");
 
