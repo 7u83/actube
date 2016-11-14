@@ -118,6 +118,8 @@ struct cw_itemdef capwap_itemdefs[] = {
 
 
 
+
+
 {CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,CW_ITEM_NONE,MBAG_BYTE},
 
 {CW_ITEM_LOCATION_DATA,CW_ITEM_NONE,MBAG_STR},

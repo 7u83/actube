@@ -12,7 +12,7 @@ OBJS=\
 	capwap_in_wtp_descriptor.o \
 	capwap_out_ac_ip_list.o \
 	capwap_in_session_id.o \
-	capwap_in
+#	capwap_in
 
 
 NAME=libcapwap.a
