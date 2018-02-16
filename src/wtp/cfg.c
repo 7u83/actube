@@ -44,7 +44,7 @@ void set_cfg(mbag_t mbag, cw_itemdefheap_t defs, const char *id, const char *sub
 	//printf("Setting: %s/%s: %s\n",id,subid,val);
 	const cw_itemdef_t *idef;
 
-printf("Looking for def of: %s\n",id);
+//printf("Looking for def of: %s\n",id);
 	int dyn=0;
 	if (!subid) {
 		idef = cw_itemdef_get(defs,id,subid);
