@@ -25,7 +25,7 @@
 
 
 /**
- * Vendor specific message elements LWAPP Cisco 
+ * Vendor specific message elements defined in LWAPP by Cisco 
  */
 
 #define LW_CISCO_AP_USERNAME_PASSWORD		18
