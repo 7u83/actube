@@ -564,7 +564,7 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    |                         Password Hash 1 ... (121 bytes) ...
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
-                         ... PAssword Hash 1                       |
+                         ... Password Hash 1                       |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
    |                         Password Hash 2 ... (121 bytes) ...
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ 
@@ -576,11 +576,11 @@ Vendor spec CAPWAP | Vedor spec LWAPP  | Vendor specific LWAPP data
    Username: 
 	0-terminated username, the field has to filled up with zeros.
 
-   Password 1: 
-	Password
+   Password Hash 1: 
+	Password hash for the login password
 
-   Password 2: 
-	Password
+   Password Hash 2: 
+	Password hash for the enable-password.
 
 
    Type:
