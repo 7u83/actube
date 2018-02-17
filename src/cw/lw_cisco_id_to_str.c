@@ -45,7 +45,10 @@ const char * lw_cisco_id_to_str(int elem_id)
 			return "RAD Extended Config";
 
 		case LW_CISCO_MANAGER_IP_ADDR:
-			return "MAnager IP Address";
+			return "Manager IP Address";
+
+		case LW_CISCO_ADD_WLAN:
+			return "Add WLAN";
 
 		default: 
 			return "Unknown";
