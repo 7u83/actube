@@ -24,13 +24,12 @@
 #include "cw/capwap.h"
 #include "cw/sock.h"
 
-#include "conf.h"
-
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/cw_util.h"
 #include "cw/action.h"
 
+#include "conf.h"
 #include "ac.h"
 
 uint8_t conf_macaddress[12];
@@ -137,31 +136,7 @@ static int init_acname()
 #include "../mod/modload.h"
 
 
-struct mod_ac * conf_mods[10];
 
-static int init_mods()
-{
-
-	conf_mods[0]=modload_ac("cisco");
-	conf_mods[1]=modload_ac("fortinet");
-//	conf_mods[2]=modload_ac("zyxel");
-	conf_mods[2]=modload_ac("cipwap");
-	conf_mods[3]=modload_ac("capwap");
-	conf_mods[4]=modload_ac("capwap80211");
-	conf_mods[5]=NULL;
-
-
-
-
-	int i;
-	for(i=0; conf_mods[i]; i++){
-		if (conf_mods[i]->init){
-			conf_mods[i]->init();
-		}
-	}
-
-	return 0;
-}
 
 static int init_acid()
 {
@@ -626,6 +601,56 @@ static int conf_read_dbg_level(cfg_t * cfg)
 	return 1;
 }
 
+
+
+
+
+struct mod_ac ** conf_mods; //[10];
+
+
+
+static int init_mods()
+{
+
+/*	conf_mods[0]=modload_ac("cisco");
+	conf_mods[1]=modload_ac("fortinet");
+//	conf_mods[2]=modload_ac("zyxel");
+	conf_mods[2]=modload_ac("cipwap");
+	conf_mods[3]=modload_ac("capwap");
+	conf_mods[4]=modload_ac("capwap80211");
+	conf_mods[5]=NULL;
+*/
+	int i;
+	for(i=0; conf_mods[i]; i++){
+		if (conf_mods[i]->init){
+			conf_mods[i]->init();
+		}
+	}
+	return 0;
+}
+
+/*
+ * Read the module names from config file
+ */ 
+static int conf_read_mods(cfg_t *cfg){
+	int n, i;
+	n = cfg_size(cfg,CFG_ENTRY_MODS);
+	
+	conf_mods = malloc(sizeof(struct mod_ac *)*(n+1));
+	
+	for (i=0; i < n; i++){
+		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
+		conf_mods[i] = modload_ac(modname);
+		if (!conf_mods[i]){
+			cw_log(LOG_ERR,"Can't load mod: %s",modname);
+			return 0;
+		}
+	}
+	conf_mods[i]=NULL;
+	return 1;
+}
+
+
 void conf_init_capwap_mode()
 {
 	if (conf_capwap_mode_str == NULL)
@@ -720,7 +745,16 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 	return 0;
 }
 
+static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 
+	if (cfg && cfg->filename && cfg->line)
+		fprintf(stderr, "ERROR in %s:%d: ", 
+			cfg->filename, cfg->line);
+	else if (cfg && cfg->filename)
+		fprintf(stderr, "ERROR in %s:", cfg->filename);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr,"\n");
+}
 
 
 int read_config(const char *filename)
@@ -730,13 +764,8 @@ int read_config(const char *filename)
 	if (!init_control_port())
 		return 0;
 
-
-
-
-
-
-
 	cfg_opt_t opts[] = {
+		CFG_STR_LIST("mods", "{}", CFGF_NONE),
 		CFG_STR_LIST("dbg", "{}", CFGF_NONE),
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
@@ -785,9 +814,12 @@ int read_config(const char *filename)
 		CFG_END()
 	};
 	cfg_t *cfg;
-	cfg = cfg_init(opts, 0);
+	cfg = cfg_init(opts, CFGF_NONE);
+	cfg_set_error_function(cfg, errfunc);
 
-	cfg_parse(cfg, filename);
+	if (cfg_parse(cfg, filename))
+		return 0;
+	
 
 	/* read debug options */
 	conf_read_dbg_level(cfg);
@@ -801,10 +833,6 @@ int read_config(const char *filename)
 
 	/* read ipv4 broadcast addresses */
 	conf_read_strings(cfg, "broadcast_listen", &conf_bcast_addrs, &conf_bcast_addrs_len);
-
-
-
-
 
 
 	/* read ac_ips */
@@ -821,6 +849,11 @@ int read_config(const char *filename)
 		else {
 			perror(str);
 		}
+	}
+	
+	if (!conf_read_mods(cfg)){
+		cfg_free(cfg);
+		return 0;
 	}
 
 

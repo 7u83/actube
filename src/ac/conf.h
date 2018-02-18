@@ -33,7 +33,7 @@
 #include "cw/vendors.h"
 
 
-extern struct mod_ac * conf_mods[10];
+extern struct mod_ac ** conf_mods;
 
 #ifndef CONF_DEFAULT_ACNAME
 #define CONF_DEFAULT_ACNAME "AC"
@@ -138,6 +138,8 @@ extern int conf_capwap_mode;
 
 extern int conf_parse_listen_addr(const char *addr, char *saddr, char *port, int *proto);
 
+
+#define CFG_ENTRY_MODS "mods"
 
 
 #endif
