@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="actube" Database="">
-  <Project Name="ac" Path="ac.project" Active="No"/>
+  <Project Name="ac" Path="ac.project" Active="Yes"/>
   <Project Name="wtp" Path="wtp.project" Active="No"/>
   <Project Name="mod_cipwap" Path="mod_cipwap.project" Active="No"/>
   <Project Name="mod_capwap" Path="mod_capwap.project" Active="No"/>
   <Project Name="mod_cisco" Path="mod_cisco.project" Active="No"/>
-  <Project Name="libcw" Path="libcw.project" Active="Yes"/>
+  <Project Name="libcw" Path="libcw.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
