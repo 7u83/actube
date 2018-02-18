@@ -12,7 +12,7 @@ int mbag_set_from_buf(mbag_t dst, mbagtype_t type, const char *item_id, uint8_t 
 		mbag_set_word(dst, item_id, cw_get_word(data));
 		return 1;
 	}
-	if (type == MBAG_DWORD) {
+	if (type == MTYPE_DWORD) {
 		mbag_set_dword(dst, item_id, cw_get_dword(data));
 		return 1;
 	}

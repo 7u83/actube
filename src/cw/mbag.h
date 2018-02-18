@@ -131,8 +131,8 @@ extern const struct mbag_typedef mbag_type_data;
 #define MBAG_BYTE (&mbag_type_byte)
 /** MBAG_WORD stores one word */
 #define MBAG_WORD (&mbag_type_word)
-/** MBAG_DWORD stores one dword */
-#define MBAG_DWORD (&mtype_dword)
+/** MTYPE_DWORD stores one dword */
+#define MTYPE_DWORD (&mtype_dword)
 /** MBAG_MBAG stores an MBAG */ 
 #define MBAG_MBAG (&mbag_type_mbag)
 #define MBAG_MBAG_DYN (&mbag_type_mbag_dyn)
@@ -358,7 +358,7 @@ static inline uint32_t mbag_get_dword(mbag_t s, const char *id, uint32_t def)
 	struct mbag_item *i = mbag_get(s, id);
 	if (!i)
 		return def;
-	if (i->type != MBAG_DWORD)
+	if (i->type != MTYPE_DWORD)
 		return def;
 	return i->dword;
 }

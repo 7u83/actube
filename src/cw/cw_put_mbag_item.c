@@ -46,7 +46,7 @@ int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 	if (MBAG_WORD == item->type){
 		return cw_put_word(dst, item->word);
 	}
-	if (MBAG_DWORD == item->type){
+	if (MTYPE_DWORD == item->type){
 		return cw_put_dword(dst, item->dword);
 	}
 	if (MBAG_BSTR  == item->type) {

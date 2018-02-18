@@ -51,7 +51,7 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 		mbag_set_word(itemstore, a->item_id, cw_get_word(data));
 		return 1;
 	}
-	if (idef->type == MBAG_DWORD) {
+	if (idef->type == MTYPE_DWORD) {
 		mbag_set_dword(itemstore, a->item_id, cw_get_dword(data));
 		return 1;
 	}

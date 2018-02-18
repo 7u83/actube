@@ -22,7 +22,7 @@
 
 static struct mbag_item *  from_str(const char *src)
 {
-	mbag_item_t * i = mbag_item_new(MBAG_DWORD);
+	mbag_item_t * i = mbag_item_new(MTYPE_DWORD);
 	if (!i)
 		return NULL;
 	i->dword=atoi(src);
@@ -37,7 +37,7 @@ static int to_str(void *item,char *dst)
 
 static struct mbag_item * get(const uint8_t *src,int len)
 {
-	mbag_item_t * item = mbag_item_new(MBAG_DWORD);
+	mbag_item_t * item = mbag_item_new(MTYPE_DWORD);
 	if (!item)
 		return NULL;
 	item->dword=cw_get_dword(src);
