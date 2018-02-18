@@ -21,8 +21,8 @@
  * @brief Definition of vendor IDs
  */
 
-#ifndef __VENDORS_H
-#define __VENDORS_H
+#ifndef __CW_VENDORS_H
+#define __CW_VENDORS_H
 
 #define LW_VENDOR_ID_CISCO	4232704
 
