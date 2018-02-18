@@ -36,7 +36,7 @@
  * @param out where to write data to
  * @param maxlen maximum number of bytes to read
  * @return the number of bytes read
- */ 
+ */
 int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 {
 	if (conn->dtls_buffer_len == 0) {
@@ -51,8 +51,8 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 		memcpy(out, conn->dtls_buffer + conn->dtls_buffer_pos, maxlen);
 		conn->dtls_buffer_len -= maxlen;
 		conn->dtls_buffer_pos += maxlen;
-		cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen,
-		       maxlen, conn->dtls_buffer_len);
+		cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d",
+		       maxlen, maxlen, conn->dtls_buffer_len);
 		cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, maxlen, "Dump...");
 
 		return maxlen;
@@ -61,8 +61,8 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 	memcpy(out, conn->dtls_buffer + conn->dtls_buffer_pos, conn->dtls_buffer_len);
 	int ret = conn->dtls_buffer_len;
 	conn->dtls_buffer_len = 0;
-	cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen, ret,
-	       conn->dtls_buffer_len);
+	cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen,
+	       ret, conn->dtls_buffer_len);
 	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) out, ret, "Dump...");
 	return ret;
 }
@@ -80,14 +80,13 @@ int dtls_bio_write(struct conn *conn, const char *data, int len)
 	*((uint32_t *) buffer) = htonl(1 << 24);
 	memcpy(buffer + 4, data, len);
 	int rc = conn->send_packet(conn, buffer, len + 4);
-	if (rc>=0)
-		rc-=4;
-		
+	if (rc >= 0)
+		rc -= 4;
 
 	cw_dbg(DBG_DTLS_BIO, "SSL BIO write: %d bytes, wrote=%d, ptr: %p", len, rc, data);
 	cw_dbg_dmp(DBG_DTLS_BIO_DMP, (uint8_t *) data, len, "Dump ...");
 
 	if (rc < 0)
 		return rc;
-	return rc ;
+	return rc;
 }
