@@ -29,6 +29,7 @@
       <File Name="src/cw/md5sum.c"/>
       <File Name="src/cw/sock_mwait.c"/>
       <File Name="src/cw/dbg.c"/>
+      <File Name="src/cw/cw_readmsg_configuration_status_request.c"/>
       <File Name="src/cw/mod.h"/>
       <File Name="src/cw/format.h"/>
       <File Name="src/cw/send.c"/>
@@ -39,6 +40,7 @@
       <File Name="src/cw/bstr_create.c"/>
       <File Name="src/cw/avltree_foreach_lr.c"/>
       <File Name="src/cw/cw_put_mbag_item.c"/>
+      <File Name="src/cw/conn_get_response.c"/>
       <File Name="src/cw/dtls_bio.c"/>
       <File Name="src/cw/rand.h"/>
       <File Name="src/cw/capwap_items.h"/>
@@ -58,6 +60,7 @@
       <File Name="src/cw/conn_wait_for_message.c"/>
       <File Name="src/cw/cw_util.h"/>
       <File Name="src/cw/radio.h"/>
+      <File Name="src/cw/cw_read_image_data_request.c"/>
       <File Name="src/cw/cw_read_wtp_descriptor_versions.c"/>
       <File Name="src/cw/cw_in_wtp_descriptor.c"/>
       <File Name="src/cw/capwap80211_types.h"/>
@@ -66,10 +69,12 @@
       <File Name="src/cw/cw_in_wtp_board_data.c"/>
       <File Name="src/cw/conn_prepare_request.c"/>
       <File Name="src/cw/cw_put_ac_status.c"/>
+      <File Name="src/cw/conn_wait_for_request.c"/>
       <File Name="src/cw/capwap_strings_msg.c"/>
       <File Name="src/cw/bstr_replace.c"/>
       <File Name="src/cw/sock_receive.c"/>
       <File Name="src/cw/capwap_80211_actions.h"/>
+      <File Name="src/cw/mbag_get_upd.c"/>
       <File Name="src/cw/avltree.h"/>
       <File Name="src/cw/acpriolist.h"/>
       <File Name="src/cw/sock_hwaddrtostr.c"/>
@@ -77,6 +82,7 @@
       <File Name="src/cw/lw_msg_id_to_str.c"/>
       <File Name="src/cw/lw_put_cisco_path_mtu.c"/>
       <File Name="src/cw/cw_in_check_join_request.c"/>
+      <File Name="src/cw/conn_get_message.c"/>
       <File Name="src/cw/cw_readelem_maximum_message_length.c"/>
       <File Name="src/cw/capwap_msg_new.c"/>
       <File Name="src/cw/cw_in_radio_administrative_state_wtp.c"/>
@@ -131,10 +137,13 @@
       <File Name="src/cw/avltree_foreach_from_lr.c"/>
       <File Name="src/cw/avliter_next.c"/>
       <File Name="src/cw/capwap_80211_actions_ac.c"/>
+      <File Name="src/cw/mbag.h"/>
       <File Name="src/cw/sock_addrlen.c"/>
       <File Name="src/cw/cw_load_file.c"/>
       <File Name="src/cw/sock_copyaddr.c"/>
+      <File Name="src/cw/cw_readelem_ac_descriptor.c"/>
       <File Name="src/cw/cw_setstr.c"/>
+      <File Name="src/cw/cw_readelem_radio_operational_state.c"/>
       <File Name="src/cw/conn_q_get_packet.c"/>
       <File Name="src/cw/cw_read_80211_mac_operation.c"/>
       <File Name="src/cw/cw_in_check_img_data_req_ac.c"/>
@@ -168,11 +177,13 @@
       <File Name="src/cw/lw_put_ac_descriptor.c"/>
       <File Name="src/cw/conn_destroy.c"/>
       <File Name="src/cw/mavl_merge.c"/>
+      <File Name="src/cw/cw_readelem_cisco_wtp_radio_cfg.c"/>
       <File Name="src/cw/cw_put_msg.c"/>
       <File Name="src/cw/cw_in_check_disc_resp.c"/>
       <File Name="src/cw/mavl_add.c"/>
       <File Name="src/cw/dtls_gnutls_get_cipher.c"/>
       <File Name="src/cw/cw_in_check_cipwap_join_req.c"/>
+      <File Name="src/cw/wtpinfo_readelem_wtp_board_data.c"/>
       <File Name="src/cw/vendors.h"/>
       <File Name="src/cw/cw_read_wtp_descriptor_7.c"/>
       <File Name="src/cw/dbg.h"/>
@@ -213,6 +224,7 @@
       <File Name="src/cw/cw_80211.h"/>
       <File Name="src/cw/capwap80211_type_rateset.c"/>
       <File Name="src/cw/cw_out_image_data.c"/>
+      <File Name="src/cw/cw_readelem_80211_wtp_radio_info.c"/>
       <File Name="src/cw/connlist.h"/>
       <File Name="src/cw/mbag_type_data.c"/>
       <File Name="src/cw/item.c"/>
@@ -238,6 +250,7 @@
       <File Name="src/cw/cw_in_check_img_data_req_wtp.c"/>
       <File Name="src/cw/cw_out_radio_administrative_states.c"/>
       <File Name="src/cw/dot11_beacon.c"/>
+      <File Name="src/cw/cw_send_image_file.c"/>
       <File Name="src/cw/strlist.h"/>
       <File Name="src/cw/dtls_gnutls_accept.c"/>
       <File Name="src/cw/dtls_openssl.c"/>
@@ -265,6 +278,7 @@
       <File Name="src/cw/mavl_create.c"/>
       <File Name="src/cw/lw.h"/>
       <File Name="src/cw/dtls_gnutls_bio.c"/>
+      <File Name="src/cw/cw_readelem_statistics_timer.c"/>
       <File Name="src/cw/cw_read_ac_descriptor.c"/>
       <File Name="src/cw/conn_prepare_image_data_request.c"/>
       <File Name="src/cw/aciplist.h"/>
@@ -273,13 +287,13 @@
       <File Name="src/cw/lwapp_cisco.h"/>
       <File Name="src/cw/hdr_print.c"/>
       <File Name="src/cw/mbag_type_vendorstr.c"/>
-      <File Name="src/cw/mdata.h"/>
       <File Name="src/cw/cw_out_wtp_board_data.c"/>
       <File Name="src/cw/mbag_type_str.c"/>
       <File Name="src/cw/cw_init_data_keep_alive_msg.c"/>
       <File Name="src/cw/cw_in_check_chng_state_evnt_req.c"/>
       <File Name="src/cw/capwap_strings_item.c"/>
       <File Name="src/cw/cw_out_ac_name_with_priority.c"/>
+      <File Name="src/cw/conn_send_request.c"/>
       <File Name="src/cw/mavl_del_all.c"/>
       <File Name="src/cw/cw_out_wtp_reboot_statistics.c"/>
       <File Name="src/cw/capwap.h"/>

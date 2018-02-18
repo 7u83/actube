@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="actube" Database="">
-  <Project Name="libcw" Path="libcw.project" Active="Yes"/>
   <Project Name="ac" Path="ac.project" Active="No"/>
   <Project Name="wtp" Path="wtp.project" Active="No"/>
   <Project Name="mod_cipwap" Path="mod_cipwap.project" Active="No"/>
   <Project Name="mod_capwap" Path="mod_capwap.project" Active="No"/>
   <Project Name="mod_cisco" Path="mod_cisco.project" Active="No"/>
+  <Project Name="libcw" Path="libcw.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
-      <Project Name="libcw" ConfigName="Debug"/>
       <Project Name="ac" ConfigName="Debug"/>
       <Project Name="wtp" ConfigName="Debug"/>
       <Project Name="mod_cipwap" ConfigName="Debug"/>
       <Project Name="mod_capwap" ConfigName="Debug"/>
       <Project Name="mod_cisco" ConfigName="Debug"/>
+      <Project Name="libcw" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
-      <Project Name="libcw" ConfigName="Release"/>
       <Project Name="ac" ConfigName="Release"/>
       <Project Name="wtp" ConfigName="Release"/>
       <Project Name="mod_cipwap" ConfigName="Release"/>
       <Project Name="mod_capwap" ConfigName="Release"/>
       <Project Name="mod_cisco" ConfigName="Release"/>
+      <Project Name="libcw" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
