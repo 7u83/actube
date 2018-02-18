@@ -102,7 +102,8 @@ int main(int argc, char *argv[])
 
 	cw_log_name = "AC-Tube";
 
-	read_config("ac.conf");
+	if (!read_config("ac.conf"))
+		return 1;
 
 
 	/* Show debug options if there are any set */
