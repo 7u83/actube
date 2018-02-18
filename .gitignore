@@ -35,6 +35,8 @@
 *.key
 *.req
 *.der
+ssl/root-ca/
+ssl/intermediate-ca/
 
 # Archives
 *.gz
@@ -42,3 +44,7 @@
 *.tar
 *.tar.gz
 *.tar.xz
+
+# other stuff
+.codelite/
+
