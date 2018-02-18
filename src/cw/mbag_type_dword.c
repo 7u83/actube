@@ -51,7 +51,7 @@ static int put(struct mbag_item * i, uint8_t *dst)
 }
 
 
-const struct mbag_typedef mbag_type_dword = {
+const struct mbag_typedef mtype_dword = {
 	.name = "Dword",
 	.del = NULL,
 	.to_str = to_str,

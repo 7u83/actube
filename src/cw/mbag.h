@@ -110,7 +110,7 @@ typedef struct mbag_item mbag_item_t;
 
 extern const struct mbag_typedef mbag_type_byte;
 extern const struct mbag_typedef mbag_type_word;
-extern const struct mbag_typedef mbag_type_dword;
+extern const struct mbag_typedef mtype_dword;
 extern const struct mbag_typedef mbag_type_mbag;
 extern const struct mbag_typedef mbag_type_bstr;
 extern const struct mbag_typedef mbag_type_bstr16;
@@ -132,7 +132,7 @@ extern const struct mbag_typedef mbag_type_data;
 /** MBAG_WORD stores one word */
 #define MBAG_WORD (&mbag_type_word)
 /** MBAG_DWORD stores one dword */
-#define MBAG_DWORD (&mbag_type_dword)
+#define MBAG_DWORD (&mtype_dword)
 /** MBAG_MBAG stores an MBAG */ 
 #define MBAG_MBAG (&mbag_type_mbag)
 #define MBAG_MBAG_DYN (&mbag_type_mbag_dyn)
@@ -221,7 +221,7 @@ static inline struct mbag_item * mbag_set_dword(mbag_t s, const char *id, uint32
 	if (!i)
 		return NULL;
 	i->dword = dword;
-	i->type = &mbag_type_dword;
+	i->type = &mtype_dword;
 	return i;
 }
 
