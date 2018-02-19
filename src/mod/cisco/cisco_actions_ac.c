@@ -81,12 +81,25 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
+	/* Element WTP Board Data - Discovery Request 
+	 * Change it to not mandatory, because older Cisco 
+	 * firmware does not send this message element.
+	 */
+	{
+		.capwap_state = CW_STATE_DISCOVERY, 
+		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+	 	.start = cw_in_wtp_board_data, 
+		.item_id = CW_ITEM_WTP_BOARD_DATA, 
+		.mand = 0, 
+	}
+	,
 
 
 
 
 	/* --------------------------------------------------------
-	 * Discovery Resquest 
+	 * Join Resquest 
 	 */
 
 	/* WTP Descriptor - Join Request */
@@ -311,6 +324,16 @@ static cw_action_out_t actions_out[]={
 	 * Discovery Response 
 	 */
 
+	/* AC Descriptor - Discovery Response */
+	{
+		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.item_id = CW_ITEM_AC_DESCRIPTOR,
+		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
+		.out = cisco_out_ac_descriptor,
+		.mand = 1
+	}
+	,
+
 
 	/* Cisco AP Timesync - Discovery Request
 	 * Important to get the WTP a DTLS connection established
@@ -321,15 +344,6 @@ static cw_action_out_t actions_out[]={
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_AP_TIMESYNC,
 		.out = cisco_out_ap_timesync,
-		.mand = 1
-	}
-	,
-	/* AC Descriptor - Discovery Response */
-	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
-		.item_id = CW_ITEM_AC_DESCRIPTOR,
-		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
-		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}
 	,
