@@ -21,14 +21,15 @@ int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *
 
 	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->data),conn);
 
-	
-	/* Send back the same software version as the WTP has,
-	   otherwise the AP wants us to send an image */
-
-	//i = mbag_get(conn->incomming,CW_ITEM_WTP_SOFTWARE_VERSION);
-	
 
 	i = mbag_get(cisco_config,CW_ITEM_AC_SOFTWARE_VERSION);
+
+	if (!i){
+		/* Send back the same software version as the WTP has,
+		otherwise the AP wants us to send an image */
+		i = mbag_get(conn->incomming,CW_ITEM_WTP_SOFTWARE_VERSION);
+	}
+	
 	if ( i ) {	
 	 	d += cw_put_version(d,1,i->data);
 	}
