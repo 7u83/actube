@@ -166,17 +166,6 @@ static cw_action_in_t actions_in[] = {
 	}
 	,
 
-	/* Add WLAN */
-	{
-
-		.capwap_state = CW_STATE_RUN, 
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
-		.vendor_id = CW_VENDOR_ID_CISCO,
-		.elem_id = CW_CISCO_ADD_WLAN,
-//		.item_id = CISCO_ITEM_ADD_WLAN,
-		.start = cisco_in_add_wlan
-	}
-	,
 
 
 		
@@ -226,9 +215,10 @@ static cw_action_in_t actions_in[] = {
 
 
 
+	/* Cisco's Vendor specific encapsulation
+	 * of LWAPP elements */
+
 	{
-		/* Cisco's Vendor specific encapsulation
-		 * of LWAPP elements */
 
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE,
@@ -236,6 +226,15 @@ static cw_action_in_t actions_in[] = {
 		.elem_id = CW_CISCO_SPAM_VENDOR_SPECIFIC,
 		.start = lw_in_vendor_specific,
 
+	}
+	,
+
+	{
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_SPAM_VENDOR_SPECIFIC,
+		.start = lw_in_vendor_specific,
 	}
 	,
 
@@ -451,6 +450,33 @@ static cw_action_in_t actions80211_in[] = {
 		.mand = 0
 	}
 	,
+
+
+	/* Add WLAN */
+	{
+
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = CW_VENDOR_ID_CISCO,
+		.elem_id = CW_CISCO_ADD_WLAN,
+//		.item_id = CISCO_ITEM_ADD_WLAN,
+		.start = cisco_in_add_wlan
+	}
+	,
+
+
+	/* Add WLAN - LWAP Vendor Specific */
+	{
+		.proto = CW_ACTION_PROTO_LWAPP,
+		.capwap_state = CW_STATE_RUN, 
+		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.vendor_id = LW_VENDOR_ID_CISCO,
+		.elem_id = LW_CISCO_ADD_WLAN,
+//		.item_id = CIPWAP_ITEM_AC_HASH_VALUE,
+//		.start = cw_in_generic2, //cisco_in_telnet_ssh
+		.start = cisco_in_add_wlan
+	}
+
 
 
 
