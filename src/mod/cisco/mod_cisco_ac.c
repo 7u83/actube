@@ -11,9 +11,14 @@
 
 #include "cw/vendors.h"
 
+#include "cw/capwap_items.h"
+
 
 extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
 extern int cisco_register_actions_ac(struct cw_actiondef *def);
+
+mbag_t cisco_config = NULL;
+
 
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
@@ -60,7 +65,29 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 static int init()
 {
 	cw_dbg(DBG_INFO, "Initialiazing mod_cisco ...");
-//      struct mod_ac *cmod = modload_ac("capwap");
+	cisco_config = mbag_create();
+	
+	char * hardware_version = ".x01000001";
+	char * software_version = ".x07036500";
+	
+	
+	uint8_t * str;
+	
+	str = bstr_create_from_cfgstr(hardware_version);
+	mbag_set_bstrv(cisco_config, CW_ITEM_AC_HARDWARE_VERSION, 
+		CW_VENDOR_ID_CISCO, 
+		bstr_data(str),bstr_len(str)
+		);
+	free(str);
+
+	str = bstr_create_from_cfgstr(software_version);
+	mbag_set_bstrv(cisco_config, CW_ITEM_AC_SOFTWARE_VERSION, 
+		CW_VENDOR_ID_CISCO, 
+		bstr_data(str),bstr_len(str)
+		);
+	free(str);
+
+
 	return 1;
 }
 
@@ -68,7 +95,6 @@ static int init()
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
-
 
 	int offset = cw_get_hdr_msg_offset(rawmsg);
 	const uint8_t *msg_ptr = rawmsg + offset;
@@ -112,10 +138,12 @@ static struct mod_ac capwap_ac = {
 	.name = "cisco",
 	.init = init,
 	.detect = detect,
-	.register_actions = register_actions
+	.register_actions = register_actions,
 };
 
 struct mod_ac *mod_cisco_ac()
 {
 	return &capwap_ac;
 };
+
+
