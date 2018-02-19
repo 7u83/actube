@@ -48,7 +48,10 @@ const char * lw_cisco_id_to_str(int elem_id)
 			return "Manager IP Address";
 
 		case LW_CISCO_ADD_WLAN:
-			return "Add WLAN";
+			return "Add WLAN?";
+
+		case LW_CISCO_DELETE_WLAN:
+			return "Delete WLAN?";
 
 		default: 
 			return "Unknown";
