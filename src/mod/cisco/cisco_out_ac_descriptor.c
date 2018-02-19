@@ -1,3 +1,21 @@
+/*
+    This file is part of actube.
+
+    actube is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    actube is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 #include "cw/log.h"
 #include "cw/conn.h"
 
@@ -49,7 +67,6 @@ int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *
 	int len = d-dst-4;
 	
 	return len + cw_put_elem_hdr(dst,a->elem_id,len);
-
 }
 
 
