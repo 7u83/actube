@@ -1,3 +1,4 @@
+#include <confuse.h>
 
 #include "cw/cw.h"
 #include "cw/mod.h"
@@ -60,17 +61,45 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 
 }
 
-
+static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
+	
+	if (cfg && cfg->filename && cfg->line)
+		cw_log(LOG_ERR, "MOD Cisco cfg file in %s:%d: ", 
+			cfg->filename, cfg->line);
+	else if (cfg && cfg->filename)
+		cw_log(LOG_ERR, "MOD Cisco cfg file in %s:", cfg->filename);
+}
 
 static int init()
 {
+	int rc = 1;
 	cw_dbg(DBG_INFO, "Initialiazing mod_cisco ...");
 	cisco_config = mbag_create();
+
+	char * hardware_version = strdup(".x01000001");
+	char * software_version = NULL;
+
+	cfg_opt_t opts[] = {
+		CFG_SIMPLE_STR("hardware_version", &hardware_version),
+		CFG_SIMPLE_STR("software_version",&software_version),
+		CFG_END()
+	};
+
+	cfg_t *cfg;
+	cfg = cfg_init(opts, CFGF_NONE);
 	
-	char * hardware_version = ".x01000001";
-	char * software_version = ".x07036500";
+	cfg_set_error_function(cfg, errfunc);
 	
-	
+	char *filename = "cisco.conf";
+	FILE * f = fopen(filename,"r");
+	if (f){
+		fclose(f);
+		if (cfg_parse(cfg, filename)){
+			rc = 0;
+			goto errX;
+		}
+	}
+
 	uint8_t * str;
 	
 	str = bstr_create_from_cfgstr(hardware_version);
@@ -80,17 +109,21 @@ static int init()
 		);
 	free(str);
 
-	str = bstr_create_from_cfgstr(software_version);
-	mbag_set_bstrv(cisco_config, CW_ITEM_AC_SOFTWARE_VERSION, 
-		CW_VENDOR_ID_CISCO, 
-		bstr_data(str),bstr_len(str)
-		);
-	free(str);
-
-
-	return 1;
+	if (software_version){
+		str = bstr_create_from_cfgstr(software_version);
+		mbag_set_bstrv(cisco_config, CW_ITEM_AC_SOFTWARE_VERSION, 
+			CW_VENDOR_ID_CISCO, 
+			bstr_data(str),bstr_len(str)
+			);
+		free(str);
+	}
+errX:
+	if (hardware_version)
+		free (hardware_version);
+	if (software_version)
+		free(software_version);
+	return rc;
 }
-
 
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
