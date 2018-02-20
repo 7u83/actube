@@ -75,7 +75,8 @@ static int init()
 	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x01000000");
 	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_HARDWARE_VERSION,v);
 
-	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x08007900");
+//	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x08007900");
+	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x07036500");
 	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_SOFTWARE_VERSION,v);
 
 	v = bstrv_create_from_str(CW_VENDOR_ID_CISCO,".x0C030800");
