@@ -111,8 +111,18 @@ int cw_cisco_get_wlan_(mbag_t wlan, uint8_t *data, int len)
 int cisco_in_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
-
+	cw_dbg (DBG_X,"Add WLAN");
+	
 	int rid = cw_get_byte(data);
+	cw_dbg (DBG_X, "RID = %d",rid);
+
+	bstr_t mac = bstr_create(data+1,6);
+	cw_dbg (DBG_X, "MAC: %s",sock_hwaddr2str(bstr_data(mac),bstr_len(mac)));
+	
+
+	return 0;
+
+	
 	mbag_t wlan = mbag_i_get_mbag(conn->radios,rid,NULL);
 	if ( !wlan ) {
 		printf("No Radio git\n");
