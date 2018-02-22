@@ -46,7 +46,7 @@
 static void reset_echointerval_timer(struct wtpman *wtpman)
 {
 	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
-				    CAPWAP_MAX_DISCOVERY_INTERVAL << 8 |
+				    CW_MAX_DISCOVERY_INTERVAL << 8 |
 				    CAPWAP_ECHO_INTERVAL);
 
 	/* start echinterval timer and put 2 seconds for "safety" on it */

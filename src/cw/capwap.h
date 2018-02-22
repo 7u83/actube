@@ -18,7 +18,7 @@
 
 /**
  * @file
- * @brief CAPWAP desfinitions 
+ * @brief CAPWAP definitions 
  */
 
 
@@ -49,14 +49,14 @@
  */
 
 /** CAPWAP Version */
-#define CAPWAP_VERSION (0)
+#define CW_VERSION (0)
 
-#define CWIANA_ENTERPRISE_NUMBER 0
+#define CW_IANA_ENTERPRISE_NUMBER 0
 
 /** CAPWAP Control Port*/
-#define CAPWAP_CONTROL_PORT 5246
+#define CW_CONTROL_PORT 5246
 /** CAPWAP Control Port as String */
-#define CAPWAP_CONTROL_PORT_STR "5246"
+#define CW_CONTROL_PORT_STR "5246"
 
 /** CAPWAP Data Port */
 #define CAPWAP_DATA_PPORT 5247
@@ -92,8 +92,8 @@
 #define CW_WBID_EPCGLOBAL	3
 
 
-#define CAPWAP_PACKET_PREAMBLE (CAPWAP_VERSION<<4)
-#define CAPWAP_DTLS_PACKET_PREAMBLE (CAPWAP_VERSION<<4|1)
+#define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
+#define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
 
 /*
  * control header stuff
@@ -307,9 +307,8 @@ CW_MSG_MAXMSG	=				26
 #define CW_WTP_FRAME_TUNNEL_MODE_E	4	/* 802.3 mode */
 #define CW_WTP_FRAME_TUNNEL_MODE_N	8	/* native mode */
 
-#include "radioinfo.h"
 
-
+/* Discovery Types */
 #define CW_DISCOVERY_TYPE_UNKNOWN	0
 #define CW_DISCOVERY_TYPE_STATIC	1
 #define CW_DISCOVERY_TYPE_DHCP		2
@@ -317,26 +316,23 @@ CW_MSG_MAXMSG	=				26
 #define CW_DISCOVERY_TYPE_AC_REFERRAL	4
 
 
-
-
-/* wtp mac types */
+/* WTP mac types */
 #define CW_WTP_MAC_TYPE_LOCAL	0
 #define CW_WTP_MAC_TYPE_SPLIT	1
 #define CW_WTP_MAC_TYPE_BOTH	2
 
 
 
-
 //#define CWMSG_MAX_SIZE 65536
-#define CWMSG_MAX_SIZE 2048
+//#define CWMSG_MAX_SIZE 2048
 
 
 #define CW_SESSION_ID_LEN	16
 
 
 /* capwap timer default values */
-#define CAPWAP_DISCOVERY_INTERVAL	5
-#define CAPWAP_MAX_DISCOVERY_INTERVAL	20
+#define CW_DISCOVERY_INTERVAL		5
+#define CW_MAX_DISCOVERY_INTERVAL	20
 #define CAPWAP_RETRANSMIT_INTERVAL	3
 #define CAPWAP_MAX_DISCOVERIES		10
 #define CAPWAP_MAX_RETRANSMIT		5
@@ -351,7 +347,7 @@ CW_MSG_MAXMSG	=				26
 #define CAPWAP_STATISTICS_TIMER		120
 
 
-#define CAPWAP_TIMERS			((CAPWAP_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
+#define CAPWAP_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
 
 
 //#define CAPWAP_CIPHER                 "PSK-AES128-CBC-SHA:"

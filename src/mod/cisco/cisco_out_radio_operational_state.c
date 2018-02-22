@@ -5,6 +5,8 @@
 
 int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
+	cw_dbg(DBG_X,"Try send oper state");
+	
 
 	int l=0;
 	MAVLITER_DEFINE(it,conn->radios_upd);
@@ -27,7 +29,8 @@ int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a
 		cw_dbg(DBG_X,"Translated oper state for output from %d to %d",oper_state, oper_state_t);
 
 		l+=cw_put_elem_radio_operational_state(dst+l,i->iid,oper_state_t, oper_cause);
-
+		
+	//	cw_dbg_elem_(conn,1,1,dst+l,l);
 
 	}
 	return l;

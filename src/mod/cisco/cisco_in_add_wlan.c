@@ -111,13 +111,21 @@ int cw_cisco_get_wlan_(mbag_t wlan, uint8_t *data, int len)
 int cisco_in_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
+	int pos=0;
+	
 	cw_dbg (DBG_X,"Add WLAN");
 	
 	int rid = cw_get_byte(data);
-	cw_dbg (DBG_X, "RID = %d",rid);
+	cw_dbg (DBG_X, "Radio ID = %d",rid);
 
 	bstr_t mac = bstr_create(data+1,6);
 	cw_dbg (DBG_X, "MAC: %s",sock_hwaddr2str(bstr_data(mac),bstr_len(mac)));
+
+	int wid = cw_get_word(data+1+6);
+	cw_dbg (DBG_X, "WLAN ID = %d",wid);
+
+	char * ssid=cw_get_str(data+1+6+2+1,16);
+	cw_dbg (DBG_X, "SSID = %s",ssid);
 	
 
 	return 0;

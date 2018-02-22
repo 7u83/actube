@@ -209,7 +209,7 @@ int wtpconf_ac_list()
 
 int wtpconf_preinit()
 {
-	conf_control_port=strdup(CAPWAP_CONTROL_PORT_STR);
+	conf_control_port=strdup(CW_CONTROL_PORT_STR);
 	conf_dtls_cipher=strdup(CONF_DEFAULT_DTLS_CIPHER);
 
 

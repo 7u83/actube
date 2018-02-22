@@ -75,7 +75,7 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_put_dword(buffer + 4, 0);
 
 	/* unencrypted */
-	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
+	cw_set_hdr_preamble(buffer, CW_VERSION << 4 | 0);
 
 	cw_set_hdr_rmac(buffer, conn->base_rmac);
 	//cw_set_hdr_hlen(buffer, 2);
@@ -99,7 +99,7 @@ void cw_init_data_msg(struct conn *conn)
 	cw_put_dword(buffer + 4, 0);
 
 	/* unencrypted */
-	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
+	cw_set_hdr_preamble(buffer, CW_VERSION << 4 | 0);
 
 
 
@@ -579,12 +579,12 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 
 	int preamble = cw_get_hdr_preamble(packet);
 
-	if ((preamble & 0xf0) != (CAPWAP_VERSION << 4)) {
+	if ((preamble & 0xf0) != (CW_VERSION << 4)) {
 		/* wrong version */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong version, version=%d, version %d expected.",
 		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 4,
-		       CAPWAP_VERSION);
+		       CW_VERSION);
 		errno = EAGAIN;
 		return -1;
 	}

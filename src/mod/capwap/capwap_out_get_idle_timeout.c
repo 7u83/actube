@@ -21,5 +21,5 @@ struct mbag_item * capwap_out_get_capwap_timers(struct conn *conn,struct cw_acti
 	if (m)
 		return m;
 
-	return mbag_set_word(conn->local,CW_ITEM_CAPWAP_TIMERS,CAPWAP_MAX_DISCOVERY_INTERVAL<<8 | CAPWAP_ECHO_INTERVAL);
+	return mbag_set_word(conn->local,CW_ITEM_CAPWAP_TIMERS,CW_MAX_DISCOVERY_INTERVAL<<8 | CAPWAP_ECHO_INTERVAL);
 }
