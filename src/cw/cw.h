@@ -65,9 +65,7 @@
 #define cw_get_word lw_get_word
 #define cw_get_dword lw_get_dword
 
-
-
-
+#define cw_get_str(data, maxlen) (strndup((char*)(data),maxlen))
 
 /** 
  * Macro to isolate bits from a dword 
