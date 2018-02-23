@@ -77,7 +77,7 @@ static int read_subelem(struct ac_info* acinfo,int subtype,uint8_t *elem, int le
  */
 int cw_readelem_ac_descriptor(struct ac_info * acinfo,int type, uint8_t *msgelem, int len)
 {
-	if (type != CW_ELEM_AC_DESCRIPTOR)
+	if (type != CAPWAP_ELEM_AC_DESCRIPTOR)
 		return 0;
 
 	if (len<12)

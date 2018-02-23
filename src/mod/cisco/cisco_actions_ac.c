@@ -328,7 +328,7 @@ static cw_action_out_t actions_out[]={
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
-		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
+		.elem_id = CAPWAP_ELEM_AC_DESCRIPTOR, 
 		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}
@@ -353,7 +353,7 @@ static cw_action_out_t actions_out[]={
 	{
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
-		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
+		.elem_id = CAPWAP_ELEM_AC_DESCRIPTOR, 
 		.out = cisco_out_ac_descriptor,
 		.mand = 1
 	}

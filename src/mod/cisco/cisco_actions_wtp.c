@@ -48,7 +48,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
-		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cisco_in_ac_descriptor,
 		.min_len = 12,
@@ -82,7 +82,7 @@ static cw_action_in_t actions_in[] = {
 		/* Cisco's AC Descriptor */
 		.capwap_state = CW_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cisco_in_ac_descriptor,
 		.min_len = 12,
