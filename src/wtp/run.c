@@ -118,7 +118,7 @@ int run()
 
 	do {
 
-		int echo_interval = mbag_get_word(conn->config,CW_ITEM_CAPWAP_TIMERS,CAPWAP_TIMERS)&0xff;
+		int echo_interval = mbag_get_word(conn->config,CW_ITEM_CAPWAP_TIMERS,CW_TIMERS)&0xff;
 		time_t timer = cw_timer_start(echo_interval);
 		int rc;
 
