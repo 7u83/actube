@@ -18,11 +18,13 @@
 
 
 #include "cw/cw.h"
+#include "cw/log.h"
 #include "cw/action.h"
 #include "cw/capwap_items.h"
 #include "cw/strheap.h"
 #include "cw/radio.h"
 
+#include "cw/message_set.h"
 
 #include "mod_capwap.h"
 
@@ -37,12 +39,14 @@ static cw_message_element_t elements[] = {
 	},
 	{
 		.id = CAPWAP_ELEM_WTP_BOARD_DATA,
+		.name = "WTP Board Data",
 //	 	.start = cw_in_wtp_board_data, 
 //		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 	},
 
 	{
 		.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
+		.name = "WTP Descriptor",
 	 	//.start = capwap_in_wtp_descriptor, 
 		//.item_id = "wtp_descriptor", 
 
@@ -50,12 +54,14 @@ static cw_message_element_t elements[] = {
 	,
 	{
 		.id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.name = "WTP Frame Tunnel Mode",
 //	 	.start = cw_in_generic2, 
 //		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
 		.min_len = 1, 
 		.max_len = 1
 	}
 	,
+	{.id=0}
 };
 
 static cw_message_t messages[] = {
@@ -73,7 +79,16 @@ static cw_message_t messages[] = {
 	}
 };
 
+void test_sets(){
 
+	cw_message_set_t * set = cw_message_set_create();
+	if (set==NULL){
+		cw_log(LOG_ERR,"No mem");
+		return;
+	}
+	
+	cw_message_set_add(set,messages,&elements);
+}
 
 
 

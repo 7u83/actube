@@ -85,6 +85,7 @@ MAVLOBJS= \
 	mlist.o \
 	cw_load_file.o \
 	cw_save_file.o \
+	message_set.o
 
 
 

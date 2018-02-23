@@ -303,6 +303,8 @@
       <File Name="src/cw/avltree_foreach_rl.c"/>
       <File Name="src/cw/cw_out_radio_info.c"/>
       <File Name="src/cw/capwap_items.c"/>
+      <File Name="src/cw/message_set.c"/>
+      <File Name="src/cw/message_set.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

@@ -92,9 +92,17 @@ extern struct mod_ac * cw_get_mod_ac(const char *name);
 #include "cw/mlist.h"
 
 
+extern void test_sets();
+
 int main(int argc, char *argv[])
 {
 
+
+
+	
+	
+	
+	
 	int rc = 0;
 
 	/* parse arguments */
@@ -116,6 +124,10 @@ int main(int argc, char *argv[])
 	/* Warn, if the "secret" debugging feature for 
 	   developers is turned on ;) */
 	DBGX("Attention! %s", "DBG X is ON!");
+
+	test_sets();
+	
+	exit(0);
 
 
 	/* Initialize the database */

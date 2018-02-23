@@ -115,6 +115,7 @@ typedef struct {
 	int type;
 	int * states;
 	cw_messagedef_t * elements;
+	const char * name;
 }cw_message_t;
 
 typedef struct {
@@ -127,10 +128,10 @@ typedef struct {
 	const char * name;
 }cw_message_element_t;
 
-typefe struct {
-	
-	
-}cw_message_set;
+typedef struct {
+	mavl_t messages;
+	mavl_t all_elems;
+}cw_message_set_t;
 
 
 
