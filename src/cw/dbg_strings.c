@@ -47,6 +47,7 @@ struct cw_strlist_elem cw_dbg_strings[] = {
 	{ DBG_MSG_OUT, "msg_out"},
 	{ DBG_MSG_ERR, "msg_err" },
 	{ DBG_ELEM,  "elem" },
+	{ DBG_ELEM_DETAIL, "elem_detail"},
 	{ DBG_ELEM_DMP, "elem_dmp" },
 	{ DBG_ELEM_ERR, "elem_err" },
 	{ DBG_DTLS, "dtls" },
