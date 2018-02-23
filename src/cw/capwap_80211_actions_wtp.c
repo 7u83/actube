@@ -43,7 +43,7 @@ cw_action_out_t capwap_80211_actions_wtp_out[]={
 	 */
 
 	/* 802.11 Radio Information */
-	{CW_MSG_JOIN_REQUEST, CW_ITEM_RADIO_INFOS, 0,
+	{CAPWAP_MSG_JOIN_REQUEST, CW_ITEM_RADIO_INFOS, 0,
 	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1},
 
 

@@ -126,7 +126,7 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST,
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST,
 		.end = cw_in_check_join_req
 	}
 	,
@@ -134,7 +134,7 @@ static cw_action_in_t actions_in[] = {
 	/* Location Data - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id =CW_MSG_JOIN_REQUEST, 
+		.msg_id =CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_LOCATION_DATA, 
 		.item_id = CW_ITEM_LOCATION_DATA,
 		.start = cw_in_generic2,
@@ -147,7 +147,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Board Data - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
@@ -158,7 +158,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Descriptor - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
 	 	.start = capwap_in_wtp_descriptor, 
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
@@ -169,7 +169,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Name - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_NAME,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_NAME, 
@@ -182,7 +182,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element Session ID - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_SESSION_ID,
 	 	.start = capwap_in_session_id, 
 		.item_id = CW_ITEM_SESSION_ID, 
@@ -195,7 +195,7 @@ static cw_action_in_t actions_in[] = {
 	/* WTP Frame Tunnel Mode - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
@@ -208,7 +208,7 @@ static cw_action_in_t actions_in[] = {
 	/* WTP Mac Type - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
@@ -226,7 +226,7 @@ static cw_action_in_t actions_in[] = {
 	/* ECN Support - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
 	 	.start = cw_in_generic2, 
@@ -240,7 +240,7 @@ static cw_action_in_t actions_in[] = {
 	/* Local IPv4 Address - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
 	 	.start = cw_in_capwap_local_ipv4_address, 
@@ -253,7 +253,7 @@ static cw_action_in_t actions_in[] = {
 	/* Local IPv6 Address - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
 	 	.start = cw_in_capwap_local_ipv4_address, 
@@ -268,7 +268,7 @@ static cw_action_in_t actions_in[] = {
 	/* CAPWAP Transport Protocol - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_CAPWAP_TRANSPORT_PROTOCOL,
 		.item_id = CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL,
 	 	.start = cw_in_generic2, 
@@ -280,7 +280,7 @@ static cw_action_in_t actions_in[] = {
 	/* Maximum Message Length - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
@@ -292,7 +292,7 @@ static cw_action_in_t actions_in[] = {
 	/* WTP Reboot Statistics - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
 	 	.start = cw_in_wtp_reboot_statistics, 
 		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
@@ -304,7 +304,7 @@ static cw_action_in_t actions_in[] = {
 	/* Vendor Specific Payload - Join Request*/
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7

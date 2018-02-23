@@ -46,7 +46,7 @@ static cw_action_in_t actions_ac_in[] = {
 	/* 802.11 Radio Information - Join Request */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 

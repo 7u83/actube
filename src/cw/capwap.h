@@ -121,7 +121,11 @@
  * A Discovery Response message is send by the AP to 
  * the WTP after receiving a Discovery Request message. */
 #define CAPWAP_MSG_DISCOVERY_RESPONSE			2
-#define	CW_MSG_JOIN_REQUEST				3
+/**
+ * The CAPWAP Join Request message type. A Join Request is 
+ * snet by the WTP to join an AC */
+#define	CAPWAP_MSG_JOIN_REQUEST				3
+
 #define CW_MSG_JOIN_RESPONSE				4
 
 #define CW_MSG_CONFIGURATION_STATUS_REQUEST		5

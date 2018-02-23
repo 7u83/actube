@@ -297,7 +297,7 @@ static cw_action_out_t actions_out[]={
 	/* CAPWAP Local IP Address - Join Request */
 	{
 		/* use draft 7 elem ids */
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS, 
 		.out = cw_out_capwap_local_ip_address_7,
 		.mand = 1
@@ -306,7 +306,7 @@ static cw_action_out_t actions_out[]={
 
 	/* WTP Descriptor - Join Request */
 	{
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = cisco_out_wtp_descriptor,
@@ -316,7 +316,7 @@ static cw_action_out_t actions_out[]={
 
 	/* WTP Group Name (WTP Name) - Join Request */
 	{
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_AP_GROUP_NAME,
 		.item_id = CIPWAP_ITEM_WTP_GROUP_NAME, 
@@ -328,7 +328,7 @@ static cw_action_out_t actions_out[]={
 
 	/* WTP Board Data Options - Join Request */
 	{
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_BOARD_DATA_OPTIONS,
 		.item_id = CW_ITEM_CISCO_BOARD_DATA_OPTIONS, 
@@ -344,7 +344,7 @@ static cw_action_out_t actions_out[]={
 	{
 		/* Cisco doesn't know ECN support, so we 
 		   define no output method */
-		.msg_id = CW_MSG_JOIN_REQUEST, 
+		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.mand = 0

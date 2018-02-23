@@ -27,7 +27,7 @@ int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 	if (!radio) {
 		if (a->vendor_id != 0
 		    || ( (a->vendor_id == 0) && (a->msg_id != CAPWAP_MSG_DISCOVERY_REQUEST
-			&& a->msg_id != CW_MSG_JOIN_REQUEST) )) {
+			&& a->msg_id != CAPWAP_MSG_JOIN_REQUEST) )) {
 			cw_dbg(DBG_ELEM_ERR, "Radio not found %d", rid);
 			return 0;
 		}
