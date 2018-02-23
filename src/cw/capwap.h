@@ -26,14 +26,13 @@
 #define __CAPWAP_H
 
 #include <stdint.h>
-#include <string.h>
+//#include <string.h>
 
 #include <errno.h>
 #include <arpa/inet.h>
 
 #include "conn.h"
 
-#include "lwapp.h"
 #include "strlist.h"
 
 
