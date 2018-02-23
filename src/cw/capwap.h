@@ -36,6 +36,7 @@
 #include "lwapp.h"
 #include "strlist.h"
 
+
 /* capwap version and iana number */
 
 /**
@@ -55,7 +56,7 @@
 #define CAPWAP_VERSION (0)
 
 #define CAPWAP_IANA_ENTERPRISE_NUMBER 0
- * 
+ 
 /** CAPWAP Control Port*/
 #define CAPWAP_CONTROL_PORT 5246
 /** CAPWAP Control Port as String */
@@ -165,7 +166,7 @@
  * @defgroup CAPWAPMsgElems CAPWAP Message Elements 
  * @brief CAPWAP message elements as defined in  RFC 5415
  * @{
- */namin
+ */   //namin
 
 #define CW_ELEM_AC_DESCRIPTOR				1	/**< AC Descriptor */
 #define CW_ELEM_AC_IPV4_LIST				2	/**< AC IP V4 List */
