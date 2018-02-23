@@ -59,7 +59,7 @@
 #define CAPWAP_DATA_PPORT 5247
 
 /** CAWPAP DataPort as String */
-#define CAPWAP_DATA_PPORT_STR "5247"
+#define CAPWAP_DATA_PORT_STR "5247"
 
 
 
