@@ -43,9 +43,9 @@
  */
 
  /*
- * @defgroup DebugFunctions Debug Functions
- * @{
- */ 
+  * @defgroup DebugFunctions Debug Functions
+  * @{
+  */
 
 
 
@@ -58,7 +58,7 @@ uint32_t cw_dbg_opt_display = 0;
 
 /**
  * Current debug level
- */ 
+ */
 uint32_t cw_dbg_opt_level = 0;
 
 
@@ -84,86 +84,91 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 static struct cw_strlist_elem color_on[] = {
-	{ DBG_PKT_IN, DBG_CLR_YELLO },
-	{ DBG_PKT_OUT, DBG_CLR_YELLO_I },
+	{DBG_PKT_IN, DBG_CLR_YELLO},
+	{DBG_PKT_OUT, DBG_CLR_YELLO_I},
 
-	{ DBG_MSG_IN, DBG_CLR_BLUE },
-	{ DBG_MSG_OUT, DBG_CLR_BLUE_I },
+	{DBG_MSG_IN, DBG_CLR_BLUE},
+	{DBG_MSG_OUT, DBG_CLR_BLUE_I},
 
-	{ DBG_ELEM, "\x1b[39m" },
-	{ DBG_MSG_ERR, "\x1b[31m" },
-	{ DBG_PKT_ERR, "\x1b[31m" },
-	{ DBG_ELEM_ERR, "\x1b[31m" },
-	{ DBG_SUBELEM, "\x1b[30m"},
-	{ DBG_DTLS, DBG_CLR_MAGENTA_B },
-	{ DBG_DTLS_DETAIL, DBG_CLR_MAGENTA },
-	{ DBG_DTLS_BIO,DBG_CLR_MAGENTA_L},
+	{DBG_ELEM, "\x1b[39m"},
+	{DBG_MSG_ERR, "\x1b[31m"},
+	{DBG_PKT_ERR, "\x1b[31m"},
+	{DBG_ELEM_ERR, "\x1b[31m"},
+	{DBG_SUBELEM, "\x1b[30m"},
+	{DBG_DTLS, DBG_CLR_MAGENTA_B},
+	{DBG_DTLS_DETAIL, DBG_CLR_MAGENTA},
+	{DBG_DTLS_BIO, DBG_CLR_MAGENTA_L},
 
 
-	{ DBG_RFC, "\x1b[31m" },
-	{ DBG_X, "\x1b[31m" },
-	{ DBG_WARN, DBG_CLR_CYAN },
-	{ DBG_MOD, "\x1b[91m" },
-	{ CW_STR_STOP, "" } 
+	{DBG_RFC, "\x1b[31m"},
+	{DBG_X, "\x1b[31m"},
+	{DBG_WARN, DBG_CLR_CYAN},
+	{DBG_MOD, "\x1b[91m"},
+	{CW_STR_STOP, ""}
 };
+
 static struct cw_strlist_elem color_ontext[] = {
 
-	{ DBG_ELEM_DMP, "\x1b[30m"},
-	{ CW_STR_STOP, "" } 
+	{DBG_ELEM_DMP, "\x1b[30m"},
+	{CW_STR_STOP, ""}
 };
 
 
 static struct cw_strlist_elem color_off[] = {
 
-	{ CW_STR_STOP, "\x1b[22;39m\x1b[23m" } 
+	{CW_STR_STOP, "\x1b[22;39m\x1b[23m"}
 };
 
 static struct cw_strlist_elem prefix[] = {
-	{ DBG_INFO, " Info -" },
-	{ DBG_PKT_IN, " Pkt IN -" },
-	{ DBG_PKT_OUT, " Pkt Out -" },
-	{ DBG_MSG_IN, " Msg IN -" },
-	{ DBG_MSG_OUT, " Msg Out -" },
+	{DBG_INFO, " Info -"},
+	{DBG_PKT_IN, " Pkt IN -"},
+	{DBG_PKT_OUT, " Pkt Out -"},
+	{DBG_MSG_IN, " Msg IN -"},
+	{DBG_MSG_OUT, " Msg Out -"},
 
-	{ DBG_ELEM,   " Msg Element -" },
-	{ DBG_MSG_ERR," Msg Error -" },
-	{ DBG_PKT_ERR," Pkt Error -" },
-	{ DBG_ELEM_ERR," Elem Error -" },
-	{ DBG_RFC,    " RFC -" },
-	{ DBG_SUBELEM," Sub-Element - "},
-	{ DBG_DTLS, " DTLS - "},
-	{ DBG_DTLS_DETAIL, " DTLS - "},
-	{ DBG_WARN, " Warning - "},
-	{ DBG_MOD, " Mod - "},
-	{ DBG_X, "XXXXX - "},
+	{DBG_ELEM, " Msg Element -"},
+	{DBG_MSG_ERR, " Msg Error -"},
+	{DBG_PKT_ERR, " Pkt Error -"},
+	{DBG_ELEM_ERR, " Elem Error -"},
+	{DBG_RFC, " RFC -"},
+	{DBG_SUBELEM, " Sub-Element - "},
+	{DBG_DTLS, " DTLS - "},
+	{DBG_DTLS_DETAIL, " DTLS - "},
+	{DBG_WARN, " Warning - "},
+	{DBG_MOD, " Mod - "},
+	{DBG_X, "XXXXX - "},
 
-	{ CW_STR_STOP, "" } 
+	{CW_STR_STOP, ""}
 };
 
 
 
 
-static const char * get_dbg_color_on(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+static const char *get_dbg_color_on(int level)
+{
+	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
 		return "";
-	return cw_strlist_get_str(color_on,level);
+	return cw_strlist_get_str(color_on, level);
 }
 
-static const char * get_dbg_color_off(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+static const char *get_dbg_color_off(int level)
+{
+	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
 		return "";
-	return cw_strlist_get_str(color_off,level);
+	return cw_strlist_get_str(color_off, level);
 }
 
-static const char * get_dbg_prefix(int level){
-	return cw_strlist_get_str(prefix,level);
+static const char *get_dbg_prefix(int level)
+{
+	return cw_strlist_get_str(prefix, level);
 
 }
 
-static const char * get_dbg_color_ontext(int level){
-	if ( ! (cw_dbg_opt_display & DBG_DISP_COLORS ) )
+static const char *get_dbg_color_ontext(int level)
+{
+	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
 		return "";
-	return cw_strlist_get_str(color_ontext,level);
+	return cw_strlist_get_str(color_ontext, level);
 
 }
 
@@ -181,10 +186,10 @@ static const char * get_dbg_color_ontext(int level){
 void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int n,
 			 cw_action_in_t * a)
 {
-//	if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
-//		return;
+//      if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
+//              return;
 
-	if ( !cw_dbg_is_level(level) || n==0)
+	if (!cw_dbg_is_level(level) || n == 0)
 		return;
 
 	char buffer[2000];
@@ -202,95 +207,95 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 /**
  * Format a Packet Header
  */
-int cw_format_pkt_hdr(char *dst,int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
+int cw_format_pkt_hdr(char *dst, int level, struct conn *conn, uint8_t * packet, int len,
+		      struct sockaddr *from)
 {
-	char *s=dst;
+	char *s = dst;
 	switch (level) {
 		case DBG_PKT_IN:
-			if (cw_get_hdr_flag_f(packet)){
-				s+=sprintf(s,"Fragment from %s",sock_addr2str_p(from));
-			}
-			else{
-				s+=sprintf(s,"From %s",sock_addr2str_p(from));
+			if (cw_get_hdr_flag_f(packet)) {
+				s += sprintf(s, "Fragment from %s",
+					     sock_addr2str_p(from));
+			} else {
+				s += sprintf(s, "From %s", sock_addr2str_p(from));
 			}
 			break;
 		case DBG_PKT_OUT:
-			if (cw_get_hdr_flag_f(packet)){
-				s+=sprintf(s,"Fragment to %s",sock_addr2str(from));
-			}
-			else{
-				s+=sprintf(s,"To %s",sock_addr2str(from));
+			if (cw_get_hdr_flag_f(packet)) {
+				s += sprintf(s, "Fragment to %s", sock_addr2str(from));
+			} else {
+				s += sprintf(s, "To %s", sock_addr2str(from));
 			}
 			break;
 	}
-	s+=sprintf(s," l=%d: ",len);
+	s += sprintf(s, " l=%d: ", len);
 
-	int preamble = cw_get_hdr_preamble(packet); 
-	if (preamble==01){
-		s+=sprintf(s," (encrypted)");
-		return s-dst;
+	int preamble = cw_get_hdr_preamble(packet);
+	if (preamble == 01) {
+		s += sprintf(s, " (encrypted)");
+		return s - dst;
 	}
 
-	if (len<4)
+	if (len < 4)
 		goto abort;
-		
+
 /*		
 	if (cw_get_hdr_flag_f(packet)){
 		s+=sprintf(s," (fragmented)");
 	}
 */
-	int hlen = cw_get_hdr_hlen(packet); 
+	int hlen = cw_get_hdr_hlen(packet);
 	int rid = cw_get_hdr_rid(packet);
 	int wbid = cw_get_hdr_wbid(packet);
-	s+=sprintf(s," H:%d R:%02d W:%02d",hlen,rid,wbid);
+	s += sprintf(s, " H:%d R:%02d W:%02d", hlen, rid, wbid);
 
 
-	s+=sprintf(s," Flgs:");
-	s+=format_hdr_flags(s,packet);
+	s += sprintf(s, " Flgs:");
+	s += format_hdr_flags(s, packet);
 
-	if (len<8)
+	if (len < 8)
 		goto abort;
 	int frag_id = cw_get_hdr_fragid(packet);
 	int frag_offs = cw_get_hdr_fragoffset(packet);
-	s+=sprintf(s," Frag/Offs:%d/%d",frag_id,frag_offs);
+	s += sprintf(s, " Frag/Offs:%d/%d", frag_id, frag_offs);
 
 
 	if (cw_get_hdr_flag_m(packet)) {
 		/* rmac is present, print the rmac */
-		int rmac_len=cw_get_hdr_rmac_len(packet);
-		int plen=rmac_len;
-		if (rmac_len+8>len) 
-			plen=len-8;
-		if (rmac_len>10) 
-			plen=10;
-		
-		s+=sprintf(s," R-MAC:");
-		s+=format_mac(s,cw_get_hdr_rmac_data(packet),plen);
-		if (rmac_len>10){
-			s+=sprintf(s," ... (len=%d)",rmac_len);
+		int rmac_len = cw_get_hdr_rmac_len(packet);
+		int plen = rmac_len;
+		if (rmac_len + 8 > len)
+			plen = len - 8;
+		if (rmac_len > 10)
+			plen = 10;
+
+		s += sprintf(s, " R-MAC:");
+		s += format_mac(s, cw_get_hdr_rmac_data(packet), plen);
+		if (rmac_len > 10) {
+			s += sprintf(s, " ... (len=%d)", rmac_len);
 		}
 	}
 
-	if (cw_get_hdr_flag_w(packet)){
+	if (cw_get_hdr_flag_w(packet)) {
 		/* print wireless specific info */
 		int ws_len = cw_get_hdr_ws_len(packet);
-		int plen = ws_len > 20 ? 20:ws_len;
-		s+=sprintf(s," WS:");
-		s+=format_hexu(s,cw_get_hdr_ws_data(packet),plen);
-		if (ws_len>20){
-			s+=sprintf(s," ... (len=%d)",ws_len);
+		int plen = ws_len > 20 ? 20 : ws_len;
+		s += sprintf(s, " WS:");
+		s += format_hexu(s, cw_get_hdr_ws_data(packet), plen);
+		if (ws_len > 20) {
+			s += sprintf(s, " ... (len=%d)", ws_len);
 		}
 	}
 
-	
-
-	return s-dst;	
 
 
-	
-abort:
-	s+=sprintf(s," Incomplete...");
-	return s-dst;
+	return s - dst;
+
+
+
+      abort:
+	s += sprintf(s, " Incomplete...");
+	return s - dst;
 
 }
 
@@ -300,8 +305,8 @@ abort:
  * @param data data to dump
  * @param len number of bytes to dump (size of data)
  * @return a character string with the created data ASCII dump (must be released with free)
- */ 
-char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
+ */
+char *cw_dbg_mkdmp_c(const uint8_t * data, int len, int invlen)
 {
 
 	int maxtlen = 2048;
@@ -317,8 +322,8 @@ char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 		md = 1;
 
 
-	
-	char *dst = malloc(2*(md * (len * 3 + (rows * 2) + 8 + maxtlen)));
+
+	char *dst = malloc(2 * (md * (len * 3 + (rows * 2) + 8 + maxtlen)));
 	if (!dst)
 		return NULL;
 
@@ -333,19 +338,19 @@ char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 	char asc_buffer[128];
 	char *ascdst = asc_buffer;
 
-//	if (invlen) {
-//		pdst+=sprintf(pdst,"\x1b[7m");
-//	}
+//      if (invlen) {
+//              pdst+=sprintf(pdst,"\x1b[7m");
+//      }
 
 	for (i = 0; i < len; i++) {
-		char * sp=" ";
-		if(i==invlen-1)
-			sp="|";
-//		if (i==invlen){
-//			pdst+=sprintf(pdst,"\x1b[27m");
-//		}
+		char *sp = " ";
+		if (i == invlen - 1)
+			sp = "|";
+//              if (i==invlen){
+//                      pdst+=sprintf(pdst,"\x1b[27m");
+//              }
 
-		pdst+=sprintf(pdst, "%02X%s", data[i] & 0xff,sp);
+		pdst += sprintf(pdst, "%02X%s", data[i] & 0xff, sp);
 		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
 			int c = data[i] & 0xff;
 			if (c < 0x20 || c > 0x7f)
@@ -353,8 +358,7 @@ char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 			*ascdst = c;
 			ascdst++;
 		}
-
-//		pdst += 3;
+//              pdst += 3;
 		if ((i + 1) % rowlen == 0) {
 			int l;
 			if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
@@ -383,9 +387,9 @@ char * cw_dbg_mkdmp_c( const uint8_t * data, int len, int invlen)
 
 
 
-char * cw_dbg_mkdmp( const uint8_t * data, int len)
+char *cw_dbg_mkdmp(const uint8_t * data, int len)
 {
-	return cw_dbg_mkdmp_c(data,len,0);
+	return cw_dbg_mkdmp_c(data, len, 0);
 }
 
 
@@ -403,43 +407,43 @@ char * cw_dbg_mkdmp( const uint8_t * data, int len)
 
 /**
  * Display a packet on for debugger
- */ 
-void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
+ */
+void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
+		struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
 		return;
 
 	char buf[1024];
-	cw_format_pkt_hdr(buf,level,conn,packet,len,from);
+	cw_format_pkt_hdr(buf, level, conn, packet, len, from);
 
 	int hlen = cw_get_hdr_msg_offset(packet);
 
-	if (cw_dbg_is_level(DBG_PKT_DMP)){
-		char  *dmp = cw_dbg_mkdmp_c(packet,len,hlen);
-		cw_dbg(level,"%s%s",buf,dmp);
+	if (cw_dbg_is_level(DBG_PKT_DMP)) {
+		char *dmp = cw_dbg_mkdmp_c(packet, len, hlen);
+		cw_dbg(level, "%s%s", buf, dmp);
 		free(dmp);
-	}
-	else
-		cw_dbg(level,"%s",buf);
+	} else
+		cw_dbg(level, "%s", buf);
 }
 
-void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struct sockaddr *from)
+void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
+		   struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
 		return;
 
 	char buf[1024];
-	cw_format_pkt_hdr(buf,level,NULL,packet,len,from);
+	cw_format_pkt_hdr(buf, level, NULL, packet, len, from);
 
 	int hlen = cw_get_hdr_msg_offset(packet);
 
-	if (cw_dbg_is_level(DBG_PKT_DMP)){
-		char  *dmp = cw_dbg_mkdmp_c(packet,len,hlen);
-		cw_dbg(level,"%s%s",buf,dmp);
+	if (cw_dbg_is_level(DBG_PKT_DMP)) {
+		char *dmp = cw_dbg_mkdmp_c(packet, len, hlen);
+		cw_dbg(level, "%s%s", buf, dmp);
 		free(dmp);
-	}
-	else
-		cw_dbg(level,"%s",buf);
+	} else
+		cw_dbg(level, "%s", buf);
 }
 
 
@@ -448,14 +452,14 @@ void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struc
 
 
 void cw_dbg_dmp_(int level, const char *file, int line,
-		     const uint8_t * data, int len, const char *format, ...)
+		 const uint8_t * data, int len, const char *format, ...)
 {
 	if (!cw_dbg_is_level(level))
 		return;
 
 
-	char  *dmp = cw_dbg_mkdmp(data,len);
-	cw_dbg(level,"%s%s",format,dmp);
+	char *dmp = cw_dbg_mkdmp(data, len);
+	cw_dbg(level, "%s%s", format, dmp);
 	free(dmp);
 
 
@@ -464,7 +468,8 @@ void cw_dbg_dmp_(int level, const char *file, int line,
 
 
 
-void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from)
+void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
+		struct sockaddr *from)
 {
 	if (!cw_dbg_is_level(level))
 		return;
@@ -474,50 +479,50 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct so
 
 
 
-	uint8_t * msgptr = cw_get_hdr_msg_ptr(packet);
-//	int pplen = len - (msgptr-packet);
+	uint8_t *msgptr = cw_get_hdr_msg_ptr(packet);
+//      int pplen = len - (msgptr-packet);
 
-	int msg_id=cw_get_msg_id(msgptr);
-	s+=sprintf(s,"%s Message (type=%d) ",cw_strmsg(msg_id),msg_id);
-	if ( level == DBG_MSG_IN ) 
-		s+=sprintf(s,"from %s ",sock_addr2str(from));
+	int msg_id = cw_get_msg_id(msgptr);
+	s += sprintf(s, "%s Message (type=%d) ", cw_strmsg(msg_id), msg_id);
+	if (level == DBG_MSG_IN)
+		s += sprintf(s, "from %s ", sock_addr2str(from));
 	else
-		s+=sprintf(s,"to %s ",sock_addr2str(from));
+		s += sprintf(s, "to %s ", sock_addr2str(from));
 
-	s+=sprintf(s,", Seqnum: %d ElemLen: %d",cw_get_msg_seqnum(msgptr),cw_get_msg_elems_len(msgptr));
+	s += sprintf(s, ", Seqnum: %d ElemLen: %d", cw_get_msg_seqnum(msgptr),
+		     cw_get_msg_elems_len(msgptr));
 
 //abort:
-	cw_dbg(level,"%s",buf);
+	cw_dbg(level, "%s", buf);
 }
 
 static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
-		     const uint8_t * elem_data)
+			    const uint8_t * elem_data)
 {
 	switch (vendor_id) {
 		case CW_VENDOR_ID_CISCO:
-			{
-				if (elem_id != CW_CISCO_SPAM_VENDOR_SPECIFIC) {
-					return sprintf(dst, "%d - %s", elem_id,
-						       cw_cisco_id_to_str(elem_id));
-				}
-
-
-				/* dive into LWAPP vendor specific decoding */
-				uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
-				return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
-					       elem_id,
-					       lw_elem_id,
-					       lw_cisco_id_to_str(lw_elem_id));
-
-
-
-				break;
+		{
+			if (elem_id != CW_CISCO_SPAM_VENDOR_SPECIFIC) {
+				return sprintf(dst, "%d - %s", elem_id,
+					       cw_cisco_id_to_str(elem_id));
 			}
+
+
+			/* dive into LWAPP vendor specific decoding */
+			uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
+			return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
+				       elem_id,
+				       lw_elem_id, lw_cisco_id_to_str(lw_elem_id));
+
+
+
+			break;
+		}
 		default:
-			{
-					return sprintf(dst, "%d", elem_id);
-		
-			}
+		{
+			return sprintf(dst, "%d", elem_id);
+
+		}
 
 
 
@@ -558,19 +563,13 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	}
 
 
-	if (!cw_dbg_is_level(DBG_ELEM_DMP)){
-		cw_dbg(DBG_ELEM, "%d (%s), len=%d",
-		       msgelem, elemname, len);
-	}
-	else{
-		char *dmp = cw_dbg_mkdmp(msgbuf,len);
+	if (!cw_dbg_is_level(DBG_ELEM_DMP)) {
+		cw_dbg(DBG_ELEM, "%d (%s), len=%d", msgelem, elemname, len);
+	} else {
+		char *dmp = cw_dbg_mkdmp(msgbuf, len);
 
 		cw_dbg(DBG_ELEM, "%d (%s), len=%d%s%s",
-			msgelem, 
-			elemname, 
-			len, 
-			get_dbg_color_ontext(DBG_ELEM_DMP),
-			dmp);
+		       msgelem, elemname, len, get_dbg_color_ontext(DBG_ELEM_DMP), dmp);
 
 		free(dmp);
 	}
@@ -588,15 +587,13 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 	sprintf(fbuf, "DBG:%s%s %s%s%s",
 		get_dbg_color_on(level),
 		get_dbg_prefix(level),
-		get_dbg_color_ontext(level),
-		format,
-		get_dbg_color_off(level)
-		);
-		
+		get_dbg_color_ontext(level), format, get_dbg_color_off(level)
+	    );
+
 
 	va_list args;
 	va_start(args, format);
-	cw_log_vcb(level,fbuf,args);
+	cw_log_vcb(level, fbuf, args);
 	va_end(args);
 
 }
@@ -604,12 +601,12 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 //int cw_is_utf8(unsigned char *str, size_t len);
 
 
-int cw_format_item(char *dst,mbag_item_t * item)
+int cw_format_item(char *dst, mbag_item_t * item)
 {
-	*dst=0;
-	if (item->type==MBAG_BSTR16){
-		strncpy(dst,(char*)bstr16_data(item->data),bstr16_len(item->data));
-		*(dst+bstr16_len(item->data))=0;
+	*dst = 0;
+	if (item->type == MBAG_BSTR16) {
+		strncpy(dst, (char *) bstr16_data(item->data), bstr16_len(item->data));
+		*(dst + bstr16_len(item->data)) = 0;
 		return bstr16_len(item->data);
 
 
@@ -617,61 +614,60 @@ int cw_format_item(char *dst,mbag_item_t * item)
 	return 0;
 }
 
-static int cw_format_version(char *s, bstrv_t ver, char * def)
+static int cw_format_version(char *s, bstrv_t ver, char *def)
 {
 	if (!ver)
-		return sprintf(s,"%s",def);
+		return sprintf(s, "%s", def);
 
 
-	uint8_t * version = bstrv_data(ver);
+	uint8_t *version = bstrv_data(ver);
 	int len = bstrv_len(ver);
-	
 
 
-	int rs=0;	
+
+	int rs = 0;
 	int i;
 
 
-	if ( format_is_utf8(version,len)  ){
-		if (len != 0 )
-			rs+=sprintf(s+rs,"%.*s",len,version);
+	if (format_is_utf8(version, len)) {
+		if (len != 0)
+			rs += sprintf(s + rs, "%.*s", len, version);
 		else
-			rs+=sprintf(s+rs,"''");
-	}
-	else{
-		for (i=0; i<len && i<20; i++){
-			rs+=sprintf(s+rs,"%02X",version[i]);
+			rs += sprintf(s + rs, "''");
+	} else {
+		for (i = 0; i < len && i < 20; i++) {
+			rs += sprintf(s + rs, "%02X", version[i]);
 		}
 
-		int dot=0;
+		int dot = 0;
 
-		rs+=sprintf(s+rs," (");
-		for (i=0; i<len && i<20; i++){
-			if (dot) 
-				rs+=sprintf(s+rs,".");
-			dot=1;
-			rs+=sprintf(s+rs,"%d",version[i]);
+		rs += sprintf(s + rs, " (");
+		for (i = 0; i < len && i < 20; i++) {
+			if (dot)
+				rs += sprintf(s + rs, ".");
+			dot = 1;
+			rs += sprintf(s + rs, "%d", version[i]);
 		}
-		rs+=sprintf(s+rs,")");
+		rs += sprintf(s + rs, ")");
 	}
 
 	uint32_t vendor = bstrv_get_vendor_id(ver);
-	rs+=sprintf(s+rs,", Vendor Id: %d, %s",vendor, cw_strvendor(vendor));
-	return rs;	
+	rs += sprintf(s + rs, ", Vendor Id: %d, %s", vendor, cw_strvendor(vendor));
+	return rs;
 }
 
 
 
-void cw_dbg_version_subelem(int level,const char*context,int subtype,bstrv_t vstr)
+void cw_dbg_version_subelem(int level, const char *context, int subtype, bstrv_t vstr)
 {
-	if ( !cw_dbg_is_level(level))
+	if (!cw_dbg_is_level(level))
 		return;
-	if (!vstr) 
+	if (!vstr)
 		return;
 	char v[256];
-	cw_format_version(v,vstr,"");
-	cw_dbg(level,"%s: SubType %d, %s",context,subtype,v);
-		
+	cw_format_version(v, vstr, "");
+	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
+
 }
 
 
@@ -704,4 +700,3 @@ void dbg_istore_dmp(mbag_t s)
 
 
 /**@}*/
-
