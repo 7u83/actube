@@ -248,12 +248,12 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 
 	int preamble = cw_get_hdr_preamble(packet);
 
-	if ((preamble & 0xf0) != (CW_VERSION << 4)) {
+	if ((preamble & 0xf0) != (CAPWAP_VERSION << 4)) {
 		/* wrong version */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong version, version=%d, version %d expected.",
 		       sock_addr2str(&nc->addr), (preamble & 0xf0) >> 4,
-		       CW_VERSION);
+		       CAPWAP_VERSION);
 		errno = EAGAIN;
 		return -1;
 	}

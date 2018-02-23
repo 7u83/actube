@@ -46,7 +46,7 @@
  */
 
 /** CAPWAP Version */
-#define CW_VERSION (0)
+#define CAPWAP_VERSION (0)
 
 #define CW_IANA_ENTERPRISE_NUMBER 0
 
@@ -94,8 +94,8 @@
 #define CW_WBID_EPCGLOBAL	3
 /**@}*/
 
-#define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
-#define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
+#define CAPWAP_PACKET_PREAMBLE (CAPWAP_VERSION<<4)
+#define CAPWAP_DTLS_PACKET_PREAMBLE (CAPWAP_VERSION<<4|1)
 
 /*
  * control header stuff
