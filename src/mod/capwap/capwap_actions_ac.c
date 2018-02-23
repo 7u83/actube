@@ -26,6 +26,68 @@
 
 #include "mod_capwap.h"
 
+static cw_message_element_t elements[] = {
+	{
+		.id = CAPWAP_ELEM_DISCOVERY_TYPE,
+		.name = "Discovery Type",
+	 	//.start = cw_in_generic2, 
+		//.item_id = "discovery_type", 
+		.min_len = 1, 
+		.max_len = 1
+	},
+	{
+		.id = CAPWAP_ELEM_WTP_BOARD_DATA,
+//	 	.start = cw_in_wtp_board_data, 
+//		.item_id = CW_ITEM_WTP_BOARD_DATA, 
+	},
+
+	{
+		.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
+	 	//.start = capwap_in_wtp_descriptor, 
+		//.item_id = "wtp_descriptor", 
+
+	}
+	,
+	{
+		.id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+//	 	.start = cw_in_generic2, 
+//		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
+		.min_len = 1, 
+		.max_len = 1
+	}
+	,
+};
+
+static cw_message_t messages[] = {
+
+	/* Discovery Request Message*/
+	{
+		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
+		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
+		.elements = (cw_messagedef_t[]){
+			{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,1},
+			{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,1},
+			{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,1},
+			{0,0,CW_ELEM_WTP_FRAME_TUNNEL_MODE,1},
+		}
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static cw_action_in_t actions_in[] = {
 
 
@@ -33,7 +95,7 @@ static cw_action_in_t actions_in[] = {
 	 * Discovery Request 
 	 */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.end = cw_in_check_disc_req
 	}
@@ -41,9 +103,9 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element Discovery Type */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_DISCOVERY_TYPE,
+		.elem_id = CAPWAP_ELEM_DISCOVERY_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = "discovery_type", 
 		.mand = 1, 
@@ -54,9 +116,9 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element WTP Board Data - Discovery Request */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+		.elem_id = CAPWAP_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.mand = 1, 
@@ -65,9 +127,9 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element WTP Descriptor - Discovery */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	 	.start = capwap_in_wtp_descriptor, 
 		.item_id = "wtp_descriptor", 
 		.mand = 1, 
@@ -77,7 +139,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element WTP Frame Tunnel Mode */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
@@ -90,7 +152,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element WTP Mac Type */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
@@ -103,7 +165,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* MTU Discovery Padding  */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_MTU_DISCOVERY_PADDING,
 	 	.start = cw_in_mtu_discovery_padding, 
@@ -112,7 +174,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Vendor Specific Payload */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
@@ -148,7 +210,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+		.elem_id = CAPWAP_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.mand = 1, 
@@ -159,7 +221,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	 	.start = capwap_in_wtp_descriptor, 
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.mand = 1, 

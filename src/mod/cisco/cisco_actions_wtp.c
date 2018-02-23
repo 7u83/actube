@@ -46,7 +46,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -269,7 +269,7 @@ static cw_action_out_t actions_out[]={
 	/* WTP Descriptor - Discovery */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = cisco_out_wtp_descriptor,
 		.mand = 1
@@ -307,7 +307,7 @@ static cw_action_out_t actions_out[]={
 	/* WTP Descriptor - Join Request */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = cisco_out_wtp_descriptor,
 		.mand = 1

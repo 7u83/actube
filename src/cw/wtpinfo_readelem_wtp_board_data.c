@@ -58,7 +58,7 @@ static void wtpinfo_readsubelems_wtp_board_data(struct wtpinfo * wtpinfo,uint8_t
 int wtpinfo_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgelem, int len)
 {
 
-	if (type!=CW_ELEM_WTP_BOARD_DATA)
+	if (type!=CAPWAP_ELEM_WTP_BOARD_DATA)
 		return 0;
 	if (len<4){
 		cw_dbg(DBG_ELEM,"Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d\n",type,len);

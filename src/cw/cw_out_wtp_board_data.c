@@ -105,6 +105,6 @@ printf("Val: %s\n",buf);
 	}
 
 	int l = d - dst-4;
-	return l + cw_put_elem_hdr(dst, CW_ELEM_WTP_BOARD_DATA, l );
+	return l + cw_put_elem_hdr(dst, CAPWAP_ELEM_WTP_BOARD_DATA, l );
 
 }

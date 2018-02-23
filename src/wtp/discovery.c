@@ -122,7 +122,7 @@ static int run_discovery(struct conn *conn)
 //      conn->incomming = mbag_create();
 
 
-	conn->capwap_state = CW_STATE_DISCOVERY;
+	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 	mbag_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
 			      CAPWAP_DISCOVERY_TYPE_UNKNOWN);
 
@@ -136,7 +136,7 @@ static int run_discovery(struct conn *conn)
 
 
 	while (!cw_timer_timeout(timer)
-	       && conn->capwap_state == CW_STATE_DISCOVERY) {
+	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		mavl_del_all(conn->incomming);
 
 		int rc = cw_read_from(conn);

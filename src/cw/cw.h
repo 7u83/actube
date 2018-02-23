@@ -100,6 +100,40 @@
 #define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_F ) ? 1:0)
 #define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_T ) ? 1:0)
 
+
+
+
+
+typedef struct{
+	int proto;
+	int vendor;
+	int id;
+	int mand;
+}cw_messagedef_t;
+
+typedef struct {
+	int type;
+	int * states;
+	cw_messagedef_t * elements;
+}cw_message_t;
+
+typedef struct {
+	int proto;
+	int vendor;
+	int id;
+
+	int min_len;
+	int max_len;
+	const char * name;
+}cw_message_element_t;
+
+typefe struct {
+	
+	
+}cw_message_set;
+
+
+
 /** 
  * Get length wireless specific data
  * @param th Pointer to packet

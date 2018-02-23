@@ -90,14 +90,14 @@ static void wtpman_run_discovery(void *arg)
 
 	extern cw_actionlist_in_t the_tree;
 
-	wtpman->conn->capwap_state = CW_STATE_DISCOVERY;
+	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 	wtpman->conn->actions = &capwap_actions;
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
 
 	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_state == CW_STATE_DISCOVERY) {
+	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		cw_read_messages(wtpman->conn);
 	}
 
@@ -120,7 +120,7 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	uint32_t type = cw_get_msg_type(msgptr);
 	cw_log(LOG_ERR, "Hey: %d", type);
 	if (type == CAPWAP_MSG_DISCOVERY_REQUEST)
-		conn->capwap_state = CW_STATE_DISCOVERY;
+		conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
 
 	return process_message(conn, rawmsg, rawlen, from);

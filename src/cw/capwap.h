@@ -220,7 +220,11 @@
 #define CW_ELEM_DELETE_MAC_ACL_ENTRY			17
 #define CW_ELEM_DELETE_STATION				18
 #define CW_ELEM_RESERVED_19				19
-#define CW_ELEM_DISCOVERY_TYPE				20
+/**
+ * Indicates the AP's Discovery Type
+ * @see CAPWAPDIscoveryTypes
+ */
+#define CAPWAP_ELEM_DISCOVERY_TYPE			20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
 #define CW_ELEM_ECN_SUPPORT				53
@@ -239,8 +243,11 @@
 #define CW_ELEM_SESSION_ID				35
 #define CW_ELEM_STATISTICS_TIMER			36
 #define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD			37
-#define CW_ELEM_WTP_BOARD_DATA				38
-#define CW_ELEM_WTP_DESCRIPTOR				39
+#define CAPWAP_ELEM_WTP_BOARD_DATA			38
+/**
+ * The WTP Descriptor message element conteins information
+ * about the WTP */
+#define CAPWAP_ELEM_WTP_DESCRIPTOR			39
 #define CW_ELEM_WTP_FALLBACK				40
 #define CW_ELEM_WTP_FRAME_TUNNEL_MODE			41
 #define CW_ELEM_RESERVED_42				42
@@ -662,7 +669,7 @@ struct cw_ac_status {
 enum capwap_states {
 	CW_STATE_NONE = 0,
 	/** Discovery State */
-	CW_STATE_DISCOVERY,
+	CAPWAP_STATE_DISCOVERY,
 	/** Join State */
 	CW_STATE_JOIN,
 	/** Config State */

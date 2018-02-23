@@ -50,7 +50,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Message Discovery Request */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.end = cw_in_check_disc_req
 	}
@@ -58,9 +58,9 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element WTP Descriptor */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	 	.start = cisco_in_wtp_descriptor, 
 		.item_id = "wtp_descriptor", 
 		.mand = 1, 
@@ -69,7 +69,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element Cisco RAD Name */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME, 
@@ -86,9 +86,9 @@ static cw_action_in_t actions_in[] = {
 	 * firmware does not send this message element.
 	 */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_BOARD_DATA,
+		.elem_id = CAPWAP_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.mand = 0, 
@@ -106,7 +106,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	 	.start = cisco_in_wtp_descriptor, 
 		.item_id = "wtp_descriptor", 
 		.mand = 1, 
@@ -503,7 +503,7 @@ static cw_action_in_t actions80211_in[] = {
 		/* Cisco doe't sned this message element in discovery request,
 		   so make it non-mandatory */
 
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,

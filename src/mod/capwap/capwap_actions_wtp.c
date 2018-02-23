@@ -10,7 +10,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Message Discovery Response */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.end = cw_in_check_disc_resp
 	}
@@ -18,7 +18,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -31,7 +31,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Name - Discovery Response */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
@@ -44,7 +44,7 @@ static cw_action_in_t actions_in[] = {
 	
 	/* CAPWAP Control IPv4 Address - Discovery Response*/
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
@@ -58,7 +58,7 @@ static cw_action_in_t actions_in[] = {
 	
 	/* CAPWAP Control IPv6 Address - Discovery Response*/
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
@@ -71,7 +71,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Vendor Specific Payload - Discovery Response*/
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
@@ -85,7 +85,7 @@ static cw_action_in_t actions_in[] = {
 		 * The Result Code is not defined as part
 		 * of Discovery Response
 		 */
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
@@ -451,7 +451,7 @@ static cw_action_out_t actions_out[] = {
 	/* Discovery Type - Discovery Request */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_DISCOVERY_TYPE,
+		.elem_id  = CAPWAP_ELEM_DISCOVERY_TYPE,
 		.item_id = CW_ITEM_DISCOVERY_TYPE, 
 		.out = cw_out_generic,
 		.get = cw_out_get_outgoing,
@@ -462,7 +462,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Board Data - Discovery Request */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
+		.elem_id  = CAPWAP_ELEM_WTP_BOARD_DATA,
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.out = cw_out_wtp_board_data,
 		.get = cw_out_get_config,
@@ -473,7 +473,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Descriptor - Discover Request */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = capwap_out_wtp_descriptor,
 		//.get = cw_out_get_config,
@@ -523,7 +523,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Board Data - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
+		.elem_id  = CAPWAP_ELEM_WTP_BOARD_DATA,
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.out = cw_out_wtp_board_data,
 		.get = cw_out_get_config,
@@ -534,7 +534,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Descriptor - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
+		.elem_id  = CAPWAP_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = cw_out_wtp_descriptor,
 		.mand = 1

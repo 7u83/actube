@@ -16,7 +16,7 @@ cw_action_in_t capwap_80211_actions_ac_in[] = {
 	 * Discovery Resquest 
 	 */
 
-	{0, 0, CW_STATE_DISCOVERY, CAPWAP_MSG_DISCOVERY_REQUEST,
+	{0, 0, CAPWAP_STATE_DISCOVERY, CAPWAP_MSG_DISCOVERY_REQUEST,
 	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
 	,
 	/* --------------------------------------------------------
