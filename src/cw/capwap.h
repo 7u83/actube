@@ -18,16 +18,15 @@
 
 /**
  * @file
- * @brief CAPWAP definitions 
+ * @brief CAPWAP definitions as in RFC 5415
  */
-
 
 
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
 
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -38,8 +37,6 @@
 
 #include "lwapp.h"
 #include "strlist.h"
-
-//#include "cw.h"
 
 /* capwap version and iana number */
 
@@ -85,12 +82,17 @@
 
 
 
-/* wireless binding ids */
+
+
+/**
+ * @addtogroup CAPWAPWBIDS Wireless binding IDs
+ * @{
+ */
 #define CW_WBID_RESERVED1	0
 #define CW_WBID_IEEE80211	1
 #define CW_WBID_RESERVED2	2
 #define CW_WBID_EPCGLOBAL	3
-
+/**@}*/
 
 #define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
 #define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
@@ -347,7 +349,7 @@ CW_MSG_MAXMSG	=				26
 #define CAPWAP_STATISTICS_TIMER		120
 
 
-#define CAPWAP_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
+#define CW_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
 
 
 //#define CAPWAP_CIPHER                 "PSK-AES128-CBC-SHA:"
