@@ -70,15 +70,15 @@
 /**
  * CAPWAP header flags.
  */
-#define CW_FLAG_HDR_R1 0x01	/* bit 0 reserved 1 */
-#define CW_FLAG_HDR_R2 0x02	/* bit 1 reserved 2 */
-#define CW_FLAG_HDR_R3 0x04	/* bit 2 reserved 3 */
-#define CW_FLAG_HDR_K  0x08	/* bit 3 Keep alive flag */
-#define CW_FLAG_HDR_M  0x10	/* bit 4 MAC Adress field present */
-#define CW_FLAG_HDR_W  0x20	/* bit 5 wireless info present */
-#define CW_FLAG_HDR_L  0x40	/* bit 6 last fragment */
-#define CW_FLAG_HDR_F  0x80	/* bit 7 fragment */
-#define CW_FLAG_HDR_T  0x100	/* bit 8 type of payload frame */
+#define CAPWAP_FLAG_HDR_R1 0x01		/**< bit 0 reserved 1 */
+#define CAPWAP_FLAG_HDR_R2 0x02		/**< bit 1 reserved 2 */
+#define CAPWAP_FLAG_HDR_R3 0x04		/**< bit 2 reserved 3 */
+#define CAPWAP_FLAG_HDR_K  0x08		/**< bit 3 Keep alive flag */
+#define CAPWAP_FLAG_HDR_M  0x10		/**< bit 4 MAC Adress field present */
+#define CAPWAP_FLAG_HDR_W  0x20		/**< bit 5 wireless info present */
+#define CAPWAP_FLAG_HDR_L  0x40		/**< bit 6 last fragment */
+#define CAPWAP_FLAG_HDR_F  0x80		/**< bit 7 fragment */
+#define CAPWAP_FLAG_HDR_T  0x100	/**< bit 8 type of payload frame */
 
 
 

@@ -89,16 +89,16 @@
 #define cw_get_hdr_rmac_size(th) cw_get_hdr_rmac_len(th)
 #define cw_get_hdr_rmac_data(th) (th+9)
 
-#define cw_get_hdr_flag_r1(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_R1 ) ? 1:0)
-#define cw_get_hdr_flag_r2(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_R2 ) ? 1:0)
-#define cw_get_hdr_flag_r3(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_R3 ) ? 1:0)
+#define cw_get_hdr_flag_r1(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_R1 ) ? 1:0)
+#define cw_get_hdr_flag_r2(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_R2 ) ? 1:0)
+#define cw_get_hdr_flag_r3(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_R3 ) ? 1:0)
 
-#define cw_get_hdr_flag_k(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_K ) ? 1:0)
-#define cw_get_hdr_flag_m(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_M ) ? 1:0)
-#define cw_get_hdr_flag_w(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_W ) ? 1:0)
-#define cw_get_hdr_flag_l(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_L ) ? 1:0)
-#define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_F ) ? 1:0)
-#define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CW_FLAG_HDR_T ) ? 1:0)
+#define cw_get_hdr_flag_k(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_K ) ? 1:0)
+#define cw_get_hdr_flag_m(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_M ) ? 1:0)
+#define cw_get_hdr_flag_w(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_W ) ? 1:0)
+#define cw_get_hdr_flag_l(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_L ) ? 1:0)
+#define cw_get_hdr_flag_f(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_F ) ? 1:0)
+#define cw_get_hdr_flag_t(th) ((ntohl( *((uint32_t*)th)) & CAPWAP_FLAG_HDR_T ) ? 1:0)
 
 /** 
  * Get length wireless specific data
@@ -196,7 +196,7 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 #define cw_set_hdr_flags(th,flags,set) \
 	( set ? ((*((uint32_t*)th)) |= htonl(flags)) : ((*((uint32_t*)th)) &= (0xffffffff^htonl(flags))) )
 
-#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CW_FLAG_HDR_F)
+#define cw_set_hdr_flag_f(th,set)  cw_set_hdr_flag(th, CAPWAP_FLAG_HDR_F)
 
 
 
@@ -267,13 +267,13 @@ static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
 static inline int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 {
 	if (!rmac) {
-		cw_set_hdr_flags(th, CW_FLAG_HDR_M, 0);
+		cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 0);
 		cw_set_hdr_hlen(th, 2);
 		return 0;
 	}
 	int rmac_len = bstr_len(rmac);
 	memcpy(cw_get_hdr_rmac(th), rmac, rmac_len + 1);
-	cw_set_hdr_flags(th, CW_FLAG_HDR_M, 1);
+	cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 1);
 
 	int hlen = 4 + rmac_len / 4;
 

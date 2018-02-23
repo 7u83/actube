@@ -202,7 +202,7 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 	int mtu = 1400;
 
 	while (msglen>mtu){
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
 		cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 
 		cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,mtu,(struct sockaddr*)&nc->addr);
@@ -219,9 +219,9 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 
 
 	if (fragoffset)
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F | CW_FLAG_HDR_L,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F | CAPWAP_FLAG_HDR_L,1);
 	else
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,0);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,0);
 
 	cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 

@@ -16,7 +16,7 @@ uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac)
 
 	cw_set_hdr_rmac(buffer, rmac);
 
-	cw_set_hdr_flags(buffer, CW_FLAG_HDR_K,1);
+	cw_set_hdr_flags(buffer, CAPWAP_FLAG_HDR_K,1);
 
 	return cw_get_hdr_payload_ptr(buffer);
 }
