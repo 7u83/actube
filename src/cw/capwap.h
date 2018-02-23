@@ -57,9 +57,12 @@
 
 #define CAPWAP_IANA_ENTERPRISE_NUMBER 0
  
-/** CAPWAP Control Port*/
+/** CAPWAP Control Port. This port is defined by RFC5415
+ * for the AC to listen on for CAPWAP control messages. */
 #define CAPWAP_CONTROL_PORT 5246
-/** CAPWAP Control Port as String */
+
+/** CAPWAP Control Port as String.
+ * @see CAPWAP_CONTROL_PORT */
 #define CAPWAP_CONTROL_PORT_STR "5246"
 
 /** CAPWAP Data Port */
@@ -117,18 +120,27 @@
  * find an AC on the network and inform the AC about some 
  * basic capabillities of the WTP. */
 #define	CAPWAP_MSG_DISCOVERY_REQUEST			1
+
 /**
  * A Discovery Response message is send by the AP to 
  * the WTP after receiving a Discovery Request message. */
 #define CAPWAP_MSG_DISCOVERY_RESPONSE			2
+
 /**
  * The CAPWAP Join Request message type. A Join Request is 
  * snet by the WTP to join an AC */
 #define	CAPWAP_MSG_JOIN_REQUEST				3
 
-#define CW_MSG_JOIN_RESPONSE				4
+/**
+ * Join Response, sent by the AC to the WTP in response to 
+ * Join Request message */
+#define CAPWAP_MSG_JOIN_RESPONSE			4
 
-#define CW_MSG_CONFIGURATION_STATUS_REQUEST		5
+/**
+ * The Config Status Request message is sent by the WTP
+ * to report ist status to the AC*/
+#define CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST		5
+
 #define CW_MSG_CONFIGURATION_STATUS_RESPONSE		6
 
 #define CW_MSG_CONFIGURATION_UPDATE_REQUEST		7

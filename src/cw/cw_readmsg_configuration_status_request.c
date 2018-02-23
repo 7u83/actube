@@ -11,7 +11,7 @@ int cw_readmsg_configuration_update_request(uint8_t *elems,int elems_len)
 		int len = cw_get_elem_len(elem);
 		uint8_t *data = cw_get_elem_data(elem);
 
-		cw_dbg_msgelem(CW_MSG_CONFIGURATION_STATUS_REQUEST, type, data, len);
+		cw_dbg_msgelem(CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, type, data, len);
 
 
 //		cw_readelem_vendor_specific_payload(elem,CW_MSG_CONFIGURATION_STATUS_RESPONSE, type,data,len );

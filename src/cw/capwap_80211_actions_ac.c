@@ -40,7 +40,7 @@ cw_action_out_t capwap_80211_actions_ac_out[]={
 	,
 
 	/* Radio Infos */
-	{CW_MSG_JOIN_RESPONSE, NULL /*CW_ELEM80211_WTP_RADIO_INFORMATION*/, 0,
+	{CAPWAP_MSG_JOIN_RESPONSE, NULL /*CW_ELEM80211_WTP_RADIO_INFORMATION*/, 0,
 	 CW_ELEM80211_WTP_RADIO_INFORMATION, NULL,cw_out_radio_infos, NULL,1}
 	,
 

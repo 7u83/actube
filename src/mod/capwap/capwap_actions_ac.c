@@ -318,7 +318,7 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.end = cw_in_check_generic_req
 	}
 	,
@@ -326,7 +326,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Name - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.start = cw_in_generic2,
@@ -340,7 +340,7 @@ static cw_action_in_t actions_in[] = {
 	/*  Radio Admin State (IN) - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cw_in_radio_generic,
@@ -352,7 +352,7 @@ static cw_action_in_t actions_in[] = {
 	/* Statistics Timer  - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_STATISTICS_TIMER,
 		.item_id = CW_ITEM_STATISTICS_TIMER,
 		.start = cw_in_generic2,
@@ -367,7 +367,7 @@ static cw_action_in_t actions_in[] = {
 	/* WTP Reboot Statistics - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
 	 	.start = cw_in_wtp_reboot_statistics, 
 		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
@@ -382,7 +382,7 @@ static cw_action_in_t actions_in[] = {
 	/* Vendor Specific Payload - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 	}
@@ -594,7 +594,7 @@ static cw_action_out_t actions_out[]={
 	/* Result Code - Join Response */
 
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE,
 	 	.out = cw_out_generic, 
@@ -605,7 +605,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Name - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.out = cw_out_generic,
@@ -616,7 +616,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.out = capwap_out_ac_descriptor,
@@ -627,7 +627,7 @@ static cw_action_out_t actions_out[]={
 
 	/* Capwap Local IPv4/IPv6 Address - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
 	 	.out = cw_out_capwap_control_ip_addr_list, 
 		.get = cw_out_get_outgoing,
@@ -637,7 +637,7 @@ static cw_action_out_t actions_out[]={
 
 	/* ECN Support - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.out = cw_out_generic,
@@ -649,7 +649,7 @@ static cw_action_out_t actions_out[]={
 
 
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id = CW_ELEM_AC_IPV4_LIST,
 		.out = capwap_out_ac_ip_list
 

@@ -179,7 +179,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		/* We have to deal with zero-length strings */
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.start = cw_in_generic2,
@@ -194,7 +194,7 @@ static cw_action_in_t actions_in[] = {
 
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_WTP_RADIO_CFG, 
 		.start=cisco80211_in_wtp_radio_configuration, 
@@ -206,7 +206,7 @@ static cw_action_in_t actions_in[] = {
 	/* LED State Config */	
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG, 
 		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
@@ -218,7 +218,7 @@ static cw_action_in_t actions_in[] = {
 	/* LED Flash Config */	
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG, 
 		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
@@ -234,7 +234,7 @@ static cw_action_in_t actions_in[] = {
 		 * of LWAPP elements */
 
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_SPAM_VENDOR_SPECIFIC,
 		.start = lw_in_vendor_specific,
@@ -250,7 +250,7 @@ static cw_action_in_t actions_in[] = {
 
 		.proto = CW_ACTION_PROTO_LWAPP,
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = LW_VENDOR_ID_CISCO,
 		.elem_id = LW_CISCO_TELNET_SSH,
 		.start = cisco_in_telnet_ssh
@@ -262,7 +262,7 @@ static cw_action_in_t actions_in[] = {
 	{
 
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
@@ -274,7 +274,7 @@ static cw_action_in_t actions_in[] = {
 	{
 
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LOG_FACILITY,
 		.item_id = CIPWAP_ITEM_LOG_FACILITY,
@@ -351,7 +351,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
 		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
 		.out = cisco_out_ac_descriptor,
@@ -363,7 +363,7 @@ static cw_action_out_t actions_out[]={
 
 	/* ECN Support - Join Response */
 	{
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT
 	}
@@ -521,7 +521,7 @@ static cw_action_in_t actions80211_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_CISCO_SUPPORTED_RATES,
 		.item_id = CW_RADIOITEM80211_SUPPORTED_RATES,
 	 	.start = cw_in_radio_generic, 
@@ -537,7 +537,7 @@ static cw_action_in_t actions80211_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_CISCO_MAC_OPERATION,
 		.item_id = "mac operation",
 	 	.start = cisco80211_in_mac_operation, 
@@ -553,7 +553,7 @@ static cw_action_in_t actions80211_in[] = {
 	/*  Radio Admin State (IN) - Config Status Request */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cisco_in_radio_administrative_state,

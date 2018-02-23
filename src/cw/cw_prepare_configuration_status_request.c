@@ -12,7 +12,7 @@ void cw_prepare_configuration_status_request(struct conn * conn, struct radioinf
 	struct cwmsg * cwmsg = &conn->req_msg;
 	uint8_t * buffer = conn->req_buffer;
 
-	cwmsg_init(cwmsg,buffer,CW_MSG_CONFIGURATION_STATUS_REQUEST,conn_get_next_seqnum(conn),radioinfo);
+	cwmsg_init(cwmsg,buffer,CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,conn_get_next_seqnum(conn),radioinfo);
 	cwmsg->capwap_mode=conn->capwap_mode;
 	
 	cwmsg_addelem_ac_name(cwmsg,(uint8_t *)"AC-iMaxi");	

@@ -67,7 +67,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		/* Make ECN Support non-mand */
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
 	 	.start = cw_in_generic2, 
@@ -81,7 +81,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		/* Cisco's AC Descriptor */
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cisco_in_ac_descriptor,
@@ -354,7 +354,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AP Mode and Type -  Configuration Status Request OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
@@ -367,7 +367,7 @@ static cw_action_out_t actions_out[]={
 	
 	/* Cisco WTP Admin state -  OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 		.item_id = CISCO_ITEM_WTP_ADMIN_STATE,
 	 	.out = cisco_out_wtp_administrative_state, 
@@ -489,7 +489,7 @@ static cw_action_out_t actions80211_out[]={
 	 */
 	{
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 		.out = cisco_out_80211_wtp_radio_cfg,
@@ -501,7 +501,7 @@ static cw_action_out_t actions80211_out[]={
 
 
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.item_id = CW_RADIO_SUPPORTED_RATES ,
 	 	.elem_id = CW_ELEM80211_SUPPORTED_RATES, 
 		.mand = 0,

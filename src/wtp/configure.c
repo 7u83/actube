@@ -25,7 +25,7 @@ int configure()
 	mbag_t radios_upd = conn->radios_upd;
 	conn->radios_upd=conn->radios;
 
-	int rc = cw_send_request(conn, CW_MSG_CONFIGURATION_STATUS_REQUEST);
+	int rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST);
 	conn->radios_upd=radios_upd;
 
 	if (!cw_rcok(rc)) {

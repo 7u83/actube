@@ -103,14 +103,14 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.end = cw_in_check_generic_resp
 	}
 	,
 	/* Result Code - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
 		.start  = cw_in_generic2,
@@ -123,7 +123,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Descriptor - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cw_in_ac_descriptor,
@@ -136,7 +136,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Name - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
 		.start  = cw_in_generic2,
@@ -149,7 +149,7 @@ static cw_action_in_t actions_in[] = {
 	/* ECN Support - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.start  = cw_in_generic2,
@@ -162,7 +162,7 @@ static cw_action_in_t actions_in[] = {
 	/* CAPWAP Control IPv4 Address - Join Response*/
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address,
@@ -175,7 +175,7 @@ static cw_action_in_t actions_in[] = {
 	/* CAPWAP Control IPv6 Address - Join Response*/
 	{
 		.capwap_state = CW_STATE_JOIN,
-		.msg_id = CW_MSG_JOIN_RESPONSE,
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
@@ -189,7 +189,7 @@ static cw_action_in_t actions_in[] = {
 	/* Maximum Message Length - Join Response */
 	{
 		.capwap_state = CW_STATE_JOIN, 
-		.msg_id = CW_MSG_JOIN_RESPONSE, 
+		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
@@ -627,7 +627,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* AC Name - Config Status Request - OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.out = cw_out_generic,
@@ -638,7 +638,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* Radio Admin State - Config Status Request - OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.out = cw_out_radio_generic,
@@ -652,7 +652,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* WTP Reboot Statistics - Config Status Request */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
 		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
 		.out = cw_out_wtp_reboot_statistics,
@@ -664,7 +664,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* Statistics Timer - Join Request */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id  = CW_ELEM_STATISTICS_TIMER,
 		.item_id = CW_ITEM_STATISTICS_TIMER, 
 		.out = cw_out_generic,
