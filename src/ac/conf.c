@@ -620,7 +620,7 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 	char *ctrlport;
 	switch (*proto) {
 		case AC_PROTO_CAPWAP:
-			ctrlport = CW_CONTROL_PORT_STR;
+			ctrlport = CAPWAP_CONTROL_PORT_STR;
 			break;
 		case AC_PROTO_LWAPP:
 			ctrlport = LWAPP_CONTROL_PORT_STR;

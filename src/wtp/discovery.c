@@ -124,10 +124,10 @@ static int run_discovery(struct conn *conn)
 
 	conn->capwap_state = CW_STATE_DISCOVERY;
 	mbag_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
-			      CW_DISCOVERY_TYPE_UNKNOWN);
+			      CAPWAP_DISCOVERY_TYPE_UNKNOWN);
 
 
-	cw_init_request(conn, CW_MSG_DISCOVERY_REQUEST);
+	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
 	cw_put_msg(conn, conn->req_buffer);
 	conn_send_msg(conn, conn->req_buffer);
 

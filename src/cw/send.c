@@ -36,7 +36,7 @@ cw_dbg(DBG_X,"Here is a conn_send_msg for anything");
 	int mtu = conn->mtu;
 
 	while (packetlen>mtu){
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
 		cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
@@ -54,9 +54,9 @@ cw_dbg(DBG_X,"Here is a conn_send_msg for anything");
 
 
 	if (fragoffset)
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F | CW_FLAG_HDR_L,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F | CAPWAP_FLAG_HDR_L,1);
 	else
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,0);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,0);
 
 	cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
@@ -83,7 +83,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 	int mtu = conn->mtu;
 
 	while (packetlen>mtu){
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
 		cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
@@ -101,9 +101,9 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 
 	if (fragoffset)
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F | CW_FLAG_HDR_L,1);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F | CAPWAP_FLAG_HDR_L,1);
 	else
-		cw_set_hdr_flags(rawmsg,CW_FLAG_HDR_F,0);
+		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,0);
 
 	cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 

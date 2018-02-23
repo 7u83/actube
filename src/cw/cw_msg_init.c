@@ -19,7 +19,7 @@ void cw_init_response(struct conn * conn, uint8_t *req)
 	int dhbytes;
 	memcpy(buffer,req,shbytes);
 	cw_set_hdr_hlen(buffer,2);
-	cw_set_hdr_flags(buffer,CW_FLAG_HDR_M,1);
+	cw_set_hdr_flags(buffer,CAPWAP_FLAG_HDR_M,1);
 	dhbytes = cw_get_hdr_msg_offset(buffer);
 
 	uint8_t * msgptr = req+shbytes;

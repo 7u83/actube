@@ -25,8 +25,6 @@
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
 
-
-//#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -41,132 +39,87 @@
 /* capwap version and iana number */
 
 /**
- *@defgroup CAPWAPConstants CAPWAP Constants 
+ *@defgroup CAPWAP CAPWAP Defintions from RFC5415
+ *@{
+ */
+
+
+
+/**
+ *@defgroup CAPWAPConstants CAPWAP General Constants 
+ *@brief General constants as defined in RFC5415
  *@{
  */
 
 /** CAPWAP Version */
-#define CW_VERSION (0)
+#define CAPWAP_VERSION (0)
 
-#define CW_IANA_ENTERPRISE_NUMBER 0
-
+#define CAPWAP_IANA_ENTERPRISE_NUMBER 0
+ * 
 /** CAPWAP Control Port*/
-#define CW_CONTROL_PORT 5246
+#define CAPWAP_CONTROL_PORT 5246
 /** CAPWAP Control Port as String */
-#define CW_CONTROL_PORT_STR "5246"
+#define CAPWAP_CONTROL_PORT_STR "5246"
 
 /** CAPWAP Data Port */
 #define CAPWAP_DATA_PPORT 5247
 
 /** CAWPAP DataPort as String */
-#define CAPWAP_DATA_PPORT_STR "5247"
-
-
+#define CAPWAP_DATA_PORT_STR "5247"
 
 /**@}*/
 
 
 
 /**
- * CAPWAP header flags.
- */
-#define CW_FLAG_HDR_R1 0x01	/* bit 0 reserved 1 */
-#define CW_FLAG_HDR_R2 0x02	/* bit 1 reserved 2 */
-#define CW_FLAG_HDR_R3 0x04	/* bit 2 reserved 3 */
-#define CW_FLAG_HDR_K  0x08	/* bit 3 Keep alive flag */
-#define CW_FLAG_HDR_M  0x10	/* bit 4 MAC Adress field present */
-#define CW_FLAG_HDR_W  0x20	/* bit 5 wireless info present */
-#define CW_FLAG_HDR_L  0x40	/* bit 6 last fragment */
-#define CW_FLAG_HDR_F  0x80	/* bit 7 fragment */
-#define CW_FLAG_HDR_T  0x100	/* bit 8 type of payload frame */
-
-
-
-
-
-/**
- * @addtogroup CAPWAPWBIDS Wireless binding IDs
- * @{
- */
-#define CW_WBID_RESERVED1	0
-#define CW_WBID_IEEE80211	1
-#define CW_WBID_RESERVED2	2
-#define CW_WBID_EPCGLOBAL	3
-/**@}*/
-
-#define CAPWAP_PACKET_PREAMBLE (CW_VERSION<<4)
-#define CAPWAP_DTLS_PACKET_PREAMBLE (CW_VERSION<<4|1)
-
-/*
- * control header stuff
- */
-
-/** 
- *@addtogroup CAPWAPConstants 
+ *@defgroup CAPWAPHeaderFlags CAPWAP Header Flags
+ *@brief The CAPWAP control header flags
+ * 
  *@{
  */
+#define CAPWAP_FLAG_HDR_R1 0x01		/**< bit 0 reserved 1 */
+#define CAPWAP_FLAG_HDR_R2 0x02		/**< bit 1 reserved 2 */
+#define CAPWAP_FLAG_HDR_R3 0x04		/**< bit 2 reserved 3 */
+#define CAPWAP_FLAG_HDR_K  0x08		/**< bit 3 Keep alive flag */
+#define CAPWAP_FLAG_HDR_M  0x10		/**< bit 4 MAC Adress field present */
+#define CAPWAP_FLAG_HDR_W  0x20		/**< bit 5 wireless info present */
+#define CAPWAP_FLAG_HDR_L  0x40		/**< bit 6 last fragment */
+#define CAPWAP_FLAG_HDR_F  0x80		/**< bit 7 fragment */
+#define CAPWAP_FLAG_HDR_T  0x100	/**< bit 8 type of payload frame */
+/**@}*/
+
+
+
 
 /**
- * CAPWAP message types as defined in RFC 5416 
+ * @defgroup CAPWAPWBIDS CAPWAP Wireless binding IDs
+ * @{
  */
-enum cw_message_types{
-
-/**Discovery Request = 1*/
-CW_MSG_DISCOVERY_REQUEST = 			1,
-/** Discovery Response = 2 */
-CW_MSG_DISCOVERY_RESPONSE = 			2,
-/** Join Request = 3 */
-CW_MSG_JOIN_REQUEST = 				3,
-/** Join Response = 4 */
-CW_MSG_JOIN_RESPONSE = 				4,
-/** Config. Status Request = 5*/
-CW_MSG_CONFIGURATION_STATUS_REQUEST = 		5,
-/** Config. Status Response = 6 */
-CW_MSG_CONFIGURATION_STATUS_RESPONSE = 		6,
-/** Config. Update Request = 7 */
-CW_MSG_CONFIGURATION_UPDATE_REQUEST = 		7,
-CW_MSG_CONFIGURATION_UPDATE_RESPONSE = 		8,
-
-CW_MSG_WTP_EVENT_REQUEST = 			9,
-CW_MSG_WTP_EVENT_RESPONSE = 			10,
-
-CW_MSG_CHANGE_STATE_EVENT_REQUEST = 		11,
-CW_MSG_CHANGE_STATE_EVENT_RESPONSE = 		12,
-
-CW_MSG_ECHO_REQUEST = 				13,
-CW_MSG_ECHO_RESPONSE = 				14,
-
-CW_MSG_IMAGE_DATA_REQUEST = 			15,
-CW_MSG_IMAGE_DATA_RESPONSE = 			16,
-
-CW_MSG_RESET_REQUEST = 				17,
-CW_MSG_RESET_RESPONSE = 			18,
-
-CW_MSG_PRIMARY_DISCOVERY_REQUEST = 		19,
-CW_MSG_PRIMARY_DISCOVERY_RESPONSE = 		20,
-
-CW_MSG_DATA_TRANSFER_REQUEST = 			21,
-CW_MSG_DATA_TRANSFER_RESPONSE = 		22,
-
-CW_MSG_CLEAR_CONFIGURATION_REQUEST = 		23,
-CW_MSG_CLEAR_CONFIGURATION_RESPONSE = 		24,
-
-CW_STATION_CONFIGURATION_REQUEST = 		25,
-CW_STATION_CONFIGURATION_RESPONSE = 		26,
-
-CW_MSG_MAXMSG	=				26
-
-};
-
-//cw_msg_t;
-
+#define CAPWAP_WBID_RESERVED1	0
+#define CAPWAP_WBID_IEEE80211	1
+#define CAPWAP_WBID_RESERVED2	2
+#define CAPWAP_WBID_EPCGLOBAL	3
 /**@}*/
+
+#define CAPWAP_PACKET_PREAMBLE (CAPWAP_VERSION<<4)
+#define CAPWAP_DTLS_PACKET_PREAMBLE (CAPWAP_VERSION<<4|1)
+
 
  
 
-/*
-#define	CW_MSG_DISCOVERY_REQUEST			1
-#define CW_MSG_DISCOVERY_RESPONSE			2
+/**
+ * @defgroup CAPWAPMessages CAPWAP message types as defined in RFC 5416
+ * @{
+ */
+/**
+ * The Discovery Request message is sent by the WTP to 
+ * find an AC on the network and inform the AC about some 
+ * basic capabillities of the WTP. */
+#define	CAPWAP_MSG_DISCOVERY_REQUEST			1
+/**
+ * A Discovery Response message is send by the AP to 
+ * the WTP after receiving a Discovery Request message. */
+#define CAPWAP_MSG_DISCOVERY_RESPONSE			2
 #define	CW_MSG_JOIN_REQUEST				3
 #define CW_MSG_JOIN_RESPONSE				4
 
@@ -204,25 +157,33 @@ CW_MSG_MAXMSG	=				26
 #define CW_STATION_CONFIGURATION_RESPONSE		26
 
 #define CW_MSG_MAXMSG					26
-*/
+
+/**@}*/
+
 
 /**
-* CAPWAP message elements as defined in  RFC 5415
-*/
+ * @defgroup CAPWAPMsgElems CAPWAP Message Elements 
+ * @brief CAPWAP message elements as defined in  RFC 5415
+ * @{
+ */namin
 
-
-#define CW_ELEM_AC_DESCRIPTOR				1
-#define CW_ELEM_AC_IPV4_LIST				2
-#define CW_ELEM_AC_IPV6_LIST				3
+#define CW_ELEM_AC_DESCRIPTOR				1	/**< AC Descriptor */
+#define CW_ELEM_AC_IPV4_LIST				2	/**< AC IP V4 List */
+#define CW_ELEM_AC_IPV6_LIST				3	/**< AC IP V6 List */
 #define CW_ELEM_AC_NAME					4
 #define CW_ELEM_AC_NAME_WITH_PRIORITY			5
-#define CW_ELEM_AC_NAME_WITH_INDEX			CW_ELEM_AC_NAME_WITH_PRIORITY	/* Draft 7 naming */
+#define CW_ELEM_AC_NAME_WITH_INDEX			CW_ELEM_AC_NAME_WITH_PRIORITY	/**< Draft 7 naming */
 #define CW_ELEM_AC_TIMESTAMP				6
+/**@{
+ * one for all
+ */
+ /* yes one for alllll */
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
 #define CW_ELEM_RESERVED_9				9
 #define CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS		10
 #define CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS		11
+/**@}*/
 #define CW_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS		30
 #define CW_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS		50
 #define CW_ELEM_CAPWAP_TIMERS				12
@@ -272,7 +233,7 @@ CW_MSG_MAXMSG	=				26
 #define	CW_ELEM_WTP_IPV4_IP_ADDRESS			42
 #define	CW_ELEM_WTP_IPV6_IP_ADDRESS			43
 
-
+/**@}*/
 
 /**
  * @defgrpup BOARD_SUBELEMS Board Data Sub-Elements
@@ -310,12 +271,23 @@ CW_MSG_MAXMSG	=				26
 #define CW_WTP_FRAME_TUNNEL_MODE_N	8	/* native mode */
 
 
-/* Discovery Types */
-#define CW_DISCOVERY_TYPE_UNKNOWN	0
-#define CW_DISCOVERY_TYPE_STATIC	1
-#define CW_DISCOVERY_TYPE_DHCP		2
-#define CW_DISCOVERY_TYPE_DNS		3
-#define CW_DISCOVERY_TYPE_AC_REFERRAL	4
+
+/**
+ * @defgroup CAPWAPDiscoveryTypes CAPWAP Discovery Types
+ * @brief CAPWAP Discovery Types defined in RFC5415
+ * @{
+ */
+/** Discovery Type is unknown */
+#define CAPWAP_DISCOVERY_TYPE_UNKNOWN		0	
+/** AC was discoverd by a static IP address stored in AP's config */
+#define CAPWAP_DISCOVERY_TYPE_STATIC		1
+/** AC was discovered by DHCP option 43 returned from a DHCP server */
+#define CAPWAP_DISCOVERY_TYPE_DHCP		2
+/** AC was discovered by DNS lookup */
+#define CAPWAP_DISCOVERY_TYPE_DNS		3
+/** AC was discovered by referral */
+#define CAPWAP_DISCOVERY_TYPE_AC_REFERRAL	4
+/**@}*/
 
 
 /* WTP mac types */
@@ -759,3 +731,7 @@ int cw_in_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in 
 
 
 #endif
+
+/**
+ *@}
+ */

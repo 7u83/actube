@@ -168,7 +168,7 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 		f->bytesreceived+=payloadlen;
 	}
 
-	if (val0  & CW_FLAG_HDR_L){
+	if (val0  & CAPWAP_FLAG_HDR_L){
 		f->bytesneeded=dst+payloadlen;
 	}
 

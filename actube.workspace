@@ -6,6 +6,7 @@
   <Project Name="mod_capwap" Path="mod_capwap.project" Active="No"/>
   <Project Name="mod_cisco" Path="mod_cisco.project" Active="Yes"/>
   <Project Name="libcw" Path="libcw.project" Active="No"/>
+  <Project Name="mod_capwap80211" Path="mod_capwap80211.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
@@ -15,6 +16,7 @@
       <Project Name="mod_capwap" ConfigName="Debug"/>
       <Project Name="mod_cisco" ConfigName="Debug"/>
       <Project Name="libcw" ConfigName="Debug"/>
+      <Project Name="mod_capwap80211" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
@@ -24,6 +26,7 @@
       <Project Name="mod_capwap" ConfigName="Release"/>
       <Project Name="mod_cisco" ConfigName="Release"/>
       <Project Name="libcw" ConfigName="Release"/>
+      <Project Name="mod_capwap80211" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

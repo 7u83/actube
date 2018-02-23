@@ -119,7 +119,7 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 	uint32_t type = cw_get_msg_type(msgptr);
 	cw_log(LOG_ERR, "Hey: %d", type);
-	if (type == CW_MSG_DISCOVERY_REQUEST)
+	if (type == CAPWAP_MSG_DISCOVERY_REQUEST)
 		conn->capwap_state = CW_STATE_DISCOVERY;
 
 

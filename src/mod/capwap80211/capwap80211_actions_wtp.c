@@ -20,7 +20,7 @@ static cw_action_in_t actions_wtp_in[] = {
 	/* 802.11 Radio Inmformation - Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 //	 	.start = cw_in_radio_generic, 
@@ -72,7 +72,7 @@ cw_action_out_t actions_out[]={
 
 	/* 802.11 Radio Information - Discovery Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.item_id = CW_ITEM_RADIO_INFOS ,
 	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
 		.out = cw_out_radio_infos, 

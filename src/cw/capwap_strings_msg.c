@@ -26,8 +26,8 @@
  * CAPWAP Message Strings
  */ 
 struct cw_strlist_elem capwap_strings_msg[] = {
-{ CW_MSG_DISCOVERY_REQUEST, "Discovery Request" },
-{ CW_MSG_DISCOVERY_RESPONSE,"Discovery Response" },
+{ CAPWAP_MSG_DISCOVERY_REQUEST, "Discovery Request" },
+{ CAPWAP_MSG_DISCOVERY_RESPONSE,"Discovery Response" },
 { CW_MSG_JOIN_REQUEST, "Join Request"},
 { CW_MSG_JOIN_RESPONSE,"Join Response"},
 { CW_MSG_CONFIGURATION_STATUS_REQUEST,"Configuration Status Request"},

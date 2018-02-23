@@ -34,7 +34,7 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_REQUEST,
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.end = cw_in_check_disc_req
 	}
 	,
@@ -42,7 +42,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element Discovery Type */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_DISCOVERY_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = "discovery_type", 
@@ -55,7 +55,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Board Data - Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
@@ -66,7 +66,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Descriptor - Discovery */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
 	 	.start = capwap_in_wtp_descriptor, 
 		.item_id = "wtp_descriptor", 
@@ -78,7 +78,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Frame Tunnel Mode */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
@@ -91,7 +91,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Mac Type */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_MAC_TYPE,
@@ -104,7 +104,7 @@ static cw_action_in_t actions_in[] = {
 	/* MTU Discovery Padding  */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_MTU_DISCOVERY_PADDING,
 	 	.start = cw_in_mtu_discovery_padding, 
 	}
@@ -113,7 +113,7 @@ static cw_action_in_t actions_in[] = {
 	/* Vendor Specific Payload */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7
@@ -550,7 +550,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.out = capwap_out_ac_descriptor,
@@ -560,7 +560,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Name - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.out = cw_out_generic,
@@ -575,7 +575,7 @@ static cw_action_out_t actions_out[]={
 	 * of .elem_id isn't needed.
 	 */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
 	 	.out = cw_out_capwap_control_ip_addr_list, 
 		.get = cw_out_get_outgoing,

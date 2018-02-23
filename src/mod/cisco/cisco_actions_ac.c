@@ -51,7 +51,7 @@ static cw_action_in_t actions_in[] = {
 	/* Message Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_REQUEST,
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.end = cw_in_check_disc_req
 	}
 	,
@@ -59,7 +59,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element WTP Descriptor */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
 	 	.start = cisco_in_wtp_descriptor, 
 		.item_id = "wtp_descriptor", 
@@ -70,7 +70,7 @@ static cw_action_in_t actions_in[] = {
 	/* Element Cisco RAD Name */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME, 
 		.start=cw_in_generic2, 
@@ -87,7 +87,7 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_BOARD_DATA,
 	 	.start = cw_in_wtp_board_data, 
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
@@ -326,7 +326,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
 		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
 		.out = cisco_out_ac_descriptor,
@@ -339,7 +339,7 @@ static cw_action_out_t actions_out[]={
 	 * Important to get the WTP a DTLS connection established
 	 */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_AP_TIMESYNC,
@@ -504,7 +504,7 @@ static cw_action_in_t actions80211_in[] = {
 		   so make it non-mandatory */
 
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 
