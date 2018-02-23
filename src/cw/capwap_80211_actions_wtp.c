@@ -13,7 +13,7 @@
 cw_action_in_t capwap_80211_actions_wtp_in[] = {
 
 	/* Discovery Response */
-	{0, 0, CW_STATE_DISCOVERY, CW_MSG_DISCOVERY_RESPONSE,
+	{0, 0, CW_STATE_DISCOVERY, CAPWAP_MSG_DISCOVERY_RESPONSE,
 	 CW_ACTION_IN_80211_WTP_RADIO_INFORMATION, 1}
 	,
 

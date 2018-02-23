@@ -550,7 +550,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.out = capwap_out_ac_descriptor,
@@ -560,7 +560,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Name - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.out = cw_out_generic,
@@ -575,7 +575,7 @@ static cw_action_out_t actions_out[]={
 	 * of .elem_id isn't needed.
 	 */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST,
 	 	.out = cw_out_capwap_control_ip_addr_list, 
 		.get = cw_out_get_outgoing,

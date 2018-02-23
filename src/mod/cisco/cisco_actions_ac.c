@@ -326,7 +326,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AC Descriptor - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_DESCRIPTOR,
 		.elem_id = CW_ELEM_AC_DESCRIPTOR, 
 		.out = cisco_out_ac_descriptor,
@@ -339,7 +339,7 @@ static cw_action_out_t actions_out[]={
 	 * Important to get the WTP a DTLS connection established
 	 */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id  = CW_CISCO_AP_TIMESYNC,

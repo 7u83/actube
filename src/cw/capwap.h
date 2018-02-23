@@ -25,8 +25,6 @@
 #ifndef __CAPWAP_H
 #define __CAPWAP_H
 
-
-//#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -49,6 +47,7 @@
 
 /**
  *@defgroup CAPWAPConstants CAPWAP General Constants 
+ *@brief General constants as defined in RFC5415
  *@{
  */
 
@@ -56,7 +55,7 @@
 #define CAPWAP_VERSION (0)
 
 #define CAPWAP_IANA_ENTERPRISE_NUMBER 0
-
+ * 
 /** CAPWAP Control Port*/
 #define CAPWAP_CONTROL_PORT 5246
 /** CAPWAP Control Port as String */
@@ -74,7 +73,8 @@
 
 /**
  *@defgroup CAPWAPHeaderFlags CAPWAP Header Flags
- *@brief Alles ist schoen
+ *@brief The CAPWAP control header flags
+ * 
  *@{
  */
 #define CAPWAP_FLAG_HDR_R1 0x01		/**< bit 0 reserved 1 */
@@ -111,8 +111,15 @@
  * @defgroup CAPWAPMessages CAPWAP message types as defined in RFC 5416
  * @{
  */
+/**
+ * The Discovery Request message is sent by the WTP to 
+ * find an AC on the network and inform the AC about some 
+ * basic capabillities of the WTP. */
 #define	CAPWAP_MSG_DISCOVERY_REQUEST			1
-#define CW_MSG_DISCOVERY_RESPONSE			2
+/**
+ * A Discovery Response message is send by the AP to 
+ * the WTP after receiving a Discovery Request message. */
+#define CAPWAP_MSG_DISCOVERY_RESPONSE			2
 #define	CW_MSG_JOIN_REQUEST				3
 #define CW_MSG_JOIN_RESPONSE				4
 
@@ -158,7 +165,7 @@
  * @defgroup CAPWAPMsgElems CAPWAP Message Elements 
  * @brief CAPWAP message elements as defined in  RFC 5415
  * @{
- */
+ */namin
 
 #define CW_ELEM_AC_DESCRIPTOR				1	/**< AC Descriptor */
 #define CW_ELEM_AC_IPV4_LIST				2	/**< AC IP V4 List */

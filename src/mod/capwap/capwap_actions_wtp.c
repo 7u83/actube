@@ -11,7 +11,7 @@ static cw_action_in_t actions_in[] = {
 	/* Message Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.end = cw_in_check_disc_resp
 	}
 	,
@@ -19,7 +19,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Descriptor - Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cw_in_ac_descriptor,
@@ -32,7 +32,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Name - Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
 		.start  = cw_in_generic2,
@@ -45,7 +45,7 @@ static cw_action_in_t actions_in[] = {
 	/* CAPWAP Control IPv4 Address - Discovery Response*/
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address,
@@ -59,7 +59,7 @@ static cw_action_in_t actions_in[] = {
 	/* CAPWAP Control IPv6 Address - Discovery Response*/
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE,
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
@@ -72,7 +72,7 @@ static cw_action_in_t actions_in[] = {
 	/* Vendor Specific Payload - Discovery Response*/
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
@@ -86,7 +86,7 @@ static cw_action_in_t actions_in[] = {
 		 * of Discovery Response
 		 */
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
 		.start  = cw_in_generic2,

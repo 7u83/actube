@@ -103,7 +103,7 @@ cw_action_out_t actions_ac_out[]={
 
 	/* 802.11 Radio Information - Discovery Response */
 	{
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION ,
 		.out = cw_out_radio_infos, 

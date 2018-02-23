@@ -47,7 +47,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Descriptor - Discovery Response */
 	{
 		.capwap_state = CW_STATE_DISCOVERY,
-		.msg_id = CW_MSG_DISCOVERY_RESPONSE, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
 		.start  = cisco_in_ac_descriptor,
