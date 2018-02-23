@@ -28,7 +28,7 @@ static cw_action_in_t actions_ac_in[] = {
 	/* 802.11 Radio Information - Discovery Request */
 	{
 		.capwap_state = CW_STATE_DISCOVERY, 
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 	 	.start = cw_in_radio_generic, 

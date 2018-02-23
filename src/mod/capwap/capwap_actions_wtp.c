@@ -450,7 +450,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* Discovery Type - Discovery Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_DISCOVERY_TYPE,
 		.item_id = CW_ITEM_DISCOVERY_TYPE, 
 		.out = cw_out_generic,
@@ -461,7 +461,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* WTP Board Data - Discovery Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_BOARD_DATA,
 		.item_id = CW_ITEM_WTP_BOARD_DATA, 
 		.out = cw_out_wtp_board_data,
@@ -472,7 +472,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* WTP Descriptor - Discover Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_DESCRIPTOR,
 		.item_id = CW_ITEM_WTP_DESCRIPTOR, 
 		.out = capwap_out_wtp_descriptor,
@@ -484,7 +484,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* WTP Frame TunnelMode - Discovery Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
 		.out = cw_out_generic,
@@ -495,7 +495,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* WTP Mac Type - Discovery Request */
 	{
-		.msg_id = CW_MSG_DISCOVERY_REQUEST, 
+		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,

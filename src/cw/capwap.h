@@ -95,10 +95,10 @@
  * @defgroup CAPWAPWBIDS CAPWAP Wireless binding IDs
  * @{
  */
-#define CW_WBID_RESERVED1	0
-#define CW_WBID_IEEE80211	1
-#define CW_WBID_RESERVED2	2
-#define CW_WBID_EPCGLOBAL	3
+#define CAPWAP_WBID_RESERVED1	0
+#define CAPWAP_WBID_IEEE80211	1
+#define CAPWAP_WBID_RESERVED2	2
+#define CAPWAP_WBID_EPCGLOBAL	3
 /**@}*/
 
 #define CAPWAP_PACKET_PREAMBLE (CAPWAP_VERSION<<4)
@@ -106,12 +106,12 @@
 
 
  
-/*
- * CAPWAP message types as defined in RFC 5416 
+
+/**
+ * @defgroup CAPWAPMessages CAPWAP message types as defined in RFC 5416
+ * @{
  */
-
-
-#define	CW_MSG_DISCOVERY_REQUEST			1
+#define	CAPWAP_MSG_DISCOVERY_REQUEST			1
 #define CW_MSG_DISCOVERY_RESPONSE			2
 #define	CW_MSG_JOIN_REQUEST				3
 #define CW_MSG_JOIN_RESPONSE				4
@@ -151,6 +151,7 @@
 
 #define CW_MSG_MAXMSG					26
 
+/**@}*/
 
 
 /**
@@ -169,6 +170,7 @@
 /**@{
  * one for all
  */
+ /* yes one for alllll */
 #define CW_ELEM_ADD_MAC_ACL_ENTRY			7
 #define CW_ELEM_ADD_STATION				8
 #define CW_ELEM_RESERVED_9				9

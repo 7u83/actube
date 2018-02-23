@@ -127,7 +127,7 @@ static int run_discovery(struct conn *conn)
 			      CAPWAP_DISCOVERY_TYPE_UNKNOWN);
 
 
-	cw_init_request(conn, CW_MSG_DISCOVERY_REQUEST);
+	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
 	cw_put_msg(conn, conn->req_buffer);
 	conn_send_msg(conn, conn->req_buffer);
 

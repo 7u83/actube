@@ -31,8 +31,8 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 		return 0;
 
 	int wbid = cw_get_hdr_wbid(rawmsg);
-	if (wbid != CW_WBID_IEEE80211 ) {
-		cw_dbg(DBG_MOD,"CAPWAP80211 detected: no, my wbid=%d, remote wbid=%d",CW_WBID_IEEE80211,wbid);
+	if (wbid != CAPWAP_WBID_IEEE80211 ) {
+		cw_dbg(DBG_MOD,"CAPWAP80211 detected: no, my wbid=%d, remote wbid=%d",CAPWAP_WBID_IEEE80211,wbid);
 		return 0;
 	}
 	cw_dbg(DBG_MOD,"CAPWAP80211 detected: yes");
