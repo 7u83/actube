@@ -96,6 +96,9 @@ enum cw_dbg_levels{
 	/** Show message elements  */
 	DBG_ELEM,
 
+	/** Show message element details  */
+	DBG_ELEM_DETAIL,
+
 	/** Error in msg elements */
 	DBG_ELEM_ERR,
 
