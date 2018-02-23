@@ -48,12 +48,12 @@
 /** CAPWAP Version */
 #define CAPWAP_VERSION (0)
 
-#define CW_IANA_ENTERPRISE_NUMBER 0
+#define CAPWAP_IANA_ENTERPRISE_NUMBER 0
 
 /** CAPWAP Control Port*/
-#define CW_CONTROL_PORT 5246
+#define CAPWAP_CONTROL_PORT 5246
 /** CAPWAP Control Port as String */
-#define CW_CONTROL_PORT_STR "5246"
+#define CAPWAP_CONTROL_PORT_STR "5246"
 
 /** CAPWAP Data Port */
 #define CAPWAP_DATA_PPORT 5247

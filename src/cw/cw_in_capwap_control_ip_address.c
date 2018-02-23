@@ -62,7 +62,7 @@ int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 		struct sockaddr_in addr;
 		memcpy(&addr.sin_addr,data,4);
 		addr.sin_family=AF_INET;
-		sock_setport((struct sockaddr*)&addr,CW_CONTROL_PORT);
+		sock_setport((struct sockaddr*)&addr,CAPWAP_CONTROL_PORT);
 		memcpy(&acip->ip,&addr,sizeof(addr));
 		acip->index = cw_get_word(data+4);
 	}
@@ -72,7 +72,7 @@ int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 		memset (&addr,0,sizeof(addr));
 		memcpy(&addr.sin6_addr,data,16);
 		addr.sin6_family=AF_INET6;
-		sock_setport((struct sockaddr*)&addr,CW_CONTROL_PORT);
+		sock_setport((struct sockaddr*)&addr,CAPWAP_CONTROL_PORT);
 		memcpy(&acip->ip,&addr,sizeof(addr));
 		acip->index = cw_get_word(data+16);
 	}
