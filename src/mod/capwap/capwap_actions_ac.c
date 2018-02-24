@@ -17,6 +17,7 @@
 */
 
 
+
 #include "cw/cw.h"
 #include "cw/log.h"
 #include "cw/action.h"
@@ -28,69 +29,72 @@
 
 #include "mod_capwap.h"
 
-static cw_message_element_t elements[] = {
-	{
-		.id = CAPWAP_ELEM_DISCOVERY_TYPE,
-		.name = "Discovery Type",
-	 	//.start = cw_in_generic2, 
-		//.item_id = "discovery_type", 
-		.min_len = 1, 
-		.max_len = 1
-	},
-	{
-		.id = CAPWAP_ELEM_WTP_BOARD_DATA,
-		.name = "WTP Board Data",
-//	 	.start = cw_in_wtp_board_data, 
-//		.item_id = CW_ITEM_WTP_BOARD_DATA, 
-	},
-
-	{
-		.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
-		.name = "WTP Descriptor",
-	 	//.start = capwap_in_wtp_descriptor, 
-		//.item_id = "wtp_descriptor", 
-
-	}
-	,
-	{
-		.id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
-		.name = "WTP Frame Tunnel Mode",
-//	 	.start = cw_in_generic2, 
-//		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
-		.min_len = 1, 
-		.max_len = 1
-	}
-	,
-	{
- 
-		.id = CAPWAP_ELEM_WTP_MAC_TYPE,
-		.name = "WTP Mac Type",
-//	 	.start = cw_in_generic2, 
-//		.item_id = CW_ITEM_WTP_MAC_TYPE,
-
-		.min_len = 1, 
-		.max_len = 1
-	},
-	/* MTU Discovery Padding  */
-	{
-		.id = CW_ELEM_MTU_DISCOVERY_PADDING,
-		.name = "MTU Discovery Padding"
-//	 	.start = cw_in_mtu_discovery_padding, 
-	}
-	,
-	{
-
-		.id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
-		.name = "Vendor Specific Payload",
-//		.start = cw_in_vendor_specific_payload,
-		.min_len=7
-	}
-	,
-	
-	
-	
-	{.id=0}
+static cw_message_element_t _DISCOVERY_TYPE = {
+	.name = "Discovery Type",
+	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
+ 	//.start = cw_in_generic2, 
+	//.item_id = "discovery_type", 
+	.min_len = 1, 
+	.max_len = 1
 };
+static cw_message_element_t _WTP_BOARD_DATA = {
+	.name = "WTP Board Data",
+	.id = CAPWAP_ELEM_WTP_BOARD_DATA,
+//	.start = cw_in_wtp_board_data, 
+//	.item_id = CW_ITEM_WTP_BOARD_DATA, 
+};
+
+static cw_message_element_t _WTP_DESCRIPTOR = {
+	.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
+	.name = "WTP Descriptor",
+ 	//.start = capwap_in_wtp_descriptor, 
+	//.item_id = "wtp_descriptor", 
+};
+
+static cw_message_element_t _WTP_FRAME_TUNNEL_MODE = {
+	.id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
+	.name = "WTP Frame Tunnel Mode",
+// 	.start = cw_in_generic2, 
+//	.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
+	.min_len = 1, 
+	.max_len = 1
+};
+
+static cw_message_element_t _WTP_MAC_TYPE = {
+	.id = CAPWAP_ELEM_WTP_MAC_TYPE,
+	.name = "WTP Mac Type",
+//	.start = cw_in_generic2, 
+//	.item_id = CW_ITEM_WTP_MAC_TYPE,
+	.min_len = 1, 
+	.max_len = 1
+};
+
+/* MTU Discovery Padding  */
+static cw_message_element_t _MTU_DISCOVERY_PADDING = {
+	.id = CW_ELEM_MTU_DISCOVERY_PADDING,
+	.name = "MTU Discovery Padding"
+// 	.start = cw_in_mtu_discovery_padding, 
+};
+
+static cw_message_element_t _VENDOR_SPECIFIC_PAYLOAD = {
+	.name = "Vendor Specific Payload",
+	.id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+
+//	.start = cw_in_vendor_specific_payload,
+	.min_len=7
+};
+
+	/* AC Descriptor - Discovery Response */
+static cw_message_element_t _AC_DESCRIPTOR = {
+	.name = "AC Descriptor",
+	.id  = CAPWAP_ELEM_AC_DESCRIPTOR,
+	//.item_id = CW_ITEM_AC_DESCRIPTOR, 
+	//.start  = cw_in_ac_descriptor,
+	.min_len = 12,
+	.max_len = 8192,
+};
+
+
 
 static cw_message_t messages[] = {
 
@@ -99,16 +103,27 @@ static cw_message_t messages[] = {
 		.name = "Discovery Request",
 		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_messagedef_t[]){
-			{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,1},
-			{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,1},
-			{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,1},
-			{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,1},
-			{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,1},
-			{0,0,CW_ELEM_MTU_DISCOVERY_PADDING,0},
-			{0,0,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,0}
+		.elements = (cw_messagedef_t []){
+			{&_DISCOVERY_TYPE,1},
+			{&_WTP_BOARD_DATA,1},
+			{&_WTP_DESCRIPTOR,1},
+			{&_WTP_FRAME_TUNNEL_MODE,1},
+			{&_WTP_MAC_TYPE,1},
+			{&_MTU_DISCOVERY_PADDING,0},
+			{&_VENDOR_SPECIFIC_PAYLOAD,0},
+			{0,0},
 		}
-	}
+	},
+	/* Discovery Request Response */
+	{
+		.name = "Discovery Response",
+		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
+		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
+		.elements = (cw_messagedef_t[]){
+			{&_AC_DESCRIPTOR,1},
+			{0,0},
+		}
+	}	
 };
 
 
@@ -120,7 +135,7 @@ void test_sets(){
 		return;
 	}
 	
-	cw_message_set_add(set,messages,elements);
+	cw_message_set_add(set,messages);
 	
 	cw_message_element_t el, *result;
 	memset(&el,0,sizeof(el));
@@ -243,7 +258,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7
 	}
@@ -434,7 +449,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7
 	}
@@ -512,7 +527,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 	}
 	,
@@ -559,7 +574,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7
 	}
@@ -608,7 +623,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 		.min_len=7
 	}
@@ -631,7 +646,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_ECHO_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 	}
 	,
@@ -651,7 +666,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_WTP_EVENT_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload,
 	}
 	,
