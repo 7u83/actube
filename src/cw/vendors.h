@@ -21,16 +21,21 @@
  * @brief Definition of vendor IDs
  */
 
+/**
+ * @defgroup CAPWAPVendors 
+ * @{ */
+
 #ifndef __CW_VENDORS_H
 #define __CW_VENDORS_H
 
 #define LW_VENDOR_ID_CISCO	4232704
-
 
 #define CW_VENDOR_ID_FSF	11591
 #define CW_VENDOR_ID_ZYXEL	890
 #define CW_VENDOR_ID_CISCO	LW_VENDOR_ID_CISCO
 #define CW_VENDOR_ID_LANCOM	2356
 #define CW_VENDOR_ID_FORTINET	12356
+
+/** @} */
 
 #endif
