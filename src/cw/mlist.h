@@ -46,22 +46,23 @@ struct mlist_elem {
 
 struct mlist {
 	void *data;
-	int (*cmp) (void *d1, void *d2);
-	struct mlist_elem *list;
+	int (*cmp) (const void *d1, const void *d2);
+	struct mlist_elem *first;
 };
 
-typedef struct mlist mlist_t;
+typedef struct mlist * mlist_t;
 
 
 /**
  * defgroup MLIST_FUNCTIONS
  * @{
  */
-extern mlist_t *mlist_create(int (*cmp) (void *v1, void *v2));
-extern struct mlist_elem *mlist_append(mlist_t * l, void *data);
-extern struct mlist_elem *mlist_find(mlist_t * l, struct mlist_elem *start, void *data);
-extern struct mlist_elem *mlist_replace(mlist_t *l, struct mlist_elem *start, void *data);
+extern mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2));
+extern struct mlist_elem *mlist_append(mlist_t l, void *data);
+extern struct mlist_elem *mlist_find(mlist_t l, struct mlist_elem *start, void *data);
+extern struct mlist_elem *mlist_replace(mlist_t l, struct mlist_elem *start, void *data);
 
+#define mlist_add mlist_append
 /**
  * @}
  */
@@ -70,7 +71,7 @@ extern struct mlist_elem *mlist_replace(mlist_t *l, struct mlist_elem *start, vo
 
 
 #define mlist_foreach(i,l)\
-	for (i=l->data; i; i=i->next)
+	for (i=l->first; i; i=i->next)
 
 
 

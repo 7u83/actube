@@ -549,7 +549,7 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	char vendor_details[265];
 	*vendor_details = 0;
 
-	if (msgelem == CW_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
+	if (msgelem == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
 		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
 		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);

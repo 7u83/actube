@@ -53,7 +53,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	uint8_t *dst = msgptr+8;
 
-	mlist_t *m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
+	mlist_t m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
 
 	if (!m){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
@@ -69,7 +69,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	int len = 0;
 
-	for (e=m->list; e; e=e->next) {
+	for (e=m->first; e; e=e->next) {
 		cw_action_out_t *ae=(cw_action_out_t*)e->data;
 
 		//printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);

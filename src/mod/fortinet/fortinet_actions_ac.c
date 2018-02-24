@@ -39,7 +39,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Message Discovery Request */
 	{
-		.capwap_state = CW_STATE_DISCOVERY,
+		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.end = cw_in_check_disc_req
 	}
@@ -47,7 +47,7 @@ static cw_action_in_t actions_in[] = {
 #if 0
 	/* Element WTP Descriptor */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM_WTP_DESCRIPTOR,
 	 	.start = cisco_in_wtp_descriptor, 
@@ -58,7 +58,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element Cisco RAD Name */
 	{
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME, 
@@ -249,7 +249,7 @@ static cw_action_in_t actions80211_in[] = {
 		/* Cisco doe't sned this message element in discovery request,
 		   so make it non-mandatory */
 
-		.capwap_state = CW_STATE_DISCOVERY, 
+		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = "radio_information",

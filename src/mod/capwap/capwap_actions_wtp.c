@@ -73,7 +73,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
 	,
@@ -299,7 +299,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
 	,
@@ -370,7 +370,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_ECHO_RESPONSE, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
 	,
@@ -435,7 +435,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
-		.elem_id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
 	,

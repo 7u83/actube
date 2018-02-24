@@ -17,6 +17,7 @@
         <File Name="src/mod/capwap/capwap_in_session_id.c"/>
         <File Name="src/mod/capwap/capwap_out_get_session_id.c"/>
         <File Name="src/mod/capwap/capwap_out_get_idle_timeout.c"/>
+        <File Name="src/mod/capwap/capwap_actions_ac.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

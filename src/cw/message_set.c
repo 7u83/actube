@@ -1,6 +1,7 @@
 
 #include "cw.h"
 #include "mavl.h"
+#include "cw/dbg.h"
 
 #include "message_set.h"
 
@@ -12,9 +13,9 @@ typedef struct {
 	mlist_t elements_list;
 }message2_t;
 
-static inline int cmp_cw_message_element(const void *elem1, const void *elem2){
-	cw_message_element_t * e1 = (cw_message_element_t*)elem1;
-	cw_message_element_t * e2 = (cw_message_element_t*)elem2;
+static inline int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
+	cw_msgelemdef_t * e1 = ((cw_msgelemprops_t*)elem1)->elem;
+	cw_msgelemdef_t * e2 = ((cw_msgelemprops_t*)elem2)->elem;
 	int r;
 	r = e1->id - e2->id;
 	if (r!=0)
@@ -58,7 +59,7 @@ cw_message_set_t * cw_message_set_create(){
 	memset(set,0,sizeof(cw_message_set_t));
 
 	/* create mavl for all_elems */
-	set->all_elems = mavl_create(cmp_cw_message_element,NULL);
+	set->all_elems = mavl_create(cmp_cw_msgelemprops,NULL);
 	if (set->all_elems==NULL){
 		cw_message_set_destroy(set);
 		return NULL;
@@ -76,25 +77,85 @@ cw_message_set_t * cw_message_set_create(){
 }
 
 
+static void update_message(message2_t * msg, cw_msgdef_t * src, cw_message_set_t * set){
 
-void cw_message_set_add(cw_message_set_t * set,
-			cw_message_t  messages[], 
-			cw_message_element_t elements[]){
+	cw_msgelemprops_t *md;
 	
-	cw_message_element_t * e;
-	for (e=elements; e->id!=0; e++){
-		mavl_replace(set->all_elems, e);
-	}
 	
-	cw_message_t * m;
-	for (m=messages; m->type !=0; m++){
-		printf("MESS: %d %s",m->type, m->name);
+
+	for (md = src->elements; md->elem!=0; md++){
+		cw_dbg(DBG_INFO,"  add element %d - %s, %d",md->elem->id, md->elem->name, md->mand);
+		mavl_add(msg->elements_tree,md);
+		mavl_add(set->all_elems,md);
+		mlist_append(msg->elements_list,md);
+		mlist_replace(msg->elements_list,NULL,md);		
 	}
 	
 }
 
-cw_message_element_t * cw_message_set_find_element(
+
+
+void cw_message_set_add(cw_message_set_t * set,
+			cw_msgdef_t  messages[]){
+
+	cw_msgdef_t * m;
+	for (m=messages; m->type !=0; m++){
+		message2_t search, *next;
+		
+		search.type = m->type;
+
+		cw_dbg(DBG_INFO,"Add message: Type:%d - %s",m->type,m->name);
+		
+		next = mavl_find(set->messages,&search);
+
+		/** message not already in memory, 
+		 * create a new one */
+		if (next == NULL){
+			next = malloc (sizeof(message2_t));
+			if (next == NULL)
+				return;
+			next->elements_tree = mavl_create(cmp_cw_msgelemprops,NULL);
+			if (next->elements_tree==NULL){
+				free(next);
+				return;
+			}
+			next->elements_list = mlist_create(cmp_cw_msgelemprops);
+			if (next->elements_list == NULL){
+				mavl_destroy(next->elements_tree);
+				free(next);
+				return;
+			}
+			next->type=m->type;
+			mavl_add(set->messages,next);
+			
+		}
+		/* massage is alreaddy in there */
+		if (m->name)
+			next->name=m->name;
+		if (m->states)
+			next->states=m->states;
+		
+		update_message(next,m, set);
+
+	}
+
+}
+
+cw_msgelemdef_t * cw_message_set_find_element(
 			cw_message_set_t * set,
-			cw_message_element_t * element){
+			cw_msgelemdef_t * element){
 	return mavl_find(set->all_elems,element);
+}
+
+
+mlist_t cw_msgset_get_msg(cw_message_set_t * set, int type){
+	message2_t search;
+	search.type = type;
+	message2_t * result = mavl_find(set->messages,&search);
+	if (!result){
+		printf ("no result\n");
+		return NULL;
+		
+	}
+	return result->elements_list;
 }

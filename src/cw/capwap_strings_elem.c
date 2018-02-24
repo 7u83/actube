@@ -43,7 +43,7 @@ struct cw_strlist_elem capwap_strings_elem[] = {
 	{CW_ELEM_RETURNED_MESSAGE_ELEMENT, "Returned Message Element"},
 	{CW_ELEM_SESSION_ID, "Session ID"},
 	{CW_ELEM_STATISTICS_TIMER, "Statistics Timer"},
-	{CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, "Vendor Specific Payload"},
+	{CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, "Vendor Specific Payload"},
 	{CAPWAP_ELEM_WTP_BOARD_DATA, "WTP Board Data"},
 	{CAPWAP_ELEM_WTP_DESCRIPTOR, "WTP Descriptor"},
 	{CW_ELEM_WTP_FALLBACK, "WTP Fallback"},

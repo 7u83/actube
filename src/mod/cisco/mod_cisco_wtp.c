@@ -127,7 +127,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	 * specific payload Cisco identifier */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 		int id = cw_get_elem_id(elem);
-		if (id == CW_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
+		if (id == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_CISCO) {
 				//              conn->actions = &actions;

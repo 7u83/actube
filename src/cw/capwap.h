@@ -242,7 +242,11 @@
 #define CW_ELEM_RETURNED_MESSAGE_ELEMENT		34
 #define CW_ELEM_SESSION_ID				35
 #define CW_ELEM_STATISTICS_TIMER			36
-#define CW_ELEM_VENDOR_SPECIFIC_PAYLOAD			37
+/**
+ * The Vendor Specific Payload allows tronasport of 
+ * vebdor defined data.*/
+#define CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD		37
+
 #define CAPWAP_ELEM_WTP_BOARD_DATA			38
 /**
  * The WTP Descriptor message element conteins information

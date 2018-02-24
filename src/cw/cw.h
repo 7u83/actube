@@ -104,36 +104,34 @@
 
 
 
-typedef struct{
-	int proto;
-	int vendor;
-	int id;
-	int mand;
-}cw_messagedef_t;
+
+
 
 typedef struct {
-	int type;
-	int * states;
-	cw_messagedef_t * elements;
 	const char * name;
-}cw_message_t;
-
-typedef struct {
 	int proto;
 	int vendor;
 	int id;
-
 	int min_len;
 	int max_len;
-	const char * name;
-}cw_message_element_t;
+}cw_msgelemdef_t;
 
 typedef struct {
 	mavl_t messages;
 	mavl_t all_elems;
 }cw_message_set_t;
 
+typedef struct{
+	cw_msgelemdef_t * elem;
+	int mand;
+}cw_msgelemprops_t;
 
+typedef struct {
+	int type;
+	int * states;
+	cw_msgelemprops_t * elements;
+	const char * name;
+}cw_msgdef_t;
 
 /** 
  * Get length wireless specific data
@@ -390,7 +388,7 @@ static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 					 uint16_t elemid, uint16_t len)
 {
 
-	cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
+	cw_put_elem_hdr(dst, CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
 	cw_put_dword(dst + 4, vendorid);
 	cw_put_word(dst + 8, elemid);
 	return 10;

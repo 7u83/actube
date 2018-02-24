@@ -42,7 +42,7 @@ int cw_addelem_vendor_specific_payload(uint8_t * dst, uint32_t vendor_id,
 	d += cw_put_data(d, data, len);
 
 	int l = d - dst;
-	cw_put_elem_hdr(dst, CW_ELEM_VENDOR_SPECIFIC_PAYLOAD, l - 4);
+	cw_put_elem_hdr(dst, CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, l - 4);
 	return l;
 
 }

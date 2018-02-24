@@ -29,7 +29,7 @@
 
 #include "mod_capwap.h"
 
-static cw_message_element_t _DISCOVERY_TYPE = {
+static cw_msgelemdef_t _DISCOVERY_TYPE = {
 	.name = "Discovery Type",
 	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
  	//.start = cw_in_generic2, 
@@ -37,21 +37,21 @@ static cw_message_element_t _DISCOVERY_TYPE = {
 	.min_len = 1, 
 	.max_len = 1
 };
-static cw_message_element_t _WTP_BOARD_DATA = {
+static cw_msgelemdef_t _WTP_BOARD_DATA = {
 	.name = "WTP Board Data",
 	.id = CAPWAP_ELEM_WTP_BOARD_DATA,
 //	.start = cw_in_wtp_board_data, 
 //	.item_id = CW_ITEM_WTP_BOARD_DATA, 
 };
 
-static cw_message_element_t _WTP_DESCRIPTOR = {
+static cw_msgelemdef_t _WTP_DESCRIPTOR = {
 	.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	.name = "WTP Descriptor",
  	//.start = capwap_in_wtp_descriptor, 
 	//.item_id = "wtp_descriptor", 
 };
 
-static cw_message_element_t _WTP_FRAME_TUNNEL_MODE = {
+static cw_msgelemdef_t _WTP_FRAME_TUNNEL_MODE = {
 	.id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 	.name = "WTP Frame Tunnel Mode",
 // 	.start = cw_in_generic2, 
@@ -60,7 +60,7 @@ static cw_message_element_t _WTP_FRAME_TUNNEL_MODE = {
 	.max_len = 1
 };
 
-static cw_message_element_t _WTP_MAC_TYPE = {
+static cw_msgelemdef_t _WTP_MAC_TYPE = {
 	.id = CAPWAP_ELEM_WTP_MAC_TYPE,
 	.name = "WTP Mac Type",
 //	.start = cw_in_generic2, 
@@ -70,13 +70,13 @@ static cw_message_element_t _WTP_MAC_TYPE = {
 };
 
 /* MTU Discovery Padding  */
-static cw_message_element_t _MTU_DISCOVERY_PADDING = {
+static cw_msgelemdef_t _MTU_DISCOVERY_PADDING = {
 	.id = CW_ELEM_MTU_DISCOVERY_PADDING,
 	.name = "MTU Discovery Padding"
 // 	.start = cw_in_mtu_discovery_padding, 
 };
 
-static cw_message_element_t _VENDOR_SPECIFIC_PAYLOAD = {
+static cw_msgelemdef_t _VENDOR_SPECIFIC_PAYLOAD = {
 	.name = "Vendor Specific Payload",
 	.id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 
@@ -85,7 +85,7 @@ static cw_message_element_t _VENDOR_SPECIFIC_PAYLOAD = {
 };
 
 	/* AC Descriptor - Discovery Response */
-static cw_message_element_t _AC_DESCRIPTOR = {
+static cw_msgelemdef_t _AC_DESCRIPTOR = {
 	.name = "AC Descriptor",
 	.id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 	//.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -96,14 +96,14 @@ static cw_message_element_t _AC_DESCRIPTOR = {
 
 
 
-static cw_message_t messages[] = {
+static cw_msgdef_t messages[] = {
 
 	/* Discovery Request Message*/
 	{
 		.name = "Discovery Request",
 		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_messagedef_t []){
+		.elements = (cw_msgelemprops_t []){
 			{&_DISCOVERY_TYPE,1},
 			{&_WTP_BOARD_DATA,1},
 			{&_WTP_DESCRIPTOR,1},
@@ -119,7 +119,7 @@ static cw_message_t messages[] = {
 		.name = "Discovery Response",
 		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_messagedef_t[]){
+		.elements = (cw_msgelemprops_t[]){
 			{&_AC_DESCRIPTOR,1},
 			{0,0},
 		}
@@ -137,22 +137,40 @@ void test_sets(){
 	
 	cw_message_set_add(set,messages);
 	
-	cw_message_element_t el, *result;
+	cw_msgelemdef_t el; 
 	memset(&el,0,sizeof(el));
 	el.id=CAPWAP_ELEM_DISCOVERY_TYPE;
 	
-	result = mavl_find(set->all_elems,&el);
+	cw_msgelemprops_t search, *result;;
+	search.elem = &el;
+	
+	
+	result = mavl_find(set->all_elems,&search);
 	
 	if (result!=NULL){
-		printf("Found: %d %s\n",
-			result->id,
-			result->name
+		printf("Found: %d %s %d\n",
+			result->elem->id,
+			result->elem->name,
+			result->mand
 		);
 	}
 	else{
 		printf("not found\n");
 	}
+
+	mlist_t m;
+	m = cw_msgset_get_msg(set,CAPWAP_MSG_DISCOVERY_REQUEST);
+	printf("Hey: %p\n",m);	
 	
+	struct mlist_elem * i;
+	mlist_foreach(i,m){
+		cw_msgelemprops_t * le = i->data;
+		printf("Element: %d %s\n",le->elem->id, le->elem->name, le->mand);
+	}
+	
+
+
+
 }
 
 
