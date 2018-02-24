@@ -485,7 +485,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Frame TunnelMode - Discovery Request */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.elem_id  = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
 		.out = cw_out_generic,
 		.get = cw_out_get_local,
@@ -496,7 +496,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Mac Type - Discovery Request */
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
+		.elem_id  = CAPWAP_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
 		.get = cw_out_get_local,
@@ -566,7 +566,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Frame Tunnel Mode - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.elem_id  = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
 		.out = cw_out_generic,
 		.get = cw_out_get_local,
@@ -578,7 +578,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP MAC Type - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_MAC_TYPE,
+		.elem_id  = CAPWAP_ELEM_WTP_MAC_TYPE,
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.out = cw_out_generic,
 		.get = cw_out_get_local,

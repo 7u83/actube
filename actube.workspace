@@ -3,9 +3,9 @@
   <Project Name="ac" Path="ac.project" Active="No"/>
   <Project Name="wtp" Path="wtp.project" Active="No"/>
   <Project Name="mod_cipwap" Path="mod_cipwap.project" Active="No"/>
-  <Project Name="mod_capwap" Path="mod_capwap.project" Active="Yes"/>
+  <Project Name="mod_capwap" Path="mod_capwap.project" Active="No"/>
   <Project Name="mod_cisco" Path="mod_cisco.project" Active="No"/>
-  <Project Name="libcw" Path="libcw.project" Active="No"/>
+  <Project Name="libcw" Path="libcw.project" Active="Yes"/>
   <Project Name="mod_capwap80211" Path="mod_capwap80211.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">

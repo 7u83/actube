@@ -53,7 +53,7 @@ static cw_message_element_t elements[] = {
 	}
 	,
 	{
-		.id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 		.name = "WTP Frame Tunnel Mode",
 //	 	.start = cw_in_generic2, 
 //		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
@@ -61,6 +61,34 @@ static cw_message_element_t elements[] = {
 		.max_len = 1
 	}
 	,
+	{
+ 
+		.id = CAPWAP_ELEM_WTP_MAC_TYPE,
+		.name = "WTP Mac Type",
+//	 	.start = cw_in_generic2, 
+//		.item_id = CW_ITEM_WTP_MAC_TYPE,
+
+		.min_len = 1, 
+		.max_len = 1
+	},
+	/* MTU Discovery Padding  */
+	{
+		.id = CW_ELEM_MTU_DISCOVERY_PADDING,
+		.name = "MTU Discovery Padding"
+//	 	.start = cw_in_mtu_discovery_padding, 
+	}
+	,
+	{
+
+		.id = CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,
+		.name = "Vendor Specific Payload",
+//		.start = cw_in_vendor_specific_payload,
+		.min_len=7
+	}
+	,
+	
+	
+	
 	{.id=0}
 };
 
@@ -68,16 +96,21 @@ static cw_message_t messages[] = {
 
 	/* Discovery Request Message*/
 	{
+		.name = "Discovery Request",
 		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
 		.elements = (cw_messagedef_t[]){
 			{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,1},
 			{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,1},
 			{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,1},
-			{0,0,CW_ELEM_WTP_FRAME_TUNNEL_MODE,1},
+			{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,1},
+			{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,1},
+			{0,0,CW_ELEM_MTU_DISCOVERY_PADDING,0},
+			{0,0,CW_ELEM_VENDOR_SPECIFIC_PAYLOAD,0}
 		}
 	}
 };
+
 
 void test_sets(){
 
@@ -87,7 +120,24 @@ void test_sets(){
 		return;
 	}
 	
-	cw_message_set_add(set,messages,&elements);
+	cw_message_set_add(set,messages,elements);
+	
+	cw_message_element_t el, *result;
+	memset(&el,0,sizeof(el));
+	el.id=CAPWAP_ELEM_DISCOVERY_TYPE;
+	
+	result = mavl_find(set->all_elems,&el);
+	
+	if (result!=NULL){
+		printf("Found: %d %s\n",
+			result->id,
+			result->name
+		);
+	}
+	else{
+		printf("not found\n");
+	}
+	
 }
 
 
@@ -156,7 +206,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.elem_id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
 		.mand = 1, 
@@ -169,7 +219,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM_WTP_MAC_TYPE,
+		.elem_id = CAPWAP_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_MAC_TYPE,
 		.mand = 1, 
@@ -177,6 +227,8 @@ static cw_action_in_t actions_in[] = {
 		.max_len = 1
 	}
 	,
+
+
 
 	/* MTU Discovery Padding  */
 	{
@@ -186,7 +238,7 @@ static cw_action_in_t actions_in[] = {
 	 	.start = cw_in_mtu_discovery_padding, 
 	}
 	,
-
+// TODO: Add them
 	/* Vendor Specific Payload */
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
@@ -273,7 +325,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_FRAME_TUNNEL_MODE,
+		.elem_id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE, 
 		.mand = 1, 
@@ -286,7 +338,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_MAC_TYPE,
+		.elem_id = CAPWAP_ELEM_WTP_MAC_TYPE,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_WTP_MAC_TYPE, 
 		.mand = 1, 
