@@ -114,7 +114,11 @@ typedef struct {
 	int id;
 	int min_len;
 	int max_len;
-}cw_msgelemdef_t;
+
+        int (*start_in)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
+        int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
+
+}cw_elem_handler_t;
 
 typedef struct {
 	mavl_t messages;
@@ -122,8 +126,9 @@ typedef struct {
 }cw_message_set_t;
 
 typedef struct{
-	cw_msgelemdef_t * elem;
+	cw_elem_handler_t * elem;
 	int mand;
+	int op;
 }cw_msgelemprops_t;
 
 typedef struct {
@@ -466,6 +471,12 @@ struct cw_descriptor_subelem_def {
 	int maxlen;
 	int mand;
 };
+
+#define CW_DELETE 1
+#define CW_APPEND 2
+#define CW_PREPEND 3
+#define CW_REPLACE 4
+
 
 
 extern int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,

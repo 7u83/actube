@@ -29,6 +29,13 @@ struct mlist_elem * mlist_append(mlist_t l, void *data)
 	return *n;
 }
 
+struct mlist_elem * mlist_prepend(mlist_t l, void *data){
+	
+}
+
+
+
+
 struct mlist_elem *mlist_find(mlist_t l, struct mlist_elem *start, void *data)
 {
 	struct mlist_elem *e;

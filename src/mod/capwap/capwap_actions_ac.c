@@ -29,7 +29,7 @@
 
 #include "mod_capwap.h"
 
-static cw_msgelemdef_t _DISCOVERY_TYPE = {
+static cw_elem_handler_t _DISCOVERY_TYPE = {
 	.name = "Discovery Type",
 	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
  	//.start = cw_in_generic2, 
@@ -37,21 +37,21 @@ static cw_msgelemdef_t _DISCOVERY_TYPE = {
 	.min_len = 1, 
 	.max_len = 1
 };
-static cw_msgelemdef_t _WTP_BOARD_DATA = {
+static cw_elem_handler_t _WTP_BOARD_DATA = {
 	.name = "WTP Board Data",
 	.id = CAPWAP_ELEM_WTP_BOARD_DATA,
 //	.start = cw_in_wtp_board_data, 
 //	.item_id = CW_ITEM_WTP_BOARD_DATA, 
 };
 
-static cw_msgelemdef_t _WTP_DESCRIPTOR = {
+static cw_elem_handler_t _WTP_DESCRIPTOR = {
 	.id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	.name = "WTP Descriptor",
  	//.start = capwap_in_wtp_descriptor, 
 	//.item_id = "wtp_descriptor", 
 };
 
-static cw_msgelemdef_t _WTP_FRAME_TUNNEL_MODE = {
+static cw_elem_handler_t _WTP_FRAME_TUNNEL_MODE = {
 	.id = CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,
 	.name = "WTP Frame Tunnel Mode",
 // 	.start = cw_in_generic2, 
@@ -60,7 +60,7 @@ static cw_msgelemdef_t _WTP_FRAME_TUNNEL_MODE = {
 	.max_len = 1
 };
 
-static cw_msgelemdef_t _WTP_MAC_TYPE = {
+static cw_elem_handler_t _WTP_MAC_TYPE = {
 	.id = CAPWAP_ELEM_WTP_MAC_TYPE,
 	.name = "WTP Mac Type",
 //	.start = cw_in_generic2, 
@@ -70,13 +70,13 @@ static cw_msgelemdef_t _WTP_MAC_TYPE = {
 };
 
 /* MTU Discovery Padding  */
-static cw_msgelemdef_t _MTU_DISCOVERY_PADDING = {
+static cw_elem_handler_t _MTU_DISCOVERY_PADDING = {
 	.id = CW_ELEM_MTU_DISCOVERY_PADDING,
 	.name = "MTU Discovery Padding"
 // 	.start = cw_in_mtu_discovery_padding, 
 };
 
-static cw_msgelemdef_t _VENDOR_SPECIFIC_PAYLOAD = {
+static cw_elem_handler_t _VENDOR_SPECIFIC_PAYLOAD = {
 	.name = "Vendor Specific Payload",
 	.id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 
@@ -84,8 +84,8 @@ static cw_msgelemdef_t _VENDOR_SPECIFIC_PAYLOAD = {
 	.min_len=7
 };
 
-	/* AC Descriptor - Discovery Response */
-static cw_msgelemdef_t _AC_DESCRIPTOR = {
+/* AC Descriptor - Discovery Response */
+static cw_elem_handler_t _AC_DESCRIPTOR = {
 	.name = "AC Descriptor",
 	.id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 	//.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -137,7 +137,7 @@ void test_sets(){
 	
 	cw_message_set_add(set,messages);
 	
-	cw_msgelemdef_t el; 
+	cw_elem_handler_t el; 
 	memset(&el,0,sizeof(el));
 	el.id=CAPWAP_ELEM_DISCOVERY_TYPE;
 	

@@ -14,8 +14,8 @@ typedef struct {
 }message2_t;
 
 static inline int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
-	cw_msgelemdef_t * e1 = ((cw_msgelemprops_t*)elem1)->elem;
-	cw_msgelemdef_t * e2 = ((cw_msgelemprops_t*)elem2)->elem;
+	cw_elem_handler_t * e1 = ((cw_msgelemprops_t*)elem1)->elem;
+	cw_elem_handler_t * e2 = ((cw_msgelemprops_t*)elem2)->elem;
 	int r;
 	r = e1->id - e2->id;
 	if (r!=0)
@@ -141,9 +141,9 @@ void cw_message_set_add(cw_message_set_t * set,
 
 }
 
-cw_msgelemdef_t * cw_message_set_find_element(
+cw_elem_handler_t * cw_message_set_find_element(
 			cw_message_set_t * set,
-			cw_msgelemdef_t * element){
+			cw_elem_handler_t * element){
 	return mavl_find(set->all_elems,element);
 }
 
