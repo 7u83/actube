@@ -53,3 +53,8 @@ struct cw_Mod *mod_capwap_ac()
 {
 	return &capwap_ac;
 };
+
+
+struct cw_Mod * mod_get_interface(){
+	return &capwap_ac;
+}

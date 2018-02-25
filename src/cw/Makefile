@@ -1,25 +1,16 @@
-include ../CapwapConfig.mak
 include ../Macros.mak
-
-ifndef CC
-	CC=gcc
-endif
-
-ifndef AR
-	AR = ar
-endif
-
-#ifndef ARCH
-#	ARCH = $(shell $(CC) -dumpmachine)
-#endif
+include ../CWConfig.mak
+-include ../Config.local.mak
 
 
+LIBARCHDIR	:= ../../lib/$(ARCH)
+OBJDIR		:= ../../obj/cw/$(ARCH)
 
-#OPENSSLINC=$(OPENSSLINC) 
-#../contrib/openssl-1.0.1i/include
+SNAME		:= $(LIBARCHDIR)/libcw.a
+DNAME		:= $(LIBARCHDIR)/libcw.so
 
-NAME=libcw.a
-LIBDIR=../lib/$(ARCH)
+LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib 
+
 
 SOCKOBJS=\
 	sock_create.o\
@@ -203,6 +194,8 @@ CAPWAP80211OBJS=\
 # SSL objects
 #
 
+LIBS=
+
 ifeq ($(WITH_OPENSSL),1)
 CFLAGS+=$(OPENSSL_CFLAGS)
 CFLAGS+=-DWITH_OPENSSL
@@ -211,6 +204,7 @@ DTLSOBJS += dtls_openssl.o \
 	dtls_openssl_connect.o \
 	dtls_openssl_get_cipher.o \
 	dtls_openssl_bio.o 
+LIBS+=-lssl
 endif
 
 ifeq ($(WITH_GNUTLS),1)
@@ -222,6 +216,7 @@ DTLSOBJS+= dtls_gnutls.o \
 	dtls_gnutls_bio.o \
 	dtls_gnutls_get_cipher.o \
 	dtls_gnutls_get_peers_cert.o
+LIBS+=-lgnutls
 endif
 
 DTLSOBJS+=dtls_bio.o 
@@ -323,18 +318,15 @@ OBJS=$(CONNOBJS) $(FRAGOBJS) $(SOCKOBJS) $(CAPWAPOBJS) $(WTPINFOOBJS) \
 	$(MBAGOBJS) \
 	$(CAPWAP80211OBJS)
 
-#include $(OBJS:.o=.d)
-
 O:=$(OBJS);
 
-OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
+OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 
+all: $(SNAME) $(DNAME)
 
 
-
-CFLAGS = -Wall -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
-#CFLAGS = -Wall  -Os -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I/usr/local/include
+CFLAGS = -W -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \
@@ -345,22 +337,21 @@ CFLAGS += $(GNUTLS_CFLAGS) \
 	-Werror 
 
 
-
-
-#SRCS = $(OBJS:.o=.c) 
-#MODOBJS=$(wildcard ./mod/cipwap/$(ARCH)/*.o)
-#MODOBJS+=$(wildcard ./mod/capwap/$(ARCH)/*.o)
-
-$(ARCH)/%.o:%.c
-	@mkdir -p $(ARCH)
-	@echo "  CC "$<
+$(OBJDIR)/%.o:%.c
+	@mkdir -p $(OBJDIR)
+	@echo "  $(CC) "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
-#	@$(CC) -MM $(CFLAGS) $< > $*.d
 
-$(LIBDIR)/$(NAME) : $(OBJS) $(MODOBJS)
-	@mkdir -p $(LIBDIR)
-	@echo "  AR $(LIBDIR)/$(NAME)"
-	@$(AR) rcs $(LIBDIR)/$(NAME) $(OBJS) $(MODOBJS)
+$(SNAME) : $(OBJS) $(MODOBJS)
+	@mkdir -p $(LIBARCHDIR)
+	@echo "  AR $(SNAME)"
+	@$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
+
+$(DNAME) : $(OBJS) $(MODOBJS)
+	@mkdir -p $(LIBARCHDIR)
+	@echo "  AR $(DNAME)"
+	@$(CC) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(LIBS)
+
 
 
 SRCS = $(OBJS:.o=.c) 
@@ -370,19 +361,11 @@ DEPS := $(OBJS:.o=.d)
 .PHONY: deps clean clean_libs libs
 
 
-# top-level rule, to compile everything. 
-all: $(ARCH)/$(NAME)
-
-
-
-
 
 clean: 
-	$(RM) $(ARCH)/*
-	$(RM) $(LIBDIR)/$(NAME)
-#	$(RM) $(OBJS)
-#	$(RM) $(DEPS)
-#	$(RM) $(ARCH)/$(NAME) 
+	$(RM) $(OBJDIR)/*
+	$(RM) $(DNAME)
+	$(RM) $(SNAME)
 	
 
 clean_deps:

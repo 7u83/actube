@@ -574,7 +574,7 @@ static int conf_read_mods(cfg_t *cfg){
 	
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-		conf_mods[i] = modload_ac(modname);
+		conf_mods[i] = NULL; //modload_ac(modname);
 		if (!conf_mods[i]){
 			cw_log(LOG_ERR,"Can't load mod: %s",modname);
 			return 0;

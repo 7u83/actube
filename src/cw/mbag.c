@@ -94,14 +94,15 @@ static void mbag_type_mbag_del(void *i)
 	mavl_destroy(x);
 }
 
-const struct mbag_typedef mbag_type_mbag = {
+/*const struct mbag_typedef mbag_type_mbag = {
+#	"mbag",mbag_type_mbag_del
+};
+*/
+
+/*const struct mbag_typedef mbag_type_mbag_dyn = {
 	"mbag",mbag_type_mbag_del
 };
-
-const struct mbag_typedef mbag_type_mbag_dyn = {
-	"mbag",mbag_type_mbag_del
-};
-
+*/
 
 static void mbag_del_data(struct mbag_item *i)
 {

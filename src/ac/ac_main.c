@@ -99,10 +99,6 @@ int main(int argc, char *argv[])
 
 
 
-	cw_mod_add_dynamic("../../lib/actube/capwap.so"	);
-
-	exit(0);
-
 	
 	
 	
@@ -127,6 +123,10 @@ int main(int argc, char *argv[])
 	/* Warn, if the "secret" debugging feature for 
 	   developers is turned on ;) */
 	DBGX("Attention! %s", "DBG X is ON!");
+
+	cw_mod_add_dynamic("../../lib/actube","capwap");
+
+	exit(0);
 
 
 test_sets();

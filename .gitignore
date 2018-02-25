@@ -47,4 +47,7 @@ ssl/intermediate-ca/
 
 # other stuff
 .codelite/
+lib/
+obj/
+bin/
 

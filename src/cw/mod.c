@@ -182,16 +182,32 @@ int cw_mod_add(struct cw_Mod * (*modfn)() ){
 }
 
 
-int cw_mod_add_dynamic(const char * filename){
+int cw_mod_add_dynamic(const char * path, const char * mod_name){
+	
+	char * filename = malloc(strlen(path)+strlen(mod_name)+8);
+	if (!filename)
+		return 0;
+	strcpy(filename,path);
+	strcat(filename,"/");
+	strcat(filename,mod_name);
+	strcat(filename,".so");
+	
+	int rc=0;
+	
 	void * handle;
 	handle = dlopen(filename,RTLD_NOW);
 	if (!handle){
-		printf("Error: %s",dlerror());
+		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
+		goto errX;
 	}
 
-	printf("Load DLL %p\n",handle);
+	void * ifu = dlsym(handle,"mod_get_interface");
+	if (!ifu){
+		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
+		goto errX;
+	}
 
-	void * ifu = dlsym(handle,"bstr_create");
-
-	printf("IFU DLL %p\n",ifu);
+errX:
+	free(filename);
+	return rc;
 }

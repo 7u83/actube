@@ -84,6 +84,6 @@ extern int mod_caching;
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
-extern int cw_mod_add_dynamic(const char * filename);
+extern int cw_mod_add_dynamic(const char * path, const char * file);
 
 #endif
