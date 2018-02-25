@@ -125,10 +125,6 @@ int main(int argc, char *argv[])
 	   developers is turned on ;) */
 	DBGX("Attention! %s", "DBG X is ON!");
 
-	test_sets();
-	
-	exit(0);
-
 
 	/* Initialize the database */
 	if (!db_init())
