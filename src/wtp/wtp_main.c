@@ -123,7 +123,7 @@ int main()
 //#define CWBIND "capwap80211"
 
 
-	struct mod_wtp *mod = modload_wtp(CWMOD);
+	struct cw_Mod *mod = modload_wtp(CWMOD);
 	if (!mod) {
 		printf("Can't load mod capwap\n");
 		exit(0);

@@ -42,14 +42,14 @@ static int register_actions(struct cw_actiondef *def, int mode)
 
 
 
-static struct mod_ac capwap_ac = {
+static struct cw_Mod capwap_ac = {
 	.name = "capwap",
 	.init = init,
 	.detect = detect,
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_capwap_ac()
+struct cw_Mod *mod_capwap_ac()
 {
 	return &capwap_ac;
 };

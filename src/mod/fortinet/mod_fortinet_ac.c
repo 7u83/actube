@@ -21,7 +21,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		case MOD_MODE_CAPWAP:
 		{
 
-			struct mod_ac *cmod = modload_ac("capwap");
+			struct cw_Mod *cmod = modload_ac("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap");
@@ -34,7 +34,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct mod_ac *cmod = modload_ac("capwap80211");
+			struct cw_Mod *cmod = modload_ac("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap80211");
@@ -60,7 +60,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 static int init()
 {
 	cw_dbg(DBG_INFO, "Initialiazing mod_fortineto ...");
-//      struct mod_ac *cmod = modload_ac("capwap");
+//      struct cw_Mod *cmod = modload_ac("capwap");
 	return 1;
 }
 
@@ -108,14 +108,14 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 0;
 }
 
-static struct mod_ac capwap_ac = {
+static struct cw_Mod capwap_ac = {
 	.name = "fortinet",
 	.init = init,
 	.detect = detect,
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_fortinet_ac()
+struct cw_Mod *mod_fortinet_ac()
 {
 	return &capwap_ac;
 };

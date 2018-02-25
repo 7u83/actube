@@ -18,11 +18,12 @@
 
 /**
  * @file 
- * @brief Functions for mods
+ * @brief Functions for modules (mods) management.
  */
 
 #include <string.h>
 #include <errno.h>
+#include <dlfcn.h>
 
 
 #include "action.h"
@@ -31,15 +32,16 @@
 #include "log.h"
 
 
-static void (*actions_registered_cb) (struct mod_ac * capwap, struct mod_ac * bindings,
+static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
 				      struct cw_actiondef * actions) = NULL;
 
 
 
-int mod_caching = 1;
+
 
 void mod_set_actions_registered_cb(void (*fun)
-			      (struct mod_ac *, struct mod_ac *, struct cw_actiondef *))
+				    (struct cw_Mod *, struct cw_Mod *,
+				     struct cw_actiondef *))
 {
 	actions_registered_cb = fun;
 }
@@ -49,7 +51,7 @@ struct cache_item {
 	const char *capwap;
 	const char *bindings;
 	struct cw_actiondef actions;
-
+	struct cw_MsgSet * msgset;
 };
 
 static struct mavl *cache = NULL;
@@ -62,9 +64,10 @@ static int mod_null_register_actions(struct cw_actiondef *def, int mode)
 /**
  * mod_null is a dummy mod 
  */
-struct mod_ac mod_null = {
+struct cw_Mod mod_null = {
 	.name = "none",
-	.register_actions = mod_null_register_actions
+	.register_actions = mod_null_register_actions,
+	
 };
 
 
@@ -89,7 +92,7 @@ struct cw_actiondef *mod_cache_get(const char *capwap, const char *bindings)
 }
 
 
-struct cw_actiondef *mod_cache_add(struct conn *conn, struct mod_ac *c, struct mod_ac *b)
+struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct cw_Mod *b)
 {
 	if (!cache) {
 		cache = mavl_create(cmp, NULL);
@@ -130,8 +133,65 @@ struct cw_actiondef *mod_cache_add(struct conn *conn, struct mod_ac *c, struct m
 	}
 
 	if (actions_registered_cb)
-		actions_registered_cb(c,b,&(i->actions));
+		actions_registered_cb(c, b, &(i->actions));
 
 	mavl_add(cache, i);
 	return &(i->actions);
+}
+
+
+
+/* static mavl to store modules */
+static struct mavl * modlist = NULL;
+static int mod_cmp(const void *e1, const void *e2){
+	struct cw_Mod * (*m1fn)() = e1;
+	struct cw_Mod * (*m2fn)() = e2;
+	return strcmp(m1fn()->name,m2fn()->name);
+}
+
+
+/**
+ * @brief Load a module 
+ * @param name Name of the module
+ * @return pointer to the module structure or NULL if the 
+ * module cannot be loaded.
+ */
+struct cw_Mod * cw_mod_get(const char *name)
+{
+	
+/*int i;
+        for (i=0; modlist[i];i++){
+
+                struct cw_Mod * m = modlist[i]();
+                if (strcmp(m->name,name)==0)
+                        return m;
+        }
+        return NULL;
+*/
+}
+
+int cw_mod_add(struct cw_Mod * (*modfn)() ){
+	if (modlist == NULL){
+		modlist = mavl_create(mod_cmp,NULL);
+		if (modlist==NULL){
+			return 0;
+		}
+	}
+	mavl_add(modlist,modfn);
+	return 1;
+}
+
+
+int cw_mod_add_dynamic(const char * filename){
+	void * handle;
+	handle = dlopen(filename,RTLD_NOW);
+	if (!handle){
+		printf("Error: %s",dlerror());
+	}
+
+	printf("Load DLL %p\n",handle);
+
+	void * ifu = dlsym(handle,"bstr_create");
+
+	printf("IFU DLL %p\n",ifu);
 }

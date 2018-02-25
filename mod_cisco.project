@@ -13,7 +13,6 @@
         <File Name="src/mod/cisco/cisco_out_wtp_descriptor.c"/>
         <File Name="src/mod/cisco/cisco_out_wtp_administrative_state.c"/>
         <File Name="src/mod/cisco/cisco_out_ac_descriptor.c"/>
-        <File Name="src/mod/cisco/mod_cisco.h"/>
         <File Name="src/mod/cisco/cw_in_check_disc_req.c"/>
         <File Name="src/mod/cisco/mod_cisco_ac.c"/>
         <File Name="src/mod/cisco/cisco_in_ac_descriptor.c"/>

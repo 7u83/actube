@@ -25,6 +25,7 @@ LIBS+=-lrt
 LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
+LIBS+=-ldl
 
 
 ifeq ($(SSL_LIBRARY),GNUTLS)

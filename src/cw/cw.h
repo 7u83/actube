@@ -120,10 +120,11 @@ typedef struct {
 
 }cw_elem_handler_t;
 
-typedef struct {
+struct cw_MsgSet {
 	mavl_t messages;
 	mavl_t all_elems;
-}cw_message_set_t;
+};
+typedef struct cw_MsgSet cw_MsgSet_t;
 
 typedef struct{
 	cw_elem_handler_t * elem;

@@ -539,7 +539,7 @@ static int conf_read_dbg_level(cfg_t * cfg)
 
 
 
-struct mod_ac ** conf_mods; //[10];
+struct cw_Mod ** conf_mods; //[10];
 
 
 
@@ -570,7 +570,7 @@ static int conf_read_mods(cfg_t *cfg){
 	int n, i;
 	n = cfg_size(cfg,CFG_ENTRY_MODS);
 	
-	conf_mods = malloc(sizeof(struct mod_ac *)*(n+1));
+	conf_mods = malloc(sizeof(struct cw_Mod *)*(n+1));
 	
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);

@@ -16,6 +16,7 @@ OBJS=\
 
 
 NAME=libcapwap.a
+SLIBS=-lcw
 
 include ../Mod.mak
 

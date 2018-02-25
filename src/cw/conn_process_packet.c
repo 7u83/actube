@@ -168,23 +168,21 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 	return 1;
 }
 
-static struct mod_ac *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
+static struct cw_Mod *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 				 int elems_len, struct sockaddr *from, int mode)
 {
-	if (conn->mods) {
-		struct mod_ac **mods = (struct mod_ac **) conn->mods;
-		int i;
-		for (i = 0; mods[i]; i++) {
-			if (mods[i]->detect) {
-				if (mods[i]->detect
-				    (conn, rawmsg, len, elems_len, from, mode)) {
-					return mods[i];
-
-				}
-			}
-		}
+	if (!conn->mods)
+		return MOD_NULL;
+	
+	struct cw_Mod **mods = (struct cw_Mod **) conn->mods;
+	int i;
+	for (i = 0; mods[i]; i++) {
+		if (!mods[i]->detect)
+			continue;
+		if (mods[i]->detect (conn, rawmsg, len, elems_len, from, mode))
+			return mods[i];
 	}
-
+	
 	return MOD_NULL;
 }
 
@@ -192,16 +190,16 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 				      int elems_len, struct sockaddr *from)
 {
 
-	struct mod_ac *cmod =
+	struct cw_Mod *cmod =
 	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
-		       "Can't find mod to handle connection from %s , discarding message",
+		       "Can't find mod to handle connection from %s, discarding message",
 		       sock_addr2str_p(from));
 		return NULL;
 	}
 
-	struct mod_ac *bmod =
+	struct cw_Mod *bmod =
 	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
 
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);

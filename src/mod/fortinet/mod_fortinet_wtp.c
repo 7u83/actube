@@ -21,7 +21,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		case MOD_MODE_CAPWAP:
 		{
 
-			struct mod_wtp *cmod = modload_wtp("capwap");
+			struct cw_Mod *cmod = modload_wtp("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap");
@@ -38,7 +38,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct mod_ac *cmod = modload_wtp("capwap80211");
+			struct cw_Mod *cmod = modload_wtp("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap80211");
@@ -82,7 +82,7 @@ static int init()
 	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_BOOTLOADER_VERSION,v);
 
 #endif
-//      struct mod_ac *cmod = modload_ac("capwap");
+//      struct cw_Mod *cmod = modload_ac("capwap");
 	return 1;
 }
 
@@ -153,7 +153,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 0;
 }
 
-static struct mod_ac fortinet_wtp = {
+static struct cw_Mod fortinet_wtp = {
 	.name = "fortinet",
 	.init = init,
 	.init_config = init_config,
@@ -161,7 +161,7 @@ static struct mod_ac fortinet_wtp = {
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_fortinet_wtp()
+struct cw_Mod *mod_fortinet_wtp()
 {
 	return &fortinet_wtp;
 };

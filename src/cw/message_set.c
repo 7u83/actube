@@ -39,7 +39,7 @@ static inline int msg_cmp(const void *elem1, const void *elem2)
 }
 
 
-void cw_message_set_destroy(cw_message_set_t * set){
+void cw_message_set_destroy(cw_MsgSet_t * set){
 	if (set->messages){
 		mavl_destroy(set->messages);
 	}
@@ -49,14 +49,14 @@ void cw_message_set_destroy(cw_message_set_t * set){
 	free(set);
 }
 
-cw_message_set_t * cw_message_set_create(){
+cw_MsgSet_t * cw_message_set_create(){
 
 	/* allocate memory for a message_set */
-	cw_message_set_t  * set = malloc(sizeof(cw_message_set_t));
+	cw_MsgSet_t  * set = malloc(sizeof(cw_MsgSet_t));
 	if (set==NULL)
 		return NULL;
 
-	memset(set,0,sizeof(cw_message_set_t));
+	memset(set,0,sizeof(cw_MsgSet_t));
 
 	/* create mavl for all_elems */
 	set->all_elems = mavl_create(cmp_cw_msgelemprops,NULL);
@@ -77,7 +77,7 @@ cw_message_set_t * cw_message_set_create(){
 }
 
 
-static void update_message(message2_t * msg, cw_msgdef_t * src, cw_message_set_t * set){
+static void update_message(message2_t * msg, cw_msgdef_t * src, cw_MsgSet_t * set){
 
 	cw_msgelemprops_t *md;
 	
@@ -95,7 +95,7 @@ static void update_message(message2_t * msg, cw_msgdef_t * src, cw_message_set_t
 
 
 
-void cw_message_set_add(cw_message_set_t * set,
+void cw_msgset_add(cw_MsgSet_t * set,
 			cw_msgdef_t  messages[]){
 
 	cw_msgdef_t * m;
@@ -136,19 +136,17 @@ void cw_message_set_add(cw_message_set_t * set,
 			next->states=m->states;
 		
 		update_message(next,m, set);
-
 	}
-
 }
 
 cw_elem_handler_t * cw_message_set_find_element(
-			cw_message_set_t * set,
+			cw_MsgSet_t * set,
 			cw_elem_handler_t * element){
 	return mavl_find(set->all_elems,element);
 }
 
 
-mlist_t cw_msgset_get_msg(cw_message_set_t * set, int type){
+mlist_t cw_msgset_get_msg(cw_MsgSet_t * set, int type){
 	message2_t search;
 	search.type = type;
 	message2_t * result = mavl_find(set->messages,&search);

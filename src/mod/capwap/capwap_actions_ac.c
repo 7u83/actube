@@ -127,15 +127,20 @@ static cw_msgdef_t messages[] = {
 };
 
 
+
+int capwap_register_msg_set(struct cw_MsgSet * set){
+	
+}
+
 void test_sets(){
 
-	cw_message_set_t * set = cw_message_set_create();
+	cw_MsgSet_t * set = cw_message_set_create();
 	if (set==NULL){
 		cw_log(LOG_ERR,"No mem");
 		return;
 	}
 	
-	cw_message_set_add(set,messages);
+	cw_msgset_add(set,messages);
 	
 	cw_elem_handler_t el; 
 	memset(&el,0,sizeof(el));

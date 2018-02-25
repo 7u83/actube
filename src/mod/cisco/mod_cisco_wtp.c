@@ -19,11 +19,12 @@ extern int cisco_register_actions_wtp(struct cw_actiondef *def);
 
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
+
 	switch (mode) {
 		case MOD_MODE_CAPWAP:
 		{
 
-			struct mod_wtp *cmod = modload_wtp("cipwap");
+			struct cw_Mod *cmod = modload_wtp("cipwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initzialize mod_cisco, failed to load base mod mod_cipwap");
@@ -40,7 +41,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct mod_ac *cmod = modload_wtp("capwap80211");
+			struct cw_Mod *cmod = modload_wtp("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initzialize mod_cisco, failed to load base mod mod_capwap80211");
@@ -154,7 +155,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 0;
 }
 
-static struct mod_ac cisco_wtp = {
+static struct cw_Mod cisco_wtp = {
 	.name = "cisco",
 	.init = init,
 	.init_config = init_config,
@@ -162,7 +163,7 @@ static struct mod_ac cisco_wtp = {
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_cisco_wtp()
+struct cw_Mod *mod_cisco_wtp()
 {
 	return &cisco_wtp;
 };

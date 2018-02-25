@@ -87,7 +87,7 @@ static int parse_args(int argc, char *argv[])
 
 
 #include "cw/mod.h"
-extern struct mod_ac * cw_get_mod_ac(const char *name);
+extern struct cw_Mod * cw_get_mod_ac(const char *name);
 
 #include "cw/mlist.h"
 
@@ -99,7 +99,10 @@ int main(int argc, char *argv[])
 
 
 
-	
+	cw_mod_add_dynamic("../../lib/actube/capwap.so"	);
+
+	exit(0);
+
 	
 	
 	

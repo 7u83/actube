@@ -33,7 +33,7 @@
 #include "cw/vendors.h"
 
 
-extern struct mod_ac ** conf_mods;
+extern struct cw_Mod ** conf_mods;
 
 #ifndef CONF_DEFAULT_ACNAME
 #define CONF_DEFAULT_ACNAME "AC"
