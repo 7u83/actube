@@ -349,7 +349,7 @@ $(SNAME) : $(OBJS) $(MODOBJS)
 
 $(DNAME) : $(OBJS) $(MODOBJS)
 	@mkdir -p $(LIBARCHDIR)
-	@echo "  AR $(DNAME)"
+	@echo "  $(CC) $(DNAME)"
 	@$(CC) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(LIBS)
 
 

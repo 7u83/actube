@@ -1,3 +1,8 @@
+include ../../Macros.mak
+include ../../Config.mak
+include ../../Config.local.mak
+
+
 
 OBJS=\
 	mod_capwap_ac.o \
@@ -12,11 +17,13 @@ OBJS=\
 	capwap_in_wtp_descriptor.o \
 	capwap_out_ac_ip_list.o \
 	capwap_in_session_id.o \
-#	capwap_in
 
 
-NAME=libcapwap.a
-SLIBS=-lcw
+LIBDIR		:= ../../../lib/$(ARCH)
+OBJDIR		:= ../../../obj/mod_capwap/$(ARCH)
+SNAME		:= $(LIBDIR)/libcapwap.a
+DNAME		:= $(LIBDIR)/capwap.so
+SLIBS		:= -lcw
 
 include ../Mod.mak
 
