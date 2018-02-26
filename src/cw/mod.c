@@ -30,7 +30,7 @@
 #include "mavl.h"
 #include "dbg.h"
 #include "log.h"
-
+#include "file.h"
 
 static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
 				      struct cw_actiondef * actions) = NULL;
@@ -144,8 +144,8 @@ struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct c
 /* static mavl to store modules */
 static struct mavl * mods_loaded = NULL;
 static int mod_cmp(const void *e1, const void *e2){
-	struct cw_Mod * m1 = e1;
-	struct cw_Mod * m2 = e2;
+	const struct cw_Mod * m1 = e1;
+	const struct cw_Mod * m2 = e2;
 	return strcmp(m1->name,m2->name);
 }
 
@@ -243,5 +243,22 @@ struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
 			return 0;
 		}
 	}
-	return mlist_append(mods_list,mod);
+	return mlist_append(mods_list,mod)->data;
+}
+
+
+struct cw_Mod * cw_mod_detect(struct conn *conn, 
+			uint8_t * rawmsg, int len,
+			int elems_len, struct sockaddr *from, 
+			int mode){
+	cw_dbg(DBG_MOD, "Try to detect");
+
+	if (mods_list==NULL)
+		return MOD_NULL;
+	
+	struct mlist_elem * e;
+	mlist_foreach(e,mods_list){
+		struct cw_Mod * mod = e->data;
+		cw_dbg(DBG_MOD,"Checking mod: %s",mod->name);
+	}
 }

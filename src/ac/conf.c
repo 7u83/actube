@@ -580,16 +580,8 @@ static int conf_read_mods(cfg_t *cfg){
 		struct cw_Mod * mod = cw_mod_load(modname);
 		if (!mod)
 			return 0;
-
-/*		conf_mods[i] = NULL; //modload_ac(modname);
-		if (!conf_mods[i]){
-			cw_log(LOG_ERR,"Can't load mod: %s",modname);
-			return 0;
-		}
-*/
-		
+		cw_mod_add_to_list(mod);
 	}
-
 	return 1;
 }
 

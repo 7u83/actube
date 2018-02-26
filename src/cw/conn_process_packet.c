@@ -171,6 +171,7 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 static struct cw_Mod *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 				 int elems_len, struct sockaddr *from, int mode)
 {
+	cw_mod_detect(conn,rawmsg,len,elems_len,from,mode);
 	return MOD_NULL;
 	
 	if (!conn->mods)
