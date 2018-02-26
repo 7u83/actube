@@ -125,7 +125,7 @@ struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct c
 	memset(i, 0, sizeof(struct cache_item));
 	if (c) {
 		i->capwap = c->name;
-		c->register_actions(&(i->actions), MOD_MODE_CAPWAP);
+		c->register_actions(&(i->actions), CW_MOD_MODE_CAPWAP);
 	}
 	if (b) {
 		i->bindings = b->name;
@@ -149,40 +149,38 @@ static int mod_cmp(const void *e1, const void *e2){
 	return strcmp(m1->name,m2->name);
 }
 
+static const char * mod_path="./";
 
-/**
- * @brief Load a module 
- * @param name Name of the module
- * @return pointer to the module structure or NULL if the 
- * module cannot be loaded.
- */
-struct cw_Mod * cw_mod_get(const char *name)
-{
-	
-/*int i;
-        for (i=0; modlist[i];i++){
-
-                struct cw_Mod * m = modlist[i]();
-                if (strcmp(m->name,name)==0)
-                        return m;
-        }
-        return NULL;
-*/
+void cw_mod_set_mod_path(const char * path){
+	mod_path = path;
 }
 
-int cw_mod_add(struct cw_Mod * (*modfn)() ){
+static int cw_mod_add(struct cw_Mod * mod ){
 	if (modlist == NULL){
 		modlist = mavl_create(mod_cmp,NULL);
 		if (modlist==NULL){
 			return 0;
 		}
 	}
-	mavl_add(modlist,modfn);
+	//mavl_add(modlist,modfn);
 	return 1;
 }
 
-
-struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * mod_name){
+/**
+ * @brief Load a module 
+ * @param path
+ * @param mod_name
+ * @return 
+ */
+struct cw_Mod * cw_mod_load(const char * mod_name){
+	/* if modlist is not initialized, initialize ... */
+	if (modlist==NULL){
+		modlist=mavl_create(mod_cmp,NULL);
+		if (modlist==NULL){
+			cw_log(LOG_ERROR, "Can't init modlist, no memory");
+			return NULL;
+		}
+	}
 
 	/* Search for the module in modlist, to see if it is
 	 * already loaded or was statically linked */
@@ -195,17 +193,20 @@ struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * mod_name){
 		return mod;
 	}
 
+	if (strlen(mod_name)>CW_MOD_MAX_MOD_NAME_LEN){
+		cw_log(LOG_ERROR,"Mod name too long: %s (max allowed = %d",
+			mod_name,CW_MOD_MAX_MOD_NAME_LEN);
+		return NULL;
+	}
+	
+	char mod_filename[CW_MOD_MAX_MOD_NAME_LEN+5];
+	sprintf(mod_filename,"mod_%s",mod_name);
 
-	int n = strlen(path)+strlen(mod_name)+8;
-
-	char * filename = malloc(n);
-
-	if (!filename)
-		return 0;
-	strcpy(filename,path);
-	strcat(filename,"/");
-	strcat(filename,mod_name);
-	strcat(filename,".so");
+	/* we have to load the module dynamically */
+	char * filename;
+	filename = cw_filename(mod_path,mod_filename,".so");
+	if (filename==NULL)
+		return NULL;
 
 	/* Open the DLL */
 	void * handle;
@@ -217,7 +218,9 @@ struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * mod_name){
 	}
 
 	struct cw_Mod * (*mod_get_interface)();
+	
 	mod_get_interface = dlsym(handle,"mod_get_interface");
+	
 	if (!mod_get_interface){
 		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
 		goto errX;

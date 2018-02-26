@@ -18,7 +18,7 @@ extern int fortinet_register_actions_ac(struct cw_actiondef *def);
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
 	switch (mode) {
-		case MOD_MODE_CAPWAP:
+		case CW_MOD_MODE_CAPWAP:
 		{
 
 			struct cw_Mod *cmod = modload_ac("capwap");
@@ -27,7 +27,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap");
 				return 1;
 			}
-			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
 			int rc = fortinet_register_actions_ac(actions);
 			cw_dbg(DBG_INFO, "Initialized mod fortinet with %d actions", rc);
 			return 0;
@@ -85,7 +85,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_FORTINET) {
 				//              conn->actions = &actions;
-				if (mode == MOD_MODE_CAPWAP) {
+				if (mode == CW_MOD_MODE_CAPWAP) {
 					cw_dbg(DBG_MOD, "Fortinet capwap detected: yes");
 				} else {
 					cw_dbg(DBG_MOD, "Fortinet bindings detected: yes");
@@ -99,7 +99,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 	}
 
-	if (mode == MOD_MODE_CAPWAP) {
+	if (mode == CW_MOD_MODE_CAPWAP) {
 		cw_dbg(DBG_MOD, "Fortinet capwap detected: no");
 	} else {
 		cw_dbg(DBG_MOD, "Fortinet bindings detected: no");

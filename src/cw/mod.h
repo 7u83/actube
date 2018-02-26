@@ -35,7 +35,7 @@ struct cw_actiondef;
 
 
 enum {
-	MOD_MODE_CAPWAP,
+	CW_MOD_MODE_CAPWAP,
 	MOD_MODE_BINDINGS
 };
 
@@ -91,6 +91,9 @@ extern int mod_caching;
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
-struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * file);
+struct cw_Mod * cw_mod_load(const char * mod_name);
+
+#define CW_MOD_MAX_MOD_NAME_LEN	128
+#define CW_MOD_INTERFACE_FUNCTION_NAME_SUFFIX "_get_interface"
 
 #endif

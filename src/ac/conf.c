@@ -573,11 +573,15 @@ static int conf_read_mods(cfg_t *cfg){
 	conf_mods = malloc(sizeof(struct cw_Mod *)*(n+1));
 
 	cw_dbg(DBG_INFO,"Mods directory: %s",conf_mods_dir);
+	cw_mod_set_mod_path(conf_mods_dir);
 
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-	
-		struct cw_Mod * mod = cw_mod_add_dynamic(conf_mods_dir,modname);
+
+printf("Modname: %s\n",modname);
+
+
+		struct cw_Mod * mod = cw_mod_load(modname);
 		if (!mod)
 			return 0;
 

@@ -27,7 +27,7 @@ static int init()
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
-	if (mode != MOD_MODE_CAPWAP)
+	if (mode != CW_MOD_MODE_CAPWAP)
 		return 0;
 	conn->detected = 1;
 	conn->actions = &actions;
@@ -36,7 +36,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 static int register_actions(struct cw_actiondef *def, int mode)
 {
-	if (mode != MOD_MODE_CAPWAP)
+	if (mode != CW_MOD_MODE_CAPWAP)
 		return 0;
 	return capwap_register_actions_wtp(def);
 }

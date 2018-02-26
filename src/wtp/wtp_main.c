@@ -130,7 +130,7 @@ int main()
 	}
 	mod->init();
 
-	mod->register_actions(&capwap_actions,MOD_MODE_CAPWAP);
+	mod->register_actions(&capwap_actions,CW_MOD_MODE_CAPWAP);
 	mod = modload_wtp(CWBIND);
 	if (!mod) {
 		printf("Can't load mod capwap80211\n");

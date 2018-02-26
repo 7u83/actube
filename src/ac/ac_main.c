@@ -93,15 +93,11 @@ extern struct cw_Mod * cw_get_mod_ac(const char *name);
 
 
 extern void test_sets();
+#include "cw/file.h"
 
 int main(int argc, char *argv[])
 {
 
-
-
-	
-	
-	
 	int rc = 0;
 
 	/* parse arguments */
@@ -124,7 +120,8 @@ int main(int argc, char *argv[])
 	   developers is turned on ;) */
 	DBGX("Attention! %s", "DBG X is ON!");
 
-	cw_mod_add_dynamic("../../lib/actube","capwap");
+	cw_mod_set_mod_path("../../lib/actube");
+	cw_mod_load("capwap");
 
 	exit(0);
 

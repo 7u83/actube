@@ -306,6 +306,7 @@
       <File Name="src/cw/message_set.c"/>
       <File Name="src/cw/message_set.h"/>
       <File Name="src/mod/cisco/mod_cisco.h"/>
+      <File Name="src/cw/cw_filename.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

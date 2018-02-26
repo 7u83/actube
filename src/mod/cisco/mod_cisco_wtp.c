@@ -21,7 +21,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 {
 
 	switch (mode) {
-		case MOD_MODE_CAPWAP:
+		case CW_MOD_MODE_CAPWAP:
 		{
 
 			struct cw_Mod *cmod = modload_wtp("cipwap");
@@ -31,7 +31,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 				return 1;
 			}
 			
-			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
 
 			int rc = cisco_register_actions_wtp(actions);
 
@@ -132,7 +132,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_CISCO) {
 				//              conn->actions = &actions;
-				if (mode == MOD_MODE_CAPWAP) {
+				if (mode == CW_MOD_MODE_CAPWAP) {
 					cw_dbg(DBG_MOD, "CISCO capwap detected: yes");
 				} else {
 					cw_dbg(DBG_MOD, "CISCO bindings detected: yes");
@@ -146,7 +146,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 	}
 
-	if (mode == MOD_MODE_CAPWAP) {
+	if (mode == CW_MOD_MODE_CAPWAP) {
 		cw_dbg(DBG_MOD, "CISCO capwap detected: no");
 	} else {
 		cw_dbg(DBG_MOD, "CISCO bindings detected: no");

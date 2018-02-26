@@ -191,7 +191,7 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 {
 
 	struct cw_Mod *cmod =
-	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_CAPWAP);
+	    detect_mod(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Can't find mod to handle connection from %s, discarding message",

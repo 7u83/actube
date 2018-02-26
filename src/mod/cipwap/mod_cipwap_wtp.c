@@ -18,7 +18,7 @@ int cipwap_init()
 
 static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_len, struct sockaddr *from, int mode)
 {
-	if (mode == MOD_MODE_CAPWAP)
+	if (mode == CW_MOD_MODE_CAPWAP)
 		return 1;
 
 	return 0;
@@ -27,7 +27,7 @@ static int detect(struct conn *conn,const uint8_t *rawmsg, int rawlen,int elems_
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
 	switch (mode) {
-		case MOD_MODE_CAPWAP:
+		case CW_MOD_MODE_CAPWAP:
 		{
 
 			struct cw_Mod *cmod = modload_wtp("capwap");
@@ -36,7 +36,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 				       "Can't initialize mod_cisco, failed to load base mod mod_capwap");
 				return 1;
 			}
-			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
 			int rc = cipwap_register_actions_ac(actions);
 			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d actions", rc);
 			return rc;
