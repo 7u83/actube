@@ -66,9 +66,11 @@ struct cw_Mod {
 	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet set, int mode);
 	
 	/** 
-	 * Handle returned by dlopen, if this module was loaded dynamically 
-	 * with dlopen */
-	void * handle;
+	 * Handle returned by dlopen, if this module was loaded 
+	 * dynamically with dlopen. If this module was statically 
+	 * linked, dll_handle is NULL.
+	 */
+	void * dll_handle;
 };
 
 
