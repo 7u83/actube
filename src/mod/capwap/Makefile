@@ -22,9 +22,9 @@ OBJS=\
 LIBDIR		:= ../../../lib
 LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
 OBJDIR		:= ../../../obj/mod_capwap/$(ARCH)
-SNAME		:= $(LIBARCHDIR)/libcapwap.a
-DNAME		:= $(LIBARCHDIR)/capwap.so
-MODNAME		:= $(LIBDIR)/capwap.so
+SNAME		:= $(LIBARCHDIR)/libmod_capwap.a
+DNAME		:= $(LIBARCHDIR)/mod_capwap.so
+MODNAME		:= $(LIBDIR)/mod_capwap.so
 SLIBS		:= -lcw
 
 include ../Mod.mak

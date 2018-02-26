@@ -92,6 +92,7 @@ extern int mod_caching;
 #define mod_get_caching() (mod_caching)
 
 struct cw_Mod * cw_mod_load(const char * mod_name);
+struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod );
 
 #define CW_MOD_MAX_MOD_NAME_LEN	128
 #define CW_MOD_INTERFACE_FUNCTION_NAME_SUFFIX "_get_interface"

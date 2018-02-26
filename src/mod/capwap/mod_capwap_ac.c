@@ -55,6 +55,6 @@ struct cw_Mod *mod_capwap_ac()
 };
 
 
-struct cw_Mod * mod_get_interface(){
+struct cw_Mod * mod_capwap(){
 	return &capwap_ac;
 }

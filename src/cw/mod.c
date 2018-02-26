@@ -142,7 +142,7 @@ struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct c
 
 
 /* static mavl to store modules */
-static struct mavl * modlist = NULL;
+static struct mavl * mods_loaded = NULL;
 static int mod_cmp(const void *e1, const void *e2){
 	struct cw_Mod * m1 = e1;
 	struct cw_Mod * m2 = e2;
@@ -155,46 +155,36 @@ void cw_mod_set_mod_path(const char * path){
 	mod_path = path;
 }
 
-static int cw_mod_add(struct cw_Mod * mod ){
-	if (modlist == NULL){
-		modlist = mavl_create(mod_cmp,NULL);
-		if (modlist==NULL){
-			return 0;
-		}
-	}
-	//mavl_add(modlist,modfn);
-	return 1;
-}
-
 /**
  * @brief Load a module 
- * @param path
- * @param mod_name
- * @return 
+ * @param mod_name Name of the module
+ * @return a pointer to the module interface
  */
 struct cw_Mod * cw_mod_load(const char * mod_name){
+	
+	
 	/* if modlist is not initialized, initialize ... */
-	if (modlist==NULL){
-		modlist=mavl_create(mod_cmp,NULL);
-		if (modlist==NULL){
+	if (mods_loaded==NULL){
+		mods_loaded=mavl_create(mod_cmp,NULL);
+		if (mods_loaded==NULL){
 			cw_log(LOG_ERROR, "Can't init modlist, no memory");
 			return NULL;
 		}
 	}
 
-	/* Search for the module in modlist, to see if it is
+	/* Search for the module in mods_loaded, to see if it is
 	 * already loaded or was statically linked */
 	struct cw_Mod search;
 	memset(&search,0,sizeof(search));
 	search.name=mod_name;
 	struct cw_Mod * mod;
-	mod = mavl_find(modlist,&search);
+	mod = mavl_find(mods_loaded,&search);
 	if (mod){
 		return mod;
 	}
 
 	if (strlen(mod_name)>CW_MOD_MAX_MOD_NAME_LEN){
-		cw_log(LOG_ERROR,"Mod name too long: %s (max allowed = %d",
+		cw_log(LOG_ERROR,"Mod name too long: %s (max allowed = %d)",
 			mod_name,CW_MOD_MAX_MOD_NAME_LEN);
 		return NULL;
 	}
@@ -219,7 +209,7 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 
 	struct cw_Mod * (*mod_get_interface)();
 	
-	mod_get_interface = dlsym(handle,"mod_get_interface");
+	mod_get_interface = dlsym(handle,mod_filename);
 	
 	if (!mod_get_interface){
 		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
@@ -227,8 +217,31 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 	}
 
 	mod = mod_get_interface();
+	mod->dll_handle=handle;
+	
+	if (!mavl_add(mods_loaded,mod)){
+		dlclose(handle);
+		cw_log(LOG_ERR,"Can' add module %s",mod_name);
+		goto errX;
+	}
+	
 	mod->init();
 errX:
 	free(filename);
 	return mod;
+}
+
+
+
+static struct mlist * mods_list = NULL;
+
+struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
+	if (!mods_list){
+		mods_list = mlist_create(mod_cmp);
+		if (!mods_list){
+			cw_log(LOG_ERROR,"Can't init mods_list");
+			return 0;
+		}
+	}
+	return mlist_append(mods_list,mod);
 }

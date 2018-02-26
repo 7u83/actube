@@ -577,10 +577,6 @@ static int conf_read_mods(cfg_t *cfg){
 
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-
-printf("Modname: %s\n",modname);
-
-
 		struct cw_Mod * mod = cw_mod_load(modname);
 		if (!mod)
 			return 0;
@@ -830,7 +826,9 @@ int read_config(const char *filename)
 	if (!conf_image_dir)
 		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
 
-	init_mods();
+//printf("INIT MODS\n");
+//	init_mods();
+//printf("done init mods");
 
 //	conf_init_capwap_mode();
 
@@ -839,7 +837,7 @@ int read_config(const char *filename)
 	init_mcast_groups();
 	init_bcast_addrs();
 
-
+//printf("Yea all mods inited\n");
 	return 1;
 }
 
