@@ -120,14 +120,14 @@ int main(int argc, char *argv[])
 	   developers is turned on ;) */
 	DBGX("Attention! %s", "DBG X is ON!");
 
-	cw_mod_set_mod_path("../../lib/actube");
-	cw_mod_load("capwap");
-
-	exit(0);
+//	cw_mod_set_mod_path("../../lib/actube");
+//	cw_mod_load("capwap");
 
 
-test_sets();
-exit(0);
+
+
+//test_sets();
+//exit(0);
 
 	/* Initialize the database */
 	if (!db_init())

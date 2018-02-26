@@ -171,6 +171,8 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 static struct cw_Mod *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
 				 int elems_len, struct sockaddr *from, int mode)
 {
+	return MOD_NULL;
+	
 	if (!conn->mods)
 		return MOD_NULL;
 	
@@ -299,7 +301,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		//struct mod_ac *mod;
 		struct cw_actiondef *ad = load_mods(conn, rawmsg, len, elems_len, from);
 		if (!ad) {
-			cw_log(LOG_ERR, "Error");
+			//cw_log(LOG_ERR, "Error");
 			errno = EAGAIN;
 			return -1;
 		}
