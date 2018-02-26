@@ -10,7 +10,7 @@ CFLAGS = -fPIC -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUP
 
 SRCS = $(OBJS:.o=.c) 
 
-all: $(SNAME) $(DNAME)
+all: $(SNAME) $(DNAME) $(MODNAME)
 
 $(OBJDIR)/%.o:%.c
 	@mkdir -p $(OBJDIR)
@@ -19,20 +19,25 @@ $(OBJDIR)/%.o:%.c
 
 
 $(SNAME) : $(OBJS) $(MODOBJS)
-	@mkdir -p $(LIBDIR)
+	@mkdir -p $(LIBARCHDIR)
 	@echo "  $(AR) $(SNAME)"
 	@$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
 
 $(DNAME) : $(OBJS) $(MODOBJS)
-	@mkdir -p $(LIBDIR)
+	@mkdir -p $(LIBARCHDIR)
 	@echo "  $(CC) $(DNAME)"
-	@$(CC) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(LIBS)
+	@$(CC) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
 
-#	$(CC) -L$(LIBDIR) $(OBJS) $(MODOBJS) $(SLIBS) -v -shared -o ../../../lib/actube/capwap.so
+$(MODNAME) : $(DNAME)
+	cp $(DNAME) $(MODNAME)
+
+#	$(CC) -L$(LIBARCHDIR) $(OBJS) $(MODOBJS) $(SLIBS) -v -shared -o ../../../lib/actube/capwap.so
 
 
 
 clean: 
 	rm -rf $(OBJDIR)
 	rm -f $(SNAME)
+	rm -f $(DNAME)
+	rm -f $(MODNAME)
 

@@ -19,10 +19,12 @@ OBJS=\
 	capwap_in_session_id.o \
 
 
-LIBDIR		:= ../../../lib/$(ARCH)
+LIBDIR		:= ../../../lib
+LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
 OBJDIR		:= ../../../obj/mod_capwap/$(ARCH)
-SNAME		:= $(LIBDIR)/libcapwap.a
-DNAME		:= $(LIBDIR)/capwap.so
+SNAME		:= $(LIBARCHDIR)/libcapwap.a
+DNAME		:= $(LIBARCHDIR)/capwap.so
+MODNAME		:= $(LIBDIR)/capwap.so
 SLIBS		:= -lcw
 
 include ../Mod.mak

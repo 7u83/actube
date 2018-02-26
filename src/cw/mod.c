@@ -144,9 +144,9 @@ struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct c
 /* static mavl to store modules */
 static struct mavl * modlist = NULL;
 static int mod_cmp(const void *e1, const void *e2){
-	struct cw_Mod * (*m1fn)() = e1;
-	struct cw_Mod * (*m2fn)() = e2;
-	return strcmp(m1fn()->name,m2fn()->name);
+	struct cw_Mod * m1 = e1;
+	struct cw_Mod * m2 = e2;
+	return strcmp(m1->name,m2->name);
 }
 
 
@@ -182,32 +182,50 @@ int cw_mod_add(struct cw_Mod * (*modfn)() ){
 }
 
 
-int cw_mod_add_dynamic(const char * path, const char * mod_name){
-	
-	char * filename = malloc(strlen(path)+strlen(mod_name)+8);
+struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * mod_name){
+
+	/* Search for the module in modlist, to see if it is
+	 * already loaded or was statically linked */
+	struct cw_Mod search;
+	memset(&search,0,sizeof(search));
+	search.name=mod_name;
+	struct cw_Mod * mod;
+	mod = mavl_find(modlist,&search);
+	if (mod){
+		return mod;
+	}
+
+
+	int n = strlen(path)+strlen(mod_name)+8;
+
+	char * filename = malloc(n);
+
 	if (!filename)
 		return 0;
 	strcpy(filename,path);
 	strcat(filename,"/");
 	strcat(filename,mod_name);
 	strcat(filename,".so");
-	
-	int rc=0;
-	
+
+	/* Open the DLL */
 	void * handle;
 	handle = dlopen(filename,RTLD_NOW);
+	
 	if (!handle){
 		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
 		goto errX;
 	}
 
-	void * ifu = dlsym(handle,"mod_get_interface");
-	if (!ifu){
+	struct cw_Mod * (*mod_get_interface)();
+	mod_get_interface = dlsym(handle,"mod_get_interface");
+	if (!mod_get_interface){
 		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
 		goto errX;
 	}
 
+	mod = mod_get_interface();
+	mod->init();
 errX:
 	free(filename);
-	return rc;
+	return mod;
 }

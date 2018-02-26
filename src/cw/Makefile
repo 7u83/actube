@@ -3,7 +3,8 @@ include ../CWConfig.mak
 -include ../Config.local.mak
 
 
-LIBARCHDIR	:= ../../lib/$(ARCH)
+LIBDIR		:= ../../lib
+LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
 OBJDIR		:= ../../obj/cw/$(ARCH)
 
 SNAME		:= $(LIBARCHDIR)/libcw.a

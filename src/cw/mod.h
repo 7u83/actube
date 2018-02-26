@@ -64,6 +64,11 @@ struct cw_Mod {
 	int (*register_actions) (struct cw_actiondef * def,int mode);
 	
 	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet set, int mode);
+	
+	/** 
+	 * Handle returned by dlopen, if this module was loaded dynamically 
+	 * with dlopen */
+	void * handle;
 };
 
 
@@ -84,6 +89,6 @@ extern int mod_caching;
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
-extern int cw_mod_add_dynamic(const char * path, const char * file);
+struct cw_Mod * cw_mod_add_dynamic(const char * path, const char * file);
 
 #endif
