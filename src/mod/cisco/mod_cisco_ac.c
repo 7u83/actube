@@ -21,21 +21,21 @@ extern int cisco_register_actions_ac(struct cw_actiondef *def);
 mbag_t cisco_config = NULL;
 
 
-static int register_actions(struct cw_actiondef *actions, int mode)
+static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 {
 	switch (mode) {
 		case CW_MOD_MODE_CAPWAP:
 		{
 
-			struct cw_Mod *cmod = NULL; //modload_ac("cipwap");
+			struct cw_Mod *cmod = cw_mod_load("capwap");//  NULL; //modload_ac("cipwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
-				       "Can't initialize mod_cisco, failed to load base mod mod_cipwap");
+				       "Can't initialize mod_cisco, failed to load base module mod_cipwap");
 				return 1;
 			}
-			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
-			int rc = cisco_register_actions_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d actions", rc);
+			cmod->register_messages(set, CW_MOD_MODE_CAPWAP);
+			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d messafe", 7);
 			return 0;
 		}
 		case MOD_MODE_BINDINGS:
@@ -46,9 +46,9 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
 				return 1;
 			}
-			cmod->register_actions(actions, MOD_MODE_BINDINGS);
-			int rc = cisco_register_actions80211_ac(actions);
-			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", rc);
+			cmod->register_messages(set, MOD_MODE_BINDINGS);
+			int rc = cisco_register_actions80211_ac(set);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", 12);
 			return 0;
 		}
 		
@@ -172,7 +172,7 @@ static struct cw_Mod capwap_ac = {
 	.init = init,
 	.detect = detect,
 //	.register_actions = register_actions,
-	
+	.register_messages = register_messages
 };
 
 struct cw_Mod *mod_cisco_ac()

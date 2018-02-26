@@ -275,19 +275,11 @@ printf("We have loaded the message set\n");
 	struct cw_MsgData search;
 	search.type = cw_get_msg_id(msg_ptr);
 	struct cw_MsgData * message;
+	/* Search for message combination */	
 	message = mavl_get(conn->msgset->messages,&search);
 
-printf("Got Message %d (%s)\n", message->type, message->name);
-exit(0);
-/*
-	as.capwap_state = conn->capwap_state;
-	as.msg_id = cw_get_msg_id(msg_ptr);
-	as.vendor_id = 0;
-	as.elem_id = 0;
-	as.proto = 0;
-*/
 
-	/* Search for state/message combination */
+
 //	afm = cw_actionlist_in_get(conn->actions->in, &as);
 
 	if (!afm) {

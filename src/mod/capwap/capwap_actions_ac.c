@@ -132,7 +132,7 @@ static cw_msgdef_t messages[] = {
 
 
 
-struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
+struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return NULL;
 	cw_msgset_add(set,messages);

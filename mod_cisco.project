@@ -35,6 +35,7 @@
         <File Name="src/mod/cisco/cisco_out_ap_timesync.c"/>
         <File Name="src/mod/cisco/mod_cisco_wtp.c"/>
         <File Name="src/mod/cisco/cisco80211.c"/>
+        <File Name="src/mod/cisco/mod_cisco.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>
