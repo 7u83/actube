@@ -492,10 +492,14 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	search.type = msg_id;
 	struct cw_MsgData * message;
 	message = mavl_get(conn->msgset->messages,&search);
-
 	
+	char * msname;
+	if (!message)
+		msname="Unknown";
+	else
+		msname = message->name;
 	
-	s += sprintf(s, "%s Message (type=%d) ", message->name  /*cw_strmsg(msg_id)*/, msg_id);
+	s += sprintf(s, "%s Message (type=%d) ", msname  /*cw_strmsg(msg_id)*/, msg_id);
 	if (level == DBG_MSG_IN)
 		s += sprintf(s, "from %s ", sock_addr2str(from));
 	else

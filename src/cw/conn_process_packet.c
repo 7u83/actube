@@ -267,8 +267,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		conn->detected = 1;
 	}
 
-printf("We have loaded the message set\n");
-
 	cw_dbg_msg(DBG_MSG_IN, conn, rawmsg, len, from);
 
 	/* prepare struct for search operation */
@@ -277,7 +275,18 @@ printf("We have loaded the message set\n");
 	struct cw_MsgData * message;
 	/* Search for message combination */	
 	message = mavl_get(conn->msgset->messages,&search);
-
+	
+	int result_code = 0;
+	if (!message){
+		/* Message is unknown */
+		cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
+			search.type, cw_strmsg(search.type),
+			cw_strstate(conn->capwap_state));
+		result_code = CW_RESULT_MSG_UNRECOGNIZED;
+		cw_send_error_response(conn, rawmsg, result_code);
+		errno = EAGAIN;
+		return -1;
+	}
 
 
 //	afm = cw_actionlist_in_get(conn->actions->in, &as);
@@ -304,7 +313,7 @@ printf("We have loaded the message set\n");
 			cw_dbg(DBG_MSG_ERR,
 			       "Message type %d (%s) not allowed in %s State.", as.msg_id,
 			       cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
-			result_code = CW_RESULT_MSG_INVALID_IN_CURRENT_STATE;
+			result_code = CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE;
 		} else {
 			/* Message is unknown */
 			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
@@ -388,7 +397,7 @@ printf("We have loaded the message set\n");
 	/* all message elements are processed, do now after processing
 	   by calling the "end" function for the message */
 
-	int result_code = 0;
+	//int result_code = 0;
 
 
 
