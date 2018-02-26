@@ -124,6 +124,7 @@ struct cw_MsgSet {
 	mavl_t messages;
 	mavl_t all_elems;
 };
+
 typedef struct cw_MsgSet cw_MsgSet_t;
 
 typedef struct{

@@ -328,7 +328,7 @@ OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 all: $(SNAME) $(DNAME)
 
 
-CFLAGS = -W -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
+CFLAGS = -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

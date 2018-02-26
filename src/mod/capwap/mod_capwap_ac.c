@@ -18,8 +18,6 @@ extern int capwap_register_actions_ac(struct cw_actiondef *def);
 static int init()
 {
 	cw_dbg(DBG_MOD, "Initialiazing mod_capwap.");
-//	int rc = capwap_register_actions_ac(&actions);
-//	cw_dbg(DBG_INFO, "Initialized mod capwap with %d actions", rc);
 	return 0;
 }
 
@@ -46,7 +44,8 @@ static struct cw_Mod capwap_ac = {
 	.name = "capwap",
 	.init = init,
 	.detect = detect,
-	.register_actions = register_actions
+	.register_actions = register_actions,
+	.register_messages = capwap_register_msg_set
 };
 
 struct cw_Mod *mod_capwap_ac()

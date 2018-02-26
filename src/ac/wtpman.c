@@ -91,7 +91,7 @@ static void wtpman_run_discovery(void *arg)
 	extern cw_actionlist_in_t the_tree;
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-	wtpman->conn->actions = &capwap_actions;
+//	wtpman->conn->actions = &capwap_actions;
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
@@ -276,8 +276,12 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 }
 
+
+// TODO XXXX
+
 void props_to_sql(struct conn *conn, mbag_t  mb, const char *mid)
 {
+	/*
 	// XXX for the now we use just the IP adress as ID
 	char *wtp_id = sock_addr2str(&conn->addr);
 
@@ -327,6 +331,7 @@ void props_to_sql(struct conn *conn, mbag_t  mb, const char *mid)
 		}
 
 	}
+	 */
 }
 
 
@@ -334,6 +339,8 @@ void props_to_sql(struct conn *conn, mbag_t  mb, const char *mid)
 
 void config_to_sql(struct conn *conn)
 {
+	
+/*
 	// XXX for the moment we use just the IP adress as ID
 	char *wtp_id = sock_addr2str(&conn->addr);
 
@@ -370,10 +377,13 @@ void config_to_sql(struct conn *conn)
 		}
 
 	}
+*/
 }
 
 void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
 {
+	
+/*	
 	MAVLITER_DEFINE(it, radio);
 	mavliter_foreach(&it) {
 		mbag_item_t *i = mavliter_get(&it);
@@ -408,7 +418,7 @@ void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
 
 
 //		int rid = ((struct mbag_item*)mavliter_get(&it))->iid;
-
+*/
 }
 
 

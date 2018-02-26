@@ -29,20 +29,20 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 			vendor=cw_strvendor(a->vendor_id);
 		}
 		if (a->mand) {
-			cw_log(LOG_ERR,
+/*			cw_log(LOG_ERR,
 			       "Can't put mandatory element %s %d - (%s) into %s. No value for '%s' found.",
 				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id)
 			       , a->item_id
 			    );
-		}
+*/		}
 		else{
-			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %s not found.",
+/*			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %s not found.",
 				vendor,
 			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
 			       , cw_strmsg(a->msg_id),a->item_id);
-
+*/
 		}
 		return 0;
 	} else {

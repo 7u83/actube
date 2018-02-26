@@ -5,10 +5,11 @@
 #include "mbag.h"
 #include "cw.h"
 
-
+/// TODO XXXX
 int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		     struct sockaddr *from)
 {
+	/*
 	if (len < a->min_len) {
 		cw_dbg(DBG_ELEM_ERR,
 		       "%d (%s) message element too short, len=%d, min len=%d",
@@ -22,7 +23,7 @@ int static check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 		       cw_strelemp(conn->actions, a->elem_id), len, a->max_len);
 		return 0;
 	}
-
+*/
 	return 1;
 }
 

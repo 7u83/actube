@@ -4,6 +4,7 @@
 
 #include "conn.h"
 #include "mavl.h"
+#include "pthread.h"
 
 struct connlist {
 /*	struct conn ** connlist; */

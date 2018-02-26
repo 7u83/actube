@@ -28,5 +28,8 @@ extern struct mbag_item * capwap_out_get_capwap_timers(struct conn *conn,struct 
 extern int capwap_out_ac_ip_list(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
+struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode);
+
+
 
 #endif

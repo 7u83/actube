@@ -151,7 +151,7 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 	if (!a->max_len)
 		return 1;
 
-	if (len < a->min_len) {
+/*	if (len < a->min_len) {
 		cw_dbg(DBG_ELEM_ERR,
 		       "%d (%s) message element too short, len=%d, min len=%d",
 		       a->elem_id, cw_strelemp(conn->actions, a->elem_id), len,
@@ -164,37 +164,17 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 		       cw_strelemp(conn->actions, a->elem_id), len, a->max_len);
 		return 0;
 	}
-
+*/
 	return 1;
 }
 
-static struct cw_Mod *detect_mod(struct conn *conn, uint8_t * rawmsg, int len,
-				 int elems_len, struct sockaddr *from, int mode)
-{
-	cw_mod_detect(conn,rawmsg,len,elems_len,from,mode);
-	return MOD_NULL;
-	
-	if (!conn->mods)
-		return MOD_NULL;
-	
-	struct cw_Mod **mods = (struct cw_Mod **) conn->mods;
-	int i;
-	for (i = 0; mods[i]; i++) {
-		if (!mods[i]->detect)
-			continue;
-		if (mods[i]->detect (conn, rawmsg, len, elems_len, from, mode))
-			return mods[i];
-	}
-	
-	return MOD_NULL;
-}
 
-static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int len,
+static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int len,
 				      int elems_len, struct sockaddr *from)
 {
 
 	struct cw_Mod *cmod =
-	    detect_mod(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_CAPWAP);
+	    cw_mod_detect(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Can't find mod to handle connection from %s, discarding message",
@@ -203,43 +183,15 @@ static struct cw_actiondef *load_mods(struct conn *conn, uint8_t * rawmsg, int l
 	}
 
 	struct cw_Mod *bmod =
-	    detect_mod(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
+	    cw_mod_detect(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
 
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
-	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
+//	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
 
-	return ad;
+	struct cw_MsgSet * set = cw_mod_get_msg_set(conn,cmod,bmod);
 
-
-
-
-/*
-	if (bindins_mod) {
-		cw_dbg(DBG_INFO, "Using mod '%s' to handle CAWPAP for %s", mod->name,
-		       sock_addr2str_p(from));
-		conn->detected=1;
-	}
-	else{
-//              errno = EAGAIN;
-//              return -1;
-	}
-
-
-	mod = detect_mod(conn, rawmsg, len, elems_len, from, MOD_DETECT_BINDINGS);
-	if (mod) {
-		cw_dbg(DBG_INFO, "Using bindings '%s' to handle %s", mod->name,
-		       sock_addr2str_p(from));
-		conn->detected=1;
-	}
-	else{
-		cw_dbg(DBG_MSG_ERR, "Can't detect bindings ... for %s",
-		       sock_addr2str_p(from));
-	}
-
-	
-	return 0;
-	*/
+	return set;
 }
 
 int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -296,22 +248,21 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 	}
 
-
+	
 
 	if (!conn->detected) {
 		//struct mod_ac *mod;
-		struct cw_actiondef *ad = load_mods(conn, rawmsg, len, elems_len, from);
-		if (!ad) {
+		struct cw_MsgSet *set = load_msg_set(conn, rawmsg, len, elems_len, from);
+		if (!set) {
 			//cw_log(LOG_ERR, "Error");
 			errno = EAGAIN;
 			return -1;
 		}
-		conn->actions = ad;
+		
+		conn->msgset= set;
+//		conn->actions = ad;
 		conn->detected = 1;
-
 	}
-
-
 
 	/* prepare struct for search operation */
 	as.capwap_state = conn->capwap_state;
@@ -322,7 +273,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 	/* Search for state/message combination */
-	afm = cw_actionlist_in_get(conn->actions->in, &as);
+//	afm = cw_actionlist_in_get(conn->actions->in, &as);
 
 	if (!afm) {
 		/* Throw away unexpected response messages */
@@ -337,7 +288,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 		/* Request message not found in current state, check if we know 
 		   anything else about this message type */
-		const char *str = cw_strheap_get(conn->actions->strmsg, as.msg_id);
+		// TODO XXXX
+		//const char *str = cw_strheap_get(conn->actions->strmsg, as.msg_id);
+		const char *str = 0;
 		int result_code = 0;
 		if (str) {
 			/* Message found, but it was in wrong state */
@@ -382,15 +335,18 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-
-		af = cw_actionlist_in_get(conn->actions->in, &as);
+		// TODO XXX
+//		af = cw_actionlist_in_get(conn->actions->in, &as);
+		af = 0;
 
 		if (!af) {
 			unrecognized++;
-			cw_dbg(DBG_ELEM_ERR,
+			// TOOO XXXX
+/*			cw_dbg(DBG_ELEM_ERR,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
 			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
 			       as.msg_id, cw_strmsg(as.msg_id));
+/*			        * 
 			continue;
 		}
 
@@ -416,7 +372,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 
 		if(conn->elem_end){
-			afrc = conn->elem_end(conn,af,afrc,cw_get_elem_data(elem), elem_len,from);
+			// TODO XXXX
+//			afrc = conn->elem_end(conn,af,afrc,cw_get_elem_data(elem), elem_len,from);
 		}
 
 	}

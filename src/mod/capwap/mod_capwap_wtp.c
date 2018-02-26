@@ -30,7 +30,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return 0;
 	conn->detected = 1;
-	conn->actions = &actions;
+	//conn->actions = &actions;
 	return 1;
 }
 

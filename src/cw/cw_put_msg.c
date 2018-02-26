@@ -53,7 +53,9 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	uint8_t *dst = msgptr+8;
 
-	mlist_t m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
+/// TODO XXXX
+	//mlist_t m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
+	mlist_t m =0;
 
 	if (!m){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
@@ -152,8 +154,9 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 
 	uint8_t *dst = msgptr+8;
 
-	DEFINE_AVLITER(i,conn->actions->out);
-
+/// TODO XXXX
+//	DEFINE_AVLITER(i,conn->actions->out);
+DEFINE_AVLITER(i,0);
 	cw_action_out_t *am;
 
 	if (! (am=avliter_seek(&i,&as))){

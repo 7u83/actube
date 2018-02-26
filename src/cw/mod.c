@@ -26,11 +26,13 @@
 #include <dlfcn.h>
 
 
-#include "action.h"
+//#include "action.h"
 #include "mavl.h"
 #include "dbg.h"
 #include "log.h"
 #include "file.h"
+#include "cw.h"
+#include "cw/message_set.h"
 
 static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
 				      struct cw_actiondef * actions) = NULL;
@@ -50,11 +52,9 @@ void mod_set_actions_registered_cb(void (*fun)
 struct cache_item {
 	const char *capwap;
 	const char *bindings;
-	struct cw_actiondef actions;
 	struct cw_MsgSet * msgset;
 };
-
-static struct mavl *cache = NULL;
+static struct mavl *msgset_cache = NULL;
 
 static int mod_null_register_actions(struct cw_actiondef *def, int mode)
 {
@@ -92,51 +92,66 @@ struct cw_actiondef *mod_cache_get(const char *capwap, const char *bindings)
 }
 
 
-struct cw_actiondef *mod_cache_add(struct conn *conn, struct cw_Mod *c, struct cw_Mod *b)
+struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn, 
+			struct cw_Mod * capwap_mod, struct cw_Mod *bindings_mod)
 {
-	if (!cache) {
-		cache = mavl_create(cmp, NULL);
-		if (!cache) {
-			cw_log(LOG_ERR, "Can't initialize mod cache: %s",
+	if (!msgset_cache) {
+		msgset_cache = mavl_create(cmp, NULL);
+		if (!msgset_cache) {
+			cw_log(LOG_ERR, "Can't initialize msgset cache: %s",
 			       strerror(errno));
 			return NULL;
 		}
 	}
 
-	struct cache_item s;
-	s.capwap = c->name;
-	s.bindings = b->name;
+	struct cache_item search;
+	search.capwap = capwap_mod->name;
+	search.bindings = bindings_mod->name;
 
-	struct cache_item *i = mavl_get(cache, &s);
-	if (i) {
-		cw_dbg(DBG_INFO, "Using cached actions for %s,%s", c->name, b->name);
-		return &(i->actions);
+	struct cache_item * cached_set = mavl_get(msgset_cache, &search);
+	if (cached_set) {
+		cw_dbg(DBG_INFO, "Using cached message set for %s,%s", capwap_mod->name, bindings_mod->name);
+		return cached_set->msgset;
 	}
 
 
-	i = malloc(sizeof(struct cache_item));
-	if (!i) {
+	cached_set = malloc(sizeof(struct cache_item));
+	if (!cached_set) {
 		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",
 		       strerror(errno));
 		return NULL;
 	}
-
-	cw_dbg(DBG_INFO, "Loading actions for %s,%s", c->name, b->name);
-	memset(i, 0, sizeof(struct cache_item));
-	if (c) {
-		i->capwap = c->name;
-		c->register_actions(&(i->actions), CW_MOD_MODE_CAPWAP);
+	memset(cached_set, 0, sizeof(struct cache_item));
+	
+	struct cw_MsgSet * set = cw_message_set_create();
+	if (!set) {
+		free(cached_set);
+		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",
+		       strerror(errno));
+		return NULL;
 	}
-	if (b) {
-		i->bindings = b->name;
-		b->register_actions(&(i->actions), MOD_MODE_BINDINGS);
+	cached_set->msgset=set;	
+
+
+
+	cw_dbg(DBG_INFO, "Loading message set for %s,%s", capwap_mod->name, bindings_mod->name);
+
+
+	if (capwap_mod) {
+		cached_set->capwap = capwap_mod->name;
+		//c->register_actions(&(i->actions), CW_MOD_MODE_CAPWAP);
+		capwap_mod->register_messages(cached_set->msgset,CW_MOD_MODE_CAPWAP);
+	}
+	if (bindings_mod) {
+		cached_set->bindings = bindings_mod->name;
+		//b->register_actions(&(i->actions), MOD_MODE_BINDINGS);
 	}
 
-	if (actions_registered_cb)
-		actions_registered_cb(c, b, &(i->actions));
+//	if (actions_registered_cb)
+//		actions_registered_cb(capwap_mod, bindings_mod, &(cached_set->actions));
 
-	mavl_add(cache, i);
-	return &(i->actions);
+	mavl_add(msgset_cache, cached_set);
+	return cached_set->msgset;
 }
 
 
@@ -246,13 +261,10 @@ struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
 	return mlist_append(mods_list,mod)->data;
 }
 
-
 struct cw_Mod * cw_mod_detect(struct conn *conn, 
 			uint8_t * rawmsg, int len,
 			int elems_len, struct sockaddr *from, 
 			int mode){
-	cw_dbg(DBG_MOD, "Try to detect");
-
 	if (mods_list==NULL)
 		return MOD_NULL;
 	
@@ -260,5 +272,14 @@ struct cw_Mod * cw_mod_detect(struct conn *conn,
 	mlist_foreach(e,mods_list){
 		struct cw_Mod * mod = e->data;
 		cw_dbg(DBG_MOD,"Checking mod: %s",mod->name);
+		
+		/* if there is no detect method, skip */
+		if (!mod->detect)
+			continue;
+		
+		if ( mod->detect(conn,rawmsg,len,elems_len,from,mode) ){
+			return mod;
+		}
 	}
+	return MOD_NULL;
 }

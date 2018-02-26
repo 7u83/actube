@@ -63,7 +63,7 @@ struct cw_Mod {
 	/** Register actions */
 	int (*register_actions) (struct cw_actiondef * def,int mode);
 	
-	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet set, int mode);
+	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet * set, int mode);
 	
 	/** 
 	 * Handle returned by dlopen, if this module was loaded 
