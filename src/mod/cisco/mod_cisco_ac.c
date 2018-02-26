@@ -27,7 +27,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		case CW_MOD_MODE_CAPWAP:
 		{
 
-			struct cw_Mod *cmod = modload_ac("cipwap");
+			struct cw_Mod *cmod = NULL; //modload_ac("cipwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_cisco, failed to load base mod mod_cipwap");
@@ -40,7 +40,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct cw_Mod *cmod = modload_ac("capwap80211");
+			struct cw_Mod *cmod = NULL; //modload_ac("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
@@ -180,3 +180,7 @@ struct cw_Mod *mod_cisco_ac()
 };
 
 
+struct cw_Mod *mod_cisco()
+{
+	return &capwap_ac;
+};
