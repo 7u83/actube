@@ -171,7 +171,8 @@ static struct cw_Mod capwap_ac = {
 	.name = "cisco",
 	.init = init,
 	.detect = detect,
-	.register_actions = register_actions,
+//	.register_actions = register_actions,
+	
 };
 
 struct cw_Mod *mod_cisco_ac()

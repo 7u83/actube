@@ -133,12 +133,10 @@ static cw_msgdef_t messages[] = {
 
 
 struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
-	printf("Register Message set %p\n",set);
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return NULL;
 	cw_msgset_add(set,messages);
-	printf("Done Addin gmessages");
-	exit(0);
+	return set;
 }
 
 void test_sets(){

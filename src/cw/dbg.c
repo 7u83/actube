@@ -36,6 +36,8 @@
 #include "capwap.h"
 #include "capwap_cisco.h"
 #include "lwapp_cisco.h"
+#include "cw.h"
+#include "message_set.h"
 
 /**
  *@addtogroup DBG
@@ -485,7 +487,15 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 //      int pplen = len - (msgptr-packet);
 
 	int msg_id = cw_get_msg_id(msgptr);
-	s += sprintf(s, "%s Message (type=%d) ", cw_strmsg(msg_id), msg_id);
+	
+	struct cw_MsgData search;
+	search.type = msg_id;
+	struct cw_MsgData * message;
+	message = mavl_get(conn->msgset->messages,&search);
+
+	
+	
+	s += sprintf(s, "%s Message (type=%d) ", message->name  /*cw_strmsg(msg_id)*/, msg_id);
 	if (level == DBG_MSG_IN)
 		s += sprintf(s, "from %s ", sock_addr2str(from));
 	else

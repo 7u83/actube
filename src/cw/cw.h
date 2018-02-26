@@ -133,12 +133,13 @@ typedef struct{
 	int op;
 }cw_msgelemprops_t;
 
-typedef struct {
+struct cw_MsgDef{
 	int type;
 	int * states;
 	cw_msgelemprops_t * elements;
 	const char * name;
-}cw_msgdef_t;
+};
+typedef struct cw_MsgDef cw_msgdef_t;
 
 /** 
  * Get length wireless specific data

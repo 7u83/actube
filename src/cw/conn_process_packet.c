@@ -32,7 +32,7 @@
 
 #include "stravltree.h"
 #include "mod.h"
-
+#include "message_set.h"
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
@@ -189,6 +189,7 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 
 //	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
 
+
 	struct cw_MsgSet * set = cw_mod_get_msg_set(conn,cmod,bmod);
 
 	return set;
@@ -253,6 +254,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	if (!conn->detected) {
 		//struct mod_ac *mod;
 		struct cw_MsgSet *set = load_msg_set(conn, rawmsg, len, elems_len, from);
+		
+		
 		if (!set) {
 			//cw_log(LOG_ERR, "Error");
 			errno = EAGAIN;
@@ -264,13 +267,25 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		conn->detected = 1;
 	}
 
+printf("We have loaded the message set\n");
+
+	cw_dbg_msg(DBG_MSG_IN, conn, rawmsg, len, from);
+
 	/* prepare struct for search operation */
+	struct cw_MsgData search;
+	search.type = cw_get_msg_id(msg_ptr);
+	struct cw_MsgData * message;
+	message = mavl_get(conn->msgset->messages,&search);
+
+printf("Got Message %d (%s)\n", message->type, message->name);
+exit(0);
+/*
 	as.capwap_state = conn->capwap_state;
 	as.msg_id = cw_get_msg_id(msg_ptr);
 	as.vendor_id = 0;
 	as.elem_id = 0;
 	as.proto = 0;
-
+*/
 
 	/* Search for state/message combination */
 //	afm = cw_actionlist_in_get(conn->actions->in, &as);
@@ -346,7 +361,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
 			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
 			       as.msg_id, cw_strmsg(as.msg_id));
-/*			        * 
+*/			        
 			continue;
 		}
 
@@ -452,7 +467,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 		    struct sockaddr *from)
 {
-
 
 
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
@@ -596,7 +610,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 
 
 		cw_dbg_pkt(DBG_PKT_IN, conn, f + 4, *(uint32_t *) f, from);
-		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);
+//		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);
 
 		// XXX: Modify fragman to not throw away CAPWAP headers
 
@@ -607,7 +621,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 	}
 
 	/* not fragmented, we have a complete message */
-	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);
+//	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);
 	return conn->process_message(conn, packet, len, from);
 }
 
