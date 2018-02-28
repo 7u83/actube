@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #include "log.h"
-#include "wtpinfo.h"
+//#include "wtpinfo.h"
 
 #include "lwapp.h"
 
@@ -26,7 +26,7 @@ int lw_readelem_wtp_board_data(struct wtpinfo *wtpinfo, int type, uint8_t *msgel
 		return 0;
 
 	if ( len != 46 ) {
-		cw_dbg(DBG_MSG_ERR,"LWAPP msg size wrong. (WTP BOARD DATA) must be 46");
+//		cw_dbg(DBG_MSG_ERR,"LWAPP msg size wrong. (WTP BOARD DATA) must be 46");
 		return -1;
 	}
 

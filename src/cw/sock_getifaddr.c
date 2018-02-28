@@ -52,11 +52,10 @@ int sock_getifaddr(const char * ifname,int family, int type,struct sockaddr * sa
 				memcpy (sa, ifa->ifa_addr, sock_addrlen(ifa->ifa_addr));
 				rc=1;
 				break;
-			case IFF_BROADCAST:
-//				memcpy (sa, ifa->ifa_ifu.ifu_broadaddr, sock_addrlen(ifa->ifa_addr));
-				memcpy (sa, ifa->ifa_broadaddr, sock_addrlen(ifa->ifa_addr));
-				rc=1;
-				break;
+//			case IFF_BROADCAST:
+//				memcpy (sa, ifa->ifa_broadaddr, sock_addrlen(ifa->ifa_addr));
+//				rc=1;
+//				break;
 			default:
 				break;
 

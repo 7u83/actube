@@ -27,6 +27,7 @@
 #include "cwmsg.h"
 #include "conn.h"
 
+/*
 
 uint8_t * cw_addelem(uint8_t * buf,int type, uint8_t *elem, int len)
 {
@@ -76,4 +77,4 @@ void  cw_addelem_capwap_local_ip_addr(struct cwmsg *msg, int sock, int cw_mode)
 
 }
 
-
+*/

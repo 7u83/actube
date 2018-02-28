@@ -24,7 +24,8 @@
 
 #include "capwap.h"
 
-#include "cw_log.h"
+#include "log.h"
+#include "dbg.h"
 #include "cw_util.h"
 
 #include <stdio.h> 
@@ -54,7 +55,7 @@ static int imgdata_request(void * ptr,int type,uint8_t* msgelem,int len)
 	cw_dbg_msgelem(CW_MSG_IMAGE_DATA_REQUEST, type, msgelem, len);
 
 
-	cw_dbg(DBG_ALL,"Reading image data req msgelem, type=%d - %s ,len=%d\n",type,cw_strelem(type),len);
+	//cw_dbg(DBG_ALL,"Reading image data req msgelem, type=%d - %s ,len=%d\n",type,cw_strelem(type),len);
 
 	if (cw_readelem_image_identifier(ptr,type,msgelem,len))
 		return 1;
