@@ -288,11 +288,42 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		return -1;
 	}
 
+printf("Receivers: %d %d\n",message->receiver,conn->receiver);
+
+	/* Throw away unexpected messages */
+	if (!(message->receiver & conn->receiver)) {
+		cw_dbg(DBG_MSG_ERR,
+		       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
+		       search.type, cw_strmsg(search.type),
+			       cw_strstate(conn->capwap_state));
+		errno = EAGAIN;
+		return -1;
+	}
+
+	/* Check if current state is in state of message */
+	int *i = message->states;
+	for (i=message->states; *i; i++){
+		if(*i==conn->capwap_state)
+			break;
+	}
+	
+	if (!*i){
+		/* Message found, but it was in wrong state */
+		cw_dbg(DBG_MSG_ERR,
+		       "Message type %d (%s) not allowed in %s State.", search.type,
+		       cw_strmsg(search.type), cw_strstate(conn->capwap_state));
+		result_code = CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE;
+		cw_send_error_response(conn, rawmsg, result_code);
+		errno = EAGAIN;
+		return -1;
+	}
+
+
 
 //	afm = cw_actionlist_in_get(conn->actions->in, &as);
 
 	if (!afm) {
-		/* Throw away unexpected response messages */
+		// Throw away unexpected response messages 
 		if (!(as.msg_id & 1)) {
 			cw_dbg(DBG_MSG_ERR,
 			       "Message type %d (%s) unexpected/illegal in %s State, discarding.",

@@ -97,7 +97,7 @@ acinfo.result_code=99;
 int run_join_d(struct sockaddr *sa)
 {
 	struct conn *conn = get_conn();
-	conn->capwap_state = CW_STATE_JOIN;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
 
 	int sockfd;
 	int rc;

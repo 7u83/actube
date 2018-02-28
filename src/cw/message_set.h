@@ -14,6 +14,7 @@ typedef struct cw_MsgData{
 	int type;
 	const char * name;
 	int * states;
+	int receiver;
 	mavl_t elements_tree;
 	mlist_t elements_list;
 };

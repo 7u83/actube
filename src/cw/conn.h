@@ -82,6 +82,8 @@ struct conn {
 	uint8_t session_id[16];
 
 
+	int receiver;
+
 	/** base_mac */
 	bstr_t base_rmac;
 	

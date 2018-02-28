@@ -60,7 +60,7 @@ static cw_action_in_t actions_in[] = {
 	/* ECN Support - Join Response */
 	{
 		/* Make ECN Support non-mand */
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
@@ -74,7 +74,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Descriptor - Join Response */
 	{
 		/* Cisco's AC Descriptor */
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CW_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 

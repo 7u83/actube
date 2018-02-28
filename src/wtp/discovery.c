@@ -260,6 +260,6 @@ int discovery()
 	printf("Radios = %d\n",conn->radios->count);
 
 	cw_run_discovery(conn, "255.255.255.255");
-	conn->capwap_state=CW_STATE_JOIN;
+	conn->capwap_state=CAPWAP_STATE_JOIN;
 	return 1;
 }

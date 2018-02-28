@@ -189,7 +189,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 
 
-	wtpman->conn->capwap_state = CW_STATE_JOIN;
+	wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
 //	wtpman->conn->actions = &capwap_actions;
 
 //      wtpman->conn->itemstore = mbag_create();
@@ -198,7 +198,7 @@ static int wtpman_join(void *arg, time_t timer)
 	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr));
 
 	int rc;
-	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CW_STATE_JOIN) {
+	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			break;
@@ -212,7 +212,7 @@ static int wtpman_join(void *arg, time_t timer)
 	}
 
 
-	if (wtpman->conn->capwap_state == CW_STATE_JOIN) {
+	if (wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
 		       sock_addr2str(&wtpman->conn->addr), wtpman->conn->wait_dtls);
 
@@ -723,6 +723,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 //                        struct sockaddr *from);
 
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
+	wtpman->conn->receiver = CW_RECEIVER_AC;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr, (struct sockaddr *) &wtpman->conn->addr);

@@ -35,7 +35,7 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		
 
 	/* ok, send response */
-	conn->capwap_state = CW_STATE_JOIN;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
 
 	return 0;
 }

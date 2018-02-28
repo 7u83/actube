@@ -102,14 +102,14 @@ static cw_action_in_t actions_in[] = {
 	 * Message Join Response 
 	 */
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.end = cw_in_check_generic_resp
 	}
 	,
 	/* Result Code - Join Response */
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
@@ -122,7 +122,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Descriptor - Join Response */
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_AC_DESCRIPTOR,
 		.item_id = CW_ITEM_AC_DESCRIPTOR, 
@@ -135,7 +135,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC Name - Join Response */
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
@@ -148,7 +148,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* ECN Support - Join Response */
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id  = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
@@ -161,7 +161,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* CAPWAP Control IPv4 Address - Join Response*/
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
@@ -174,7 +174,7 @@ static cw_action_in_t actions_in[] = {
 			
 	/* CAPWAP Control IPv6 Address - Join Response*/
 	{
-		.capwap_state = CW_STATE_JOIN,
+		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
 		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
@@ -188,7 +188,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Maximum Message Length - Join Response */
 	{
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
 	 	.start = cw_in_generic2, 

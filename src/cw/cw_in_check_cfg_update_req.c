@@ -16,7 +16,7 @@ int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_
 	if (n) {
 		if ( conn->strict_capwap ){
 			cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
-			conn->capwap_state=CW_STATE_JOIN;
+			conn->capwap_state=CAPWAP_STATE_JOIN;
 			return CW_RESULT_MISSING_MAND_ELEM;
 		}
 		cw_dbg_missing_mand(DBG_RFC,conn,mlist,n,a);

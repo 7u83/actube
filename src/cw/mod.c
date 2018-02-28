@@ -212,7 +212,7 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 	filename = cw_filename(mod_path,mod_filename,".so");
 	if (filename==NULL)
 		return NULL;
-
+cw_log(LOG_ERROR,"DLOPEN now !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	/* Open the DLL */
 	void * handle;
 	handle = dlopen(filename,RTLD_NOW);

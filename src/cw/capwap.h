@@ -675,7 +675,7 @@ enum capwap_states {
 	/** Discovery State */
 	CAPWAP_STATE_DISCOVERY,
 	/** Join State */
-	CW_STATE_JOIN,
+	CAPWAP_STATE_JOIN,
 	/** Config State */
 	CW_STATE_CONFIGURE,
 	/** Image Data Upload */

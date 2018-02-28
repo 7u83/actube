@@ -25,7 +25,7 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n && conn->strict_capwap) {
 		cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
-		conn->capwap_state=CW_STATE_JOIN;
+		conn->capwap_state=CAPWAP_STATE_JOIN;
 		errno=EAGAIN;
 		return -1; //CW_RESULT_MISSING_MAND_ELEM;
 	}

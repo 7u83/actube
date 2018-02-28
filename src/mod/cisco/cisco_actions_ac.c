@@ -160,7 +160,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* WTP Descriptor - Join Request */
 	{
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CAPWAP_ELEM_WTP_DESCRIPTOR,
 	 	.start = cisco_in_wtp_descriptor, 
@@ -172,7 +172,7 @@ static cw_action_in_t actions_in[] = {
 	/* Session ID - Join Request */
 	{
 		/* Cisco uses 4 byte session ids */
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_SESSION_ID,
 	 	.start = capwap_in_session_id, 
@@ -185,7 +185,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Local IPv4 Address - Join Request */
 	{
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_IPV4_IP_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
@@ -198,7 +198,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Local IPv6 Address - Join Request */
 	{
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_WTP_IPV6_IP_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
@@ -213,7 +213,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		/* Cisco (using draft 7) does nothing know 
 		 * about ECN support, so make it non-mandatory */
-		.capwap_state = CW_STATE_JOIN, 
+		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,

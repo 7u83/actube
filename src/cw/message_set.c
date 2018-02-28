@@ -136,6 +136,8 @@ void cw_msgset_add(cw_MsgSet_t * set,
 			next->name=message->name;
 		if (message->states)
 			next->states=message->states;
+		if (message->receiver)
+			next->receiver=message->receiver;
 		
 		update_message(next,message, set);
 	}
