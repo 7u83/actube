@@ -33,8 +33,8 @@
 int cw_send_echo_response(struct conn * conn,int seqnum,struct radioinfo * radioinfo)
 {
 	struct cwmsg * cwmsg = &conn->resp_msg;	
-	cwmsg_init(cwmsg,conn->resp_buffer,CW_MSG_ECHO_RESPONSE,seqnum,radioinfo);
+//	cwmsg_init(cwmsg,conn->resp_buffer,CW_MSG_ECHO_RESPONSE,seqnum,radioinfo);
 
-	conn_send_response(conn,cwmsg,seqnum);
+//	conn_send_response(conn,cwmsg,seqnum);
 	return 1;
 }

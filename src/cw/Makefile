@@ -12,6 +12,31 @@ DNAME		:= $(LIBARCHDIR)/libcw.so
 
 LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib 
 
+LIBS=
+
+ifeq ($(WITH_OPENSSL),1)
+CFLAGS+=$(OPENSSL_CFLAGS)
+CFLAGS+=-DWITH_OPENSSL
+DTLSOBJS += dtls_openssl.o \
+	dtls_openssl_accept.o \
+	dtls_openssl_connect.o \
+	dtls_openssl_get_cipher.o \
+	dtls_openssl_bio.o 
+LIBS+=-lssl
+endif
+
+ifeq ($(WITH_GNUTLS),1)
+CFLAGS+=$(GNUTLS_CFLAGS)
+CFLAGS+=-DWITH_GNUTLS
+DTLSOBJS+= dtls_gnutls.o \
+	dtls_gnutls_accept.o \
+	dtls_gnutls_connect.o \
+	dtls_gnutls_bio.o \
+	dtls_gnutls_get_cipher.o \
+	dtls_gnutls_get_peers_cert.o
+LIBS+=-lgnutls
+endif
+
 
 SRC=$(wildcard *.c)
 OBJS=$(patsubst %.c,%.o,$(SRC))
