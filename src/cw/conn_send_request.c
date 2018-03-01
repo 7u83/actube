@@ -23,7 +23,7 @@
 
 #include "capwap.h"
 #include "cw_util.h"
-#include "cw_log.h"
+#include "log.h"
 
 /**
  * Send a request message and wait for its response
@@ -32,6 +32,9 @@
  * The message has to be prepared and put to conn->req_msg
  * 
  */ 
+
+
+/*
 struct cwrmsg * conn_send_request(struct conn * conn)
 {
 	int i;
@@ -58,4 +61,4 @@ struct cwrmsg * conn_send_request(struct conn * conn)
         cw_dbg(DBG_MSG_ERR,"Max retransmit's reached, message type=%d,seq=%d",cwmsg->type,cwmsg->seqnum);
         return 0;
 }
-
+*/

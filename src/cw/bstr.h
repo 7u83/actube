@@ -130,16 +130,7 @@ static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
 */
 
 
-static inline uint8_t * bstr16_create(const uint8_t *data, uint16_t len)
-{
-	uint8_t * str = malloc(2+len*sizeof(uint8_t));
-	if (!str)	
-		return 0;
-	*((uint16_t*)str)=len;
-	memcpy(str+2,data,len);
-	return str;
-}
-
+extern uint8_t * bstr16_create(const uint8_t *data, uint16_t len);
 uint8_t * bstr16_create_from_str(const char *s);
 extern uint8_t * bstr16_create_from_cfgstr(const char * s);
 
@@ -182,24 +173,9 @@ typedef uint8_t * bstrv_t;
 	(1+6+(n)*sizeof(uint8_t))
 
 
-static inline uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
-{
-	uint8_t * str = malloc(bstrv_size(len));
-	if (!str)	
-		return 0;
-
-	bstrv_set_vendor_id(str,vendor_id);
-	bstrv_set_len(str,len);
-	memcpy(bstrv_data(str),data,len);
-	*(bstrv_data(str)+bstrv_len(str))=0;
-	return str;
-
-}
-
 uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s);
+uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len);
 
-
-//uint8_t * bstr16cfgstr(const char * s);
 
 
 #endif

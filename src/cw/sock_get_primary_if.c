@@ -53,4 +53,3 @@ char * sock_get_primary_if(int family)
 	return r;
 }
 
-

@@ -29,6 +29,7 @@
 #include "log.h"
 #include "sock.h"
 #include "capwap.h"
+#include "dtls_common.h"
 #include "dtls_gnutls.h"
 #include "timer.h"
 

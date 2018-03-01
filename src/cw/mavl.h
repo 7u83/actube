@@ -117,31 +117,12 @@ int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
 
 //extern void mavl_foreach(struct mavl *t, int (*callback)(void *,void*),void *cbpriv,int dir);
 
-static inline void *mavl_replace_data(struct mavl *t, void *data, int len)
-{
-	void *df = mavl_get(t, data);
-	if (!df)
-		return NULL;
-	memcpy(df, data, len);
-	return df;
-}
+void *mavl_replace_data(struct mavl *t, void *data, int len);
 
-static inline void *mavl_replace(struct mavl *t,void *data){
-	struct mavlnode * node = mavl_get_node(t,data);
-	if (node){
-		t->del(node->data);
-		return node->data=data;	
-	}
-	return mavl_add(t,data);
-}
+void *mavl_replace(struct mavl *t,void *data);
 
 
-static inline void mavl_destroy(struct mavl *t)
-{
-	mavl_del_all(t);
-	free (t);
-}
-
+void mavl_destroy(struct mavl *t);
 
 
 
@@ -169,41 +150,12 @@ typedef struct mavliter mavliter_t;
 
 void * mavliter_next(mavliter_t *i);
 
-static inline void * mavliter_seek_set(struct mavliter *i)
-{
-	i->stack_ptr=0;
-	i->cur=i->root;
-	return mavliter_next(i);
-}
+void * mavliter_seek_set(struct mavliter *i);
 
-/**
- * Init an AVL Tree Iterator.
- *
- * After initialization #mavliter_next would return the first element.
- * The behavior of #mavliter_get would still be undefined.
- * @param i AVL Iterator to initialize
- * @param t correspondending AVL Tree
- *
- * @See mavliter_t, 
- */
-static inline void mavliter_init(mavliter_t *i, mavl_t t){
-	i->root = t->root;
-	i->stack_ptr=0;
-	i->cmp=t->cmp;
-}
+void mavliter_init(mavliter_t *i, mavl_t t);
 
 	
-/**
- * Get the element, where AVL Iterator currently is positioned.
- * @param i AVL Iterator
- * @return element or NULL if not found.
- */
-static inline void * mavliter_get(mavliter_t *i){
-	if(!i->cur)
-		return NULL;
-	return i->cur->data;	
-}
-
+void * mavliter_get(mavliter_t *i);
 
 extern void * mavliter_seek(mavliter_t *i,void *d);
 

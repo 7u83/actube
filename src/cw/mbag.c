@@ -237,3 +237,161 @@ struct mbag_item *strmbag_item_create(mbag_t s, char *name)
 */
 
 /**@}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+int mbag_set(mbag_t t,mbag_item_t *is)
+{
+	mavl_del(t,is);
+	mavl_add(t,is);
+	return 1;
+
+/*
+	struct mbag_item *i = mavl_get(s, is);
+	if (i) {
+		mbag_del_data(i);
+		return i;
+	}
+	mavl_add(t,is);
+*/
+}
+
+int mbag_set_byte(mbag_t s, const char *id, uint8_t byte)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	i->byte = byte;
+	i->type = &mbag_type_byte;
+	return 1;
+}
+
+struct mbag_item * mbag_set_word(mbag_t s, const char *id, uint16_t word)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	i->word = word;
+	i->type = &mbag_type_word;
+	return i;
+}
+
+
+
+
+struct mbag_item * mbag_set_dword(mbag_t s, const char *id, uint32_t dword)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return NULL;
+	i->dword = dword;
+	i->type = &mtype_dword;
+	return i;
+}
+
+
+int mbag_i_set_mbag(mbag_t s, uint32_t id, mbag_t mbag)
+{
+	struct mbag_item *i = mbag_i_item_create(s, id);
+	if (!i)
+		return 0;
+	i->data = mbag;
+	i->type = &mbag_type_mbag;
+	return 1;
+}
+
+int mbag_set_mbag(mbag_t s, const char *id, mbag_t mbag)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	i->data = mbag;
+	i->type = &mbag_type_mbag;
+	return 1;
+}
+
+int mbag_set_data(mbag_t s, const char *id, const struct mbag_typedef *type, void *data)
+{
+	struct mbag_item *i = mbag_item_create(s, id);
+	if (!i)
+		return 0;
+	i->data = data;
+	i->type = type;
+	return 1;
+
+
+}
+
+
+bstrv_t mbag_set_bstrv(mbag_t s, const char *id, uint32_t vendor_id,
+			     uint8_t * version, int len)
+{
+	mbag_item_t *i = mbag_item_create(s, id);
+	if (!i)
+		return NULL;
+	
+	i->type = MBAG_VENDORSTR;
+	i->data = bstrv_create(vendor_id,version,len);
+	return i->data;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+mbag_item_t *mbag_get(mbag_t s, const char *id)
+{
+	mbag_item_t i;
+	i.id = id;
+	i.type=0;
+	return mavl_get(s, &i);
+}
+
+
+mbag_item_t *mbag_i_get(mbag_t s, uint32_t id)
+{
+	mbag_item_t i;
+	i.iid = id;
+	i.type=0;
+	return mavl_get(s, &i);
+}
+
+
+
+void mbag_del(mbag_t s,const char *id)
+{
+	mbag_item_t i;
+	i.id = id;
+	i.type=0;
+	mavl_del(s, &i);
+}
+
+void * mbag_get_data(mbag_t s, const char *id, const struct mbag_typedef * type, void * def)
+{
+	struct mbag_item *i = mbag_get(s, id);
+	if (!i)
+		return def;
+	if (i->type != type)
+		return def;
+	return i->data;
+}
+
+
