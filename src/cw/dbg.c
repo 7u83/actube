@@ -25,6 +25,7 @@
  * @file Debugging Functions
  * @brief Various debug functions.
  */
+#include <stdarg.h>
 
 #include "capwap.h"
 #include "dbg.h"
@@ -38,6 +39,8 @@
 #include "lwapp_cisco.h"
 #include "cw.h"
 #include "message_set.h"
+
+
 
 /**
  *@addtogroup DBG

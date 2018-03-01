@@ -22,6 +22,7 @@
 #include <gnutls/gnutls.h>
 #include <gnutls/dtls.h>
 
+#include "dtls_common.h"
 #include "dtls_gnutls.h"
 
 #include "conn.h"

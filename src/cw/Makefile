@@ -1,6 +1,6 @@
-include ../Macros.mak
 include ../CWConfig.mak
 -include ../Config.local.mak
+include ../Macros.mak
 
 
 LIBDIR		:= ../../lib
@@ -9,8 +9,6 @@ OBJDIR		:= ../../obj/cw/$(ARCH)
 
 SNAME		:= $(LIBARCHDIR)/libcw.a
 DNAME		:= $(LIBARCHDIR)/libcw.so
-
-LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib 
 
 LIBS=
 
@@ -40,24 +38,16 @@ endif
 
 SRC=$(wildcard *.c)
 OBJS=$(patsubst %.c,%.o,$(SRC))
-#O:=$(OBJS);
-
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 
 all: $(SNAME) $(DNAME)
 
 
-#CFLAGS = -D_XOPEN_SOURCE=500 -std=c90 -pedantic -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
-CFLAGS = -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
-
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \
 	  -DWITH_CW_LOG_DEBUG \
-	  -DWITH_DTLS \
-	  $(XINCLUDE)\
-	  -I $(OPENSSLINC)\
-	-Werror 
+	  -DWITH_DTLS 
 
 
 $(OBJDIR)/%.o:%.c
@@ -65,15 +55,15 @@ $(OBJDIR)/%.o:%.c
 	@echo "  $(CC) "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
 
-$(SNAME) : $(OBJS) $(MODOBJS)
+$(SNAME) : $(OBJS) 
 	@mkdir -p $(LIBARCHDIR)
-	@echo "  AR $(SNAME)"
-	@$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
+	@echo "  $(AR) $(SNAME)"
+	@$(AR) rcs $(SNAME) $(OBJS) 
 
-$(DNAME) : $(OBJS) $(MODOBJS)
+$(DNAME) : $(OBJS) 
 	@mkdir -p $(LIBARCHDIR)
-	@echo "  $(CC) $(DNAME)"
-	@$(CC) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(LIBS)
+	@echo "  $(LD) $(DNAME)"
+	@$(LD) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(LIBS)
 
 
 SRCS = $(OBJS:.o=.c) 

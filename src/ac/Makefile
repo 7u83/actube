@@ -1,12 +1,13 @@
-include ../Macros.mak
 include ../Config.mak
 include ../ACConfig.mak
 -include ../Config.local.mak
+-include ../ACConfig.local.mak
+include ../Macros.mak
 
 
 LIBARCHDIR=../../lib/$(ARCH)
 
-LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib -L$(LIBARCHDIR) 
+LDFLAGS+=-g -L/usr/local/lib -L$(LIBARCHDIR) 
 CFLAGS += -W -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
 
 
@@ -80,7 +81,7 @@ all: $(AC_NAME)
 
 $(AC_NAME): $(AC_OBJS) 
 #	$(CC) $(AC_OBJS) ../mod/modload_ac.o -o $(AC_NAME) $(LDFLAGS) $(LIBS)
-	$(CC) $(AC_OBJS) -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
+	$(LD) $(AC_OBJS) -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
 
 
 clean: 
@@ -90,6 +91,6 @@ clean_deps:
 	$(AC_DEPS) 
 	
 deps: $(AC_SRC) 
-	$(CC) -MD -E $(AC_SRCS) $(CFLAGS) >/dev/null
+	$(LD) -MD -E $(AC_SRCS) $(CFLAGS) >/dev/null
 
 -include $(AC_DEPS)

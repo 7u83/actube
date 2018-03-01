@@ -19,7 +19,32 @@ endif
 
 
 ifndef ARCH
-	ARCH = $(shell $(CC) -dumpmachine)
+	ARCH = $(shell uname -m)
 endif
+
+
+ifeq ($(CC),clang)
+LDFLAGS		+= -g -L/usr/local/lib 
+CFLAGS 		+= -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+LD		= gcc
+endif
+
+ifeq ($(CC),gcc)
+LDFLAGS		+= -g -L/usr/local/lib 
+CFLAGS 		+= -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+LD		= gcc
+endif
+
+ifeq ($(CC),tcc)
+LDFLAGS		+= -g -L/usr/local/lib 
+CFLAGS 		+= -Wall -Wunusupported  -Wimplicit-function-declaration -I /usr/local/include -I../
+LD		= tcc 
+endif
+
+
+
+CFLAGS		+= -DWITH_IPV6 -DWITH_RMAC_SUPPORT
+
+
 
 

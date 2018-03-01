@@ -16,6 +16,7 @@
 
 */
 
+#include <stdarg.h>
 #include "log.h"
 
 
