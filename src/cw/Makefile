@@ -24,7 +24,7 @@ all: $(SNAME) $(DNAME)
 
 
 #CFLAGS = -D_XOPEN_SOURCE=500 -std=c90 -pedantic -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
-CFLAGS = -D_XOPEN_SOURCE=500  -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
+CFLAGS = -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wall  -fPIC -g -O0 -D_REENTRANT -DWITH_IPV6 -DWITH_RMAC_SUPPORT -I /usr/local/include -I../
 
 CFLAGS += $(GNUTLS_CFLAGS) \
 	  -DWITH_CW_LOG \

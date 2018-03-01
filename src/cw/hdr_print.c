@@ -23,7 +23,7 @@
 #include "capwap.h"
 #include "sock.h"
 
-
+/*
 
 int hdr_print(char *str, uint8_t *packet, int len)
 {
@@ -119,3 +119,5 @@ int hdr_print(char *str, uint8_t *packet, int len)
 
 	return s-str;
 }
+
+*/

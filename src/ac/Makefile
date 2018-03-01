@@ -80,7 +80,7 @@ all: $(AC_NAME)
 
 $(AC_NAME): $(AC_OBJS) 
 #	$(CC) $(AC_OBJS) ../mod/modload_ac.o -o $(AC_NAME) $(LDFLAGS) $(LIBS)
-	$(CC) $(AC_OBJS) -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
+	$(CC) $(AC_OBJS) -v -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
 
 
 clean: 

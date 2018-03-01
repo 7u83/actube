@@ -24,7 +24,7 @@
 
 #include "sock.h"
 
-/*
+
 char * sock_get_primary_if(int family)
 {
         struct ifaddrs *ifap,*ifa;
@@ -53,4 +53,3 @@ char * sock_get_primary_if(int family)
 	return r;
 }
 
-*/
