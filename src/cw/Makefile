@@ -84,6 +84,9 @@ clean_deps:
 	$(DEPS) 
 	
 deps:  
-	$(CC) -MM -E *.c $(CFLAGS) > .depend
+	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
+	makedepend $(SRC) -f.depend -p$(OBJDIR)/
+
 
 -include .depend
+
