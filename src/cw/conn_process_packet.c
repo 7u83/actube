@@ -249,13 +249,11 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 	}
 
-	
 
+	/* Detect the connecting AC type */
 	if (!conn->detected) {
-		//struct mod_ac *mod;
+
 		struct cw_MsgSet *set = load_msg_set(conn, rawmsg, len, elems_len, from);
-		
-		
 		if (!set) {
 			//cw_log(LOG_ERR, "Error");
 			errno = EAGAIN;
@@ -263,20 +261,22 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 		
 		conn->msgset= set;
-//		conn->actions = ad;
 		conn->detected = 1;
 	}
 
+	/** debug the received message */
 	cw_dbg_msg(DBG_MSG_IN, conn, rawmsg, len, from);
 
 	/* prepare struct for search operation */
 	struct cw_MsgData search;
 	search.type = cw_get_msg_id(msg_ptr);
+	
+	/* Search message */
 	struct cw_MsgData * message;
-	/* Search for message combination */	
 	message = mavl_get(conn->msgset->messages,&search);
 	
 	int result_code = 0;
+	
 	if (!message){
 		/* Message is unknown */
 		cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
@@ -288,9 +288,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		return -1;
 	}
 
-printf("Receivers: %d %d\n",message->receiver,conn->receiver);
-
 	/* Throw away unexpected messages */
+	/* maybe we have to check this too: if (!(message->type & 1)) 
+	 * means unexpected response message
+	 * */
 	if (!(message->receiver & conn->receiver)) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
@@ -319,54 +320,17 @@ printf("Receivers: %d %d\n",message->receiver,conn->receiver);
 	}
 
 
-
-//	afm = cw_actionlist_in_get(conn->actions->in, &as);
-
-	if (!afm) {
-		// Throw away unexpected response messages 
-		if (!(as.msg_id & 1)) {
-			cw_dbg(DBG_MSG_ERR,
-			       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
-			       as.msg_id, cw_strmsg(as.msg_id),
-			       cw_strstate(conn->capwap_state));
-			errno = EAGAIN;
-			return -1;
-		}
-
-		/* Request message not found in current state, check if we know 
-		   anything else about this message type */
-		// TODO XXXX
-		//const char *str = cw_strheap_get(conn->actions->strmsg, as.msg_id);
-		const char *str = 0;
-		int result_code = 0;
-		if (str) {
-			/* Message found, but it was in wrong state */
-			cw_dbg(DBG_MSG_ERR,
-			       "Message type %d (%s) not allowed in %s State.", as.msg_id,
-			       cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
-			result_code = CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE;
-		} else {
-			/* Message is unknown */
-			cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
-			       as.msg_id, cw_strmsg(as.msg_id),
-			       cw_strstate(as.capwap_state));
-			result_code = CW_RESULT_MSG_UNRECOGNIZED;
-
-		}
-		cw_send_error_response(conn, rawmsg, result_code);
-		errno = EAGAIN;
-		return -1;
-	}
-
 	
 	if (conn->msg_start){
 		conn->msg_start(conn, afm, rawmsg, len, from);
 	}
 
 	/* Execute start processor for message */
-	if (afm->start) {
-		afm->start(conn, afm, rawmsg, len, from);
-	}
+//	if (afm->start) {
+//		afm->start(conn, afm, rawmsg, len, from);
+//	}
+
+
 
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 	uint8_t *elem;
@@ -382,6 +346,23 @@ printf("Receivers: %d %d\n",message->receiver,conn->receiver);
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
+		cw_elem_handler_t search_eh;
+		memset(&search_eh,0,sizeof(search_eh));
+		struct cw_ElemDef search_elem;
+		search_elem.handler=&search_eh;
+
+		search_eh.id = cw_get_elem_id(elem);
+
+
+
+		struct cw_ElemDef * elem;
+		elem = mavl_find(message->elements_tree,&search_elem);
+		
+		
+printf("ElemCHeck %d\n",search_eh.id);
+if (elem){
+	printf("Elem %d found! %s\n", elem->handler->id   , elem->handler->name);
+}
 		// TODO XXX
 //		af = cw_actionlist_in_get(conn->actions->in, &as);
 		af = 0;

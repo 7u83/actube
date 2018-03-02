@@ -10,7 +10,7 @@ extern void cw_msgset_add(cw_MsgSet_t * set,
 mlist_t cw_msgset_get_msg(cw_MsgSet_t * set, int type);
 
 
-typedef struct cw_MsgData{
+struct cw_MsgData{
 	int type;
 	const char * name;
 	int * states;

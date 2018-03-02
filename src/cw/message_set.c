@@ -16,8 +16,8 @@ typedef struct {
 */
 
 static inline int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
-	cw_elem_handler_t * e1 = ((cw_msgelemprops_t*)elem1)->elem;
-	cw_elem_handler_t * e2 = ((cw_msgelemprops_t*)elem2)->elem;
+	cw_elem_handler_t * e1 = ((cw_ElemDef_t*)elem1)->handler;
+	cw_elem_handler_t * e2 = ((cw_ElemDef_t*)elem2)->handler;
 	int r;
 	r = e1->id - e2->id;
 	if (r!=0)
@@ -81,12 +81,12 @@ cw_MsgSet_t * cw_message_set_create(){
 
 static void update_message(message2_t * msg, cw_msgdef_t * src, cw_MsgSet_t * set){
 
-	cw_msgelemprops_t *md;
+	cw_ElemDef_t *md;
 	
 	
 
-	for (md = src->elements; md->elem!=0; md++){
-		cw_dbg(DBG_INFO,"  add element %d - %s, %d",md->elem->id, md->elem->name, md->mand);
+	for (md = src->elements; md->handler!=0; md++){
+		cw_dbg(DBG_INFO,"  add element %d - %s, %d",md->handler->id, md->handler->name, md->mand);
 		mavl_add(msg->elements_tree,md);
 		mavl_add(set->all_elems,md);
 		mlist_append(msg->elements_list,md);

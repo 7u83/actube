@@ -104,7 +104,7 @@ static cw_msgdef_t messages[] = {
 		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.receiver = CW_RECEIVER_AC,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_msgelemprops_t []){
+		.elements = (cw_ElemDef_t []){
 			{&_DISCOVERY_TYPE,1},
 			{&_WTP_BOARD_DATA,1},
 			{&_WTP_DESCRIPTOR,1},
@@ -121,7 +121,7 @@ static cw_msgdef_t messages[] = {
 		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.receiver = CW_RECEIVER_WTP,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_msgelemprops_t[]){
+		.elements = (cw_ElemDef_t[]){
 			{&_AC_DESCRIPTOR,1},
 			{0,0},
 		}
@@ -155,16 +155,16 @@ void test_sets(){
 	memset(&el,0,sizeof(el));
 	el.id=CAPWAP_ELEM_DISCOVERY_TYPE;
 	
-	cw_msgelemprops_t search, *result;;
-	search.elem = &el;
+	cw_ElemDef_t search, *result;;
+	search.handler = &el;
 	
 	
 	result = mavl_find(set->all_elems,&search);
 	
 	if (result!=NULL){
 		printf("Found: %d %s %d\n",
-			result->elem->id,
-			result->elem->name,
+			result->handler->id,
+			result->handler->name,
 			result->mand
 		);
 	}
@@ -178,8 +178,8 @@ void test_sets(){
 	
 	struct mlist_elem * i;
 	mlist_foreach(i,m){
-		cw_msgelemprops_t * le = i->data;
-		printf("Element: %d %s\n",le->elem->id, le->elem->name, le->mand);
+		cw_ElemDef_t * le = i->data;
+		printf("Element: %d %s\n",le->handler->id, le->handler->name, le->mand);
 	}
 	
 

@@ -59,7 +59,7 @@ static cw_msgdef_t messages[] = {
 		.name = "Discovery Request Cisco",
 		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_msgelemprops_t []){
+		.elements = (cw_ElemDef_t []){
 			{&_DISCOVERY_TYPE,1},
 			{0,0},
 		}
@@ -69,7 +69,7 @@ static cw_msgdef_t messages[] = {
 		.name = "Discovery Response",
 		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_msgelemprops_t[]){
+		.elements = (cw_ElemDef_t[]){
 			{0,0},
 		}
 	},

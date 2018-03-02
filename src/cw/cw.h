@@ -127,11 +127,12 @@ struct cw_MsgSet {
 
 typedef struct cw_MsgSet cw_MsgSet_t;
 
-typedef struct{
-	cw_elem_handler_t * elem;
+typedef struct cw_ElemDef{
+	cw_elem_handler_t * handler;
 	int mand;
 	int op;
-}cw_msgelemprops_t;
+};
+typedef struct cw_ElemDef cw_ElemDef_t;
 
 #define CW_RECEIVER_AC 1
 #define CW_RECEIVER_WTP 1
@@ -141,7 +142,7 @@ struct cw_MsgDef{
 	int * states;	/**< states in wich the message is allowed */
 	int receiver;	/**< Who can receive this message */
 	
-	cw_msgelemprops_t * elements;
+	cw_ElemDef_t * elements;
 	const char * name;
 };
 typedef struct cw_MsgDef cw_msgdef_t;
