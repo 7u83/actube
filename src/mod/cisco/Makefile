@@ -1,7 +1,10 @@
+include ../../Macros.mak
+include ../../Config.mak
+include ../../Config.local.mak
+
 
 OBJS=\
 	mod_cisco_ac.o \
-	mod_cisco_wtp.o \
 	cisco_actions_ac.o \
 	cisco_actions_wtp.o \
 	cisco_out_ap_timesync.o \
@@ -31,8 +34,14 @@ OBJS=\
 #	cisco_out_radio_administrative_state.o \
 
 	
+LIBDIR		:= ../../../lib
+LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
+OBJDIR		:= ../../../obj/mod_cisco/$(ARCH)
+SNAME		:= $(LIBARCHDIR)/libmod_cisco.a
+DNAME		:= $(LIBARCHDIR)/mod_cisco.so
+MODNAME		:= $(LIBDIR)/mod_cisco.so
+SLIBS		:= -lcw -lmod_cipwap -lmod_capwap
 
-NAME=libcisco.a
 
 include ../Mod.mak
 

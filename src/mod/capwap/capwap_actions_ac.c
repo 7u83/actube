@@ -101,7 +101,8 @@ static cw_msgdef_t messages[] = {
 	/* Discovery Request Message*/
 	{
 		.name = "Discovery Request",
-		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
+	//	.type = CAPWAP_MSG_DISCOVERY_REQUEST,
+		.type = 7,
 		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
 		.elements = (cw_msgelemprops_t []){
 			{&_DISCOVERY_TYPE,1},
@@ -123,19 +124,31 @@ static cw_msgdef_t messages[] = {
 			{&_AC_DESCRIPTOR,1},
 			{0,0},
 		}
-	}	
+	},
+	{0,0,0,0}
+	
+	
+	
 };
 
 
+
+struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
+	if (mode != CW_MOD_MODE_CAPWAP)
+		return NULL;
+	cw_msgset_add(set,messages);
+	return set;
+}
+
 void test_sets(){
 
-	cw_message_set_t * set = cw_message_set_create();
+	cw_MsgSet_t * set = cw_message_set_create();
 	if (set==NULL){
 		cw_log(LOG_ERR,"No mem");
 		return;
 	}
 	
-	cw_message_set_add(set,messages);
+	cw_msgset_add(set,messages);
 	
 	cw_elem_handler_t el; 
 	memset(&el,0,sizeof(el));

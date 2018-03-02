@@ -96,7 +96,9 @@ struct conn {
 	/** Actionsdefs - this defines the possible actions for
 	    this conn object, so in the end this is the specification
 	    of the protocoll */
-	struct cw_actiondef *actions;
+//	struct cw_actiondef *actions;
+
+	struct cw_MsgSet * msgset;
 
 	/** Current CAPWAP state */
 

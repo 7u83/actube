@@ -1,31 +1,43 @@
 include ../../Macros.mak
 include ../../Config.mak
+include ../../Config.local.mak
+
+OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 
-OBJS:=$(patsubst %.o,$(ARCH)/%.o,$(OBJS))
+CFLAGS = -fPIC -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT -I ../../ -I../ -I../../include
 
-
-CFLAGS = -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT -I ../../ -I../ -I../../include
-
-LIBDIR=../../lib/$(ARCH)
 
 SRCS = $(OBJS:.o=.c) 
 
-$(ARCH)/%.o:%.c
-	@mkdir -p $(ARCH)
-	@echo "  CC "$<
+all: $(SNAME) $(DNAME) $(MODNAME)
+
+$(OBJDIR)/%.o:%.c
+	@mkdir -p $(OBJDIR)
+	@echo "  $(CC) "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 
-$(LIBDIR)/$(NAME) : $(OBJS) $(MODOBJS)
-	@mkdir -p $(LIBDIR)
-	@echo "  AR $(LIBDIR)/$(NAME)"
-	@$(AR) rcs $(LIBDIR)/$(NAME) $(OBJS) $(MODOBJS)
+$(SNAME) : $(OBJS) $(MODOBJS)
+	@mkdir -p $(LIBARCHDIR)
+	@echo "  $(AR) $(SNAME)"
+	@$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
+
+$(DNAME) : $(OBJS) $(MODOBJS)
+	@mkdir -p $(LIBARCHDIR)
+	@echo "  $(CC) $(DNAME)"
+	@$(CC) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
+
+$(MODNAME) : $(DNAME)
+	cp $(DNAME) $(MODNAME)
+
+#	$(CC) -L$(LIBARCHDIR) $(OBJS) $(MODOBJS) $(SLIBS) -v -shared -o ../../../lib/actube/capwap.so
 
 
-all: $(LIBDIR)/$(NAME)
 
 clean: 
-	rm -rf $(ARCH)
-	rm -f $(LIBDIR)/$(NAME)
+	rm -rf $(OBJDIR)
+	rm -f $(SNAME)
+	rm -f $(DNAME)
+	rm -f $(MODNAME)
 

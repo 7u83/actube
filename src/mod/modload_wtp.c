@@ -12,14 +12,14 @@
 
 #include "modload.h"
 
-struct mod_wtp *(*mods_wtp[])() = MODS_WTP;
+struct cw_Mod *(*mods_wtp[])() = MODS_WTP;
 
-struct mod_wtp * modload_wtp(const char *name)
+struct cw_Mod * modload_wtp(const char *name)
 {
 	int i;
 	for (i=0; mods_wtp[i];i++){
 
-		struct mod_wtp * m = mods_wtp[i]();
+		struct cw_Mod * m = mods_wtp[i]();
 		if (strcmp(m->name,name)==0)
 			return m;
 	}	

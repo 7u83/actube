@@ -13,7 +13,8 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 	as.vendor_id = 0;
 	as.elem_id = 0;
 	as.proto=0;
-
+/// TODO XXXX
+/*
 	DEFINE_AVLITER(it,conn->actions->in);
 	int n=0;
 	avliter_foreach_from(&it,&as) {
@@ -30,7 +31,8 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 		}
 	
 	}
-	return n;	
+	return n;
+*/
 }
 
 

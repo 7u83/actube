@@ -18,23 +18,23 @@ extern int fortinet_register_actions_ac(struct cw_actiondef *def);
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
 	switch (mode) {
-		case MOD_MODE_CAPWAP:
+		case CW_MOD_MODE_CAPWAP:
 		{
 
-			struct mod_ac *cmod = modload_ac("capwap");
+			struct cw_Mod *cmod = modload_ac("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap");
 				return 1;
 			}
-			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
 			int rc = fortinet_register_actions_ac(actions);
 			cw_dbg(DBG_INFO, "Initialized mod fortinet with %d actions", rc);
 			return 0;
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct mod_ac *cmod = modload_ac("capwap80211");
+			struct cw_Mod *cmod = modload_ac("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap80211");
@@ -60,7 +60,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 static int init()
 {
 	cw_dbg(DBG_INFO, "Initialiazing mod_fortineto ...");
-//      struct mod_ac *cmod = modload_ac("capwap");
+//      struct cw_Mod *cmod = modload_ac("capwap");
 	return 1;
 }
 
@@ -85,7 +85,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_FORTINET) {
 				//              conn->actions = &actions;
-				if (mode == MOD_MODE_CAPWAP) {
+				if (mode == CW_MOD_MODE_CAPWAP) {
 					cw_dbg(DBG_MOD, "Fortinet capwap detected: yes");
 				} else {
 					cw_dbg(DBG_MOD, "Fortinet bindings detected: yes");
@@ -99,7 +99,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 	}
 
-	if (mode == MOD_MODE_CAPWAP) {
+	if (mode == CW_MOD_MODE_CAPWAP) {
 		cw_dbg(DBG_MOD, "Fortinet capwap detected: no");
 	} else {
 		cw_dbg(DBG_MOD, "Fortinet bindings detected: no");
@@ -108,14 +108,14 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 0;
 }
 
-static struct mod_ac capwap_ac = {
+static struct cw_Mod capwap_ac = {
 	.name = "fortinet",
 	.init = init,
 	.detect = detect,
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_fortinet_ac()
+struct cw_Mod *mod_fortinet_ac()
 {
 	return &capwap_ac;
 };

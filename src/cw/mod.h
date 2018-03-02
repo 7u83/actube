@@ -16,6 +16,11 @@
 
 */
 
+/**
+ * @file 
+ * @brief module definitions
+ */
+  
 #ifndef __MOD_H
 #define __MOD_H
 
@@ -28,15 +33,14 @@
 
 struct cw_actiondef;
 
-#define MOD_MAXMODS 8
 
 enum {
-	MOD_MODE_CAPWAP,
+	CW_MOD_MODE_CAPWAP,
 	MOD_MODE_BINDINGS
 };
 
-struct mod_ac {
-	/** Name of the mod */
+struct cw_Mod {
+	/** Name of the module */
 	const char *name;
 	/** Initializion method */
 	int (*init) ();
@@ -45,8 +49,10 @@ struct mod_ac {
 	int (*init_config) (mbag_t config);
 
 	/** Detect capwap 
-	This function is called after receiving and disassembling a complete 
-	CAPWAP message. Either on Discovery Request or Join Request
+	 * This function is called after receiving and disassembling a complete 
+	 * CAPWAP message. Either on Discovery Request or Join Request.
+	 * @param conn current connection
+	 * @return 0 if notdetected 
 	**/
 	int (*detect) (struct conn * conn, const uint8_t * rawmsg, int rawlen,
 		       int elems_len, struct sockaddr * from, int mode);
@@ -56,31 +62,45 @@ struct mod_ac {
 
 	/** Register actions */
 	int (*register_actions) (struct cw_actiondef * def,int mode);
+	
+	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet * set, int mode);
+	
+	/** 
+	 * Handle returned by dlopen, if this module was loaded 
+	 * dynamically with dlopen. If this module was statically 
+	 * linked, dll_handle is NULL.
+	 */
+	void * dll_handle;
 };
 
 
-/**
- * We define here struct mod_wtp in case we need 
- * different methods for WTP and AC later
- */
-#define mod_wtp mod_ac
-
-extern struct mod_ac mod_null;
+extern struct cw_Mod mod_null;
 
 
 #define MOD_NULL (&mod_null)
 
-struct cw_actiondef * mod_cache_add(struct conn *conn,struct mod_ac *c, struct mod_ac *b);
+struct cw_actiondef * mod_cache_add(struct conn *conn,struct cw_Mod *c, struct cw_Mod *b);
 
 
 #define mod_init_config(mod,cfg) (mod->init_config ? mod->init_config(cfg):1)
 
-void mod_set_actions_registered_cb(void (*fun) (struct mod_ac *, struct mod_ac *, struct cw_actiondef *));
+void mod_set_actions_registered_cb(void (*fun) (struct cw_Mod *, struct cw_Mod *, struct cw_actiondef *));
 
 extern int mod_caching;
 
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
+struct cw_Mod * cw_mod_load(const char * mod_name);
+struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod );
+struct cw_Mod * cw_mod_detect(struct conn *conn, 
+			uint8_t * rawmsg, int len,
+			int elems_len, struct sockaddr *from, 
+			int mode);
+struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn, 
+			struct cw_Mod * capwap_mod, struct cw_Mod *bindings_mod);
+
+#define CW_MOD_MAX_MOD_NAME_LEN	128
+#define CW_MOD_INTERFACE_FUNCTION_NAME_SUFFIX "_get_interface"
 
 #endif

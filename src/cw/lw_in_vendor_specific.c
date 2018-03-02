@@ -23,8 +23,10 @@ int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 	as.elem_id = cw_get_word(data + 4);
 	as.proto = CW_ACTION_PROTO_LWAPP;
 
-
-	af = cw_actionlist_in_get(conn->actions->in, &as);
+// TODO XXXX
+	//af = cw_actionlist_in_get(conn->actions->in, &as);
+	
+	af = 0;
 
 	if (!af) {
 		cw_dbg(DBG_WARN,

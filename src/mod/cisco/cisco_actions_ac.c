@@ -41,6 +41,62 @@
 #include "include/cipwap_items.h"
 
 
+
+static cw_elem_handler_t _DISCOVERY_TYPE = {
+	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
+	.name = "WTP Frame Tunnel Mode",
+// 	.start = cw_in_generic2, 
+//	.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
+	.min_len = 1, 
+	.max_len = 1
+};
+
+
+static cw_msgdef_t messages[] = {
+
+	/* Discovery Request Message*/
+	{
+		.name = "Discovery Request Cisco",
+		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
+		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
+		.elements = (cw_msgelemprops_t []){
+			{&_DISCOVERY_TYPE,1},
+			{0,0},
+		}
+	},
+	/* Discovery Request Response */
+	{
+		.name = "Discovery Response",
+		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
+		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
+		.elements = (cw_msgelemprops_t[]){
+			{0,0},
+		}
+	},
+	{0,0,0,0}
+	
+	
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static cw_action_in_t actions_in[] = {
 
 
@@ -492,6 +548,15 @@ static cw_action_out_t actions_out[]={
 	{0,0}
 
 };
+
+
+struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
+	if (mode != CW_MOD_MODE_CAPWAP)
+		return NULL;
+	cw_msgset_add(set,messages);
+	return set;
+}
+
 
 static cw_action_in_t actions80211_in[] = {
 	/* --------------------------------------------------------

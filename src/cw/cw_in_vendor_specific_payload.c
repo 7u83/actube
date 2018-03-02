@@ -22,9 +22,10 @@ int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 	as.vendor_id = cw_get_dword(data);
 	as.elem_id = cw_get_word(data + 4);
 
-
-	af = cw_actionlist_in_get(conn->actions->in, &as);
-
+	// TODO XXXX
+//	af = cw_actionlist_in_get(conn->actions->in, &as);
+	af = 0;
+	
 	if (!af) {
 		cw_dbg(DBG_WARN,
 		       "Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
@@ -44,4 +45,5 @@ int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 	}
 
 	return 1;
+
 }

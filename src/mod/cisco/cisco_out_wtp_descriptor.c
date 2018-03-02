@@ -6,12 +6,13 @@
 
 #include "cisco.h"
 
-extern mbag_t cisco_config_wtp;
+//#extern mbag_t cisco_config_wtp;
 
 int cisco_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 
-	mbag_t mbag = cisco_config_wtp;
+//	mbag_t mbag = cisco_config_wtp;
+mbag_t mbag = NULL;
 
 	// XXX Dummy WTP Descriptor Header
 	uint8_t *d = dst+4;

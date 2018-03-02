@@ -31,6 +31,7 @@
 
 #include <stdint.h>
 #include <time.h>
+#include <unistd.h>
 
 #ifndef FRAG_MAXSIZE
 	/** maximaum size of a fragment */

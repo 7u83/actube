@@ -26,6 +26,7 @@
 
 #include "cw_util.h"
 #include "log.h"
+#include "dbg.h"
 
 /**
  * Reads the LWAPP message element WTP Name
@@ -42,7 +43,7 @@ int lw_readelem_wtp_name(uint8_t ** dst, int type, uint8_t * msgelem, int len)
 
 	
 	if (len>254){
-		cw_dbg(DBG_MSG_ERR,"Truncating WTP_NAME msgelem to 254, wrong size, type=%d,len=%d",type,len);
+		cw_dbg(DBG_ELEM_ERR,"Truncating WTP_NAME msgelem to 254, wrong size, type=%d,len=%d",type,len);
 		len=254;
 	}
 

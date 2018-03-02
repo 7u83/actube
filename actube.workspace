@@ -7,6 +7,7 @@
   <Project Name="mod_cisco" Path="mod_cisco.project" Active="No"/>
   <Project Name="libcw" Path="libcw.project" Active="Yes"/>
   <Project Name="mod_capwap80211" Path="mod_capwap80211.project" Active="No"/>
+  <Project Name="mod_fortinet" Path="mod_fortinet.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
@@ -17,6 +18,7 @@
       <Project Name="mod_cisco" ConfigName="Debug"/>
       <Project Name="libcw" ConfigName="Debug"/>
       <Project Name="mod_capwap80211" ConfigName="Debug"/>
+      <Project Name="mod_fortinet" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
@@ -27,6 +29,7 @@
       <Project Name="mod_cisco" ConfigName="Release"/>
       <Project Name="libcw" ConfigName="Release"/>
       <Project Name="mod_capwap80211" ConfigName="Release"/>
+      <Project Name="mod_fortinet" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

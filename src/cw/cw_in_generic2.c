@@ -98,7 +98,10 @@ int static do_save(mbag_t itemstore, struct conn *conn, struct cw_action_in *a,
 int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
-	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
+	/// TODO XXXX
+//	const cw_itemdef_t * idef = cw_itemdef_get(conn->actions->items,a->item_id,CW_ITEM_NONE);
+	
+const cw_itemdef_t * idef=0;
 
 	if (!idef) {
 		cw_log(LOG_ERR,"No itemdef found for %s",a->item_id);

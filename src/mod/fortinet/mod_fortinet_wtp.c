@@ -18,17 +18,17 @@ extern int cisco_register_actions_wtp(struct cw_actiondef *def);
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
 	switch (mode) {
-		case MOD_MODE_CAPWAP:
+		case CW_MOD_MODE_CAPWAP:
 		{
 
-			struct mod_wtp *cmod = modload_wtp("capwap");
+			struct cw_Mod *cmod = modload_wtp("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap");
 				return 1;
 			}
 
-			cmod->register_actions(actions, MOD_MODE_CAPWAP);
+			cmod->register_actions(actions, CW_MOD_MODE_CAPWAP);
 
 			int rc = cisco_register_actions_wtp(actions);
 
@@ -38,7 +38,7 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 		}
 		case MOD_MODE_BINDINGS:
 		{
-			struct mod_ac *cmod = modload_wtp("capwap80211");
+			struct cw_Mod *cmod = modload_wtp("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_fortinet, failed to load base mod mod_capwap80211");
@@ -82,7 +82,7 @@ static int init()
 	mbag_set_bstr16(cisco_config_wtp,CW_ITEM_WTP_BOOTLOADER_VERSION,v);
 
 #endif
-//      struct mod_ac *cmod = modload_ac("capwap");
+//      struct cw_Mod *cmod = modload_ac("capwap");
 	return 1;
 }
 
@@ -130,7 +130,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
 			if (vendor_id == CW_VENDOR_ID_FORTINET) {
 				//              conn->actions = &actions;
-				if (mode == MOD_MODE_CAPWAP) {
+				if (mode == CW_MOD_MODE_CAPWAP) {
 					cw_dbg(DBG_MOD, "Fortinet capwap detected: yes");
 				} else {
 					cw_dbg(DBG_MOD, "Fortinet bindings detected: yes");
@@ -144,7 +144,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 	}
 
-	if (mode == MOD_MODE_CAPWAP) {
+	if (mode == CW_MOD_MODE_CAPWAP) {
 		cw_dbg(DBG_MOD, "Fortinet capwap detected: no");
 	} else {
 		cw_dbg(DBG_MOD, "Fortinet bindings detected: no");
@@ -153,7 +153,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 0;
 }
 
-static struct mod_ac fortinet_wtp = {
+static struct cw_Mod fortinet_wtp = {
 	.name = "fortinet",
 	.init = init,
 	.init_config = init_config,
@@ -161,7 +161,7 @@ static struct mod_ac fortinet_wtp = {
 	.register_actions = register_actions
 };
 
-struct mod_ac *mod_fortinet_wtp()
+struct cw_Mod *mod_fortinet_wtp()
 {
 	return &fortinet_wtp;
 };

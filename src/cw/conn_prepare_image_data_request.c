@@ -19,7 +19,7 @@
 #include "capwap.h"
 #include "lwapp.h"
 
-
+/*
 
 int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data,
 				    struct image_identifier *id)
@@ -33,7 +33,7 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 
 
 
-	/* for Cisco APs send image data in "LWAPP format" */
+	// for Cisco APs send image data in "LWAPP format" 
 	if (conn->capwap_mode == CWMODE_CISCO) {
 		uint8_t type = 3;
 		uint16_t checksum = htons(lw_checksum(data->data, data->len));
@@ -46,7 +46,7 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 	}
 
 
-	/* standard capwap operation */
+	// standard capwap operation 
 
 	cwmsg_vaddelem(cwmsg,CW_ELEM_IMAGE_DATA,
 		&data->type, sizeof(data->type),
@@ -57,3 +57,5 @@ int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *data
 
 	return 0;
 }
+
+*/

@@ -1,8 +1,8 @@
 #ifndef __MOD_FORTINET_H
 #define __MOD_FORTINET_H
 
-struct mod_ac * mod_fortinet_ac();
-struct mod_ac * mod_fortinet_wtp();
+struct cw_Mod * mod_fortinet_ac();
+struct cw_Mod * mod_fortinet_wtp();
 
 
 #endif

@@ -499,7 +499,7 @@ enum cw_reboot_failure_types {
       17 Image Data Error (Image Already Present)
 */
 
-#define CW_RESULT_MSG_INVALID_IN_CURRENT_STATE			18
+#define CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE		18
 #define CW_RESULT_MSG_UNRECOGNIZED				19
 #define CW_RESULT_MISSING_MAND_ELEM				20
 

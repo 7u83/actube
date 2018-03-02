@@ -1,4 +1,4 @@
-
+/*
 
 #include "capwap_cisco.h"
 #include "cw_log.h"
@@ -19,4 +19,7 @@ int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct ra
 	ri->beacon_period = lw_get_word(elem+13);
 
 	return 1;
-}	
+}
+
+
+*/	

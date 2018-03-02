@@ -120,10 +120,12 @@ typedef struct {
 
 }cw_elem_handler_t;
 
-typedef struct {
+struct cw_MsgSet {
 	mavl_t messages;
 	mavl_t all_elems;
-}cw_message_set_t;
+};
+
+typedef struct cw_MsgSet cw_MsgSet_t;
 
 typedef struct{
 	cw_elem_handler_t * elem;
@@ -131,12 +133,13 @@ typedef struct{
 	int op;
 }cw_msgelemprops_t;
 
-typedef struct {
+struct cw_MsgDef{
 	int type;
 	int * states;
 	cw_msgelemprops_t * elements;
 	const char * name;
-}cw_msgdef_t;
+};
+typedef struct cw_MsgDef cw_msgdef_t;
 
 /** 
  * Get length wireless specific data

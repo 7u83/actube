@@ -38,7 +38,7 @@ uint8_t conf_macaddress_len = 0;
 
 long conf_strict_capwap = 1;
 long conf_strict_headers = 0;
-char *conf_capwap_mode_str = NULL;
+//char *conf_capwap_mode_str = NULL;
 int conf_capwap_mode = CW_MODE_CAPWAP;
 
 
@@ -539,8 +539,8 @@ static int conf_read_dbg_level(cfg_t * cfg)
 
 
 
-struct mod_ac ** conf_mods; //[10];
-
+struct cw_Mod ** conf_mods; //[10];
+char *conf_mods_dir = NULL;
 
 
 static int init_mods()
@@ -570,21 +570,22 @@ static int conf_read_mods(cfg_t *cfg){
 	int n, i;
 	n = cfg_size(cfg,CFG_ENTRY_MODS);
 	
-	conf_mods = malloc(sizeof(struct mod_ac *)*(n+1));
-	
+	conf_mods = malloc(sizeof(struct cw_Mod *)*(n+1));
+
+	cw_dbg(DBG_INFO,"Mods directory: %s",conf_mods_dir);
+	cw_mod_set_mod_path(conf_mods_dir);
+
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-		conf_mods[i] = modload_ac(modname);
-		if (!conf_mods[i]){
-			cw_log(LOG_ERR,"Can't load mod: %s",modname);
+		struct cw_Mod * mod = cw_mod_load(modname);
+		if (!mod)
 			return 0;
-		}
+		cw_mod_add_to_list(mod);
 	}
-	conf_mods[i]=NULL;
 	return 1;
 }
 
-
+/*
 void conf_init_capwap_mode()
 {
 	if (conf_capwap_mode_str == NULL)
@@ -600,7 +601,7 @@ void conf_init_capwap_mode()
 
 
 }
-
+*/
 
 
 int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *proto)
@@ -700,6 +701,8 @@ int read_config(const char *filename)
 
 	cfg_opt_t opts[] = {
 		CFG_STR_LIST("mods", "{}", CFGF_NONE),
+		CFG_SIMPLE_STR("mods_dir", &conf_mods_dir),
+		
 		CFG_STR_LIST("dbg", "{}", CFGF_NONE),
 		CFG_STR_LIST("listen", "{}", CFGF_NONE),
 		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
@@ -710,7 +713,7 @@ int read_config(const char *filename)
 		CFG_SIMPLE_BOOL("strict_capwap", &conf_strict_capwap),
 		CFG_SIMPLE_BOOL("strict_headers", &conf_strict_headers),
 		CFG_SIMPLE_BOOL("use_loopback", &conf_use_loopback),
-		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),
+//		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),
 
 
 #ifdef WITH_LWAPP
@@ -815,16 +818,18 @@ int read_config(const char *filename)
 	if (!conf_image_dir)
 		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
 
-	init_mods();
+//printf("INIT MODS\n");
+//	init_mods();
+//printf("done init mods");
 
-	conf_init_capwap_mode();
+//	conf_init_capwap_mode();
 
 
 	init_listen_addrs();
 	init_mcast_groups();
 	init_bcast_addrs();
 
-
+//printf("Yea all mods inited\n");
 	return 1;
 }
 

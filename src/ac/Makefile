@@ -1,30 +1,28 @@
-
+include ../Config.mak
 include ../ACConfig.mak
+-include ../Config.local.mak
+-include ../ACConfig.local.mak
 include ../Macros.mak
 
-ifndef CC
-        CC=gcc
-endif
-#SYSARCH := $(shell uname -m)
-ifndef ARCH
-	ARCH = $(shell $(CC) -dumpmachine)
-endif
 
-LDFLAGS+=-g -D_REENTRANT -L/usr/local/lib -L../lib/$(ARCH) 
-CFLAGS += -Wall -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
+LIBARCHDIR=../../lib/$(ARCH)
+
+LDFLAGS+=-g -L/usr/local/lib -L$(LIBARCHDIR) 
+CFLAGS += -W -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
 
 
-LIBS+=-lcapwap
-LIBS+=-lcapwap80211
-LIBS+=-lcipwap
-LIBS+=-lcisco
-LIBS+=-lfortinet
-LIBS+=-lzyxel
+#LIBS+=-lcapwap
+#LIBS+=-lcapwap80211
+#LIBS+=-lcipwap
+#LIBS+=-lcisco
+#LIBS+=-lfortinet
+#LIBS+=-lzyxel
 LIBS+=-lcw
 LIBS+=-lrt
 LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
+LIBS+=-ldl
 
 
 ifeq ($(SSL_LIBRARY),GNUTLS)
@@ -51,7 +49,7 @@ CFLAGS += -DWITH_IPV6
 
 RM = /bin/rm -f 
 
-AC_MODULES = mod_cipwap.o
+#AC_MODULES = mod_cipwap.o
 
 
 # list of generated object files for AC. 
@@ -77,12 +75,13 @@ AC_NAME = actube
 all: $(AC_NAME) 
 
 %.o:%.c
-	@echo "  CC "$<
+	@echo "  $(CC) "$<
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 
 $(AC_NAME): $(AC_OBJS) 
-	$(CC) $(AC_OBJS) ../mod/modload_ac.o -o $(AC_NAME) $(LDFLAGS) $(LIBS)
+#	$(CC) $(AC_OBJS) ../mod/modload_ac.o -o $(AC_NAME) $(LDFLAGS) $(LIBS)
+	$(LD) $(AC_OBJS) -o $(AC_NAME) $(LDFLAGS) $(LIBS) 
 
 
 clean: 
@@ -92,6 +91,6 @@ clean_deps:
 	$(AC_DEPS) 
 	
 deps: $(AC_SRC) 
-	$(CC) -MD -E $(AC_SRCS) $(CFLAGS) >/dev/null
+	$(LD) -MD -E $(AC_SRCS) $(CFLAGS) >/dev/null
 
 -include $(AC_DEPS)

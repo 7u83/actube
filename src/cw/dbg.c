@@ -25,6 +25,7 @@
  * @file Debugging Functions
  * @brief Various debug functions.
  */
+#include <stdarg.h>
 
 #include "capwap.h"
 #include "dbg.h"
@@ -36,6 +37,10 @@
 #include "capwap.h"
 #include "capwap_cisco.h"
 #include "lwapp_cisco.h"
+#include "cw.h"
+#include "message_set.h"
+
+
 
 /**
  *@addtogroup DBG
@@ -196,10 +201,12 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 	char *p = buffer;
 	int i;
 	char *delim = "";
+	// TODO XXXX
 	for (i = 0; i < n; i++) {
-		p += sprintf(p, "%s", delim);
+/*		p += sprintf(p, "%s", delim);
 		delim = ", ";
 		p += sprintf(p, "%s", cw_strelemp(conn->actions, ml[i]->elem_id));
+*/
 	}
 	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
 }
@@ -483,7 +490,19 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 //      int pplen = len - (msgptr-packet);
 
 	int msg_id = cw_get_msg_id(msgptr);
-	s += sprintf(s, "%s Message (type=%d) ", cw_strmsg(msg_id), msg_id);
+	
+	struct cw_MsgData search;
+	search.type = msg_id;
+	struct cw_MsgData * message;
+	message = mavl_get(conn->msgset->messages,&search);
+	
+	char * msname;
+	if (!message)
+		msname="Unknown";
+	else
+		msname = message->name;
+	
+	s += sprintf(s, "%s Message (type=%d) ", msname  /*cw_strmsg(msg_id)*/, msg_id);
 	if (level == DBG_MSG_IN)
 		s += sprintf(s, "from %s ", sock_addr2str(from));
 	else
@@ -548,18 +567,21 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	char vendorname[256];
 	char vendor_details[265];
 	*vendor_details = 0;
+/// TODO XXXX
 
 	if (msgelem == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
 		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
 		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);
-		sprintf(vendorname, "%s/%s/%s",
+/*		sprintf(vendorname, "%s/%s/%s",
 			cw_strelemp(conn->actions, msgelem),
 			(char *) cw_strvendor(vendor_id), vendor_details);
+*/
 		elemname = vendorname;
 
 	} else {
-		elemname = cw_strelemp(conn->actions, msgelem);
+//		elemname = cw_strelemp(conn->actions, msgelem);
+		elemname=0;
 	}
 
 
