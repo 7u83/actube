@@ -25,6 +25,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "cw.h"
+
 /**
  * Format bytes as hex string.
  * @param dst Destination buffer
