@@ -71,4 +71,14 @@ cw_acprio_t * cw_acpriolist_add(cw_acpriolist_t l, const char *name,int name_len
 }
 
 
+int cw_acpriolist_get(cw_acpriolist_t l, char * acname){
+	cw_acprio_t ps,*pf;
+	ps.name=acname;
+	
+	pf=mavl_get(l,&ps);
+	if (!pf)
+		return 256;
+	return pf->prio;
+}
+
  

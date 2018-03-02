@@ -147,43 +147,16 @@ struct cw_MsgDef{
 };
 typedef struct cw_MsgDef cw_msgdef_t;
 
-/** 
- * Get length wireless specific data
- * @param th Pointer to packet
- * @return length of wireless specific data
- *
- * Call this function only if the W flag is set
- */
-static inline int cw_get_hdr_ws_len(uint8_t * th)
-{
-	if (!cw_get_hdr_flag_m(th)){
-		return *(th + 8);
-	}
-	return *(th + 9 + cw_get_hdr_rmac_len(th));
-}
 
-/** 
- * Get pointer to wireless specific data
- * @param th Pointer to packet
- * @return Pointer to data
- *
- * Call this function only if the W flag is set
- */
-static inline uint8_t *cw_get_hdr_ws_data(uint8_t * th)
-{
-	if (!cw_get_hdr_flag_m(th))
-		return th + 9;
-	return (th + 10 + cw_get_hdr_rmac_len(th));
-}
+
+int cw_get_hdr_ws_len(uint8_t * th);
+uint8_t *cw_get_hdr_ws_data(uint8_t * th);
+
 
 
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))
 
-static inline uint8_t * cw_get_hdr_payload_ptr(uint8_t *th)
-{
-	return th+cw_get_hdr_msg_offset(th);
-}
-
+uint8_t * cw_get_hdr_payload_ptr(uint8_t *th);
 
 #define cw_get_hdr_msg_elems_offset(th) (cw_get_hdr_msg_offset(th)+8)
 
@@ -191,46 +164,9 @@ static inline uint8_t * cw_get_hdr_payload_ptr(uint8_t *th)
 
 
 
-
-/**
- * Set the HLEN field of a CAWAP Header
- * @param th pointer to the header
- * @param hlen value to set (Header Length)
- */
-static inline void cw_set_hdr_hlen(uint8_t * th, int hlen)
-{
-	uint32_t d = cw_get_dword(th);
-	d &= (0x1f << 19) ^ 0xffffffff;
-	d |= ((hlen) & 0x1f) << 19;
-	cw_set_dword(th, d);
-}
-
-/**
- * Set the WBID field of a CAWAP Header
- * @param th pointer to the header
- * @param wbid value to set (Wireless ID)
- */
-static inline void cw_set_hdr_wbid(uint8_t * th, int wbid)
-{
-	uint32_t d = cw_get_dword(th);
-	d &= (0x1f << 9) ^ 0xffffffff;
-	d |= ((wbid) & 0x1f) << 9;
-	cw_set_dword(th, d);
-}
-
-/**
- * Set the RID field of a CAWAP Header
- * @param th pointer to the header
- * @param rid value to set (Radio ID)
- */
-static inline void cw_set_hdr_rid(uint8_t * th, int rid)
-{
-	uint32_t d = cw_get_dword(th);
-	d &= (0x1f << 14) ^ 0xffffffff;
-	d |= ((rid) & 0x1f) << 14;
-	cw_set_dword(th, d);
-}
-
+void cw_set_hdr_hlen(uint8_t * th, int hlen);
+void cw_set_hdr_wbid(uint8_t * th, int wbid);
+void cw_set_hdr_rid(uint8_t * th, int rid);
 
 
 
@@ -288,49 +224,17 @@ static inline void cw_set_hdr_rid(uint8_t * th, int rid)
 #define cw_is_response(msg_id) (!is_response(msg_id))
 
 
-static inline uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m)
-{
-	return cw_get_msg_elems_ptr(m + cw_get_hdr_msg_offset(m));
-}
+uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m);
+uint8_t *cw_get_hdr_msg_ptr(uint8_t * rawmsg);
 
-static inline uint8_t *cw_get_hdr_msg_ptr(uint8_t * rawmsg)
-{
-	return rawmsg + cw_get_hdr_msg_offset(rawmsg);
-}
+
 
 #define cw_get_hdr_msg_id(ptr)\
 	cw_get_msg_id(cw_get_hdr_msg_ptr(ptr))
 #define cw_get_hdr_msg_type cw_get_hdr_msg_id
 
-static inline int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
-{
-
-	int offset = cw_get_hdr_msg_offset(rawmsg);
-	return offset + cw_get_msg_elems_len(rawmsg + offset) + 8;
-}
-
-
-
-static inline int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
-{
-	if (!rmac) {
-		cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 0);
-		cw_set_hdr_hlen(th, 2);
-		return 0;
-	}
-	int rmac_len = bstr_len(rmac);
-	memcpy(cw_get_hdr_rmac(th), rmac, rmac_len + 1);
-	cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 1);
-
-	int hlen = 4 + rmac_len / 4;
-
-	if (rmac_len % 4 != 0) {
-		hlen++;
-	}
-	cw_set_hdr_hlen(th, hlen);
-	return 1;
-}
-
+int cw_get_hdr_msg_total_len(uint8_t * rawmsg);
+int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac);
 
 
 
@@ -390,24 +294,8 @@ static inline int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
 
 
-/** 
- * Put a message element header for a message to contain a vendor specific payload
- * @param dst pointer to destination buffer
- * @param vendorid vendorid
- * @param elemid element id of vendor specific data
- * @len length of vendor specific data 
- * @return the number of bytes put (always 10)
- */
-static inline int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
-					 uint16_t elemid, uint16_t len)
-{
-
-	cw_put_elem_hdr(dst, CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
-	cw_put_dword(dst + 4, vendorid);
-	cw_put_word(dst + 8, elemid);
-	return 10;
-}
-
+int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
+					 uint16_t elemid, uint16_t len);
 
 
 
@@ -428,46 +316,13 @@ extern int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item);
 #define cw_put_encryption_capabilities_7(dst,cap) cw_put_word(dst,cap)
 
 
-/**
- * Add a message element to a buffer
- * @param dst pointer to buffer
- * @type message element type
- * @data pointer to data
- * @length of message element 
- * @return the number of bytes put
- */
-static inline int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len)
-{
-	int l = cw_put_elem_hdr(dst, type, len);
-	return l + cw_put_data(dst + l, data, len);
-}
-
-
-static inline int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr)
-{
-	return cw_addelem(dst, type, bstr_data(bstr), bstr_len(bstr));
-}
-
-
-static inline int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
-{
-	cw_put_dword(dst + 4, code);
-	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
-}
+int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len);
+int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr);
+int cw_put_elem_result_code(uint8_t * dst, uint32_t code);
+int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v);
 
 
 
-
-
-
-static inline int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
-{
-	uint8_t *d = dst;
-	d += cw_put_dword(d, bstrv_get_vendor_id(v));
-	d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
-	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
-	return d - dst;
-}
 
 
 extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);
@@ -604,28 +459,15 @@ extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause)
 //extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
 
 
-static inline int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause) {
-	cw_put_byte(dst+4,rid);
-	cw_put_byte(dst+5,state);
-	cw_put_byte(dst+6,cause);
-	return 3+cw_put_elem_hdr(dst,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
-}
+int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause);
+int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
 
-static inline int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state) {
-	cw_put_byte(dst+4,rid);
-	cw_put_byte(dst+5,state);
-	return 2+cw_put_elem_hdr(dst,CW_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
-}
 
 
 uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 
-static inline int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len){
-	memcpy(dst+4,session_id,len);
-	return len+cw_put_elem_hdr(dst,CW_ELEM_SESSION_ID,len);
-}
-
 int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
 
 /**

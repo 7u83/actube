@@ -110,4 +110,28 @@ int format_scan_hex_bytes(uint8_t *dst,const char *s, int len)
 	return err;
 }
 
+char *format_s_hex_bytes(char *dst, const char *format, const char *delim,
+				       const uint8_t * src, int len)
+{
+	format_hex_bytes(dst, format, delim, src, len);
+	return dst;
+}
+
+
+
+int format_hdr_flags(char *dst, uint8_t * th)
+{
+	char *s = dst;
+	s += sprintf(s, "%s", "(");
+	s += sprintf(s, "%s", cw_get_hdr_flag_t(th) ? "T" : "");
+	s += sprintf(s, "%s", cw_get_hdr_flag_f(th) ? "F" : "");
+	s += sprintf(s, "%s", cw_get_hdr_flag_l(th) ? "L" : "");
+	s += sprintf(s, "%s", cw_get_hdr_flag_w(th) ? "W" : "");
+	s += sprintf(s, "%s", cw_get_hdr_flag_m(th) ? "M" : "");
+	s += sprintf(s, "%s", cw_get_hdr_flag_k(th) ? "K" : "");
+	s += sprintf(s, "%s", ")");
+	return s - dst;
+
+}
+
 

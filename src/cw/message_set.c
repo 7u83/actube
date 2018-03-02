@@ -15,7 +15,7 @@ typedef struct {
 }message2_t;
 */
 
-static inline int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
+static int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
 	cw_elem_handler_t * e1 = ((cw_ElemDef_t*)elem1)->handler;
 	cw_elem_handler_t * e2 = ((cw_ElemDef_t*)elem2)->handler;
 	int r;
@@ -32,7 +32,7 @@ static inline int cmp_cw_msgelemprops(const void *elem1, const void *elem2){
 }
 
 
-static inline int msg_cmp(const void *elem1, const void *elem2)
+int msg_cmp(const void *elem1, const void *elem2)
 {       
 	message2_t * e1 = (message2_t*)elem1;
 	message2_t * e2 = (message2_t*)elem2;

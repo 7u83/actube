@@ -131,14 +131,7 @@ extern const uint8_t dot11_tab_br[256];
 #define dot11_put_qword(dst,v) ((*((uint64_t*)(dst))=htobe64(v)),8)
 
 
-static inline uint16_t dot11_get_word(uint8_t * ptr)
-{
-	uint16_t w;
-	w = dot11_get_byte(ptr + 1);
-	w |= dot11_get_byte(ptr) << 8;
-	return w;
-}
-
+uint16_t dot11_get_word(uint8_t * ptr);
 
 
 
@@ -154,10 +147,9 @@ static inline uint16_t dot11_get_word(uint8_t * ptr)
 
 #define dot11_get_duration(frame) dot11_get_word(frame+2)
 
-static inline void dot11_get_address(uint8_t * dst, uint8_t * frame)
-{
-	memcpy(dst, frame, 6);
-}
+
+void dot11_get_address(uint8_t * dst, uint8_t * frame);
+
 
 #define dot11_get_address1(dst,frame) dot11_get_address(dst,frame+4)
 #define dot11_get_address2(dst,frame) dot11_get_address(dst,frame+4+1*6)
@@ -180,12 +172,7 @@ static inline void dot11_get_address(uint8_t * dst, uint8_t * frame)
 
 #define dot11_fc_put_frame_control(dst,fc) dot11_put_word(dst,fc)
 
-static inline int dot11_put_frame_control(uint8_t * dst, int fctype, int flags)
-{
-	uint16_t fc = fctype | flags;
-	return dot11_fc_put_frame_control(dst, fc);
-}
-
+int dot11_put_frame_control(uint8_t * dst, int fctype, int flags);
 
 /**
  * @defgroup DOT11_TIMER Timer
@@ -193,25 +180,9 @@ static inline int dot11_put_frame_control(uint8_t * dst, int fctype, int flags)
  */
 extern uint64_t dot11_timer_offset;
 
-/**
- * Get the current timestamp
- * @return current timestamp in microseconds
- */
-static inline uint64_t dot11_timer_get()
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return 1000000 * tv.tv_sec + tv.tv_usec - dot11_timer_offset;
-}
+uint64_t dot11_timer_get();
+void dot11_timer_set(uint64_t val);
 
-
-
-static inline void dot11_timer_set(uint64_t val)
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	dot11_timer_offset = 1000000 * tv.tv_sec + tv.tv_usec - val;
-}
 
 /**
  * @}
@@ -230,13 +201,10 @@ static inline void dot11_timer_set(uint64_t val)
 #define dot11_put_address(dst,addr) (memcpy(dst,addr,6),6)
 #define dot11_put_sequence_control(dst,v) (dot11_put_word(dst,v))
 #define dot11_put_capability(dst,v) dot11_put_word(dst,v)
-static inline int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len){
-	dot11_put_byte(dst,DOT11_ELEM_SSID);
-	dot11_put_byte(dst+1,len);
-	memcpy(dst+2,ssid,len);
-	return len;
+int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len);
 
-}
+
+
 
 /**
  * Convert a rate, specified as float to an inzteger, used 
@@ -253,30 +221,11 @@ static inline int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len){
  */
 #define dot11_rate2float(rate) (((float)(rate))/2.0)
 
-static inline int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates){
-	uint8_t *d = dst+2;
-	while(*basic != 0.0){
-		*d++ = 0x80 | dot11_float2rate(*basic);
-		basic++;
-	}
-	while(*rates != 0.0){
-		*d++ = dot11_float2rate(*rates);
-		rates++;
-	}
-	*(dst)=DOT11_ELEM_SUPPORTED_RATES;
-	*(dst+1) = d-(dst+2);
-
-	return d-dst;
-}
+int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates);
+int dot11_put_dsss_param_set(uint8_t *dst,int ch);
 
 
-static inline int dot11_put_dsss_param_set(uint8_t *dst,int ch) {
 
-	dot11_put_byte(dst,DOT11_ELEM_DSSS_PARAM_SET);
-	dot11_put_byte(dst+1,1);
-	dot11_put_byte(dst+2,ch);
-	return 3;
-}
 
 extern int dot11_create_beacon(uint8_t *dst);
 
