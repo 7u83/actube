@@ -32,7 +32,7 @@
  */
 
 
-static inline int cw_action_in_cmp(const void *elem1, const void *elem2)
+static int cw_action_in_cmp(const void *elem1, const void *elem2)
 {
 	struct cw_action_in *e1 = (struct cw_action_in *) elem1;
 	struct cw_action_in *e2 = (struct cw_action_in *) elem2;

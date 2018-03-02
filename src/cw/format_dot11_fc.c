@@ -2,7 +2,7 @@
 #include "format.h"
 
 
-static inline int  add_flag(char *dst,int fc, int flag, char *name,char **delim)
+static int  add_flag(char *dst,int fc, int flag, char *name,char **delim)
 {
 	if (! (fc&flag) )
 		return 0;
