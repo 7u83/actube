@@ -4,8 +4,6 @@
 #include <stdint.h>
 
 #include "radioinfo.h"
-//#include "acinfo.h"
-//#include "wtpinfo.h"
 
 struct cwmsg{
 	uint8_t * buffer;

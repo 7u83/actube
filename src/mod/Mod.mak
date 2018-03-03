@@ -5,7 +5,9 @@ include ../../Config.local.mak
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 
-CFLAGS = -fPIC -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT -I ../../ -I../ -I../../include
+#CFLAGS = -fPIC -Wall -g -O0 -D_REENTRANT -DWITH_IPV6 $(COMPDEFS) -DWITH_RMAC_SUPPORT 
+
+CFLAGS+= -I ../../ -I../ -I../../include
 
 
 SRCS = $(OBJS:.o=.c) 
@@ -26,7 +28,7 @@ $(SNAME) : $(OBJS) $(MODOBJS)
 $(DNAME) : $(OBJS) $(MODOBJS)
 	@mkdir -p $(LIBARCHDIR)
 	@echo "  $(CC) $(DNAME)"
-	@$(CC) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
+	@$(LD) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
 
 $(MODNAME) : $(DNAME)
 	cp $(DNAME) $(MODNAME)

@@ -346,23 +346,23 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		as.elem_id = cw_get_elem_id(elem);
 		int elem_len = cw_get_elem_len(elem);
 
-		cw_elem_handler_t search_eh;
-		memset(&search_eh,0,sizeof(search_eh));
-		struct cw_ElemDef search_elem;
-		search_elem.handler=&search_eh;
+		//cw_elem_handler_t search_eh;
+		//memset(&search_eh,0,sizeof(search_eh));
+//		struct cw_ElemDef search_elem;
+//		search_elem.handler=&search_eh;
 
-		search_eh.id = cw_get_elem_id(elem);
+//		search_eh.id = cw_get_elem_id(elem);
 
 
 
 		struct cw_ElemDef * elem;
-		elem = mavl_find(message->elements_tree,&search_elem);
+	//	elem = mavl_find(message->elements_tree,&search_elem);
 		
 		
-printf("ElemCHeck %d\n",search_eh.id);
-if (elem){
-	printf("Elem %d found! %s\n", elem->handler->id   , elem->handler->name);
-}
+//printf("ElemCHeck %d\n",search_eh.id);
+//if (elem){
+//printf("Elem %d found! %s\n", elem->handler->id   , elem->handler->name);
+//}
 		// TODO XXX
 //		af = cw_actionlist_in_get(conn->actions->in, &as);
 		af = 0;

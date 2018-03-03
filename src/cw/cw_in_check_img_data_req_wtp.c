@@ -17,7 +17,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 //usleep(100000);
 	return 0;
 
-	return CW_RESULT_IMAGE_DATA_ERROR;
+	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 	return 0;
 
 
@@ -40,7 +40,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 
 		char * image_filename = malloc(6+bstrv_len(i->data)+1+strlen(image_dir));
 		if (!image_filename) 
-			return CW_RESULT_IMAGE_DATA_ERROR;
+			return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 
 		sprintf(image_filename,"%s%04X/%s",image_dir,vendor_id,bstrv_data(i->data));
 
@@ -50,7 +50,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 			cw_log(LOG_WARNING,"Can't open image file: %s - %s - requestet by WTP",
 				image_filename,strerror(errno));
 			free(image_filename);
-			return CW_RESULT_IMAGE_DATA_ERROR;
+			return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 		}
 
 		mbag_set_str(conn->outgoing,CW_ITEM_IMAGE_FILENAME,image_filename);
@@ -61,6 +61,6 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 
 	
 
-	return CW_RESULT_IMAGE_DATA_ERROR;
+	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 
 }

@@ -123,7 +123,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	}
 	memset(cached_set, 0, sizeof(struct cache_item));
 	
-	struct cw_MsgSet * set = cw_message_set_create();
+	struct cw_MsgSet * set = cw_msgset_create();
 	if (!set) {
 		free(cached_set);
 		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",

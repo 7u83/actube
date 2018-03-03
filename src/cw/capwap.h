@@ -26,7 +26,7 @@
 #define __CAPWAP_H
 
 #include <stdint.h>
-//#include <string.h>
+
 
 #include <errno.h>
 #include <arpa/inet.h>
@@ -181,7 +181,7 @@
  * @defgroup CAPWAPMsgElems CAPWAP Message Elements 
  * @brief CAPWAP message elements as defined in  RFC 5415
  * @{
- */   //namin
+ */   
 
 
 #define CAPWAP_ELEM_AC_DESCRIPTOR		1	/**< AC Descriptor */
@@ -332,10 +332,10 @@
 #define CW_WTP_MAC_TYPE_BOTH	2
 
 
-
+/*
 //#define CWMSG_MAX_SIZE 65536
 //#define CWMSG_MAX_SIZE 2048
-
+*/
 
 #define CW_SESSION_ID_LEN	16
 
@@ -359,9 +359,10 @@
 
 #define CW_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
 
-
-//#define CAPWAP_CIPHER                 "PSK-AES128-CBC-SHA:"
+/*
+//#define CAPWAP_CIPHER "PSK-AES128-CBC-SHA:"
 //#define CAPWAP_CIPHER "AES128-SHA"
+*/
 
 #ifdef WITH_GNUTLS
 #define CAPWAP_CIPHER	"NORMAL"
@@ -385,15 +386,24 @@
 
 
 /**
- * @defgroup ACDTLSPOLICY AC DTLS Policy Flags  
+ * @defgroup ACDTLSPOLICY CAPWAP DTLS Policy Flags
+ * The DTLS policy flags are describing the data transfer
+ * policy by AC. 
  * @{
  */
+
 /** Reserved */
-#define CW_FLAG_DTLS_POLICY_R		1
-/** Clear Text Data Channel Support  */
-#define CW_FLAG_DTLS_POLICY_C		2
-/** DTLS Data Channel Support */
-#define CW_FLAG_DTLS_POLICY_D		4
+#define CAPWAP_FLAG_DTLS_POLICY_R		1
+
+/** 
+ * Clear Text Data Channel Support. 
+ * Means unencrypted data is supprted.*/
+#define CAPWAP_FLAG_DTLS_POLICY_C		2
+
+/** 
+ * DTLS Data Channel Support. 
+ * Encrypted data is supported. */
+#define CAPWAP_FLAG_DTLS_POLICY_D		4
 /**
  * @}
  */
@@ -416,12 +426,15 @@ struct cwimage_identifier{
 */
 
 
-
+/*
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
+*/
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
 					  struct radioinfo *radioinfos);
-
+/*
 //extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
+*/
+
 extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id,
 						  int type, uint8_t * payload, int len);
 
@@ -431,6 +444,7 @@ extern int hdr_print(char *str, uint8_t * packet, int len);
 
 extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * msgelem,
 				   int len);
+/*
 //extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem,
 //					      int len);
 //extern int cw_readelem_ac_name(uint8_t ** dst, int type, uint8_t * msgelem, int len);
@@ -442,6 +456,8 @@ extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * ms
 //						  uint8_t * msgelem, int len);
 //extern int cw_readelem_radio_operational_state(struct radioinfo *radioinfo, int type,
 //					       uint8_t * msgelem, int len);
+*/
+
 
 extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem,
 					int len);
@@ -467,7 +483,7 @@ enum cw_reboot_failure_types {
 };
 
 
-#define CW_RESULT_SUCCESS					0
+#define CAPWAP_RESULT_SUCCESS					0
 #define CW_RESULT_MISSING_AC_LIST				1
 #define CW_RESULT_SUCCESS_NAT					2
 #define CW_RESULT_JOIN_FAILURE					3
@@ -481,20 +497,35 @@ enum cw_reboot_failure_types {
 
 #define CW_RESULT_RESET_FAILURE_FIRMWARE_WRITE_ERROR		11
 
-#define CW_RESULT_CONFIGURATION_FAILURE				12	//Configuration Failure (Unable to Apply Requested Configuration
+/** 
+ * Configuration Failure (Unable to Apply Requested Configuration
+ * - Service Provided Anyhow)
+ */ 
+#define CW_RESULT_CONFIGURATION_FAILURE				12
 
-//         - Service Provided Anyhow)
-/*
+
+
+/**
 
       13 Configuration Failure (Unable to Apply Requested Configuration
          - Service Not Provided)
 */
-#define CW_RESULT_IMAGE_DATA_INVALID_CHECKSUM			14 //Image Data Error (Invalid Checksum)
 
+/** 
+ * Image Data Error (Invalid Checksum)
+ */
+#define CW_RESULT_IMAGE_DATA_INVALID_CHECKSUM			14 
 
-#define CW_RESULT_IMAGE_DATA_IVALID_LENGTH			15	//Image Data Error (Invalid Data Length)
+/**
+ * Image Data Error (Invalid Data Length)
+ */
+#define CW_RESULT_IMAGE_DATA_IVALID_LENGTH			15
 
-#define CW_RESULT_IMAGE_DATA_ERROR				16	//Image Data Error (Other Error)
+/**
+ * Image Data Error (Other Error)
+ */
+#define CAPWAP_RESULT_IMAGE_DATA_ERROR				16
+
 /*
       17 Image Data Error (Image Already Present)
 */
@@ -533,11 +564,12 @@ enum cw_reboot_failure_types {
 
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
+/*
 //extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
 //				     int len);
 //extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
 //					    uint8_t * msgelem, int len);
-
+*/
 
 
 extern int cw_send_echo_response(struct conn *conn, int seqnum,
@@ -570,7 +602,9 @@ extern struct cw_strlist_elem mbag_item_strings[];
 #define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
 #define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
+
 #define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,id)
+
 #define cw_strboardelem(id) cw_strlist_get_str(capwap_strings_board,id)
 
 #define cw_stritem(id) cw_strlist_get_str(mbag_item_strings,(id))
@@ -595,9 +629,9 @@ const char *cw_strelemp_(cw_strheap_t h, int msg_id);
 
 
 
-
+/*
 //int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
-
+*/
 
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len,struct sockaddr *from);
@@ -607,24 +641,31 @@ extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8
 				int len,struct sockaddr *from);
 extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len,struct sockaddr *from);
-//extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
-extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//, struct mbag_item *item);
 
+/*
+//extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
+*/
+
+extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+
+/*
 //extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
 				//struct mbag_item *item);
-extern int cw_out_ac_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	//,struct mbag_item * item) 
+*/
+extern int cw_out_ac_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 extern int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 				 uint8_t * dst);
 
-
+/*
 //extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
 //                                        uint8_t * dst, struct mbag_item *item);
+*/
 
 extern int cw_out_capwap_control_ip_addr_list(struct conn *conn, struct cw_action_out *a,
 					      uint8_t * dst);
 
 extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
-int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);	// ,struct mbag_item * item) 
+int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 
 struct cw_ac_status {
@@ -706,7 +747,9 @@ extern int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_
 int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 
 int cw_send_request(struct conn *conn, int msg_id);
+/*
 //int cw_is_utf8(unsigned char *str, size_t len);
+*/
 
 int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
@@ -720,14 +763,16 @@ int cw_in_ac_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data,
 int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
 
+/*
 //int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
+*/
 
 int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from);
 
-
+/*
 //int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
+*/
 
 int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from);

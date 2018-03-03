@@ -56,5 +56,5 @@ extern const cw_itemdef_t * cw_itemdef_get(cw_itemdefheap_t t, const char *id,
 struct cw_itemdef *cw_item_get_by_name(const char *name, struct cw_itemdef *table);
 
 typedef const char *cw_item_id_t;
-//
+
 #endif

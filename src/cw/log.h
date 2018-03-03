@@ -46,13 +46,13 @@
 
 
 
-
+/*
 
 //extern void cw_log_dbg_(int type, const char *file, int line, const char *fromat, ...);
 //extern void cw_log_dbg_dmp_(int type, const char *file, int line, const uint8_t * data,
 			    //int len, const char *format, ...);
 
-
+*/
 
 
 #ifdef WITH_CW_LOG
@@ -61,6 +61,7 @@
 #define cw_log(...)
 #endif
 
+/*
 //#ifdef WITH_CW_LOG_DEBUG
 
 
@@ -83,6 +84,8 @@
 //#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
 
 //#endif
+*/
+
 
 extern void (*cw_log_cb) (int level, const char *fromat, ...);
 extern void (*cw_log_vcb) (int level, const char *fromat, va_list args);
@@ -99,11 +102,13 @@ void cw_log_file(int level,const char *format, ...);
 
 void cw_log_colored(int level, const char *format, ...);
 
-
+/*
 
 //extern void (*cw_log_debug_cb) (int type, const char *format, ...);
 
 //extern void (*cw_log_debug_cbs[]) (const char *fromat, ...);
+*/
+
 extern int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 			      const char *format, ...);
 

@@ -107,45 +107,12 @@
 
 
 
-typedef struct {
-	const char * name;
-	int proto;
-	int vendor;
-	int id;
-	int min_len;
-	int max_len;
 
-        int (*start_in)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
-        int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 
-}cw_elem_handler_t;
-
-struct cw_MsgSet {
-	mavl_t messages;
-	mavl_t all_elems;
-};
-
-typedef struct cw_MsgSet cw_MsgSet_t;
-
-typedef struct cw_ElemDef{
-	cw_elem_handler_t * handler;
-	int mand;
-	int op;
-};
-typedef struct cw_ElemDef cw_ElemDef_t;
 
 #define CW_RECEIVER_AC 1
 #define CW_RECEIVER_WTP 1
 
-struct cw_MsgDef{
-	int type;	/**< Message type */
-	int * states;	/**< states in wich the message is allowed */
-	int receiver;	/**< Who can receive this message */
-	
-	cw_ElemDef_t * elements;
-	const char * name;
-};
-typedef struct cw_MsgDef cw_msgdef_t;
 
 
 
@@ -455,9 +422,10 @@ extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *ne
  * @{
  */
 extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause);
+/*
 //extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
 //extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
-
+*/
 
 int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause);
 int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);

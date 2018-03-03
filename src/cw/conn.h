@@ -98,7 +98,7 @@ struct conn {
 	/** Actionsdefs - this defines the possible actions for
 	    this conn object, so in the end this is the specification
 	    of the protocoll */
-//	struct cw_actiondef *actions;
+
 
 	struct cw_MsgSet * msgset;
 
@@ -140,17 +140,17 @@ struct conn {
 	int (*recv_packet) (struct conn *, uint8_t *, int);
 	int (*recv_packet_peek) (struct conn *, uint8_t *, int);
 	int (*send_packet) (struct conn *, const uint8_t *, int);
-
+/*
 //	int (*recv_data_packet) (struct conn *, uint8_t *,int);
 //	int (*send_data_packet) (struct conn *, const uint8_t *, int);
-	
+*/	
 
 	int (*readfrom) (struct conn *, uint8_t *, int, struct sockaddr_storage *);
 	int (*read) (struct conn *, uint8_t *, int);
 	int (*write) (struct conn *, const uint8_t *, int);
-
+/*
 //	int (*write_data) (struct conn *, const uint8_t *, int);
-
+*/
 	/* optional packet queue */
 	uint8_t **q;
 	int qsize;
@@ -222,7 +222,9 @@ struct conn {
 
 	int (*elem_end)(struct conn *conn,struct cw_action_in *a,int afrc,uint8_t*elem,int len,struct sockaddr *from);
 
+/*
 //	void (*actions_registered)(struct conn *conn);
+*/
 
 };
 
@@ -237,8 +239,11 @@ struct conn *conn_create_noq(int sock, struct sockaddr *addr);
 
 
 extern int conn_send_cwmsg(struct conn *conn, struct cwmsg *cwmsg);
+
+/*
 //extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
 //				int (*cb) (void *, uint8_t *,int len), void *cbarg);
+*/
 
 extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 extern int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
@@ -274,7 +279,10 @@ struct cwimage_data;
 extern void conn_prepare_request(struct conn *conn, int type);
 extern int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *,
 					   struct image_identifier *id);
+/*
 //extern void conn_detect_capwap(struct conn *conn, struct wtpinfo *wtpinfo);
+*/
+
 struct cwrmsg *conn_send_request(struct conn *conn);
 struct cwrmsg *conn_wait_for_message(struct conn *conn, time_t timer);
 

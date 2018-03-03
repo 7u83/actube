@@ -53,6 +53,8 @@
  * @}
  */
 
+
+
 /**
  * Defines the structure of an AVL Node.
  */
@@ -115,7 +117,7 @@ int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
  * @}
  */
 
-//extern void mavl_foreach(struct mavl *t, int (*callback)(void *,void*),void *cbpriv,int dir);
+
 
 void *mavl_replace_data(struct mavl *t, void *data, int len);
 
@@ -128,7 +130,7 @@ void mavl_destroy(struct mavl *t);
 
 #define mavl_find(t,d) mavl_get(t,d)
 #define mavl_insert(t,d) mavl_add(t,d)
-//#define mavl_walk(t,dir) mavl_foreach(t,dir)
+
 
 #define mavl_foreach_asc(t,cb,priv) mavl_foreach_lr((t)->root,cb,priv)
 #define mavl_foreach_desc(t,cb,priv) mavl_foreach_rl((t)->root,cb,priv)
@@ -170,7 +172,7 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
  * \code 
    mavl_t datatree = mavl_create();
  
-   // fill up datatree with some values
+   // fill up datatree with some values 
  
    MAVLITER_DEFINE (i,datatree);
    mavliter_foreach(&i) {
@@ -178,7 +180,7 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 	void * value = mavliter_get(&i);
    
    }
- * \endcode
+   \endcode
  */ 
 #define MAVLITER_DEFINE(i,t)\
 	mavliter_t i; mavliter_init(&i,t)

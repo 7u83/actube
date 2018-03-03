@@ -87,7 +87,10 @@ typedef mavl_t cw_actionlist_in_t;
 
 extern cw_actionlist_in_t cw_actionlist_in_create();
 extern cw_action_in_t * cw_actionlist_in_get(cw_actionlist_in_t t,cw_action_in_t *a);
+
+/*
 //extern cw_action_in_t * cw_actionlist_in_add(cw_actionlist_in_t t,cw_action_in_t *a);
+*/
 extern int cw_actionlist_in_register_actions(cw_actionlist_in_t t,cw_action_in_t * actions);
 
 
@@ -118,7 +121,9 @@ extern cw_actionlist_out_t cw_actionlist_out_create();
 extern int cw_actionlist_out_register_actions(cw_actionlist_out_t t,cw_action_out_t * actions);
 mlist_t * cw_actionlist_out_get(cw_actionlist_out_t,int msg_id);
 
+/*
 //extern cw_action_out_t * cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_out * a);
+*/
 
 /**
  * @}

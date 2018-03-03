@@ -56,7 +56,11 @@ extern int sock_getifaddr(const char *ifname, int family, int type, struct socka
 extern int sock_getifhwaddr(const char *ifname, uint8_t * hwaddr, uint8_t * addrlen);
 extern char *sock_hwaddrtostr(const uint8_t * haddr, int len, char *dst,
 			      const char *separator);
+
+/*
 //extern char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen);
+*/
+
 extern int sock_strtoaddr(const char *s, struct sockaddr *saout);
 extern int sock_set_recvtimeout(int sock, int seconds);
 
@@ -69,7 +73,10 @@ extern int sock_set_dontfrag(int sock, int val);
 
 
 extern char *sock_get_primary_if(int family);
+
+/*
 //extern char * sock_getifinfo(const struct sockaddr *sa,struct ifaddrs *result);
+*/
 extern int sock_getifinfo(const struct sockaddr *addr, char *ifname,
 			  struct sockaddr *broadcast, struct sockaddr *netmask);
 
@@ -105,7 +112,10 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
 
 #define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
 #define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
+
+/*
 //#define sock_addrtostr(s,str,n) sock_addrtostr(s,str,n,1)
+*/
 
 #define sock_addrfamily(addr) ( ((struct sockaddr_storage*)(addr))->ss_family )
 

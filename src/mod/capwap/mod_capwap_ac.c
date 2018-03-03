@@ -18,6 +18,10 @@ extern int capwap_register_actions_ac(struct cw_actiondef *def);
 static int init()
 {
 	cw_dbg(DBG_MOD, "Initialiazing mod_capwap.");
+	
+	test_sets();
+	
+	exit(0);
 	return 0;
 }
 
@@ -35,7 +39,7 @@ static int register_actions(struct cw_actiondef *def, int mode)
 {
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return 0;
-	return capwap_register_actions_ac(def);
+	return 0; //capwap_register_actions_ac(def);
 }
 
 

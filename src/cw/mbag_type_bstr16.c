@@ -49,6 +49,7 @@ static struct mbag_item * get(const uint8_t *src, int len)
 
 }
 
+
 const struct mbag_typedef mbag_type_bstr16 = {
 	.name = "Bstr16",
 	.del = free,

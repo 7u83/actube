@@ -307,6 +307,13 @@
       <File Name="src/cw/message_set.h"/>
       <File Name="src/mod/cisco/mod_cisco.h"/>
       <File Name="src/cw/cw_filename.c"/>
+      <File Name="src/cw/mdata.h"/>
+      <File Name="src/cw/mdata.c"/>
+      <File Name="src/cw/mdata_elem_new.c"/>
+      <File Name="src/cw/cw_type_byte.c"/>
+      <File Name="src/cw/cw_type_word.c"/>
+      <File Name="src/cw/cw_types.h"/>
+      <File Name="src/cw/cw_type_dword.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
