@@ -1,4 +1,5 @@
 #include "log.h"
+#include "mbag.h"
 #include "conn.h"
 
 #include "mbag.h"
@@ -51,7 +52,7 @@ int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	}
 
 	uint8_t *d = dst + 4;
-	d += cw_put_dword(d, i->dword);
+	d += cw_put_dword(d, i->u2.dword);
 
 char buf[90];
 
@@ -59,14 +60,14 @@ char buf[90];
 	if (i) {
 
 printf("We have got an i %p\n",i);
-printf("len: %d\n",bstr16_len(i->data));
-memcpy(buf,bstr16_data(i->data),bstr16_len(i->data));
-buf[bstr16_len(i->data)]=0;
+printf("len: %d\n",bstr16_len(i->u2.data));
+memcpy(buf,bstr16_data(i->u2.data),bstr16_len(i->u2.data));
+buf[bstr16_len(i->u2.data)]=0;
 printf("Val: %s\n",buf);
 
 		d += cw_put_word(d, CW_BOARDDATA_MODELNO);
-		d += cw_put_word(d, bstr16_len(i->data));
-		d += cw_put_data(d, bstr16_data(i->data), bstr16_len(i->data));
+		d += cw_put_word(d, bstr16_len(i->u2.data));
+		d += cw_put_data(d, bstr16_data(i->u2.data), bstr16_len(i->u2.data));
 	} else {
 		cw_log(LOG_ERR,
 		       "Error: Can't set sub-element \"WTP Model Number\" in WTP Board Data.");
@@ -75,8 +76,8 @@ printf("Val: %s\n",buf);
 	i = mbag_get(board_data, CW_ITEM_WTP_BOARD_SERIALNO);
 	if (i) {
 		d += cw_put_word(d, CW_BOARDDATA_SERIALNO);
-		d += cw_put_word(d, bstr16_len(i->data));
-		d += cw_put_data(d, bstr16_data(i->data), bstr16_len(i->data));
+		d += cw_put_word(d, bstr16_len(i->u2.data));
+		d += cw_put_data(d, bstr16_data(i->u2.data), bstr16_len(i->u2.data));
 	}else {
 		cw_log(LOG_ERR,
 		       "Error: Can't set sub-element \"WTP Serial Number\" in WTP Board Data.");
@@ -86,22 +87,22 @@ printf("Val: %s\n",buf);
 	i = mbag_get(board_data, CW_ITEM_WTP_BOARD_ID);
 	if (i) {
 		d += cw_put_word(d, CW_BOARDDATA_BOARDID);
-		d += cw_put_word(d, bstr16_len(i->data));
-		d += cw_put_data(d, bstr16_data(i->data), bstr16_len(i->data));
+		d += cw_put_word(d, bstr16_len(i->u2.data));
+		d += cw_put_data(d, bstr16_data(i->u2.data), bstr16_len(i->u2.data));
 	}
 
 	i = mbag_get(board_data, CW_ITEM_WTP_BOARD_REVISION);
 	if (i) {
 		d += cw_put_word(d, CW_BOARDDATA_REVISION);
-		d += cw_put_word(d, bstr16_len(i->data));
-		d += cw_put_data(d, bstr16_data(i->data), bstr16_len(i->data));
+		d += cw_put_word(d, bstr16_len(i->u2.data));
+		d += cw_put_data(d, bstr16_data(i->u2.data), bstr16_len(i->u2.data));
 	}
 
 	i = mbag_get(board_data, CW_ITEM_WTP_BOARD_MACADDRESS);
 	if (i) {
 		d += cw_put_word(d, CW_BOARDDATA_MACADDRESS);
-		d += cw_put_word(d, bstr_len(i->data));
-		d += cw_put_data(d, bstr_data(i->data), bstr_len(i->data));
+		d += cw_put_word(d, bstr_len(i->u2.data));
+		d += cw_put_data(d, bstr_data(i->u2.data), bstr_len(i->u2.data));
 	}
 
 	int l = d - dst-4;

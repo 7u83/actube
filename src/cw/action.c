@@ -21,7 +21,7 @@
  * @brief Implementation of methods for actionlists.
  */
 
-
+#include "mbag.h"
 #include <stdlib.h>
 #include <string.h>
 

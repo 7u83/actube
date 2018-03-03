@@ -44,7 +44,7 @@ int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause)
 	MAVLITER_DEFINE(it,radios);
 	mavliter_foreach(&it){
 		mbag_item_t *i = mavliter_get(&it);
-		cw_radio_set_admin_state(radios,i->iid,state,cause);
+		cw_radio_set_admin_state(radios,i->u1.iid,state,cause);
 
 	}
 	return 1;	

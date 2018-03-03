@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <string.h>
 
+#include "mbag.h"
 #include "conn.h"
 
 #include "sock.h"

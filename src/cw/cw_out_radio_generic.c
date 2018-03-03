@@ -1,6 +1,6 @@
 
 
-
+#include "mbag.h"
 #include "action.h"
 #include "cw.h"
 #include "cw/dbg.h"
@@ -26,15 +26,15 @@ cw_dbg(DBG_X,"Radio Generic out %s",a->item_id);
 
 
 
-		struct mbag_item * item = mbag_get(radio->data,a->item_id);
+		struct mbag_item * item = mbag_get(radio->u2.data,a->item_id);
 		if (!item){
-cw_dbg(DBG_X,"Not found! %s for rid %d",a->item_id,radio->iid);
+cw_dbg(DBG_X,"Not found! %s for rid %d",a->item_id,radio->u1.iid);
 			continue;
 		}
 		int len=0;
-		len += cw_put_byte(d+start,radio->iid);
+		len += cw_put_byte(d+start,radio->u1.iid);
 
-	cw_dbg(DBG_X, "Radio generic out '%s' fro rid %d",a->item_id,radio->iid);
+	cw_dbg(DBG_X, "Radio generic out '%s' fro rid %d",a->item_id,radio->u1.iid);
 		len += cw_put_mbag_item(d + start+1, item);
 
 		if (a->vendor_id)

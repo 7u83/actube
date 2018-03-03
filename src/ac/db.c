@@ -1,6 +1,7 @@
 
 #include <sqlite3.h>
 
+#include "cw/mbag.h"
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/capwap_items.h"

@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-
+#include "mbag.h"
 #include "conn.h"
 
 static int conn_q_recv_packet_(struct conn * conn, uint8_t * buffer,int len,int peek)

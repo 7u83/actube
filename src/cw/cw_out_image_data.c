@@ -25,7 +25,7 @@ int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 		return 0;
 	}
 
-	FILE *infile = item->data;
+	FILE *infile = item->u2.data;
 	if (infile==NULL){
 		cw_log(LOG_ERR,"Image Data Request infile = NULL");
 		return 0;

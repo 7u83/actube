@@ -26,9 +26,10 @@
 #include <errno.h>
 
 #include "log.h"
+#include "capwap.h"
 #include "conn.h"
 #include "sock.h"
-#include "capwap.h"
+
 
 
 /**

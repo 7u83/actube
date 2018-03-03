@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 
+#include "mbag.h"
 #include "conn.h"
 #include "connlist.h"
 

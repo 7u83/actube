@@ -29,13 +29,13 @@
  * @param data Element to get
  * @return pointer to element or NULL if not found. 
  */ 
-void * mavl_get(struct mavl *t ,void *data)
+union mavldata * mavl_get(struct mavl *t ,union mavldata *data)
 {
 	struct mavlnode *n = t->root;
 	while(n){
-		int rc=t->cmp(data,n->data);
+		int rc=t->cmp(data,&n->data);
 		if (rc==0)
-			return n->data;
+			return &n->data;
 		if (rc<0)
 			n=n->left;
 		else

@@ -16,6 +16,7 @@
 
 */
 
+#include "mbag.h"
 #include "dtls_openssl.h"
 
 const char * dtls_openssl_get_cipher(struct conn * conn)

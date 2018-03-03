@@ -1,5 +1,6 @@
 #include <openssl/err.h>
 
+#include "mbag.h"
 #include "dtls_openssl.h"
 #include "log.h"
 #include "dbg.h"

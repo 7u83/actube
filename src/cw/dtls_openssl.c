@@ -21,6 +21,7 @@
 #include <openssl/err.h>
 #include <openssl/rand.h>
 
+#include "capwap.h"
 
 #include "dtls_openssl.h"
 #include "capwap.h"

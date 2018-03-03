@@ -32,7 +32,7 @@ int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst
 		if ( i->type != MBAG_MBAG ) {
 			continue;
 		}
-		l+=cw_put_elem_radio_info(dst+l,i->iid,i->data);
+		l+=cw_put_elem_radio_info(dst+l,i->u1.iid,i->u2.data);
 
 	}
 	return l;

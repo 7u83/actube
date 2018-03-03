@@ -5,10 +5,10 @@
  * @param i AVL Iterator
  * @return element or NULL if not found.
  */
-void * mavliter_get(mavliter_t *i){
+union mavldata * mavliter_get(mavliter_t *i){
 	if(!i->cur)
 		return NULL;
-	return i->cur->data;	
+	return &i->cur->data;	
 }
 
 

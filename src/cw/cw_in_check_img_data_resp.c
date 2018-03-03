@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include "mbag.h"
 #include "capwap.h"
 #include "dbg.h"
 #include "log.h"
@@ -26,7 +27,7 @@ int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t
 	mbag_item_t * iresult = mbag_get(conn->incomming,	CW_ITEM_RESULT_CODE);
 
 	if ( iresult ) {
-		return iresult->dword;
+		return iresult->u2.dword;
 	}
 
 	return 0;

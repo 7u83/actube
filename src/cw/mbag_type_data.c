@@ -9,7 +9,7 @@
 static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-	return format_hex(dst, ((uint8_t*)i->data)+1, *((uint8_t*)i->data));
+	return format_hex(dst, ((uint8_t*)i->u2.data)+1, *((uint8_t*)i->u2.data));
 }
 
 
@@ -31,7 +31,7 @@ static struct mbag_item *  from_str(const char *src)
 
 	*(mem)=msize;
 	format_scan_hex_bytes(mem+1,src,l);
-	i->data=mem;
+	i->u2.data=mem;
 	return i;		
 	
 }
@@ -50,14 +50,14 @@ static struct mbag_item *  get(const uint8_t *src,int len)
 	}
 	*data=len;
 	memcpy(data+1,src,len);
-	item->data=data;
+	item->u2.data=data;
 	return item;
 }
 
 static int put(struct mbag_item *i,uint8_t *dst)
 {
-	int l = *((uint8_t*)i->data);
-	memcpy(dst,i->data+1,l);
+	int l = *((uint8_t*)i->u2.data);
+	memcpy(dst,i->u2.data+1,l);
 	return l;
 }
 

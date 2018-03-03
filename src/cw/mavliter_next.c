@@ -28,7 +28,8 @@
  * @param i pointer to AVL Iterator
  * @return the element or NULL if there is no next elemeent.
  */ 
-void * mavliter_next(mavliter_t *i)
+
+union mavldata * mavliter_next(mavliter_t *i)
 {
 
 	while ( i->stack_ptr) {
@@ -39,7 +40,7 @@ void * mavliter_next(mavliter_t *i)
 			continue;
 
 		if ((i->stack_ptr)&1) {
-			return i->cur->data;
+			return &i->cur->data;
 		}
 		break;		
 
@@ -63,7 +64,7 @@ void * mavliter_next(mavliter_t *i)
 
 	i->stack[i->stack_ptr++]=i->cur->right;
 
-	return i->cur->data;
+	return &i->cur->data;
 }
 
 

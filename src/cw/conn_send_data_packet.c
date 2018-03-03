@@ -19,6 +19,8 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include "sock.h"
+#include "capwap.h"
+
 #include "conn.h"
 
 #include <netinet/in.h>

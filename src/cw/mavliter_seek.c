@@ -24,24 +24,26 @@
 
 #include "mavl.h"
 
+
 /**
  * Set an AVL Iterator to a specific position.
  * @param i AVL Iterator
  * @param d element to search for
  * @return element found or NULL if not found
  */
-void * mavliter_seek(mavliter_t *i,void *d)
+union mavldata  * mavliter_seek(mavliter_t *i,void *d)
 {
+	int rc;
 	if (!i->root)
 		return NULL;
 
 	i->cur=i->root;
 	i->stack_ptr=0;
 		
-	int rc;
+
 	while(i->cur) {
 
-		rc = i->cmp(d,i->cur->data);
+		rc = i->cmp(d,&i->cur->data);
 		if (rc==0){
 			i->stack[i->stack_ptr++]=i->cur->right;
 			i->stack[i->stack_ptr++]=i->cur;

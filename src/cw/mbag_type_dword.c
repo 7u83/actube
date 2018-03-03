@@ -25,14 +25,14 @@ static struct mbag_item *  from_str(const char *src)
 	mbag_item_t * i = mbag_item_new(MTYPE_DWORD);
 	if (!i)
 		return NULL;
-	i->dword=atoi(src);
+	i->u2.dword=atoi(src);
 	return i;
 }
 
 static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "%d", i->dword);
+        return sprintf(dst, "%d", i->u2.dword);
 }
 
 static struct mbag_item * get(const uint8_t *src,int len)
@@ -40,14 +40,14 @@ static struct mbag_item * get(const uint8_t *src,int len)
 	mbag_item_t * item = mbag_item_new(MTYPE_DWORD);
 	if (!item)
 		return NULL;
-	item->dword=cw_get_dword(src);
+	item->u2.dword=cw_get_dword(src);
 	return item;
 }
 
 
 static int put(struct mbag_item * i, uint8_t *dst)
 {
-	return cw_put_dword(dst,i->dword);
+	return cw_put_dword(dst,i->u2.dword);
 }
 
 

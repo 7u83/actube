@@ -24,6 +24,7 @@
 #include <gnutls/dtls.h>
 
 
+#include "mbag.h"
 #include "conn.h"
 #include "dbg.h"
 #include "log.h"

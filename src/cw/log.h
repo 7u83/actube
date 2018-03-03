@@ -55,12 +55,15 @@
 */
 
 
-#ifdef WITH_CW_LOG
-#define cw_log(level,...) cw_log_colored(level,__VA_ARGS__)
-#else
+/*#ifdef WITH_CW_LOG*/
+/*#define cw_log(level,...) cw_log_colored(level,__VA_ARGS__)*/
+
+#define cw_log cw_log_colored
+
+/*#else
 #define cw_log(...)
 #endif
-
+*/
 /*
 //#ifdef WITH_CW_LOG_DEBUG
 

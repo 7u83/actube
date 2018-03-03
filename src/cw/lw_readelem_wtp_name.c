@@ -21,7 +21,7 @@
  * @brief Implent lw_readelem_wtp_name
  */
 
-
+#include "mbag.h"
 #include "lwapp.h"
 
 #include "cw_util.h"

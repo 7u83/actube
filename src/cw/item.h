@@ -20,7 +20,7 @@
 #ifndef __CW_ITEM_H
 #define __CW_ITEM_H
 
-#include "mbag.h"
+/*#include "mbag.h"*/
 
 extern const char CW_ITEM_NONE[];
 extern const char CW_ITEM_ANY[];

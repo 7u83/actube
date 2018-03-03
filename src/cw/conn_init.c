@@ -24,6 +24,7 @@
 
 #include <string.h>
 
+#include "mbag.h"
 #include "conn.h"
 #include "capwap.h"
 

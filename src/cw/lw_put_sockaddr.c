@@ -20,6 +20,8 @@
 #include <string.h>
 #include <netinet/in.h>
 
+
+#include "mbag.h"
 #include "lw.h"
 
 int lw_put_sockaddr(uint8_t * dst, struct sockaddr_storage *addr)

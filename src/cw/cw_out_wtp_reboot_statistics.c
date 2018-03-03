@@ -18,6 +18,7 @@
 
 #include "log.h"
 
+#include "mbag.h"
 #include "capwap_items.h"
 #include "action.h"
 
@@ -46,7 +47,7 @@ int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 		return 0;
 	}
 
-	mbag_t rs = (mbag_t) i->data;
+	mbag_t rs = (mbag_t) i->u2.data;
 
 	uint8_t *d = dst + 4;
 	d += cw_put_word(d, mbag_get_word(rs, CW_ITEM_REBOOT_COUNT, 0));

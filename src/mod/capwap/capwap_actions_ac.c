@@ -25,7 +25,7 @@
 
 #include "mod_capwap.h"
 
-static struct cw_ElemHandler elements[] = {
+static struct cw_ElemHandler handlers[] = {
 
 	{ 
 		"Discovery Type",		/* name */
@@ -52,7 +52,11 @@ static struct cw_ElemHandler elements[] = {
 
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
-	{CAPWAP_ELEM_DISCOVERY_TYPE, 1, 0}
+	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
+	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,	1, 0},
+	{0,0,0,00}
+	
 };
 
 static struct cw_MsgDef messages[] = {
@@ -108,11 +112,10 @@ static struct cw_MsgDef messages[] = {
 };
 
 
-
 struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return NULL;
-	cw_msgset_add(set,messages, elements);
+	cw_msgset_add(set,messages, handlers);
 	return set;
 }
 
@@ -124,7 +127,7 @@ void test_sets(){
 		return;
 	}
 	
-	cw_msgset_add(set,messages, elements);
+	cw_msgset_add(set,messages, handlers);
 }
 /*
 	cw_msgset_add(set,messages);

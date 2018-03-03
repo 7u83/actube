@@ -1,6 +1,7 @@
 #include "mavl.h"
 
-static struct mavlnode *mavlnode_create(void *data)
+
+static struct mavlnode *mavlnode_create(union mavldata *data)
 {
 	struct mavlnode *n = malloc(sizeof(struct mavlnode));
 	if (!n)
@@ -8,20 +9,19 @@ static struct mavlnode *mavlnode_create(void *data)
 
 	n->left = n->right = 0;
 	n->bal = 0;
-	n->data = data;
+	n->data = *data;
 	return n;
 }
 
 
 
 
-static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
+static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * data)
 {
-//      struct mavlnode * rn;
 	struct mavlnode *tmp;
 
 	struct mavlnode *n = *parent;
-	int rc = t->cmp(*data, n->data);
+	int rc = t->cmp(data, &n->data);
 
 	int bal;
 	if (rc == 0) {
@@ -71,8 +71,6 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
 					return 0;
 
 				}
-				//printf("!!!!left bal = %i\n",n->left->bal);
-				//exit(0);
 
 			}
 			return bal;
@@ -80,7 +78,7 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
 		}
 
 		/* n->left is 0 */
-		n->left = mavlnode_create(*data);
+		n->left = mavlnode_create(data);
 		if (!n->left)
 			return 3;
 
@@ -139,9 +137,6 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
 					n->right = tmp;
 					return 0;
 				}
-				//printf("!!!!iright bal = %i\n",n->left->bal);
-				//exit(0);
-
 
 			}
 			return bal;
@@ -150,7 +145,7 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
 
 		/* n->right is 0 */
 
-		n->right = mavlnode_create(*data);
+		n->right = mavlnode_create(data);
 		if (!n->right)
 			return 3;
 
@@ -171,16 +166,21 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, void **data)
  * @data pointer to element
  * @return added alement or NULL if error.
  */
-void *mavl_add(struct mavl *t, void *data)
+union mavldata *mavl_add(struct mavl *t, union mavldata *data)
 {
+	union mavldata * d;
+	int rc;
+	
 	if (t->root == 0) {
 		t->root = mavlnode_create(data);
 		if (t->root)
 			t->count++;
-		return t->root->data;
+		return &t->root->data;
 	}
-	void *d = data;
-	int rc = mavl_add0(t, &t->root, &d);
+
+	d = data;
+
+	rc = mavl_add0(t, &t->root, d);
 
 	if (rc > 3)
 		return NULL;

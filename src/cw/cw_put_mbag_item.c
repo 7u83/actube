@@ -33,40 +33,40 @@ int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 
 
 	if (MBAG_STR == item->type ){
-		return cw_put_data(dst, item->data, strlen((char *) item->data));
+		return cw_put_data(dst, item->u2.data, strlen((char *) item->u2.data));
 	}
 
 	if (MBAG_DATA == item->type){
-		return cw_put_data(dst, item->data+1, *((uint8_t*)item->data));
+		return cw_put_data(dst, item->u2.data+1, *((uint8_t*)item->u2.data));
 	}
 
 	if (MBAG_BYTE == item->type){
-		return cw_put_byte(dst, item->byte);
+		return cw_put_byte(dst, item->u2.byte);
 	}
 	if (MBAG_WORD == item->type){
-		return cw_put_word(dst, item->word);
+		return cw_put_word(dst, item->u2.word);
 	}
 	if (MTYPE_DWORD == item->type){
-		return cw_put_dword(dst, item->dword);
+		return cw_put_dword(dst, item->u2.dword);
 	}
 	if (MBAG_BSTR  == item->type) {
-		return cw_put_bstr(dst, item->data);
+		return cw_put_bstr(dst, item->u2.data);
 	}
 
 	if ( MBAG_BSTR16 == item->type)
-		return cw_put_bstr16(dst,item->data);
+		return cw_put_bstr16(dst,item->u2.data);
 
 	if (MBAG_VENDORSTR == item->type)
 	{
 		int l=0;
-		l+=cw_put_dword(dst, bstrv_get_vendor_id(item->data));
-		l+=cw_put_data(dst+4, bstrv_data(item->data),bstrv_len(item->data));
+		l+=cw_put_dword(dst, bstrv_get_vendor_id(item->u2.data));
+		l+=cw_put_data(dst+4, bstrv_data(item->u2.data),bstrv_len(item->u2.data));
 		return l;
 	}
 
 	
 	if (MBAG_MBAG == item->type){
-		*((void**)dst)=item->data;
+		*((void**)dst)=item->u2.data;
 		return sizeof(void *);
 	}
 

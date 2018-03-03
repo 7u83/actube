@@ -1,4 +1,6 @@
 
+#include "capwap.h"
+
 #include "conn.h"
 
 #include "mavl.h"
@@ -13,9 +15,9 @@ void conn_clear_upd(struct conn *conn, int merge)
 
 		mavliter_foreach(&it){
 			struct mbag_item * ruitem = mavliter_get(&it);
-			mavl_t radio_upd = ruitem->data;
+			mavl_t radio_upd = ruitem->u2.data;
 
-			mbag_t radio = mbag_i_get_mbag(conn->radios,ruitem->iid,NULL);
+			mbag_t radio = mbag_i_get_mbag(conn->radios,ruitem->u1.iid,NULL);
 			if (radio){
 				mavl_merge(radio,radio_upd);
 			}

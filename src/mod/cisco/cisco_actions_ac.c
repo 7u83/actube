@@ -41,7 +41,7 @@
 #include "include/cipwap_items.h"
 
 
-
+/*
 static cw_elem_handler_t _DISCOVERY_TYPE = {
 	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
 	.name = "WTP Frame Tunnel Mode",
@@ -50,6 +50,7 @@ static cw_elem_handler_t _DISCOVERY_TYPE = {
 	.min_len = 1, 
 	.max_len = 1
 };
+*/
 
 
 static cw_msgdef_t messages[] = {
@@ -78,7 +79,6 @@ static cw_msgdef_t messages[] = {
 	
 	
 };
-
 
 
 

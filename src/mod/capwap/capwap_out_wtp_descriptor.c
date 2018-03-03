@@ -1,3 +1,4 @@
+#include "cw/mbag.h"
 #include "cw/log.h"
 #include "cw/conn.h"
 #include "cw/capwap_items.h"
@@ -41,12 +42,12 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 	mbag_item_t * i;
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->data);
-		if (bstrv_get_vendor_id(i->data)){
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->u2.data);
+		if (bstrv_get_vendor_id(i->u2.data)){
 			d += cw_put_dword(d, 0);
 			d += cw_put_word(d, CW_SUBELEM_WTP_HARDWARE_VERSION);
-			d += cw_put_word(d, bstrv_len(i->data));
-			d += cw_put_data(d, bstrv_data(i->data), bstrv_len(i->data));
+			d += cw_put_word(d, bstrv_len(i->u2.data));
+			d += cw_put_data(d, bstrv_data(i->u2.data), bstrv_len(i->u2.data));
 
 		}
 	}
@@ -58,7 +59,7 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 	i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);
 
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Software Version in WTP descriptor, not set.");
@@ -66,7 +67,7 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 
 	i = mbag_get(mbag,CW_ITEM_WTP_BOOTLOADER_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_BOOTLOADER_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_BOOTLOADER_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Bootloader Version in WTP descriptor, not set.");

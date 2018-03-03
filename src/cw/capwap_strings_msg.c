@@ -19,7 +19,7 @@
  * @file
  * @brief Definition of CAPWAP Message Strings
  */ 
-
+#include "mbag.h"
 #include "capwap.h"
 
 /**

@@ -40,7 +40,7 @@ int mbag_set_from_buf(mbag_t dst, mbagtype_t type, const char *item_id, uint8_t 
 		struct mbag_item * item = type->get(data,len);
 		if (!item)
 			return 0;
-		item->id=item_id;
+		item->u1.id=item_id;
 		mbag_set(dst,item);
 		return 1;
 

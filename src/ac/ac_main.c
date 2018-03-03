@@ -98,7 +98,32 @@ extern void test_sets();
 
 int main(int argc, char *argv[])
 {
-
+/*	char data[100];
+	mavl_t im;
+	mavldata_t val,itt;	
+	mavliter_t myit;
+	
+	im = mavl_create(mavl_cmp_dword,NULL);
+	
+	for (itt.dword=100; itt.dword>0; itt.dword--){
+		printf("Copunting: %d\n",itt.dword);
+		mavl_add(im,&itt);
+	}
+	
+	mavliter_init(&myit,im);
+	mavliter_foreach(&myit){
+		union mavldata * result;
+		result = mavliter_get(&myit);
+		printf("Got Value %d\n",result->dword);
+	}
+		
+	mavl_destroy(im);
+*/	
+	
+	
+	
+	
+	
 	int rc = 0;
 
 	/* parse arguments */

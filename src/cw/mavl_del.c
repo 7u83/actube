@@ -3,12 +3,11 @@
 void mavlnode_destroy(struct mavl *t, struct mavlnode *n)
 {
 	if (t->del) {
-		t->del(n->data);
+		t->del(&n->data);
 	}
 	free(n);
 	t->count--;
 }
-
 
 
 
@@ -70,16 +69,12 @@ static int adj_bal_l(struct mavlnode *n, struct mavlnode **parent)
 		rot_l(n, parent);
 		return 0;
 	} else if (n->right->bal == -1) {
-//              int rb;
 		n->bal = 0;
 		n->right->bal = 0;
-//              rb = n->right->left->bal;
 		n->right->left->bal = 0;
 		rot_rl(n, parent);
 		return 1;
 	}
-//      printf("adj bal l not handled \n");
-//      exit(0);
 
 	return -11;		/* that should never happen */
 }
@@ -98,16 +93,12 @@ static int adj_bal_r(struct mavlnode *n, struct mavlnode **parent)
 		rot_r(n, parent);
 		return 0;
 	} else if (n->left->bal == 1) {
-//              int rb;
 		n->bal = 0;
 		n->left->bal = 0;
-//              rb = n->left->right->bal;
 		n->left->right->bal = 0;
 		rot_lr(n, parent);
 		return 1;
 	}
-//      printf("adj bal li left  not handled \n");
-//      exit(0);
 	return -11;		/* that should never happen */
 }
 
@@ -116,7 +107,7 @@ static int adj_bal_r(struct mavlnode *n, struct mavlnode **parent)
 
 
 
-static int mavl_del_lo(struct mavlnode **parent, void **data)
+static int mavl_del_lo(struct mavlnode **parent, union mavldata *data)
 {
 	struct mavlnode *n = *parent;
 
@@ -152,12 +143,12 @@ static int mavl_del_lo(struct mavlnode **parent, void **data)
 
 
 
-int mavl_del0(struct mavl *t, struct mavlnode **parent, void **data)
+int mavl_del0(struct mavl *t, struct mavlnode **parent, union mavldata *data)
 {
 	struct mavlnode *n = *parent;
 	int rc;
 	int bal;
-	rc = t->cmp(*data, n->data);
+	rc = t->cmp(data, &n->data);
 
 	if (rc == 0) {
 		if (n->right == 0 && n->left == 0) {
@@ -183,7 +174,7 @@ int mavl_del0(struct mavl *t, struct mavlnode **parent, void **data)
 		/* node has two childs */
 
 		if (t->del) {
-			t->del(n->data);
+			t->del(&n->data);
 		}
 		t->count--;
 		bal = mavl_del_lo(&n->right, &n->data);
@@ -237,13 +228,16 @@ int mavl_del0(struct mavl *t, struct mavlnode **parent, void **data)
 
 }
 
-void *mavl_del(struct mavl *t, void *data)
+union mavldata *mavl_del(struct mavl *t, union mavldata *data)
 {
+	union mavldata *d;
+	int rc;
+	
 	if (!t->root)
 		return NULL;
 
-	void *d = data;
-	int rc = mavl_del0(t, &t->root, &d);
+	d = data;
+	rc = mavl_del0(t, &t->root, d);
 	if (rc == 2)
 		return NULL;
 	return data;

@@ -28,7 +28,7 @@ int cw_detect_capwap(struct conn *conn)
 
 	mbag_item_t * item = mbag_get(is,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if (item) {
-		bstrv_t s = item->data;
+		bstrv_t s = item->u2.data;
 		uint32_t v = bstrv_get_vendor_id(s);
 		
 		switch(v) {

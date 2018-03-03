@@ -27,6 +27,7 @@
  */
 #include <stdarg.h>
 
+#include "mbag.h"
 #include "capwap.h"
 #include "dbg.h"
 #include "sock.h"
@@ -166,7 +167,6 @@ static const char *get_dbg_color_off(int level)
 static const char *get_dbg_prefix(int level)
 {
 	return cw_strlist_get_str(prefix, level);
-
 }
 
 static const char *get_dbg_color_ontext(int level)
@@ -627,9 +627,9 @@ int cw_format_item(char *dst, mbag_item_t * item)
 {
 	*dst = 0;
 	if (item->type == MBAG_BSTR16) {
-		strncpy(dst, (char *) bstr16_data(item->data), bstr16_len(item->data));
-		*(dst + bstr16_len(item->data)) = 0;
-		return bstr16_len(item->data);
+		strncpy(dst, (char *) bstr16_data(item->u2.data), bstr16_len(item->u2.data));
+		*(dst + bstr16_len(item->u2.data)) = 0;
+		return bstr16_len(item->u2.data);
 
 
 	}
@@ -691,6 +691,23 @@ void cw_dbg_version_subelem(int level, const char *context, int subtype, bstrv_t
 	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

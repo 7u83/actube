@@ -53,14 +53,22 @@
  * @}
  */
 
-
+union mavldata {
+	void *ptr;
+	uint32_t dword;
+	uint16_t word;
+	uint8_t byte;
+	const char *str;
+};
+typedef union mavldata mavldata_t;
 
 /**
  * Defines the structure of an AVL Node.
  */
 struct mavlnode {
 	/** Pointer to data, thant belongs to the node */
-	void *data;
+	/* void *data; */
+	union mavldata data;
 	/** Pointer to left son*/
 	struct mavlnode *left;
 	/** Pointer to right son*/
@@ -76,9 +84,9 @@ struct mavl {
 	/** Pointer to root node */
 	struct mavlnode *root;
 	/** Compare function */
-	int (*cmp) (const void *, const void *);
+	int (*cmp) (const union mavldata *, const union mavldata *);
 	/** Delete element function */
-	void (*del) (void *);
+	void (*del) (union mavldata *);
 	/** Number of elements currently stored in the tree */
 	int count;
 };
@@ -93,16 +101,17 @@ typedef struct mavl * mavl_t;
  * @defgroup MAVL_FUNCTIONS Functions
  * @{
  */
-struct mavl *mavl_create(int (*cmp) (const void *, const void *),
-			       void (*del) (void *));
+struct mavl *mavl_create(int (*cmp) (const union mavldata *, const union mavldata *),
+			       void (*del) (union mavldata *));
 
 void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
 void mavl_del_all(struct mavl *t);
-void *mavl_del(struct mavl *t, void *data);
-void *mavl_add(struct mavl *t, void *data);
-void * mavl_get(struct mavl *t ,void *data);
-struct mavlnode *mavl_get_node(struct mavl *t, void *data);
+union mavldata *mavl_del(struct mavl *t, union mavldata *data);
+union mavldata *mavl_add(struct mavl *t, union mavldata *data);
+union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
+struct mavlnode *mavl_get_node(struct mavl *t, union mavldata *data);
+void * mavl_get_ptr(mavl_t tree, void * search);
 void mavl_merge(mavl_t m, mavl_t t);
 
 
@@ -121,7 +130,7 @@ int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
 
 void *mavl_replace_data(struct mavl *t, void *data, int len);
 
-void *mavl_replace(struct mavl *t,void *data);
+union mavldata *mavl_replace(struct mavl *t,union mavldata *data);
 
 
 void mavl_destroy(struct mavl *t);
@@ -129,6 +138,7 @@ void mavl_destroy(struct mavl *t);
 
 
 #define mavl_find(t,d) mavl_get(t,d)
+#define mavl_find_ptr(tree,search_ptr) mavl_get_ptr(tree,search_ptr)
 #define mavl_insert(t,d) mavl_add(t,d)
 
 
@@ -144,22 +154,22 @@ struct mavliter{
 	struct mavlnode *cur;
 	int stack_ptr;
 	struct mavlnode * root;
-	int (*cmp) (const void *, const void *);
+	int (*cmp) (const union mavldata *, const union mavldata *);
 
 };
 typedef struct mavliter mavliter_t;
 
 
-void * mavliter_next(mavliter_t *i);
+union mavldata * mavliter_next(mavliter_t *i);
 
-void * mavliter_seek_set(struct mavliter *i);
+union mavldata * mavliter_seek_set(struct mavliter *i);
 
 void mavliter_init(mavliter_t *i, mavl_t t);
 
 	
-void * mavliter_get(mavliter_t *i);
+union mavldata * mavliter_get(mavliter_t *i);
 
-extern void * mavliter_seek(mavliter_t *i,void *d);
+extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
 
 /** 
  * Define a AVL Iterator varialble and accociate it with 
@@ -182,16 +192,16 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
    }
    \endcode
  */ 
-#define MAVLITER_DEFINE(i,t)\
-	mavliter_t i; mavliter_init(&i,t)
+#define MAVLITER_DEFINE(iterator,mavl_obj)\
+	mavliter_t iterator; mavliter_init(&iterator,mavl_obj)
 
 
 /**
  * Iterate through all elements of an MAVL Object using a MAVL Iterator.
  * @param i pointer to MAVL Interator object
  */ 
-#define mavliter_foreach(i)\
-	for (mavliter_seek_set(i); NULL != mavliter_get(i); mavliter_next(i))
+#define mavliter_foreach(iterator)\
+	for (mavliter_seek_set(iterator); NULL != mavliter_get(iterator); mavliter_next(iterator))
 
 #define mavliter_foreach_from(i,from)\
 	for (mavliter_seek(i,from); NULL != mavliter_get(i); mavliter_next(i))
@@ -210,7 +220,8 @@ extern void * mavliter_seek(mavliter_t *i,void *d);
 typedef mavl_t mavl_conststr_t;
 extern mavl_conststr_t mavl_create_conststr();
 
-
+int mavl_cmp_dword(const union mavldata *e1, const union mavldata *e2);
+void mavl_free_bin(union mavldata *data);
 
 
 /*

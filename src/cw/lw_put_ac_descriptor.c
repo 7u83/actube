@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "mbag.h"
 #include "lwapp.h"
 #include "lw.h"
 

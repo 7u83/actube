@@ -1,22 +1,27 @@
 #ifndef __MESSAGE_SET_H
 #define __MESSAGE_SET_H
 
+#include "mlist.h"
 
 struct cw_MsgSet {
 	mavl_t messages;
-	mavl_t all_elems_by_id;
-	mavl_t all_elems_by_key;
+	mavl_t handlers_by_id;
+	mavl_t handlers_by_key;
 	
 };
 
 struct cw_ElemDef{
+	int proto;
+	int vendor;
 	int id;
 	int mand;
 	int op;
 };
 
 struct cw_ElemData{
-	struct cw_ElemHandler *handler;
+	int proto;
+	int vendor;
+	int id;
 	int mand;
 };
 
@@ -61,7 +66,7 @@ extern struct cw_MsgSet * cw_msgset_create();
 
 extern void cw_msgset_destroy(struct cw_MsgSet * set);
 extern int cw_msgset_add(struct cw_MsgSet * set,
-			struct cw_MsgDef messages[], struct cw_ElemHandler elements[]);
+			struct cw_MsgDef messages[], struct cw_ElemHandler handlers[]);
 mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type);
 
 

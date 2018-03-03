@@ -25,14 +25,14 @@ static struct mbag_item *  from_str(const char *src)
 	mbag_item_t * i = mbag_item_new(MBAG_BYTE);
 	if (!i)
 		return NULL;
-	i->byte=atoi(src);
+	i->u2.byte=atoi(src);
 	return i;
 }
 
 static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "%d", i->byte);
+        return sprintf(dst, "%d", i->u2.byte);
 }
 
 static struct mbag_item * get(const uint8_t *src,int len)
@@ -40,14 +40,14 @@ static struct mbag_item * get(const uint8_t *src,int len)
 	mbag_item_t * item = mbag_item_new(MBAG_BYTE);
 	if (!item)
 		return NULL;
-	item->byte=*src;
+	item->u2.byte=*src;
 	return item;
 }
 
 
 static int put(struct mbag_item * i, uint8_t *dst)
 {
-	return cw_put_byte(dst,i->byte);
+	return cw_put_byte(dst,i->u2.byte);
 }
 
 /** Defines a word, two bytes. */

@@ -39,6 +39,8 @@ enum {
 	MOD_MODE_BINDINGS
 };
 
+
+
 struct cw_Mod {
 	/** Name of the module */
 	const char *name;
@@ -46,7 +48,7 @@ struct cw_Mod {
 	int (*init) ();
 
 	/** init_config */
-	int (*init_config) (mbag_t config);
+	int (*init_config) (void * /*mbag_t config*/);
 
 	/** Detect capwap 
 	 * This function is called after receiving and disassembling a complete 

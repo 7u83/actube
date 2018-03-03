@@ -87,7 +87,7 @@ struct mbag_item{
 	 * create mbags. 
 	 */
 		const char *id;
-	};
+	}u1;
 	/** 
 	 * Indicates if the key is dynamic oder static.
 	 * If dynamic, the id will be freed using free,
@@ -102,7 +102,7 @@ struct mbag_item{
 		uint8_t byte;
 		uint16_t word;
 		uint32_t dword;
-	};
+	}u2;
 };
 
 

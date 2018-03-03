@@ -16,6 +16,7 @@
 
 */
 
+#include "mbag.h"
 #include "capwap.h"
 
 struct capwap_msg * capwap_msg_new()

@@ -1,3 +1,4 @@
+#include "cw/mbag.h"
 #include "cw/log.h"
 #include "cw/conn.h"
 
@@ -22,13 +23,13 @@ int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t 
 		return 0; 
 	}
 
-	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->data),conn);
+	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->u2.data),conn);
 
 
 
 	i = mbag_get(conn->local,CW_ITEM_AC_HARDWARE_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_AC_HARDWARE_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_AC_HARDWARE_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send hard version in AC descriptor, not set.");
@@ -38,7 +39,7 @@ int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t 
 	i = mbag_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
 
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send software version in AC descriptor, not set.");

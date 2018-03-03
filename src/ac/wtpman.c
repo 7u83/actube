@@ -428,9 +428,9 @@ void radios_to_sql(struct conn *conn)
 	MAVLITER_DEFINE(it, conn->radios);
 	mavliter_foreach(&it) {
 		struct mbag_item * i = mavliter_get(&it);
-		int rid = i->iid;
+		int rid = i->u1.iid;
 
-		radio_to_sql(conn,wtp_id,rid,i->data);
+		radio_to_sql(conn,wtp_id,rid,i->u2.data);
 
 
 	}

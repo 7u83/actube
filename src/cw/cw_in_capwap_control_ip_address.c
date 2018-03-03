@@ -29,6 +29,7 @@
 
 #include <errno.h>
 
+#include "mbag.h"
 #include "action.h"
 #include "log.h"
 #include "mbag.h"

@@ -3,6 +3,7 @@
 
 #include "lwapp.h"
 #include "lwapp_cisco.h"
+#include "mbag.h"
 #include "lw.h"
 #include "vendors.h"
 

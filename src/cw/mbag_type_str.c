@@ -3,7 +3,7 @@
 static int to_str(void *item,char *dst)
 {
 	mbag_item_t *i= item;
-        return sprintf(dst, "%s", (char*)i->data);
+        return sprintf(dst, "%s", (char*)i->u2.data);
 }
 
 static struct mbag_item *  from_str(const char *src)
@@ -14,7 +14,7 @@ static struct mbag_item *  from_str(const char *src)
 
 	i->type = MBAG_STR;
 	i->dynid=0;
-	i->data = strndup(src,2000);
+	i->u2.data = strndup(src,2000);
 	return i;
 }
 

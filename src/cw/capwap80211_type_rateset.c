@@ -11,7 +11,7 @@ static int to_str(void *item,char *dst)
 {
 	mbag_item_t *it= item;
 
-	uint8_t *data = (uint8_t*)it->data;
+	uint8_t *data = (uint8_t*)it->u2.data;
 	int n=*data;
 	data++;
 
@@ -83,7 +83,7 @@ static struct mbag_item *  from_str(const char *src)
 	*data=nrates;
 	memcpy(data+1,rates,nrates);
 
-	item->data=data;
+	item->u2.data=data;
 
 
 	return item;
@@ -103,14 +103,14 @@ static struct mbag_item *  get(const uint8_t *src,int len)
 	}
 	*data=len;
 	memcpy(data+1,src,len);
-	item->data=data;
+	item->u2.data=data;
 	return item;
 }
 
 static  int put(struct mbag_item *i,uint8_t *dst)
 {
-	int l=*((uint8_t*)(i->data));
-	memcpy(dst,i->data+1,l);
+	int l=*((uint8_t*)(i->u2.data));
+	memcpy(dst,i->u2.data+1,l);
 	return l;
 }
 

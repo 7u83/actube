@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include "mbag.h"
 #include "capwap.h"
 #include "dbg.h"
 #include "log.h"
@@ -22,16 +23,16 @@ int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8
 	
 	struct mbag_item *i = mbag_get(conn->incomming,CW_ITEM_IMAGE_IDENTIFIER);
 	if (i) {
-		uint32_t vendor_id = bstrv_get_vendor_id(i->data);
+		uint32_t vendor_id = bstrv_get_vendor_id(i->u2.data);
 
 		const char * image_dir;
 		image_dir = mbag_get_str(conn->local,CW_ITEM_AC_IMAGE_DIR,"./img");
 
-		char * image_filename = malloc(6+bstrv_len(i->data)+1+strlen(image_dir));
+		char * image_filename = malloc(6+bstrv_len(i->u2.data)+1+strlen(image_dir));
 		if (!image_filename) 
 			return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 
-		sprintf(image_filename,"%s%04X/%s",image_dir,vendor_id,bstrv_data(i->data));
+		sprintf(image_filename,"%s%04X/%s",image_dir,vendor_id,bstrv_data(i->u2.data));
 
 
 		FILE *infile = fopen(image_filename,"rb");

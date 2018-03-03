@@ -15,7 +15,7 @@ int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *
 		if ( i->type != MBAG_MBAG ) {
 			continue;
 		}
-		l+=cw_put_elem_radio_administrative_state(dst+l,i->iid,i->data);
+		l+=cw_put_elem_radio_administrative_state(dst+l,i->u1.iid,i->u2.data);
 
 	}
 	return l;

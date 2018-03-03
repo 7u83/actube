@@ -27,7 +27,7 @@ int cw_out_80211_supported_rates(struct conn *conn, struct cw_action_out *a, uin
 		if ( i->type != MBAG_MBAG ) {
 			continue;
 		}
-		l+=cw_put_elem_80211_supported_rates(dst+l,i->iid,i->data);
+		l+=cw_put_elem_80211_supported_rates(dst+l,i->u1.iid,i->u2.data);
 	}
 	return l;
 }

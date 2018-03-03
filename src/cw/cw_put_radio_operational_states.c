@@ -46,7 +46,7 @@ int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 	mavliter_foreach(&it){
 
 		mbag_item_t * radioitem = mavliter_get(&it);
-		mbag_item_t *ositem = mbag_get(radioitem->data,CW_RADIOITEM_OPER_STATE);
+		mbag_item_t *ositem = mbag_get(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
 		if (!ositem){
 			(*nerror)++;
 			continue;
@@ -54,10 +54,10 @@ int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 
 
 		/* Put the radio ID */
-		cw_put_byte(d+4,radioitem->iid);
+		cw_put_byte(d+4,radioitem->u1.iid);
 		
 		/* Get the operational state and cause */
-		uint16_t os = ositem->word;
+		uint16_t os = ositem->u2.word;
 
 		if ( d7mode ){
 			/* Isolate Oper Sate from cause */
@@ -77,7 +77,7 @@ int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 		/* delete the operational state item, so it won't be 
 		   sent again, until it is set by a change through
 		   Set Radio Admin State */
-		mbag_del(radioitem->data,CW_RADIOITEM_OPER_STATE);
+		mbag_del(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
 
 	}
 

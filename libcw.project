@@ -314,6 +314,11 @@
       <File Name="src/cw/cw_type_word.c"/>
       <File Name="src/cw/cw_types.h"/>
       <File Name="src/cw/cw_type_dword.c"/>
+      <File Name="src/cw/mavl_cmp_dword.c"/>
+      <File Name="src/cw/mavl_free_bin.c"/>
+      <File Name="src/cw/debug.h"/>
+      <File Name="src/cw/debug.c"/>
+      <File Name="src/cw/mavl_get_ptr.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

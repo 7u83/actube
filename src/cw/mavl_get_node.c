@@ -22,11 +22,11 @@
 #include "mavl.h"
 
 
-struct mavlnode * mavl_get_node(struct mavl *t ,void *data)
+struct mavlnode * mavl_get_node(struct mavl *t ,union mavldata *data)
 {
 	struct mavlnode *n = t->root;
 	while(n){
-		int rc=t->cmp(data,n->data);
+		int rc=t->cmp(data,&n->data);
 		if (rc==0)
 			return n;
 		if (rc<0)
