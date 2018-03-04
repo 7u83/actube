@@ -319,6 +319,11 @@
       <File Name="src/cw/debug.h"/>
       <File Name="src/cw/debug.c"/>
       <File Name="src/cw/mavl_get_ptr.c"/>
+      <File Name="src/cw/mavl_add_strdup.c"/>
+      <File Name="src/cw/mavl_cmp_str.c"/>
+      <File Name="src/cw/mavliter_init.c"/>
+      <File Name="src/cw/mavl_add_ptr.c"/>
+      <File Name="src/cw/cw_format_dump.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

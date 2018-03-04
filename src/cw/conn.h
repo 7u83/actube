@@ -32,6 +32,8 @@
 #include "fragman.h"
 #include "cwmsg.h"
 
+#include "mbag.h"
+
 /*#include "action.h"*/
 
 /*#include "mbag.h"*/

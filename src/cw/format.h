@@ -25,10 +25,10 @@
 #ifndef __FORMAT_H
 #define __FORMAT_H
 
-#include "cw.h"
+#include <stdint.h>
+#include <stddef.h>
 
-
-extern int format_hex_bytes(char *dst, const char *format, const char *delim,
+int format_hex_bytes(char *dst, const char *format, const char *delim,
 			    const uint8_t * src, int len);
 
 char *format_s_hex_bytes(char *dst, const char *format, const char *delim,
@@ -83,6 +83,22 @@ int format_is_utf8(unsigned char *str, size_t len);
 int format_dot11_fc(char *dst, uint16_t fc);
 
 
+
+
+#ifndef CW_FORMAT_DUMP_ROW_LEN
+	#define CW_FORMAT_DUMP_ROW_LEN 16
+#endif
+
+struct cw_FormatDumpSettings {
+	int rowlen;
+	int ascii;
+	int invlen;
+	
+	const char * dump_prefix;
+};
+
+char *cw_format_dump(const uint8_t * data, int len, 
+	struct cw_FormatDumpSettings *settings);
 
 /**@}*/
 

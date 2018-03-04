@@ -68,8 +68,7 @@ extern void cw_msgset_destroy(struct cw_MsgSet * set);
 extern int cw_msgset_add(struct cw_MsgSet * set,
 			struct cw_MsgDef messages[], struct cw_ElemHandler handlers[]);
 mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type);
-
-
+struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type);
 
 
 #endif

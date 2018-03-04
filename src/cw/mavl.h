@@ -58,7 +58,7 @@ union mavldata {
 	uint32_t dword;
 	uint16_t word;
 	uint8_t byte;
-	const char *str;
+	char *str;
 };
 typedef union mavldata mavldata_t;
 
@@ -112,6 +112,8 @@ union mavldata *mavl_add(struct mavl *t, union mavldata *data);
 union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
 struct mavlnode *mavl_get_node(struct mavl *t, union mavldata *data);
 void * mavl_get_ptr(mavl_t tree, void * search);
+void *mavl_add_ptr(mavl_t tree, void *ptr);
+
 void mavl_merge(mavl_t m, mavl_t t);
 
 
@@ -221,7 +223,10 @@ typedef mavl_t mavl_conststr_t;
 extern mavl_conststr_t mavl_create_conststr();
 
 int mavl_cmp_dword(const union mavldata *e1, const union mavldata *e2);
+int mavl_cmp_str(const union mavldata *e1, const union mavldata *e2);
+
 void mavl_free_bin(union mavldata *data);
+void mavl_free_str(union mavldata *data);
 
 
 /*

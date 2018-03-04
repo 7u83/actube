@@ -25,7 +25,7 @@ int cisco80211_in_wtp_radio_configuration(struct conn *conn, struct cw_action_in
 	mbag_set_word(r,CIPWAP_RADIOITEM80211_CFP_MAXIMUM_DURATION,cw_get_word(data+5));
 
 	struct mbag_item * bssid = MBAG_DATA->get(data+7,6);
-	bssid->id=CW_RADIOITEM80211_BSSID;
+	bssid->u1.id=CW_RADIOITEM80211_BSSID;
 	mbag_set(r,bssid);
 
 	mbag_set_word(r,CW_RADIOITEM80211_BEACON_PERIOD,cw_get_word(data+13));

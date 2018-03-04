@@ -25,12 +25,12 @@ cw_dbg(DBG_X,"The update beginns ***********************************************
 	MAVLITER_DEFINE(it,conn->radios_upd);
 	mavliter_foreach(&it){
 		struct mbag_item *r = mavliter_get(&it);
-		mbag_t radio_upd = r->data;
-		mbag_t radio = mbag_i_get_mbag(conn->radios,r->iid,NULL);
+		mbag_t radio_upd = r->u2.data;
+		mbag_t radio = mbag_i_get_mbag(conn->radios,r->u1.iid,NULL);
 
 		radio = radio_upd;
 
-		d+=cw_put_byte(d,r->iid);
+		d+=cw_put_byte(d,r->u1.iid);
 
 //		mbag_t radio = mbag_i_get(conn->radios,radio_upd->data->iid);
 

@@ -1,9 +1,9 @@
 
 #include <errno.h>
-#include "mbag.h"
+
 #include "mavl.h"
-#include "cw/debug.h"
-#include "cw/log.h"
+#include "debug.h"
+#include "log.h"
 
 #include "message_set.h"
 
@@ -65,7 +65,7 @@ static void msgdata_destroy(struct cw_MsgData *data){
 	free(data);
 }
 
-static struct cw_MsgData * msgdata_create(){
+static struct cw_MsgData * msgdata_create(int type){
 	struct cw_MsgData * msg;
 	
 	msg = malloc( sizeof(struct cw_MsgData));
@@ -78,7 +78,7 @@ static struct cw_MsgData * msgdata_create(){
 		return NULL;
 	}
 
-
+	msg->type=type;
 	return msg;
 }
 
@@ -179,7 +179,6 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 				elemdef->id, 
 				elemdef->vendor,
 				handler->name
-				
 		DBG_END
 	}
 	
@@ -226,13 +225,18 @@ int cw_msgset_add(struct cw_MsgSet * set,
 		msg = mavl_find_ptr(set->messages,&search);
 
 		if (!msg){
-			msg = msgdata_create();
+			msg = msgdata_create(msgdef->type);
+			
 			if (!msg){
 				cw_log(LOG_ERR,"Can't create messae");
 				return 0;
 			}
-		}
 
+			mavl_add_ptr(set->messages,msg);
+		}
+	
+		
+		
 		/* Overwrite the found message */
 		if (msgdef->name)
 			msg->name=msgdef->name;
@@ -243,36 +247,21 @@ int cw_msgset_add(struct cw_MsgSet * set,
 		DBG_START(NULL,DBG_INFO)
 		   "Add message Type:%d - %s ",msgdef->type,msgdef->name
 		DBG_END
-
-		
+	
 		update_msgdata(set,msg,msgdef);
 	}
-
-	DBG_START(NULL,DBG_INFO) "Hello world" DBG_END
-	exit(0);
 
 	return 0;
 }
 
-/*
-struct cw_ElemHandler * cw_message_set_find_element(
-			struct cw_MsgSet * set,
-			struct cw_ElemHandler * element){
-	return mavl_find(set->all_elems_by_id,element);
-}
-*/
-
-
-/*
-mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type){
+/**
+ * @brief Find message data to a specific message
+ * @param set message set
+ * @param type message type to search for
+ * @return message data or NULL if not found
+ */
+struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type){
 	struct cw_MsgData search;
-	search.type = type;
-	struct cw_MsgData * result = mavl_find(set->messages,&search);
-	if (!result){
-		printf ("no result\n");
-		return NULL;
-		
-	}
-	return result->elements_list;
+	search.type=type;
+	return mavl_find_ptr(set->messages,&search);
 }
-*/

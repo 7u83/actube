@@ -18,7 +18,7 @@ int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a
 			continue;
 		}
 
-		int state = mbag_get_word(i->data,CW_RADIOITEM_OPER_STATE,CW_RADIO_OPER_STATE_DISABLED<<8);
+		int state = mbag_get_word(i->u2.data,CW_RADIOITEM_OPER_STATE,CW_RADIO_OPER_STATE_DISABLED<<8);
 		int oper_state = (state >> 8) & 0xff;
 		int oper_cause = state & 0xff;
 
@@ -31,7 +31,7 @@ int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a
 		cw_dbg(DBG_X,"Translated oper state for output from %d to %d",oper_state, oper_state_t);
 
 		l+=cw_put_elem_radio_operational_state(dst+l,255,oper_state_t, oper_cause);
-		l+=cw_put_elem_radio_operational_state(dst+l,i->iid,oper_state_t, oper_cause);
+		l+=cw_put_elem_radio_operational_state(dst+l,i->u1.iid,oper_state_t, oper_cause);
 
 
 		

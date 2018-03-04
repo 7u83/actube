@@ -95,8 +95,8 @@ int cisco_out_80211_wtp_radio_cfg(struct conn *conn, struct cw_action_out *a, ui
 			continue;
 		}
 //		l+=cw_put_elem_radio_info(dst+l,i->id,i->data);
-		l+=cw_put_elem_cisco_radio_cfg(dst+l,i->iid,i->data);
-		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,0);
+		l+=cw_put_elem_cisco_radio_cfg(dst+l,i->u1.iid,i->u2.data);
+		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->u1.iid,i->u2.data,0);
 //		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,1);
 //		l+=cw_put_elem_cisco_ap_regulatory_domain(dst+l,i->iid,i->data,2);
 
@@ -149,7 +149,7 @@ int cw_radio_cisco_set_state(struct conn * conn, uint8_t *data, int len, int cau
 	MAVLITER_DEFINE(it,conn->radios);
 	mavliter_foreach(&it){
 		mbag_item_t *i = mavliter_get(&it);
-		cw_radio_set_admin_state(conn->radios,i->iid,state,cause);
+		cw_radio_set_admin_state(conn->radios,i->u1.iid,state,cause);
 
 	}
 	return 1;	

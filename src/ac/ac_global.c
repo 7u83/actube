@@ -107,7 +107,7 @@ int ac_global_init()
 //	mod_set_actions_registered_cb(setup_actions);
 
 
-
+/*
 	ac_config = mbag_create();
 	mbag_set_str(ac_config, CW_ITEM_AC_NAME, conf_acname);
 	mbag_set_ptr(ac_config, CW_ITEM_AC_STATUS, &ac_status);
@@ -133,6 +133,6 @@ int ac_global_init()
 
 	
 	mbag_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, get_iplist,release_iplist,(void*)771);
-
+*/
 	return 1;
 }

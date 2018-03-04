@@ -27,7 +27,7 @@ int lw_cisco_put_telnet_ssh(struct conn *conn, uint8_t type,const char * item_id
 
 	if (item){
 		if (item->type == MBAG_BYTE) {
-			d+=lw_put_byte(d,item->byte);
+			d+=lw_put_byte(d,item->u2.byte);
 			d+=lw_put_byte(d,type);
 		}
 	}

@@ -40,48 +40,55 @@
 
 #include "include/cipwap_items.h"
 
+#include "cw/message_set.h"
+#include "cw/cw_types.h"
 
-/*
-static cw_elem_handler_t _DISCOVERY_TYPE = {
-	.id = CAPWAP_ELEM_DISCOVERY_TYPE,
-	.name = "WTP Frame Tunnel Mode",
-// 	.start = cw_in_generic2, 
-//	.item_id = CW_ITEM_WTP_FRAME_TUNNEL_MODE,
-	.min_len = 1, 
-	.max_len = 1
+static struct cw_ElemHandler handlers[] = {
+
+	{ 
+		"Discovery Type",		/* name */
+		CAPWAP_ELEM_DISCOVERY_TYPE,	/* Element ID */
+		0,0,				/* Vendor / Proto */
+		1,1,				/* min/max length */
+		CW_TYPE_BYTE,			/* type */
+		"discovery_type"		/* Key */
+	}
+	,
+	{ 
+		"WTP Mac Type",			/* name */
+		CAPWAP_ELEM_WTP_MAC_TYPE,	/* Element ID */
+		0,0,				/* Vendor / Proto */
+		1,1,				/* min/max length */
+		CW_TYPE_BYTE,			/* type */
+		"wtp_mac_type"			/* Key */
+	}
+	,
+	{0,0,0,0,0,0,0,0}
+
 };
-*/
 
 
-static cw_msgdef_t messages[] = {
+static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
+static struct cw_ElemDef discovery_request_elements[] ={
+	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
+	{0,0,0,00}
+	
+};
 
-	/* Discovery Request Message*/
+static struct cw_MsgDef messages[] = {
 	{
-		.name = "Discovery Request Cisco",
-		.type = CAPWAP_MSG_DISCOVERY_REQUEST,
-		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_ElemDef_t []){
-			{&_DISCOVERY_TYPE,1},
-			{0,0},
-		}
+		"Discovery Request",
+		CAPWAP_MSG_DISCOVERY_REQUEST,
+		CW_RECEIVER_AC,
+		discovery_request_states,
+		discovery_request_elements
 	},
-	/* Discovery Request Response */
-	{
-		.name = "Discovery Response",
-		.type = CAPWAP_MSG_DISCOVERY_RESPONSE,
-		.states = (int[]){CAPWAP_STATE_DISCOVERY,0},
-		.elements = (cw_ElemDef_t[]){
-			{0,0},
-		}
-	},
+
 	{0,0,0,0}
 	
 	
 	
 };
-
-
-
 
 
 
@@ -550,11 +557,14 @@ static cw_action_out_t actions_out[]={
 };
 
 
+
+
+
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
-	if (mode != CW_MOD_MODE_CAPWAP)
-		return NULL;
-	cw_msgset_add(set,messages);
-	return set;
+        if (mode != CW_MOD_MODE_CAPWAP)
+                return NULL;
+        cw_msgset_add(set,messages, handlers);
+        return set;
 }
 
 

@@ -29,7 +29,7 @@ mbag_t mbag = NULL;
 	mbag_item_t * i;
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Hardware Version in WTP Descriptor, not set.");
@@ -39,7 +39,7 @@ mbag_t mbag = NULL;
 	i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);
 
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Software Version in WTP descriptor, not set.");
@@ -47,7 +47,7 @@ mbag_t mbag = NULL;
 
 	i = mbag_get(mbag,CW_ITEM_WTP_BOOTLOADER_VERSION);
 	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_WTP_BOOTLOADER_VERSION,i->data);
+	 	d += cw_put_version(d,CW_SUBELEM_WTP_BOOTLOADER_VERSION,i->u2.data);
 	}
 	else {
 		cw_log(LOG_ERR, "Can't send Bootloader Version in WTP descriptor, not set.");

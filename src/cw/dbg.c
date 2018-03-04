@@ -473,8 +473,6 @@ void cw_dbg_dmp_(int level, const char *file, int line,
 }
 
 
-
-
 void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
@@ -494,7 +492,7 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	struct cw_MsgData search;
 	search.type = msg_id;
 	struct cw_MsgData * message;
-	message = mavl_get(conn->msgset->messages,&search);
+	message = mavl_get_ptr(conn->msgset->messages,&search);
 	
 	char * msname;
 	if (!message)

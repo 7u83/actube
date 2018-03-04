@@ -357,12 +357,17 @@ static char *conf_default_mcast_groups_ipv6[] = {
 #endif
 
 //#include "avltree"
-#include "cw/stravltree.h"
+//#include "cw/stravltree.h"
 
 
 
 static int add_bcast_addr(void *priv, void *addr)
 {
+	printf("Callback Called\n");
+	union mavldata *ud;
+	ud = addr;
+	printf("Callback Called %s\n", ud->str);	
+	
 	char *s = (char *) addr;
 	conf_bcast_addrs[conf_bcast_addrs_len] = strdup(s);
 	if (conf_bcast_addrs[conf_bcast_addrs_len] != 0)
@@ -375,18 +380,21 @@ static int add_bcast_addr(void *priv, void *addr)
  */
 int init_bcast_addrs()
 {
+	mavl_t t;
+	mavliter_t it;
+	
 	if (conf_bcast_addrs)
 		return 1;
 
 	if (!conf_ipv4)
 		return 1;
 
-	struct avltree *t = stravltree_create();
+	t = mavl_create(mavl_cmp_str,mavl_free_str);
 	if (!t)
 		return 0;
 
 	/* add the default broadast address */
-	stravltree_add(t, "255.255.255.255");
+	mavl_add_strdup(t, "255.255.255.255");
 
 
 	/* add all other local broadcast addresses */
@@ -417,15 +425,27 @@ int init_bcast_addrs()
 		if (ifa->ifa_broadaddr) {
 			sock_addrtostr(ifa->ifa_broadaddr, str, 100,1);
 			*strchr(str, ':') = 0;
-			stravltree_add(t, str);
+			mavl_add_strdup(t, str);
 		}
 
 	}
 
 	conf_bcast_addrs = malloc(t->count * sizeof(char *));
 
-	stravltree_foreach_asc(t, add_bcast_addr, 0);
-	stravltree_destroy(t);
+//mavl_foreach_asc(t, add_bcast_addr, 0);
+
+	mavliter_init(&it,t);
+	mavliter_foreach(&it){
+		union mavldata * d;
+		d = mavliter_get(&it);
+		conf_bcast_addrs[conf_bcast_addrs_len] = strdup(d->str);
+		if (conf_bcast_addrs[conf_bcast_addrs_len] != 0)
+			conf_bcast_addrs_len++;
+
+	}
+
+
+	mavl_destroy(t);
 
 	freeifaddrs(ifa0);
 

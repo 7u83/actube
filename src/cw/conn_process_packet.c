@@ -273,8 +273,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	/* Search message */
 	struct cw_MsgData * message;
-	message = mavl_get(conn->msgset->messages,&search);
-	
+	message = mavl_find_ptr(conn->msgset->messages,&search);
+		
 	int result_code = 0;
 	
 	if (!message){
@@ -469,8 +469,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	return result_code;
 
 }
-
-
 
 
 

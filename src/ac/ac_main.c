@@ -98,6 +98,16 @@ extern void test_sets();
 
 int main(int argc, char *argv[])
 {
+	char * dump_data = "Eine kleine Mickey Maus zog sich mal die Hosen\
+	aus, zog sie wieder an, und du bist dran. Dran bist du noch lange nicht\
+	musst erst sagen, wie alt du bist.";
+	
+	char * result = cw_format_dump(dump_data,strlen(dump_data),0);
+	
+	printf("Dump Result:\n%s\n", result);
+	exit(0);
+	
+	
 /*	char data[100];
 	mavl_t im;
 	mavldata_t val,itt;	

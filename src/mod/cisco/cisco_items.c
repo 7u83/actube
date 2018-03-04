@@ -1,3 +1,4 @@
+#include "cw/mbag.h"
 #include "cw/item.h"
 #include "cisco_items.h"
 

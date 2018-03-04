@@ -65,7 +65,6 @@ void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
  */
 #include "debug.h"
 
-#define DBG_LN(level)  level,__FILE__,__LINE__
 
 
 /* driver specific debugs */
