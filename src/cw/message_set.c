@@ -1,7 +1,7 @@
 
 #include "cw.h"
 #include "mavl.h"
-#include "cw/dbg.h"
+#include "dbg.h"
 
 #include "message_set.h"
 
