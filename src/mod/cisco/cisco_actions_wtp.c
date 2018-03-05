@@ -390,7 +390,7 @@ static cw_action_out_t actions_out[]={
 	
 	/* Cisco WTP Operational state -  OUT */
 	{
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 //		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_WTP_OPER_STATE,
@@ -405,7 +405,7 @@ static cw_action_out_t actions_out[]={
 		
 	/* Radio Operational State  - OUT */
 	{
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 	 	.out = cisco_out_radio_operational_state,

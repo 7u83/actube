@@ -226,7 +226,7 @@ static cw_action_out_t actions_out[]={
 	 */
 	/* AP Time Sync - Echo Response */
 	{
-		.msg_id = CW_MSG_ECHO_RESPONSE, 
+		.msg_id = CAPWAP_MSG_ECHO_RESPONSE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
 		.elem_id  = CW_CISCO_AP_TIMESYNC,

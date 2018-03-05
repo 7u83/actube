@@ -256,7 +256,7 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 	int rc = 0;
 	while (conn->capwap_state == CW_STATE_IMAGE_DATA && rc == 0 && eof != NULL) {
-		rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
+		rc = cw_send_request(conn, CAPWAP_MSG_IMAGE_DATA_REQUEST);
 		eof = mbag_get(conn->outgoing, CW_ITEM_IMAGE_FILEHANDLE);
 	}
 
@@ -466,7 +466,7 @@ void wtpman_run_data(void *wtpman_arg)
 static int msg_end_handler(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			     int len, struct sockaddr *from)
 {
-	if (a->msg_id ==CW_MSG_CHANGE_STATE_EVENT_REQUEST) {
+	if (a->msg_id ==CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST) {
 		props_to_sql(conn,conn->incomming,0);
 		radios_to_sql(conn);
 	}

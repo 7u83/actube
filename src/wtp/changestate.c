@@ -20,7 +20,7 @@ int changestate()
 
 	
 	/* Change State ... */
-	int rc = cw_send_request(conn,CW_MSG_CHANGE_STATE_EVENT_REQUEST);
+	int rc = cw_send_request(conn,CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST);
 	if ( !cw_rcok(rc) ) {
 		cw_strresult(rc);
 		return 0;

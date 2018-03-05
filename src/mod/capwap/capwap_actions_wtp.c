@@ -313,14 +313,14 @@ static cw_action_in_t actions_in[] = {
 
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE,
 	 	.end =	cw_in_check_cfg_update_req  
 	}
 	,
 
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
 		.start  = cw_in_generic2,
@@ -336,14 +336,14 @@ static cw_action_in_t actions_in[] = {
 
 	{
 		.capwap_state = CW_STATE_RUN, 
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE,
 	 	.end =	cw_in_check_cfg_update_req  
 	}
 	,
 
 	{
 		.capwap_state = CW_STATE_RUN,
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_RESPONSE, 
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE, 
 		.elem_id  = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
 		.start  = cw_in_generic2,
@@ -362,14 +362,14 @@ static cw_action_in_t actions_in[] = {
 	 */
 	{
 		.capwap_state = CW_STATE_RUN,
-		.msg_id = CW_MSG_ECHO_RESPONSE,
+		.msg_id = CAPWAP_MSG_ECHO_RESPONSE,
 	}
 	,
 
 	/* Vendor Specific Payload - Echo Response */
 	{
 		.capwap_state = CW_STATE_RUN, 
-		.msg_id = CW_MSG_ECHO_RESPONSE, 
+		.msg_id = CAPWAP_MSG_ECHO_RESPONSE, 
 		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
 	}
@@ -683,7 +683,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* Radio Operational State(s) - Change State Event */
 	{
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 //		.out = cw_out_radio_operational_state,
@@ -694,7 +694,7 @@ static cw_action_out_t actions_out[] = {
 
 
 	{
-		.msg_id = CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE,
 		.out = cw_out_generic,

@@ -351,7 +351,7 @@ static cw_action_in_t actions_in[] = {
 	/* Radio Operational State - Run State - Change State Event Req */
 	{
 		.capwap_state = CW_STATE_RUN, 
-		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id= CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 		.start = cisco_in_radio_operational_state,
@@ -364,7 +364,7 @@ static cw_action_in_t actions_in[] = {
 	/* Radio Operational State - Configure State - Change State Event Req */
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
-		.msg_id= CW_MSG_CHANGE_STATE_EVENT_REQUEST,
+		.msg_id= CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 		.start = cisco_in_radio_operational_state, //operational_state,
@@ -437,7 +437,7 @@ static cw_action_out_t actions_out[]={
 	 */
 	/* AP Time Sync - Echo Response */
 	{
-		.msg_id = CW_MSG_ECHO_RESPONSE, 
+		.msg_id = CAPWAP_MSG_ECHO_RESPONSE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.item_id = CW_ITEM_AC_TIMESTAMP, 
 		.elem_id  = CW_CISCO_AP_TIMESYNC,

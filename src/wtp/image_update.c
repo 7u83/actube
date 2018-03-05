@@ -22,7 +22,7 @@ int image_update()
 				   CW_VENDOR_ID_CISCO, (uint8_t *) ii, strlen(ii));
 
 
-	int rc = cw_send_request(conn, CW_MSG_IMAGE_DATA_REQUEST);
+	int rc = cw_send_request(conn, CAPWAP_MSG_IMAGE_DATA_REQUEST);
 
 	if (rc < 0) {
 	}
