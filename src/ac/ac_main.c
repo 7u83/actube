@@ -365,6 +365,7 @@ int ac_run()
 
 void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	cw_dbg(DBG_X, "There is a data packet now");
 
 	dataman_list_lock();
@@ -372,12 +373,12 @@ void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, 
 	struct dataman * dm = dataman_list_get(socklist[index].data_sockfd,addr);
 	cw_dbg(DBG_X, "Dataman list locked, now gotted");
 
-	cw_dbg(DBG_INFO,"Packet for dataman %s,%d",sock_addr2str_p(addr),socklist[index].data_sockfd);
+	cw_dbg(DBG_INFO,"Packet for dataman %s,%d",sock_addr2str_p(addr,sock_buf),socklist[index].data_sockfd);
 	if (!dm) {
-		cw_dbg(DBG_INFO,"No dataman %s,%d",sock_addr2str_p(addr),socklist[index].data_sockfd);
+		cw_dbg(DBG_INFO,"No dataman %s,%d",sock_addr2str_p(addr,sock_buf),socklist[index].data_sockfd);
 		dm = dataman_create(socklist[index].data_sockfd,addr);
 		if (!dm){
-			cw_log(LOG_ERR,"Can't create dataman for packet from %s",sock_addr2str_p(addr));
+			cw_log(LOG_ERR,"Can't create dataman for packet from %s",sock_addr2str_p(addr,sock_buf));
 			return;
 		}
 		dataman_list_add(dm);
@@ -401,7 +402,7 @@ void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, 
 	exit(0);
 	struct wtpman *wtpman = wtplist_get(addr);
 	if (!wtpman){
-		cw_dbg(DBG_PKT_ERR,"Discarding packet on data channel from %s - No wtpman found.",sock_addr2str(addr));
+		cw_dbg(DBG_PKT_ERR,"Discarding packet on data channel from %s - No wtpman found.",sock_addr2str(addr,sock_buf));
 		return;
 	}
 
@@ -412,7 +413,7 @@ void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, 
 
 void process_cw_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	/* first of all check preamble */
 	int preamble = cw_get_hdr_preamble(buffer);
@@ -420,7 +421,7 @@ void process_cw_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, 
 	if (preamble != CAPWAP_PACKET_PREAMBLE && preamble != CAPWAP_DTLS_PACKET_PREAMBLE) {
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong preamble, preamble = 0x%01X",
-		       sock_addr2str(addr), preamble);
+		       sock_addr2str(addr,sock_buf), preamble);
 		return;
 	}
 

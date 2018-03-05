@@ -16,7 +16,8 @@ void cw_get_wtp_name(struct conn *conn,struct sockaddr *addr)
 
 int cw_set_capwap_mode(struct conn *conn,int mode)
 {
-	cw_dbg(DBG_INFO,"Setting CAPWAP mode to %d for %s",mode,sock_addr2str(&conn->addr));
+	char sock_buf[SOCK_ADDR_BUFSIZE];
+	cw_dbg(DBG_INFO,"Setting CAPWAP mode to %d for %s",mode,sock_addr2str(&conn->addr,sock_buf));
 	conn->capwap_mode_out=mode;
 	return 1;
 }

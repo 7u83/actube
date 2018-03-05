@@ -181,13 +181,14 @@ static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, 
 static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int len,
 				      int elems_len, struct sockaddr *from)
 {
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
+	
 	struct cw_Mod *cmod =
 	    cw_mod_detect(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Can't find mod to handle connection from %s, discarding message",
-		       sock_addr2str_p(from));
+		       sock_addr2str_p(from,sock_buf));
 		return NULL;
 	}
 
@@ -219,6 +220,7 @@ int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct cw_action_in as, *af, *afm;
 
 	int offset = cw_get_hdr_msg_offset(rawmsg);
@@ -236,7 +238,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (conn->strict_hdr) {
 			cw_dbg(DBG_MSG_ERR,
 			       "Discarding message from %s, msgelems len=%d, payload len=%d, (Strict CAPWAP) ",
-			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
+			       sock_addr2str(&conn->addr,sock_buf), elems_len, payloadlen - 8);
 			errno = EAGAIN;
 			return -1;
 		}
@@ -245,7 +247,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (elems_len < payloadlen - 8) {
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has %d bytes of extra data, ignoring.",
-			       sock_addr2str(&conn->addr), payloadlen - 8 - elems_len);
+			       sock_addr2str(&conn->addr,sock_buf), payloadlen - 8 - elems_len);
 			elems_len = len - 8;
 		}
 
@@ -253,7 +255,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 			cw_dbg(DBG_RFC,
 			       "Packet from from %s has msgelems len of %d bytes, but has only %d bytes of data, truncating.",
-			       sock_addr2str(&conn->addr), elems_len, payloadlen - 8);
+			       sock_addr2str(&conn->addr, sock_buf), elems_len, payloadlen - 8);
 			elems_len = payloadlen - 8;
 		}
 	}
@@ -487,7 +489,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 		    struct sockaddr *from)
 {
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
@@ -517,7 +519,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	if (sd != 0) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Discarding message from %s, old seqnum, seqnum = %d, last seqnum=%d",
-		       sock_addr2str(&conn->addr), s2, s1);
+		       sock_addr2str(&conn->addr,sock_buf), s2, s1);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -528,7 +530,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 	cw_dbg(DBG_MSG_ERR,
 	       "Retransmitted request message from %s detected, seqnum=%d, type=%d",
-	       sock_addr2str(&conn->addr), s2, type);
+	       sock_addr2str(&conn->addr,sock_buf), s2, type);
 
 
 	if (cw_get_hdr_msg_type(conn->resp_buffer) - 1 != type) {
@@ -540,7 +542,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	}
 
 	cw_dbg(DBG_MSG_ERR, "Retransmitting response message to %s, seqnum=%d",
-	       sock_addr2str(&conn->addr), s2);
+	       sock_addr2str(&conn->addr, sock_buf), s2);
 
 	// XXX untested
 	conn_send_msg(conn, conn->resp_buffer);
@@ -558,13 +560,13 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, packet too short, len=%d,  at least 8 expected.",
-		       sock_addr2str(&conn->addr), len);
+		       sock_addr2str(&conn->addr, sock_buf), len);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -575,7 +577,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 		/* wrong version */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong version, version=%d, version %d expected.",
-		       sock_addr2str(&conn->addr), (preamble & 0xf0) >> 4,
+		       sock_addr2str(&conn->addr,sock_buf), (preamble & 0xf0) >> 4,
 		       CAPWAP_VERSION);
 		errno = EAGAIN;
 		return -1;
@@ -585,7 +587,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 		/* Encrypted data, this shuold never happen here */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, encrypted data after decryption ...",
-		       sock_addr2str(&conn->addr));
+		       sock_addr2str(&conn->addr,sock_buf));
 		errno = EAGAIN;
 		return -1;
 	}
@@ -599,7 +601,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 		/* Eleminate messages with wrong header size */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, header length (%d) greater than packet len (%d).",
-		       sock_addr2str(&conn->addr), offs, len);
+		       sock_addr2str(&conn->addr,sock_buf), offs, len);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -611,7 +613,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 			/* wrong rmac size */
 			cw_dbg(DBG_PKT_ERR,
 			       "Discarding packet from %s, wrong R-MAC size, size=%d",
-			       sock_addr2str(&conn->addr), *(packet + 8));
+			       sock_addr2str(&conn->addr,sock_buf), *(packet + 8));
 			errno = EAGAIN;
 			return -1;
 		}

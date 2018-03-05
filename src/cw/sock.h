@@ -84,6 +84,9 @@ extern int sock_getifinfo(const struct sockaddr *addr, char *ifname,
 
 char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addport);
 
+#define SOCK_ADDR_BUFSIZE 64
+
+#define SOCK_ADDR_BUF_DEFINE char __sock_buf__[SOCK_ADDR_BUFSIZE]
 
 /**
  * Convert a sockaddr structure to a human readable string
@@ -100,13 +103,13 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
    sprintf("Adress: %s",sock_addr2str(&sa));
    \endcode 
  */
-#define sock_addr2str(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64, 0 ) )
+#define sock_addr2str(s,buf) ( sock_addrtostr( (struct sockaddr*)s, buf , SOCK_ADDR_BUFSIZE, 0 ) )
 
 /**
  * Same as #sock_addr2str, but also the port number is appended to the result
  * @see #sock_addr2str
  */
-#define sock_addr2str_p(s) ( sock_addrtostr( (struct sockaddr*)s, (char[64]){0}, 64,1 ) )
+#define sock_addr2str_p(s,buf) ( sock_addrtostr( (struct sockaddr*)s, buf, SOCK_ADDR_BUFSIZE, 1 ) )
 
 
 

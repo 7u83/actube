@@ -10,6 +10,7 @@
 int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	cw_action_in_t *mlist[120];
 	int n = cw_check_missing_mand(mlist, conn, a);
@@ -23,7 +24,7 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 		   mode send no discovery response */
 		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Request from %s - missing mandatory elements.",
-		       sock_addr2str(from));
+		       sock_addr2str(from,sock_buf));
 		return -1;
 	}
 

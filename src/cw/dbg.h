@@ -27,6 +27,7 @@
 
 #include "conn.h"
 
+
 #ifndef CW_LOG_DUMP_ROW_LEN
 #define CW_LOG_DUMP_ROW_LEN 32
 #endif
@@ -34,6 +35,7 @@
 #ifndef CW_LOG_DUMP_ROW_TAB_LEN
 #define CW_LOG_DUMP_ROW_TAB_LEN 8
 #endif
+
 
 /**
  *@defgroup DBG DBG

@@ -217,21 +217,24 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 int cw_format_pkt_hdr(char *dst, int level, struct conn *conn, uint8_t * packet, int len,
 		      struct sockaddr *from)
 {
+
+	char sock_buf[SOCK_ADDR_BUFSIZE]; 
+	
 	char *s = dst;
 	switch (level) {
 		case DBG_PKT_IN:
 			if (cw_get_hdr_flag_f(packet)) {
 				s += sprintf(s, "Fragment from %s",
-					     sock_addr2str_p(from));
+					     sock_addr2str_p(from,sock_buf));
 			} else {
-				s += sprintf(s, "From %s", sock_addr2str_p(from));
+				s += sprintf(s, "From %s", sock_addr2str_p(from,sock_buf));
 			}
 			break;
 		case DBG_PKT_OUT:
 			if (cw_get_hdr_flag_f(packet)) {
-				s += sprintf(s, "Fragment to %s", sock_addr2str(from));
+				s += sprintf(s, "Fragment to %s", sock_addr2str(from,sock_buf));
 			} else {
-				s += sprintf(s, "To %s", sock_addr2str(from));
+				s += sprintf(s, "To %s", sock_addr2str(from,sock_buf));
 			}
 			break;
 	}
@@ -477,7 +480,7 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 {
 	if (!cw_dbg_is_level(level))
 		return;
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	char buf[1024];
 	char *s = buf;
 
@@ -501,9 +504,9 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	
 	s += sprintf(s, "%s Message (type=%d) ", msname  /*cw_strmsg(msg_id)*/, msg_id);
 	if (level == DBG_MSG_IN)
-		s += sprintf(s, "from %s ", sock_addr2str(from));
+		s += sprintf(s, "from %s ", sock_addr2str(from,sock_buf));
 	else
-		s += sprintf(s, "to %s ", sock_addr2str(from));
+		s += sprintf(s, "to %s ", sock_addr2str(from,sock_buf));
 
 	s += sprintf(s, ", Seqnum: %d ElemLen: %d", cw_get_msg_seqnum(msgptr),
 		     cw_get_msg_elems_len(msgptr));

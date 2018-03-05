@@ -26,6 +26,8 @@
 
 int dtls_openssl_accept(struct conn *conn)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
+	
 	if (!conn->dtls_data)
 		conn->dtls_data =
 		    dtls_openssl_data_create(conn, DTLSv1_server_method(),
@@ -49,6 +51,6 @@ int dtls_openssl_accept(struct conn *conn)
 			return 0;
 	}
 	cw_log(LOG_ERR, "DTLS Error: Timeout while establishing session with %s.",
-	       sock_addr2str(&conn->addr));
+	       sock_addr2str(&conn->addr, sock_buf));
 	return 0;
 }

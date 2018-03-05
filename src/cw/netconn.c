@@ -124,6 +124,7 @@ int netconn_q_recv_packet_peek(struct netconn *nc, uint8_t * buffer, int len)
 
 void netconn_q_add_packet(struct netconn * nc,uint8_t *packet,int len)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	int qwpos = nc->qwpos;
 	if (qwpos==nc->qsize)
 		qwpos=0;
@@ -131,7 +132,7 @@ void netconn_q_add_packet(struct netconn * nc,uint8_t *packet,int len)
 	if (nc->qrpos==qwpos){
 		/* no buffers, discard packet */
 		cw_dbg(DBG_PKT_ERR, "Discarding packet from %s, no queue buffers left",
-			sock_addr2str(&nc->addr));
+			sock_addr2str(&nc->addr,sock_buf));
 		return;
 	}
 
@@ -236,13 +237,14 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	cw_dbg_pkt_nc(DBG_PKT_IN, nc, packet, len, from);
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, packet too short, len=%d,  at least 8 expected.",
-		       sock_addr2str(&nc->addr), len);
+		       sock_addr2str(&nc->addr,sock_buf), len);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -253,7 +255,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 		/* wrong version */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, wrong version, version=%d, version %d expected.",
-		       sock_addr2str(&nc->addr), (preamble & 0xf0) >> 4,
+		       sock_addr2str(&nc->addr,sock_buf), (preamble & 0xf0) >> 4,
 		       CAPWAP_VERSION);
 		errno = EAGAIN;
 		return -1;
@@ -263,7 +265,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 		/* Encrypted data, this shuold never happen here */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, encrypted data after decryption ...",
-		       sock_addr2str(&nc->addr));
+		       sock_addr2str(&nc->addr,sock_buf));
 		errno = EAGAIN;
 		return -1;
 	}
@@ -277,7 +279,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 		/* Eleminate messages with wrong header size */
 		cw_dbg(DBG_PKT_ERR,
 		       "Discarding packet from %s, header length (%d) greater than packet len (%d).",
-		       sock_addr2str(&nc->addr), offs, len);
+		       sock_addr2str(&nc->addr,sock_buf), offs, len);
 		errno = EAGAIN;
 		return -1;
 	}
@@ -289,7 +291,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 			/* wrong rmac size */
 			cw_dbg(DBG_PKT_ERR,
 			       "Discarding packet from %s, wrong R-MAC size, size=%d",
-			       sock_addr2str(&nc->addr), *(packet + 8));
+			       sock_addr2str(&nc->addr,sock_buf), *(packet + 8));
 			errno = EAGAIN;
 			return -1;
 		}

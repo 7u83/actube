@@ -332,7 +332,7 @@ static int socklist_check_size()
 
 int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 {
-
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	if (!socklist_check_size())
 		return 0;
@@ -402,7 +402,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 			       sock_addrlen(res->ai_addr));
 			cw_log(LOG_INFO,
 			       "Bound to: %s:%s (%i) on interface %s, netmask %s", addr,
-			       port, sockfd, ifname, sock_addr2str(&netmask));
+			       port, sockfd, ifname, sock_addr2str(&netmask,sock_buf));
 		} else {
 			cw_log(LOG_INFO, "Bound to: [%s]:%s (%i) on interface %s", addr,
 			       port, sockfd, ifname);

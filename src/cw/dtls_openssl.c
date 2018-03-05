@@ -531,6 +531,7 @@ int dtls_openssl_shutdown(struct conn *conn)
 
 int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
@@ -539,7 +540,7 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 	/* we "missuse" sockaddr2str to convert our cookie to a hex str */
 	cw_dbg(DBG_DTLS,"DTLS session cookie for %s generated: %s",
-		sock_addr2str(&conn->addr), sock_hwaddr2idstr(conn->dtls_cookie,sizeof(conn->dtls_cookie)));
+		sock_addr2str(&conn->addr,sock_buf), sock_hwaddr2idstr(conn->dtls_cookie,sizeof(conn->dtls_cookie)));
 
 	memcpy(cookie,conn->dtls_cookie,sizeof(conn->dtls_cookie));
 	*cookie_len=sizeof(conn->dtls_cookie);
@@ -552,11 +553,12 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int len)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
 
 	cw_dbg(DBG_DTLS,"Verifying DTLS cookie from %s: %s",
-		sock_addr2str(&conn->addr),sock_hwaddr2idstr(conn->dtls_cookie,len));
+		sock_addr2str(&conn->addr,sock_buf),sock_hwaddr2idstr(conn->dtls_cookie,len));
 
 	if (len != sizeof(conn->dtls_cookie)){
 		return 0;

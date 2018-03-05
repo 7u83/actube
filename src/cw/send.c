@@ -124,6 +124,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 int cw_send_request(struct conn *conn,int msg_id)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	cw_init_request(conn, msg_id);
 	if ( cw_put_msg(conn, conn->req_buffer) == -1 ){
 		errno=ENOMSG;
@@ -157,7 +158,7 @@ int cw_send_request(struct conn *conn,int msg_id)
 	}
 
 	if ( rc <0 && errno != EAGAIN) {
-		cw_log(LOG_ERR,"Can't read from %s: %s",sock_addr2str(&conn->addr),strerror(errno));
+		cw_log(LOG_ERR,"Can't read from %s: %s",sock_addr2str(&conn->addr,sock_buf),strerror(errno));
 	}
 	if ( rc <0 && errno == EAGAIN) {
 		errno=ETIMEDOUT;

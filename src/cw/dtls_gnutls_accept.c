@@ -37,13 +37,14 @@
 
 int dtls_gnutls_accept(struct conn *conn)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
 
 	gnutls_datum_t cookie_key;
 
 	gnutls_key_generate(&cookie_key, GNUTLS_COOKIE_KEY_SIZE);
 	cw_dbg(DBG_DTLS, "Session cookie for %s generated: %s",
-	       sock_addr2str(&conn->addr), sock_hwaddr2idstr((uint8_t *) (&cookie_key),
+	       sock_addr2str(&conn->addr,sock_buf), sock_hwaddr2idstr((uint8_t *) (&cookie_key),
 							     sizeof(cookie_key)));
 
 	gnutls_dtls_prestate_st prestate;
@@ -94,7 +95,7 @@ int dtls_gnutls_accept(struct conn *conn)
 	}
 
 
-	cw_dbg(DBG_DTLS, "Cookie verified! Starting handshake with %s ...",sock_addr2str(&conn->addr));
+	cw_dbg(DBG_DTLS, "Cookie verified! Starting handshake with %s ...",sock_addr2str(&conn->addr,sock_buf));
 
 
 
@@ -113,12 +114,12 @@ int dtls_gnutls_accept(struct conn *conn)
 
 
 	if ( rc < 0 ) {
-		cw_log(LOG_ERR, "Error in handshake with %s: %s",sock_addr2str(&conn->addr), gnutls_strerror(rc));
+		cw_log(LOG_ERR, "Error in handshake with %s: %s",sock_addr2str(&conn->addr,sock_buf), gnutls_strerror(rc));
 		return 0;
 	}
 
 
-	cw_dbg(DBG_DTLS,"Handshake with %s successful.",sock_addr2str(&conn->addr));
+	cw_dbg(DBG_DTLS,"Handshake with %s successful.",sock_addr2str(&conn->addr,sock_buf));
 
 	conn->dtls_data=d;
 	conn->read = dtls_gnutls_read;

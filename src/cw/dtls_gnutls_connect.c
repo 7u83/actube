@@ -38,6 +38,7 @@
  */
 int dtls_gnutls_connect(struct conn *conn)
 {
+	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
 	d = dtls_gnutls_data_create(conn,
 				    GNUTLS_CLIENT | GNUTLS_DATAGRAM | GNUTLS_NONBLOCK);
@@ -63,12 +64,12 @@ int dtls_gnutls_connect(struct conn *conn)
 
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS (gnutls) Can't connect to %s: %s",
-		       sock_addr2str(&conn->addr), gnutls_strerror(rc));
+		       sock_addr2str(&conn->addr,sock_buf), gnutls_strerror(rc));
 		return 0;
 	}
 
 
-	cw_dbg(DBG_DTLS, "Handshake with %s successful", sock_addr2str(&conn->addr));
+	cw_dbg(DBG_DTLS, "Handshake with %s successful", sock_addr2str(&conn->addr,sock_buf));
 
 	conn->dtls_data = d;
 	conn->read = dtls_gnutls_read;
