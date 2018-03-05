@@ -54,10 +54,10 @@
   */
 
 
-
+/*
 void (*cw_dbg_cb) (int level, const char *format, ...) = CW_LOG_DEFAULT_LOG;
 void (*cw_dbg_vcb) (int level, const char *fromat, va_list args) = CW_LOG_DEFAULT_VLOG;
-
+*/
 
 
 uint32_t cw_dbg_opt_display = 0;
@@ -613,7 +613,8 @@ void cw_dbg_colored(int level, const char *file, int line, const char *format, .
 
 	va_list args;
 	va_start(args, format);
-	cw_log_vcb(level, fbuf, args);
+/*	cw_log_vcb(level, fbuf, args);*/
+	cw_log_console_writer.write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
 	va_end(args);
 
 }

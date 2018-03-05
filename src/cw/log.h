@@ -39,71 +39,42 @@
 #define CW_LOG_DEFAULT_VLOG cw_log_vfile
 #endif
 
+struct cw_LogWriter {
+	const char * name;
+	int colored;
+	void (*open) ();
+	void (*write) (int prio, const char *format, va_list args, struct cw_LogWriter *w);
+	void (*close) ();
+	void * priv;
+};
+
+extern struct cw_LogWriter cw_log_syslog_writer;
+extern struct cw_LogWriter cw_log_console_writer;
+
+void cw_log_init();
+void cw_log(int level, const char *format, ...);
+extern const char *cw_log_name;
 
 
 
+/****/
 
-
-
-
-/*
-
-//extern void cw_log_dbg_(int type, const char *file, int line, const char *fromat, ...);
-//extern void cw_log_dbg_dmp_(int type, const char *file, int line, const uint8_t * data,
-			    //int len, const char *format, ...);
-
-*/
-
-
-/*#ifdef WITH_CW_LOG*/
-/*#define cw_log(level,...) cw_log_colored(level,__VA_ARGS__)*/
-
-#define cw_log cw_log_colored
-
-/*#else
-#define cw_log(...)
-#endif
-*/
-/*
-//#ifdef WITH_CW_LOG_DEBUG
-
-
-//#define cw_log_dbg(type,...) cw_log_dbg_(type,__FILE__,__LINE__,__VA_ARGS__)
-
-
-
-//#define cw_log_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
-//#define cw_dbg_dmp(type,str,len,...) cw_log_dbg_dmp_(type,__FILE__,__LINE__,str,len,__VA_ARGS__)
-
-//#define cw_dbg_msgelem(msgtype,msgelemtype,msgbuf,msglen) cw_dbg_msgelem_(msgtype,msgelemtype,msgbuf,msglen)
-//#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand) cw_dbg_missing_mand_elems_(conn, msgtyoe, mand)
-
-//#define lw_dbg_elem(msgtype,msgelemtype,msgbuf,msglen) lw_dbg_elem_(msgtype,msgelemtype,msgbuf,msglen)
-
-//#else
-//#define cw_log_dbg(...)
-//#define cw_dbg(...)
-
-//#define cw_dbg_missing_mand_elems(conn, msgtyoe, mand)
-
-//#endif
-*/
-
-
-extern void (*cw_log_cb) (int level, const char *fromat, ...);
+/*extern void (*cw_log_cb) (int level, const char *fromat, ...);
 extern void (*cw_log_vcb) (int level, const char *fromat, va_list args);
-
+*/
 /* Syslog functins */
-extern void cw_log_syslog(int level, const char *format, ...);
-extern void cw_log_vsyslog(int level,const char * format, va_list args);
+
+
 
 /* Log to File functions */
+
+/*
 void cw_log_vfile(int level,const char * format, va_list args);
 void cw_log_file(int level,const char *format, ...);
+*/
 
 
 
-void cw_log_colored(int level, const char *format, ...);
 
 /*
 
@@ -112,6 +83,8 @@ void cw_log_colored(int level, const char *format, ...);
 //extern void (*cw_log_debug_cbs[]) (const char *fromat, ...);
 */
 
+
+/*
 extern int cw_log_debug_dump_(int level, const uint8_t * data, int len,
 			      const char *format, ...);
 
@@ -138,6 +111,6 @@ struct cw_dbg_cfgstrs {
 extern struct cw_dbg_cfgstrs cw_dbg_cfgstrs[];
 
 
-
+*/
 
 #endif

@@ -7,34 +7,53 @@
 
 
 static struct cw_FormatDumpSettings CW_FORMAT_DUMP_SETTINGS = {
-	32/*CW_FORMAT_DUMP_ROW_LEN*/,	/* rowlen */
-	1,				/* ascii */
-	0,				/* settings->invlen */
-	"\n\t",				/* dump_prefix */
+	32,			/* row_len */
+	8,			/* marker_distance */
+	'|',			/* marker_char */
+	1,			/* ascii */
+	0,			/* inv_len */
+	'*',			/* inv_char */
+	"\n\t",			/* dump_prefix */
+	"  ",			/* ascii_prefix */
+	"\n\t"			/* newline */
 };
 
+void cw_format_get_dump_defaults(struct cw_FormatDumpSettings * settings)
+{
+	memcpy(settings, &CW_FORMAT_DUMP_SETTINGS, 
+		sizeof(struct cw_FormatDumpSettings));
+}
 
 
+static int cw_format_dump_row(char *dst, const uint8_t * data, int len,
+			struct cw_FormatDumpSettings * settings){
+	char *pdst, marker;
+ 	int i;
 
-static int cw_format_dump_row(char *dst, const uint8_t * data, int len){
-	char *pdst = dst;
-	int i;
-	char *sp;
+	pdst = dst;
 	for (i = 0; i < len; i++) {
-		sp = ((i+1)%4==0 && i<len-1) ? "|" : " ";
-		pdst += sprintf(pdst, "%02X%s", data[i] & 0xff, sp);
+		marker = ((i+1)% settings->marker_distance==0 && i<len-1) 
+			? settings->marker_char 
+			: ' ';
+		pdst += sprintf(pdst, "%02X%c", data[i] & 0xff, marker);
 	}
 	
-	pdst+=sprintf(pdst,"   ");
 	
-	for (i = 0; i < len; i++) {
-		int c = data[i] & 0xff;
-		if (c < 0x20 || c > 0x7f)
-			c = '.';
-		pdst+=sprintf(pdst,"%c",c);
+	if (settings->ascii){
+		for(i=len; i<settings->row_len; i++){
+			pdst += sprintf(pdst,"   ");
+		}
+
+		pdst+=sprintf(pdst,"%s",settings->ascii_prefix);
+		for (i = 0; i < len; i++) {
+			int c = data[i] & 0xff;
+			if (c < 0x20 || c > 0x7f)
+				c = '.';
+			pdst+=sprintf(pdst,"%c",c);
+		}
 	}
 
-	pdst+=sprintf(pdst,"%s","\n");
+	pdst+=sprintf(pdst,"%s",settings->newline);
 	return pdst-dst;
 }
 
@@ -52,84 +71,44 @@ static int cw_format_dump_row(char *dst, const uint8_t * data, int len){
 char *cw_format_dump(const uint8_t * data, int len, 
 	struct cw_FormatDumpSettings *settings)
 {
-	int i;
-
-	int row,rows;
+	int row,rows,size;
+	char *dst, *pdst;
 	
-
-	
-
 	if (!settings)
 		settings = &CW_FORMAT_DUMP_SETTINGS;
 
-	rows = len / settings->rowlen;
+	rows = len / settings->row_len;
+	if (len % settings->row_len)
+		rows++;
+
+	size = strlen(settings->dump_prefix) +
+		rows * strlen(settings->newline) + 
+		(settings->ascii ? rows*settings->row_len*3 : len * 3);
+
+	if (settings->ascii){
+		size += len + rows*strlen(settings->ascii_prefix);
+	}
 	
-	printf("Number fo rows: %d\n",rows);
-
-	int md;
-	if (settings->ascii)
-		md = 2;
-	else
-		md = 1;
-
-	char *dst = malloc(2 * (md * (len * 3 + (rows * 2) + 8 )));
+	dst = malloc(size+1);
 	if (!dst)
 		return NULL;
 
-	if (len % settings->rowlen)
-		rows++;
-
-	char *pdst = dst;
-	
-	pdst += sprintf(pdst, "%s",settings->dump_prefix);
-/*	pdst += 2; */
-
-	char asc_buffer[128];
-	char *ascdst = asc_buffer;
-
 	pdst = dst;
-	for (row; row<rows; row++){
-		int n;
-		pdst += cw_format_dump_row(pdst,data+row*settings->rowlen,settings->rowlen);
-	}
-	return dst;
+	pdst += sprintf(pdst, "%s",settings->dump_prefix);
 
-
-	for (i = 0; i < len; i++) {
-		char *sp = " ";
-		if (i == settings->invlen - 1)
-			sp = "|";
-
-		pdst += sprintf(pdst, "%02X%s", data[i] & 0xff, sp);
-		if (settings->ascii) {
-			int c = data[i] & 0xff;
-			if (c < 0x20 || c > 0x7f)
-				c = '.';
-			*ascdst = c;
-			ascdst++;
+	for (row=0; row<rows; row++){
+		int rlen, pos;
+		pos = row * settings->row_len;
+		if (len - pos > settings->row_len){
+			rlen = settings->row_len;
 		}
-
-		if ((i + 1) % settings->rowlen == 0) {
-			int l;
-			if (settings->ascii) {
-				*ascdst = 0;
-				l = sprintf(pdst, " | %s\n\t", asc_buffer);
-				ascdst = asc_buffer;
-
-			} else {
-				l = sprintf(pdst, "\n\t");
-			}
-			pdst += l;
+		else{
+			rlen = len-pos;
 		}
-
-	}
-
-	if (settings->ascii) {
-		*ascdst = 0;
-		if (strlen(asc_buffer))
-			pdst += sprintf(pdst, " | %s", asc_buffer);
+		pdst += cw_format_dump_row(pdst,data+pos, rlen, settings);
 	}
 
 	return dst;
+
 }
 

@@ -85,20 +85,26 @@ int format_dot11_fc(char *dst, uint16_t fc);
 
 
 
-#ifndef CW_FORMAT_DUMP_ROW_LEN
-	#define CW_FORMAT_DUMP_ROW_LEN 16
-#endif
 
 struct cw_FormatDumpSettings {
-	int rowlen;
+	int row_len;
+	int marker_distance;
+	char marker_char;
 	int ascii;
-	int invlen;
+
+	int inv_len;
+	char inv_char;
 	
 	const char * dump_prefix;
+	const char * ascii_prefix;
+	const char *newline;
 };
 
 char *cw_format_dump(const uint8_t * data, int len, 
 	struct cw_FormatDumpSettings *settings);
+
+void cw_format_get_dump_defaults(struct cw_FormatDumpSettings * settings);
+
 
 /**@}*/
 

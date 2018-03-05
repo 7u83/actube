@@ -4,8 +4,11 @@
 #include "dbg.h"
 #include "log.h"
 
+
+
 void cw_debug(const char * file, int line, struct dbg_Context *ctx, int level,  
 		const char * format, ...){
+	va_list args;
 	if (!(cw_dbg_is_level(level)))
 		return;
 
@@ -18,9 +21,9 @@ void cw_debug(const char * file, int line, struct dbg_Context *ctx, int level,
 	    );
 
 */
-	va_list args;
+
 	va_start(args, format);
-	cw_log_vcb(level, format, args);
+	cw_log_console_writer.write(LOG_DEBUG,format,args,&cw_log_console_writer);
 	va_end(args);
 }
 

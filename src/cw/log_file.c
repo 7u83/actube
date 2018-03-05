@@ -4,23 +4,23 @@
 #include "log.h"
 
 
-int cw_log_file_flags = LOG_PERROR;
-char * cw_log_filename = NULL;
+static void open(){
+}
 
+static void close(){
 
-void cw_log_vfile(int level,const char * format, va_list args)
+}
+static void write(int level,const char * format, va_list args, struct cw_LogWriter * w)
 {
-	vprintf(format,args);
+        vprintf(format,args);
 	printf("\n");
 }
 
-void cw_log_file(int level,const char *format, ...) 
-{
-	va_list args;
-        va_start(args, format);
-	cw_log_vfile(level,format,args);
-	va_end(args);
-        closelog();
-}
-
-
+struct cw_LogWriter cw_log_console_writer = {
+	"syslog",	/* name */
+	1,		/* colored */
+	open,		/* open */
+	write,		/* write */
+	close,		/* close */
+	NULL		/* priv */
+}; 

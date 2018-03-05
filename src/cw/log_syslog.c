@@ -17,21 +17,29 @@
 */
 
 #include <stdarg.h>
+#include <stdio.h>
+
 #include "log.h"
 
 
-void cw_log_vsyslog(int level,const char * format, va_list args)
+static void open(){
+/*	openlog (cw_log_name, LOG_PERROR | LOG_CONS | LOG_PID | LOG_NDELAY, LOG_USER); */
+	openlog (cw_log_name, LOG_NDELAY, LOG_USER); 
+}
+
+static void close(){
+	
+}
+static void write(int level,const char * format, va_list args, struct cw_LogWriter * w)
 {
-        openlog (cw_log_name, LOG_PERROR | LOG_CONS | LOG_PID | LOG_NDELAY, LOG_DEBUG);
         vsyslog(level,format,args);
 }
 
-void cw_log_syslog(int level,const char *format, ...) 
-{
-	va_list args;
-        va_start(args, format);
-	cw_log_vsyslog(level,format,args);
-	va_end(args);
-        closelog();
-}
-
+struct cw_LogWriter cw_log_syslog_writer = {
+	"syslog",	/* name */
+	0,		/* colored */
+	open,		/* open */
+	write,		/* write */
+	close,		/* close */
+	NULL		/* priv */
+}; 

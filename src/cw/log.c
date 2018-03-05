@@ -19,108 +19,98 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "strlist.h"
 #include "log.h"
 
+/*
 void (*cw_log_cb)(int level,const char * fromat, ...) = CW_LOG_DEFAULT_LOG;
 void (*cw_log_vcb)(int level,const char * fromat, va_list args) = CW_LOG_DEFAULT_VLOG;
+*/
+
+const char * cw_log_name = "actube";
 
 
-const char * cw_log_name = "cw";
-static int colored=1;
+static struct cw_strlist_elem prefix[] = {
+	{LOG_DEBUG, "DBG"},
+	{LOG_INFO, "INF" },
+	{LOG_NOTICE, "NOTICE"},
+	{LOG_WARNING, "WARNING"},
+	{LOG_ERR,"ERROR"},
+	{CW_STR_STOP, NULL}
+};
+
+static struct cw_strlist_elem prefix_color[] = {
+	{LOG_DEBUG, ""},
+	{LOG_INFO, "" },
+	{LOG_NOTICE, ""},
+	{LOG_WARNING, ""},
+	{LOG_ERR,"\033[1;31m"},
+	{CW_STR_STOP, NULL}
+};
+
+static struct cw_strlist_elem text_color[] = {
+	{LOG_DEBUG, ""},
+	{LOG_INFO, "" },
+	{LOG_NOTICE, ""},
+	{LOG_WARNING, ""},
+	{LOG_ERR,"\033[22m"},
+	{CW_STR_STOP, NULL}
+};
+
+static struct cw_strlist_elem end_color[] = {
+	{LOG_DEBUG, ""},
+	{LOG_INFO, "" },
+	{LOG_NOTICE, ""},
+	{LOG_WARNING, ""},
+	{LOG_ERR,"\033[22;39m"},
+	{CW_STR_STOP, NULL}
+};
+
+static struct cw_LogWriter * writers[] = {
+	&cw_log_syslog_writer,
+	&cw_log_console_writer,
+	NULL
+};
 
 
-static const char * get_log_prefix(int level)
+void cw_log(int prio, const char *format, ...)
 {
-	switch(level){
-		case LOG_DEBUG:
-			return "DBG";
-		case LOG_INFO:
-			return "INF";
-		case LOG_ERR:
-			return "ERROR";
-		case LOG_WARNING:
-			return "WARNING";
-
-	}
-	return "";
-}
-
-static const char * get_log_color_on(int level){
-	if ( !colored ) 
-		return "";
-
-
-	switch(level){
-		case LOG_DEBUG:
-			return "";
-		case LOG_INFO:
-			return "";
-		case LOG_ERR:
-			return "\033[1;31m";
-	}
-	return "";
-
-}
-
-static const char * get_log_color_ontext(int level){
-	if ( !colored ) 
-		return "";
-
-
-	switch(level){
-		case LOG_DEBUG:
-			return "";
-		case LOG_INFO:
-			return "";
-		case LOG_ERR:
-			return "\033[22m";
-	}
-	return "";
-
-}
-
-
-
-
-static const char * get_log_color_off(int level){
-	if ( !colored ) 
-		return "";
-
-
-	switch(level){
-		case LOG_DEBUG:
-			return "";
-		case LOG_INFO:
-			return "";
-		case LOG_ERR:
-			return "\033[22;39m";
-	}
-	return "";
-
-}
-
-
-
-
-
-void cw_log_colored(int level, const char *format, ...)
-{
-	char fbuf[1024];
-
-	sprintf(fbuf, "%s%s%s: %s%s",
-		get_log_color_on(level),
-		get_log_prefix(level),
-		get_log_color_ontext(level),
-		format,
-		get_log_color_off(level)
-		);
-		
-
 	va_list args;
-	va_start(args, format);
-	cw_log_vcb(level,fbuf,args);
-	va_end(args);
+	char fbuf[1024];
+	int i;
+	
+	
+
+	for (i=0; writers[i]; i++){
+	
+		if (writers[i]->colored){
+			sprintf(fbuf, "%s%s%s: %s%s",
+				cw_strlist_get_str(prefix_color,prio),
+				cw_strlist_get_str(prefix,prio),
+				cw_strlist_get_str(text_color,prio),
+				format,
+				cw_strlist_get_str(end_color,prio)
+			);
+			
+		}
+		else{
+			sprintf(fbuf, "%s: %s",
+				cw_strlist_get_str(prefix,prio),
+				format
+			);
+			
+		}
+		va_start(args, format);		
+		writers[i]->write(prio,fbuf,args,writers[i]);
+		va_end(args);
+	}
 
 }
 
 
+void cw_log_init(){
+	int i;
+	for (i=0; writers[i]; i++){
+		writers[i]->open();
+	}
+}
