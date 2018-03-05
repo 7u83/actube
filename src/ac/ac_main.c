@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 
 	/* Warn, if the "secret" debugging feature for 
 	   developers is turned on ;) */
-	DBGX("Attention! %s", "DBG X is ON!");
+//	DBGX("Attention! %s", "DBG X is ON!");
 
 //	cw_mod_set_mod_path("../../lib/actube");
 	//cw_mod_load("capwap");

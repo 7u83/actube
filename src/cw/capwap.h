@@ -158,6 +158,9 @@
 #define CAPWAP_MSG_IMAGE_DATA_REQUEST			15
 #define CAPWAP_MSG_IMAGE_DATA_RESPONSE			16
 
+/**
+ * A Reset Request message ist sent by the AC to the WTP 
+ * to initiate a WTP reset.*/
 #define CAPWAP_MSG_RESET_REQUEST			17
 #define CAPWAP_MSG_RESET_RESPONSE			18
 
@@ -223,8 +226,7 @@
 #define CW_ELEM_RESERVED_19				19
 /**
  * Indicates the AP's Discovery Type
- * @see CAPWAPDIscoveryTypes
- */
+ * @see CAPWAPDIscoveryTypes */
 #define CAPWAP_ELEM_DISCOVERY_TYPE			20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
