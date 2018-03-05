@@ -43,17 +43,13 @@ extern int cw_foreach_msgelem(uint8_t * msgelems,  int len,
 
 
 
-
-
-//#define cw_timer_start(t) (time(NULL)+t)
-//#define cw_timer_timeout(t) (time(NULL)>t ? 1 : 0)
-
-
 /** Generic macro to isolate bits from a dword */
 #define cw_get_dword_bits(src,start,len) ((~(0xFFFFFFFF<<len)) & (src >> (32 - start - len)))
 
 
 /* functions used to "rfc-verify" message elements */
+
+/*
 //void cw_mand_elem_found(int *l,int type);
 //int cw_is_missing_mand_elems(int *l);
 //void cw_get_missing_mand_elems(char *dst, int *l);
@@ -61,5 +57,6 @@ extern int cw_foreach_msgelem(uint8_t * msgelems,  int len,
 
 
 //extern const char * cw_msgtostr(int type);
+*/
 
 #endif

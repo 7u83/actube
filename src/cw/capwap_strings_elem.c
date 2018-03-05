@@ -47,7 +47,7 @@ struct cw_strlist_elem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, "Vendor Specific Payload"},
 	{CAPWAP_ELEM_WTP_BOARD_DATA, "WTP Board Data"},
 	{CAPWAP_ELEM_WTP_DESCRIPTOR, "WTP Descriptor"},
-	{CW_ELEM_WTP_FALLBACK, "WTP Fallback"},
+	{CAPWAP_ELEM_WTP_FALLBACK, "WTP Fallback"},
 	{CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE, "WTP Frame Tunnel Mode"},
 	{CW_ELEM_RESERVED_42, "Reserved 42"},
 	{CW_ELEM_RESERVED_43, "Reserved 43"},

@@ -34,6 +34,7 @@
 #include "mod.h"
 #include "message_set.h"
 
+
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
 
@@ -44,22 +45,25 @@ int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
  */
 void cw_init_response(struct conn *conn, uint8_t * req)
 {
-	uint8_t *buffer = conn->resp_buffer;
-	int shbytes = cw_get_hdr_msg_offset(req);
-	int dhbytes;
+	uint8_t *buffer;
+	int shbytes, dhbytes;
+	uint8_t *msgptr, *dmsgptr;
+	
+	buffer = conn->resp_buffer;
+	shbytes = cw_get_hdr_msg_offset(req);
+	
 	memcpy(buffer, req, shbytes);
 
-
 	cw_set_hdr_rmac(buffer, conn->base_rmac);
+/*
 //      cw_set_hdr_hlen(buffer, 2);
 //      cw_set_hdr_flags(buffer, CW_FLAG_HDR_M, 1);
-
-
+*/
 
 	dhbytes = cw_get_hdr_msg_offset(buffer);
 
-	uint8_t *msgptr = req + shbytes;
-	uint8_t *dmsgptr = buffer + dhbytes;
+	msgptr = req + shbytes;
+	dmsgptr = buffer + dhbytes;
 
 	cw_set_msg_type(dmsgptr, cw_get_msg_type(msgptr) + 1);
 	cw_set_msg_seqnum(dmsgptr, cw_get_msg_seqnum(msgptr));
@@ -69,7 +73,8 @@ void cw_init_response(struct conn *conn, uint8_t * req)
 void cw_init_request(struct conn *conn, int msg_id)
 {
 	uint8_t *buffer = conn->req_buffer;
-
+	uint8_t *msgptr;
+	
 	/* zero the first 8 bytes */
 	cw_put_dword(buffer + 0, 0);
 	cw_put_dword(buffer + 4, 0);
@@ -78,15 +83,16 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
 
 	cw_set_hdr_rmac(buffer, conn->base_rmac);
+/*
 	//cw_set_hdr_hlen(buffer, 2);
-
+*/
 
 
 	cw_set_hdr_wbid(buffer, conn->wbid);
 	cw_set_hdr_rid(buffer, 0);
 
 
-	uint8_t *msgptr = cw_get_hdr_msg_offset(buffer) + buffer;
+	msgptr = cw_get_hdr_msg_offset(buffer) + buffer;
 	cw_set_msg_type(msgptr, msg_id);
 	cw_set_msg_flags(msgptr, 0);
 	cw_set_msg_elems_len(msgptr, 0);
@@ -131,12 +137,15 @@ int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
  */
 int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_code)
 {
+	uint8_t *out,*dst;
+	int l;
+	
 	cw_init_response(conn, rawmsg);
 
-	uint8_t *out = conn->resp_buffer;
+	out = conn->resp_buffer;
 
-	uint8_t *dst = cw_get_hdr_msg_elems_ptr(out);
-	int l = cw_put_elem_result_code(dst, result_code);
+	dst = cw_get_hdr_msg_elems_ptr(out);
+	l = cw_put_elem_result_code(dst, result_code);
 
 	cw_set_msg_elems_len(out + cw_get_hdr_msg_offset(out), l);
 

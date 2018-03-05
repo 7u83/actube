@@ -142,7 +142,7 @@ int run()
 
 		}
 		if (rc<0 && errno == EAGAIN){
-			rc = cw_send_request(conn,CW_MSG_ECHO_REQUEST);
+			rc = cw_send_request(conn,CAPWAP_MSG_ECHO_REQUEST);
 		
 			if (!cw_rcok(rc)) {
 				cw_log(LOG_ERR,"Error in run state: %d %s",rc,cw_strrc(rc));

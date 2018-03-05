@@ -458,8 +458,7 @@ void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
 
 
 
-void cw_dbg_dmp_(int level, const char *file, int line,
-		 const uint8_t * data, int len, const char *format, ...)
+void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, ...)
 {
 	if (!cw_dbg_is_level(level))
 		return;
@@ -596,7 +595,7 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 }
 
 
-void cw_dbg_colored(int level, const char *file, int line, const char *format, ...)
+void cw_dbg_colored(int level, const char *format, ...)
 {
 
 	if (!(cw_dbg_is_level(level)))

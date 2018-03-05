@@ -255,7 +255,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id  = CW_ELEM_WTP_FALLBACK,
+		.elem_id  = CAPWAP_ELEM_WTP_FALLBACK,
 		.item_id = CW_ITEM_WTP_FALLBACK, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -710,7 +710,7 @@ static cw_action_out_t actions_out[] = {
 
 	/* Echo Request  */
 	{
-		.msg_id = CW_MSG_ECHO_REQUEST, 
+		.msg_id = CAPWAP_MSG_ECHO_REQUEST, 
 	}
 	,
 
