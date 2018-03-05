@@ -32,7 +32,7 @@ int update =0;
 int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 		      int len, struct sockaddr *from)
 {
-	if (a->msg_id == CW_MSG_CONFIGURATION_UPDATE_REQUEST){
+	if (a->msg_id == CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST){
 		update =1;
 
 	}

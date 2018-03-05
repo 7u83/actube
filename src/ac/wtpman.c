@@ -600,7 +600,7 @@ static void wtpman_run(void *arg)
 
 			cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr));
 
-			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 			mavl_merge(conn->config, conn->outgoing);
 			mavl_destroy(conn->outgoing);
 			conn->outgoing = mbag_create();
@@ -616,7 +616,7 @@ static void wtpman_run(void *arg)
 				continue;
 
 			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr));
-			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 
 
 			conn_clear_upd(conn,1);

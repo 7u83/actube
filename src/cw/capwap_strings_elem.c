@@ -4,7 +4,7 @@
 struct cw_strlist_elem capwap_strings_elem[] = {
 
 	{CAPWAP_ELEM_AC_DESCRIPTOR, "AC Descriptor"},
-	{CW_ELEM_AC_IPV4_LIST, "AC IPv4 List"},
+	{CAPWAP_ELEM_AC_IPV4_LIST, "AC IPv4 List"},
 	{CW_ELEM_AC_IPV6_LIST, "AC IPv6 List"},
 	{CW_ELEM_AC_NAME, "AC Name"},
 	{CW_ELEM_AC_NAME_WITH_PRIORITY, "AC Name with Priority"},

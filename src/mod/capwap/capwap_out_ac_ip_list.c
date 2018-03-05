@@ -23,5 +23,5 @@ int capwap_out_ac_ip_list(struct conn *conn, struct cw_action_out *a, uint8_t * 
 	struct sockaddr sa;
 	sock_strtoaddr( "192.168.0.11", &sa);
 	cw_put_sockaddr(dst+4,(struct sockaddr_storage*)&sa);
-	return 4 + cw_put_elem_hdr(dst,CW_ELEM_AC_IPV4_LIST,4);
+	return 4 + cw_put_elem_hdr(dst,CAPWAP_ELEM_AC_IPV4_LIST,4);
 }

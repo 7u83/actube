@@ -451,7 +451,7 @@ static cw_action_out_t actions_out[]={
 	 */
 	/* Manager IP Address */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.out = cisco_out_manager_ip_addr,
 		.mand = 1
 	}
@@ -463,7 +463,7 @@ static cw_action_out_t actions_out[]={
 	 */
 
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.out = cisco_out_telnet_ssh,
 	}
 	,
@@ -474,7 +474,7 @@ static cw_action_out_t actions_out[]={
 		  But the method here used to silence the element
 		  isn't effective. TODO: There shuld be a way to remove
 		  or replace such elemenns */
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.item_id = CW_ITEM_WTP_NAME, 
 		.elem_id = CW_ELEM_WTP_NAME,
 	}
@@ -483,7 +483,7 @@ static cw_action_out_t actions_out[]={
 	/* WTP Name */
 	{
 		
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.item_id = CW_ITEM_WTP_NAME, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME,
@@ -494,7 +494,7 @@ static cw_action_out_t actions_out[]={
 
 	/* Radio Operational State  - OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 	 	.out = cisco_out_radio_operational_state,
@@ -504,7 +504,7 @@ static cw_action_out_t actions_out[]={
 
 	/* LED State Config -  OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG,
 		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
@@ -517,7 +517,7 @@ static cw_action_out_t actions_out[]={
 
 	/* LED Flash Config -  OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG,
 		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
@@ -529,7 +529,7 @@ static cw_action_out_t actions_out[]={
 
 	/* AP Mode and Type -  OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
@@ -541,7 +541,7 @@ static cw_action_out_t actions_out[]={
 	
 	/* Cisco WTP Admin state -  OUT */
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.vendor_id = CW_VENDOR_ID_CISCO, 
 //		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_WTP_ADMIN_STATE,
@@ -650,14 +650,14 @@ extern int cisco_out_capwap_up(struct conn *conn, struct cw_action_out *a, uint8
 static cw_action_out_t actions80211_out[]={
 
 	{
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_WTP_RADIO_CFG,
 		.out = cisco80211_out_wtp_radio_configuration,
 	}
 	,
 	{
-		.msg_id = CW_MSG_CONFIGURATION_STATUS_RESPONSE, 
+		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.out = cisco_out_capwap_up,
 	}
 	,

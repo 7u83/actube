@@ -94,7 +94,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN,
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id  = LW_ELEM_LOCATION_DATA,
 		.item_id = CW_ITEM_LOCATION_DATA, 
 		.start  = cw_in_generic2,
@@ -108,7 +108,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN,
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id  = CW_CISCO_RAD_NAME,
 		.item_id = CW_ITEM_WTP_NAME, 
 		.start  = cw_in_generic2,
@@ -121,7 +121,7 @@ static cw_action_in_t actions_in[] = {
 	/*  Radio Admin State - Config Status Request */
 	{
 		.capwap_state = CW_STATE_RUN, 
-		.msg_id = CW_MSG_CONFIGURATION_UPDATE_REQUEST,
+		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
 		.start = cisco_in_radio_administrative_state_wtp,
