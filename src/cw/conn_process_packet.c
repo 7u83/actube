@@ -32,6 +32,8 @@
 #include "mod.h"
 #include "message_set.h"
 
+#include "cw_types.h"
+
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
@@ -215,6 +217,17 @@ int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 }
 
 
+void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn, 
+		uint8_t * elem_data, int elem_len, struct sockaddr * from){
+	mavldata_t data, *result;
+	char str[30];
+		
+	result = handler->type->get(&data,elem_data,elem_len);
+	
+	handler->type->to_str(result,str,30);
+	printf("Read %d-%s: %s %s\n", handler->id, handler->name, handler->key, str);
+	/*mavl_add(conn->remote_cfg*/
+}
 
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
@@ -385,6 +398,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		
 		
 		elem_len = cw_get_elem_len(elem);
+		
+		
+		cw_read_elem(handler, conn, cw_get_elem_data(elem), elem_len, from);
 		
 printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
 continue;

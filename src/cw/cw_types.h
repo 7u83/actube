@@ -36,9 +36,12 @@ struct cw_Type{
 extern const struct cw_Type  cw_type_byte;
 #define CW_TYPE_BYTE (&cw_type_byte)
 
-extern const struct mdata_Type  cw_type_word;
-extern const struct mdata_Type  cw_type_dword;
+extern const struct cw_Type  cw_type_word;
+extern const struct cw_Type  cw_type_dword;
 
+void cw_types_mavl_delete(mavldata_t *data);
 
+#define cw_types_mavl_create()\
+	mavl_create(mavl_cmp_kv, cw_types_mavl_delete)
 
 #endif

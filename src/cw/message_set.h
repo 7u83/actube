@@ -32,7 +32,7 @@ struct cw_ElemHandler {
 	int proto;
 	int min_len;
 	int max_len;
-	const struct mdata_Type * type;
+	const struct cw_Type * type;
 	const char * key;
 /*
         int (*start_in)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);

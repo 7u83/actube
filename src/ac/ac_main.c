@@ -96,22 +96,16 @@ extern void test_sets();
 #include "cw/file.h"
 #include "cw/cw_types.h"
 
-void cw_type_delete(mavldata_t *data){
-	struct cw_Type * type = data->kv.priv;
-	printf("Delete elem of type: %s\n", type->name);
-	if (type->del)
-		type->del(data);
-	
-}
 
 int main(int argc, char *argv[])
 {
-	mavl_t kv;
+/*	mavl_t kv;
 	mavliter_t kviter;
 	uint8_t bytes[] = { 99,4,5,7 };
 	
 
-	kv = mavl_create(mavl_cmp_kv,cw_type_delete);
+	kv = cw_types_mavl_create();
+	//mavl_cmp_kv,cw_type_delete);
 	
 	mavldata_t data, *result;
 
@@ -137,7 +131,7 @@ int main(int argc, char *argv[])
 
 	mavl_destroy(kv);
 	exit(0);
-
+*/
 
 
 /*	cw_log_init();
