@@ -33,7 +33,8 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 		char *dmp;
 		char *dmpmem = NULL;
 		if (cw_dbg_is_level(DBG_SUBELEM_DMP)) {
-			dmpmem = cw_dbg_mkdmp(data + i, sublen);
+/*  TODO XXX */
+			dmpmem = NULL; /*cw_dbg_mkdmp(data + i, sublen);*/
 			dmp = dmpmem;
 		} else
 			dmp = "";

@@ -53,7 +53,7 @@ static struct cw_ElemHandler handlers[] = {
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
-	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},
+/*	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},*/
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,	1, 0},
 	{0,0,0,00}
 	

@@ -46,6 +46,9 @@
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
 void cw_dbg_missing_mand(int level,struct conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
 void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
+void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+void cw_dbg(int level, const char *format, ...);
+void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ...);
 
 /*
 #define DBGX(f,...) cw_dbg(DBG_X,f,__VA_ARGS__)  //cw_dbg(DBG_X, f ,__VA_ARGS__)
@@ -96,22 +99,24 @@ extern uint32_t cw_dbg_opt_display;
 extern uint32_t cw_dbg_opt_level;
 extern struct cw_strlist_elem cw_dbg_strings[];
 
-
+/*
 #define cw_dbg cw_dbg_colored
+*/
 
 /*
 #define cw_dbg_dmp(type,...) cw_dbg_dmp_(type,__FILE__,__LINE__,__VA_ARGS__)
 */
+/*
 #define cw_dbg_dmp cw_dbg_dmp_
+*/
 
-void cw_dbg_colored(int level, const char *format, ...);
 void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, ...);
 
 
 extern void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 			 const uint8_t * msgbuf, int len);
 
-void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+
 void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struct sockaddr *from);
 
 void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);

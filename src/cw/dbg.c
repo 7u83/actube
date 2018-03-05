@@ -19,8 +19,6 @@
 
 
 
-
-
 /**
  * @file Debugging Functions
  * @brief Various debug functions.
@@ -31,7 +29,6 @@
 #include "capwap.h"
 #include "dbg.h"
 #include "sock.h"
-
 #include "log.h"
 #include "strlist.h"
 #include "format.h"
@@ -147,9 +144,6 @@ static struct cw_strlist_elem prefix[] = {
 	{CW_STR_STOP, ""}
 };
 
-
-
-
 static const char *get_dbg_color_on(int level)
 {
 	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
@@ -191,17 +185,23 @@ static const char *get_dbg_color_ontext(int level)
 void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int n,
 			 cw_action_in_t * a)
 {
+	/*
 //      if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
 //              return;
+*/
 
-	if (!cw_dbg_is_level(level) || n == 0)
-		return;
 
 	char buffer[2000];
-	char *p = buffer;
+/*	char *p = buffer; */
 	int i;
-	char *delim = "";
+/*	char *delim = "";*/
+	
+	if (!cw_dbg_is_level(level) || n == 0)
+		return;
+	
+/*
 	// TODO XXXX
+*/
 	for (i = 0; i < n; i++) {
 /*		p += sprintf(p, "%s", delim);
 		delim = ", ";
@@ -210,207 +210,6 @@ void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int
 	}
 	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
 }
-
-/**
- * Format a Packet Header
- */
-int cw_format_pkt_hdr(char *dst, int level, struct conn *conn, uint8_t * packet, int len,
-		      struct sockaddr *from)
-{
-
-	char sock_buf[SOCK_ADDR_BUFSIZE]; 
-	
-	char *s = dst;
-	switch (level) {
-		case DBG_PKT_IN:
-			if (cw_get_hdr_flag_f(packet)) {
-				s += sprintf(s, "Fragment from %s",
-					     sock_addr2str_p(from,sock_buf));
-			} else {
-				s += sprintf(s, "From %s", sock_addr2str_p(from,sock_buf));
-			}
-			break;
-		case DBG_PKT_OUT:
-			if (cw_get_hdr_flag_f(packet)) {
-				s += sprintf(s, "Fragment to %s", sock_addr2str(from,sock_buf));
-			} else {
-				s += sprintf(s, "To %s", sock_addr2str(from,sock_buf));
-			}
-			break;
-	}
-	s += sprintf(s, " l=%d: ", len);
-
-	int preamble = cw_get_hdr_preamble(packet);
-	if (preamble == 01) {
-		s += sprintf(s, " (encrypted)");
-		return s - dst;
-	}
-
-	if (len < 4)
-		goto abort;
-
-/*		
-	if (cw_get_hdr_flag_f(packet)){
-		s+=sprintf(s," (fragmented)");
-	}
-*/
-	int hlen = cw_get_hdr_hlen(packet);
-	int rid = cw_get_hdr_rid(packet);
-	int wbid = cw_get_hdr_wbid(packet);
-	s += sprintf(s, " H:%d R:%02d W:%02d", hlen, rid, wbid);
-
-
-	s += sprintf(s, " Flgs:");
-	s += format_hdr_flags(s, packet);
-
-	if (len < 8)
-		goto abort;
-	int frag_id = cw_get_hdr_fragid(packet);
-	int frag_offs = cw_get_hdr_fragoffset(packet);
-	s += sprintf(s, " Frag/Offs:%d/%d", frag_id, frag_offs);
-
-
-	if (cw_get_hdr_flag_m(packet)) {
-		/* rmac is present, print the rmac */
-		int rmac_len = cw_get_hdr_rmac_len(packet);
-		int plen = rmac_len;
-		if (rmac_len + 8 > len)
-			plen = len - 8;
-		if (rmac_len > 10)
-			plen = 10;
-
-		s += sprintf(s, " R-MAC:");
-		s += format_mac(s, cw_get_hdr_rmac_data(packet), plen);
-		if (rmac_len > 10) {
-			s += sprintf(s, " ... (len=%d)", rmac_len);
-		}
-	}
-
-	if (cw_get_hdr_flag_w(packet)) {
-		/* print wireless specific info */
-		int ws_len = cw_get_hdr_ws_len(packet);
-		int plen = ws_len > 20 ? 20 : ws_len;
-		s += sprintf(s, " WS:");
-		s += format_hexu(s, cw_get_hdr_ws_data(packet), plen);
-		if (ws_len > 20) {
-			s += sprintf(s, " ... (len=%d)", ws_len);
-		}
-	}
-
-
-
-	return s - dst;
-
-
-
-      abort:
-	s += sprintf(s, " Incomplete...");
-	return s - dst;
-
-}
-
-/**
- * Create an ASCII hex dump of binary data
- * 
- * @param data data to dump
- * @param len number of bytes to dump (size of data)
- * @return a character string with the created data ASCII dump (must be released with free)
- */
-char *cw_dbg_mkdmp_c(const uint8_t * data, int len, int invlen)
-{
-
-	int maxtlen = 2048;
-	int i;
-	int rowlen = CW_LOG_DUMP_ROW_LEN;
-	int rows = len / rowlen;
-	int tlen = 0;
-
-	int md;
-	if (cw_dbg_opt_display & DBG_DISP_ASC_DMP)
-		md = 2;
-	else
-		md = 1;
-
-
-
-	char *dst = malloc(2 * (md * (len * 3 + (rows * 2) + 8 + maxtlen)));
-	if (!dst)
-		return NULL;
-
-	if (len % CW_LOG_DUMP_ROW_LEN)
-		rows++;
-
-
-	char *pdst = dst + tlen;
-	sprintf(pdst, "\n\t");
-	pdst += 2;
-
-	char asc_buffer[128];
-	char *ascdst = asc_buffer;
-
-//      if (invlen) {
-//              pdst+=sprintf(pdst,"\x1b[7m");
-//      }
-
-	for (i = 0; i < len; i++) {
-		char *sp = " ";
-		if (i == invlen - 1)
-			sp = "|";
-//              if (i==invlen){
-//                      pdst+=sprintf(pdst,"\x1b[27m");
-//              }
-
-		pdst += sprintf(pdst, "%02X%s", data[i] & 0xff, sp);
-		if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
-			int c = data[i] & 0xff;
-			if (c < 0x20 || c > 0x7f)
-				c = '.';
-			*ascdst = c;
-			ascdst++;
-		}
-//              pdst += 3;
-		if ((i + 1) % rowlen == 0) {
-			int l;
-			if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
-				*ascdst = 0;
-				l = sprintf(pdst, " | %s\n\t", asc_buffer);
-				ascdst = asc_buffer;
-
-			} else {
-				l = sprintf(pdst, "\n\t");
-			}
-			pdst += l;
-		}
-
-	}
-
-	if (cw_dbg_opt_display & DBG_DISP_ASC_DMP) {
-		*ascdst = 0;
-		if (strlen(asc_buffer))
-			pdst += sprintf(pdst, " | %s", asc_buffer);
-
-	}
-
-	return dst;
-}
-
-
-
-
-char *cw_dbg_mkdmp(const uint8_t * data, int len)
-{
-	return cw_dbg_mkdmp_c(data, len, 0);
-}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -421,16 +220,27 @@ char *cw_dbg_mkdmp(const uint8_t * data, int len)
 void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
+
+	int hlen;
+	char buf[1024];
+
 	if (!cw_dbg_is_level(level))
 		return;
-
-	char buf[1024];
-	cw_format_pkt_hdr(buf, level, conn, packet, len, from);
-
-	int hlen = cw_get_hdr_msg_offset(packet);
+	
+	if (level == DBG_PKT_IN)
+		cw_format_pkt_hdr(buf, 1,  packet, len, from);
+	else
+		cw_format_pkt_hdr(buf, 0,  packet, len, from);
+		
+	hlen = cw_get_hdr_msg_offset(packet);
 
 	if (cw_dbg_is_level(DBG_PKT_DMP)) {
+		/*
 		char *dmp = cw_dbg_mkdmp_c(packet, len, hlen);
+		*/
+		char * dmp;
+		dmp = cw_format_dump(packet,len,NULL);
+		
 		cw_dbg(level, "%s%s", buf, dmp);
 		free(dmp);
 	} else
@@ -440,6 +250,7 @@ void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
 		   struct sockaddr *from)
 {
+/*	
 	if (!cw_dbg_is_level(level))
 		return;
 
@@ -454,6 +265,7 @@ void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
 		free(dmp);
 	} else
 		cw_dbg(level, "%s", buf);
+*/
 }
 
 
@@ -461,42 +273,50 @@ void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
 
 
 
-void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, ...)
+void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ...)
 {
+	char *dmp;
+	
 	if (!cw_dbg_is_level(level))
 		return;
 
-
-	char *dmp = cw_dbg_mkdmp(data, len);
+	dmp = cw_format_dump(data, len, NULL);
 	cw_dbg(level, "%s%s", format, dmp);
 	free(dmp);
-
-
 }
 
 
 void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
-	if (!cw_dbg_is_level(level))
-		return;
+
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	char buf[1024];
-	char *s = buf;
-
-
-
-	uint8_t *msgptr = cw_get_hdr_msg_ptr(packet);
-//      int pplen = len - (msgptr-packet);
-
-	int msg_id = cw_get_msg_id(msgptr);
-	
+	char *s;
 	struct cw_MsgData search;
-	search.type = msg_id;
 	struct cw_MsgData * message;
+	const char * msname;	
+	uint8_t *msgptr;
+	int msg_id;
+	
+	if (!cw_dbg_is_level(level))
+		return;	
+	
+	s = buf;
+
+
+	msgptr = cw_get_hdr_msg_ptr(packet);
+/*
+//      int pplen = len - (msgptr-packet);
+*/
+	msg_id = cw_get_msg_id(msgptr);
+	
+
+	search.type = msg_id;
+
 	message = mavl_get_ptr(conn->msgset->messages,&search);
 	
-	char * msname;
+
 	if (!message)
 		msname="Unknown";
 	else
@@ -510,14 +330,16 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 
 	s += sprintf(s, ", Seqnum: %d ElemLen: %d", cw_get_msg_seqnum(msgptr),
 		     cw_get_msg_elems_len(msgptr));
-
+/*
 //abort:
+ */
 	cw_dbg(level, "%s", buf);
 }
 
 static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 			    const uint8_t * elem_data)
 {
+	uint32_t lw_elem_id;
 	switch (vendor_id) {
 		case CW_VENDOR_ID_CISCO:
 		{
@@ -528,7 +350,7 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 
 
 			/* dive into LWAPP vendor specific decoding */
-			uint32_t lw_elem_id = lw_get_word(elem_data + 4 + 6);
+			lw_elem_id = lw_get_word(elem_data + 4 + 6);
 			return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
 				       elem_id,
 				       lw_elem_id, lw_cisco_id_to_str(lw_elem_id));
@@ -560,15 +382,21 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 			 const uint8_t * msgbuf, int len)
 {
-	if (!cw_dbg_is_level(level))
-		return;
+
 
 	const char *elemname;
 	char vendorname[256];
 	char vendor_details[265];
-	*vendor_details = 0;
-/// TODO XXXX
 
+	if (!cw_dbg_is_level(level))
+		return;
+		
+	*vendor_details = 0;
+
+	
+/*	
+/// TODO XXXX
+*/
 	if (msgelem == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
 		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
 		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
@@ -580,7 +408,9 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 		elemname = vendorname;
 
 	} else {
+/*		
 //		elemname = cw_strelemp(conn->actions, msgelem);
+*/
 		elemname=0;
 	}
 
@@ -588,7 +418,11 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	if (!cw_dbg_is_level(DBG_ELEM_DMP)) {
 		cw_dbg(DBG_ELEM, "%d (%s), len=%d", msgelem, elemname, len);
 	} else {
+		/*
 		char *dmp = cw_dbg_mkdmp(msgbuf, len);
+		 */
+		char *dmp;
+		dmp = cw_format_dump(msgbuf,len,NULL);
 
 		cw_dbg(DBG_ELEM, "%d (%s), len=%d%s%s",
 		       msgelem, elemname, len, get_dbg_color_ontext(DBG_ELEM_DMP), dmp);
@@ -598,13 +432,14 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 }
 
 
-void cw_dbg_colored(int level, const char *format, ...)
+void cw_dbg(int level, const char *format, ...)
 {
+	char fbuf[1024];
+	va_list args;
 
+	
 	if (!(cw_dbg_is_level(level)))
 		return;
-
-	char fbuf[1024];
 
 	sprintf(fbuf, "DBG:%s%s %s%s%s",
 		get_dbg_color_on(level),
@@ -613,7 +448,6 @@ void cw_dbg_colored(int level, const char *format, ...)
 	    );
 
 
-	va_list args;
 	va_start(args, format);
 /*	cw_log_vcb(level, fbuf, args);*/
 	cw_log_console_writer.write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
@@ -621,8 +455,9 @@ void cw_dbg_colored(int level, const char *format, ...)
 
 }
 
+/*
 //int cw_is_utf8(unsigned char *str, size_t len);
-
+*/
 
 int cw_format_item(char *dst, mbag_item_t * item)
 {
@@ -639,17 +474,20 @@ int cw_format_item(char *dst, mbag_item_t * item)
 
 static int cw_format_version(char *s, bstrv_t ver, char *def)
 {
+	int dot;
+	uint8_t *version;
+	int len,rs,i;
+	uint32_t vendor;
+	
 	if (!ver)
 		return sprintf(s, "%s", def);
 
 
-	uint8_t *version = bstrv_data(ver);
-	int len = bstrv_len(ver);
+	version = bstrv_data(ver);
+	len = bstrv_len(ver);
 
-
-
-	int rs = 0;
-	int i;
+	rs = 0;
+	
 
 
 	if (format_is_utf8(version, len)) {
@@ -662,7 +500,7 @@ static int cw_format_version(char *s, bstrv_t ver, char *def)
 			rs += sprintf(s + rs, "%02X", version[i]);
 		}
 
-		int dot = 0;
+		dot = 0;
 
 		rs += sprintf(s + rs, " (");
 		for (i = 0; i < len && i < 20; i++) {
@@ -674,7 +512,7 @@ static int cw_format_version(char *s, bstrv_t ver, char *def)
 		rs += sprintf(s + rs, ")");
 	}
 
-	uint32_t vendor = bstrv_get_vendor_id(ver);
+	vendor = bstrv_get_vendor_id(ver);
 	rs += sprintf(s + rs, ", Vendor Id: %d, %s", vendor, cw_strvendor(vendor));
 	return rs;
 }
@@ -683,11 +521,11 @@ static int cw_format_version(char *s, bstrv_t ver, char *def)
 
 void cw_dbg_version_subelem(int level, const char *context, int subtype, bstrv_t vstr)
 {
+	char v[256];
 	if (!cw_dbg_is_level(level))
 		return;
 	if (!vstr)
 		return;
-	char v[256];
 	cw_format_version(v, vstr, "");
 	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
 

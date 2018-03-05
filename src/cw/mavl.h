@@ -52,6 +52,18 @@
 /**
  * @}
  */
+ 
+struct mavl_KeyVal{
+	const char *key;
+	const void *priv;
+	union{
+		void * ptr;
+		uint32_t dword;
+		uint16_t word;
+		uint8_t byte;
+		char * str;
+	}val;
+};
 
 union mavldata {
 	void *ptr;
@@ -59,6 +71,7 @@ union mavldata {
 	uint16_t word;
 	uint8_t byte;
 	char *str;
+	struct mavl_KeyVal kv;
 };
 typedef union mavldata mavldata_t;
 
@@ -66,8 +79,8 @@ typedef union mavldata mavldata_t;
  * Defines the structure of an AVL Node.
  */
 struct mavlnode {
-	/** Pointer to data, thant belongs to the node */
-	/* void *data; */
+	/** Pointer to data, that belongs to the node */
+
 	union mavldata data;
 	/** Pointer to left son*/
 	struct mavlnode *left;
@@ -113,6 +126,9 @@ union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
 struct mavlnode *mavl_get_node(struct mavl *t, union mavldata *data);
 void * mavl_get_ptr(mavl_t tree, void * search);
 void *mavl_add_ptr(mavl_t tree, void *ptr);
+
+int mavl_cmp_kv(const union mavldata *e1, const union mavldata *e2);
+union mavldata *mavl_add_kv_byte(mavl_t tree, const char *key, uint8_t val);
 
 void mavl_merge(mavl_t m, mavl_t t);
 

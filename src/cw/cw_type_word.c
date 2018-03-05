@@ -21,6 +21,7 @@
 #include "cw_types.h"
 #include "cw.h"
 
+/*
 static struct mdata_Elem *  from_str(const char *src)
 {
 	struct mdata_Elem * e = mdata_elem_new(&cw_type_word);
@@ -59,3 +60,4 @@ static int put(struct mdata_Elem * e, uint8_t *dst)
 #define _I_FROM_STR	from_str
 
 const struct mdata_Type  cw_type_word = MDATA_TYPE_INIT();
+*/

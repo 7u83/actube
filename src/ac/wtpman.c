@@ -96,6 +96,8 @@ static void wtpman_run_discovery(void *arg)
 
 	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
+	
+	wtpman->conn->remote_cfg = mavl_create(mavl_cmp_kv,NULL);
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {

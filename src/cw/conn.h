@@ -70,6 +70,10 @@ struct conn {
 
 
 	int recv_timeout;
+	
+	
+	mavl_t remote_cfg;
+	
 
 	mbag_t outgoing;
 	mbag_t incomming;

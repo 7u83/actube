@@ -94,10 +94,52 @@ extern struct cw_Mod * cw_get_mod_ac(const char *name);
 
 extern void test_sets();
 #include "cw/file.h"
+#include "cw/cw_types.h"
 
+void cw_type_delete(mavldata_t *data){
+	struct cw_Type * type = data->kv.priv;
+	printf("Delete elem of type: %s\n", type->name);
+	if (type->del)
+		type->del(data);
+	
+}
 
 int main(int argc, char *argv[])
 {
+	mavl_t kv;
+	mavliter_t kviter;
+	uint8_t bytes[] = { 99,4,5,7 };
+	
+
+	kv = mavl_create(mavl_cmp_kv,cw_type_delete);
+	
+	mavldata_t data, *result;
+
+	data.kv.key="wtp_board_data";
+	result = cw_type_byte.get(&data,bytes,1);
+	mavl_add(kv,result);
+	
+	data.kv.key="wtp_next_data";
+	result = cw_type_byte.get(&data,bytes+1,1);
+	mavl_add(kv,result);
+
+
+	mavliter_init(&kviter,kv);
+	mavliter_foreach(&kviter){
+		char value[500];
+		mavldata_t * data;
+		data = mavliter_get(&kviter);
+		struct cw_Type * type = data->kv.priv;
+		type->to_str(data,value,0);
+		
+		printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
+	}
+
+	mavl_destroy(kv);
+	exit(0);
+
+
+
 /*	cw_log_init();
 	cw_log(LOG_ERROR,"Hello Debug World222");
 	exit(0);
@@ -115,10 +157,24 @@ int main(int argc, char *argv[])
 	
 /*	char data[100];
 	mavl_t im;
-	mavldata_t val,itt;	
+	mavldata_t * val, * val2,itt, itt2, * result, search ;	
 	mavliter_t myit;
 	
 	im = mavl_create(mavl_cmp_dword,NULL);
+	itt.dword = 7;
+	itt2.dword = 7;
+	
+	
+	val = mavl_add(im,&itt);
+	val2 = mavl_add(im,&itt2);
+	
+	search.dword = 7;
+	result = mavl_get(im,&search);
+
+	printf("Result: (%p, %p) (%p, %p) (%p, %p)\n",val, &itt, val2, &itt2, result, &search);
+	
+	exit(0);
+	
 	
 	for (itt.dword=100; itt.dword>0; itt.dword--){
 		printf("Copunting: %d\n",itt.dword);
@@ -133,8 +189,8 @@ int main(int argc, char *argv[])
 	}
 		
 	mavl_destroy(im);
+
 */	
-	
 	
 	
 	

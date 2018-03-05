@@ -15,8 +15,6 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
-
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -182,8 +180,9 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 				      int elems_len, struct sockaddr *from)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	struct cw_Mod *cmod, *bmod;
 	
-	struct cw_Mod *cmod =
+	cmod =
 	    cw_mod_detect(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_CAPWAP);
 	if (cmod == MOD_NULL) {
 		cw_dbg(DBG_MSG_ERR,
@@ -192,17 +191,17 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 		return NULL;
 	}
 
-	struct cw_Mod *bmod =
+	bmod = 
 	    cw_mod_detect(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
 
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
+/*
 //	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
+*/
 
+	return cw_mod_get_msg_set(conn,cmod,bmod);
 
-	struct cw_MsgSet * set = cw_mod_get_msg_set(conn,cmod,bmod);
-
-	return set;
 }
 
 int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -220,7 +219,8 @@ int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
 {
-	char sock_buf[SOCK_ADDR_BUFSIZE];
+	char sock_buf[SOCK_ADDR_BUFSIZE]; /**< to hold str from sockaddr2str */
+	
 	struct cw_action_in as, *af, *afm;
 
 	int offset = cw_get_hdr_msg_offset(rawmsg);
@@ -266,7 +266,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 		struct cw_MsgSet *set = load_msg_set(conn, rawmsg, len, elems_len, from);
 		if (!set) {
+/*
 			//cw_log(LOG_ERR, "Error");
+*/ 
 			errno = EAGAIN;
 			return -1;
 		}
@@ -337,10 +339,11 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	}
 
 	/* Execute start processor for message */
+/*
 //	if (afm->start) {
 //		afm->start(conn, afm, rawmsg, len, from);
 //	}
-
+*/
 
 
 	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
@@ -354,36 +357,71 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
-		as.elem_id = cw_get_elem_id(elem);
-		int elem_len = cw_get_elem_len(elem);
+		struct cw_ElemHandler *handler;
+		struct cw_ElemData * elem_data, elem_data_search;
+		int elem_len, elem_id;
+		
+		elem_id = cw_get_elem_id(elem);
+		
+		handler = cw_msgset_get_elemhandler(conn->msgset,0, 0, elem_id);
+		if (!handler) {
+			cw_dbg(DBG_ELEM_ERR, "Unknown message element: %d, ignoring", 
+				elem_id);
+			continue;
+		}
 
+
+		elem_data_search.id=elem_id;
+		elem_data_search.proto=0;
+		elem_data_search.vendor=0;
+		
+		elem_data = mavl_find_ptr(message->elements_tree,&elem_data_search);
+
+		if (!elem_data){
+			cw_dbg(DBG_ELEM_ERR, "Element %d - %s, not allowed here", 
+				elem_id, handler->name);
+			continue;
+		}
+		
+		
+		elem_len = cw_get_elem_len(elem);
+		
+printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
+continue;
+exit(0);
+		
+		
+		as.elem_id = cw_get_elem_id(elem);
+	/*	int elem_len = cw_get_elem_len(elem);*/
+
+/*
 		//cw_elem_handler_t search_eh;
 		//memset(&search_eh,0,sizeof(search_eh));
 //		struct cw_ElemDef search_elem;
 //		search_elem.handler=&search_eh;
 
 //		search_eh.id = cw_get_elem_id(elem);
-
+*/
 
 
 		struct cw_ElemDef * elem;
-	//	elem = mavl_find(message->elements_tree,&search_elem);
+		
+
 		
 		
-//printf("ElemCHeck %d\n",search_eh.id);
-//if (elem){
-//printf("Elem %d found! %s\n", elem->handler->id   , elem->handler->name);
-//}
+/*
 		// TODO XXX
 //		af = cw_actionlist_in_get(conn->actions->in, &as);
+ */
 		af = 0;
 
 		if (!af) {
 			unrecognized++;
-			// TOOO XXXX
+			
+			
 /*			cw_dbg(DBG_ELEM_ERR,
 			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
-			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
+// TODO XXXX			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
 			       as.msg_id, cw_strmsg(as.msg_id));
 */			        
 			continue;
@@ -411,8 +449,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 
 		if(conn->elem_end){
+/*			
 			// TODO XXXX
 //			afrc = conn->elem_end(conn,af,afrc,cw_get_elem_data(elem), elem_len,from);
+*/
 		}
 
 	}

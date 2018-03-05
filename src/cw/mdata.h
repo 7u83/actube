@@ -50,17 +50,6 @@ struct mdata_Type{
 };
 
 
-#define MDATA_TYPE_INIT()\
-	{\
-		_I_NAME,\
-		_I_DEL,\
-		_I_PUT,\
-		_I_GET,\
-		_I_TO_STR,\
-		_I_FROM_STR \
-	}
-
-
 struct mdata_Elem *mdata_elem_new( const struct mdata_Type * type );
 
 

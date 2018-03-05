@@ -3,6 +3,7 @@
 
 #include "mavl.h"
 #include "debug.h"
+#include "dbg.h"
 #include "log.h"
 
 #include "message_set.h"
@@ -155,6 +156,7 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 		struct cw_MsgDef * msgdef)
 {
 	struct cw_ElemDef * elemdef;
+	mavldata_t mavldata, *result;
 	
 	/* iterate through all defined elements */
 	for(elemdef = msgdef->elements; elemdef->id; elemdef++){
@@ -164,7 +166,7 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 			elemdef->proto,
 			elemdef->vendor,
 			elemdef->id);
-
+		/* check if a handler for our element already exists */
 		if (!handler){
 			cw_log(LOG_ERR, "No handler for message element: %d %d %d",
 					elemdef->proto,
@@ -172,14 +174,33 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 					elemdef->id);
 			continue;
 		}
-
-		DBG_START(NULL,DBG_INFO)
-			"Have an element %d %d %d, %s", 
+		
+		mavldata.ptr = malloc(sizeof(struct cw_ElemData));
+		if (!mavldata.ptr){
+			cw_log(LOG_ERR,"Can't create ElemData element: %s",strerror(errno));
+		}
+		((struct cw_ElemData *)(mavldata.ptr))->id=elemdef->id;
+		((struct cw_ElemData *)(mavldata.ptr))->proto=elemdef->proto;
+		((struct cw_ElemData *)(mavldata.ptr))->vendor=elemdef->vendor;
+		((struct cw_ElemData *)(mavldata.ptr))->mand=elemdef->mand;
+		
+		result = mavl_replace(msgdata->elements_tree, &mavldata);
+		
+		if (result != &mavldata){
+			cw_dbg(DBG_MOD, "  adding message element %d %d %d - %s", 
 				elemdef->proto,
-				elemdef->id, 
 				elemdef->vendor,
-				handler->name
-		DBG_END
+				elemdef->id, 
+				handler->name);
+		}
+		else{
+			cw_dbg(DBG_MOD, "  replaceing message element %d %d %d - %s", 
+				elemdef->proto,
+				elemdef->vendor,
+				elemdef->id, 
+				handler->name);
+		}
+
 	}
 	
 	return 0;
@@ -203,12 +224,11 @@ int cw_msgset_add(struct cw_MsgSet * set,
 			continue;
 		}
 		
-		DBG_START(NULL,DBG_MOD)
-			"  Adding handler for element %d - %s - with key: %s", 
+		cw_dbg(DBG_MOD,"Adding handler for element %d - %s - with key: %s", 
 				handler->id,
 				handler->name,
-				handler->key
-		DBG_END
+				handler->key);
+		
 		
 		memcpy(copy.ptr,handler,sizeof(struct cw_ElemHandler));
 		
@@ -244,9 +264,9 @@ int cw_msgset_add(struct cw_MsgSet * set,
 			msg->states=msgdef->states;
 		msg->receiver=msgdef->receiver;
 
-		DBG_START(NULL,DBG_INFO)
-		   "Add message Type:%d - %s ",msgdef->type,msgdef->name
-		DBG_END
+
+		cw_dbg(DBG_MOD, "Add message Type:%d - %s ",msgdef->type,msgdef->name);
+
 	
 		update_msgdata(set,msg,msgdef);
 	}

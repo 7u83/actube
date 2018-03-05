@@ -21,7 +21,7 @@
 #include "cw.h"
 #include "cw_types.h"
 
-
+/*
 static struct mdata_Elem *from_str(const char *src)
 {
 	struct mdata_Elem *i = mdata_elem_new(&cw_type_byte);
@@ -37,26 +37,31 @@ static int to_str(const struct mdata_Elem *e, char *dst)
 {
 	return sprintf(dst, "%d", e->data.byte);
 }
+*/
 
-static struct mdata_Elem *get(const uint8_t * src, int len)
+static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
 {
-	struct mdata_Elem *e = mdata_elem_new(&cw_type_byte);
-	if (!e)
-		return NULL;
-	e->data.byte = cw_get_byte(src);
-	return e;
+	data->kv.priv = &cw_type_byte;
+	data->kv.val.byte = cw_get_byte(src);
+	return data;
 }
 
-static int put(struct mdata_Elem *e, uint8_t * dst)
+static int put(mavldata_t *data, uint8_t * dst)
 {
-	return cw_put_byte(dst, e->data.byte);
+	return cw_put_byte(dst, data->kv.val.byte);
 }
 
-#define _I_NAME		"Byte"
-#define _I_PUT		put
-#define _I_GET		get
-#define _I_DEL		NULL
-#define _I_TO_STR	to_str
-#define _I_FROM_STR	from_str
+static int to_str(const mavldata_t *data, char *dst, int max_len)
+{
+	return sprintf(dst, "%d", data->kv.val.byte);
+}
 
-const struct mdata_Type cw_type_byte = MDATA_TYPE_INIT();
+const struct cw_Type cw_type_byte = {
+	"Byte",	/* name */
+	NULL,	/* del */
+	put,	/* put */
+	get,	/* get */
+	to_str	/* to_str */
+};
+
+

@@ -28,6 +28,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "sock.h"
+
 int format_hex_bytes(char *dst, const char *format, const char *delim,
 			    const uint8_t * src, int len);
 
@@ -104,7 +106,8 @@ char *cw_format_dump(const uint8_t * data, int len,
 	struct cw_FormatDumpSettings *settings);
 
 void cw_format_get_dump_defaults(struct cw_FormatDumpSettings * settings);
-
+int cw_format_pkt_hdr(char *dst, int incomming, uint8_t * packet, int len,
+		      struct sockaddr *from);
 
 /**@}*/
 

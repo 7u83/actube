@@ -324,6 +324,9 @@
       <File Name="src/cw/mavliter_init.c"/>
       <File Name="src/cw/mavl_add_ptr.c"/>
       <File Name="src/cw/cw_format_dump.c"/>
+      <File Name="src/cw/cw_format_pkt_hdr.c"/>
+      <File Name="src/cw/mavl_cmp_kv.c"/>
+      <File Name="src/cw/mavl_add_kv_byte.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

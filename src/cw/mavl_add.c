@@ -125,10 +125,6 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * 
 						n->right->bal = 0;
 					}
 
-
-
-
-
 					(*parent)->bal = 0;
 					n->right->left = (*parent)->right;
 					(*parent)->right = n->right;
@@ -162,10 +158,18 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * 
 
 /**
  * Add an element to an AVL tree
- * @t mavl
- * @data pointer to element
- * @return added alement or NULL if error.
+ * 
+ * @param t mavl
+ * @param data pointer to element
+ * 
+ * @return A pointer to the element in the tree. If teh returned pointer 
+ * equals to the pointer given in the data argument, the element has already
+ * been in the tree. If the function returns NULL, there was en error, e.g.
+ * no memory left. Consult therefore errno.  
+ *
+ * @example mavl_add_example.c
  */
+ 
 union mavldata *mavl_add(struct mavl *t, union mavldata *data)
 {
 	union mavldata * d;
