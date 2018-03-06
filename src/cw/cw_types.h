@@ -38,6 +38,7 @@ extern const struct cw_Type  cw_type_byte;
 
 extern const struct cw_Type  cw_type_word;
 extern const struct cw_Type  cw_type_dword;
+extern const struct cw_Type  cw_type_version;
 
 void cw_types_mavl_delete(mavldata_t *data);
 
