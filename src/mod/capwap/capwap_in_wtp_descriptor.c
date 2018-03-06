@@ -17,17 +17,21 @@
 */
 
 
-
 #include "cw/sock.h"
 #include "cw/cw.h"
 
-int capwap_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+#include "mod_capwap.h"
+
+int capwap_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
+	int rc;
+	printf("WTP Descriptor reader\n");
+/*
+//	mbag_t mbag = conn->incomming;
+*/
+	rc =cw_read_wtp_descriptor(conn->remote_cfg, conn, eh, data, len, NULL);
 
-	mbag_t mbag = conn->incomming;
-
-	int rc =cw_read_wtp_descriptor(mbag, conn, a, data, len, NULL);
 	return rc;
 }
 

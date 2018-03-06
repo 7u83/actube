@@ -44,23 +44,14 @@
 #include "cw/cw_types.h"
 
 static struct cw_ElemHandler handlers[] = {
-
 	{ 
-		"Discovery Type",		/* name */
-		CAPWAP_ELEM_DISCOVERY_TYPE,	/* Element ID */
+		"WTP Descriptor (Draft 7)",	/* name */
+		CAPWAP_ELEM_WTP_DESCRIPTOR,	/* Element ID */
 		0,0,				/* Vendor / Proto */
-		1,1,				/* min/max length */
-		CW_TYPE_BYTE,			/* type */
-		"discovery_type"		/* Key */
-	}
-	,
-	{ 
-		"WTP Mac Type",			/* name */
-		CAPWAP_ELEM_WTP_MAC_TYPE,	/* Element ID */
-		0,0,				/* Vendor / Proto */
-		1,1,				/* min/max length */
-		CW_TYPE_BYTE,			/* type */
-		"wtp_mac_type"			/* Key */
+		4,128,				/* min/max length */
+		NULL,				/* type */
+		"wtp_descriptor",		/* Key */
+		cisco_in_wtp_descriptor	 /* get */
 	}
 	,
 	{0,0,0,0,0,0,0,0}
@@ -70,7 +61,7 @@ static struct cw_ElemHandler handlers[] = {
 
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
-	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
 	{0,0,0,00}
 	
 };
@@ -136,7 +127,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME, 
-		.start=cw_in_generic2, 
+		.start=cw_in_generic, 
 		.item_id = "wtp_name", 
 		.min_len=1,
 		.max_len=512,
@@ -224,7 +215,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
-	 	.start = cw_in_generic2, 
+	 	.start = cw_in_generic, 
 		.mand = 0, 
 		.min_len = 1, 
 		.max_len = 1
@@ -245,7 +236,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CW_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
-		.start = cw_in_generic2,
+		.start = cw_in_generic,
 		.min_len = 0,
 		.max_len = 512,
 		.mand = 1
@@ -273,7 +264,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG, 
 		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
-		.start = cw_in_generic2
+		.start = cw_in_generic
 
 	}
 	,
@@ -285,7 +276,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG, 
 		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
-		.start = cw_in_generic2
+		.start = cw_in_generic
 
 	}
 	,
@@ -329,7 +320,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
-		.start = cw_in_generic2
+		.start = cw_in_generic
 	}
 	,
 
@@ -341,7 +332,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_LOG_FACILITY,
 		.item_id = CIPWAP_ITEM_LOG_FACILITY,
-		.start = cw_in_generic2
+		.start = cw_in_generic
 	}
 	,
 

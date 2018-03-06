@@ -328,7 +328,6 @@
       <File Name="src/cw/mavl_cmp_kv.c"/>
       <File Name="src/cw/mavl_add_kv_byte.c"/>
       <File Name="src/cw/cw_types_mavl_delete.c"/>
-      <File Name="src/cw/cw_read_elem.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

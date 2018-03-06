@@ -2,6 +2,9 @@
 #define __MESSAGE_SET_H
 
 #include "mlist.h"
+#include "sock.h"
+#include "mavl.h"
+#include "conn.h"
 
 struct cw_MsgSet {
 	mavl_t messages;
@@ -34,9 +37,10 @@ struct cw_ElemHandler {
 	int max_len;
 	const struct cw_Type * type;
 	const char * key;
-/*
-        int (*start_in)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
-        int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
+        int (*get)(struct conn *conn, struct cw_ElemHandler * handler,
+		uint8_t*data,int len,struct sockaddr *from);
+/*        
+	int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 */
 };
 

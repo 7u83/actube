@@ -19,9 +19,13 @@
 #include "cw.h"
 #include "dbg.h"
 
-int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,
-				struct cw_descriptor_subelem_def *elems)
+int cw_read_descriptor_subelems(mavl_t store, uint8_t * data, int len,
+				struct cw_DescriptorSubelemDef *elems)
 {
+
+	printf("sub reader\n");
+
+	
 	int errors = 0;
 	int success = 0;
 	int sub = 0;
@@ -36,10 +40,14 @@ int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,
 
 		bstrv_t vstr = NULL;
 		int i;
+		
+		/* search sub-element */
 		for (i = 0; elems[i].maxlen; i++) {
 			if (elems[i].type == subtype && elems[i].vendor_id==vendor_id)
 				break;
 		}
+		
+		
 		if (!elems[i].maxlen) {
 			vstr = bstrv_create(vendor_id, data + sub + 8, sublen);
 			if (vstr) {
@@ -58,11 +66,11 @@ int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,
 			}
 
 			vstr =
-			    mbag_set_bstrv(store, elems[i].item_id, vendor_id,
+			    mbag_set_bstrv(store, elems[i].key, vendor_id,
 					   data + sub + 8, l);
 
 			char dbgstr[128];
-			sprintf(dbgstr, "Storing '%s'", elems[i].item_id);
+			sprintf(dbgstr, "Storing '%s'", elems[i].key);
 			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype, vstr);
 			success++;
 		}

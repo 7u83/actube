@@ -25,6 +25,7 @@
 
 #include "mod_capwap.h"
 
+
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
@@ -33,7 +34,8 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
-		"discovery_type"		/* Key */
+		"discovery_type",		/* Key */
+		cw_in_generic			/* get */
 	}
 	,
 	{ 
@@ -42,9 +44,31 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
-		"wtp_mac_type"			/* Key */
+		"wtp_mac_type",			/* Key */
+		cw_in_generic			/* get */
 	}
 	,
+	{ 
+		"WTP Board Data",		/* name */
+		CAPWAP_ELEM_WTP_BOARD_DATA,	/* Element ID */
+		0,0,				/* Vendor / Proto */
+		4,128,				/* min/max length */
+		NULL,				/* type */
+		"wtp_board_data",		/* Key */
+		capwap_in_wtp_board_data	/* get */
+	}
+	,
+	{ 
+		"WTP Descriptor",		/* name */
+		CAPWAP_ELEM_WTP_DESCRIPTOR,	/* Element ID */
+		0,0,				/* Vendor / Proto */
+		4,128,				/* min/max length */
+		NULL,				/* type */
+		"wtp_descriptor",		/* Key */
+		capwap_in_wtp_descriptor	 /* get */
+	}
+	,
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -55,8 +79,9 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
 	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,	1, 0},
-	{0,0,0,00}
-	
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},	
+	{0,0,0,0,0}
+
 };
 
 static struct cw_MsgDef messages[] = {

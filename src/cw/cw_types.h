@@ -23,7 +23,7 @@ struct cw_Type{
 
         /** Cereate an item of this type from a string, which was previously
             created by the #del function. */
-/* struct mdata_Elem * (*from_str)(const char *src);*/
+	mavldata_t * (*from_str)(mavldata_t * data, const char *src);
 
 /*
         int (*def)(void *, void *);
@@ -44,4 +44,4 @@ void cw_types_mavl_delete(mavldata_t *data);
 #define cw_types_mavl_create()\
 	mavl_create(mavl_cmp_kv, cw_types_mavl_delete)
 
-#endif
+#endif /* __CW_TYPES_H */

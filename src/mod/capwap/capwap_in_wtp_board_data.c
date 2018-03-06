@@ -16,22 +16,16 @@
 
 */
 
-
 #include <stdlib.h>
 #include <string.h>
 
+#include "mod_capwap.h"
 
-
-#include "cw/cw.h"
-#include "cw/capwap_items.h"
-
-#include "cw/mbag.h"
-
-#include "cw/cw_util.h"
 #include "cw/dbg.h"
+#include "cw/cw.h"
 
 
-
+/*
 static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 					int len)
 {
@@ -89,26 +83,36 @@ static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 	} while (i < len);
 }
 
+*/
 
 /**
  * Parse a WTP Board Data messag element and put results to itemstore.
  */
-int capwap_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int capwap_in_wtp_board_data(struct conn *conn, struct cw_ElemHandler *eh, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
 
+/*
 	if (len < 4) {
 		cw_dbg(DBG_ELEM_ERR,
 		       "Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d",
 		       a->elem_id, len);
 		return 0;
 	}
+*/
 
+	char vendor_key[64];
+
+	printf("Have to read WTP Board Data\n");	
+	sprintf(vendor_key,"%s/%s",eh->key,"vendor");
+
+/*
 	mbag_t itemstore = conn->incomming;
 	mbag_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR, cw_get_dword(data));
+*/
 
-	readsubelems_wtp_board_data(itemstore, data + 4, len - 4);
-
+/*	readsubelems_wtp_board_data(itemstore, data + 4, len - 4);
+*/
 	return 1;
 }
 

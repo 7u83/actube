@@ -30,7 +30,7 @@ int cw_in_ac_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 
 	mbag_set_ptr(conn->incomming, CW_ITEM_AC_STATUS, status);
 
-	static struct cw_descriptor_subelem_def allowed[] = {
+	static struct cw_DescriptorSubelemDef allowed[] = {
 		{0,CW_SUBELEM_AC_HARDWARE_VERSION, CW_ITEM_WTP_HARDWARE_VERSION, 1024,1},
 		{0,CW_SUBELEM_AC_SOFTWARE_VERSION, CW_ITEM_WTP_SOFTWARE_VERSION, 1024,1},
 		{0,0, NULL,0, 0}

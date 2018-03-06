@@ -70,7 +70,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
 		.elem_id = CW_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
-	 	.start = cw_in_generic2, 
+	 	.start = cw_in_generic, 
 		.mand = 0, 
 		.min_len = 1, 
 		.max_len = 1
@@ -103,7 +103,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id  = LW_ELEM_LOCATION_DATA,
 		.item_id = CW_ITEM_LOCATION_DATA, 
-		.start  = cw_in_generic2,
+		.start  = cw_in_generic,
 		.min_len = 0,
 		.max_len = 1024,
 		.mand = 0
@@ -117,7 +117,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id  = CW_CISCO_RAD_NAME,
 		.item_id = CW_ITEM_WTP_NAME, 
-		.start  = cw_in_generic2,
+		.start  = cw_in_generic,
 		.min_len = 0,
 		.max_len = 1024,
 		.mand = 0
@@ -132,7 +132,7 @@ static cw_action_in_t actions_in[] = {
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
 		.elem_id  = CW_CISCO_AP_GROUP_NAME,
 		.item_id = CIPWAP_ITEM_WTP_GROUP_NAME, 
-		.start  = cw_in_generic2,
+		.start  = cw_in_generic,
 		.min_len = 0,
 		.max_len = 1024,
 		.mand = 0
@@ -162,7 +162,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
-		.start = cw_in_generic2
+		.start = cw_in_generic
 	}
 	,
 
@@ -250,7 +250,7 @@ static cw_action_in_t actions_in[] = {
 		.vendor_id = LW_VENDOR_ID_CISCO,
 		.elem_id = LW_CISCO_MWAR_HASH_VALUE,
 		.item_id = CIPWAP_ITEM_AC_HASH_VALUE,
-		.start = cw_in_generic2, //cisco_in_telnet_ssh
+		.start = cw_in_generic, //cisco_in_telnet_ssh
 	}
 
 	,
@@ -473,7 +473,7 @@ static cw_action_in_t actions80211_in[] = {
 		.vendor_id = LW_VENDOR_ID_CISCO,
 		.elem_id = LW_CISCO_ADD_WLAN,
 //		.item_id = CIPWAP_ITEM_AC_HASH_VALUE,
-//		.start = cw_in_generic2, //cisco_in_telnet_ssh
+//		.start = cw_in_generic, //cisco_in_telnet_ssh
 		.start = cisco_in_add_wlan
 	}
 

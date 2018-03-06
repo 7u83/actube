@@ -25,8 +25,6 @@
 #include <errno.h>
 #include <dlfcn.h>
 
-
-//#include "action.h"
 #include "mbag.h"
 #include "mavl.h"
 #include "dbg.h"
@@ -57,27 +55,32 @@ struct cache_item {
 };
 static struct mavl *msgset_cache = NULL;
 
+/*
 static int mod_null_register_actions(struct cw_actiondef *def, int mode)
 {
 	return 0;
 }
+*/
 
 /**
  * mod_null is a dummy mod 
  */
 struct cw_Mod mod_null = {
-	.name = "none",
-	.register_actions = mod_null_register_actions,
+	"none",		/* name */
+	NULL,		/* init */
+	NULL,		/* init_config */
+	NULL,		/* detect */
+	NULL		/* data */
 	
 };
 
 
 
 
-static int cmp(const void *p1, const void *p2)
+static int cmp(const mavldata_t *p1, const mavldata_t *p2)
 {
-	struct cache_item *c1 = (struct cache_item *) p1;
-	struct cache_item *c2 = (struct cache_item *) p2;
+	struct cache_item *c1 = (struct cache_item *) p1->ptr;
+	struct cache_item *c2 = (struct cache_item *) p2->ptr;
 
 	int r;
 	r = strcmp(c1->capwap, c2->capwap);
@@ -96,6 +99,10 @@ struct cw_actiondef *mod_cache_get(const char *capwap, const char *bindings)
 struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn, 
 			struct cw_Mod * capwap_mod, struct cw_Mod *bindings_mod)
 {
+	struct cache_item search;
+	struct cache_item * cached_set;
+	struct cw_MsgSet * set;
+
 	if (!msgset_cache) {
 		msgset_cache = mavl_create(cmp, NULL);
 		if (!msgset_cache) {
@@ -105,11 +112,11 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 		}
 	}
 
-	struct cache_item search;
+
 	search.capwap = capwap_mod->name;
 	search.bindings = bindings_mod->name;
 
-	struct cache_item * cached_set = mavl_get(msgset_cache, &search);
+	cached_set = mavl_get_ptr(msgset_cache, &search);
 	if (cached_set) {
 		cw_dbg(DBG_INFO, "Using cached message set for %s,%s", capwap_mod->name, bindings_mod->name);
 		return cached_set->msgset;
@@ -124,7 +131,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	}
 	memset(cached_set, 0, sizeof(struct cache_item));
 	
-	struct cw_MsgSet * set = cw_msgset_create();
+	set = cw_msgset_create();
 	if (!set) {
 		free(cached_set);
 		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",
@@ -140,18 +147,16 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 
 	if (capwap_mod) {
 		cached_set->capwap = capwap_mod->name;
-		//c->register_actions(&(i->actions), CW_MOD_MODE_CAPWAP);
 		capwap_mod->register_messages(cached_set->msgset,CW_MOD_MODE_CAPWAP);
 	}
 	if (bindings_mod) {
 		cached_set->bindings = bindings_mod->name;
-		//b->register_actions(&(i->actions), MOD_MODE_BINDINGS);
 	}
-
+/*
 //	if (actions_registered_cb)
 //		actions_registered_cb(capwap_mod, bindings_mod, &(cached_set->actions));
-
-	mavl_add(msgset_cache, cached_set);
+*/
+	mavl_add_ptr(msgset_cache, cached_set);
 	return cached_set->msgset;
 }
 
@@ -159,11 +164,19 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 
 /* static mavl to store modules */
 static struct mavl * mods_loaded = NULL;
-static int mod_cmp(const void *e1, const void *e2){
+static int mod_cmp_mavl(const mavldata_t *e1, const mavldata_t *e2){
+	const struct cw_Mod * m1 = e1->ptr;
+	const struct cw_Mod * m2 = e2->ptr;
+	return strcmp(m1->name,m2->name);
+}
+
+static int mod_cmp_mlist(const void *e1, const void *e2){
 	const struct cw_Mod * m1 = e1;
 	const struct cw_Mod * m2 = e2;
 	return strcmp(m1->name,m2->name);
 }
+
+
 
 static const char * mod_path="./";
 
@@ -177,11 +190,16 @@ void cw_mod_set_mod_path(const char * path){
  * @return a pointer to the module interface
  */
 struct cw_Mod * cw_mod_load(const char * mod_name){
-	
-	
+	struct cw_Mod search;
+	struct cw_Mod * mod;
+	char mod_filename[CW_MOD_MAX_MOD_NAME_LEN+5];
+	char * filename;
+	void * handle;
+	struct cw_Mod * (*mod_get_interface)();
+
 	/* if modlist is not initialized, initialize ... */
 	if (mods_loaded==NULL){
-		mods_loaded=mavl_create(mod_cmp,NULL);
+		mods_loaded=mavl_create(mod_cmp_mavl,NULL);
 		if (mods_loaded==NULL){
 			cw_log(LOG_ERROR, "Can't init modlist, no memory");
 			return NULL;
@@ -190,11 +208,11 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 
 	/* Search for the module in mods_loaded, to see if it is
 	 * already loaded or was statically linked */
-	struct cw_Mod search;
+	
 	memset(&search,0,sizeof(search));
 	search.name=mod_name;
-	struct cw_Mod * mod;
-	mod = mavl_find(mods_loaded,&search);
+
+	mod = mavl_find_ptr(mods_loaded,&search);
 	if (mod){
 		return mod;
 	}
@@ -205,17 +223,16 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 		return NULL;
 	}
 	
-	char mod_filename[CW_MOD_MAX_MOD_NAME_LEN+5];
+	
 	sprintf(mod_filename,"mod_%s",mod_name);
 
 	/* we have to load the module dynamically */
-	char * filename;
+
 	filename = cw_filename(mod_path,mod_filename,".so");
 	if (filename==NULL)
 		return NULL;
-cw_log(LOG_ERROR,"DLOPEN now !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 	/* Open the DLL */
-	void * handle;
 	handle = dlopen(filename,RTLD_NOW);
 	
 	if (!handle){
@@ -223,9 +240,8 @@ cw_log(LOG_ERROR,"DLOPEN now !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		goto errX;
 	}
 
-	struct cw_Mod * (*mod_get_interface)();
-	
-	mod_get_interface = dlsym(handle,mod_filename);
+
+	mod_get_interface = (struct cw_Mod*(*)()) dlsym(handle,mod_filename);
 	
 	if (!mod_get_interface){
 		cw_log(LOG_ERROR,"Failed to load module: %s",dlerror());
@@ -235,7 +251,7 @@ cw_log(LOG_ERROR,"DLOPEN now !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	mod = mod_get_interface();
 	mod->dll_handle=handle;
 	
-	if (!mavl_add(mods_loaded,mod)){
+	if (!mavl_add_ptr(mods_loaded,mod)){
 		dlclose(handle);
 		cw_log(LOG_ERR,"Can' add module %s",mod_name);
 		goto errX;
@@ -253,7 +269,7 @@ static struct mlist * mods_list = NULL;
 
 struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
 	if (!mods_list){
-		mods_list = mlist_create(mod_cmp);
+		mods_list = mlist_create(mod_cmp_mlist);
 		if (!mods_list){
 			cw_log(LOG_ERROR,"Can't init mods_list");
 			return 0;
@@ -266,10 +282,13 @@ struct cw_Mod * cw_mod_detect(struct conn *conn,
 			uint8_t * rawmsg, int len,
 			int elems_len, struct sockaddr *from, 
 			int mode){
+	
+	struct mlist_elem * e;
+				
 	if (mods_list==NULL)
 		return MOD_NULL;
 	
-	struct mlist_elem * e;
+
 	mlist_foreach(e,mods_list){
 		struct cw_Mod * mod = e->data;
 		cw_dbg(DBG_MOD,"Checking mod: %s",mod->name);

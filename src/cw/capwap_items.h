@@ -139,8 +139,9 @@ extern const char CW_ITEM_CAPWAP_TRANSPORT_PROTOCOL[];
 
 
 	/* CIPWAP and Cisco */
+/*	
 //extern const char CW_ITEM_WTP_GROUP_NAME[];
-
+*/
 
 	/* Other Items */
 extern const char CW_ITEM_AC_IMAGE_DIR[];		/* Path where WTP images are stored */
@@ -177,10 +178,10 @@ extern const char CW_ITEM_WTP_MAX_RADIOS[];
 extern const char CW_ITEM_RADIO_INFOS[];
 extern const char CW_ITEM_ECN_SUPPORT[];
 
-
+/*
 //extern const char CW_ITEM_SSH_ENABLE[];
 //extern const char CW_ITEM_TELNET_ENABLE[];
-
+*/
 
 
 

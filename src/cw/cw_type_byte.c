@@ -21,24 +21,6 @@
 #include "cw.h"
 #include "cw_types.h"
 
-/*
-static struct mdata_Elem *from_str(const char *src)
-{
-	struct mdata_Elem *i = mdata_elem_new(&cw_type_byte);
-	if (!i)
-		return NULL;
-
-	i->data.byte = atoi(src);
-	return i;
-}
-
-
-static int to_str(const struct mdata_Elem *e, char *dst)
-{
-	return sprintf(dst, "%d", e->data.byte);
-}
-*/
-
 static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
 {
 	data->kv.priv = &cw_type_byte;
@@ -56,12 +38,19 @@ static int to_str(const mavldata_t *data, char *dst, int max_len)
 	return sprintf(dst, "%d", data->kv.val.byte);
 }
 
-const struct cw_Type cw_type_byte = {
-	"Byte",	/* name */
-	NULL,	/* del */
-	put,	/* put */
-	get,	/* get */
-	to_str	/* to_str */
-};
+static mavldata_t *from_str(mavldata_t * data, const char *src)
+{
+	data->kv.val.byte = atoi(src);
+	return data;
+}
 
+
+const struct cw_Type cw_type_byte = {
+	"Byte",		/* name */
+	NULL,		/* del */
+	put,		/* put */
+	get,		/* get */
+	to_str,		/* to_str */
+	from_str	/* from_str */ 
+};
 

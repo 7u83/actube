@@ -26,14 +26,19 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 	switch (mode) {
 		case CW_MOD_MODE_CAPWAP:
 		{
+			cw_dbg(DBG_MOD,"Cisco: loading base med capwap");
 
-			struct cw_Mod *cmod = cw_mod_load("capwap");//  NULL; //modload_ac("cipwap");
+			struct cw_Mod *cmod = cw_mod_load("capwap");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_cisco, failed to load base module mod_cipwap");
 				return 1;
 			}
+			
+\
 			cmod->register_messages(set, CW_MOD_MODE_CAPWAP);
+
+			cw_dbg(DBG_MOD,"Cisco: loading cisco message set");
 			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
 			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d messafe", 7);
 			return 0;

@@ -18,45 +18,38 @@
 
 #include <stdio.h>
 
-#include "cw_types.h"
 #include "cw.h"
-/*
-static struct mdata_Elem *  from_str(const char *src)
-{
-	struct mdata_Elem * e = mdata_elem_new(&cw_type_dword);
-	if (!e)
-		return NULL;
+#include "cw_types.h"
 
-	e->data.word=atoi(src);
-	return e;
+static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
+{
+	data->kv.priv = &cw_type_byte;
+	data->kv.val.dword = cw_get_dword(src);
+	return data;
 }
 
-
-static int to_str(const struct mdata_Elem *e, char *dst)
+static int put(mavldata_t *data, uint8_t * dst)
 {
-	return sprintf(dst, "%d", e->data.word);
+	return cw_put_dword(dst, data->kv.val.dword);
 }
 
-static struct mdata_Elem * get(const uint8_t *src,int len)
+static int to_str(const mavldata_t *data, char *dst, int max_len)
 {
-	struct mdata_Elem * e = mdata_elem_new(&cw_type_dword);
-	if (!e)
-		return NULL;
-	e->data.word=cw_get_dword(src);
-	return e;
+	return sprintf(dst, "%d", data->kv.val.dword);
 }
 
-static int put(struct mdata_Elem * e, uint8_t *dst)
+static mavldata_t *from_str(mavldata_t * data, const char *src)
 {
-	return cw_put_dword(dst,e->data.word);
+	data->kv.val.dword = atoi(src);
+	return data;
 }
 
-#define _I_NAME		"Dword"
-#define _I_PUT		put
-#define _I_GET		get
-#define _I_DEL		NULL
-#define _I_TO_STR	to_str
-#define _I_FROM_STR	from_str
+const struct cw_Type cw_type_dword = {
+	"Dword",	/* name */
+	NULL,		/* del */
+	put,		/* put */
+	get,		/* get */
+	to_str,		/* to_str */
+	from_str	/* from_str */ 
+};
 
-const struct mdata_Type  cw_type_dword = MDATA_TYPE_INIT();
-*/

@@ -398,11 +398,12 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		
 		
 		elem_len = cw_get_elem_len(elem);
-		
-		
-		cw_read_elem(handler, conn, cw_get_elem_data(elem), elem_len, from);
-		
+
 printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
+		
+		handler->get(conn, handler, cw_get_elem_data(elem), elem_len, from);
+		
+
 continue;
 exit(0);
 		
@@ -475,6 +476,29 @@ exit(0);
 
 	/* all message elements are processed, do now after processing
 	   by calling the "end" function for the message */
+
+	{
+
+		mavliter_t it;
+		const struct cw_Type * type;
+		printf("********** THE REMODE CFG **************\n");
+		mavliter_init(&it,conn->remote_cfg);
+
+
+		mavliter_foreach(&it){
+			char value[500];
+			mavldata_t * data;
+			data = mavliter_get(&it);
+			type = data->kv.priv;
+			type->to_str(data,value,0);
+		
+			printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
+		}
+
+
+
+	}
+
 
 	//int result_code = 0;
 

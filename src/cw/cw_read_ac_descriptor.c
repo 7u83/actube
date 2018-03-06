@@ -3,7 +3,8 @@
 #include "dbg.h"
 #include "mbag.h"
 
-int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, struct cw_descriptor_subelem_def *allowed)
+int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, 
+		struct cw_DescriptorSubelemDef *allowed)
 {
 	struct cw_ac_status *status = malloc(sizeof(struct cw_ac_status));
 	if (!status)
@@ -24,9 +25,9 @@ int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, struct cw_descri
 
 	mbag_set_ptr(store, CW_ITEM_AC_STATUS, status);
 
-	static struct cw_descriptor_subelem_def allowed_default[] = {
-		{0,CW_SUBELEM_AC_HARDWARE_VERSION, CW_ITEM_WTP_HARDWARE_VERSION, 1024,1},
-		{0,CW_SUBELEM_AC_SOFTWARE_VERSION, CW_ITEM_WTP_SOFTWARE_VERSION, 1024,1},
+	static struct cw_DescriptorSubelemDef allowed_default[] = {
+		{0,CW_SUBELEM_AC_HARDWARE_VERSION, "ac_hardware_versision", 1024,1},
+		{0,CW_SUBELEM_AC_SOFTWARE_VERSION, "ac_software_version", 1024,1},
 		{0,0, NULL,0, 0}
 	};
 

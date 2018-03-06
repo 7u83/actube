@@ -10,6 +10,7 @@
 
 #include "lw.h"
 #include "capwap.h"
+#include "message_set.h"
 
 /**
  * @defgroup CW CW
@@ -275,7 +276,7 @@ extern int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item);
 
 /**
  * Put encryption capabilities as described in CAWAP 
- * draft 7 fpr WTP Descriptor
+ * draft 7 fpr WTP DescriptorSubelemDef
  * @param dst Destination buffer
  * @param cap Capability
  * @return number of bytes put
@@ -295,10 +296,10 @@ int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v);
 extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);
 
 
-struct cw_descriptor_subelem_def {
+struct cw_DescriptorSubelemDef {
 	int vendor_id;
 	int type;
-	const char *item_id;
+	const char *key;
 	int maxlen;
 	int mand;
 };
@@ -310,19 +311,26 @@ struct cw_descriptor_subelem_def {
 
 
 
-extern int cw_read_descriptor_subelems(mbag_t store, uint8_t * data, int len,
-				       struct cw_descriptor_subelem_def *elems);
+extern int cw_read_descriptor_subelems(mavl_t store, uint8_t * data, int len,
+				       struct cw_DescriptorSubelemDef *elems);
 
-extern int cw_read_wtp_descriptor(mbag_t mbag, struct conn *conn,
-				  struct cw_action_in *a, uint8_t * data, int len,
-				  struct cw_descriptor_subelem_def *allowed);
+/*
+int cw_read_wtp_descriptor(mavl_t mbag, struct conn *conn,
+				  struct cw_ElemHandler *eh, uint8_t * data, int len,
+				  struct cw_DescriptorSubelemDef *allowed);
+*/
 
-extern int cw_read_wtp_descriptor_7(mbag_t mbag, struct conn *conn,
-				    struct cw_action_in *a, uint8_t * data, int len,
-				    struct cw_descriptor_subelem_def *allowed);
+int cw_read_wtp_descriptor(mavl_t mbag, struct conn *conn,
+			   struct cw_ElemHandler *eh, uint8_t * data, int len,
+			   struct cw_DescriptorSubelemDef *allowed);
+
+
+extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct conn *conn,
+				    struct cw_ElemHandler *eh, uint8_t * data, int len,
+				    struct cw_DescriptorSubelemDef *allowed);
 
 extern int cw_read_ac_descriptor(mbag_t store, uint8_t * data, int len,
-				 struct cw_descriptor_subelem_def *allowed);
+				 struct cw_DescriptorSubelemDef *allowed);
 
 extern int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len);
 
@@ -342,11 +350,9 @@ extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a
  * @defgroup CWELEMIN Input Handlers for Message Elements
  * @{
  */
+int cw_in_generic(struct conn * conn, struct cw_ElemHandler * handler,  
+		uint8_t * elem_data, int elem_len, struct sockaddr * from);
 
-extern int cw_in_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len,struct sockaddr *from);
-extern int cw_in_generic2(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len,struct sockaddr *from);
 
 
 

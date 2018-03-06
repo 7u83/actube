@@ -22,11 +22,11 @@
 #include "cw/capwap_items.h"
 
 
-int cisco_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int cisco_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
 
-	static struct cw_descriptor_subelem_def allowed[] = {
+	static struct cw_DescriptorSubelemDef allowed[] = {
 		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_HARDWARE_VERSION, CW_ITEM_WTP_HARDWARE_VERSION, 1024,0},
 		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_SOFTWARE_VERSION, CW_ITEM_WTP_SOFTWARE_VERSION, 1024.0},
 		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_BOOTLOADER_VERSION, CW_ITEM_WTP_BOOTLOADER_VERSION, 1024.0},
@@ -35,7 +35,7 @@ int cisco_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t *
 	};
 
 
-	return cw_read_wtp_descriptor_7(conn->incomming, conn, a, data, len, allowed);
+	return cw_read_wtp_descriptor_7(conn->incomming, conn, eh, data, len, allowed);
 }
 
 
