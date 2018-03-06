@@ -67,6 +67,8 @@ int cw_rand_r(uint8_t * dst, int len)
 int cw_rand(uint8_t * dst, int len)
 {
 	static uint32_t rinit = 0;
+	int i;
+	
 	if (!rinit) {
 
 		int l = cw_rand_r((uint8_t *) (&rinit), sizeof(uint32_t));
@@ -79,7 +81,7 @@ int cw_rand(uint8_t * dst, int len)
 
 		srand(rinit);
 	}
-	int i;
+
 	for (i = 0; i < len; i++) {
 		dst[i] = rand();
 	}

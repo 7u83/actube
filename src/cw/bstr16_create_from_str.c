@@ -24,7 +24,7 @@ uint8_t * bstr16_create_from_str(const char *s)
 		msize++;
 	uint8_t * mem = malloc(2+msize);
 	*((uint16_t*)mem)=msize;
-	format_scan_hex_bytes(mem+2,s+2,l);
+	cw_format_scan_hex_bytes(mem+2,s+2,l);
 	return mem;		
 }
 

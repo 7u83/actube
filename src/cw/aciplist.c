@@ -28,14 +28,14 @@
 #include <arpa/inet.h>
 
 #include "aciplist.h"
-#include "avltree.h"
+#include "mavl.h"
 #include "sock.h"
 
 
-static int acip_cmp(const void *x1, const void *x2)
+static int acip_cmp(const mavldata_t *x1, const mavldata_t *x2)
 {
-	struct cw_acip *ip1 = (struct cw_acip *) x1;
-	struct cw_acip *ip2 = (struct cw_acip *) x2;
+	struct cw_acip *ip1 = (struct cw_acip *) x1->ptr;
+	struct cw_acip *ip2 = (struct cw_acip *) x2->ptr;
 		
 	int r = ip1->index - ip2->index;
 	if (r!=0)
@@ -68,9 +68,9 @@ static int acip_cmp(const void *x1, const void *x2)
 	return -1;
 }
 
-static void acip_del(void *d)
+static void acip_del(mavldata_t *d)
 {
-	free(d);
+	free(d->ptr);
 }
 
 /**
@@ -79,6 +79,6 @@ static void acip_del(void *d)
  */
 cw_aciplist_t cw_aciplist_create()
 {
-	return  avltree_create(acip_cmp, acip_del);
+	return  mavl_create(acip_cmp, acip_del);
 }
 

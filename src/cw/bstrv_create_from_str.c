@@ -58,7 +58,7 @@ uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s)
 	bstrv_set_vendor_id(mem,vendor_id);
 	bstrv_set_len(mem,msize);
 
-	format_scan_hex_bytes(bstrv_data(mem),s+2,l);
+	cw_format_scan_hex_bytes(bstrv_data(mem),s+2,l);
 	return mem;		
 }
 

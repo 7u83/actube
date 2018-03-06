@@ -4,10 +4,10 @@
 #include <stdint.h>
 
 #include "strlist.h"
-#include "avltree.h"
+#include "mavl.h"
 
 
-typedef struct avltree * cw_strheap_t;
+typedef struct mavl * cw_strheap_t;
 
 
 extern cw_strheap_t cw_strheap_create();

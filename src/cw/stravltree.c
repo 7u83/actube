@@ -18,7 +18,7 @@ static void del(void* d)
 
 struct avltree * stravltree_create()
 {
-	return avltree_create(cmp,del);	
+	return mavl_create(cmp,del);	
 }
 
 const char * stravltree_add(struct avltree * t, const char * str)
@@ -26,5 +26,5 @@ const char * stravltree_add(struct avltree * t, const char * str)
 	char * s = strdup(str);
 	if (!s)
 		return 0;
-	return avltree_add(t,s);
+	return mavl_add(t,s);
 }

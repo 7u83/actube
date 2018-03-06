@@ -32,24 +32,26 @@
  * The memory allocated returned in data must be freed using free.
  *
  * Eexample:
- * \code
+ * \code{.c}
    #include "capwap/file.h"
    size_t bytes;
    char * data = cw_load_file("file.txt",&bytes);
    if (data){
-	// Do something with data ...
+	@startcomment Do something with data ... @endcomment
 	free (data);
    }
    \endcode
  */
 char *cw_load_file(const char *filename, size_t * size)
 {
-	FILE *infile = fopen(filename, "rb");
+	char *buf;
+	FILE *infile;
+	infile = fopen(filename, "rb");
 	if (!infile)
 		return NULL;
 	fseek(infile, 0, SEEK_END);
 	*size = ftell(infile);
-	char *buf = malloc(*size);
+	buf = malloc(*size);
 	if (!buf)
 		goto errX;
 

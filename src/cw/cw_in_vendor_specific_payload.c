@@ -22,9 +22,10 @@ int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 	as.vendor_id = cw_get_dword(data);
 	as.elem_id = cw_get_word(data + 4);
 
+/*
 	// TODO XXXX
 //	af = cw_actionlist_in_get(conn->actions->in, &as);
-	af = 0;
+*/	af = 0;
 	
 	if (!af) {
 		cw_dbg(DBG_WARN,

@@ -11,6 +11,8 @@
 int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6elem_id)
 {
 	struct sockaddr_storage a;
+	int id;
+	
 	socklen_t alen = sizeof(struct sockaddr_storage);
 	int rc = getsockname(sock, (struct sockaddr *) &a, &alen);
 
@@ -20,7 +22,6 @@ int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6ele
 	}
 
 
-	int id; 
 
 	switch (((struct sockaddr *) &a)->sa_family) {
 		case AF_INET:
@@ -33,8 +34,9 @@ int cw_put_local_ip_address(int sock, uint8_t *dst, int ipv4elem_id, int ipv6ele
 
 		case AF_INET6:
 		{
+			struct sockaddr_in6 *sain;
 			id  = ipv6elem_id;
-			struct sockaddr_in6 *sain = (struct sockaddr_in6 *) &a;
+			sain = (struct sockaddr_in6 *) &a;
 			cw_put_data(dst + 4, (uint8_t *) & sain->sin6_addr, 16);
 			return 16 + cw_put_elem_hdr(dst, id, 16);
 

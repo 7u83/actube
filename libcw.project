@@ -22,7 +22,6 @@
       <File Name="src/cw/mavl_get_node.c"/>
       <File Name="src/cw/dtls_openssl_connect.c"/>
       <File Name="src/cw/acpriolist.c"/>
-      <File Name="src/cw/avltree_get_node.c"/>
       <File Name="src/cw/lw_elem_id_to_str.c"/>
       <File Name="src/cw/cw_put_elem_radio_administrative_state.c"/>
       <File Name="src/cw/lwapp.h"/>
@@ -38,7 +37,6 @@
       <File Name="src/cw/cw_is_printable.c"/>
       <File Name="src/cw/sock_getifaddr.c"/>
       <File Name="src/cw/bstr_create.c"/>
-      <File Name="src/cw/avltree_foreach_lr.c"/>
       <File Name="src/cw/cw_put_mbag_item.c"/>
       <File Name="src/cw/conn_get_response.c"/>
       <File Name="src/cw/dtls_bio.c"/>
@@ -75,7 +73,6 @@
       <File Name="src/cw/sock_receive.c"/>
       <File Name="src/cw/capwap_80211_actions.h"/>
       <File Name="src/cw/mbag_get_upd.c"/>
-      <File Name="src/cw/avltree.h"/>
       <File Name="src/cw/acpriolist.h"/>
       <File Name="src/cw/sock_hwaddrtostr.c"/>
       <File Name="src/cw/mavliter_next.c"/>
@@ -95,7 +92,6 @@
       <File Name="src/cw/lw_readelem_wtp_name.c"/>
       <File Name="src/cw/capwap_cisco.h"/>
       <File Name="src/cw/cw_in_wtp_reboot_statistics.c"/>
-      <File Name="src/cw/avliter_seek.c"/>
       <File Name="src/cw/mlist.c"/>
       <File Name="src/cw/netconn.c"/>
       <File Name="src/cw/mavl_create_conststr.c"/>
@@ -134,8 +130,6 @@
       <File Name="src/cw/cw_in_check_join_resp.c"/>
       <File Name="src/cw/cw_in_80211_mac_operation.c"/>
       <File Name="src/cw/capwap_strings_board.c"/>
-      <File Name="src/cw/avltree_foreach_from_lr.c"/>
-      <File Name="src/cw/avliter_next.c"/>
       <File Name="src/cw/capwap_80211_actions_ac.c"/>
       <File Name="src/cw/mbag.h"/>
       <File Name="src/cw/sock_addrlen.c"/>
@@ -154,7 +148,6 @@
       <File Name="src/cw/intavltree.h"/>
       <File Name="src/cw/sock_cmpaddr.c"/>
       <File Name="src/cw/cw_in_radio_administrative_state.c"/>
-      <File Name="src/cw/avltree_get.c"/>
       <File Name="src/cw/cwmsg_addelem_80211_add_wlan.c"/>
       <File Name="src/cw/cw_in_check_generic_req.c"/>
       <File Name="src/cw/dot11.h"/>
@@ -206,7 +199,6 @@
       <File Name="src/cw/dtls_openssl_get_cipher.c"/>
       <File Name="src/cw/cw_addelem_capwap_local_ip_addr.c"/>
       <File Name="src/cw/cw_out_generic.c"/>
-      <File Name="src/cw/cw_iplist.c"/>
       <File Name="src/cw/lw_addelem.c"/>
       <File Name="src/cw/lw_in_vendor_specific.c"/>
       <File Name="src/cw/conn_q_add_packet.c"/>
@@ -240,11 +232,9 @@
       <File Name="src/cw/wtpinfo_lwreadelem_wtp_descriptor.c"/>
       <File Name="src/cw/dbg_strings.c"/>
       <File Name="src/cw/dtls_gnutls.c"/>
-      <File Name="src/cw/avltree_foreach_node.c"/>
       <File Name="src/cw/conn_prepare_configuration_update_request.c"/>
       <File Name="src/cw/conn_q_recv_packet.c"/>
       <File Name="src/cw/bstr16_create_from_str.c"/>
-      <File Name="src/cw/avltree_foreach.c"/>
       <File Name="src/cw/format_is_utf8.c"/>
       <File Name="src/cw/conn_create.c"/>
       <File Name="src/cw/cw_in_check_img_data_req_wtp.c"/>
@@ -300,7 +290,6 @@
       <File Name="src/cw/sock_getifinfo.c"/>
       <File Name="src/cw/capwap_crypto.h"/>
       <File Name="src/cw/capwap_strings_state.c"/>
-      <File Name="src/cw/avltree_foreach_rl.c"/>
       <File Name="src/cw/cw_out_radio_info.c"/>
       <File Name="src/cw/capwap_items.c"/>
       <File Name="src/cw/message_set.c"/>
@@ -328,6 +317,7 @@
       <File Name="src/cw/mavl_cmp_kv.c"/>
       <File Name="src/cw/mavl_add_kv_byte.c"/>
       <File Name="src/cw/cw_types_mavl_delete.c"/>
+      <File Name="src/cw/cw_format_scan_hex_bytes.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

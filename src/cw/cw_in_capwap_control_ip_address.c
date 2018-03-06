@@ -43,6 +43,7 @@
 int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 				 uint8_t * data, int len,struct sockaddr *from)
 {
+	cw_acip_t * acip;	
 	cw_aciplist_t list =
 	    mbag_get_mavl_c(conn->incomming,a->item_id,cw_aciplist_create);
 
@@ -51,7 +52,7 @@ int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 		return 0;
 	}
 
-	cw_acip_t * acip;
+
 	acip = malloc(sizeof(cw_acip_t));
 	if (!acip) {
 		cw_log(LOG_ERR,"Can't allocate memory for acv4ip: %s",strerror(errno));

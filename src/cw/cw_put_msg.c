@@ -29,6 +29,7 @@
 #include "dbg.h"
 
 
+
 /**
  * Put a message to a buffer
  * This functions assumes, that a message header is
@@ -156,10 +157,10 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 
 /// TODO XXXX
 //	DEFINE_AVLITER(i,conn->actions->out);
-DEFINE_AVLITER(i,0);
+MAVLITER_DEFINE(i,0);
 	cw_action_out_t *am;
 
-	if (! (am=avliter_seek(&i,&as))){
+	if (! (am=mavliter_seek(&i,&as))){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
 			as.msg_id,cw_strmsg(as.msg_id));
 		return -1;
@@ -167,7 +168,7 @@ DEFINE_AVLITER(i,0);
 
 	cw_action_out_t *ae;
 	int len = 0;
-	while(NULL != (ae=avliter_next(&i))) {
+	while(NULL != (ae=mavliter_next(&i))) {
 
 //		DBGX("Put %d %i %p\n",ae->msg_id,ae->elem_id,ae->item_id);
 //		DBGX("Elem ID %s",ae->item_id);

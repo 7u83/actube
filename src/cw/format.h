@@ -43,8 +43,9 @@ char *format_s_hex_bytes(char *dst, const char *format, const char *delim,
 
 
 
-extern int format_scan_hex_bytes(uint8_t * dst, const char *s, int len);
+int cw_format_scan_hex_bytes(uint8_t *dst,const char *s, int len);
 
+struct avltree;
 
 /**
  * Format bytes as a hex string. Hexadecimal letters are lower-case.

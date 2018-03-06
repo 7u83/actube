@@ -21,7 +21,6 @@
  *@brief 
  */
 
-//#include <string.h>
 
 #include "mbag.h"
 #include "dbg.h"

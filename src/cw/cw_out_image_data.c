@@ -19,6 +19,7 @@
 
 int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
+	/*
 	mbag_item_t * item = mbag_get(conn->outgoing,CW_ITEM_IMAGE_FILEHANDLE);
 	if (!item) {
 		cw_log(LOG_ERR,"Can't put element Image Data, no image filehandle found");
@@ -51,5 +52,7 @@ int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 	}
 
 	return bytes + cw_put_elem_hdr(dst,a->elem_id,bytes);
+	 */
+	 return 0;
 }
 

@@ -100,7 +100,7 @@ cw_action_in_t *cw_actionlist_in_add(cw_actionlist_in_t t, struct cw_action_in *
  */
 struct cw_action_in *cw_actionlist_in_get(cw_actionlist_in_t t, struct cw_action_in *a)
 {
-	return avltree_get(t, a);
+	return mavl_get(t, a);
 }
 
 
@@ -260,7 +260,7 @@ int cw_actionlist_out_register_actions(cw_actionlist_out_t t, cw_action_out_t * 
  * @param s size of element to add
  * @return pointer to added element or NULL if an error has opccured
  */
-void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
+void *cw_actionlist_add(struct mavl *t, void *a, size_t s)
 {
 
 	void *r = mavl_replace_data(t, a, s); //sizeof(struct cw_action_in));
@@ -273,7 +273,7 @@ void *cw_actionlist_add(struct avltree *t, void *a, size_t s)
 		return NULL;
 
 	memcpy(an, a, s);
-	return avltree_add(t, an);
+	return mavl_add(t, an);
 
 }
 

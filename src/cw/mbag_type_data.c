@@ -30,7 +30,7 @@ static struct mbag_item *  from_str(const char *src)
 		return NULL;
 
 	*(mem)=msize;
-	format_scan_hex_bytes(mem+1,src,l);
+	cw_format_scan_hex_bytes(mem+1,src,l);
 	i->u2.data=mem;
 	return i;		
 	
