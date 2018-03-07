@@ -81,7 +81,7 @@ struct avltree;
 int format_hdr_flags(char *dst, uint8_t * th);
 
 
-int format_is_utf8(unsigned char *str, size_t len);
+int format_is_utf8(const unsigned char *str, size_t len);
 
 int format_dot11_fc(char *dst, uint16_t fc);
 
@@ -109,6 +109,7 @@ char *cw_format_dump(const uint8_t * data, int len,
 void cw_format_get_dump_defaults(struct cw_FormatDumpSettings * settings);
 int cw_format_pkt_hdr(char *dst, int incomming, uint8_t * packet, int len,
 		      struct sockaddr *from);
+int cw_format_version(char *s, const uint8_t * version, int len);
 
 /**@}*/
 

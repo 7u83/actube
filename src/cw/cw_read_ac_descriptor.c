@@ -34,7 +34,7 @@ int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len,
 	if (!allowed)
 		allowed=allowed_default;
 
-	return cw_read_descriptor_subelems(store, data + 12, len - 12, allowed);
+	return cw_read_descriptor_subelems(store, "key", data + 12, len - 12, allowed);
 	
 }
 

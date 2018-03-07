@@ -53,4 +53,3 @@ const struct cw_Type cw_type_byte = {
 	to_str,		/* to_str */
 	from_str	/* from_str */ 
 };
-

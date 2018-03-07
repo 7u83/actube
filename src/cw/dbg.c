@@ -472,63 +472,23 @@ int cw_format_item(char *dst, mbag_item_t * item)
 	return 0;
 }
 
-static int cw_format_version(char *s, bstrv_t ver, char *def)
+
+
+void cw_dbg_version_subelem(int level, const char *context, int subtype, 
+		uint32_t vendor_id, const uint8_t * vstr, int len)
 {
-	int dot;
-	uint8_t *version;
-	int len,rs,i;
-	uint32_t vendor;
+	char v[2048];
+	int n;
 	
-	if (!ver)
-		return sprintf(s, "%s", def);
-
-
-	version = bstrv_data(ver);
-	len = bstrv_len(ver);
-
-	rs = 0;
-	
-
-
-	if (format_is_utf8(version, len)) {
-		if (len != 0)
-			rs += sprintf(s + rs, "%.*s", len, version);
-		else
-			rs += sprintf(s + rs, "''");
-	} else {
-		for (i = 0; i < len && i < 20; i++) {
-			rs += sprintf(s + rs, "%02X", version[i]);
-		}
-
-		dot = 0;
-
-		rs += sprintf(s + rs, " (");
-		for (i = 0; i < len && i < 20; i++) {
-			if (dot)
-				rs += sprintf(s + rs, ".");
-			dot = 1;
-			rs += sprintf(s + rs, "%d", version[i]);
-		}
-		rs += sprintf(s + rs, ")");
-	}
-
-	vendor = bstrv_get_vendor_id(ver);
-	rs += sprintf(s + rs, ", Vendor Id: %d, %s", vendor, cw_strvendor(vendor));
-	return rs;
-}
-
-
-
-void cw_dbg_version_subelem(int level, const char *context, int subtype, bstrv_t vstr)
-{
-	char v[256];
 	if (!cw_dbg_is_level(level))
 		return;
 	if (!vstr)
 		return;
-	cw_format_version(v, vstr, "");
-	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
+	n = cw_format_version(v, vstr, len);
 
+	sprintf(v + n, ", Vendor Id: %d, %s", vendor_id, cw_strvendor(vendor_id));
+
+	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
 }
 
 

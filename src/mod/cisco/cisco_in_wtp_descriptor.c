@@ -16,7 +16,7 @@
 
 */
 
-
+#include "cw/keys.h"
 #include "cw/cw.h"
 #include "cw/vendors.h"
 #include "cw/capwap_items.h"
@@ -27,15 +27,15 @@ int cisco_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_
 {
 
 	static struct cw_DescriptorSubelemDef allowed[] = {
-		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_HARDWARE_VERSION, CW_ITEM_WTP_HARDWARE_VERSION, 1024,0},
-		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_SOFTWARE_VERSION, CW_ITEM_WTP_SOFTWARE_VERSION, 1024.0},
-		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_BOOTLOADER_VERSION, CW_ITEM_WTP_BOOTLOADER_VERSION, 1024.0},
-		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION, "other", 1024.0},
+		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_HARDWARE_VERSION, CW_KEY_HARDWARE, 1024,0},
+		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_SOFTWARE_VERSION, CW_KEY_SOFTWARE, 1024.0},
+		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_BOOTLOADER_VERSION, CW_KEY_BOOTLOADER, 1024.0},
+		{CW_VENDOR_ID_CISCO,CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION, CW_KEY_OTHER_SOFTWARE, 1024.0},
 		{0,0, NULL, 0,0}
 	};
 
 
-	return cw_read_wtp_descriptor_7(conn->incomming, conn, eh, data, len, allowed);
+	return cw_read_wtp_descriptor_7(conn->remote_cfg, conn, eh, data, len, allowed);
 }
 
 

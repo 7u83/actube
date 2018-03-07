@@ -311,7 +311,7 @@ struct cw_DescriptorSubelemDef {
 
 
 
-extern int cw_read_descriptor_subelems(mavl_t store, uint8_t * data, int len,
+extern int cw_read_descriptor_subelems(mavl_t store, const char * key, uint8_t * data, int len,
 				       struct cw_DescriptorSubelemDef *elems);
 
 /*

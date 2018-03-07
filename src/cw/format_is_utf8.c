@@ -30,7 +30,7 @@
  * @return 0 if the string is not in UTF8 format, otherwise it is UTF8.
  */
 
-int format_is_utf8(unsigned char *str, size_t len)
+int format_is_utf8(const unsigned char *str, size_t len)
 {
 	size_t i = 0;
 	size_t bytes = 0;

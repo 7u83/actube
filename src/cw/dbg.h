@@ -121,7 +121,8 @@ void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struc
 
 void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 char * cw_dbg_mkdmp(const uint8_t * data, int len);
-void cw_dbg_version_subelem(int level,const char*context,int subtype,bstrv_t vstr);
+void cw_dbg_version_subelem(int level, const char *context, int subtype, 
+		uint32_t vendor_id, const uint8_t * vstr, int len);
 
 
 /**

@@ -10,7 +10,8 @@ int cw_in_generic(struct conn * conn,  struct cw_ElemHandler * handler,
 	result->kv.key = strdup(handler->key);
 	
 	handler->type->to_str(result,str,30);
-	printf("Read %d-%s: %s %s\n", handler->id, handler->name, handler->key, str);
+/*	printf("Read %d-%s: %s %s\n", handler->id, handler->name, handler->key, str);
+ */
 	mavl_add(conn->remote_cfg, result);
 	return 0;
 }

@@ -54,7 +54,7 @@
  */
  
 struct mavl_KeyVal{
-	const char *key;
+	char *key;
 	const void *priv;
 	union{
 		void * ptr;

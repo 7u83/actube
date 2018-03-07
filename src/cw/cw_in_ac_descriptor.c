@@ -36,7 +36,7 @@ int cw_in_ac_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 		{0,0, NULL,0, 0}
 	};
 
-	cw_read_descriptor_subelems(conn->config, data + 12, len - 12, allowed);
+	cw_read_descriptor_subelems(conn->config,"ackey" , data + 12, len - 12, allowed);
 
 	return 1;
 }

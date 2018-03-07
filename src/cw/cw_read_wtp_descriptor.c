@@ -59,5 +59,5 @@ int cw_read_wtp_descriptor(mavl_t cfg, struct conn *conn,
 		allowed=allowed_default;
 	}
 printf("call read subelems\n");
-	return cw_read_descriptor_subelems(cfg, data + pos, len - pos, allowed);
+	return cw_read_descriptor_subelems(cfg,eh->key , data + pos, len - pos, allowed);
 }
