@@ -42,11 +42,12 @@
 int sock_receive(int sock, void *buf, size_t len, int flags,
 		 struct sockaddr *srcaddr, socklen_t * srcaddrlen)
 {
-//	socklen_t al = sizeof(struct sockaddr_storage);
+	int n;
+/*	socklen_t al = sizeof(struct sockaddr_storage); */
 	*srcaddrlen=sizeof(struct sockaddr);	
 	memset(srcaddr, 0, sizeof(struct sockaddr));
 
-	int n;
+
 	while ((n = recvfrom(sock, (char *) buf, len, flags, srcaddr, srcaddrlen)) < 0) {
 		if (errno != EINTR)
 			return n;

@@ -46,10 +46,10 @@ static mavldata_t *from_str(mavldata_t * data, const char *src)
 
 
 const struct cw_Type cw_type_byte = {
-	"Byte",		/* name */
-	NULL,		/* del */
-	put,		/* put */
-	get,		/* get */
-	to_str,		/* to_str */
-	from_str	/* from_str */ 
+	"Byte",			/* name */
+	cw_types_del_null,	/* del */
+	put,			/* put */
+	get,			/* get */
+	to_str,			/* to_str */
+	from_str		/* from_str */ 
 };

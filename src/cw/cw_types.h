@@ -42,4 +42,6 @@ extern const struct cw_Type  cw_type_version;
 #define CW_TYPE_DWORD (&cw_type_dword)
 #define CW_TYPE_VERSION (&cw_type_version)
 
+void cw_types_del_null(mavldata_t *data);
+
 #endif /* __CW_TYPES_H */

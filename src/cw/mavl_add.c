@@ -1,6 +1,5 @@
 #include "mavl.h"
 
-
 static struct mavlnode *mavlnode_create(union mavldata *data)
 {
 	struct mavlnode *n = malloc(sizeof(struct mavlnode));
@@ -16,16 +15,16 @@ static struct mavlnode *mavlnode_create(union mavldata *data)
 
 
 
-static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * data)
+static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata ** data)
 {
 	struct mavlnode *tmp;
 
 	struct mavlnode *n = *parent;
-	int rc = t->cmp(data, &n->data);
+	int rc = t->cmp(*data, &n->data);
 
 	int bal;
 	if (rc == 0) {
-		*data = n->data;
+		*data = &n->data;
 		return 2;
 	}
 
@@ -78,7 +77,7 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * 
 		}
 
 		/* n->left is 0 */
-		n->left = mavlnode_create(data);
+		n->left = mavlnode_create(*data);
 		if (!n->left)
 			return 3;
 
@@ -141,7 +140,7 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * 
 
 		/* n->right is 0 */
 
-		n->right = mavlnode_create(data);
+		n->right = mavlnode_create(*data);
 		if (!n->right)
 			return 3;
 
@@ -170,7 +169,7 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata * 
  * @example mavl_add_example.c
  */
  
-union mavldata *mavl_add(struct mavl *t, union mavldata *data)
+union mavldata *mavl_add(struct mavl *t, const union mavldata *data)
 {
 	union mavldata * d;
 	int rc;
@@ -184,7 +183,7 @@ union mavldata *mavl_add(struct mavl *t, union mavldata *data)
 
 	d = data;
 
-	rc = mavl_add0(t, &t->root, d);
+	rc = mavl_add0(t, &t->root, &d);
 
 	if (rc > 3)
 		return NULL;

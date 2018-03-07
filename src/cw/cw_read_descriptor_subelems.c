@@ -20,6 +20,7 @@
 #include "cw_types.h"
 #include "dbg.h"
 #include "keys.h"
+#include "kvstore.h"
 
 int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key, 
 				uint8_t * data, int len,
@@ -54,7 +55,7 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 			errors++;
 		} else {
 			int l = sublen;
-			mavldata_t mdata, *mdata_result;
+
 			char dbgstr[1048];
 			char key[1024];
 			
@@ -68,20 +69,13 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 
 			/* vendor */
 			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VENDOR);
-			mdata.kv.key = strdup(key);
-			mdata.kv.val.dword = vendor_id;
-			mdata.kv.priv=CW_TYPE_DWORD;
-			mavl_add(cfg,&mdata);
-
-
+			cw_kvstore_add(cfg,key,CW_TYPE_DWORD,data + sub,4);
+	
 			/* version */
 			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VERSION);
-			mdata_result = cw_type_version.get(&mdata,data+sub+8,l);
-			mdata.kv.key = strdup(key);
-			mavl_add(cfg,mdata_result);
-
-			cw_type_version.to_str(mdata_result,dbgstr,90);
-			sprintf(dbgstr, "Storing '%s'", elems[i].key);
+			cw_kvstore_add(cfg,key,CW_TYPE_VERSION,data+sub+8,l);
+	
+			sprintf(dbgstr, "%s", key);
 			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype, vendor_id, data+sub+8,l);
 			success++;
 		}

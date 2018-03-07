@@ -23,7 +23,7 @@
 
 static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
 {
-	data->kv.priv = &cw_type_byte;
+	data->kv.priv = &cw_type_dword;
 	data->kv.val.dword = cw_get_dword(src);
 	return data;
 }
@@ -45,11 +45,11 @@ static mavldata_t *from_str(mavldata_t * data, const char *src)
 }
 
 const struct cw_Type cw_type_dword = {
-	"Dword",	/* name */
-	NULL,		/* del */
-	put,		/* put */
-	get,		/* get */
-	to_str,		/* to_str */
-	from_str	/* from_str */ 
+	"Dword",		/* name */
+	cw_types_del_null,	/* del */
+	put,			/* put */
+	get,			/* get */
+	to_str,			/* to_str */
+	from_str		/* from_str */ 
 };
 

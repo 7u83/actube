@@ -121,7 +121,7 @@ void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
 void mavl_del_all(struct mavl *t);
 union mavldata *mavl_del(struct mavl *t, union mavldata *data);
-union mavldata *mavl_add(struct mavl *t, union mavldata *data);
+union mavldata *mavl_add(struct mavl *t, const union mavldata *data);
 union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
 struct mavlnode *mavl_get_node(struct mavl *t, union mavldata *data);
 void * mavl_get_ptr(mavl_t tree, void * search);
@@ -226,6 +226,7 @@ extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
 
 #define mavliter_foreach_asc(iter,val) \
 	while(NULL != (val = mavliter_next(iter)))
+
 
 
 /**

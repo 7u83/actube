@@ -469,7 +469,7 @@ extern cw_iplist_t cw_aciplist_create();
 
 */
 
-
+char *cw_strdup(const char *s);
 
 
 /**
