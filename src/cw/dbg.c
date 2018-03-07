@@ -387,12 +387,17 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 	const char *elemname;
 	char vendorname[256];
 	char vendor_details[265];
-
+	struct cw_ElemHandler * handler;
+	
 	if (!cw_dbg_is_level(level))
 		return;
 		
 	*vendor_details = 0;
 
+	handler = cw_msgset_get_elemhandler(conn->msgset,0,0,msgelem);
+	if (!handler)
+		return;
+	
 	
 /*	
 /// TODO XXXX
@@ -411,7 +416,7 @@ void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
 /*		
 //		elemname = cw_strelemp(conn->actions, msgelem);
 */
-		elemname=0;
+		elemname=handler->name;
 	}
 
 

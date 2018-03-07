@@ -14,6 +14,7 @@ static struct cw_FormatDumpSettings CW_FORMAT_DUMP_SETTINGS = {
 	0,			/* inv_len */
 	'*',			/* inv_char */
 	"\n\t",			/* dump_prefix */
+	""			/* dump_suffix */
 	"  ",			/* ascii_prefix */
 	"\n\t"			/* newline */
 };
@@ -53,7 +54,6 @@ static int cw_format_dump_row(char *dst, const uint8_t * data, int len,
 		}
 	}
 
-	pdst+=sprintf(pdst,"%s",settings->newline);
 	return pdst-dst;
 }
 
@@ -106,6 +106,10 @@ char *cw_format_dump(const uint8_t * data, int len,
 			rlen = len-pos;
 		}
 		pdst += cw_format_dump_row(pdst,data+pos, rlen, settings);
+		if(row<rows)
+			pdst += sprintf(pdst,"%s",settings->newline);
+		else
+			pdst += sprintf(pdst,"%s",settings->dump_suffix);			
 	}
 
 	return dst;

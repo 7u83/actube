@@ -402,7 +402,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		elem_len = cw_get_elem_len(elem);
 
 /*printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
-*/		
+*/
+		cw_dbg_elem(DBG_ELEM, conn, message->type, handler->id, 
+				cw_get_elem_data(elem),elem_len);
+				
 		handler->get(conn, handler, cw_get_elem_data(elem), elem_len, from);
 		
 

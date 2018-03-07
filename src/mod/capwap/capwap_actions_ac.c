@@ -68,7 +68,16 @@ static struct cw_ElemHandler handlers[] = {
 		capwap_in_wtp_descriptor	 /* get */
 	}
 	,
-
+	{ 
+		"WTP Frame Tunnel Mode",		/* name */
+		CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,					/* type */
+		"wtp_frame_tunnel_mode",		/* Key */
+		cw_in_generic				 /* get */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -79,7 +88,8 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
 	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,	1, 0},
-	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},	
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
+	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	1, 0},
 	{0,0,0,0,0}
 
 };

@@ -99,6 +99,7 @@ struct cw_FormatDumpSettings {
 	char inv_char;
 	
 	const char * dump_prefix;
+	const char * dump_suffix;
 	const char * ascii_prefix;
 	const char *newline;
 };
