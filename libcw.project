@@ -95,7 +95,6 @@
       <File Name="src/cw/netconn.c"/>
       <File Name="src/cw/mavl_create_conststr.c"/>
       <File Name="src/cw/cw_in_capwap_local_ipv6_address.c"/>
-      <File Name="src/cw/cw_in_generic2.c"/>
       <File Name="src/cw/cw_out_capwap_local_ip_address.c"/>
       <File Name="src/cw/cw_out_wtp_descriptor.c"/>
       <File Name="src/cw/cw_in_check_img_data_resp.c"/>
