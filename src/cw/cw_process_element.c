@@ -15,8 +15,6 @@
 int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendor,int elem_id,
 		uint8_t  * data, int len){
 	
-printf("The process elemnt handler is here \n");
-
 	struct cw_ElemHandler * handler;
 	struct cw_ElemData * elem_data, elem_data_search;
 

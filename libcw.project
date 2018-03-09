@@ -11,7 +11,6 @@
       <File Name="src/cw/mbag_type_dword.c"/>
       <File Name="src/cw/sock_getport.c"/>
       <File Name="src/cw/dtls_gnutls_get_peers_cert.c"/>
-      <File Name="src/cw/cw_in_vendor_specific_payload.c"/>
       <File Name="src/cw/conn_process_packet.c"/>
       <File Name="src/cw/cw_cisco_id_to_str.c"/>
       <File Name="src/cw/lw_put_sockaddr.c"/>

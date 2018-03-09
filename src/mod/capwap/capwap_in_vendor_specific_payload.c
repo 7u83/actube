@@ -1,7 +1,6 @@
 
-#include "cw.h"
-#include "dbg.h"
-#include "log.h"
+#include "cw/dbg.h"
+#include "cw/log.h"
 
 /** 
  * @file 
@@ -11,7 +10,7 @@
 /**
  * Default handler for Vendor Specific Payload message elements.
  */
-int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
+int capwap_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
 				struct cw_ElemHandlerParams *params,
 				  uint8_t * data, int len)
 {
@@ -23,7 +22,6 @@ int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler,
 	vendor_id = cw_get_dword(data);
 	elem_id = cw_get_word(data + 4);
 
-	printf("Spec handler looking for %d %d %d\n",0,vendor_id,elem_id);
 	vhandler = cw_msgset_get_elemhandler(params->conn->msgset,0,vendor_id,elem_id);
 	
 	

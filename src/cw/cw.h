@@ -368,10 +368,11 @@ extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len, struct sockaddr *from);
 
-					 
+/*					 
 int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
 				struct cw_ElemHandlerParams *params,
 				  uint8_t * data, int len);
+*/
 
 extern int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,

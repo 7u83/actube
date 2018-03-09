@@ -85,7 +85,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* min/max length */
 		NULL,					/* type */
 		"vendor_specific_payload",		/* Key */
-		cw_in_vendor_specific_payload		/* get */
+		capwap_in_vendor_specific_payload		/* get */
 	}
 	,
 	
