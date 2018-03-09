@@ -17,7 +17,7 @@ int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a, uint8_t 
 	mbag_item_t * result = mbag_get(conn->incomming,CW_ITEM_RESULT_CODE);
 	
 	if  (result ) {
-		if (!cw_rcok(result->u2.dword)){
+		if (!cw_result_is_ok(result->u2.dword)){
 			return result->u2.dword;
 		}
 	}

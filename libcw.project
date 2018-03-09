@@ -324,6 +324,7 @@
       <File Name="src/cw/cw_types_del_null.c"/>
       <File Name="src/cw/cw_type_bstr16.c"/>
       <File Name="src/cw/cw_process_element.c"/>
+      <File Name="src/cw/cw_result_is_ok.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

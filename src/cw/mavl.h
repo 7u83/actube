@@ -81,7 +81,8 @@ typedef union mavldata mavldata_t;
 struct mavlnode {
 	/** Pointer to data, that belongs to the node */
 
-	union mavldata data;
+	union mavldata data; 
+	
 	/** Pointer to left son*/
 	struct mavlnode *left;
 	/** Pointer to right son*/
@@ -102,6 +103,8 @@ struct mavl {
 	void (*del) (union mavldata *);
 	/** Number of elements currently stored in the tree */
 	int count;
+	
+	size_t data_size;
 };
 
 /** 

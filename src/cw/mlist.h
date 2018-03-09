@@ -42,12 +42,16 @@ struct mlist_elem {
 	 * The last element is determined by a NULL pointer
 	 * */
 	struct mlist_elem *next;
+	struct mlist_elem *prev;
 };
 
 struct mlist {
 	void *data;
 	int (*cmp) (const void *d1, const void *d2);
 	struct mlist_elem *first;
+	struct mlist_elem *last;
+	int count;
+	//size_t elem_size;
 };
 
 typedef struct mlist * mlist_t;

@@ -637,7 +637,7 @@ extern struct cw_strlist_elem mbag_item_strings[];
 
 
 const char * cw_strerror(int rc);
-int cw_rcok(int rc);
+int cw_result_is_ok(int rc);
 const char *cw_strelemp_(cw_strheap_t h, int msg_id);
 
 

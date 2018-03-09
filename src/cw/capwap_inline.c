@@ -11,7 +11,7 @@ const char * cw_strerror(int rc) {
 	return cw_strresult(rc);
 }
 
-
+/*(
 
 int cw_rcok(int rc)
 {
@@ -20,7 +20,7 @@ int cw_rcok(int rc)
 	}
 	return 0;
 }
-
+*/
 
 /**
  *@defgroup CW CW 

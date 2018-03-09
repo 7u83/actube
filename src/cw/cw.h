@@ -456,6 +456,7 @@ uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
+int cw_result_is_ok( int rc );
 
 /**
  * @}

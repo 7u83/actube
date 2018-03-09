@@ -307,7 +307,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	if (!message){
 		/* Message is unknown */
-		cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
+		cw_dbg(DBG_MSG_ERR, 
+			"Message type %d (%s) unrecognized, sending response.",
 			search.type, cw_strmsg(search.type),
 			cw_strstate(conn->capwap_state));
 		result_code = CAPWAP_RESULT_MSG_UNRECOGNIZED;
@@ -339,8 +340,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	if (!*i){
 		/* Message found, but it was in wrong state */
 		cw_dbg(DBG_MSG_ERR,
-		       "Message type %d (%s) not allowed in %s State.", search.type,
-		       cw_strmsg(search.type), cw_strstate(conn->capwap_state));
+		       "Message type %d (%s) not allowed in %s State, sending response.", 
+		       search.type,cw_strmsg(search.type), cw_strstate(conn->capwap_state));
 		result_code = CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE;
 		cw_send_error_response(conn, rawmsg, result_code);
 		errno = EAGAIN;
@@ -367,7 +368,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* Create an avltree to catch the found mandatory elements */
 	conn->mand = stravltree_create();
 
-	int unrecognized = 0;
+	
 
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -394,8 +395,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		params.from=from;
 		params.msgdata=message;
 		
-		result_code = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); //elems_len-(elem-elems_ptr));
+		result_code = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); 
 		
+
+		if (cw_result_is_ok(result_code))
+			continue;
+		
+		
+
 
 /*		
 		
@@ -435,20 +442,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 continue;
 exit(0);
-		
-		
-		as.elem_id = cw_get_elem_id(elem);
-	/*	int elem_len = cw_get_elem_len(elem);*/
-
-/*
-		//cw_elem_handler_t search_eh;
-		//memset(&search_eh,0,sizeof(search_eh));
-//		struct cw_ElemDef search_elem;
-//		search_elem.handler=&search_eh;
-
-//		search_eh.id = cw_get_elem_id(elem);
-*/
-
 
 		struct cw_ElemDef * elem;
 		
@@ -462,7 +455,7 @@ exit(0);
 		af = 0;
 
 		if (!af) {
-			unrecognized++;
+			//unrecognized++;
 			
 			
 /*			cw_dbg(DBG_ELEM_ERR,
@@ -530,7 +523,7 @@ exit(0);
 
 
 	//int result_code = 0;
-
+int unrecognized =3;
 
 
 	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from);

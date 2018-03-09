@@ -546,7 +546,7 @@ static void wtpman_run(void *arg)
 		}
 	}
 
-	if (!cw_rcok(rc)) {
+	if (!cw_result_is_ok(rc)) {
 		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
 		wtpman_remove(wtpman);
 		return;

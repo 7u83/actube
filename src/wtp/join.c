@@ -188,7 +188,7 @@ int run_join(struct conn *conn)
 
 	int rc = cw_send_request(conn, CAPWAP_MSG_JOIN_REQUEST);
 
-	if (!cw_rcok(rc)) {
+	if (!cw_result_is_ok(rc)) {
 		if (rc > 0) {
 			cw_log(LOG_ERR, "Can't Join AC at %s, AC said: %d - %s.",
 			       sock_addr2str(&conn->addr), rc, cw_strerror(rc));

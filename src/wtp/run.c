@@ -95,7 +95,7 @@ static void do_update(struct conn * conn)
 	cfg_to_json();
 	/* Change State ... */
 	int rc = cw_send_request(conn,CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST);
-	if ( !cw_rcok(rc) ) {
+	if ( !cw_result_is_ok(rc) ) {
 		cw_strresult(rc);
 		return ;
 	}
@@ -131,7 +131,7 @@ int run()
 				continue;
 			}
 
-			if ( !cw_rcok(rc))
+			if ( !cw_result_is_ok(rc))
 				break;
 
 
@@ -144,14 +144,14 @@ int run()
 		if (rc<0 && errno == EAGAIN){
 			rc = cw_send_request(conn,CAPWAP_MSG_ECHO_REQUEST);
 		
-			if (!cw_rcok(rc)) {
+			if (!cw_result_is_ok(rc)) {
 				cw_log(LOG_ERR,"Error in run state: %d %s",rc,cw_strrc(rc));
 				break;
 			}
 			continue;
 		}
 
-		if (!cw_rcok(rc)) {
+		if (!cw_result_is_ok(rc)) {
 			cw_log(LOG_ERR,"Error in run state: %d %s",rc,cw_strrc(rc));
 			break;
 		}

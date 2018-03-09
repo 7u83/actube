@@ -15,7 +15,7 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 	mbag_item_t * jresult = mbag_get(conn->incomming,CW_ITEM_RESULT_CODE);
 	if  (jresult ) {
-		if (!cw_rcok(jresult->u2.dword)){
+		if (!cw_result_is_ok(jresult->u2.dword)){
 			return jresult->u2.dword;
 		}
 	}

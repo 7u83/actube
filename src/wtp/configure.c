@@ -28,7 +28,7 @@ int configure()
 	int rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST);
 	conn->radios_upd=radios_upd;
 
-	if (!cw_rcok(rc)) {
+	if (!cw_result_is_ok(rc)) {
 		if (rc > 0) {
 			cw_log(LOG_ERR,
 			       "Error sending Configuration Status Request to AC at %s, AC said: %d - %s.",
