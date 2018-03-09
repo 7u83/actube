@@ -230,7 +230,7 @@
 #define CAPWAP_ELEM_DISCOVERY_TYPE			20
 #define CW_ELEM_DUPLICATE_IPV4_ADDRESS			21
 #define CW_ELEM_DUPLICATE_IPV6_ADRESS			22
-#define CW_ELEM_ECN_SUPPORT				53
+#define CAPWAP_ELEM_ECN_SUPPORT				53
 #define CW_ELEM_IDLE_TIMEOUT				23
 #define CW_ELEM_IMAGE_DATA				24
 #define CW_ELEM_IMAGE_IDENTIFIER			25
@@ -636,8 +636,11 @@ const char *cw_strelemp_(cw_strheap_t h, int msg_id);
 //int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
 */
 
+/*
 extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len,struct sockaddr *from);
+*/
+
 extern int cw_in_wtp_name(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			  int len,struct sockaddr *from);
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,

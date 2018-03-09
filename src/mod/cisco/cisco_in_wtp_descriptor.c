@@ -22,8 +22,8 @@
 #include "cw/capwap_items.h"
 
 
-int cisco_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_t * data,
-			 int len, struct sockaddr *from)
+int cisco_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams * params, uint8_t * data,
+			 int len)
 {
 
 	static struct cw_DescriptorSubelemDef allowed[] = {
@@ -35,7 +35,7 @@ int cisco_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_
 	};
 
 
-	return cw_read_wtp_descriptor_7(conn->remote_cfg, conn, eh, data, len, allowed);
+	return cw_read_wtp_descriptor_7(params->conn->remote_cfg, params->conn, eh, data, len, allowed);
 }
 
 

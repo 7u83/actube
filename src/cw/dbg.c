@@ -375,65 +375,21 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 
 
 
-/**
- * print debug info for message elements
- */
-
-void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
-			 const uint8_t * msgbuf, int len)
+void cw_dbg_version_subelem(int level, const char *context, int subtype, 
+		uint32_t vendor_id, const uint8_t * vstr, int len)
 {
-
-
-	const char *elemname;
-	char vendorname[256];
-	char vendor_details[265];
-	struct cw_ElemHandler * handler;
+	char v[2048];
+	int n;
 	
 	if (!cw_dbg_is_level(level))
 		return;
-		
-	*vendor_details = 0;
-
-	handler = cw_msgset_get_elemhandler(conn->msgset,0,0,msgelem);
-	if (!handler)
+	if (!vstr)
 		return;
-	
-	
-/*	
-/// TODO XXXX
-*/
-	if (msgelem == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
-		uint32_t vendor_id = ntohl(*((uint32_t *) msgbuf));
-		int type = ntohs(*((uint16_t *) (msgbuf + 4)));
-		cw_format_vendor(vendor_details, vendor_id, type, msgbuf);
-/*		sprintf(vendorname, "%s/%s/%s",
-			cw_strelemp(conn->actions, msgelem),
-			(char *) cw_strvendor(vendor_id), vendor_details);
-*/
-		elemname = vendorname;
+	n = cw_format_version(v, vstr, len);
 
-	} else {
-/*		
-//		elemname = cw_strelemp(conn->actions, msgelem);
-*/
-		elemname=handler->name;
-	}
+	sprintf(v + n, ", Vendor Id: %d, %s", vendor_id, cw_strvendor(vendor_id));
 
-
-	if (!cw_dbg_is_level(DBG_ELEM_DMP)) {
-		cw_dbg(DBG_ELEM, "%d (%s), len=%d", msgelem, elemname, len);
-	} else {
-		/*
-		char *dmp = cw_dbg_mkdmp(msgbuf, len);
-		 */
-		char *dmp;
-		dmp = cw_format_dump(msgbuf,len,NULL);
-
-		cw_dbg(DBG_ELEM, "%d (%s), len=%d%s%s",
-		       msgelem, elemname, len, get_dbg_color_ontext(DBG_ELEM_DMP), dmp);
-
-		free(dmp);
-	}
+	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
 }
 
 
@@ -476,27 +432,6 @@ int cw_format_item(char *dst, mbag_item_t * item)
 	}
 	return 0;
 }
-
-
-
-void cw_dbg_version_subelem(int level, const char *context, int subtype, 
-		uint32_t vendor_id, const uint8_t * vstr, int len)
-{
-	char v[2048];
-	int n;
-	
-	if (!cw_dbg_is_level(level))
-		return;
-	if (!vstr)
-		return;
-	n = cw_format_version(v, vstr, len);
-
-	sprintf(v + n, ", Vendor Id: %d, %s", vendor_id, cw_strvendor(vendor_id));
-
-	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
-}
-
-
 
 
 

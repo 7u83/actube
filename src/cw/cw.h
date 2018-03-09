@@ -350,10 +350,14 @@ extern int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a
  * @defgroup CWELEMIN Input Handlers for Message Elements
  * @{
  */
+ 
+ /*
 int cw_in_generic(struct conn * conn, struct cw_ElemHandler * handler,  
 		uint8_t * elem_data, int elem_len, struct sockaddr * from);
+*/
 
-
+int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
 
 
 
@@ -364,8 +368,10 @@ extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len, struct sockaddr *from);
 
-extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
-					 uint8_t * data, int len, struct sockaddr *from);
+					 
+int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
+				struct cw_ElemHandlerParams *params,
+				  uint8_t * data, int len);
 
 extern int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,
@@ -383,8 +389,14 @@ extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in 
 					 uint8_t * data, int len, struct sockaddr *from);
 
 
-
-
+/*	
+int cw_process_element(struct conn * conn, 
+		struct cw_MsgData * msgdata, int proto, int vendor,
+		uint8_t  * elem, int max_len);
+*/
+int cw_process_element(struct cw_ElemHandlerParams *params, 
+		int proto, int vendor,int msgid,
+		uint8_t  * elem, int max_len);
 
 /**
  * @}

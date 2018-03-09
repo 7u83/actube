@@ -36,11 +36,12 @@ struct cw_Type{
 extern const struct cw_Type  cw_type_byte;
 extern const struct cw_Type  cw_type_word;
 extern const struct cw_Type  cw_type_dword;
-extern const struct cw_Type  cw_type_version;
+extern const struct cw_Type  cw_type_bstr16;
 
 #define CW_TYPE_BYTE (&cw_type_byte)
+#define CW_TYPE_WORD (&cw_type_word)
 #define CW_TYPE_DWORD (&cw_type_dword)
-#define CW_TYPE_VERSION (&cw_type_version)
+#define CW_TYPE_BSTR16 (&cw_type_bstr16)
 
 void cw_types_del_null(mavldata_t *data);
 

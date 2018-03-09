@@ -39,29 +39,33 @@ int dtls_gnutls_accept(struct conn *conn)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
+	uint8_t buffer[2048];
+	int tlen, rc;
+	time_t c_timer;
 
 	gnutls_datum_t cookie_key;
-
+	gnutls_dtls_prestate_st prestate;
+	
 	gnutls_key_generate(&cookie_key, GNUTLS_COOKIE_KEY_SIZE);
 	cw_dbg(DBG_DTLS, "Session cookie for %s generated: %s",
-	       sock_addr2str(&conn->addr,sock_buf), sock_hwaddr2idstr((uint8_t *) (&cookie_key),
-							     sizeof(cookie_key)));
+	       sock_addr2str(&conn->addr,sock_buf), sock_hwaddrtostr((uint8_t *) (&cookie_key),
+							     sizeof(cookie_key),sock_buf,""));
 
-	gnutls_dtls_prestate_st prestate;
+
 	memset(&prestate, 0, sizeof(prestate));
 
 
 
-	uint8_t buffer[2048];
-	int tlen;
 	tlen = dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
 
 	gnutls_dtls_cookie_send(&cookie_key, &conn->addr, sizeof(conn->addr),
 				&prestate, (gnutls_transport_ptr_t) conn, dtls_gnutls_bio_write);
 
-	int rc=-1;
+	rc=-1;
 
-	time_t c_timer = cw_timer_start(10);
+
+
+	c_timer = cw_timer_start(10);
 
 	while(!cw_timer_timeout(c_timer)){
 
@@ -84,7 +88,6 @@ int dtls_gnutls_accept(struct conn *conn)
 			continue;
 		}
 
-	//	dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
 		break;
 
 	}

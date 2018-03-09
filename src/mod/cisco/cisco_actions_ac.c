@@ -38,10 +38,12 @@
 
 #include "cisco_items.h"
 
+
 #include "include/cipwap_items.h"
 
 #include "cw/message_set.h"
 #include "cw/cw_types.h"
+
 
 static struct cw_ElemHandler handlers[] = {
 	{ 
@@ -51,7 +53,28 @@ static struct cw_ElemHandler handlers[] = {
 		4,128,				/* min/max length */
 		NULL,				/* type */
 		"wtp_descriptor",		/* Key */
-		cisco_in_wtp_descriptor	 /* get */
+		cisco_in_wtp_descriptor	 	/* get */
+	}
+	,
+	{
+		"RAD Name -> CAPWAP WTP Name",	/* name */
+		CW_CISCO_RAD_NAME,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
+		1,512,				/* min/max length */
+		CW_TYPE_BSTR16,			/* type */
+		"wtp_name",			/* Key */
+		cw_in_generic			/* handler */
+	}
+
+	,
+	{
+		"Board Data Options",		/* name */
+		CW_CISCO_BOARD_DATA_OPTIONS,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
+		2,2,				/* min/max length */
+		CW_TYPE_DWORD,			/* type */
+		"cisco_board_data_options",	/* Key */
+		cw_in_generic			/* handler */
 	}
 	,
 	{0,0,0,0,0,0,0,0}
@@ -61,7 +84,8 @@ static struct cw_ElemHandler handlers[] = {
 
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
-	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
+	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
+	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_RAD_NAME,		1, 0},	
 	{0,0,0,00}
 	
 };
@@ -213,7 +237,7 @@ static cw_action_in_t actions_in[] = {
 		 * about ECN support, so make it non-mandatory */
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.elem_id = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
 	 	.start = cw_in_generic, 
 		.mand = 0, 
@@ -418,7 +442,7 @@ static cw_action_out_t actions_out[]={
 	/* ECN Support - Join Response */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.elem_id  = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT
 	}
 	,

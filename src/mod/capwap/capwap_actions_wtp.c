@@ -150,7 +150,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.elem_id  = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -589,7 +589,7 @@ static cw_action_out_t actions_out[] = {
 	/* ECN Support - Join Request */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.elem_id  = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,

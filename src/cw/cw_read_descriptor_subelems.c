@@ -73,7 +73,7 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 	
 			/* version */
 			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VERSION);
-			cw_kvstore_add(cfg,key,CW_TYPE_VERSION,data+sub+8,l);
+			cw_kvstore_add(cfg,key,CW_TYPE_BSTR16,data+sub+8,l);
 	
 			sprintf(dbgstr, "%s", key);
 			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype, vendor_id, data+sub+8,l);

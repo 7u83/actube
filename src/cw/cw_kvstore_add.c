@@ -3,12 +3,16 @@
 #include "cw.h"
 
 #include "log.h"
+#include "dbg.h"
 
 const char * cw_kvstore_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			const uint8_t * data, int len)
 {
 	mavldata_t mdata, *mresult;
-	
+
+/*	cw_dbg(DBG_ELEM,"KVStore (%p,%d) add elem (%s): %s", kvstore, kvstore->count,
+			type->name, key );
+*/
 	mdata.kv.key=cw_strdup(key);
 	if (!mdata.kv.key){
 		cw_log(LOG_ERR, "Can't allocate memory for key %s: %s",
@@ -30,9 +34,9 @@ const char * cw_kvstore_add(mavl_t kvstore, const char *key, const struct cw_Typ
 		cw_log(LOG_ERR, "Element already exists %s", key);
 		/* element already exists */
 		free(mdata.kv.key);
-		type->del(mresult);
+		type->del(&mdata);
 		return key;
 	}
-	
+
 	return mdata.kv.key;
 }

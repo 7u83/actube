@@ -21,43 +21,36 @@
 #include "cw_types.h"
 #include "cw.h"
 
-/*
-static struct mdata_Elem *  from_str(const char *src)
-{
-	struct mdata_Elem * e = mdata_elem_new(&cw_type_word);
-	if (!e)
-		return NULL;
 
-	e->data.word=atoi(src);
-	return e;
+static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
+{
+	data->kv.priv = &cw_type_word;
+	data->kv.val.word = cw_get_word(src);
+	return data;
 }
 
-
-static int to_str(const struct mdata_Elem *e, char *dst)
+static int put(mavldata_t *data, uint8_t * dst)
 {
-	return sprintf(dst, "%d", e->data.word);
+	return cw_put_word(dst, data->kv.val.word);
 }
 
-static struct mdata_Elem * get(const uint8_t *src,int len)
+static int to_str(const mavldata_t *data, char *dst, int max_len)
 {
-	struct mdata_Elem * e = mdata_elem_new(&cw_type_word);
-	if (!e)
-		return NULL;
-	e->data.word=cw_get_word(src);
-	return e;
+	return sprintf(dst, "%d", data->kv.val.word);
 }
 
-static int put(struct mdata_Elem * e, uint8_t *dst)
+static mavldata_t *from_str(mavldata_t * data, const char *src)
 {
-	return cw_put_word(dst,e->data.word);
+	data->kv.val.word = atoi(src);
+	return data;
 }
 
-#define _I_NAME		"Word"
-#define _I_PUT		put
-#define _I_GET		get
-#define _I_DEL		NULL
-#define _I_TO_STR	to_str
-#define _I_FROM_STR	from_str
+const struct cw_Type cw_type_word = {
+	"Word",			/* name */
+	cw_types_del_null,	/* del */
+	put,			/* put */
+	get,			/* get */
+	to_str,			/* to_str */
+	from_str		/* from_str */ 
+};
 
-const struct mdata_Type  cw_type_word = MDATA_TYPE_INIT();
-*/

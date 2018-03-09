@@ -37,19 +37,18 @@
 
 
 
-
-static int cmp_by_addr(const void * d1,const void *d2)
+static int cmp_by_addr(const mavldata_t * d1,const mavldata_t *d2)
 {
-	struct conn * c1=(struct conn *) d1;
-	struct conn * c2=(struct conn *) d2;
+	struct conn * c1=(struct conn *) d1->ptr;
+	struct conn * c2=(struct conn *) d2->ptr;
 
 	return sock_cmpaddr((struct sockaddr*)&c1->addr,(struct sockaddr*)&c2->addr,1);
 }
 
-static int cmp_by_session_id(const void *d1, const void *d2)
+static int cmp_by_session_id(const mavldata_t *d1, const mavldata_t *d2)
 {
-	struct conn * c1=(struct conn *) d1;
-	struct conn * c2=(struct conn *) d2;
+	struct conn * c1=(struct conn *) d1->ptr;
+	struct conn * c2=(struct conn *) d2->ptr;
 	return memcmp(c1->session_id,c2->session_id,16);	
 }
 
@@ -111,7 +110,7 @@ struct conn * connlist_get(struct connlist * cl, const struct sockaddr * addr)
 {
 	struct conn search;
 	sock_copyaddr(&search.addr,addr);
-	return mavl_get(cl->by_addr,&search);
+	return mavl_get_ptr(cl->by_addr,&search);
 }
 
 
@@ -121,23 +120,26 @@ struct conn * connlist_add(struct connlist * cl, struct conn * conn)
 		if (cl->by_addr->count>=cl->len)
 			return NULL;
 	conn->connlist=cl;
-	return mavl_add(cl->by_addr,conn);
+	return mavl_add_ptr(cl->by_addr,conn);
 }
 
 struct conn * connlist_get_by_session_id(struct connlist *cl, struct conn * conn)
 {
-	return mavl_get(cl->by_session_id,conn);
+	return mavl_get_ptr(cl->by_session_id,conn);
 }
 
 struct conn * connlist_add_by_session_id(struct connlist * cl, struct conn * conn)
 {
-	return mavl_add(cl->by_session_id,conn);
+	return mavl_add_ptr(cl->by_session_id,conn);
 }
 
 void connlist_remove(struct connlist *cl,struct conn * conn)
 {
-	mavl_del(cl->by_session_id,conn);
-	mavl_del(cl->by_addr,conn);
+	mavldata_t md;
+	md.ptr=conn;
+	mavl_del(cl->by_session_id,&md);
+	md.ptr=conn;
+	mavl_del(cl->by_addr,&md);
 }
 	
 

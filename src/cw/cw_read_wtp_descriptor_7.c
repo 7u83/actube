@@ -4,6 +4,7 @@
 #include "capwap_items.h"
 #include "cw_types.h"
 #include "keys.h"
+#include "kvstore.h"
 
 
 static struct cw_DescriptorSubelemDef allowed_default[] = {
@@ -28,12 +29,17 @@ int cw_read_wtp_descriptor_7(mavl_t cfg, struct conn *conn,
 	char key[64];
 
 	sprintf(key,"%s/%s",eh->key, "max_radios");
-	md.kv.key=strdup(key);
+/*	md.kv.key=strdup(key);
 	mavl_replace (cfg, cw_type_byte.get(&md,data,1));
+*/
+	cw_kvstore_add(cfg,key,CW_TYPE_BYTE,data,1);
 
 	sprintf(key,"%s/%s",eh->key, "radios_in_use");
-	md.kv.key=strdup(key);
+	cw_kvstore_add(cfg,key,CW_TYPE_BYTE,data+1,1);
+	
+/*	md.kv.key=strdup(key);
 	mavl_replace (cfg, cw_type_byte.get(&md,data+1,1));
+*/
 
 /*	mbag_set_byte(mbag, CW_ITEM_WTP_MAX_RADIOS, cw_get_byte(data));
 	mbag_set_byte(mbag, CW_ITEM_WTP_RADIOS_IN_USE, cw_get_byte(data + 1));

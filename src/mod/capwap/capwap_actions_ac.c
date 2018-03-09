@@ -25,7 +25,6 @@
 
 #include "mod_capwap.h"
 
-
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
@@ -65,7 +64,7 @@ static struct cw_ElemHandler handlers[] = {
 		4,128,				/* min/max length */
 		NULL,				/* type */
 		"wtp_descriptor",		/* Key */
-		capwap_in_wtp_descriptor	 /* get */
+		capwap_in_wtp_descriptor	/* get */
 	}
 	,
 	{ 
@@ -73,11 +72,23 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
-		CW_TYPE_BYTE,					/* type */
+		CW_TYPE_BYTE,				/* type */
 		"wtp_frame_tunnel_mode",		/* Key */
-		cw_in_generic				 /* get */
+		cw_in_generic				/* get */
 	}
 	,
+	
+	{ 
+		"Vendor Specific Payload",		/* name */
+		CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		0,0,					/* min/max length */
+		NULL,					/* type */
+		"vendor_specific_payload",		/* Key */
+		cw_in_vendor_specific_payload		/* get */
+	}
+	,
+	
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -85,11 +96,12 @@ static struct cw_ElemHandler handlers[] = {
 
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
-	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,	1, 0},
-	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,	1, 0},
-	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
-	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	1, 0},
+	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
+	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, 0},
 	{0,0,0,0,0}
 
 };

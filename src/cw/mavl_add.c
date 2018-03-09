@@ -1,6 +1,6 @@
 #include "mavl.h"
 
-static struct mavlnode *mavlnode_create(union mavldata *data)
+static struct mavlnode *mavlnode_create(const union mavldata *data)
 {
 	struct mavlnode *n = malloc(sizeof(struct mavlnode));
 	if (!n)
@@ -169,16 +169,19 @@ static int mavl_add0(struct mavl *t, struct mavlnode **parent, union mavldata **
  * @example mavl_add_example.c
  */
  
-union mavldata *mavl_add(struct mavl *t, const union mavldata *data)
+union mavldata *mavl_add(struct mavl *t, union mavldata *data)
 {
 	union mavldata * d;
 	int rc;
 	
-	if (t->root == 0) {
+	
+	if (t->root == NULL) {
 		t->root = mavlnode_create(data);
 		if (t->root)
 			t->count++;
-		return &t->root->data;
+		
+		/* return &t->root->data; */
+		return data;
 	}
 
 	d = data;

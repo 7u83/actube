@@ -29,7 +29,7 @@ struct cw_strlist_elem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_DISCOVERY_TYPE, "Discovery Type"},
 	{CW_ELEM_DUPLICATE_IPV4_ADDRESS, "Duplicate IPv4 Address"},
 	{CW_ELEM_DUPLICATE_IPV6_ADRESS, "Duplicate IPv6 Address"},
-	{CW_ELEM_ECN_SUPPORT, "ECN Support"},
+	{CAPWAP_ELEM_ECN_SUPPORT, "ECN Support"},
 	{CW_ELEM_IDLE_TIMEOUT, "Idle Timeout"},
 	{CW_ELEM_IMAGE_DATA, "Image Data"},
 	{CW_ELEM_IMAGE_IDENTIFIER, "Image Identifier"},

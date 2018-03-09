@@ -318,7 +318,6 @@
       <File Name="src/cw/mavl_add_kv_byte.c"/>
       <File Name="src/cw/cw_types_mavl_delete.c"/>
       <File Name="src/cw/cw_format_scan_hex_bytes.c"/>
-      <File Name="src/cw/cw_type_version.c"/>
       <File Name="src/cw/cw_dbg_elem.c"/>
       <File Name="src/cw/cw_kvstore_mavl_delete.c"/>
       <File Name="src/cw/cw_format_version.c"/>
@@ -326,6 +325,8 @@
       <File Name="src/cw/kvstore.h"/>
       <File Name="src/cw/cw_kvstore_add.c"/>
       <File Name="src/cw/cw_types_del_null.c"/>
+      <File Name="src/cw/cw_type_bstr16.c"/>
+      <File Name="src/cw/cw_process_element.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

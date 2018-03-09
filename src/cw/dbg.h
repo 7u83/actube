@@ -26,6 +26,7 @@
 #define __DBG_H
 
 #include "conn.h"
+#include "cw.h"
 
 
 #ifndef CW_LOG_DUMP_ROW_LEN
@@ -57,9 +58,10 @@ void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ..
 */
 
 
-
+/*
 	#define cw_dbg_elem(level,conn,msgtype,msgelemtype,msgbuf,msglen)\
 		 cw_dbg_elem_colored(level,conn,msgtype,msgelemtype,msgbuf,msglen)
+*/
 
 
 #endif
@@ -113,7 +115,8 @@ extern struct cw_strlist_elem cw_dbg_strings[];
 void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, ...);
 
 
-extern void cw_dbg_elem_colored(int level, struct conn *conn, int msg, int msgelem,
+
+extern void cw_dbg_elem(int level, struct conn *conn, int msg, struct cw_ElemHandler * handler,
 			 const uint8_t * msgbuf, int len);
 
 

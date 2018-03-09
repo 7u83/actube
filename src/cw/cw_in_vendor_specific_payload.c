@@ -2,7 +2,6 @@
 #include "cw.h"
 #include "dbg.h"
 #include "log.h"
-#include "stravltree.h"
 
 /** 
  * @file 
@@ -12,38 +11,32 @@
 /**
  * Default handler for Vendor Specific Payload message elements.
  */
-int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
-				  uint8_t * data, int len, struct sockaddr *from)
+int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
+				struct cw_ElemHandlerParams *params,
+				  uint8_t * data, int len)
 {
 
-	cw_action_in_t as, *af;
-	as = *a;
-
-	as.vendor_id = cw_get_dword(data);
-	as.elem_id = cw_get_word(data + 4);
-
-/*
-	// TODO XXXX
-//	af = cw_actionlist_in_get(conn->actions->in, &as);
-*/	af = 0;
+	struct cw_ElemHandler *vhandler;
 	
-	if (!af) {
+	uint32_t vendor_id, elem_id;
+	
+	vendor_id = cw_get_dword(data);
+	elem_id = cw_get_word(data + 4);
+
+	printf("Spec handler looking for %d %d %d\n",0,vendor_id,elem_id);
+	vhandler = cw_msgset_get_elemhandler(params->conn->msgset,0,vendor_id,elem_id);
+	
+	
+	if (!vhandler) {
 		cw_dbg(DBG_WARN,
 		       "Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
-		       cw_strvendor(as.vendor_id), as.elem_id, as.msg_id,
-		       cw_strmsg(as.msg_id), cw_strstate(as.capwap_state));
+		       cw_strvendor(vendor_id), elem_id, params->msgdata->type,
+		       params->msgdata->name, cw_strstate(params->conn->capwap_state));
 		return 0;
 	}
-
-	if (af->start) {
-		int afrc = af->start(conn, af, data + 6, len - 6, from);
-		if (af->mand && afrc) {
-			/* add found mandatory message element 
-			   to mand list */
-			stravltree_add(conn->mand, af->item_id);
-		}
-		return afrc;
-	}
+	
+	cw_dbg_elem(DBG_ELEM,params->conn,0,vhandler,data+6,len-6);
+	vhandler->get(vhandler, params, data+6, len-6);
 
 	return 1;
 

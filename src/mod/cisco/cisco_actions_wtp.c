@@ -68,7 +68,7 @@ static cw_action_in_t actions_in[] = {
 		/* Make ECN Support non-mand */
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id = CW_ELEM_ECN_SUPPORT,
+		.elem_id = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT,
 	 	.start = cw_in_generic, 
 		.mand = 0, 
@@ -345,7 +345,7 @@ static cw_action_out_t actions_out[]={
 		/* Cisco doesn't know ECN support, so we 
 		   define no output method */
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_ECN_SUPPORT,
+		.elem_id  = CAPWAP_ELEM_ECN_SUPPORT,
 		.item_id = CW_ITEM_ECN_SUPPORT, 
 		.mand = 0
 	}

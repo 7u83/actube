@@ -372,9 +372,32 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
-		struct cw_ElemHandler *handler;
-		struct cw_ElemData * elem_data, elem_data_search;
-		int elem_len, elem_id;
+		struct cw_ElemHandlerParams params;
+		int elem_len, elem_id, max_len;
+		uint8_t * elem_data;
+
+
+		elem_len = cw_get_elem_len(elem);
+		elem_data=cw_get_elem_data(elem);
+		elem_id = cw_get_elem_id(elem);
+		
+		max_len=elems_len-(elem_data-elems_ptr);
+		if (elem_len > max_len){
+			cw_dbg(DBG_RFC,
+			"Messag element claims size of %d bytes, but only %d bytes are left in the payload, truncating.",
+			elem_len,max_len-4);
+		}
+	
+
+		
+		params.conn=conn;
+		params.from=from;
+		params.msgdata=message;
+		
+		cw_process_element(&params,0,0,elem_id,elem_data,elem_len); //elems_len-(elem-elems_ptr));
+		
+
+/*		
 		
 		elem_id = cw_get_elem_id(elem);
 		
@@ -401,13 +424,14 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		
 		elem_len = cw_get_elem_len(elem);
 
-/*printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
-*/
-		cw_dbg_elem(DBG_ELEM, conn, message->type, handler->id, 
+
+//printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
+
+		cw_dbg_elem(DBG_ELEM, conn, message->type, handler, 
 				cw_get_elem_data(elem),elem_len);
 				
 		handler->get(conn, handler, cw_get_elem_data(elem), elem_len, from);
-		
+*/
 
 continue;
 exit(0);

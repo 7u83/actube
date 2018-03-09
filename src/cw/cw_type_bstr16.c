@@ -22,6 +22,11 @@
 #include "cw.h"
 #include "cw_types.h"
 
+
+static void del(mavldata_t * data){
+	free (data->kv.val.ptr);
+}
+
 static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
 {
 	
@@ -30,7 +35,7 @@ static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
 	if (!s)
 		return NULL;
 
-	data->kv.priv = &cw_type_version;
+	data->kv.priv = &cw_type_bstr16;
 	data->kv.val.ptr=s;
 	return data;
 }
@@ -61,9 +66,9 @@ static mavldata_t *from_str(mavldata_t * data, const char *src)
 }
 
 
-const struct cw_Type cw_type_version = {
-	"VersionStr",	/* name */
-	NULL,		/* del */
+const struct cw_Type cw_type_bstr16 = {
+	"Bstr16",	/* name */
+	del,		/* del */
 	put,		/* put */
 	get,		/* get */
 	to_str,		/* to_str */

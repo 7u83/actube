@@ -22,15 +22,15 @@
 
 #include "mod_capwap.h"
 
-int capwap_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh, uint8_t * data,
-			 int len, struct sockaddr *from)
+int capwap_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams *params, uint8_t * data,
+			 int len)
 {
 	int rc;
-	printf("WTP Descriptor reader\n");
+	//printf("WTP Descriptor reader\n");
 /*
 //	mbag_t mbag = conn->incomming;
 */
-	rc =cw_read_wtp_descriptor(conn->remote_cfg, conn, eh, data, len, NULL);
+	rc =cw_read_wtp_descriptor(params->conn->remote_cfg, params->conn, eh, data, len, NULL);
 
 	return rc;
 }

@@ -7,14 +7,14 @@
 
 
 static struct cw_FormatDumpSettings CW_FORMAT_DUMP_SETTINGS = {
-	32,			/* row_len */
+	24,			/* row_len */
 	8,			/* marker_distance */
 	'|',			/* marker_char */
 	1,			/* ascii */
 	0,			/* inv_len */
 	'*',			/* inv_char */
 	"\n\t",			/* dump_prefix */
-	""			/* dump_suffix */
+	"",			/* dump_suffix */
 	"  ",			/* ascii_prefix */
 	"\n\t"			/* newline */
 };
@@ -81,7 +81,7 @@ char *cw_format_dump(const uint8_t * data, int len,
 	if (len % settings->row_len)
 		rows++;
 
-	size = strlen(settings->dump_prefix) +
+	size = strlen(settings->dump_prefix) + strlen(settings->dump_suffix) +
 		rows * strlen(settings->newline) + 
 		(settings->ascii ? rows*settings->row_len*3 : len * 3);
 
@@ -106,7 +106,7 @@ char *cw_format_dump(const uint8_t * data, int len,
 			rlen = len-pos;
 		}
 		pdst += cw_format_dump_row(pdst,data+pos, rlen, settings);
-		if(row<rows)
+		if(row<rows-1)
 			pdst += sprintf(pdst,"%s",settings->newline);
 		else
 			pdst += sprintf(pdst,"%s",settings->dump_suffix);			

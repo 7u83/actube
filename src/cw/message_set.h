@@ -28,6 +28,12 @@ struct cw_ElemData{
 	int mand;
 };
 
+struct cw_ElemHandlerParams {
+	struct conn * conn;
+	struct cw_MsgData * msgdata;
+	struct sockaddr *from;
+};
+
 struct cw_ElemHandler {
 	const char * name;
 	int id;
@@ -37,8 +43,8 @@ struct cw_ElemHandler {
 	int max_len;
 	const struct cw_Type * type;
 	const char * key;
-        int (*get)(struct conn *conn, struct cw_ElemHandler * handler,
-		uint8_t*data,int len,struct sockaddr *from);
+        int (*get)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, 
+		uint8_t*data, int len);
 /*        
 	int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 */
@@ -64,6 +70,9 @@ struct cw_MsgData{
 	mavl_t elements_tree;
 	mlist_t elements_list;
 };
+
+
+
 
 
 extern struct cw_MsgSet * cw_msgset_create();
