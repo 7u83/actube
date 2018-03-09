@@ -310,7 +310,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		cw_dbg(DBG_MSG_ERR, "Message type %d (%s) unknown.",
 			search.type, cw_strmsg(search.type),
 			cw_strstate(conn->capwap_state));
-		result_code = CW_RESULT_MSG_UNRECOGNIZED;
+		result_code = CAPWAP_RESULT_MSG_UNRECOGNIZED;
 		cw_send_error_response(conn, rawmsg, result_code);
 		errno = EAGAIN;
 		return -1;
@@ -394,7 +394,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		params.from=from;
 		params.msgdata=message;
 		
-		cw_process_element(&params,0,0,elem_id,elem_data,elem_len); //elems_len-(elem-elems_ptr));
+		result_code = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); //elems_len-(elem-elems_ptr));
 		
 
 /*		
@@ -557,7 +557,7 @@ exit(0);
 
 		if ( (!result_code) && ((afm->msg_id & 1))) {
 			if (conn->strict_capwap) {
-				result_code = CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
+				result_code = CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 			}
 		}
 

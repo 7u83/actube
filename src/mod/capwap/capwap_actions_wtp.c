@@ -391,7 +391,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_NAME,
+		.elem_id  = CAPWAP_ELEM_WTP_NAME,
 		.item_id = CW_ITEM_WTP_NAME, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -544,7 +544,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Name - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_WTP_NAME,
+		.elem_id  = CAPWAP_ELEM_WTP_NAME,
 		.item_id = CW_ITEM_WTP_NAME, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,
@@ -609,7 +609,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Reboot Statistics - Join Request */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+		.elem_id = CAPWAP_ELEM_WTP_REBOOT_STATISTICS,
 		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
 		.out = cw_out_wtp_reboot_statistics,
 		.get = cw_out_get_config,
@@ -653,7 +653,7 @@ static cw_action_out_t actions_out[] = {
 	/* WTP Reboot Statistics - Config Status Request */
 	{
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
-		.elem_id = CW_ELEM_WTP_REBOOT_STATISTICS,
+		.elem_id = CAPWAP_ELEM_WTP_REBOOT_STATISTICS,
 		.item_id = CW_ITEM_WTP_REBOOT_STATISTICS, 
 		.out = cw_out_wtp_reboot_statistics,
 		.get = cw_out_get_config,

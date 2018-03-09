@@ -49,5 +49,5 @@
 int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
 				   uint8_t * dst)
 {
-	return cw_put_local_ip_address(conn->sock,dst,CW_ELEM_WTP_IPV4_IP_ADDRESS,CW_ELEM_WTP_IPV6_IP_ADDRESS);
+	return cw_put_local_ip_address(conn->sock,dst,CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS);
 }

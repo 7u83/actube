@@ -122,7 +122,6 @@
       <File Name="src/cw/sock_getifhwaddr.c"/>
       <File Name="src/cw/stravltree.h"/>
       <File Name="src/cw/conn_send_packet.c"/>
-      <File Name="src/cw/conn_detect_capwap.c"/>
       <File Name="src/cw/mbag_type_bstr16.c"/>
       <File Name="src/cw/cipwap.h"/>
       <File Name="src/cw/cw_in_check_join_resp.c"/>

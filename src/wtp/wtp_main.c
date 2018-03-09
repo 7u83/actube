@@ -194,7 +194,7 @@ printf("Setting to 8 %p %p\n",mri,r);
 
 
 
-	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, CW_WTP_MAC_TYPE_SPLIT);
+	mbag_set_byte(conn->local, CW_ITEM_WTP_MAC_TYPE, CAPWAP_WTP_MAC_TYPE_SPLIT);
 	mbag_set_byte(conn->local, CW_ITEM_WTP_FRAME_TUNNEL_MODE, CW_WTP_FRAME_TUNNEL_MODE_E);
 	conn->wbid=1;
 

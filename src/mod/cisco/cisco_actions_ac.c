@@ -209,7 +209,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_IPV4_IP_ADDRESS,
+		.elem_id = CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
 	 	.start = cw_in_capwap_local_ipv4_address, 
 		.mand = 1,
@@ -222,7 +222,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_WTP_IPV6_IP_ADDRESS,
+		.elem_id = CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_LOCAL_IP_ADDRESS,
 	 	.start = cw_in_capwap_local_ipv4_address, 
 		.mand = 1,
@@ -491,7 +491,7 @@ static cw_action_out_t actions_out[]={
 		  or replace such elemenns */
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
 		.item_id = CW_ITEM_WTP_NAME, 
-		.elem_id = CW_ELEM_WTP_NAME,
+		.elem_id = CAPWAP_ELEM_WTP_NAME,
 	}
 	,
 

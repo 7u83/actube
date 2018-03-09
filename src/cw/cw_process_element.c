@@ -10,7 +10,7 @@
  * @param handler
  * @param elems_ptr
  * @param elems_len
- * @return 
+ * @return Result Code as defined in RFC5415 
  */
 int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendor,int elem_id,
 		uint8_t  * data, int len){
@@ -18,16 +18,12 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	struct cw_ElemHandler * handler;
 	struct cw_ElemData * elem_data, elem_data_search;
 
-	/*uint8_t * elem_data;*/
-		
-	
 	handler = cw_msgset_get_elemhandler(params->conn->msgset,0, 0, elem_id);
 	if (!handler) {
-		cw_dbg(DBG_ELEM_ERR, "Unknown message element: %d, ignoring", 
+		cw_dbg(DBG_ELEM_ERR, "Unrecognized message element: %d, ignoring", 
 			elem_id);
-		return 0;
+		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
-
 
 	elem_data_search.id=elem_id;
 	elem_data_search.proto=0;
@@ -40,16 +36,10 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 			elem_id, handler->name);
 		return 0;
 	}
-	
 
-	
+
 	cw_dbg_elem(DBG_ELEM, params->conn, params->msgdata->type, handler, 
 				data,len);
-				
-	handler->get(handler, params, data, len);
-	
-	
-	
-	
-	return 0;
+
+	return handler->get(handler, params, data, len);
 }

@@ -257,20 +257,20 @@
 #define CAPWAP_ELEM_WTP_DESCRIPTOR			39
 #define CAPWAP_ELEM_WTP_FALLBACK			40
 #define CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE		41
-#define CW_ELEM_RESERVED_42				42
-#define CW_ELEM_RESERVED_43				43
+#define CAPWAP_ELEM_RESERVED_42				42
+#define CAPWAP_ELEM_RESERVED_43				43
 #define CAPWAP_ELEM_WTP_MAC_TYPE			44
-#define CW_ELEM_WTP_NAME				45
-#define CW_ELEM_RESERVED_46				46
-#define CW_ELEM_WTP_RADIO_STATISTICS			47
-#define CW_ELEM_WTP_REBOOT_STATISTICS			48
+#define CAPWAP_ELEM_WTP_NAME				45
+#define CAPWAP_ELEM_RESERVED_46				46
+#define CAPWAP_ELEM_WTP_RADIO_STATISTICS		47
+#define CAPWAP_ELEM_WTP_REBOOT_STATISTICS		48
 #define CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION	49
 #define CW_ELEM_WTP_STATIC_IP_ADDR_INFO			49
 
 
 /* Cisco's CAPWAP definitions (CAPWAP draft 7) */
-#define	CW_ELEM_WTP_IPV4_IP_ADDRESS			42
-#define	CW_ELEM_WTP_IPV6_IP_ADDRESS			43
+#define	CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS			42
+#define	CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS			43
 
 /**@}*/
 
@@ -330,9 +330,9 @@
 
 
 /* WTP mac types */
-#define CW_WTP_MAC_TYPE_LOCAL	0
-#define CW_WTP_MAC_TYPE_SPLIT	1
-#define CW_WTP_MAC_TYPE_BOTH	2
+#define CAPWAP_WTP_MAC_TYPE_LOCAL		0
+#define CAPWAP_WTP_MAC_TYPE_SPLIT		1
+#define CAPWAP_WTP_MAC_TYPE_BOTH		2
 
 
 /*
@@ -442,12 +442,15 @@ extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_
 						  int type, uint8_t * payload, int len);
 
 
-
+/*
 extern int hdr_print(char *str, uint8_t * packet, int len);
+*/
 
+/*
 extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * msgelem,
 				   int len);
-/*
+*/
+ /*
 //extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem,
 //					      int len);
 //extern int cw_readelem_ac_name(uint8_t ** dst, int type, uint8_t * msgelem, int len);
@@ -485,10 +488,19 @@ enum cw_reboot_failure_types {
 
 };
 
-
+/**
+ * @defgroup CAPWAPResultCodes CAPWAP Result Codes
+ * @{
+ */
+ 
+/** The Result Success code is sent, whenever 
+ * all went fine ;-) */ 
 #define CAPWAP_RESULT_SUCCESS					0
+/** 
+ * The Missing AC List Result Code is sent by the 
+ * WTP to the AC when the AC List is missing */
 #define CW_RESULT_MISSING_AC_LIST				1
-#define CW_RESULT_SUCCESS_NAT					2
+#define CAPWAP_RESULT_SUCCESS_NAT				2
 #define CW_RESULT_JOIN_FAILURE					3
 #define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
 #define CW_RESULT_JOIN_UNKNOWN_SOURCE				5
@@ -513,7 +525,7 @@ enum cw_reboot_failure_types {
       13 Configuration Failure (Unable to Apply Requested Configuration
          - Service Not Provided)
 */
-
+#define CAPWAP_RESULT_CONFIGURATION_FAILURE_SERVICE_NOT PROVIDED	13
 /** 
  * Image Data Error (Invalid Checksum)
  */
@@ -534,11 +546,14 @@ enum cw_reboot_failure_types {
 */
 
 #define CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE		18
-#define CW_RESULT_MSG_UNRECOGNIZED				19
+
+
+#define CAPWAP_RESULT_MSG_UNRECOGNIZED				19
+
 #define CW_RESULT_MISSING_MAND_ELEM				20
 
 
-#define CW_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT			21
+#define CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT		21
 
 /*      22 Data Transfer Error (No Information to Transfer)
 
@@ -562,7 +577,9 @@ enum cw_reboot_failure_types {
 #define CW_RADIO_OPER_CAUSE_ADMIN_SET		3
 
 
-
+/**
+ * @}
+ */
 
 
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
