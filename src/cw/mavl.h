@@ -75,13 +75,15 @@ union mavldata {
 };
 typedef union mavldata mavldata_t;
 
+
+
 /**
  * Defines the structure of an AVL Node.
  */
 struct mavlnode {
 	/** Pointer to data, that belongs to the node */
 
-	union mavldata data; 
+/*	union mavldata data; */
 	
 	/** Pointer to left son*/
 	struct mavlnode *left;
@@ -91,6 +93,11 @@ struct mavlnode {
 	int bal;
 };
 
+#define mavlnode_data(node) ((node)+sizeof(struct mavlnode))
+
+#define mavlnode_copy_data(tree,dst,src)\
+		memcpy(mavlnode_data(dst),mavlnode_data(src),\
+		(tree)->data_size)
 /**
  * AVL Tree
  */ 
@@ -117,8 +124,11 @@ typedef struct mavl * mavl_t;
  * @defgroup MAVL_FUNCTIONS Functions
  * @{
  */
-struct mavl *mavl_create(int (*cmp) (const union mavldata *, const union mavldata *),
-			       void (*del) (union mavldata *));
+
+
+ 
+struct mavl *mavl_create(int (*cmp) (const void *, const void *),
+			void (*del) (void *), size_t data_size);
 
 void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
 
@@ -126,7 +136,7 @@ void mavl_del_all(struct mavl *t);
 union mavldata *mavl_del(struct mavl *t, union mavldata *data);
 union mavldata *mavl_add(struct mavl *t,  union mavldata *data);
 union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
-struct mavlnode *mavl_get_node(struct mavl *t, union mavldata *data);
+struct mavlnode *mavl_get_node(struct mavl *t, void *data);
 void * mavl_get_ptr(mavl_t tree, void * search);
 void *mavl_add_ptr(mavl_t tree, void *ptr);
 
@@ -188,7 +198,7 @@ union mavldata * mavliter_seek_set(struct mavliter *i);
 void mavliter_init(mavliter_t *i, mavl_t t);
 
 	
-union mavldata * mavliter_get(mavliter_t *i);
+void * mavliter_get(mavliter_t *i);
 
 extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
 

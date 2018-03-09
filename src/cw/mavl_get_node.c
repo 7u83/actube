@@ -22,7 +22,7 @@
 #include "mavl.h"
 
 
-struct mavlnode * mavl_get_node(struct mavl *t ,union mavldata *data)
+struct mavlnode * mavl_get_node(struct mavl *t ,void *data)
 {
 	struct mavlnode *n = t->root;
 	while(n){

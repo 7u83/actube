@@ -30,8 +30,8 @@
  * @param del pointer to delete function which is called when an element will be deletet
  * @return pointer to an #mavl struct
  */
- struct mavl *mavl_create(int (*cmp) (const union mavldata *, const union mavldata *),
-			       void (*del) (union mavldata *))
+ struct mavl *mavl_create(int (*cmp) (const void *, const void  *),
+			       void (*del) (void *), size_t data_size)
 {
 	struct mavl *t = malloc(sizeof(struct mavl));
 	if (!t)
