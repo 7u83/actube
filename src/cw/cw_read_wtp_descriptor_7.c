@@ -2,9 +2,9 @@
 
 #include "capwap.h"
 #include "capwap_items.h"
-#include "cw_types.h"
+#include "kvt.h"
 #include "keys.h"
-#include "kvstore.h"
+
 
 
 static struct cw_DescriptorSubelemDef allowed_default[] = {
@@ -24,18 +24,18 @@ int cw_read_wtp_descriptor_7(mavl_t cfg, struct conn *conn,
 			     struct cw_ElemHandler *eh, uint8_t * data, int len,
 			     struct cw_DescriptorSubelemDef *allowed)
 {
-	int ncrypt, pos,i;
-	mavldata_t md;
+
+	int ncrypt, pos;
 	char key[64];
 
 	sprintf(key,"%s/%s",eh->key, "max_radios");
 /*	md.kv.key=strdup(key);
 	mavl_replace (cfg, cw_type_byte.get(&md,data,1));
 */
-	cw_kvstore_add(cfg,key,CW_TYPE_BYTE,data,1);
+	cw_kvt_add(cfg,key,CW_TYPE_BYTE,data,1);
 
 	sprintf(key,"%s/%s",eh->key, "radios_in_use");
-	cw_kvstore_add(cfg,key,CW_TYPE_BYTE,data+1,1);
+	cw_kvt_add(cfg,key,CW_TYPE_BYTE,data+1,1);
 	
 /*	md.kv.key=strdup(key);
 	mavl_replace (cfg, cw_type_byte.get(&md,data+1,1));

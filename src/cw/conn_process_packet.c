@@ -30,10 +30,9 @@
 
 #include "stravltree.h"
 #include "mod.h"
-#include "message_set.h"
+#include "msget.h"
 
-#include "cw_types.h"
-
+#include "kvt.h"
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
@@ -301,7 +300,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	/* Search message */
 	struct cw_MsgData * message;
-	message = mavl_find_ptr(conn->msgset->messages,&search);
+	message = mavl_find(conn->msgset->msgdata,&search);
 		
 	int result_code = 0;
 	
@@ -509,12 +508,12 @@ exit(0);
 
 		mavliter_foreach(&it){
 			char value[500];
-			mavldata_t * data;
+			struct cw_KVT * data;
 			data = mavliter_get(&it);
-			type = data->kv.priv;
+			type = data->type;
 			type->to_str(data,value,0);
 		
-			printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
+			printf("Got %s (%s): %s\n",data->key,type->name, value);
 		}
 
 

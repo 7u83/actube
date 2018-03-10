@@ -53,7 +53,7 @@ const struct mbag_typedef mbag_type_acprio = {
 
 cw_acpriolist_t cw_acpriolist_create()
 {
-	return  mavl_create(acprio_cmp, acprio_del);
+	return  mavl_create(acprio_cmp, acprio_del,4);
 }
 
 cw_acprio_t * cw_acpriolist_add(cw_acpriolist_t l, const char *name,int name_len, uint8_t prio)
@@ -66,7 +66,7 @@ cw_acprio_t * cw_acpriolist_add(cw_acpriolist_t l, const char *name,int name_len
 	s->prio=prio;
 
 	cw_acpriolist_del(l,s);
-	return mavl_add(l,s);
+	return mavl_add(l,s,NULL);
 	
 }
 

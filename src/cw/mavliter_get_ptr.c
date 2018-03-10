@@ -5,10 +5,11 @@
  * @param i AVL Iterator
  * @return element or NULL if not found.
  */
-void * mavliter_get(mavliter_t *i)
+void * mavliter_get_ptr(mavliter_t *i)
 {
+	/*void * data;*/
 	if (!i->cur)
 		return NULL;
-		
-	return mavlnode_dataptr(i->cur);
+
+	return *(void**)(mavlnode_dataptr(i->cur));
 }

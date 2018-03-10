@@ -30,7 +30,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	elem_data_search.id=elem_id;
 	elem_data_search.proto=0;
 	elem_data_search.vendor=0;
-	elem_data = mavl_find_ptr(params->msgdata->elements_tree,&elem_data_search);
+	elem_data = mavl_find(params->msgdata->elements_tree,&elem_data_search);
 	if (!elem_data){
 		cw_dbg(DBG_ELEM_ERR, "Element %d - %s, not allowed here", 
 			elem_id, handler->name);

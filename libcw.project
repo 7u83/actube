@@ -224,7 +224,6 @@
       <File Name="src/cw/fragman.c"/>
       <File Name="src/cw/lwmsg.h"/>
       <File Name="src/cw/cw_check_missing_mand.c"/>
-      <File Name="src/cw/cw_strnelem.c"/>
       <File Name="src/cw/format_dot11_fc.c"/>
       <File Name="src/cw/wtpinfo_lwreadelem_wtp_descriptor.c"/>
       <File Name="src/cw/dbg_strings.c"/>
@@ -289,8 +288,6 @@
       <File Name="src/cw/capwap_strings_state.c"/>
       <File Name="src/cw/cw_out_radio_info.c"/>
       <File Name="src/cw/capwap_items.c"/>
-      <File Name="src/cw/message_set.c"/>
-      <File Name="src/cw/message_set.h"/>
       <File Name="src/mod/cisco/mod_cisco.h"/>
       <File Name="src/cw/cw_filename.c"/>
       <File Name="src/cw/mdata.h"/>
@@ -298,33 +295,33 @@
       <File Name="src/cw/mdata_elem_new.c"/>
       <File Name="src/cw/cw_type_byte.c"/>
       <File Name="src/cw/cw_type_word.c"/>
-      <File Name="src/cw/cw_types.h"/>
       <File Name="src/cw/cw_type_dword.c"/>
-      <File Name="src/cw/mavl_cmp_dword.c"/>
-      <File Name="src/cw/mavl_free_bin.c"/>
       <File Name="src/cw/debug.h"/>
       <File Name="src/cw/debug.c"/>
       <File Name="src/cw/mavl_get_ptr.c"/>
-      <File Name="src/cw/mavl_add_strdup.c"/>
-      <File Name="src/cw/mavl_cmp_str.c"/>
       <File Name="src/cw/mavliter_init.c"/>
       <File Name="src/cw/mavl_add_ptr.c"/>
       <File Name="src/cw/cw_format_dump.c"/>
       <File Name="src/cw/cw_format_pkt_hdr.c"/>
-      <File Name="src/cw/mavl_cmp_kv.c"/>
-      <File Name="src/cw/mavl_add_kv_byte.c"/>
       <File Name="src/cw/cw_types_mavl_delete.c"/>
       <File Name="src/cw/cw_format_scan_hex_bytes.c"/>
       <File Name="src/cw/cw_dbg_elem.c"/>
-      <File Name="src/cw/cw_kvstore_mavl_delete.c"/>
       <File Name="src/cw/cw_format_version.c"/>
       <File Name="src/cw/cw_strdup.c"/>
-      <File Name="src/cw/kvstore.h"/>
-      <File Name="src/cw/cw_kvstore_add.c"/>
-      <File Name="src/cw/cw_types_del_null.c"/>
       <File Name="src/cw/cw_type_bstr16.c"/>
       <File Name="src/cw/cw_process_element.c"/>
       <File Name="src/cw/cw_result_is_ok.c"/>
+      <File Name="src/cw/mavliter_get.c"/>
+      <File Name="src/cw/kvt.h"/>
+      <File Name="src/cw/cw_kvt_mavlcmp.c"/>
+      <File Name="src/cw/cw_kvt_mavldel.c"/>
+      <File Name="src/cw/mavliter_get_ptr.c"/>
+      <File Name="src/cw/mavl_cmpstr.c"/>
+      <File Name="src/cw/mavl_freeptr.c"/>
+      <File Name="src/cw/msgset.c"/>
+      <File Name="src/cw/msget.h"/>
+      <File Name="src/cw/mavl_replace.c"/>
+      <File Name="src/cw/cw_kvt_add.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

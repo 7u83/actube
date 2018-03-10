@@ -17,7 +17,7 @@
 */
 
 /**
- *@file 
+ *@file
  *@brief Implementation of mavliter_next
  */
 
@@ -27,44 +27,42 @@
  * Get the next element within an AVL Tree.
  * @param i pointer to AVL Iterator
  * @return the element or NULL if there is no next elemeent.
- */ 
+ */
 
-union mavldata * mavliter_next(mavliter_t *i)
+union mavldata * mavliter_next ( mavliter_t *i )
 {
-
-	while ( i->stack_ptr) {
+	while ( i->stack_ptr ) {
 		i->stack_ptr--;
-		i->cur=i->stack[i->stack_ptr];
-			
-		if (!i->cur)
+		i->cur = i->stack[i->stack_ptr];
+		
+		if ( !i->cur )
 			continue;
-
-		if ((i->stack_ptr)&1) {
-			return &i->cur->data;
+			
+		if ( ( i->stack_ptr ) & 1 ) {
+			/*return &i->cur->data;*/
+			return mavlnode_dataptr ( i->cur );
 		}
-		break;		
-
+		
+		break;
 	}
-
-
-	if (!i->cur){
+	
+	if ( !i->cur ) {
 		return NULL;
 	}
-
-	while(i->cur->left) {
+	
+	while ( i->cur->left ) {
 		/* push right branch */
-		i->stack[i->stack_ptr++]=i->cur->right;
+		i->stack[i->stack_ptr++] = i->cur->right;
 		
 		/* push node */
-		i->stack[i->stack_ptr++]=i->cur;
-
-		i->cur=i->cur->left;
-
+		i->stack[i->stack_ptr++] = i->cur;
+		
+		i->cur = i->cur->left;
 	}
-
-	i->stack[i->stack_ptr++]=i->cur->right;
-
-	return &i->cur->data;
+	
+	i->stack[i->stack_ptr++] = i->cur->right;
+	
+	/*	return &i->cur->data;*/
+	return mavlnode_dataptr ( i->cur );
+	
 }
-
-

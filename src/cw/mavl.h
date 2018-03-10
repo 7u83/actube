@@ -17,15 +17,16 @@
 
 /**
  * @file
- * @brief MAVL, Mini AVL Tree, 
- * Yet another AVL Tree implementation!
+ * @brief MAVL, Mini AVL Tree,
+ * Yet another AVL Tree implementation
  */
 
 
-/** 
- * @defgroup MAVL  MAVL
+/**
+ * @addtogroup DATAMGMT
  * @{
  */
+
 
 
 #ifndef __MAVL_H
@@ -38,43 +39,27 @@
 #include <stdint.h>
 
 
+
+
 /**
- * @defgroup MAV_CONSTANTS Constants
+ * @defgroup MAVL_CONSTANTS Constants
  * @{
  */
 
-/** Maximum AVL Tree depth. 
+/** Maximum AVL Tree depth.
     The number of nodes is calculated by 2^depth.
-    So a value of 32 should be enough for around 4 
+    So a value of 32 should be enough for around 4
     billion nodes. */
 #define MAVL_MAX_DEPTH	32
 
 /**
  * @}
  */
- 
-struct mavl_KeyVal{
-	char *key;
-	const void *priv;
-	union{
-		void * ptr;
-		uint32_t dword;
-		uint16_t word;
-		uint8_t byte;
-		char * str;
-	}val;
-};
 
-union mavldata {
-	void *ptr;
-	uint32_t dword;
-	uint16_t word;
-	uint8_t byte;
-	char *str;
-	struct mavl_KeyVal kv;
-};
-typedef union mavldata mavldata_t;
-
+/**
+ * @addtogroup MAVLStructures Structures
+ * @{
+ */
 
 
 /**
@@ -82,8 +67,8 @@ typedef union mavldata mavldata_t;
  */
 struct mavlnode {
 	/** Pointer to data, that belongs to the node */
-
-/*	union mavldata data; */
+	
+	/*	union mavldata data; */
 	
 	/** Pointer to left son*/
 	struct mavlnode *left;
@@ -93,30 +78,32 @@ struct mavlnode {
 	int bal;
 };
 
-#define mavlnode_data(node) ((node)+sizeof(struct mavlnode))
 
-#define mavlnode_copy_data(tree,dst,src)\
-		memcpy(mavlnode_data(dst),mavlnode_data(src),\
-		(tree)->data_size)
+
 /**
  * AVL Tree
- */ 
+ */
 struct mavl {
 	/** Pointer to root node */
 	struct mavlnode *root;
 	/** Compare function */
-	int (*cmp) (const union mavldata *, const union mavldata *);
+	int ( *cmp ) ( const void *, const void * );
 	/** Delete element function */
-	void (*del) (union mavldata *);
+	void ( *del ) ( void * );
 	/** Number of elements currently stored in the tree */
 	int count;
-	
+	/** size of data appended to each mavlnode element.
+	 * used to allocate space in #mavl_add. */
 	size_t data_size;
 };
 
-/** 
+/**
+ * @}
+ */
+
+/**
  * MAVL AVL Tree type
- */ 
+ */
 typedef struct mavl * mavl_t;
 
 
@@ -125,33 +112,40 @@ typedef struct mavl * mavl_t;
  * @{
  */
 
+/**
+ * @param node node 
+ */
+#define mavlnode_dataptr(node) (((uint8_t*)(node))+sizeof(struct mavlnode))
 
- 
-struct mavl *mavl_create(int (*cmp) (const void *, const void *),
-			void (*del) (void *), size_t data_size);
+struct mavl *mavl_create ( int ( *cmp ) ( const void *, const void * ),
+                           void ( *del ) ( void * ), size_t data_size );
 
-void mavlnode_destroy(struct mavl *t, struct mavlnode *n);
-
-void mavl_del_all(struct mavl *t);
-union mavldata *mavl_del(struct mavl *t, union mavldata *data);
-union mavldata *mavl_add(struct mavl *t,  union mavldata *data);
-union mavldata * mavl_get(struct mavl *t ,union mavldata *data);
-struct mavlnode *mavl_get_node(struct mavl *t, void *data);
-void * mavl_get_ptr(mavl_t tree, void * search);
-void *mavl_add_ptr(mavl_t tree, void *ptr);
-
-int mavl_cmp_kv(const union mavldata *e1, const union mavldata *e2);
-union mavldata *mavl_add_kv_byte(mavl_t tree, const char *key, uint8_t val);
-
-void mavl_merge(mavl_t m, mavl_t t);
+void *mavl_add ( struct mavl *t, const void *data, int *exists );
+/*void *mavl_add ( struct mavl *t,  const void *data );*/
+void * mavl_get ( struct mavl *t , void *data );
+void *mavl_del ( struct mavl *t, const void *data );
+void *mavl_replace ( struct mavl *t, const void *data, int * result );
+void mavl_destroy ( struct mavl *t );
+void mavl_del_all ( struct mavl *t );
+void mavl_merge ( mavl_t m, mavl_t t );
+void mavlnode_destroy ( struct mavl *t, struct mavlnode *n );
+struct mavlnode *mavl_get_node ( struct mavl *t, void *data );
 
 
-extern int mavl_foreach_lr(struct mavlnode *n, int (*callback) (void *, void *),
-			      void *cbpriv);
-extern int mavl_foreach_rl(struct mavlnode *n, int (*callback) (void *, void *),
-			      void *cbpriv);
-int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
-			    int (*callback) (void *, void *), void *cbpriv);
+
+
+
+
+
+
+extern int mavl_foreach_lr ( struct mavlnode *n, int ( *callback ) ( void *, void * ),
+                             void *cbpriv );
+extern int mavl_foreach_rl ( struct mavlnode *n, int ( *callback ) ( void *, void * ),
+                             void *cbpriv );
+int mavl_foreach_from_lr ( struct mavl *t, struct mavlnode *n, void *data,
+                           int ( *callback ) ( void *, void * ), void *cbpriv );
+
+
 
 /**
  * @}
@@ -159,12 +153,8 @@ int mavl_foreach_from_lr(struct mavl *t, struct mavlnode *n, void *data,
 
 
 
-void *mavl_replace_data(struct mavl *t, void *data, int len);
+void *mavl_replace_data ( struct mavl *t, void *data, int len );
 
-union mavldata *mavl_replace(struct mavl *t,union mavldata *data);
-
-
-void mavl_destroy(struct mavl *t);
 
 
 
@@ -179,50 +169,52 @@ void mavl_destroy(struct mavl *t);
 #define mavl_foreach_from_asc(t,d,cb,priv) mavl_foreach_from_lr(t,(t)->root,d,cb,priv);
 
 
-struct mavliter{
-	struct mavlnode *stack[MAVL_MAX_DEPTH*2];
-
+struct mavliter {
+	struct mavlnode *stack[MAVL_MAX_DEPTH * 2];
+	
 	struct mavlnode *cur;
 	int stack_ptr;
 	struct mavlnode * root;
-	int (*cmp) (const union mavldata *, const union mavldata *);
-
+	int ( *cmp ) ( const void *, const void * );
+	
 };
 typedef struct mavliter mavliter_t;
 
 
-union mavldata * mavliter_next(mavliter_t *i);
+union mavldata * mavliter_next ( mavliter_t *i );
 
-union mavldata * mavliter_seek_set(struct mavliter *i);
+union mavldata * mavliter_seek_set ( struct mavliter *i );
 
-void mavliter_init(mavliter_t *i, mavl_t t);
+void mavliter_init ( mavliter_t *i, mavl_t t );
 
-	
-void * mavliter_get(mavliter_t *i);
 
-extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
+void * mavliter_get ( mavliter_t *i );
 
-/** 
- * Define a AVL Iterator varialble and accociate it with 
+void * mavliter_get_ptr(mavliter_t *i);
+
+extern union mavldata  * mavliter_seek ( mavliter_t *i, void *d );
+
+/**
+ * Define a AVL Iterator varialble and accociate it with
  * an AVL Tree.
  * @param i Name of the variable to define
  * @param t #mavl_t Tree to associate
  * @see #mavliter_get #mavliter_foreach
  *
  * Example:
- * \code 
+ * \code
    mavl_t datatree = mavl_create();
- 
-   // fill up datatree with some values 
- 
+
+   // fill up datatree with some values
+
    MAVLITER_DEFINE (i,datatree);
    mavliter_foreach(&i) {
 	// Get the current value
 	void * value = mavliter_get(&i);
-   
+
    }
    \endcode
- */ 
+ */
 #define MAVLITER_DEFINE(iterator,mavl_obj)\
 	mavliter_t iterator; mavliter_init(&iterator,mavl_obj)
 
@@ -230,7 +222,7 @@ extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
 /**
  * Iterate through all elements of an MAVL Object using a MAVL Iterator.
  * @param i pointer to MAVL Interator object
- */ 
+ */
 #define mavliter_foreach(iterator)\
 	for (mavliter_seek_set(iterator); NULL != mavliter_get(iterator); mavliter_next(iterator))
 
@@ -252,11 +244,9 @@ extern union mavldata  * mavliter_seek(mavliter_t *i,void *d);
 typedef mavl_t mavl_conststr_t;
 extern mavl_conststr_t mavl_create_conststr();
 
-int mavl_cmp_dword(const union mavldata *e1, const union mavldata *e2);
-int mavl_cmp_str(const union mavldata *e1, const union mavldata *e2);
-
-void mavl_free_bin(union mavldata *data);
-void mavl_free_str(union mavldata *data);
+/*
+//int mavl_cmp_str ( const union mavldata *e1, const union mavldata *e2 );
+*/
 
 
 /*
@@ -273,16 +263,34 @@ static inline void *mavl_replace(struct mavl *t,void *data){
 	struct mavlnode * node = mavl_get_node(t,data);
 	if (node){
 		t->del(node->data);
-		return node->data=data;	
+		return node->data=data;
 	}
 	return mavl_add(t,data);
 }
 */
 
 
-	
-/** @} */
+
+void mavl_freeptr(void *ptr);
+#define mavl_create_ptr(cmp,del)\
+	mavl_create(cmp,del,sizeof(void*))
+int mavl_cmpstr(const void *p1, const void *p2);
+#define mavl_create_str() mavl_create_ptr(mavl_cmpstr,mavl_freeptr)
+
+void * mavl_get_ptr ( mavl_t tree, void * search );
+void * mavl_add_ptr ( mavl_t tree, void *ptr );
+
+#define mavl_add_str(tree,str) mavl_add_ptr(tree,str)
+#define mavl_get_str(tree,search) ((char *)(mavl_get_ptr(tree,search)))
+#define mavliter_get_str(iter) ((char*)(mavliter_get_ptr(iter)))
+
+/**
+ * 
+ * @}
+ * datamanag
+ */
+
+
+
 
 #endif
-
-

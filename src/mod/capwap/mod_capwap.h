@@ -4,7 +4,7 @@
 struct cw_Mod *mod_capwap_ac();
 struct cw_Mod *mod_capwap_wtp();
 
-#include "cw/message_set.h"
+#include "cw/msget.h"
 #include "cw/conn.h"
 
 

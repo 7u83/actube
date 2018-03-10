@@ -20,47 +20,50 @@
 
 #include "format.h"
 #include "cw.h"
-#include "cw_types.h"
+#include "kvt.h"
 
 
-static void del(mavldata_t * data){
-	free (data->kv.val.ptr);
+static void del ( struct cw_KVT * data )
+{
+	free ( data->val.ptr );
 }
 
-static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
+static struct cw_KVT *get ( struct cw_KVT * data, const uint8_t * src, int len )
 {
-	
 	uint8_t * s;
-	s = bstr16_create(src,len);
-	if (!s)
+	s = bstr16_create ( src, len );
+	
+	if ( !s )
 		return NULL;
-
-	data->kv.priv = &cw_type_bstr16;
-	data->kv.val.ptr=s;
+		
+	data->type = &cw_type_bstr16;
+	data->val.ptr = s;
 	return data;
 }
 
-static int put(mavldata_t *data, uint8_t * dst)
+static int put ( const struct cw_KVT *data, uint8_t * dst )
 {
-	return cw_put_bstr16(dst, data->kv.val.ptr);
+	return cw_put_bstr16 ( dst, data->val.ptr );
 }
 
-static int to_str(const mavldata_t *data, char *dst, int max_len)
+static int to_str ( const struct cw_KVT *data, char *dst, int max_len )
 {
 	char *d;
-	d=dst;
-	if (format_is_utf8(bstr16_data(data->kv.val.ptr), bstr16_len(data->kv.val.ptr))) {
-		d += sprintf(d, "%.*s", bstr16_len(data->kv.val.ptr),
-			     bstr16_data(data->kv.val.ptr));
+	d = dst;
+	
+	if ( format_is_utf8 ( bstr16_data ( data->val.ptr ), bstr16_len ( data->val.ptr ) ) ) {
+		d += sprintf ( d, "%.*s", bstr16_len ( data->val.ptr ),
+		               bstr16_data ( data->val.ptr ) );
+		               
 	} else {
-		d += sprintf(d, ".x");
-		d += format_hex(d, bstr16_data(data->kv.val.ptr), bstr16_len(data->kv.val.ptr));
+		d += sprintf ( d, ".x" );
+		d += format_hex ( d, bstr16_data ( data->val.ptr ), bstr16_len ( data->val.ptr ) );
 	}
-
-	return d-dst;
+	
+	return d - dst;
 }
 
-static mavldata_t *from_str(mavldata_t * data, const char *src)
+static struct cw_KVT *from_str ( struct cw_KVT * data, const char *src )
 {
 	return NULL;
 }
@@ -72,6 +75,5 @@ const struct cw_Type cw_type_bstr16 = {
 	put,		/* put */
 	get,		/* get */
 	to_str,		/* to_str */
-	from_str	/* from_str */ 
+	from_str	/* from_str */
 };
-

@@ -18,10 +18,10 @@
 
 
 #include "cw/cw.h"
-#include "cw/cw_types.h"
+#include "cw/kvt.h"
 #include "cw/log.h"
 
-#include "cw/message_set.h"
+#include "cw/msget.h"
 
 #include "mod_capwap.h"
 

@@ -43,7 +43,8 @@ union mavldata  * mavliter_seek(mavliter_t *i,void *d)
 
 	while(i->cur) {
 
-		rc = i->cmp(d,&i->cur->data);
+/*		rc = i->cmp(d,&i->cur->data); */
+		rc = i->cmp(d,mavlnode_dataptr(i->cur));
 		if (rc==0){
 			i->stack[i->stack_ptr++]=i->cur->right;
 			i->stack[i->stack_ptr++]=i->cur;

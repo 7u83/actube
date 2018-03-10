@@ -10,7 +10,7 @@
 
 #include "lw.h"
 #include "capwap.h"
-#include "message_set.h"
+#include "msget.h"
 
 /**
  * @defgroup CW CW

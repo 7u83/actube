@@ -19,35 +19,35 @@
 #include <stdio.h>
 
 #include "cw.h"
-#include "cw_types.h"
+#include "kvt.h"
 
-static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
+static cw_KVT_t *get(cw_KVT_t * data, const uint8_t * src, int len)
 {
-	data->kv.priv = &cw_type_byte;
-	data->kv.val.byte = cw_get_byte(src);
+	data->type = &cw_type_byte;
+	data->val.byte = cw_get_byte(src);
 	return data;
 }
 
-static int put(mavldata_t *data, uint8_t * dst)
+static int put(cw_KVT_t *data, uint8_t * dst)
 {
-	return cw_put_byte(dst, data->kv.val.byte);
+	return cw_put_byte(dst, data->val.byte);
 }
 
-static int to_str(const mavldata_t *data, char *dst, int max_len)
+static int to_str(const cw_KVT_t *data, char *dst, int max_len)
 {
-	return sprintf(dst, "%d", data->kv.val.byte);
+	return sprintf(dst, "%d", data->val.byte);
 }
 
-static mavldata_t *from_str(mavldata_t * data, const char *src)
+static cw_KVT_t *from_str(cw_KVT_t * data, const char *src)
 {
-	data->kv.val.byte = atoi(src);
+	data->val.byte = atoi(src);
 	return data;
 }
 
 
 const struct cw_Type cw_type_byte = {
 	"Byte",			/* name */
-	cw_types_del_null,	/* del */
+	NULL,			/* del */
 	put,			/* put */
 	get,			/* get */
 	to_str,			/* to_str */

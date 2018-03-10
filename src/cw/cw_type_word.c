@@ -18,36 +18,36 @@
 
 #include <stdio.h>
 
-#include "cw_types.h"
+#include "kvt.h"
 #include "cw.h"
 
 
-static mavldata_t *get(mavldata_t * data, const uint8_t * src, int len)
+static struct cw_KVT *get(struct cw_KVT * data, const uint8_t * src, int len)
 {
-	data->kv.priv = &cw_type_word;
-	data->kv.val.word = cw_get_word(src);
+	data->type = &cw_type_word;
+	data->val.word = cw_get_word(src);
 	return data;
 }
 
-static int put(mavldata_t *data, uint8_t * dst)
+static int put(cw_KVT_t *data, uint8_t * dst)
 {
-	return cw_put_word(dst, data->kv.val.word);
+	return cw_put_word(dst, data->val.word);
 }
 
-static int to_str(const mavldata_t *data, char *dst, int max_len)
+static int to_str(const cw_KVT_t *data, char *dst, int max_len)
 {
-	return sprintf(dst, "%d", data->kv.val.word);
+	return sprintf(dst, "%d", data->val.word);
 }
 
-static mavldata_t *from_str(mavldata_t * data, const char *src)
+static cw_KVT_t *from_str(cw_KVT_t * data, const char *src)
 {
-	data->kv.val.word = atoi(src);
+	data->val.word = atoi(src);
 	return data;
 }
 
 const struct cw_Type cw_type_word = {
 	"Word",			/* name */
-	cw_types_del_null,	/* del */
+	NULL,			/* del */
 	put,			/* put */
 	get,			/* get */
 	to_str,			/* to_str */

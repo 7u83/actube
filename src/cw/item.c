@@ -61,14 +61,14 @@ const cw_itemdef_t * cw_itemdef_get(cw_itemdefheap_t t, const char *id, const ch
 
 cw_itemdefheap_t cw_itemdefheap_create()
 {
-	return mavl_create(cmp, NULL);
+	return mavl_create(cmp, NULL,1312);
 }
 
 int cw_itemdefheap_register(cw_itemdefheap_t t, cw_itemdef_t * defs)
 {
 	int n = 0;
 	while (defs->id != CW_ITEM_NONE) {
-		cw_itemdef_t *a = mavl_add(t, defs);
+		cw_itemdef_t *a = mavl_add(t, defs,NULL);
 		if (a != defs) {
 			cw_log(LOG_ERR, "Duplicated item: %s", defs->id);
 		} else

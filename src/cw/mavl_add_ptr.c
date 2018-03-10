@@ -1,10 +1,9 @@
 #include "mavl.h"
 
 void *mavl_add_ptr(mavl_t tree, void *ptr){
-	mavldata_t data, *result;
-	data.ptr = ptr;
-	result = mavl_add(tree,&data);
+	void * result;
+	result = mavl_add(tree,&ptr,NULL);
 	if (result)
-		return result->ptr;
+		return *(void**)result;
 	return NULL;
 }

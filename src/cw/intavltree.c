@@ -18,7 +18,7 @@ static void del(void* d)
 
 struct mavl * intavltree_create()
 {
-	return mavl_create(cmp,del);	
+	return mavl_create(cmp,del,100);
 }
 
 int * intavltree_add(struct mavl * t, int val)
@@ -31,5 +31,5 @@ int * intavltree_add(struct mavl * t, int val)
 	if (!v)
 		return NULL;
 	*v=val;
-	return mavl_add(t,v);
+	return mavl_add(t,v,NULL);
 }

@@ -2,10 +2,10 @@
 
 void * mavl_get_ptr(mavl_t tree, void * search)
 {
-	mavldata_t search_data, *result;
-	search_data.ptr=search;
-	result = mavl_find(tree,&search_data);
+	void * result;
+	
+	result = mavl_find(tree,&search);
 	if (result)
-		return result->ptr;
+		return *(void**)result;
 	return NULL;
 }

@@ -146,13 +146,13 @@ static int mbag_i_cmp_fun(const void *x1, const void *x2)
 
 mbag_t mbag_i_create()
 {
-	return mavl_create(mbag_i_cmp_fun, mbag_i_del_fun);
+	return mavl_create(mbag_i_cmp_fun, mbag_i_del_fun,1312);
 }
 
 
 mbag_t mbag_create()
 {
-	return mavl_create(mbag_cmp_fun, mbag_del_fun);
+	return mavl_create(mbag_cmp_fun, mbag_del_fun,1312);
 
 }
 
@@ -186,7 +186,7 @@ struct mbag_item *mbag_item_create(mbag_t s, const char *id)
 		return NULL;
 	i->u1.id = id;
 	i->dynid=0;
-	return mavl_add(s, i);
+	return mavl_add(s, i,NULL);
 }
 
 
@@ -207,7 +207,7 @@ struct mbag_item *mbag_i_item_create(mbag_t s, uint32_t id)
 		return NULL;
 	i->u1.iid = id;
 	i->dynid=0;
-	return mavl_add(s, i);
+	return mavl_add(s, i,NULL);
 }
 
 
@@ -253,7 +253,7 @@ struct mbag_item *strmbag_item_create(mbag_t s, char *name)
 int mbag_set(mbag_t t,mbag_item_t *is)
 {
 	mavl_del(t,is);
-	mavl_add(t,is);
+	mavl_add(t,is,NULL);
 	return 1;
 
 /*

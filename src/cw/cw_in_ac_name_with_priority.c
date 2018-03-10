@@ -24,7 +24,7 @@ int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8
 
 	prio->prio=cw_get_byte(data);
 	prio->name=strndup((char*)data+1,len-1);
-	mavl_replace(prios,prio);	
+	mavl_replace(prios,prio,NULL);	
 
 	return 1;
 }

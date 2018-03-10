@@ -33,7 +33,7 @@ static int cmp(const void *d1, const void *d2)
 
 int dataman_list_init()
 {
-	dataman_list = mavl_create(cmp, NULL);
+	dataman_list = mavl_create_ptr(cmp, NULL);
 	if (!dataman_list)
 		return 0;
 
@@ -85,7 +85,7 @@ struct dataman *dataman_list_add(struct dataman *dm)
 {
 
 	cw_dbg(DBG_X,"Adding dataman %p\n",dm);
-	return mavl_add(dataman_list, dm);
+	return mavl_add(dataman_list, dm,NULL);
 }
 
 

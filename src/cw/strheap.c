@@ -14,13 +14,13 @@ static void del(void* d)
 
 cw_strheap_t cw_strheap_create()
 {
-	return mavl_create(cmp,del);	
+	return mavl_create(cmp,del,1312);	
 }
 
 const char * cw_strheap_add(cw_strheap_t t, struct cw_strlist_elem *s)
 {
 	mavl_del(t,s);
-	return mavl_add(t,s);
+	return mavl_add(t,s,NULL);
 }
 
 int cw_strheap_register_strings(cw_strheap_t h, struct cw_strlist_elem *s) 

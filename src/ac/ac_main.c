@@ -52,208 +52,367 @@
 int ac_run();
 
 
-static void *alive_thread(void *data)
+static void *alive_thread (void *data)
 {
 	/* Ping the database every 5 seconds */
 	while (1) {
-		sleep(5);
+		sleep (5);
 		db_ping();
 	}
 }
 
 
 #include <getopt.h>
-static int parse_args(int argc, char *argv[])
+static int parse_args (int argc, char *argv[])
 {
 //	int getopt_ret;
 	int option_index;
-
+	
 	static struct option long_options[] = {
 		{"version", optional_argument, NULL, 'v'},
 		{0, 0, 0, 0}
 	};
 	int o;
-	while ((o = getopt_long(argc, argv, "v", long_options, &option_index)) != -1) {
+	
+	while ( (o = getopt_long (argc, argv, "v", long_options, &option_index)) != -1) {
 		switch (o) {
 			case 0:
 				break;
+				
 			case 'v':
-				printf("AC-Tube 0.01, %s\n", SYS_ARCH);
-				exit(0);
+				printf ("AC-Tube 0.01, %s\n", SYS_ARCH);
+				exit (0);
 		}
 	}
+	
 	return 0;
 }
 
 
 #include "cw/mod.h"
-extern struct cw_Mod * cw_get_mod_ac(const char *name);
+extern struct cw_Mod * cw_get_mod_ac (const char *name);
 
 #include "cw/mlist.h"
 
 
 extern void test_sets();
 #include "cw/file.h"
-#include "cw/cw_types.h"
+#include "cw/kvt.h"
 
 
-int main(int argc, char *argv[])
+struct mykv {
+	int key;
+	int value;
+};
+
+int mycmp (void *e1, void *e2)
 {
-/*	mavl_t kv;
-	mavliter_t kviter;
-	uint8_t bytes[] = { 99,4,5,7 };
+	struct mykv * k1 = e1;
+	struct mykv * k2 = e2;
 	
+//printf("My CMP: %d and %d\n", k1->key, k2->key);
 
-	kv = cw_types_mavl_create();
-	//mavl_cmp_kv,cw_type_delete);
-	
-	mavldata_t data, *result;
-
-	data.kv.key="wtp_board_data";
-	result = cw_type_byte.get(&data,bytes,1);
-	mavl_add(kv,result);
-	
-	data.kv.key="wtp_next_data";
-	result = cw_type_byte.get(&data,bytes+1,1);
-	mavl_add(kv,result);
-
-
-	mavliter_init(&kviter,kv);
-	mavliter_foreach(&kviter){
-		char value[500];
-		mavldata_t * data;
-		data = mavliter_get(&kviter);
-		struct cw_Type * type = data->kv.priv;
-		type->to_str(data,value,0);
+	if (k1->key > k2->key)
+		return 1;
 		
-		printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
-	}
-
-	mavl_destroy(kv);
-	exit(0);
-*/
-
-
-/*	cw_log_init();
-	cw_log(LOG_ERROR,"Hello Debug World222");
-	exit(0);
-*/	
-/*
-	char * dump_data = "Eine kleine Mickey Maus zog sich mal die Hosen\
-	aus, zog sie wieder an, und du bist dran. Dran bist du noch lange nicht\
-	musst erst sagen, wie alt du bist.";
-	
-	char * result = cw_format_dump(dump_data,strlen(dump_data),NULL);
-	
-	printf("Dump Result:\n%s\n", result);
-	exit(0);
-*/	
-	
-/*	char data[100];
-	mavl_t im;
-	mavldata_t * val, * val2,itt, itt2, * result, search ;	
-	mavliter_t myit;
-	
-	im = mavl_create(mavl_cmp_dword,NULL);
-	itt.dword = 7;
-	itt2.dword = 7;
-	
-	
-	val = mavl_add(im,&itt);
-	val2 = mavl_add(im,&itt2);
-	
-	search.dword = 7;
-	result = mavl_get(im,&search);
-
-	printf("Result: (%p, %p) (%p, %p) (%p, %p)\n",val, &itt, val2, &itt2, result, &search);
-	
-	exit(0);
-	
-	
-	for (itt.dword=100; itt.dword>0; itt.dword--){
-		printf("Copunting: %d\n",itt.dword);
-		mavl_add(im,&itt);
-	}
-	
-	mavliter_init(&myit,im);
-	mavliter_foreach(&myit){
-		union mavldata * result;
-		result = mavliter_get(&myit);
-		printf("Got Value %d\n",result->dword);
-	}
+	if (k1->key < k2->key)
+		return -1;
 		
-	mavl_destroy(im);
+	return 0;
+}
 
+void mavl_walk (struct mavlnode  * node)
+{
+	struct mykv * kv;
+	
+	if (!node) {
+		printf ("\n");
+		return;
+	}
+	
+	kv = mavlnode_dataptr (node);
+	printf ("KV %d\n", kv->key);
+	
+	printf ("go left:");
+	mavl_walk (node->left);
+	printf ("go right:");
+	mavl_walk (node->right);
+	
+}
+
+int stcmp (const void * sa1, const void *sa2)
+{
+	const char **s1 = sa1;
+	const char **s2 = sa2;
+	int rc;
+	rc = strcmp (*s1, *s2);
+	
+	printf ("CMP %s, %s = %d\n", *s1, *s2, rc);
+	return rc;
+}
+
+int main (int argc, char *argv[])
+{
+	mavl_t tree;
+	int i;
+	mavliter_t it;
+	
+	
+	/*tree = mavl_create_ptr( (int(*)(const void*,const void*))strcmp,free);
+	 */
+	
+	/*
+		tree = mavl_create_ptr(mycmp,NULL);
+	
+		struct mykv * mdata;
+	
+	
+		mdata = malloc(sizeof(struct mykv));
+		mdata->key=14;
+		mdata->value=15;
+		mavl_add_ptr(tree, mdata);
+	
+		mdata = malloc(sizeof(struct mykv));
+		mdata->key=16;
+		mdata->value=17;
+		mavl_add_ptr(tree, mdata);
+	
+		mdata = malloc(sizeof(struct mykv));
+		mdata->key=12;
+		mdata->value=13;
+		mavl_add_ptr(tree, mdata);
+	
+		mavliter_init(&it,tree);
+		mavliter_foreach(&it){
+			mdata = mavliter_get_ptr(&it);
+			printf("MAVLIT: %d %d\n",mdata->key,mdata->value);
+	
+			struct mykv search;
+			search.key=mdata->key;
+			mdata = mavl_get_ptr(tree,&search);
+			printf("Search T: %d %d\n",mdata->key,mdata->value);
+		}
+	
+		exit(0);
+	*/
+	
+	/*
+		if (tree==NULL)
+			return 0;
+	
+		tree = mavl_create_str();
+	
+		mavl_add_str(tree,cw_strdup("7u83"));
+		mavl_add_str(tree,cw_strdup("Herre"));
+		mavl_add_str(tree,cw_strdup("Tube"));
+		mavl_add_str(tree,cw_strdup("Tobias"));
+		printf("Count: %d\n", mavl_get_count(tree));
+		mavliter_init(&it,tree);
+	
+		mavliter_foreach(&it){
+	
+			printf("iterWert %s\n",mavliter_get_str(&it));
+		}
+	*/
+/*	
+	tree = mavl_create (mycmp, NULL, sizeof (struct mykv));
+	
+	struct mykv nwert;
+	int result;
+	struct mykv * mr;
+	
+	nwert.key = 7;
+	nwert.value = 777;
+	mr = mavl_add_exists (tree, &nwert, &result);
+	printf ("7Result %d: %d %d\n", result, mr->key, mr->value);
+	
+	for (i = 0; i < 10; i++) {
+		//cw_rand(&nwert.key,sizeof(nwert.key));
+		//	printf("Addwert: %u\n",nwert.key);
+		//	printf("add %u\n", i);
+		nwert.key = 9 - i;
+		nwert.value = 100 + i;
+		result=0;
+		mr = mavl_add_exists (tree, &nwert, &result);
+		printf ("Result %d: %d %d\n", result, mr->key, mr->value);
+		
+		
+		
+	}
+	
+	
+	
+	mavliter_init (&it, tree);
+	
+	mavliter_foreach (&it) {
+		struct mykv *kv;
+		kv = mavliter_get (&it);
+		printf ("iterWert %u\n", kv->key);
+	}
+	
+	exit (0);
 */	
+	
+	
+	
+	
+	
+	/*	mavl_t kv;
+		mavliter_t kviter;
+		uint8_t bytes[] = { 99,4,5,7 };
+	
+	
+		kv = cw_types_mavl_create();
+		//mavl_cmp_kv,cw_type_delete);
+	
+		mavldata_t data, *result;
+	
+		data.kv.key="wtp_board_data";
+		result = cw_type_byte.get(&data,bytes,1);
+		mavl_add(kv,result);
+	
+		data.kv.key="wtp_next_data";
+		result = cw_type_byte.get(&data,bytes+1,1);
+		mavl_add(kv,result);
+	
+	
+		mavliter_init(&kviter,kv);
+		mavliter_foreach(&kviter){
+			char value[500];
+			mavldata_t * data;
+			data = mavliter_get(&kviter);
+			struct cw_Type * type = data->kv.priv;
+			type->to_str(data,value,0);
+	
+			printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
+		}
+	
+		mavl_destroy(kv);
+		exit(0);
+	*/
+	
+	
+	/*	cw_log_init();
+		cw_log(LOG_ERROR,"Hello Debug World222");
+		exit(0);
+	*/
+	/*
+		char * dump_data = "Eine kleine Mickey Maus zog sich mal die Hosen\
+		aus, zog sie wieder an, und du bist dran. Dran bist du noch lange nicht\
+		musst erst sagen, wie alt du bist.";
+	
+		char * result = cw_format_dump(dump_data,strlen(dump_data),NULL);
+	
+		printf("Dump Result:\n%s\n", result);
+		exit(0);
+	*/
+	
+	/*	char data[100];
+		mavl_t im;
+		mavldata_t * val, * val2,itt, itt2, * result, search ;
+		mavliter_t myit;
+	
+		im = mavl_create(mavl_cmp_dword,NULL);
+		itt.dword = 7;
+		itt2.dword = 7;
+	
+	
+		val = mavl_add(im,&itt);
+		val2 = mavl_add(im,&itt2);
+	
+		search.dword = 7;
+		result = mavl_get(im,&search);
+	
+		printf("Result: (%p, %p) (%p, %p) (%p, %p)\n",val, &itt, val2, &itt2, result, &search);
+	
+		exit(0);
+	
+	
+		for (itt.dword=100; itt.dword>0; itt.dword--){
+			printf("Copunting: %d\n",itt.dword);
+			mavl_add(im,&itt);
+		}
+	
+		mavliter_init(&myit,im);
+		mavliter_foreach(&myit){
+			union mavldata * result;
+			result = mavliter_get(&myit);
+			printf("Got Value %d\n",result->dword);
+		}
+	
+		mavl_destroy(im);
+	
+	*/
 	
 	
 	
 	
 	int rc = 0;
-
+	
 	/* parse arguments */
-	parse_args(argc, argv);
-
+	parse_args (argc, argv);
+	
 	cw_log_name = "AC-Tube";
-
-	if (!read_config("ac.conf"))
+	
+	if (!read_config ("ac.conf"))
 		return 1;
-
-
+		
+		
 	/* Show debug options if there are any set */
 	if (cw_dbg_opt_level)
-		cw_log(LOG_INFO, "Debug Options: %08X", cw_dbg_opt_level);
-
+		cw_log (LOG_INFO, "Debug Options: %08X", cw_dbg_opt_level);
+		
 	/* XXX Hard coded debug settigns, set it by config in the future */
 	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
-
-	/* Warn, if the "secret" debugging feature for 
+	
+	/* Warn, if the "secret" debugging feature for
 	   developers is turned on ;) */
 //	DBGX("Attention! %s", "DBG X is ON!");
 
 //	cw_mod_set_mod_path("../../lib/actube");
 	//cw_mod_load("capwap");
-
-
-
-
-
+	
+	
+	
+	
+	
 	/* Initialize the database */
 	if (!db_init())
 		goto errX;
-
+		
 	/* Start the database */
 	if (!db_start())
 		goto errX;
-
+		
 	db_ping();
-
-
+	
+	
 	/* Start a database "pinger thread", which inserts
 	   every xx seconds a timestamp into the DB */
 	pthread_t alth;
-	pthread_create(&alth, NULL, alive_thread, NULL);
-
+	pthread_create (&alth, NULL, alive_thread, NULL);
+	
 	/* Init DTLS library */
 	dtls_init();
-
-
-
-
+	
+	
+	
+	
 	ac_global_init();
+	
 	if (!socklist_init())
 		goto errX;
-
+		
 	if (!wtplist_init())
 		goto errX;
-
+		
 	if (!dataman_list_init())
 		goto errX;
-
-
-	cw_log(LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
+		
+		
+	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
 	rc = ac_run();
-      errX:
+errX:
 	/* XXX There is more cleanup to do */
 	wtplist_destroy();
 	socklist_destroy();
@@ -266,297 +425,315 @@ int main(int argc, char *argv[])
 
 
 
-void process_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len);
+void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
-void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len);
+void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
 
 int ac_run()
 {
 
 	if (!conf_listen_addrs_len) {
-		cw_log(LOG_ERR, "Fatal error: No listen addresses found.");
+		cw_log (LOG_ERR, "Fatal error: No listen addresses found.");
 		return 1;
 	}
-
-
-
-	/* it is important to create the unicast sockets first, 
-	 * because when we create the mcast an bcast sockets next 
+	
+	
+	
+	/* it is important to create the unicast sockets first,
+	 * because when we create the mcast an bcast sockets next
 	 * we will look for already created sockets to find a
 	 * good unicast reply socket */
-
+	
 	int i;
+	
 	for (i = 0; i < conf_listen_addrs_len; i++) {
 		char addr[100];
 		char port[50];
 		int proto;
-
-		conf_parse_listen_addr(conf_listen_addrs[i], addr, port, &proto);
-
-
+		
+		conf_parse_listen_addr (conf_listen_addrs[i], addr, port, &proto);
+		
+		
 		//struct sockaddr sa;
-
-
-		socklist_add_unicast(addr, port,proto);
-
+		
+		
+		socklist_add_unicast (addr, port, proto);
+		
 //#ifdef WITH_LWAPP
 //		if (conf_lwapp)
 //			socklist_add_unicast(conf_listen_addrs[i], conf_lw_control_port,
 //					     AC_PROTO_LWAPP);
 //#endif
 	}
-
-
-
+	
+	
+	
 	if (socklist_len == 0) {
-		cw_log(LOG_ERR, "Fatal error: Could not setup any listen socket");
+		cw_log (LOG_ERR, "Fatal error: Could not setup any listen socket");
 		return 1;
 	}
-
+	
 	/* create multicast sockets */
 	for (i = 0; i < conf_mcast_groups_len; i++) {
-
-		socklist_add_multicast(conf_mcast_groups[i], conf_control_port,
-				       AC_PROTO_CAPWAP);
+	
+		socklist_add_multicast (conf_mcast_groups[i], conf_control_port,
+		                        AC_PROTO_CAPWAP);
 #ifdef WITH_LWAPP
+		                        
 		if (conf_lwapp)
-			socklist_add_multicast(conf_mcast_groups[i], conf_lw_control_port,
-					       AC_PROTO_LWAPP);
+			socklist_add_multicast (conf_mcast_groups[i], conf_lw_control_port,
+			                        AC_PROTO_LWAPP);
+			                        
 #endif
-
+			                        
 	}
-
+	
 	/* broadcast socket ipv4 only */
 	for (i = 0; i < conf_bcast_addrs_len; i++) {
-
-		char addr[50],port[50];
+	
+		char addr[50], port[50];
 		int proto;
-		conf_parse_listen_addr(conf_bcast_addrs[i], addr, port, &proto);
-
-		socklist_add_broadcast(addr,port,proto);
+		conf_parse_listen_addr (conf_bcast_addrs[i], addr, port, &proto);
+		
+		socklist_add_broadcast (addr, port, proto);
 #ifdef WITH_LWAPP
+		
 //              printf("Adding %d\n",socklist_len);
 		if (conf_lwapp)
-			socklist_add_broadcast(conf_bcast_addrs[i], conf_lw_control_port,
-					       AC_PROTO_LWAPP);
+			socklist_add_broadcast (conf_bcast_addrs[i], conf_lw_control_port,
+			                        AC_PROTO_LWAPP);
+			                        
 //              printf ("SI %d, PROTO: %d\n",socklist_len-1,socklist[socklist_len-1].ac_proto);
 #endif
 	}
-
-
-
+	
+	
+	
 	//get_acinfo();
-
-
+	
+	
 	while (1) {
-
+	
 		/* prepare fdset */
 		fd_set fset;
 		int max = 0;
-		FD_ZERO(&fset);
+		FD_ZERO (&fset);
+		
 		for (i = 0; i < socklist_len; i++) {
-			FD_SET(socklist[i].sockfd, &fset);
+			FD_SET (socklist[i].sockfd, &fset);
+			
 			if (socklist[i].sockfd > max)
 				max = socklist[i].sockfd;
+				
 			if (socklist[i].data_sockfd) {
-				FD_SET(socklist[i].data_sockfd,&fset);
+				FD_SET (socklist[i].data_sockfd, &fset);
+				
 				if (socklist[i].sockfd > max)
 					max = socklist[i].sockfd;
 			}
 		}
-
+		
 		/* wait for an event */
 		int n;
-		while ((n = select(max + 1, &fset, NULL, NULL, NULL)) < 0) {
+		
+		while ( (n = select (max + 1, &fset, NULL, NULL, NULL)) < 0) {
 			if (errno != EINTR)
 				return n;
-
+				
 		}
-
+		
 		/* process the received packet */
 		for (i = 0; i < socklist_len; i++) {
 			uint8_t buffer[4096];
 			struct sockaddr_storage srcaddr;
 			socklen_t srcaddrlen;
-
 			
-			if (FD_ISSET(socklist[i].data_sockfd, &fset)){
-				
-				int len = sock_receive(socklist[i].data_sockfd,
-						       buffer, sizeof(buffer),
-						       0,
-						       (struct sockaddr *) &srcaddr,
-						       &srcaddrlen);
-
-				process_cw_data_packet(i, (struct sockaddr *) &srcaddr, buffer, len);
+			
+			if (FD_ISSET (socklist[i].data_sockfd, &fset)) {
+			
+				int len = sock_receive (socklist[i].data_sockfd,
+				                        buffer, sizeof (buffer),
+				                        0,
+				                        (struct sockaddr *) &srcaddr,
+				                        &srcaddrlen);
+				                        
+				process_cw_data_packet (i, (struct sockaddr *) &srcaddr, buffer, len);
 				
 			}
 			
-
-			if (FD_ISSET(socklist[i].sockfd, &fset)){
-
-				int len = sock_receive(socklist[i].sockfd,
-						       buffer, sizeof(buffer),
-						       0,
-						       (struct sockaddr *) &srcaddr,
-						       &srcaddrlen);
-
-				process_ctrl_packet(i, (struct sockaddr *) &srcaddr, buffer, len);
+			
+			if (FD_ISSET (socklist[i].sockfd, &fset)) {
+			
+				int len = sock_receive (socklist[i].sockfd,
+				                        buffer, sizeof (buffer),
+				                        0,
+				                        (struct sockaddr *) &srcaddr,
+				                        &srcaddrlen);
+				                        
+				process_ctrl_packet (i, (struct sockaddr *) &srcaddr, buffer, len);
 			}
 			
 		}
-
+		
 	}
-
+	
 	return 0;
 }
 
 
-void process_cw_data_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
+void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-	cw_dbg(DBG_X, "There is a data packet now");
-
+	cw_dbg (DBG_X, "There is a data packet now");
+	
 	dataman_list_lock();
-	cw_dbg(DBG_X, "Dataman list locked, now getting");
-	struct dataman * dm = dataman_list_get(socklist[index].data_sockfd,addr);
-	cw_dbg(DBG_X, "Dataman list locked, now gotted");
-
-	cw_dbg(DBG_INFO,"Packet for dataman %s,%d",sock_addr2str_p(addr,sock_buf),socklist[index].data_sockfd);
+	cw_dbg (DBG_X, "Dataman list locked, now getting");
+	struct dataman * dm = dataman_list_get (socklist[index].data_sockfd, addr);
+	cw_dbg (DBG_X, "Dataman list locked, now gotted");
+	
+	cw_dbg (DBG_INFO, "Packet for dataman %s,%d", sock_addr2str_p (addr, sock_buf), socklist[index].data_sockfd);
+	
 	if (!dm) {
-		cw_dbg(DBG_INFO,"No dataman %s,%d",sock_addr2str_p(addr,sock_buf),socklist[index].data_sockfd);
-		dm = dataman_create(socklist[index].data_sockfd,addr);
-		if (!dm){
-			cw_log(LOG_ERR,"Can't create dataman for packet from %s",sock_addr2str_p(addr,sock_buf));
+		cw_dbg (DBG_INFO, "No dataman %s,%d", sock_addr2str_p (addr, sock_buf), socklist[index].data_sockfd);
+		dm = dataman_create (socklist[index].data_sockfd, addr);
+		
+		if (!dm) {
+			cw_log (LOG_ERR, "Can't create dataman for packet from %s", sock_addr2str_p (addr, sock_buf));
 			return;
 		}
-		dataman_list_add(dm);
-
-		dataman_start(dm);
-
-
+		
+		dataman_list_add (dm);
+		
+		dataman_start (dm);
+		
+		
 	}
+	
 	dataman_list_unlock();
-
-	dataman_add_packet(dm,buffer,len);
-
+	
+	dataman_add_packet (dm, buffer, len);
+	
 	return;
-
-	exit(0);
-
-
-
-
-	printf("Data packet received len = %d\n",len);
-	exit(0);
-	struct wtpman *wtpman = wtplist_get(addr);
-	if (!wtpman){
-		cw_dbg(DBG_PKT_ERR,"Discarding packet on data channel from %s - No wtpman found.",sock_addr2str(addr,sock_buf));
+	
+	exit (0);
+	
+	
+	
+	
+	printf ("Data packet received len = %d\n", len);
+	exit (0);
+	struct wtpman *wtpman = wtplist_get (addr);
+	
+	if (!wtpman) {
+		cw_dbg (DBG_PKT_ERR, "Discarding packet on data channel from %s - No wtpman found.", sock_addr2str (addr, sock_buf));
 		return;
 	}
-
-
-	wtpman_addpacket(wtpman, buffer, len);
+	
+	
+	wtpman_addpacket (wtpman, buffer, len);
 }
 
 
-void process_cw_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
+void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-
+	
 	/* first of all check preamble */
-	int preamble = cw_get_hdr_preamble(buffer);
-
+	int preamble = cw_get_hdr_preamble (buffer);
+	
 	if (preamble != CAPWAP_PACKET_PREAMBLE && preamble != CAPWAP_DTLS_PACKET_PREAMBLE) {
-		cw_dbg(DBG_PKT_ERR,
-		       "Discarding packet from %s, wrong preamble, preamble = 0x%01X",
-		       sock_addr2str(addr,sock_buf), preamble);
+		cw_dbg (DBG_PKT_ERR,
+		        "Discarding packet from %s, wrong preamble, preamble = 0x%01X",
+		        sock_addr2str (addr, sock_buf), preamble);
 		return;
 	}
-
-
+	
+	
 	wtplist_lock();
-	struct wtpman *wtpman = wtplist_get(addr);
+	struct wtpman *wtpman = wtplist_get (addr);
+	
 	if (!wtpman) {
-
-		wtpman = wtpman_create(index, addr);
-
-
+	
+		wtpman = wtpman_create (index, addr);
+		
+		
 		if (!wtpman) {
-			cw_log(LOG_ERR, "Error creating wtpman: %s", strerror(errno));
+			cw_log (LOG_ERR, "Error creating wtpman: %s", strerror (errno));
 			wtplist_unlock();
 			return;
 		}
-
-
-		if (!wtplist_add(wtpman)) {
-			cw_log(LOG_ERR, "Error adding wtpman: Too many wtp connections");
-			wtpman_destroy(wtpman);
+		
+		
+		if (!wtplist_add (wtpman)) {
+			cw_log (LOG_ERR, "Error adding wtpman: Too many wtp connections");
+			wtpman_destroy (wtpman);
 			wtplist_unlock();
 			return;
 		};
-
-		wtpman_start(wtpman, preamble & 0xf);
+		
+		wtpman_start (wtpman, preamble & 0xf);
 	}
-
-
-	wtpman_addpacket(wtpman, buffer, len);
+	
+	
+	wtpman_addpacket (wtpman, buffer, len);
 	wtplist_unlock();
 }
 
 
 
-void process_lw_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
+void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	//int sock = socklist[index].reply_sockfd;
-
+	
 	uint8_t *m = buffer + 6;
-	uint32_t val = ntohl(*((uint32_t *) (m)));
-
-
-	printf("VAL: %08X\n", val);
-
-
-
+	uint32_t val = ntohl (* ( (uint32_t *) (m)));
+	
+	
+	printf ("VAL: %08X\n", val);
+	
+	
+	
 	/* first of all check preamble */
-	int version = LWTH_GET_VERSION(m);
-
+	int version = LWTH_GET_VERSION (m);
+	
 	if (version != LW_VERSION) {
 //              cw_log_debug1("Discarding LWAPP packet, wrong verson");
 		return;
 	}
-
-	int l = LWTH_GET_LENGTH(m);
-	printf("LEN = %d\n", l);
-
+	
+	int l = LWTH_GET_LENGTH (m);
+	printf ("LEN = %d\n", l);
+	
 	if (l + 12 != len) {
 		//      cw_log_debug1("Discarding LWAPP packet, wrong length");
 		return;
 	}
-
+	
 	wtplist_lock();
-	struct wtpman *wtpman = wtplist_get(addr);
+	struct wtpman *wtpman = wtplist_get (addr);
+	
 	if (!wtpman) {
-
-		wtpman = wtpman_create(index, addr);
-
+	
+		wtpman = wtpman_create (index, addr);
+		
 		if (!wtpman) {
-			cw_log(LOG_ERR, "Error creating wtpman: %s", strerror(errno));
+			cw_log (LOG_ERR, "Error creating wtpman: %s", strerror (errno));
 			wtplist_unlock();
 			return;
 		}
-
-
-		if (!wtplist_add(wtpman)) {
-			cw_log(LOG_ERR, "Error adding wtpman: Too many wtp connections");
-			wtpman_destroy(wtpman);
+		
+		
+		if (!wtplist_add (wtpman)) {
+			cw_log (LOG_ERR, "Error adding wtpman: Too many wtp connections");
+			wtpman_destroy (wtpman);
 			wtplist_unlock();
 			return;
 		};
-
+		
 		//wtpman_lw_start(wtpman);
 	}
+	
 	//wtpman_lw_addpacket(wtpman,buffer,len);
 	wtplist_unlock();
 }
@@ -565,14 +742,15 @@ void process_lw_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, 
 
 
 
-void process_ctrl_packet(int index, struct sockaddr *addr, uint8_t * buffer, int len)
+void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	switch (socklist[index].ac_proto) {
 		case AC_PROTO_CAPWAP:
-			process_cw_ctrl_packet(index, addr, buffer, len);
+			process_cw_ctrl_packet (index, addr, buffer, len);
 			return;
+			
 		case AC_PROTO_LWAPP:
-			process_lw_ctrl_packet(index, addr, buffer, len);
+			process_lw_ctrl_packet (index, addr, buffer, len);
 			return;
 	}
 }

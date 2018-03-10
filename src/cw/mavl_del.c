@@ -3,7 +3,7 @@
 void mavlnode_destroy(struct mavl *t, struct mavlnode *n)
 {
 	if (t->del) {
-		t->del(&n->data);
+		t->del(mavlnode_dataptr(n));
 	}
 	free(n);
 	t->count--;
@@ -107,12 +107,12 @@ static int adj_bal_r(struct mavlnode *n, struct mavlnode **parent)
 
 
 
-static int mavl_del_lo(struct mavlnode **parent, union mavldata *data)
+static int mavl_del_lo(mavl_t t, struct mavlnode **parent, void *data)
 {
 	struct mavlnode *n = *parent;
 
 	if (n->left != 0) {
-		int bal = mavl_del_lo(&n->left, data);
+		int bal = mavl_del_lo(t, &n->left, data);
 		n->bal += bal;
 		if (n->bal == 1) {
 			return 0;
@@ -126,7 +126,9 @@ static int mavl_del_lo(struct mavlnode **parent, union mavldata *data)
 	/* found the lowest element */
 
 	*parent = n->right;
-	*data = n->data;
+/*	*data = n->data;*/
+	memcpy(data,mavlnode_dataptr(n),t->data_size);
+	
 	free(n);
 	return 1;
 
@@ -143,12 +145,12 @@ static int mavl_del_lo(struct mavlnode **parent, union mavldata *data)
 
 
 
-int mavl_del0(struct mavl *t, struct mavlnode **parent, union mavldata *data)
+int mavl_del0(struct mavl *t, struct mavlnode **parent, void *data)
 {
 	struct mavlnode *n = *parent;
 	int rc;
 	int bal;
-	rc = t->cmp(data, &n->data);
+	rc = t->cmp(data, mavlnode_dataptr(n));
 
 	if (rc == 0) {
 		if (n->right == 0 && n->left == 0) {
@@ -174,10 +176,10 @@ int mavl_del0(struct mavl *t, struct mavlnode **parent, union mavldata *data)
 		/* node has two childs */
 
 		if (t->del) {
-			t->del(&n->data);
+			t->del(mavlnode_dataptr(n));
 		}
 		t->count--;
-		bal = mavl_del_lo(&n->right, &n->data);
+		bal = mavl_del_lo(t,&n->right, mavlnode_dataptr(n));
 		n->bal -= bal;
 		if (n->bal == -1)
 			return 0;
@@ -228,9 +230,9 @@ int mavl_del0(struct mavl *t, struct mavlnode **parent, union mavldata *data)
 
 }
 
-union mavldata *mavl_del(struct mavl *t, union mavldata *data)
+void *mavl_del(struct mavl *t, const void *data)
 {
-	union mavldata *d;
+	void *d;
 	int rc;
 	
 	if (!t->root)

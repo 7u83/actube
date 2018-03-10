@@ -18,19 +18,21 @@
 
 /**
  *@file
- *@Implementation of mavl_create
+ *@brief Implementation of mavl_create
  *@addtogroup MavlFunctions 
  *@{
- */ 
+ */
+ 
 #include "mavl.h"
 
 /**
  * Create an AVL tree
- * @param cmp pointer compare function
- * @param del pointer to delete function which is called when an element will be deletet
- * @return pointer to an #mavl struct
+ * @param cmp pointer to compare function
+ * @param del pointer to delete function which is called when an element 
+ * will be deletet
+ * @return pointer to a #mavl struct
  */
- struct mavl *mavl_create(int (*cmp) (const void *, const void  *),
+struct mavl *mavl_create(int (*cmp) (const void *, const void  *),
 			       void (*del) (void *), size_t data_size)
 {
 	struct mavl *t = malloc(sizeof(struct mavl));
@@ -40,6 +42,7 @@
 	t->count = 0;
 	t->cmp = cmp;
 	t->del = del;
+	t->data_size=data_size;
 	return t;
 }
 

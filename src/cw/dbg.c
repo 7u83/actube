@@ -36,7 +36,7 @@
 #include "capwap_cisco.h"
 #include "lwapp_cisco.h"
 #include "cw.h"
-#include "message_set.h"
+#include "msget.h"
 
 
 
@@ -314,7 +314,7 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 
 	search.type = msg_id;
 
-	message = mavl_get_ptr(conn->msgset->messages,&search);
+	message = mavl_get(conn->msgset->msgdata,&search);
 	
 
 	if (!message)

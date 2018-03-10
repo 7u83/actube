@@ -7,7 +7,7 @@
 #include "conn.h"
 
 struct cw_MsgSet {
-	mavl_t messages;
+	mavl_t msgdata;
 	mavl_t handlers_by_id;
 	mavl_t handlers_by_key;
 	

@@ -38,7 +38,6 @@ uint8_t conf_macaddress_len = 0;
 
 long conf_strict_capwap = 1;
 long conf_strict_headers = 0;
-//char *conf_capwap_mode_str = NULL;
 int conf_capwap_mode = CW_MODE_CAPWAP;
 
 
@@ -79,8 +78,6 @@ char *conf_sslkeypass = NULL;
 char *conf_sslcipher = NULL;
 char *conf_dtls_psk = NULL;
 
-//char * conf_ac_hardware_version=NULL;
-//char * conf_ac_software_version=NULL;
 int conf_security = 0;
 long conf_vendor_id = CONF_DEFAULT_VENDOR_ID;
 
@@ -90,11 +87,6 @@ bstr_t conf_software_version = NULL;
 
 bstr_t conf_cisco_hardware_version = NULL;
 bstr_t conf_cisco_software_version = NULL;
-
-
-//int conf_hardware_version_len=0;
-
-//int conf_software_version_len=0;
 
 
 int conf_use_loopback = 0;
@@ -140,7 +132,9 @@ static int init_acname()
 
 static int init_acid()
 {
-
+	int i;
+	char *s;
+	
 	if (conf_acid != NULL)
 		return 1;
 
@@ -165,11 +159,11 @@ static int init_acid()
 		return 0;
 	};
 
-	int i;
+
 
 
 	conf_acid = malloc(2 * conf_macaddress_len + 1);
-	char *s = conf_acid;
+	s = conf_acid;
 
 	for (i = 0; i < conf_macaddress_len; i++) {
 		s += sprintf(s, "%02X", conf_macaddress[i]);
@@ -178,10 +172,13 @@ static int init_acid()
 
 }
 
+
 static int init_dtls()
 {
 	if (conf_dtls_psk != NULL) {
-//              conf_security=CW_SECURITY_FLAGS_S;
+/*
+		//              conf_security=CW_SECURITY_FLAGS_S;
+*/
 	}
 
 	return 1;
@@ -260,17 +257,21 @@ static int init_control_port()
 
 static int init_listen_addrs()
 {
+	struct ifaddrs *ifap, *ifa;
+	int rc;
+	int ctr;
+	
 	if (conf_listen_addrs != 0)
 		return 1;
 
-	struct ifaddrs *ifap, *ifa;
 
-	int rc = getifaddrs(&ifap);
+
+	rc = getifaddrs(&ifap);
 	if (rc == -1)
 		return 0;
 
 	/* count the addresses */
-	int ctr = 0;
+	ctr = 0;
 	for (ifa = ifap; ifa != 0; ifa = ifa->ifa_next) {
 		if (!ifa->ifa_addr)
 			continue;
@@ -307,8 +308,7 @@ static int init_listen_addrs()
 
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
-//			printf("The converter has %s\n",str);
-//			*strchr(str, ':') = 0;
+
 			conf_listen_addrs[ctr] =
 			    (char *) cw_setstr((uint8_t **) & conf_listen_addrs[ctr],
 					       (uint8_t *) str, strlen(str));
@@ -346,6 +346,7 @@ static char *conf_default_mcast_groups_ipv4[] = {
 
 #ifdef WITH_IPV6
 static char *conf_default_mcast_groups_ipv6[] = {
+	"ff01:0:0:0:0:0:0:18c",
 /*	"ff01:0:0:0:0:0:0:18c",
 	"ff02:0:0:0:0:0:0:18c%em0",
 	"ff03:0:0:0:0:0:0:18c",
@@ -356,11 +357,8 @@ static char *conf_default_mcast_groups_ipv6[] = {
 };
 #endif
 
-//#include "avltree"
-//#include "cw/stravltree.h"
 
-
-
+/*
 static int add_bcast_addr(void *priv, void *addr)
 {
 	printf("Callback Called\n");
@@ -374,12 +372,17 @@ static int add_bcast_addr(void *priv, void *addr)
 		conf_bcast_addrs_len++;
 	return 1;
 }
+*/
+
 
 /*
  * Initialize broadcast addresses (ipv4 only)
  */
 int init_bcast_addrs()
 {
+	int rc;
+	char str[100];
+	struct ifaddrs *ifa0, *ifa;
 	mavl_t t;
 	mavliter_t it;
 	
@@ -389,17 +392,17 @@ int init_bcast_addrs()
 	if (!conf_ipv4)
 		return 1;
 
-	t = mavl_create(mavl_cmp_str,mavl_free_str);
-	if (!t)
+	t = mavl_create_str();
+	if (t==NULL)
 		return 0;
 
 	/* add the default broadast address */
-	mavl_add_strdup(t, "255.255.255.255");
+	mavl_add_str(t, cw_strdup("255.255.255.255"));
 
 
 	/* add all other local broadcast addresses */
-	struct ifaddrs *ifa0, *ifa;
-	int rc = getifaddrs(&ifa0);
+	
+	rc = getifaddrs(&ifa0);
 	if (rc == -1)
 		return 0;
 
@@ -421,24 +424,22 @@ int init_bcast_addrs()
 		if (sa->sa_family != AF_INET)
 			continue;
 
-		char str[100];
+
 		if (ifa->ifa_broadaddr) {
 			sock_addrtostr(ifa->ifa_broadaddr, str, 100,1);
 			*strchr(str, ':') = 0;
-			mavl_add_strdup(t, str);
+			mavl_add_str(t, cw_strdup(str));
 		}
 
 	}
 
 	conf_bcast_addrs = malloc(t->count * sizeof(char *));
 
-//mavl_foreach_asc(t, add_bcast_addr, 0);
-
 	mavliter_init(&it,t);
 	mavliter_foreach(&it){
-		union mavldata * d;
-		d = mavliter_get(&it);
-		conf_bcast_addrs[conf_bcast_addrs_len] = strdup(d->str);
+		char * d;
+		d = mavliter_get_str(&it);
+		conf_bcast_addrs[conf_bcast_addrs_len] = cw_strdup(d);
 		if (conf_bcast_addrs[conf_bcast_addrs_len] != 0)
 			conf_bcast_addrs_len++;
 
@@ -454,19 +455,23 @@ int init_bcast_addrs()
 
 int init_mcast_groups()
 {
-	if (conf_mcast_groups)
-		return 1;
-
+	int ctr;
+	int i;
+	
 	int n = 0;
 	int n4 = 0, n6 = 0;
+
+	if (conf_mcast_groups)
+		return 1;
+	
 	if (conf_ipv4) {
 		n4 = sizeof(conf_default_mcast_groups_ipv4) / sizeof(char *);
 	}
-#ifdef WITH_IPV6
+
 	if (conf_ipv6) {
 		n6 = sizeof(conf_default_mcast_groups_ipv6) / sizeof(char *);
 	}
-#endif
+
 	n = n4 + n6;
 	if (n == 0)
 		return 1;
@@ -476,8 +481,8 @@ int init_mcast_groups()
 		return 0;
 	memset(conf_mcast_groups, 0, n * sizeof(char *));
 
-	int ctr = 0;
-	int i;
+	ctr = 0;
+
 	for (i = 0; i < n4; i++) {
 		uint8_t *g = (uint8_t *) conf_default_mcast_groups_ipv4[i];
 		conf_mcast_groups[ctr] =
@@ -546,8 +551,8 @@ static int conf_read_dbg_level(cfg_t * cfg)
 
 	for (i = 0; i < n; i++) {
 		char *str = cfg_getnstr(cfg, name, i);
-//int u = cw_log_str2dbglevel(str);
-		int b = cw_strlist_get_id(cw_dbg_strings, str);	//cw_log_str2dbglevel(str);
+		int b = cw_strlist_get_id(cw_dbg_strings, str);
+
 
 		cw_dbg_set_level(b, 1);
 
@@ -555,33 +560,8 @@ static int conf_read_dbg_level(cfg_t * cfg)
 	return 1;
 }
 
-
-
-
-
-struct cw_Mod ** conf_mods; //[10];
+struct cw_Mod ** conf_mods; 
 char *conf_mods_dir = NULL;
-
-
-static int init_mods()
-{
-
-/*	conf_mods[0]=modload_ac("cisco");
-	conf_mods[1]=modload_ac("fortinet");
-//	conf_mods[2]=modload_ac("zyxel");
-	conf_mods[2]=modload_ac("cipwap");
-	conf_mods[3]=modload_ac("capwap");
-	conf_mods[4]=modload_ac("capwap80211");
-	conf_mods[5]=NULL;
-*/
-	int i;
-	for(i=0; conf_mods[i]; i++){
-		if (conf_mods[i]->init){
-			conf_mods[i]->init();
-		}
-	}
-	return 0;
-}
 
 /*
  * Read the module names from config file
@@ -626,6 +606,10 @@ void conf_init_capwap_mode()
 
 int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *proto)
 {
+	char *b;
+	int c;
+	int i, l;
+	char *ctrlport;
 	char *p = strchr(addrstr, '/');
 	if (!p)
 		*proto = AC_PROTO_CAPWAP;
@@ -638,7 +622,7 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 			*proto = AC_PROTO_UNKNOWN;
 	}
 
-	char *ctrlport;
+
 	switch (*proto) {
 		case AC_PROTO_CAPWAP:
 			ctrlport = CAPWAP_CONTROL_PORT_STR;
@@ -651,8 +635,8 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 	}
 
 
-	int i, l;
-	int c = 0;
+
+	c = 0;
 
 	if (p)
 		l = p - addrstr;
@@ -684,7 +668,7 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 	}
 
 	/* we assume now, its ipv6 */
-	char *b = strstr(addrstr, "]:");
+	b = strstr(addrstr, "]:");
 	if (!b) {
 		/* ippv6 w/o port */
 		strncpy(saddr, addrstr, l);
@@ -716,9 +700,6 @@ int read_config(const char *filename)
 {
 	int i, n;
 
-	if (!init_control_port())
-		return 0;
-
 	cfg_opt_t opts[] = {
 		CFG_STR_LIST("mods", "{}", CFGF_NONE),
 		CFG_SIMPLE_STR("mods_dir", &conf_mods_dir),
@@ -733,7 +714,7 @@ int read_config(const char *filename)
 		CFG_SIMPLE_BOOL("strict_capwap", &conf_strict_capwap),
 		CFG_SIMPLE_BOOL("strict_headers", &conf_strict_headers),
 		CFG_SIMPLE_BOOL("use_loopback", &conf_use_loopback),
-//		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),
+/*//		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),*/
 
 
 #ifdef WITH_LWAPP
@@ -765,12 +746,17 @@ int read_config(const char *filename)
 		CFG_SIMPLE_BOOL("dtls_verify_peer", &conf_dtls_verify_peer),
 		CFG_SIMPLE_BOOL("ipv4", &conf_ipv4),
 		CFG_SIMPLE_BOOL("ipv6", &conf_ipv6),
-		CFG_SIMPLE_STR("db_file", conf_db_file),
+		CFG_SIMPLE_STR("db_file", &conf_db_file),
 		CFG_SIMPLE_STR("image_dir", &conf_image_dir),
 
 		CFG_END()
 	};
 	cfg_t *cfg;
+	
+	if (!init_control_port())
+		return 0;
+
+	
 	cfg = cfg_init(opts, CFGF_NONE);
 	cfg_set_error_function(cfg, errfunc);
 
@@ -838,18 +824,13 @@ int read_config(const char *filename)
 	if (!conf_image_dir)
 		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
 
-//printf("INIT MODS\n");
-//	init_mods();
-//printf("done init mods");
-
-//	conf_init_capwap_mode();
 
 
 	init_listen_addrs();
 	init_mcast_groups();
 	init_bcast_addrs();
 
-//printf("Yea all mods inited\n");
+
 	return 1;
 }
 

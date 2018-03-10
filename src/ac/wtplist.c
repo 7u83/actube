@@ -24,7 +24,6 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-
 #define MAX_WTPS 200
 
 #include <stdio.h>

@@ -31,7 +31,7 @@
 #include "log.h"
 #include "file.h"
 #include "cw.h"
-#include "cw/message_set.h"
+#include "cw/msget.h"
 
 static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
 				      struct cw_actiondef * actions) = NULL;
@@ -77,10 +77,10 @@ struct cw_Mod mod_null = {
 
 
 
-static int cmp(const mavldata_t *p1, const mavldata_t *p2)
+static int cmp(const void *p1, const void *p2)
 {
-	struct cache_item *c1 = (struct cache_item *) p1->ptr;
-	struct cache_item *c2 = (struct cache_item *) p2->ptr;
+	struct cache_item *c1 = ((struct cache_item **) p1)[0];
+	struct cache_item *c2 = ((struct cache_item **) p2)[0];
 
 	int r;
 	r = strcmp(c1->capwap, c2->capwap);
@@ -104,7 +104,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	struct cw_MsgSet * set;
 
 	if (!msgset_cache) {
-		msgset_cache = mavl_create(cmp, NULL);
+		msgset_cache = mavl_create(cmp, NULL,1312);
 		if (!msgset_cache) {
 			cw_log(LOG_ERR, "Can't initialize msgset cache: %s",
 			       strerror(errno));
@@ -164,9 +164,9 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 
 /* static mavl to store modules */
 static struct mavl * mods_loaded = NULL;
-static int mod_cmp_mavl(const mavldata_t *e1, const mavldata_t *e2){
-	const struct cw_Mod * m1 = e1->ptr;
-	const struct cw_Mod * m2 = e2->ptr;
+static int mod_cmp_mavl(const void *e1, const void *e2){
+	const struct cw_Mod * m1 = *((const struct cw_Mod**)e1);
+	const struct cw_Mod * m2 = *((const struct cw_Mod**)e2);
 	return strcmp(m1->name,m2->name);
 }
 
@@ -199,7 +199,7 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 
 	/* if modlist is not initialized, initialize ... */
 	if (mods_loaded==NULL){
-		mods_loaded=mavl_create(mod_cmp_mavl,NULL);
+		mods_loaded=mavl_create(mod_cmp_mavl,NULL,1312);
 		if (mods_loaded==NULL){
 			cw_log(LOG_ERROR, "Can't init modlist, no memory");
 			return NULL;

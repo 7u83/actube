@@ -6,11 +6,11 @@
 #include "dbg.h"
 #include "log.h"
 
-#include "message_set.h"
+#include "msget.h"
 
-static int cmp_cw_elemhandler_by_id(const mavldata_t * elem1, const mavldata_t *elem2){
-	struct cw_ElemHandler * e1 = elem1->ptr;
-	struct cw_ElemHandler * e2 = elem2->ptr;
+static int cmp_cw_elemhandler_by_id(const void * elem1, const void *elem2){
+	const struct cw_ElemHandler * e1 = elem1;
+	const struct cw_ElemHandler * e2 = elem2;
 	int r;
 	r = e1->id - e2->id;
 	if (r!=0)
@@ -24,23 +24,23 @@ static int cmp_cw_elemhandler_by_id(const mavldata_t * elem1, const mavldata_t *
 	return 0;
 }
 
-static int cmp_cw_elemhandler_by_key(const mavldata_t *elem1, const mavldata_t *elem2){
-	struct cw_ElemHandler * e1 = elem1->ptr;
-	struct cw_ElemHandler * e2 = elem2->ptr;
+static int cmp_cw_elemhandler_by_key(const void *elem1, const void *elem2){
+	const struct cw_ElemHandler * e1 = elem1;
+	const struct cw_ElemHandler * e2 = elem2;
 	return strcmp(e1->key,e2->key);
 }
 
-static int cmp_msgdata(const mavldata_t * elem1, const mavldata_t *elem2)
+static int cmp_msgdata(const void * elem1, const void *elem2)
 {       
-	struct cw_MsgData * e1 = elem1->ptr;
-	struct cw_MsgData * e2 = elem2->ptr;
+	const struct cw_MsgData * e1 = elem1;
+	const struct cw_MsgData * e2 = elem2;
 	return e1->type - e2->type;
 }
 
-static int cmp_elemdata(const mavldata_t * elem1, const mavldata_t *elem2)
+static int cmp_elemdata(const void * elem1, const void *elem2)
 {
-	struct cw_ElemData * e1 = elem1->ptr;
-	struct cw_ElemData * e2 = elem2->ptr;
+	const struct cw_ElemData * e1 = elem1;
+	const struct cw_ElemData * e2 = elem2;
 	int r;
 	r = e1->id - e2->id;
 	if (r!=0)
@@ -66,26 +66,9 @@ static void msgdata_destroy(struct cw_MsgData *data){
 	free(data);
 }
 
-static struct cw_MsgData * msgdata_create(int type){
-	struct cw_MsgData * msg;
-	
-	msg = malloc( sizeof(struct cw_MsgData));
-	if (!msg) 
-		return NULL;
 
-	msg->elements_tree = mavl_create(cmp_elemdata,mavl_free_bin);
-	if (!msg->elements_tree){
-		msgdata_destroy(msg);
-		return NULL;
-	}
-
-	msg->type=type;
-	return msg;
-}
-
-
-static void del_mavl_msdgdata( mavldata_t * d ){
-	msgdata_destroy(d->ptr);
+static void del_mavl_msdgdata( void * d ){
+	msgdata_destroy(d);
 }
 
 
@@ -94,8 +77,8 @@ static void del_mavl_msdgdata( mavldata_t * d ){
  * @param set Message set to destroy
  */
 void cw_msgset_destroy(struct cw_MsgSet * set){
-	if (set->messages)
-		mavl_destroy(set->messages);
+	if (set->msgdata)
+		mavl_destroy(set->msgdata);
 	if (set->handlers_by_id)
 		mavl_destroy(set->handlers_by_id);
 	if (set->handlers_by_key)
@@ -118,22 +101,25 @@ struct cw_MsgSet * cw_msgset_create(){
 	memset(set,0,sizeof(struct cw_MsgSet));
 
 	/* create mavl for all_elems by id */
-	set->handlers_by_id = mavl_create(cmp_cw_elemhandler_by_id,mavl_free_bin);
+	set->handlers_by_id = mavl_create(cmp_cw_elemhandler_by_id,NULL,
+				sizeof(struct cw_ElemHandler));
 	if (set->handlers_by_id==NULL){
 		cw_msgset_destroy(set);
 		return NULL;
 	}
 
-	/* create mavl for all_elems by id */
-	set->handlers_by_key = mavl_create(cmp_cw_elemhandler_by_key,NULL);
+	/* create mavl for all_elems by key */
+	set->handlers_by_key = mavl_create(cmp_cw_elemhandler_by_key,NULL,
+				sizeof(struct cw_ElemHandler));
 	if (set->handlers_by_key==NULL){
 		cw_msgset_destroy(set);
 		return NULL;
 	}
 
 	/* create mavl for messages */
-	set->messages = mavl_create(cmp_msgdata,del_mavl_msdgdata);
-	if (set->messages==NULL){
+	set->msgdata = mavl_create(cmp_msgdata,del_mavl_msdgdata,
+				sizeof(struct cw_MsgData));
+	if (set->msgdata==NULL){
 		cw_msgset_destroy(set);
 		return NULL;
 	}
@@ -148,7 +134,7 @@ struct cw_ElemHandler * cw_msgset_get_elemhandler(struct cw_MsgSet * set,
 	search.proto=proto;
 	search.vendor=vendor;
 	search.id=id;
-	return mavl_find_ptr(set->handlers_by_id,&search);
+	return mavl_find(set->handlers_by_id,&search);
 }
 
 
@@ -156,11 +142,12 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 		struct cw_MsgDef * msgdef)
 {
 	struct cw_ElemDef * elemdef;
-	mavldata_t mavldata, *result;
+	struct cw_ElemData ed, *result;
 	
 	/* iterate through all defined elements */
 	for(elemdef = msgdef->elements; elemdef->id; elemdef++){
 		struct cw_ElemHandler * handler;
+		int replaced;
 		
 		handler = cw_msgset_get_elemhandler(set,
 			elemdef->proto,
@@ -175,18 +162,15 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 			continue;
 		}
 		
-		mavldata.ptr = malloc(sizeof(struct cw_ElemData));
-		if (!mavldata.ptr){
-			cw_log(LOG_ERR,"Can't create ElemData element: %s",strerror(errno));
-		}
-		((struct cw_ElemData *)(mavldata.ptr))->id=elemdef->id;
-		((struct cw_ElemData *)(mavldata.ptr))->proto=elemdef->proto;
-		((struct cw_ElemData *)(mavldata.ptr))->vendor=elemdef->vendor;
-		((struct cw_ElemData *)(mavldata.ptr))->mand=elemdef->mand;
+		ed.id=elemdef->id;
+		ed.proto=elemdef->proto;
+		ed.vendor=elemdef->vendor;
+		ed.mand=elemdef->mand;
 		
-		result = mavl_replace(msgdata->elements_tree, &mavldata);
 		
-		if (result != &mavldata){
+		result = mavl_replace(msgdata->elements_tree, &ed, &replaced);
+		
+		if (!replaced){
 			cw_dbg(DBG_MOD, "  adding message element %d %d %d - %s", 
 				elemdef->proto,
 				elemdef->vendor,
@@ -194,7 +178,7 @@ static int update_msgdata(struct cw_MsgSet * set, struct cw_MsgData * msgdata,
 				handler->name);
 		}
 		else{
-			cw_dbg(DBG_MOD, "  replaceing message element %d %d %d - %s", 
+			cw_dbg(DBG_MOD, "  replacing message element %d %d %d - %s", 
 				elemdef->proto,
 				elemdef->vendor,
 				elemdef->id, 
@@ -217,46 +201,34 @@ int cw_msgset_add(struct cw_MsgSet * set,
 
 	/* Create mavl for all handlers */
 	for(handler = handlers; handler->id; handler++){
-		mavldata_t copy;
-		copy.ptr = malloc(sizeof(struct cw_ElemHandler));
-		if (!copy.ptr){
-			cw_log(LOG_ERR,"Can't alloc mem:", strerror(errno));
-			continue;
-		}
-		
 		cw_dbg(DBG_MOD,"Adding handler for element %d - %s - with key: %s", 
 				handler->id,
 				handler->name,
 				handler->key);
-		
-		
-		memcpy(copy.ptr,handler,sizeof(struct cw_ElemHandler));
-		
-		mavl_replace(set->handlers_by_id,&copy);
-		mavl_replace(set->handlers_by_key,&copy);
+		mavl_replace(set->handlers_by_id,handler,NULL);
+		mavl_replace(set->handlers_by_key,handler,NULL);
 	}
 
 
 	for (msgdef=messages; msgdef->type !=0; msgdef++){
-		struct cw_MsgData search, *msg;
+		struct cw_MsgData search;
+		struct cw_MsgData *msg;
+		int exists;
 		
 		/* Look if message already exists */ 
 		search.type=msgdef->type;
-		msg = mavl_find_ptr(set->messages,&search);
+		msg = mavl_add(set->msgdata,&search,&exists);
 
-		if (!msg){
-			msg = msgdata_create(msgdef->type);
-			
-			if (!msg){
+		if (msg == NULL){
 				cw_log(LOG_ERR,"Can't create messae");
 				return 0;
-			}
-
-			mavl_add_ptr(set->messages,msg);
 		}
-	
 		
-		
+		if (!exists){
+			msg->elements_tree = mavl_create(cmp_elemdata,NULL,
+				sizeof(struct cw_ElemData));
+		}
+
 		/* Overwrite the found message */
 		if (msgdef->name)
 			msg->name=msgdef->name;
@@ -283,5 +255,5 @@ int cw_msgset_add(struct cw_MsgSet * set,
 struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type){
 	struct cw_MsgData search;
 	search.type=type;
-	return mavl_find_ptr(set->messages,&search);
+	return mavl_find_ptr(set->msgdata,&search);
 }

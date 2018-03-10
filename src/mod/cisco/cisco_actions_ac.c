@@ -41,8 +41,8 @@
 
 #include "include/cipwap_items.h"
 
-#include "cw/message_set.h"
-#include "cw/cw_types.h"
+#include "cw/msget.h"
+#include "cw/kvt.h"
 
 
 static struct cw_ElemHandler handlers[] = {

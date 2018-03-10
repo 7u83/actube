@@ -51,7 +51,7 @@ struct mlist {
 	struct mlist_elem *first;
 	struct mlist_elem *last;
 	int count;
-	//size_t elem_size;
+/*	//size_t elem_size;*/
 };
 
 typedef struct mlist * mlist_t;

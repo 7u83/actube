@@ -17,10 +17,10 @@
 */
 
 #include "cw.h"
-#include "cw_types.h"
+#include "kvt.h"
 #include "dbg.h"
 #include "keys.h"
-#include "kvstore.h"
+
 
 int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key, 
 				uint8_t * data, int len,
@@ -69,11 +69,11 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 
 			/* vendor */
 			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VENDOR);
-			cw_kvstore_add(cfg,key,CW_TYPE_DWORD,data + sub,4);
+			cw_kvt_add(cfg,key,CW_TYPE_DWORD,data + sub,4);
 	
 			/* version */
 			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VERSION);
-			cw_kvstore_add(cfg,key,CW_TYPE_BSTR16,data+sub+8,l);
+			cw_kvt_add(cfg,key,CW_TYPE_BSTR16,data+sub+8,l);
 	
 			sprintf(dbgstr, "%s", key);
 			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype, vendor_id, data+sub+8,l);

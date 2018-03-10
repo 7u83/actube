@@ -27,17 +27,17 @@
 
 static void mavlnode_move(mavl_t m,mavl_t t, struct mavlnode *n)
 {
-	struct mavlnode * mn = mavl_get_node(m,mavlnode_data(n));
+	struct mavlnode * mn = mavl_get_node(m,mavlnode_dataptr(n));
 	if (mn) {
 		if (m->del) {
-			m->del(mavlnode_data(mn));
+			m->del(mavlnode_dataptr(mn));
 		}
 		/*mn->data=n->data;*/
-		mavlnode_copy_data(m,mn,n);
+		memcpy(mavlnode_dataptr(mn),mavlnode_dataptr(n),t->data_size);
 	}
 	else{
 		/*mavl_add(m,&n->data);*/
-		mavl_add(m,mavlnode_data(n));
+		mavl_add(m,mavlnode_dataptr(n),NULL);
 
 	}
 	free(n);
