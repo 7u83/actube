@@ -307,7 +307,7 @@ errX:
 }
 
 // TODO XXXX
-mavl_conststr_t db_get_update_tasks(struct conn * conn,const char * wtpid)
+mavl_t db_get_update_tasks(struct conn * conn,const char * wtpid)
 {
 /*
 	sqlite3_reset(get_tasks_stmt);
@@ -391,7 +391,7 @@ errX:
 
 
 
-mavl_conststr_t db_get_radio_tasks(struct conn * conn,const char * wtpid)
+mavl_t db_get_radio_tasks(struct conn * conn,const char * wtpid)
 {
 /*
 //cw_dbg(DBG_X,"Get Radio Tasks for  %s",wtpid);

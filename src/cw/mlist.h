@@ -24,6 +24,10 @@
  * @brief Mlist Mini list
  */
 
+#include <stdlib.h>
+#include <stdint.h>
+
+
 /**
  * @defgroup MLIST MLIST
  * @{
@@ -34,51 +38,43 @@
  * It's a simple connected list, just with pone connection to the 
  * next element. 
  */
-struct mlist_elem {
-	/** Pointer to data */
-	void *data;
-	/** 
-	 * Pointer to next element 
-	 * The last element is determined by a NULL pointer
-	 * */
-	struct mlist_elem *next;
-	struct mlist_elem *prev;
+struct mlistelem {
+	struct mlistelem *next;
+	struct mlistelem *prev;
 };
+typedef struct mlistelem mlistelem_t;
 
 struct mlist {
-	void *data;
+/*	void *data;*/
 	int (*cmp) (const void *d1, const void *d2);
-	struct mlist_elem *first;
-	struct mlist_elem *last;
+	void (*del) (void *data);
+	struct mlistelem *first;
+	struct mlistelem *last;
 	int count;
-/*	//size_t elem_size;*/
+	size_t data_size;
 };
-
 typedef struct mlist * mlist_t;
 
+#define mlistelem_dataptr(elem) ((void*)(((uint8_t*)(elem))+sizeof(struct mlistelem)))
 
 /**
  * defgroup MLIST_FUNCTIONS
  * @{
  */
-extern mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2));
-extern struct mlist_elem *mlist_append(mlist_t l, void *data);
-extern struct mlist_elem *mlist_find(mlist_t l, struct mlist_elem *start, void *data);
-extern struct mlist_elem *mlist_replace(mlist_t l, struct mlist_elem *start, void *data);
+mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2), void (*del)(void *), size_t data_size);
+
+struct mlistelem *mlist_append(mlist_t l, void *data);
+
+extern struct mlistelem *mlist_find(mlist_t l, struct mlistelem *start, void *data);
+extern struct mlistelem *mlist_replace(mlist_t l, struct mlistelem *start, void *data);
 
 #define mlist_add mlist_append
 /**
  * @}
  */
 
-
-
-
-#define mlist_foreach(i,l)\
-	for (i=l->first; i; i=i->next)
-
-
-
+#define mlist_foreach(elem,list)\
+	for (elem=list->first; elem; elem=elem->next)
 
 /**
  * @}

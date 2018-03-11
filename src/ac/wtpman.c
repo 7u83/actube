@@ -598,7 +598,7 @@ static void wtpman_run(void *arg)
 
 
 
-		mavl_conststr_t r;
+		mavl_t r;
 		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 

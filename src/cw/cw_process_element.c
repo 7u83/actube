@@ -37,6 +37,10 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 
+	if (elem_data->mand){
+		mavl_add_str(params->mand_found,handler->key);
+	}
+
 	/* check the length of the message */
 	if (len < handler->min_len) {
 		cw_dbg(DBG_ELEM_ERR,

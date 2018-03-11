@@ -153,10 +153,47 @@ int stcmp (const void * sa1, const void *sa2)
 
 int main (int argc, char *argv[])
 {
-	mavl_t tree;
+/*	mavl_t tree;
 	int i;
 	mavliter_t it;
 	
+	
+	mlist_t list;
+	struct mlistelem * elem;
+	
+	int x;
+	
+	list = mlist_create(NULL,sizeof(int));
+	
+	x=8;
+	mlist_append(list,&x);
+	
+	x=13;
+	mlist_append(list,&x);
+	
+	x=11;
+	mlist_append(list,&x);
+	
+	for(i=0; i<100000000; i++){
+		int val;
+		val = i;
+		mlistelem_t * result;
+		result = mlist_append(list,&val);
+		if (result == NULL){
+			printf("error\n");
+		}
+		
+	}
+
+	printf("Count %d\n",list->count);
+	mlist_foreach(elem,list){
+		int * data = mlistelem_dataptr(elem);
+		printf("Here is %d\n",*data);
+	}
+	
+	
+	exit(0);
+*/
 	
 	/*tree = mavl_create_ptr( (int(*)(const void*,const void*))strcmp,free);
 	 */

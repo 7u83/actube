@@ -264,18 +264,25 @@ errX:
 }
 
 
-
 static struct mlist * mods_list = NULL;
 
 struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
+	mlistelem_t *elem;
 	if (!mods_list){
-		mods_list = mlist_create(mod_cmp_mlist);
+		mods_list = mlist_create(mod_cmp_mlist,NULL,sizeof(struct cw_Mod *));
 		if (!mods_list){
 			cw_log(LOG_ERROR,"Can't init mods_list");
 			return 0;
 		}
 	}
-	return mlist_append(mods_list,mod)->data;
+	
+	elem = mlist_append(mods_list,&mod);
+printf("Append mod %p\n",mod);
+	if (elem == NULL)
+		return NULL;
+	return mlistelem_dataptr(elem);
+	 
+	/*return mlist_append(mods_list,mod)->data;*/
 }
 
 struct cw_Mod * cw_mod_detect(struct conn *conn, 
@@ -283,16 +290,18 @@ struct cw_Mod * cw_mod_detect(struct conn *conn,
 			int elems_len, struct sockaddr *from, 
 			int mode){
 	
-	struct mlist_elem * e;
+	struct mlistelem * e;
 				
 	if (mods_list==NULL)
 		return MOD_NULL;
 	
 
 	mlist_foreach(e,mods_list){
-		struct cw_Mod * mod = e->data;
+		/// 1312
+		struct cw_Mod * mod = *(struct cw_Mod**)(mlistelem_dataptr(e)); /* = e->data;*/
 		cw_dbg(DBG_MOD,"Checking mod: %s",mod->name);
-		
+
+printf("Got the mod %p\n",mod);
 		/* if there is no detect method, skip */
 		if (!mod->detect)
 			continue;

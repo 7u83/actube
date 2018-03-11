@@ -25,6 +25,10 @@ int capwap_in_vendor_specific_payload(struct cw_ElemHandler *handler,
 				struct cw_ElemHandlerParams *params,
 				  uint8_t * data, int len);				    
 
+int capwap_in_mtu_discovery_padding(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, uint8_t * data,
+			 int len);
+
 /*
 extern int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
 				     uint8_t * dst);

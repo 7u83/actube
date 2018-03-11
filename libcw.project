@@ -93,7 +93,6 @@
       <File Name="src/cw/cw_in_wtp_reboot_statistics.c"/>
       <File Name="src/cw/mlist.c"/>
       <File Name="src/cw/netconn.c"/>
-      <File Name="src/cw/mavl_create_conststr.c"/>
       <File Name="src/cw/cw_in_capwap_local_ipv6_address.c"/>
       <File Name="src/cw/cw_out_capwap_local_ip_address.c"/>
       <File Name="src/cw/cw_out_wtp_descriptor.c"/>
@@ -257,7 +256,6 @@
       <File Name="src/cw/lw_put_80211_wtp_wlan_radio_configuration.c"/>
       <File Name="src/cw/cw_put_image_data.c"/>
       <File Name="src/cw/cw_util.c"/>
-      <File Name="src/cw/cw_in_mtu_discovery_padding.c"/>
       <File Name="src/cw/conn_create_noq.c"/>
       <File Name="src/cw/cw_addelem_cisco_wtp_radio_cfg.c"/>
       <File Name="src/cw/mavl_del.c"/>
@@ -322,10 +320,14 @@
       <File Name="src/cw/msget.h"/>
       <File Name="src/cw/mavl_replace.c"/>
       <File Name="src/cw/cw_kvt_add.c"/>
+      <File Name="src/cw/mlist_create.c"/>
+      <File Name="src/cw/mlist_append.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
   <Dependencies/>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Static Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -342,7 +344,7 @@
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="" IntermediateDirectory="./Debug" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="" IntermediateDirectory="./Debug" Command="$(WorkspacePath)/src/ac/actube" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -413,6 +415,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
 </CodeLite_Project>

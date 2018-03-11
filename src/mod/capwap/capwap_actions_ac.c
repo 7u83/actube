@@ -88,6 +88,18 @@ static struct cw_ElemHandler handlers[] = {
 		capwap_in_vendor_specific_payload		/* get */
 	}
 	,
+
+	{ 
+		"MTU Discovery Padding",		/* name */
+		CAPWAP_ELEM_MTU_DISCOVERY_PADDING,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		0,0,					/* min/max length */
+		NULL,					/* type */
+		NULL,					/* Key */
+		capwap_in_mtu_discovery_padding		/* get */
+	}
+	,
+
 	
 	{0,0,0,0,0,0,0,0}
 
@@ -97,10 +109,11 @@ static struct cw_ElemHandler handlers[] = {
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},	
 	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
+	{0,0,CAPWAP_ELEM_MTU_DISCOVERY_PADDING,		0, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, 0},
 	{0,0,0,0,0}
 

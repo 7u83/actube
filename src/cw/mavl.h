@@ -241,8 +241,10 @@ extern union mavldata  * mavliter_seek ( mavliter_t *i, void *d );
  */
 #define mavl_get_count(m) (m->count)
 
-typedef mavl_t mavl_conststr_t;
-extern mavl_conststr_t mavl_create_conststr();
+/*
+#typedef mavl_t mavl_conststr_t;
+#extern mavl_conststr_t mavl_create_conststr();
+*/
 
 /*
 //int mavl_cmp_str ( const union mavldata *e1, const union mavldata *e2 );
@@ -276,6 +278,7 @@ void mavl_freeptr(void *ptr);
 	mavl_create(cmp,del,sizeof(void*))
 int mavl_cmpstr(const void *p1, const void *p2);
 #define mavl_create_str() mavl_create_ptr(mavl_cmpstr,mavl_freeptr)
+#define mavl_create_conststr() mavl_create_ptr(mavl_cmpstr,NULL)
 
 void * mavl_get_ptr ( mavl_t tree, void * search );
 void * mavl_add_ptr ( mavl_t tree, void *ptr );

@@ -16,16 +16,18 @@
 
 */
 
+#include "cw/capwap.h"
+#include "cw/msget.h"
+#include "cw/dbg.h"
 
-#include "cw.h"
-#include "dbg.h"
 
-
-int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from)
+int capwap_in_mtu_discovery_padding(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, uint8_t * data,
+			 int len)
 
 {
-	int i, n = 0;
+	int i, n;
+	n = 0;
 	for (i = 0; i < len; i++) {
 		if (data[i] != 0xff)
 			n++;
@@ -34,8 +36,8 @@ int cw_in_mtu_discovery_padding(struct conn *conn, struct cw_action_in *a,
 		cw_dbg(DBG_RFC,
 		       "MTU discovery padding msg elem contains %d non-0xFF byte(s) out of %d, See RFC 5415.",
 		       n, len);
-		if (conn->strict_capwap)
-			return 0;
+		if (params->conn->strict_capwap)
+			return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
-	return 1;
+	return CAPWAP_RESULT_SUCCESS;
 }

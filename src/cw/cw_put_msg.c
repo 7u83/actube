@@ -68,12 +68,12 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	}
 
 
-	struct mlist_elem *e;
+	struct mlistelem *e;
 
 	int len = 0;
 
 	for (e=m->first; e; e=e->next) {
-		cw_action_out_t *ae=(cw_action_out_t*)e->data;
+		cw_action_out_t *ae=(cw_action_out_t*)e;
 
 		//printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);
 		if ( ae->item_id ) {
@@ -123,17 +123,21 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
  * alread initilaized in buffer 
  * Message alements are taken fom actiondef in #conn->action
  */
-int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems)
+ 
+ 
+int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, /*mavl_conststr_t elems*/ t)
 {
-	/* rawout is already initialized, so we can get 
-	   msg type from buffer */
+	
+	/*
+	// rawout is already initialized, so we can get 
+	   //msg type from buffer 
 	uint8_t *msgptr = rawout + cw_get_hdr_msg_offset(rawout);
 	int msg_id = cw_get_msg_type(msgptr);
 
 	MAVLITER_DEFINE(it,elems);
 	mavliter_foreach(&it){
 		const char *i= mavliter_get(&it);
-		/* preapare action search */
+		// preapare action search 
 		cw_action_out_t as;
 		as.msg_id=msg_id;
 		as.item_id=i;
@@ -147,7 +151,7 @@ int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, mavl_conststr_t elems
 
 
 
-	/* create search paramaters */
+
 	cw_action_out_t as;
 
 	as.item_id = CW_ITEM_NONE;
@@ -182,7 +186,7 @@ MAVLITER_DEFINE(i,0);
 		}
 
 		if (ae->msg_id != as.msg_id) {
-			/* Element is from next msg, close action */
+			// Element is from next msg, close action 
 			break;
 		}
 		int l=0;
@@ -206,15 +210,15 @@ MAVLITER_DEFINE(i,0);
 	cw_set_msg_elems_len(msgptr, len);
 
 	if (as.msg_id & 1) {
-		/* It's a request, so we have to set seqnum */
+		/// It's a request, so we have to set seqnum 
 		int s = conn_get_next_seqnum(conn);
 		cw_set_msg_seqnum(msgptr,s);	
 //		printf("Set seqnum to : %d\n",s);
 
 	}
+*/
 
-
-	return len;
+	return 0; //len
 }
 
 

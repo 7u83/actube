@@ -168,7 +168,7 @@ static int mout_cmp(void *elem1,void *elem2)
 
 struct outelem * cw_actionlist_mout_create(int msg_id)
 {
-	struct outelem * o = malloc(sizeof(struct outelem));
+/*	struct outelem * o = malloc(sizeof(struct outelem));
 	if (!o)
 		return NULL;
 
@@ -179,6 +179,7 @@ struct outelem * cw_actionlist_mout_create(int msg_id)
 	}
 	o->msg_id=msg_id;
 	return o;
+*/
 }
 
 static struct outelem * cw_actionlist_out_get_outelem(cw_actionlist_out_t t, int msg_id)
@@ -220,7 +221,7 @@ cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_o
 		mavl_add(t,o,NULL);
 	}
 
-	struct mlist_elem * e = mlist_replace(o->mlist,NULL,a);
+	struct mlistelem * e = mlist_replace(o->mlist,NULL,a);
 	if (!e)
 		e = mlist_append(o->mlist,a);
 

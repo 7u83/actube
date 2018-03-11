@@ -34,7 +34,7 @@ printf("MTU discovery len %d %d and pos %d:\n",conn->mtu,len,msg->pos);
 	if (len < 0 )
 		return;
 	
-	uint32_t val = CW_ELEM_MTU_DISCOVERY_PADDING<<16|len;
+	uint32_t val = CAPWAP_ELEM_MTU_DISCOVERY_PADDING<<16|len;
 	*((uint32_t*)(msg->msgelems+msg->pos))=htonl(val);
 	memset(msg->msgelems+4+msg->pos,0xff,len);	
 	msg->pos+=4+len;

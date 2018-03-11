@@ -238,7 +238,7 @@
 #define CW_ELEM_INITIATE_DOWNLOAD			27
 #define CW_ELEM_LOCATION_DATA				28
 #define CW_ELEM_MAXIMUM_MESSAGE_LENGTH			29
-#define CW_ELEM_MTU_DISCOVERY_PADDING			52
+#define CAPWAP_ELEM_MTU_DISCOVERY_PADDING		52
 #define CW_ELEM_RADIO_ADMINISTRATIVE_STATE		31
 #define CW_ELEM_RADIO_OPERATIONAL_STATE			32
 #define CW_ELEM_RESULT_CODE				33
@@ -469,7 +469,7 @@ extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * ms
 					int len);
 extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * msgelem,
 				   int len);
-extern int cw_readelem_mtu_discovery_padding(int type, uint8_t * msgelem, int len);
+
 extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elemtype,
 					       uint8_t * msgelem, int len);
 

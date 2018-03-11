@@ -233,6 +233,10 @@ void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn,
 static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
 {
+	mavl_t mand_found;
+	mlist_t unrecognized;
+	
+	
 	char sock_buf[SOCK_ADDR_BUFSIZE]; /**< to hold str from sockaddr2str */
 	
 	struct cw_action_in as, *af, *afm;
@@ -365,9 +369,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	uint8_t *elem;
 
 	/* Create an avltree to catch the found mandatory elements */
-	conn->mand = stravltree_create();
+	//conn->mand = stravltree_create();
 
-	
+	mand_found = mavl_create_conststr();
+	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
 
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -393,6 +398,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		params.conn=conn;
 		params.from=from;
 		params.msgdata=message;
+		params.mand_found=mand_found;
 		
 		result_code = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); 
 		
@@ -400,7 +406,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (cw_result_is_ok(result_code))
 			continue;
 		
+		if (result_code == CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT){
+			mlist_append(unrecognized,&elem);
 		
+		}
 
 
 /*		
@@ -517,12 +526,27 @@ exit(0);
 		}
 
 
-
+		mavliter_init(&it,mand_found);
+		mavliter_foreach(&it){
+			printf("MAnd found: %s\n", mavliter_get_str(&it));
+		}
+		
+		{
+			mlistelem_t *e;
+			mlist_foreach(e,unrecognized){
+				uint8_t * elem = *(uint8_t**)mlistelem_dataptr(e);
+				int elem_len = cw_get_elem_len(elem);
+				//int elem_data=cw_get_elem_data(elem);
+				int elem_id = cw_get_elem_id(elem);				
+				printf("Unrecognized: %d %d\n",elem_id,elem_len);
+			}
+		}
+		mavl_destroy(mand_found);
 	}
 
 
 	//int result_code = 0;
-int unrecognized =3;
+//int unrecognized =3;
 
 
 	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from);
