@@ -28,7 +28,7 @@ static struct cw_KVT *get(struct cw_KVT * data, const uint8_t * src, int len)
 	return data;
 }
 
-static int put(struct cw_KVT *data, uint8_t * dst)
+static int put(const struct cw_KVT *data, uint8_t * dst)
 {
 	return cw_put_dword(dst, data->val.dword);
 }

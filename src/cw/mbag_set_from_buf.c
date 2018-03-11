@@ -3,7 +3,7 @@
 
 int mbag_set_from_buf(mbag_t dst, mbagtype_t type, const char *item_id, uint8_t *data, int len)
 {	
-
+/*
 	if (type == MBAG_BYTE) {
 		mbag_set_byte(dst, item_id, *data);
 		return 1;
@@ -46,7 +46,7 @@ int mbag_set_from_buf(mbag_t dst, mbagtype_t type, const char *item_id, uint8_t 
 
 
 	}
-
+*/
 	return 0;
 
 }

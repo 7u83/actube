@@ -1,5 +1,6 @@
 #include "bstr.h"
 
+/*
 uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
 {
 	uint8_t * str = malloc(bstrv_size(len));
@@ -14,4 +15,4 @@ uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len)
 
 }
 
-
+*/

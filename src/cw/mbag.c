@@ -332,7 +332,7 @@ int mbag_set_data(mbag_t s, const char *id, const struct mbag_typedef *type, voi
 
 }
 
-
+/*
 bstrv_t mbag_set_bstrv(mbag_t s, const char *id, uint32_t vendor_id,
 			     uint8_t * version, int len)
 {
@@ -346,7 +346,7 @@ bstrv_t mbag_set_bstrv(mbag_t s, const char *id, uint32_t vendor_id,
 }
 
 
-
+*/
 
 
 

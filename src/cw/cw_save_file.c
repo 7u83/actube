@@ -36,11 +36,12 @@
  */ 
 int cw_save_file(const char *filename, char *data, int len)
 {
+	int bytes;
 	FILE *outfile = fopen(filename, "wb");
 	if (!outfile)
 		return 0;
 
-	int bytes = fwrite(data, 1, len, outfile);
+	bytes = fwrite(data, 1, len, outfile);
 	fclose(outfile);
 	return bytes;
 }

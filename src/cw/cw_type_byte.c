@@ -28,7 +28,7 @@ static cw_KVT_t *get(cw_KVT_t * data, const uint8_t * src, int len)
 	return data;
 }
 
-static int put(cw_KVT_t *data, uint8_t * dst)
+static int put(const cw_KVT_t *data, uint8_t * dst)
 {
 	return cw_put_byte(dst, data->val.byte);
 }

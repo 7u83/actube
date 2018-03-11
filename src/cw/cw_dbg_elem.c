@@ -17,7 +17,7 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 {
 
 
-	const char *elemname;
+/*	const char *elemname;*/
 	char vendorname[256];
 	char vendor_details[265];
 

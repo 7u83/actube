@@ -26,7 +26,7 @@ struct cw_Type {
 	void (*del) (struct cw_KVT * data);
 
 	/** A method to put this object to a buffer */
-	int (*put) (struct cw_KVT * data, uint8_t * dst);
+	int (*put) (const struct cw_KVT * data, uint8_t * dst);
 
 	/** The get method */
 	struct cw_KVT *(*get) (struct cw_KVT * data, const uint8_t * src, int len);

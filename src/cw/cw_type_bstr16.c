@@ -35,7 +35,7 @@ static struct cw_KVT *get ( struct cw_KVT * data, const uint8_t * src, int len )
 	
 	if ( !s )
 		return NULL;
-		
+
 	data->type = &cw_type_bstr16;
 	data->val.ptr = s;
 	return data;

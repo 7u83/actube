@@ -95,7 +95,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		0,0,					/* min/max length */
 		NULL,					/* type */
-		NULL,					/* Key */
+		"mtu_discovery_padding",		/* Key */
 		capwap_in_mtu_discovery_padding		/* get */
 	}
 	,

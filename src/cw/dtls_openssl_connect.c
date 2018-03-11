@@ -28,15 +28,13 @@ static BIO_METHOD bio_methods = {
 				  unsigned int max_identity_len,
 				  unsigned char *psk, unsigned int max_psk_len)
 {
-
+	int l;
 	BIO *b = SSL_get_rbio(ssl);
 	struct conn *conn = b->ptr;
 
-//      printf("KEYY: %s\n",conn->dtls_psk);
-
 	snprintf(identity, max_identity_len, "CLient_identity");
 
-	int l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
+	l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
 	memcpy(psk, conn->dtls_psk, l);
 	return l;
 
@@ -45,22 +43,27 @@ static BIO_METHOD bio_methods = {
 
 int dtls_openssl_connect(struct conn *conn)
 {
+	struct dtls_openssl_data *d;
+	int rc;
+	time_t timer;
+	
 	if (!conn->dtls_data)
 		conn->dtls_data =
 		    dtls_openssl_data_create(conn, DTLSv1_client_method(),
 					     dtls_openssl_bio_method());
 
-	struct dtls_openssl_data *d = (struct dtls_openssl_data *) conn->dtls_data;
+	d = (struct dtls_openssl_data *) conn->dtls_data;
 	if (!d)
 		return 0;
 
+/*
 //	if (conn->dtls_psk)
 //		SSL_set_psk_client_callback(d->ssl, psk_client_cb);
+*/
 
-	int rc;
 
 	errno =0;
-	time_t timer = cw_timer_start(10);
+	timer = cw_timer_start(10);
 	do {
 		rc = SSL_connect(d->ssl);
 	}while(rc!=1 && errno==EAGAIN && !cw_timer_timeout(timer));

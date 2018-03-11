@@ -106,7 +106,7 @@ static int init()
 	}
 
 	uint8_t * str;
-	
+/*	
 	str = bstr_create_from_cfgstr(hardware_version);
 	mbag_set_bstrv(cisco_config, CW_ITEM_AC_HARDWARE_VERSION, 
 		CW_VENDOR_ID_CISCO, 
@@ -122,6 +122,7 @@ static int init()
 			);
 		free(str);
 	}
+*/
 errX:
 	if (hardware_version)
 		free (hardware_version);

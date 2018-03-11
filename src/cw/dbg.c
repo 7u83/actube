@@ -336,6 +336,8 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	cw_dbg(level, "%s", buf);
 }
 
+/*
+
 static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 			    const uint8_t * elem_data)
 {
@@ -349,7 +351,7 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 			}
 
 
-			/* dive into LWAPP vendor specific decoding */
+			// dive into LWAPP vendor specific decoding 
 			lw_elem_id = lw_get_word(elem_data + 4 + 6);
 			return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
 				       elem_id,
@@ -371,7 +373,7 @@ static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
 
 	return 0;
 }
-
+*/
 
 
 

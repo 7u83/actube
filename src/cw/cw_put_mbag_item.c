@@ -26,6 +26,7 @@
 
 int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 {
+/*	
 	if (item->type->put){
 		cw_dbg(DBG_X,"User put method to put ");
 		return item->type->put(item,dst);
@@ -72,7 +73,7 @@ int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 
 	cw_log(LOG_ERR,"No method to put items of type %s",item->type->name);
 
-
+*/
 	return 0;
 }
 

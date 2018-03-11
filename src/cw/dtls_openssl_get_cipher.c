@@ -21,14 +21,16 @@
 
 const char * dtls_openssl_get_cipher(struct conn * conn)
 {
+	struct dtls_openssl_data * d;
+	const SSL_CIPHER * c;
 	if (!conn->dtls_data)
 		return "None";
 
-	struct dtls_openssl_data * d = (struct dtls_openssl_data*)conn->dtls_data;
+	d = (struct dtls_openssl_data*)conn->dtls_data;
 
 	if ( !d->ssl )
 		return "None";
 
-	const SSL_CIPHER * c = SSL_get_current_cipher(d->ssl);
+	c = SSL_get_current_cipher(d->ssl);
 	return SSL_CIPHER_get_name(c);
 }

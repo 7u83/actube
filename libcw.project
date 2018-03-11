@@ -270,7 +270,6 @@
       <File Name="src/cw/mavl_foreach.c"/>
       <File Name="src/cw/lwapp_cisco.h"/>
       <File Name="src/cw/hdr_print.c"/>
-      <File Name="src/cw/mbag_type_vendorstr.c"/>
       <File Name="src/cw/cw_out_wtp_board_data.c"/>
       <File Name="src/cw/mbag_type_str.c"/>
       <File Name="src/cw/cw_init_data_keep_alive_msg.c"/>

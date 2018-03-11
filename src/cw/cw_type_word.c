@@ -29,7 +29,7 @@ static struct cw_KVT *get(struct cw_KVT * data, const uint8_t * src, int len)
 	return data;
 }
 
-static int put(cw_KVT_t *data, uint8_t * dst)
+static int put(const cw_KVT_t *data, uint8_t * dst)
 {
 	return cw_put_word(dst, data->val.word);
 }

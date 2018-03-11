@@ -31,7 +31,7 @@ int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8
 	}
 
 //	mbag_set(conn->remote,a->item_id,a->itemtype,data+dstart,len);
-	mbag_set_bstrv(conn->incomming,a->item_id,vendor_id,data+dstart,len);
+//	mbag_set_bstrv(conn->incomming,a->item_id,vendor_id,data+dstart,len);
 	return 1;
 }
 

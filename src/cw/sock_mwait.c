@@ -23,11 +23,11 @@
 
 int sock_mwait(int * socklist, int socklistlen,fd_set * fset)
 {
-	int i;
+	int i,max,n;
 
 	FD_ZERO(fset);
 
-	int max = 0;
+	max = 0;
 	for (i=0; i<socklistlen; i++){
 		if (socklist[i]<=0)
 			continue;
@@ -36,7 +36,6 @@ int sock_mwait(int * socklist, int socklistlen,fd_set * fset)
 			max=socklist[i];
 	}
 
-	int n;
         while((n=select(max+1, fset, NULL, NULL, NULL)) < 0) {
 		if (errno != EINTR) 
 			return n;

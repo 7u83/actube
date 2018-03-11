@@ -85,7 +85,7 @@ static struct frag * frag_new(struct frag * frags, int fragid)
 	int i;
 	for (i=0; i<FRAG_MAXIDS; i++){
 		if (frags[i].buffer==NULL || (t.tv_sec - frags[i].t.tv_sec>FRAG_TTL) ){
-		//	printf("******************************new frag, %p\n",frags[i].buffer);
+
 
 			frags[i].buffer=realloc(frags[i].buffer,FRAG_MAXSIZE);
 			if (frags[i].buffer==NULL)
