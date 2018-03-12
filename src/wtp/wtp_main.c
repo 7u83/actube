@@ -10,11 +10,15 @@
 #include "cw/log.h"
 #include "cw/msgset.h"
 
+
+#include "wtp.h"
+
 struct bootcfg{
 	const char * modname;
 	const char * modpath;
 	const char * cfgfilename;
 };
+
 
 static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 {
@@ -63,11 +67,10 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 
 int main (int argc, char **argv)
 {
-	mavl_t types;
-	mavliter_t it;
 	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset;
+	struct conn * conn;
 	
 	parse_args(argc,argv, &bootcfg);
 	
@@ -82,29 +85,25 @@ int main (int argc, char **argv)
 		exit (EXIT_FAILURE);
 	}
 	
+	/* Build a message set from our loaded modules */
 	mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
 	mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
-	
 
-
-	types = cw_ktv_create_types_tree();
-	if (types == NULL){
-		perror("Error creating types tree");
+	/* create a connection object */
+	conn = conn_create_noq(-1, NULL);
+	if (conn==NULL){
+		cw_log(LOG_ERR, "Connot create conn: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	
-	
+	conn->detected = 1;
+	conn->dtls_verify_peer=0;
+	conn->dtls_mtu = 12000;
+	conn->msgset=msgset;
+	conn->local_cfg = cw_ktv_create();
 
+	cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 
-	
-	mavl_add_ptr(types,CW_TYPE_BSTR16);
-	mavl_add_ptr(types,CW_TYPE_DWORD);
-	
-	mavliter_init(&it,types);
-	mavliter_foreach(&it){
-		struct cw_Type * t = mavliter_get_ptr(&it);
-		printf("The Type is %s\n",t->name);
-	}
-	
 	return (EXIT_SUCCESS);
+
 }

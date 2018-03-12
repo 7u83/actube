@@ -4,31 +4,28 @@
 
 #include "dbg.h"
 #include "log.h"
+#include "msgset.h"
+#include "ktv.h"
 
 
-int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)	
+int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst)
 {
-
-
-	/* Get the item to put */
-	struct mbag_item *item = NULL;
-	if (a->get) {
-		item = a->get(conn, a);
-	}
-
+	struct cw_KTV * elem;
+	int start, len;
+	/* Get the element to put */
+	elem = mavl_get(params->conn->local_cfg, handler->key);
 
 	/* Size for msg elem header depends on 
 	   vendor specific payload */
-	int start = a->vendor_id ? 10 : 4;
+	start = handler->vendor ? 10 : 4;
 
-
-	int len;
-	if (!item) {
+	if (elem == NULL) {
 		const char *vendor="";
-		if ( a->vendor_id ) {
-			vendor=cw_strvendor(a->vendor_id);
+		if ( handler->vendor ) {
+			vendor=cw_strvendor(handler->vendor);
 		}
-		if (a->mand) {
+		if ( 0) {
 /*			cw_log(LOG_ERR,
 			       "Can't put mandatory element %s %d - (%s) into %s. No value for '%s' found.",
 				vendor,
@@ -45,15 +42,15 @@ int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 */
 		}
 		return 0;
-	} else {
-		len = cw_put_mbag_item(dst + start, item);
-	}
+	} 
+	len = handler->type->put(elem,dst+start);
 
+	/*(cw_put_mbag_item(dst + start, item);*/
 
-	if (a->vendor_id)
-		return len + cw_put_elem_vendor_hdr(dst, a->vendor_id, a->elem_id, len);
+	if (handler->vendor)
+		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
 
-	return len + cw_put_elem_hdr(dst, a->elem_id, len);
+	return len + cw_put_elem_hdr(dst, handler->id, len);
 }
 
 

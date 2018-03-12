@@ -34,7 +34,8 @@ static struct cw_ElemHandler handlers[] = {
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
 		"discovery_type",		/* Key */
-		cw_in_generic			/* get */
+		cw_in_generic,			/* get */
+		cw_out_generic			/* put */
 	}
 	,
 	{ 
@@ -44,7 +45,8 @@ static struct cw_ElemHandler handlers[] = {
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
 		"wtp_mac_type",			/* Key */
-		cw_in_generic			/* get */
+		cw_in_generic,			/* get */
+		cw_out_generic			/* put */
 	}
 	,
 	{ 
@@ -54,7 +56,8 @@ static struct cw_ElemHandler handlers[] = {
 		4,128,				/* min/max length */
 		NULL,				/* type */
 		"wtp_board_data",		/* Key */
-		capwap_in_wtp_board_data	/* get */
+		capwap_in_wtp_board_data,	/* get */
+		NULL				/* put */
 	}
 	,
 	{ 
@@ -64,7 +67,8 @@ static struct cw_ElemHandler handlers[] = {
 		4,128,				/* min/max length */
 		NULL,				/* type */
 		"wtp_descriptor",		/* Key */
-		capwap_in_wtp_descriptor	/* get */
+		capwap_in_wtp_descriptor,	/* get */
+		NULL				/* put */
 	}
 	,
 	{ 
@@ -74,7 +78,8 @@ static struct cw_ElemHandler handlers[] = {
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
 		"wtp_frame_tunnel_mode",		/* Key */
-		cw_in_generic				/* get */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
 	}
 	,
 	
@@ -85,7 +90,8 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* min/max length */
 		NULL,					/* type */
 		"vendor_specific_payload",		/* Key */
-		capwap_in_vendor_specific_payload		/* get */
+		capwap_in_vendor_specific_payload,	/* get */
+		NULL					/* put */
 	}
 	,
 
@@ -96,7 +102,8 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* min/max length */
 		NULL,					/* type */
 		"mtu_discovery_padding",		/* Key */
-		capwap_in_mtu_discovery_padding		/* get */
+		capwap_in_mtu_discovery_padding,	/* get */
+		NULL					/* put */
 	}
 	,
 
@@ -114,7 +121,7 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
 	{0,0,CAPWAP_ELEM_MTU_DISCOVERY_PADDING,		0, 0},
-	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 
 };

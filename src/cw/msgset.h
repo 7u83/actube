@@ -32,6 +32,7 @@ struct cw_ElemData{
 struct cw_ElemHandlerParams {
 	struct conn * conn;
 	struct cw_MsgData * msgdata;
+	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
 };
@@ -47,6 +48,9 @@ struct cw_ElemHandler {
 	const char * key;
         int (*get)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, 
 		uint8_t*data, int len);
+		
+	int (*put)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, uint8_t * dst);
+
 /*        
 	int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 */
@@ -83,7 +87,8 @@ extern struct cw_MsgSet * cw_msgset_create();
 extern void cw_msgset_destroy(struct cw_MsgSet * set);
 extern int cw_msgset_add(struct cw_MsgSet * set,
 			struct cw_MsgDef messages[], struct cw_ElemHandler handlers[]);
-mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type);
+/*mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type);*/
+
 struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type);
 struct cw_ElemHandler * cw_msgset_get_elemhandler(struct cw_MsgSet * set,
 		int proto, int vendor, int id);

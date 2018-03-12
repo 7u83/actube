@@ -73,6 +73,8 @@ struct conn {
 	
 	
 	mavl_t remote_cfg;
+	mavl_t local_cfg;
+	
 	
 
 	mbag_t outgoing;

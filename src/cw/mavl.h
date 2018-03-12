@@ -122,7 +122,7 @@ struct mavl *mavl_create ( int ( *cmp ) ( const void *, const void * ),
 
 void *mavl_add ( struct mavl *t, const void *data, int *exists );
 /*void *mavl_add ( struct mavl *t,  const void *data );*/
-void * mavl_get ( struct mavl *t , void *data );
+void * mavl_get ( struct mavl *t , const void *data );
 void *mavl_del ( struct mavl *t, const void *data );
 void *mavl_replace ( struct mavl *t, const void *data, int * result );
 void mavl_destroy ( struct mavl *t );

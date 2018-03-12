@@ -669,7 +669,9 @@ extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
 */
 
+/*
 extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+*/
 
 /*
 //extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,

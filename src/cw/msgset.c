@@ -62,9 +62,9 @@ static void msgdata_destroy(struct cw_MsgData *data)
 {
 	if (!data)
 		return;
-/*	if (data->elements_list)
+	if (data->elements_list)
 		mlist_destroy(data->elements_list);
-*/
+
 	if (data->elements_tree)
 		mavl_destroy(data->elements_tree);
 	free(data);
@@ -91,7 +91,6 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
 		mavl_destroy(set->handlers_by_key);
 	free(set);
 }
-
 
 /**
  * @brief Create a message set
@@ -186,6 +185,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 		ed.vendor = elemdef->vendor;
 		ed.mand = elemdef->mand;
 
+		/* add message element to the elements tree */
 		result = mavl_replace(msgdata->elements_tree, &ed, &replaced);
 
 		if (!replaced) {
@@ -197,7 +197,44 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->proto,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
+		
+		{
+			struct mlistelem *elem;
+			elem = mlist_get(msgdata->elements_list,&ed);
+			if (elem==NULL){
+				printf("Elem is not in mlist\n");
+			}
+			else{
+				printf("Elem was in mlsit\n");
+			}
+		}
+
+		/* add message elemeent to the elements list */
+		switch ( elemdef->op & 0xff){
+			case CW_IGNORE:
+				break;
+			case CW_DELETE:
+				break;
+			case CW_APPEND:
+				mlist_append(msgdata->elements_list, &ed);
+				break;
+			default:
+			case CW_REPLACE:
+				if (mlist_replace(msgdata->elements_list, &ed)==NULL){
+					mlist_append(msgdata->elements_list, &ed);
+				}
+				break;
+
+
+				
+
+		}
+		
+		
+		
+		
 	}
+
 
 	if (msgdata->mand_keys!=NULL){
 		mlist_destroy(msgdata->mand_keys);
@@ -258,6 +295,8 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->elements_tree = mavl_create(cmp_elemdata, NULL,
 							 sizeof(struct cw_ElemData));
 			msg->mand_keys=NULL;
+			
+			msg->elements_list = mlist_create(cmp_elemdata,NULL,sizeof(struct cw_ElemData));
 		}
 
 		/* Overwrite the found message */
@@ -299,5 +338,5 @@ struct cw_MsgData *cw_msgset_get_msgdata(struct cw_MsgSet *set, int type)
 {
 	struct cw_MsgData search;
 	search.type = type;
-	return mavl_find_ptr(set->msgdata, &search);
+	return mavl_find(set->msgdata, &search);
 }

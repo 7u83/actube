@@ -221,7 +221,7 @@ cw_action_out_t *cw_actionlist_out_add(cw_actionlist_out_t t, struct cw_action_o
 		mavl_add(t,o,NULL);
 	}
 
-	struct mlistelem * e = mlist_replace(o->mlist,NULL,a);
+	struct mlistelem * e = mlist_replace(o->mlist,a);
 	if (!e)
 		e = mlist_append(o->mlist,a);
 

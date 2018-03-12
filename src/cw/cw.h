@@ -308,6 +308,7 @@ struct cw_DescriptorSubelemDef {
 #define CW_APPEND 2
 #define CW_PREPEND 3
 #define CW_REPLACE 4
+#define CW_IGNORE 5
 
 
 int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys );
@@ -359,7 +360,8 @@ int cw_in_generic(struct conn * conn, struct cw_ElemHandler * handler,
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 
-
+int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
 
 extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a,
 				       uint8_t * data, int len, struct sockaddr *from);

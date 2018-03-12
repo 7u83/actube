@@ -32,7 +32,7 @@ struct mlistelem *mlist_find(mlist_t l, struct mlistelem *start, void *data)
 }
 
 
-struct mlistelem * mlist_replace(mlist_t l, struct mlistelem *start, void *data)
+struct mlistelem * xmlist_replace(mlist_t l, struct mlistelem *start, void *data)
 {
 /*
 	struct mlistelem *e;

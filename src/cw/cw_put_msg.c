@@ -27,7 +27,7 @@
 
 #include "log.h"
 #include "dbg.h"
-
+#include "msgset.h"
 
 
 /**
@@ -39,10 +39,56 @@
 int cw_put_msg(struct conn *conn, uint8_t * rawout)
 {
 
+	uint8_t *msgptr,*dst;
+	int type;
+	struct cw_MsgData * msg;
+	struct mlistelem * elem;
+	int len,l;
 
 	/* rawout is already initialized, so we can get 
-	   msg type from buffer */
-	uint8_t *msgptr = rawout + cw_get_hdr_msg_offset(rawout);
+	 * msg type from buffer */
+	msgptr = rawout + cw_get_hdr_msg_offset(rawout);
+	type = cw_get_msg_type(msgptr);
+
+	printf("Looking in %p for %d\n", conn->msgset,type);
+	msg = cw_msgset_get_msgdata(conn->msgset,type);
+	if (msg == NULL){
+		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
+			type, cw_strmsg(type));
+	}
+	
+	dst = msgptr+8;
+	len =0;
+	mlist_foreach(elem,msg->elements_list){
+		struct cw_ElemData * data;
+		struct cw_ElemHandler * handler;
+		struct cw_ElemHandlerParams params;
+		
+		data =  mlistelem_dataptr(elem);
+		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
+		printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
+		if (handler->put == NULL){
+			continue;
+		}
+
+		params.conn=conn;
+		params.elemdata = data;
+		l = handler->put(handler,&params,dst+len);
+		len += l;
+	}
+
+	cw_set_msg_elems_len(msgptr, len);
+
+	if (type & 1) {
+		/* It's a request, so we have to set seqnum */
+		int s = conn_get_next_seqnum(conn);
+		cw_set_msg_seqnum(msgptr,s);
+	}
+
+	return len;
+
+	
+	printf("Message to send: %s\n",msg->name);
 
 
 	/* create search paramaters */
@@ -52,9 +98,11 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	as.item_id = CW_ITEM_NONE;
 	as.vendor_id = 0;
 
-	uint8_t *dst = msgptr+8;
+	dst = msgptr+8;
 
-/// TODO XXXX
+	printf("Put Message\n");
+	exit(0);
+
 	//mlist_t m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
 	mlist_t m =0;
 
@@ -70,9 +118,10 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	struct mlistelem *e;
 
-	int len = 0;
+	len = 0;
 
 	for (e=m->first; e; e=e->next) {
+		int l;
 		cw_action_out_t *ae=(cw_action_out_t*)e;
 
 		//printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);
@@ -84,7 +133,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 			/* Element is from next msg, close action */
 			break;
 		}
-		int l=0;
+		l=0;
 		if (ae->out) {
 
 		//	printf("Out Call with len =%d\n",len);

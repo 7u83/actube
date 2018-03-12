@@ -325,6 +325,8 @@
       <File Name="src/cw/cw_ktv_read_file.c"/>
       <File Name="src/cw/cw_ktv_mavlcmp_type_by_name.c"/>
       <File Name="src/cw/msgset.h"/>
+      <File Name="src/cw/mlist_get.c"/>
+      <File Name="src/cw/mlist_replace.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

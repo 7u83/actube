@@ -29,7 +29,7 @@
  * @param data Element to get
  * @return pointer to element or NULL if not found. 
  */ 
-void * mavl_get(struct mavl *t ,void *data)
+void * mavl_get(struct mavl *t ,const void *data)
 {
 	struct mavlnode *n = t->root;
 	while(n){
