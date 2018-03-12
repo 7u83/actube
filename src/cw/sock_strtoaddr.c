@@ -8,25 +8,25 @@
 
 #include "sock.h"
 /**
- * Convert a string to an sockaddr struct.
+ * Convert a string to a sockaddr struct.
  * The string can contain an ipv4 or ipv6 address, including a port number.
- * @param s address string
+ * @param s address string, the address string MUST not be longer 
+ * than 128 characters
  * @param saout output buffer
- * @return 1 on success,  otherwise no success
+ * @return 1 on success,  otherwise no success, consult errno!
  */
 int sock_strtoaddr(const char * s,struct sockaddr * saout){
 
-	char *ips,*ps;
+	char ips[128],*ps;
 	struct in_addr ia;
 	int port;
 
-#ifdef WITH_IPV6
+#ifndef WITHOUT_IPV6
 	struct in6_addr ia6;
 #endif
 	int rc;
 
 	/* copy the string */
-	ips = malloc(strlen(s)+1);
 	strcpy(ips,s);
 
 	/* search for a collon to separate the port */
@@ -62,10 +62,9 @@ int sock_strtoaddr(const char * s,struct sockaddr * saout){
 		sa->sin_family = AF_INET;
 		sa->sin_addr=ia;
 		sa->sin_port=htons(port);
-
 	}
 
-#ifdef WITH_IPV6
+#ifndef WITHOUT_IPV6
 	if (rc==0){
 		strcpy(ips,s);
 
@@ -99,12 +98,12 @@ int sock_strtoaddr(const char * s,struct sockaddr * saout){
 
 	}
 #endif
+
 	if (rc!=1){
 		if (rc!=-1)
 			errno=EINVAL;
 	}
 
-	free (ips);
 	return rc;
 
 }
