@@ -308,6 +308,7 @@ extern int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 int conn_send_msg(struct conn * conn, uint8_t *rawmsg);
 int cw_read_from(struct conn * conn);
 
+int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 
 void conn_clear_upd(struct conn *conn, int merge);
 

@@ -17,7 +17,7 @@
 */
 
 #include "cw/capwap.h"
-#include "cw/msget.h"
+#include "cw/msgset.h"
 #include "cw/dbg.h"
 
 

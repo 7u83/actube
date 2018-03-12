@@ -97,7 +97,7 @@ extern struct cw_Mod * cw_get_mod_ac (const char *name);
 
 extern void test_sets();
 #include "cw/file.h"
-#include "cw/kvt.h"
+#include "cw/ktv.h"
 
 
 struct mykv {
@@ -153,6 +153,36 @@ int stcmp (const void * sa1, const void *sa2)
 
 int main (int argc, char *argv[])
 {
+	mlist_t list;
+	mlistelem_t * elem;
+	
+	list = mlist_create_conststr();
+	
+	
+	mlist_append_ptr(list, "helo");
+	mlist_append_ptr(list, "tobias");	
+	mlist_append_ptr(list, "nase");
+	
+	
+	mlist_foreach(elem,list){
+//		data = mlistelem_dataptr(elem);
+//		char * str = ((char**)data)[0];
+//		printf("%p %p\n",data,str);
+		printf("String: %s\n", mlistelem_get_str(elem));
+	}
+	
+	mlist_destroy(list);
+
+	mlist_foreach(elem,list){
+//		data = mlistelem_dataptr(elem);
+//		char * str = ((char**)data)[0];
+//		printf("%p %p\n",data,str);
+		printf("String: %s\n", mlistelem_get_str(elem));
+	}
+
+	//exit(0);
+	
+	
 /*	mavl_t tree;
 	int i;
 	mavliter_t it;

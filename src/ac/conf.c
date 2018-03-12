@@ -573,7 +573,7 @@ static int conf_read_mods(cfg_t *cfg){
 	conf_mods = malloc(sizeof(struct cw_Mod *)*(n+1));
 
 	cw_dbg(DBG_INFO,"Mods directory: %s",conf_mods_dir);
-	cw_mod_set_mod_path(conf_mods_dir);
+	cw_mod_set_path(conf_mods_dir);
 
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);

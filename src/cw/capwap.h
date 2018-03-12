@@ -747,7 +747,7 @@ extern int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8
 int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			  int len,struct sockaddr *from);
 
-int cw_check_missing_mand(cw_action_in_t ** out, struct conn *conn, cw_action_in_t * a);
+
 int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from);
 extern int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a,

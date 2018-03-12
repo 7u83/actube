@@ -1,13 +1,13 @@
-#include "kvt.h"
+#include "ktv.h"
 #include "cw.h"
 
 #include "log.h"
 #include "dbg.h"
 
-const char * cw_kvt_add(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+const char * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *type,
 			const uint8_t * data, int len)
 {
-	cw_KVT_t mdata, *mresult;
+	cw_KTV_t mdata, *mresult;
 	int exists;
 
 /*	cw_dbg(DBG_ELEM,"KVStore (%p,%d) add elem (%s): %s", kvstore, kvstore->count,

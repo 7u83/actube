@@ -24,7 +24,7 @@
 #include "cw/dbg.h"
 #include "cw/cw.h"
 
-#include "cw/kvt.h"
+#include "cw/ktv.h"
 
 #include "cw/keys.h"
 
@@ -99,7 +99,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 		if (key){
 			char add_key[256];
 			sprintf(add_key,"wtp_board_data/%s",key);
-			cw_kvt_add(cfg,add_key,CW_TYPE_BSTR16,msgelem+i,sublen);
+			cw_ktv_add(cfg,add_key,CW_TYPE_BSTR16,msgelem+i,sublen);
 			
 		}
 		
@@ -134,7 +134,7 @@ int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerPar
 		
 	sprintf(vendor_key,"%s/%s",eh->key,CW_KEY_VENDOR);
 	
-	cw_kvt_add(cfg,vendor_key,CW_TYPE_DWORD,data,len);
+	cw_ktv_add(cfg,vendor_key,CW_TYPE_DWORD,data,len);
 
 /*
 	mbag_t itemstore = conn->incomming;

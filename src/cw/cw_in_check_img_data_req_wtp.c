@@ -22,7 +22,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 
 
 	/* Check for mandatory elements */
-	cw_action_in_t * mlist[60];
+/*	cw_action_in_t * mlist[60];
 	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n) {
 		cw_dbg_missing_mand(DBG_ELEM,conn,mlist,n,a);
@@ -62,5 +62,5 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 	
 
 	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
-
+*/
 }

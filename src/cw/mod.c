@@ -31,7 +31,7 @@
 #include "log.h"
 #include "file.h"
 #include "cw.h"
-#include "cw/msget.h"
+#include "cw/msgset.h"
 
 static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
 				      struct cw_actiondef * actions) = NULL;
@@ -178,9 +178,13 @@ static int mod_cmp_mlist(const void *e1, const void *e2){
 
 
 
-static const char * mod_path="./";
+static const char * mod_path="";
 
-void cw_mod_set_mod_path(const char * path){
+/**
+ * @brief Set module path, where to search for modules
+ * @param path Path to search
+ */
+void cw_mod_set_path(const char * path){
 	mod_path = path;
 }
 
@@ -209,11 +213,14 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 	/* Search for the module in mods_loaded, to see if it is
 	 * already loaded or was statically linked */
 	
+	cw_dbg(DBG_MOD,"MOD: Load module '%s'",mod_name);
+	
 	memset(&search,0,sizeof(search));
 	search.name=mod_name;
 
 	mod = mavl_find_ptr(mods_loaded,&search);
 	if (mod){
+		cw_dbg(DBG_MOD,"MOD: Module already loaded '%s'",mod_name);
 		return mod;
 	}
 
@@ -231,6 +238,8 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 	filename = cw_filename(mod_path,mod_filename,".so");
 	if (filename==NULL)
 		return NULL;
+
+	cw_dbg(DBG_MOD, "MOD: loading module from file: %s", filename);
 
 	/* Open the DLL */
 	handle = dlopen(filename,RTLD_NOW);
@@ -256,7 +265,7 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 		cw_log(LOG_ERR,"Can' add module %s",mod_name);
 		goto errX;
 	}
-	
+	cw_dbg(DBG_MOD, "MOD: %s sucessfull loaded, calling init now.",filename);
 	mod->init();
 errX:
 	free(filename);
@@ -277,7 +286,6 @@ struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod ){
 	}
 	
 	elem = mlist_append(mods_list,&mod);
-printf("Append mod %p\n",mod);
 	if (elem == NULL)
 		return NULL;
 	return mlistelem_dataptr(elem);
@@ -297,11 +305,11 @@ struct cw_Mod * cw_mod_detect(struct conn *conn,
 	
 
 	mlist_foreach(e,mods_list){
-		/// 1312
+/*		/// 1312 */
 		struct cw_Mod * mod = *(struct cw_Mod**)(mlistelem_dataptr(e)); /* = e->data;*/
 		cw_dbg(DBG_MOD,"Checking mod: %s",mod->name);
 
-printf("Got the mod %p\n",mod);
+/*printf("Got the mod %p\n",mod);*/
 		/* if there is no detect method, skip */
 		if (!mod->detect)
 			continue;

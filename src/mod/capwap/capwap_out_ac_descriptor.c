@@ -25,7 +25,7 @@ int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t 
 
 	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->u2.data),conn);
 
-
+/*
 
 	i = mbag_get(conn->local,CW_ITEM_AC_HARDWARE_VERSION);
 	if ( i ) {	
@@ -44,7 +44,7 @@ int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t 
 	else {
 		cw_log(LOG_ERR, "Can't send software version in AC descriptor, not set.");
 	}
-
+*/
 	int len = d-dst-4;
 	
 	return len + cw_put_elem_hdr(dst,a->elem_id,len);

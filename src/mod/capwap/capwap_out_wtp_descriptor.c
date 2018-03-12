@@ -41,7 +41,7 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 
 	mbag_item_t * i;
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
-	if ( i ) {	
+/*	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->u2.data);
 		if (bstrv_get_vendor_id(i->u2.data)){
 			d += cw_put_dword(d, 0);
@@ -55,10 +55,10 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 		cw_log(LOG_ERR, "Can't send Hardware Version in WTP Descriptor, not set.");
 	}
 
-
+*/
 	i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);
 
-	if ( i ) {	
+/*	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->u2.data);
 	}
 	else {
@@ -73,7 +73,7 @@ int capwap_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_
 		cw_log(LOG_ERR, "Can't send Bootloader Version in WTP descriptor, not set.");
 	}
 
-
+*/
 	int len = d-dst-4;
 	return len + cw_put_elem_hdr(dst,a->elem_id,len);
 }	

@@ -2,17 +2,31 @@
 #include "capwap.h"
 #include "dbg.h"
 
-int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_in_t *a)
+int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys )
 {
+	mlistelem_t * elem;
+	char *mandkey, *result;
+	
+	mlist_foreach(elem, msgdata->mand_keys){
+		mandkey = mlistelem_get_str(elem);
+	
+		result = mavl_get_str(keys,mandkey);
+		if (result == NULL){
+			printf("Missing\n");
+		}
+		else	printf("Ok\n");
+			
+		
+	}
 
-
-	cw_action_in_t as;
+/*	cw_action_in_t as;
 
 	as.capwap_state = a->capwap_state;
 	as.msg_id = a->msg_id;
 	as.vendor_id = 0;
 	as.elem_id = 0;
 	as.proto=0;
+*/
 /// TODO XXXX
 /*
 	DEFINE_AVLITER(it,conn->actions->in);
@@ -34,5 +48,6 @@ int cw_check_missing_mand(cw_action_in_t ** out, struct conn * conn, cw_action_i
 	return n;
 */
 }
+
 
 

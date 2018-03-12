@@ -45,7 +45,7 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 			free(dmpmem);
 
 		switch (subtype) {
-			case CW_SUBELEM_WTP_HARDWARE_VERSION:
+/*			case CW_SUBELEM_WTP_HARDWARE_VERSION:
 				mbag_set_bstrv(mbag,
 						   CW_ITEM_WTP_HARDWARE_VERSION,
 						   vendor_id, data + i, sublen);
@@ -69,7 +69,7 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 				       "Unknown WTP descriptor subelement, type = %d",
 				       subtype);
 				break;
-		}
+*/		}
 		i += sublen;
 
 	}

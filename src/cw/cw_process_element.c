@@ -19,7 +19,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	struct cw_ElemData * elem_data, elem_data_search;
 	
 	/* try to retrieve a handler for this message element */
-	handler = cw_msgset_get_elemhandler(params->conn->msgset,0, 0, elem_id);
+	handler = cw_msgset_get_elemhandler(params->conn->msgset,proto, vendor, elem_id);
 	if (!handler) {
 		cw_dbg(DBG_ELEM_ERR, "Unrecognized message element: %d, ignoring", 
 			elem_id);
@@ -28,8 +28,8 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 
 	/* check if this message element in the current message allowed */
 	elem_data_search.id=elem_id;
-	elem_data_search.proto=0;
-	elem_data_search.vendor=0;
+	elem_data_search.proto=proto;
+	elem_data_search.vendor=vendor;
 	elem_data = mavl_find(params->msgdata->elements_tree,&elem_data_search);
 	if (!elem_data){
 		cw_dbg(DBG_ELEM_ERR, "Element %d - %s, not allowed here", 

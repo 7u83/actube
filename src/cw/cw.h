@@ -10,7 +10,7 @@
 
 #include "lw.h"
 #include "capwap.h"
-#include "msget.h"
+#include "msgset.h"
 
 /**
  * @defgroup CW CW
@@ -308,6 +308,9 @@ struct cw_DescriptorSubelemDef {
 #define CW_APPEND 2
 #define CW_PREPEND 3
 #define CW_REPLACE 4
+
+
+int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys );
 
 
 

@@ -6,7 +6,8 @@
 #include "dbg.h"
 #include "log.h"
 
-#include "msget.h"
+#include "msgset.h"
+#include "ktv.h"
 
 static int cmp_cw_elemhandler_by_id(const void *elem1, const void *elem2)
 {
@@ -129,6 +130,12 @@ struct cw_MsgSet *cw_msgset_create()
 		cw_msgset_destroy(set);
 		return NULL;
 	}
+	
+	set->types_tree = cw_ktv_create_types_tree();
+	if (set->types_tree == NULL){
+		cw_msgset_destroy(set);
+		return NULL;
+	}
 
 	return set;
 }
@@ -149,6 +156,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 {
 	struct cw_ElemDef *elemdef;
 	struct cw_ElemData ed, *result;
+	mavliter_t it;
 
 	/* iterate through all defined elements */
 	for (elemdef = msgdef->elements; elemdef->id; elemdef++) {
@@ -164,6 +172,14 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->proto, elemdef->vendor, elemdef->id);
 			continue;
 		}
+		
+		if (handler->type != NULL){
+			if (mavl_add_ptr( set->types_tree, handler->type ) == NULL){
+				cw_log(LOG_ERR, "Can't add type from handler: %s", strerror(errno));
+				continue;
+			}
+		}
+		
 
 		ed.id = elemdef->id;
 		ed.proto = elemdef->proto;
@@ -182,6 +198,27 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
 	}
+
+	if (msgdata->mand_keys!=NULL){
+		mlist_destroy(msgdata->mand_keys);
+	}
+	msgdata->mand_keys = mlist_create_conststr();
+	
+	mavliter_init(&it,msgdata->elements_tree);
+	mavliter_foreach(&it){
+		struct cw_ElemHandler *handler;
+		result = mavliter_get(&it);
+
+		handler = cw_msgset_get_elemhandler(set,
+						    result->proto,
+						    result->vendor, result->id);
+		if (result->mand){
+			mlist_append_ptr(msgdata->mand_keys,(void*)handler->key);
+			cw_dbg(DBG_MOD,"    Add mandatory key: %s",handler->key);
+		}
+		/*//printf("Have Result %d %d - %s\n",result->id,result->mand, handler->key);*/
+	}
+	
 
 	return 0;
 }
@@ -220,6 +257,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		if (!exists) {
 			msg->elements_tree = mavl_create(cmp_elemdata, NULL,
 							 sizeof(struct cw_ElemData));
+			msg->mand_keys=NULL;
 		}
 
 		/* Overwrite the found message */
@@ -235,6 +273,18 @@ int cw_msgset_add(struct cw_MsgSet *set,
 
 		update_msgdata(set, msg, msgdef);
 	}
+	
+	{
+		mavliter_t it;
+		cw_dbg(DBG_MOD,"  Known types:");
+		mavliter_init(&it,set->types_tree);
+		mavliter_foreach(&it){
+			struct cw_Type * t = mavliter_get_ptr(&it);
+			cw_dbg(DBG_MOD, "   Type: %s", t->name);
+		}
+	}
+	
+	
 
 	return 0;
 }

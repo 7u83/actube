@@ -3,7 +3,7 @@
 #include "capwap.h"
 #include "capwap_items.h"
 #include "dbg.h"
-#include "kvt.h"
+#include "ktv.h"
 
 
 static struct cw_DescriptorSubelemDef allowed_default[] = {

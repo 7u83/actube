@@ -14,7 +14,7 @@ int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t
 	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */
-	int n = cw_check_missing_mand(mlist,conn,a);
+/*	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n) {
 		cw_dbg_missing_mand(DBG_ELEM,conn,mlist,n,a);
 		conn->capwap_state=CAPWAP_STATE_JOIN;
@@ -29,7 +29,7 @@ int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t
 	if ( iresult ) {
 		return iresult->u2.dword;
 	}
-
+*/
 	return 0;
 	
 }

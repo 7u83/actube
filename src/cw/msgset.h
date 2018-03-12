@@ -10,6 +10,7 @@ struct cw_MsgSet {
 	mavl_t msgdata;
 	mavl_t handlers_by_id;
 	mavl_t handlers_by_key;
+	mavl_t types_tree;
 	
 };
 
@@ -70,6 +71,7 @@ struct cw_MsgData{
 	int receiver;
 	mavl_t elements_tree;
 	mlist_t elements_list;
+	mlist_t mand_keys;  /**< Keys of mandatory elements */
 };
 
 

@@ -2,20 +2,23 @@
 #define __KVT_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "mavl.h"
 
-struct cw_KVT {
+#define CW_KTV_MAX_KEY_LEN 1024
+
+struct cw_KTV {
 	char *key;
+	const struct cw_Type *type;
 	union {
 		uint32_t dword;
 		uint16_t word;
 		uint8_t byte;
 		void *ptr;
 	} val;
-	const struct cw_Type *type;
 };
-typedef struct cw_KVT cw_KVT_t;
+typedef struct cw_KTV cw_KTV_t;
 
 
 struct cw_Type {
@@ -23,22 +26,22 @@ struct cw_Type {
 	const char *name;
 
 	/** A pointer to a function to delete elements of this type */
-	void (*del) (struct cw_KVT * data);
+	void (*del) (struct cw_KTV * data);
 
 	/** A method to put this object to a buffer */
-	int (*put) (const struct cw_KVT * data, uint8_t * dst);
+	int (*put) (const struct cw_KTV * data, uint8_t * dst);
 
 	/** The get method */
-	struct cw_KVT *(*get) (struct cw_KVT * data, const uint8_t * src, int len);
+	struct cw_KTV *(*get) (struct cw_KTV * data, const uint8_t * src, int len);
 
 	/** A pointer to a function to convert elements of this type to a string.
 	    This function is mainly used to store elements to an SQL database
 	    or to json strings */
-	int (*to_str) (const struct cw_KVT * data, char *dst, int max_len);
+	int (*to_str) (const struct cw_KTV * data, char *dst, int max_len);
 
 	/** Cereate an item of this type from a string, which was previously
 	    created by the #del function. */
-	struct cw_KVT *(*from_str) (struct cw_KVT * data, const char *src);
+	struct cw_KTV *(*from_str) (struct cw_KTV * data, const char *src);
 
 	/*
 	   int (*def)(void *, void *);
@@ -58,13 +61,20 @@ extern const struct cw_Type cw_type_bstr16;
 /*
 void cw_kvstore_mavl_delete(const void *data);
  */
-const char *cw_kvt_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
+const char *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			   const uint8_t * data, int len);
 
-int cw_kvt_mavlcmp(const void *v1, const void *v2);
-void cw_kvt_mavldel(void *data);
+int cw_ktv_mavlcmp(const void *v1, const void *v2);
+int cw_ktv_mavlcmp_type_by_name(const void *v1,const void *v2);
 
-#define cw_kvt_create()\
-	mavl_create(cw_kvt_mavlcmp, cw_kvt_mavldel, sizeof(cw_KVT_t))
+void cw_ktv_mavldel(void *data);
+
+#define cw_ktv_create()\
+	mavl_create(cw_ktv_mavlcmp, cw_ktv_mavldel, sizeof(cw_KTV_t))
+	
+#define cw_ktv_create_types_tree()\
+	mavl_create(cw_ktv_mavlcmp_type_by_name,NULL,sizeof(struct cw_Type *))
+
+int cw_ktv_read_line (FILE *f, char * key, char * type, char *val);
 
 #endif	/* __KVT_H */

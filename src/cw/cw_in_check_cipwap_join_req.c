@@ -9,6 +9,7 @@
 
 #include "vendors.h"
 
+/*
 void cw_get_wtp_name(struct conn *conn,struct sockaddr *addr)
 {
 
@@ -30,7 +31,7 @@ int cw_detect_capwap(struct conn *conn)
 	mbag_item_t * item = mbag_get(is,CW_ITEM_WTP_SOFTWARE_VERSION);
 	if (item) {
 		bstrv_t s = item->u2.data;
-		uint32_t v = bstrv_get_vendor_id(s);
+	uint32_t v = bstrv_get_vendor_id(s);
 		
 		switch(v) {
 			case CW_VENDOR_ID_CISCO:
@@ -62,3 +63,5 @@ int cw_in_check_cipwap_join_req(struct conn *conn, struct cw_action_in *a, uint8
 
 	return rc;
 }
+*/
+

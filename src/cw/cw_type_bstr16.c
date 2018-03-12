@@ -20,15 +20,15 @@
 
 #include "format.h"
 #include "cw.h"
-#include "kvt.h"
+#include "ktv.h"
 
 
-static void del ( struct cw_KVT * data )
+static void del ( struct cw_KTV * data )
 {
 	free ( data->val.ptr );
 }
 
-static struct cw_KVT *get ( struct cw_KVT * data, const uint8_t * src, int len )
+static struct cw_KTV *get ( struct cw_KTV * data, const uint8_t * src, int len )
 {
 	uint8_t * s;
 	s = bstr16_create ( src, len );
@@ -41,12 +41,12 @@ static struct cw_KVT *get ( struct cw_KVT * data, const uint8_t * src, int len )
 	return data;
 }
 
-static int put ( const struct cw_KVT *data, uint8_t * dst )
+static int put ( const struct cw_KTV *data, uint8_t * dst )
 {
 	return cw_put_bstr16 ( dst, data->val.ptr );
 }
 
-static int to_str ( const struct cw_KVT *data, char *dst, int max_len )
+static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 {
 	char *d;
 	d = dst;
@@ -63,7 +63,7 @@ static int to_str ( const struct cw_KVT *data, char *dst, int max_len )
 	return d - dst;
 }
 
-static struct cw_KVT *from_str ( struct cw_KVT * data, const char *src )
+static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 {
 	return NULL;
 }

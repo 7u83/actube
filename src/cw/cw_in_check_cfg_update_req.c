@@ -13,7 +13,7 @@ int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_
 	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */
-	int n = cw_check_missing_mand(mlist,conn,a);
+/*	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n) {
 		if ( conn->strict_capwap ){
 			cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
@@ -22,7 +22,7 @@ int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_
 		}
 		cw_dbg_missing_mand(DBG_RFC,conn,mlist,n,a);
 	}
-
+*/
 	
 	/* set result code to ok and change to configure state */
 	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);

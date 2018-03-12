@@ -32,7 +32,7 @@
  */
 uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s)
 {
-	int l = strlen(s);
+	/*int l = strlen(s);
 	if (s[0]!='.')
 		return bstrv_create(vendor_id,(uint8_t*)s,l);
 
@@ -45,7 +45,7 @@ uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s)
 	if (s[1]!='x')
 		return bstrv_create(vendor_id,(uint8_t*)s,l);
 
-	/* the string starts with ".x" - read hexbytes */
+	// the string starts with ".x" - read hexbytes 
 	l-=2;
 	int msize=l/2;	
 	if(l&1)
@@ -60,6 +60,7 @@ uint8_t * bstrv_create_from_str(uint32_t vendor_id,const char *s)
 
 	cw_format_scan_hex_bytes(bstrv_data(mem),s+2,l);
 	return mem;		
+*/
 }
 
 

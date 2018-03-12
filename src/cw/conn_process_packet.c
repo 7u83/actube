@@ -30,11 +30,11 @@
 
 #include "stravltree.h"
 #include "mod.h"
-#include "msget.h"
+#include "msgset.h"
 
-#include "kvt.h"
+#include "ktv.h"
 
-int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
+
 
 
 
@@ -193,7 +193,7 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 	}
 
 	bmod = 
-	    cw_mod_detect(conn, rawmsg, len, elems_len, from, MOD_MODE_BINDINGS);
+	    cw_mod_detect(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_BINDINGS);
 
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
@@ -506,6 +506,8 @@ exit(0);
 
 	/* all message elements are processed, do now after processing
 	   by calling the "end" function for the message */
+	   
+	cw_check_missing_mand(message,mand_found);
 
 	{
 
@@ -517,7 +519,7 @@ exit(0);
 
 		mavliter_foreach(&it){
 			char value[500];
-			struct cw_KVT * data;
+			struct cw_KTV * data;
 			data = mavliter_get(&it);
 			type = data->type;
 			type->to_str(data,value,0);

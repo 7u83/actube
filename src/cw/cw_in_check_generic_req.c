@@ -13,7 +13,7 @@ int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a, uint8_t *
 	cw_action_in_t * mlist[60];
 
 	/* Check for mandatory elements */
-	int n = cw_check_missing_mand(mlist,conn,a);
+/*	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n) {
 		if ( conn->strict_capwap ){
 			cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
@@ -21,7 +21,7 @@ int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a, uint8_t *
 		}
 		cw_dbg_missing_mand(DBG_RFC,conn,mlist,n,a);
 	}
-	
+*/
 	return 0;
 
 }

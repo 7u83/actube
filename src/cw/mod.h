@@ -36,7 +36,7 @@ struct cw_actiondef;
 
 enum {
 	CW_MOD_MODE_CAPWAP,
-	MOD_MODE_BINDINGS
+	CW_MOD_MODE_BINDINGS
 };
 
 
@@ -102,7 +102,7 @@ struct cw_Mod * cw_mod_detect(struct conn *conn,
 struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn, 
 			struct cw_Mod * capwap_mod, struct cw_Mod *bindings_mod);
 
-void cw_mod_set_mod_path(const char * path);
+void cw_mod_set_path(const char * path);
 
 #define CW_MOD_MAX_MOD_NAME_LEN	128
 #define CW_MOD_INTERFACE_FUNCTION_NAME_SUFFIX "_get_interface"

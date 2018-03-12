@@ -1,5 +1,5 @@
-#include "msget.h"
-#include "kvt.h"
+#include "msgset.h"
+#include "ktv.h"
 #include "log.h"
 
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
@@ -12,7 +12,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);
 		return 0;
 	}
-	cw_kvt_add(params->conn->remote_cfg, handler->key, handler->type, elem_data,elem_len);
+	cw_ktv_add(params->conn->remote_cfg, handler->key, handler->type, elem_data,elem_len);
 	
 	
 /*

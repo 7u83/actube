@@ -27,7 +27,7 @@ static int init()
 static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
-	if (mode != MOD_MODE_BINDINGS)
+	if (mode != CW_MOD_MODE_BINDINGS)
 		return 0;
 
 	int wbid = cw_get_hdr_wbid(rawmsg);
@@ -41,7 +41,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 
 static int register_actions(struct cw_actiondef *actions, int mode)
 {
-	if (mode != MOD_MODE_BINDINGS)
+	if (mode != CW_MOD_MODE_BINDINGS)
 		return 0;
 
 	return capwap80211_register_actions_ac(actions);

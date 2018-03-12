@@ -19,26 +19,26 @@
 #include <stdio.h>
 
 #include "cw.h"
-#include "kvt.h"
+#include "ktv.h"
 
-static struct cw_KVT *get(struct cw_KVT * data, const uint8_t * src, int len)
+static struct cw_KTV *get(struct cw_KTV * data, const uint8_t * src, int len)
 {
 	data->type = &cw_type_dword;
 	data->val.dword = cw_get_dword(src);
 	return data;
 }
 
-static int put(const struct cw_KVT *data, uint8_t * dst)
+static int put(const struct cw_KTV *data, uint8_t * dst)
 {
 	return cw_put_dword(dst, data->val.dword);
 }
 
-static int to_str(const struct cw_KVT *data, char *dst, int max_len)
+static int to_str(const struct cw_KTV *data, char *dst, int max_len)
 {
 	return sprintf(dst, "%d", data->val.dword);
 }
 
-static struct cw_KVT *from_str(struct cw_KVT * data, const char *src)
+static struct cw_KTV *from_str(struct cw_KTV * data, const char *src)
 {
 	data->val.dword = atoi(src);
 	return data;

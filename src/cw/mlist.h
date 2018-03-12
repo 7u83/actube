@@ -64,9 +64,12 @@ typedef struct mlist * mlist_t;
 mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2), void (*del)(void *), size_t data_size);
 
 struct mlistelem *mlist_append(mlist_t l, void *data);
+void mlist_destroy(mlist_t l);
 
 extern struct mlistelem *mlist_find(mlist_t l, struct mlistelem *start, void *data);
 extern struct mlistelem *mlist_replace(mlist_t l, struct mlistelem *start, void *data);
+
+
 
 #define mlist_add mlist_append
 /**
@@ -75,6 +78,14 @@ extern struct mlistelem *mlist_replace(mlist_t l, struct mlistelem *start, void 
 
 #define mlist_foreach(elem,list)\
 	for (elem=list->first; elem; elem=elem->next)
+		
+		
+#define mlistelem_get_ptr(elem) (*((void**)(mlistelem_dataptr(elem))))
+#define mlistelem_get_str(elem) mlistelem_get_ptr(elem)
+#define mlist_create_conststr() mlist_create(NULL,NULL,sizeof(const char*))
+mlistelem_t * mlist_append_ptr (mlist_t list, void * ptr);
+
+
 
 /**
  * @}

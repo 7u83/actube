@@ -17,7 +17,7 @@ extern int capwap_register_actions_ac(struct cw_actiondef *def);
 
 static int init()
 {
-	cw_dbg(DBG_MOD, "Initialiazing mod_capwap.");
+	cw_dbg(DBG_MOD, "CAPWAP: Initialiazing mod_capwap.");
 	return 0;
 }
 

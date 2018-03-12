@@ -41,7 +41,6 @@
       <File Name="src/cw/dtls_bio.c"/>
       <File Name="src/cw/rand.h"/>
       <File Name="src/cw/capwap_items.h"/>
-      <File Name="src/cw/acinfo_print.c"/>
       <File Name="src/cw/mbag_type_bstr.c"/>
       <File Name="src/cw/cw_in_cisco_image_identifier.c"/>
       <File Name="src/cw/radioinfo.h"/>
@@ -77,7 +76,6 @@
       <File Name="src/cw/mavliter_next.c"/>
       <File Name="src/cw/lw_msg_id_to_str.c"/>
       <File Name="src/cw/lw_put_cisco_path_mtu.c"/>
-      <File Name="src/cw/cw_in_check_join_request.c"/>
       <File Name="src/cw/conn_get_message.c"/>
       <File Name="src/cw/cw_readelem_maximum_message_length.c"/>
       <File Name="src/cw/capwap_msg_new.c"/>
@@ -309,18 +307,24 @@
       <File Name="src/cw/cw_process_element.c"/>
       <File Name="src/cw/cw_result_is_ok.c"/>
       <File Name="src/cw/mavliter_get.c"/>
-      <File Name="src/cw/kvt.h"/>
-      <File Name="src/cw/cw_kvt_mavlcmp.c"/>
-      <File Name="src/cw/cw_kvt_mavldel.c"/>
       <File Name="src/cw/mavliter_get_ptr.c"/>
       <File Name="src/cw/mavl_cmpstr.c"/>
       <File Name="src/cw/mavl_freeptr.c"/>
       <File Name="src/cw/msgset.c"/>
-      <File Name="src/cw/msget.h"/>
       <File Name="src/cw/mavl_replace.c"/>
-      <File Name="src/cw/cw_kvt_add.c"/>
       <File Name="src/cw/mlist_create.c"/>
       <File Name="src/cw/mlist_append.c"/>
+      <File Name="src/cw/conn_send_msg.c"/>
+      <File Name="src/cw/mlist_destroy.c"/>
+      <File Name="src/cw/mlist_append_ptr.c"/>
+      <File Name="src/cw/ktv.h"/>
+      <File Name="src/cw/cw_ktv_add.c"/>
+      <File Name="src/cw/cw_ktv_mavlcmp.c"/>
+      <File Name="src/cw/cw_ktv_mavldel.c"/>
+      <File Name="src/cw/cw_ktv_readline.c"/>
+      <File Name="src/cw/cw_ktv_read_file.c"/>
+      <File Name="src/cw/cw_ktv_mavlcmp_type_by_name.c"/>
+      <File Name="src/cw/msgset.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
@@ -343,9 +347,9 @@
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="" IntermediateDirectory="./Debug" Command="$(WorkspacePath)/src/ac/actube" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="" IntermediateDirectory="./Debug" Command="$(WorkspacePath)/src/wtp/wtp" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(WorkspacePath)/src/wtp/" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[LD_LIBRARY_PATH=../../lib]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
         <DebuggerSearchPaths/>

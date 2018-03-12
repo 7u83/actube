@@ -26,7 +26,7 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 	switch (mode) {
 		case CW_MOD_MODE_CAPWAP:
 		{
-			cw_dbg(DBG_MOD,"Cisco: loading base med capwap");
+			cw_dbg(DBG_MOD,"Cisco: loading base mod capwap");
 
 			struct cw_Mod *cmod = cw_mod_load("capwap");
 			if (!cmod) {
@@ -40,18 +40,19 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 
 			cw_dbg(DBG_MOD,"Cisco: loading cisco message set");
 			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
-			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d messafe", 7);
+			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d messages", 7);
 			return 0;
 		}
-		case MOD_MODE_BINDINGS:
+		case CW_MOD_MODE_BINDINGS:
 		{
-			struct cw_Mod *cmod = NULL; //modload_ac("capwap80211");
+			return 0;
+			struct cw_Mod *cmod = cw_mod_load("capwap80211"); //modload_ac("capwap80211");
 			if (!cmod) {
 				cw_log(LOG_ERR,
 				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
 				return 1;
 			}
-			cmod->register_messages(set, MOD_MODE_BINDINGS);
+			cmod->register_messages(set, CW_MOD_MODE_BINDINGS);
 			int rc = cisco_register_actions80211_ac(set);
 			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", 12);
 			return 0;

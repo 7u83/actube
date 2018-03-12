@@ -1,56 +1,19 @@
+include ../Config.mak
 include ../WtpConfig.mak
+-include ../Config.local.mak
+-include ../WtpConfig.local.mak
 include ../Macros.mak
 
-ifndef CC
-	CC=gcc
-endif
 
 
-V=0
+LIBDIR		:= ../../lib
+LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
+OBJDIR		:= ../../obj/wtp/$(ARCH)
+EXENAME		:= ./wtp
 
-CFLAGS+=-DWITH_RMAC_SUPPORT 
-CFLAGS+=-DWITH_IPV6
-CFLAGS+=-DWITH_CW_LOG
-CFLAGS+=-DWITH_CW_LOG_DEBUG
-CFLAGS+=-DWITH_DTLS
-
-
-ifndef ARCH
-	ARCH = $(shell $(CC) -dumpmachine)
-endif
-
-
-CFLAGS += -O0 -Wall -Wno-unused-variable -Werror -g
-#CFLAGS += -Os -Wall 
-LDFLAGS += -L../contrib/jsmn -L../../src/lib/$(ARCH) 
-
-
-CONFOBJS = wtp_conf.o
-
-
-LIBS+=-lcapwap
-LIBS+=-lcapwap80211
-LIBS+=-lcipwap
-LIBS+=-lcisco
-LIBS+=-lfortinet
-LIBS+=-lcw
-LIBS+=-lnl-3
-LIBS+=-lnl-genl-3
-LIBS+=-ljsmn
-
-
-
-ifeq ($(CONF_LIBRARY),UCI)
-CFLAGS+=-DWITH_UCI
-LIBS+=-luci -lubox
-CONFOBJS += conf_uci.o 
-else
-LIBS+=-lconfuse
-CONFOBJS += wtp_conf_confuse.o
-endif
-
-
-
+LIBS		:= -lcw
+#STATICLIBS	:= $(LIBDIR)/$(ARCH)/libcw.a
+LDFLAGS		+= -L$(LIBARCHDIR)
 
 ifeq ($(SSL_LIBRARY),GNUTLS)
 CFLAGS+=-DWITH_GNUTLS
@@ -67,76 +30,34 @@ LIBS+=$(OPENSSL_LIBS)
 endif
 
 
+#SRC=$(wildcard *.c)
+SRC=wtp_main.c
 
+OBJS=$(patsubst %.c,%.o,$(SRC))
+OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
-#HA_FILES += ../contrib/hostap/src/drivers/driver_nl80211.o
-
-HA_INCS += -I$(INCLUDE_DIR)/libnl-tiny
-HA_INCS += -I../contrib/hostap/src/utils
-HA_INCS += -I../contrib/hostap/src
-
-CFLAGS += $(HA_INCS)
-
-
-#CFLAGS += -I../src
-#CFLAGS += -I../src/utils
-CFLAGS += -I../../src -I /usr/local/include -I ../contrib/jsmn
-
-#CFLAGS += -I/usr/local/include
-
-
-
-
-OBJS += wtp_main.o
-OBJS += image_update.o
-OBJS += cfg.o 
-
-
-#OBJS += wtp_conf.o
-
-
-OBJS += discovery.o
-OBJS += wtp_interface.o
-OBJS += wtpdrv.o
-OBJS += dot11.o
-OBJS += join.o
-OBJS += run.o
-OBJS += sulking.o
-OBJS += configure.o
-OBJS += changestate.o
-OBJS += setup_conf.o
-OBJS += $(CONFOBJS)
-
-
-OBJS += nlt_attrnames.o
-OBJS += nlt_cmdnames.o
-OBJS += nlt.o
-
-#OBJS += $(HA_FILES)
-
-ALL=wtp
+ALL=$(EXENAME)
 
 all: $(ALL)
 
-Q=@
-E=echo
-ifeq ($(V), 1)
-Q=
-E=true
-endif
 
-%.o: %.c
-	@$(E) "  CC " $<
-	$(Q)$(CC) -c -o $@ $(CFLAGS) $<
+$(OBJDIR)/%.o:%.c
+	@mkdir -p $(OBJDIR)
+	@echo "  $(CC) "$<
+	@$(CC) -c $(CFLAGS) $< -o $@
+
+$(EXENAME): $(OBJS)
+	@echo "  $(LD) $(EXENAME)"
+	@$(LD) $(LDFLAGS) -o $(EXENAME) $(OBJS) $(LIBS) $(STATICLIBS)
 
 
-wtp: $(OBJS)
-	$(Q)$(CC) $(OBJS) ../mod/modload_wtp.o -o wtp $(LDFLAGS) $(LIBS)
-	@$(E) "  LD " $@
+clean: 
+	$(RM) $(OBJDIR)/*
+	$(RM) $(EXENAME)
 
-clean:
-#	$(MAKE) -C ../src clean
-	rm -f *.o 
-	rm -f *.d
+deps:  
+	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
+	makedepend $(SRC) -f.depend -p$(OBJDIR)/
 
--include $(OBJS:%.o=%.d)
+
+-include .depend

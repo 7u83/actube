@@ -281,7 +281,7 @@ int mavl_cmpstr(const void *p1, const void *p2);
 #define mavl_create_conststr() mavl_create_ptr(mavl_cmpstr,NULL)
 
 void * mavl_get_ptr ( mavl_t tree, void * search );
-void * mavl_add_ptr ( mavl_t tree, void *ptr );
+void * mavl_add_ptr ( mavl_t tree, const void *ptr );
 
 #define mavl_add_str(tree,str) mavl_add_ptr(tree,str)
 #define mavl_get_str(tree,search) ((char *)(mavl_get_ptr(tree,search)))

@@ -10,7 +10,7 @@
 int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
-
+/*
 	cw_action_in_t * mlist[60];
 
 	mbag_item_t * jresult = mbag_get(conn->incomming,CW_ITEM_RESULT_CODE);
@@ -21,7 +21,7 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 	}
 
 
-	/* Check for mandatory elements */
+	// Check for mandatory elements 
 	int n = cw_check_missing_mand(mlist,conn,a);
 	if (n && conn->strict_capwap) {
 		cw_dbg_missing_mand(DBG_MSG_ERR,conn,mlist,n,a);
@@ -40,8 +40,8 @@ int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a, uint8_t * d
 		return jresult->u2.dword;
 	}
 
-	/* set result code to ok and change to configure state */
+	// set result code to ok and change to configure state 
 //	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
-
+*/
 	return 0;
 }

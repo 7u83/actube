@@ -41,7 +41,7 @@
 #include "socklist.h"
 #include "wtpman.h"
 #include "wtplist.h"
-#include "cw/kvt.h"
+#include "cw/ktv.h"
 
 static void reset_echointerval_timer(struct wtpman *wtpman)
 {
@@ -97,7 +97,7 @@ static void wtpman_run_discovery(void *arg)
 /*	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
 */	
-	wtpman->conn->remote_cfg = cw_kvt_create(); //mavl_cmp_kv,NULL,1312);
+	wtpman->conn->remote_cfg = cw_ktv_create(); //mavl_cmp_kv,NULL,1312);
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {

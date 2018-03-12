@@ -171,7 +171,7 @@ int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
 
 
 
-
+/*
 int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 {
 	uint8_t *d = dst;
@@ -180,6 +180,7 @@ int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
 	return d - dst;
 }
+*/
 
 
 int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause) {

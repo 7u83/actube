@@ -10,6 +10,7 @@
 int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
+/*	
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	cw_action_in_t *mlist[120];
@@ -20,8 +21,8 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 
 	if (n && conn->strict_capwap) {
 		cw_dbg_missing_mand(DBG_MSG_ERR, conn, mlist, n, a);
-		/* if mandatory elements are missing, in strict 
-		   mode send no discovery response */
+		// if mandatory elements are missing, in strict 
+		   // mode send no discovery response 
 		cw_dbg(DBG_MSG_ERR,
 		       "Ignoring Discovery Request from %s - missing mandatory elements.",
 		       sock_addr2str(from,sock_buf));
@@ -29,14 +30,14 @@ int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * da
 	}
 
 	if ( n ) {
-		/* put a warning here */
+		// put a warning here 
 		cw_dbg_missing_mand(DBG_RFC, conn, mlist, n, a);
 	}
 
 		
 
-	/* ok, send response */
+	// ok, send response 
 	conn->capwap_state = CAPWAP_STATE_JOIN;
-
+*/
 	return 0;
 }

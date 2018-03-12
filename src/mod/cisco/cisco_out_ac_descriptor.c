@@ -47,7 +47,7 @@ int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *
 		otherwise the AP wants us to send an image */
 		i = mbag_get(conn->incomming,CW_ITEM_WTP_SOFTWARE_VERSION);
 	}
-	
+/*	
 	if ( i ) {	
 	 	d += cw_put_version(d,1,i->u2.data);
 	}
@@ -62,7 +62,7 @@ int cisco_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *
 	else {
 		cw_log(LOG_ERR, "Can't set Cisco Hardware Version in AC descriptor, No value defined.");
 	}
-
+*/
 
 	int len = d-dst-4;
 	
