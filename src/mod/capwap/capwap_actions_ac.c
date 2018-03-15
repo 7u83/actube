@@ -22,6 +22,7 @@
 #include "cw/log.h"
 
 #include "cw/msgset.h"
+#include "cw/keys.h"
 
 #include "mod_capwap.h"
 
@@ -33,7 +34,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
-		"discovery_type",		/* Key */
+		CW_KEY_DISCOVERY_TYPE,		/* Key */
 		cw_in_generic,			/* get */
 		cw_out_generic			/* put */
 	}
@@ -44,7 +45,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		1,1,				/* min/max length */
 		CW_TYPE_BYTE,			/* type */
-		"wtp_mac_type",			/* Key */
+		CW_KEY_WTP_MAC_TYPE,		/* Key */
 		cw_in_generic,			/* get */
 		cw_out_generic			/* put */
 	}
@@ -55,7 +56,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
 		NULL,				/* type */
-		"wtp_board_data",		/* Key */
+		CW_KEY_WTP_BOARD_DATA,		/* Key */
 		capwap_in_wtp_board_data,	/* get */
 		NULL				/* put */
 	}
@@ -66,7 +67,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
 		NULL,				/* type */
-		"wtp_descriptor",		/* Key */
+		CW_KEY_WTP_DESCRIPTOR,		/* Key */
 		capwap_in_wtp_descriptor,	/* get */
 		NULL				/* put */
 	}
@@ -77,7 +78,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		"wtp_frame_tunnel_mode",		/* Key */
+		CW_KEY_WTP_FRAME_TUNNEL_MODE,		/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}

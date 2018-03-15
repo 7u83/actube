@@ -25,7 +25,8 @@ int cw_read_wtp_descriptor_7(mavl_t cfg, struct conn *conn,
 			     struct cw_DescriptorSubelemDef *allowed)
 {
 
-	int ncrypt, pos;
+/*	int ncrypt; //currentliy unused */
+	int pos;
 	char key[64];
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_MAX_RADIOS);

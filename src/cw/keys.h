@@ -17,6 +17,11 @@
 
 
 #define CW_KEY_WTP_NAME		"wtp-name"
+#define CW_KEY_DISCOVERY_TYPE	"discovery-type"
+#define CW_KEY_WTP_MAC_TYPE	"wtp-mac-type"
+#define CW_KEY_WTP_BOARD_DATA	"wtp-board-data"
+#define CW_KEY_WTP_FRAME_TUNNEL_MODE	"wtp-frame-tunnel-mode"
+
 
 #endif
 
