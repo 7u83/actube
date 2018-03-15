@@ -9,7 +9,7 @@ struct cw_strlist_elem capwap_strings_elem[] = {
 	{CW_ELEM_AC_NAME, "AC Name"},
 	{CW_ELEM_AC_NAME_WITH_PRIORITY, "AC Name with Priority"},
 //	{CW_ELEM_AC_NAME_WITH_INDEX, "AC Name with Index"},
-	{CW_ELEM_AC_TIMESTAMP, "AC Timestamp"},
+	{CAPWAP_ELEM_AC_TIMESTAMP, "AC Timestamp"},
 	{CW_ELEM_ADD_MAC_ACL_ENTRY, "Add MAC ACL Entry"},
 	{CW_ELEM_ADD_STATION, "Add Station"},
 	{CW_ELEM_RESERVED_9, "Reserved 9"},

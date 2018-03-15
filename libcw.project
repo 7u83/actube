@@ -117,7 +117,6 @@
       <File Name="src/cw/lw_cisco_id_to_str.c"/>
       <File Name="src/cw/bstr_create_from_cfgstr.c"/>
       <File Name="src/cw/sock_getifhwaddr.c"/>
-      <File Name="src/cw/stravltree.h"/>
       <File Name="src/cw/conn_send_packet.c"/>
       <File Name="src/cw/mbag_type_bstr16.c"/>
       <File Name="src/cw/cipwap.h"/>
@@ -159,7 +158,6 @@
       <File Name="src/cw/sock.h"/>
       <File Name="src/cw/aciplist.c"/>
       <File Name="src/cw/log_syslog.c"/>
-      <File Name="src/cw/stravltree.c"/>
       <File Name="src/cw/radio.c"/>
       <File Name="src/cw/lw_put_ac_descriptor.c"/>
       <File Name="src/cw/conn_destroy.c"/>
@@ -327,6 +325,11 @@
       <File Name="src/cw/msgset.h"/>
       <File Name="src/cw/mlist_get.c"/>
       <File Name="src/cw/mlist_replace.c"/>
+      <File Name="src/cw/cw_ktv_add_from_str.c"/>
+      <File Name="src/cw/keys.h"/>
+      <File Name="src/cw/cw_ktv_put.c"/>
+      <File Name="src/cw/cw_ktv_get.c"/>
+      <File Name="src/cw/cw_write_descriptor_subelem.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

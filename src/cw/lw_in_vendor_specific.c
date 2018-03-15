@@ -2,7 +2,7 @@
 #include "cw.h"
 #include "dbg.h"
 #include "log.h"
-#include "stravltree.h"
+/*#include "stravltree.h"*/
 
 /** 
  * @file 
@@ -23,9 +23,9 @@ int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 	as.elem_id = cw_get_word(data + 4);
 	as.proto = CW_ACTION_PROTO_LWAPP;
 
-// TODO XXXX
+/* TODO XXXX
 	//af = cw_actionlist_in_get(conn->actions->in, &as);
-	
+*/	
 	af = 0;
 
 	if (!af) {
@@ -41,7 +41,7 @@ int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 		if (af->mand && afrc) {
 			/* add found mandatory message element 
 			   to mand list */
-			stravltree_add(conn->mand, af->item_id);
+/* XXXX			stravltree_add(conn->mand, af->item_id); */
 		}
 		return afrc;
 	}

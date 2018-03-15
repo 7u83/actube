@@ -24,8 +24,12 @@
 #include "log.h"
 #include "dbg.h"
 
+#include "ktv.h"
+
 int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item)
 {
+	cw_KTV_t ktv;
+	ktv.type->put(&ktv,dst);
 /*	
 	if (item->type->put){
 		cw_dbg(DBG_X,"User put method to put ");

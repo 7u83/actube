@@ -43,10 +43,11 @@ struct cw_Type {
 	    created by the #del function. */
 	struct cw_KTV *(*from_str) (struct cw_KTV * data, const char *src);
 
-	/*
-	   int (*def)(void *, void *);
-	 */
+	
+	int (*len)(cw_KTV_t *);
+	
 };
+typedef struct cw_Type cw_Type_t;
 
 extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;
@@ -76,5 +77,7 @@ void cw_ktv_mavldel(void *data);
 	mavl_create(cw_ktv_mavlcmp_type_by_name,NULL,sizeof(struct cw_Type *))
 
 int cw_ktv_read_line (FILE *f, char * key, char * type, char *val);
+int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
+cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 
 #endif	/* __KVT_H */

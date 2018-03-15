@@ -40,10 +40,15 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 
 static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 {
+	data->type = &cw_type_byte;
 	data->val.byte = atoi(src);
 	return data;
 }
 
+static int len (cw_KTV_t * data)
+{
+	return sizeof(uint8_t);
+}
 
 const struct cw_Type cw_type_byte = {
 	"Byte",			/* name */
@@ -51,5 +56,6 @@ const struct cw_Type cw_type_byte = {
 	put,			/* put */
 	get,			/* get */
 	to_str,			/* to_str */
-	from_str		/* from_str */ 
+	from_str,		/* from_str */ 
+	len			/* len */
 };

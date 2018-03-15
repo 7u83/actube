@@ -160,7 +160,6 @@ extern const struct mbag_typedef mbag_type_data;
  */
 #define MBAG_PTR (&mbag_type_ptr)
 
-#define MBAG_AVLTREE (&mbag_type_avltree)
 #define MBAG_FUN MBAG_STR
 #define MBAG_CONST_DATA (&mbag_type_const_data)
 /** MBAG_SOCK_ADDR holds a sockkaddr structure */

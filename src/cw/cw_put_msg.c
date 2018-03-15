@@ -38,7 +38,6 @@
  */
 int cw_put_msg(struct conn *conn, uint8_t * rawout)
 {
-
 	uint8_t *msgptr,*dst;
 	int type;
 	struct cw_MsgData * msg;
@@ -50,7 +49,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	msgptr = rawout + cw_get_hdr_msg_offset(rawout);
 	type = cw_get_msg_type(msgptr);
 
-	printf("Looking in %p for %d\n", conn->msgset,type);
 	msg = cw_msgset_get_msgdata(conn->msgset,type);
 	if (msg == NULL){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
@@ -66,8 +64,14 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-		printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
+		//printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
+
 		if (handler->put == NULL){
+			if (data->mand){
+				cw_log(LOG_ERR,"Error: Can't add mandatory message element %d - %s, no put method defined",
+					handler->id, handler->name);
+				
+			}
 			continue;
 		}
 
@@ -75,6 +79,8 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		params.elemdata = data;
 		l = handler->put(handler,&params,dst+len);
 		len += l;
+		
+		cw_dbg_elem(DBG_ELEM,conn,type,handler,dst+len,l);
 	}
 
 	cw_set_msg_elems_len(msgptr, len);

@@ -18,12 +18,18 @@ static int run_discovery(struct conn *conn)
 {
 /*//      conn->incomming = mbag_create();*/
 	time_t timer;
+	uint8_t dtype=0;
 
 	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 	
+	
+	cw_ktv_add(conn->local_cfg, "discovery_type", CW_TYPE_BYTE, &dtype,1);
 /*	mbag_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
 			      CAPWAP_DISCOVERY_TYPE_UNKNOWN);
 */
+
+
+
 
 	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
 	cw_put_msg(conn, conn->req_buffer);

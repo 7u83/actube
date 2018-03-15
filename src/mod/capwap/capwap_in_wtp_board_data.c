@@ -132,7 +132,7 @@ int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerPar
 	mavl_t cfg = params->conn->remote_cfg;
 
 		
-	sprintf(vendor_key,"%s/%s",eh->key,CW_KEY_VENDOR);
+	sprintf(vendor_key,"%s/%s",eh->key,CW_SKEY_VENDOR);
 	
 	cw_ktv_add(cfg,vendor_key,CW_TYPE_DWORD,data,len);
 

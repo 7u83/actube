@@ -41,6 +41,7 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 
 static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 {
+	data->type = &cw_type_word;	
 	data->val.word = atoi(src);
 	return data;
 }

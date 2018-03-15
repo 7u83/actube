@@ -43,7 +43,7 @@
 int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 				 uint8_t * data, int len,struct sockaddr *from)
 {
-	cw_acip_t * acip;	
+/*	cw_acip_t * acip;	
 	cw_aciplist_t list =
 	    mbag_get_mavl_c(conn->incomming,a->item_id,cw_aciplist_create);
 
@@ -81,6 +81,7 @@ int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 
 
 	cw_aciplist_replace(list,acip);
+*/
 
 	return 1;
 }

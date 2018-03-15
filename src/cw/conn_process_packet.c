@@ -28,7 +28,7 @@
 #include "conn.h"
 #include "sock.h"
 
-#include "stravltree.h"
+/*#include "stravltree.h"*/
 #include "mod.h"
 #include "msgset.h"
 
@@ -150,29 +150,6 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg, uint32_t result_
 
 	conn_send_msg(conn, conn->resp_buffer);
 
-	return 1;
-}
-
-static int check_len(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		     struct sockaddr *from)
-{
-	if (!a->max_len)
-		return 1;
-
-/*	if (len < a->min_len) {
-		cw_dbg(DBG_ELEM_ERR,
-		       "%d (%s) message element too short, len=%d, min len=%d",
-		       a->elem_id, cw_strelemp(conn->actions, a->elem_id), len,
-		       a->min_len);
-		return 0;
-	}
-	if (len > a->max_len) {
-		cw_dbg(DBG_ELEM_ERR,
-		       "%d (%s) message element too big, len=%d, max len=%d", a->elem_id,
-		       cw_strelemp(conn->actions, a->elem_id), len, a->max_len);
-		return 0;
-	}
-*/
 	return 1;
 }
 
@@ -369,7 +346,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	uint8_t *elem;
 
 	/* Create an avltree to catch the found mandatory elements */
-	//conn->mand = stravltree_create();
+/*	//conn->mand = stravltree_create();*/
 
 	mand_found = mavl_create_conststr();
 	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
@@ -408,99 +385,19 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		
 		if (result_code == CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT){
 			mlist_append(unrecognized,&elem);
-		
 		}
 
-
-/*		
-		
-		elem_id = cw_get_elem_id(elem);
-		
-		handler = cw_msgset_get_elemhandler(conn->msgset,0, 0, elem_id);
-		if (!handler) {
-			cw_dbg(DBG_ELEM_ERR, "Unknown message element: %d, ignoring", 
-				elem_id);
-			continue;
-		}
-
-
-		elem_data_search.id=elem_id;
-		elem_data_search.proto=0;
-		elem_data_search.vendor=0;
-		
-		elem_data = mavl_find_ptr(message->elements_tree,&elem_data_search);
-
-		if (!elem_data){
-			cw_dbg(DBG_ELEM_ERR, "Element %d - %s, not allowed here", 
-				elem_id, handler->name);
-			continue;
-		}
-		
-		
-		elem_len = cw_get_elem_len(elem);
-
-
-//printf ("Would start elem processing now %d - %s\n",handler->id, handler->name);
-
-		cw_dbg_elem(DBG_ELEM, conn, message->type, handler, 
-				cw_get_elem_data(elem),elem_len);
-				
-		handler->get(conn, handler, cw_get_elem_data(elem), elem_len, from);
-*/
 
 continue;
 exit(0);
 
-		struct cw_ElemDef * elem;
-		
-
-		
-		
-/*
-		// TODO XXX
-//		af = cw_actionlist_in_get(conn->actions->in, &as);
- */
-		af = 0;
-
-		if (!af) {
-			//unrecognized++;
-			
-			
-/*			cw_dbg(DBG_ELEM_ERR,
-			       "Element %d (%s) not allowed in msg of type %d (%s), ignoring.",
-// TODO XXXX			       as.elem_id, cw_strelemp(conn->actions, as.elem_id),
-			       as.msg_id, cw_strmsg(as.msg_id));
-*/			        
-			continue;
-		}
-
-		if (!check_len(conn, af, cw_get_elem_data(elem), elem_len, from)) {
+/*		if (!check_len(conn, af, cw_get_elem_data(elem), elem_len, from)) {
 			continue;
 		}
 		cw_dbg_elem(DBG_ELEM, conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
 			    elem_len);
-
-
-
-		int afrc = 1;
-		if (af->start) {
-			afrc =
-			    af->start(conn, af, cw_get_elem_data(elem), elem_len, from);
-
-		}
-
-		if (af->mand && afrc) {
-			/* add found mandatory message element 
-			   to mand list */
-			stravltree_add(conn->mand, af->item_id);
-		}
-
-		if(conn->elem_end){
-/*			
-			// TODO XXXX
-//			afrc = conn->elem_end(conn,af,afrc,cw_get_elem_data(elem), elem_len,from);
 */
-		}
+
 
 	}
 
@@ -508,12 +405,13 @@ exit(0);
 	   by calling the "end" function for the message */
 	   
 	cw_check_missing_mand(message,mand_found);
+	mavl_destroy(mand_found);
 
 	{
 
 		mavliter_t it;
 		const struct cw_Type * type;
-		printf("********** THE REMODE CFG **************\n");
+		cw_dbg (DBG_INFO, "********** THE REMOTE CFG **************\n");
 		mavliter_init(&it,conn->remote_cfg);
 
 
@@ -524,13 +422,13 @@ exit(0);
 			type = data->type;
 			type->to_str(data,value,0);
 		
-			printf("Got %s (%s): %s\n",data->key,type->name, value);
+			cw_dbg(DBG_INFO,"RMTCFG: %s (%s): %s",data->key,type->name, value);
 		}
 
 
 		mavliter_init(&it,mand_found);
 		mavliter_foreach(&it){
-			printf("MAnd found: %s\n", mavliter_get_str(&it));
+			printf("MAnd found: %s", mavliter_get_str(&it));
 		}
 		
 		{
@@ -543,7 +441,7 @@ exit(0);
 				printf("Unrecognized: %d %d\n",elem_id,elem_len);
 			}
 		}
-		mavl_destroy(mand_found);
+	
 	}
 
 
@@ -602,7 +500,7 @@ exit(0);
 		 */
 	}
 
-	stravltree_destroy(conn->mand);
+	/*stravltree_destroy(conn->mand);*/
 
 	return result_code;
 

@@ -11,10 +11,12 @@
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
-	struct cw_KTV * elem;
+	struct cw_KTV * elem, search;
 	int start, len;
 	/* Get the element to put */
-	elem = mavl_get(params->conn->local_cfg, handler->key);
+
+	search.key=handler->key;
+	elem = mavl_get(params->conn->local_cfg, &search);
 
 	/* Size for msg elem header depends on 
 	   vendor specific payload */
@@ -25,15 +27,13 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		if ( handler->vendor ) {
 			vendor=cw_strvendor(handler->vendor);
 		}
-		if ( 0) {
-/*			cw_log(LOG_ERR,
+		if ( params->elemdata->mand) {
+			cw_log(LOG_ERR,
 			       "Can't put mandatory element %s %d - (%s) into %s. No value for '%s' found.",
-				vendor,
-			       a->elem_id, cw_strelemp(conn->actions, a->elem_id)
-			       , cw_strmsg(a->msg_id)
-			       , a->item_id
+				vendor, handler->id, handler->name, "nona"			       	       
+			       , handler->key
 			    );
-*/		}
+		}
 		else{
 /*			cw_dbg(DBG_WARN,"No output for element %s%d -(%s) in %s. Item %s not found.",
 				vendor,

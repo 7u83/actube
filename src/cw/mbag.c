@@ -73,7 +73,7 @@ const struct mbag_typedef mbag_type_vendorstr = {
 };
 */
 
-
+/*
 void free_avltree(void*t){
 	mavl_t i = (mavl_t) t;
 
@@ -83,7 +83,7 @@ void free_avltree(void*t){
 const struct mbag_typedef mbag_type_avltree = {
 	"mavl",free_avltree
 };
-
+*/
 
 
 
@@ -493,7 +493,7 @@ mbag_item_t * mbag_set_bstrn(mbag_t s, const char *id, uint8_t * data, int len)
 }
 
 
-
+/*
 
 struct mavl *mbag_get_mavl(mbag_t s, const char *id)
 {
@@ -524,6 +524,7 @@ int mbag_set_mavl(mbag_t s, const char *id, mavl_t t)
 	i->u2.data = t;
 	return 1;
 }
+*/
 
 /*
 struct mavl *mbag_get_avltree_c(mbag_t s, const char *id,
@@ -545,7 +546,7 @@ struct mavl *mbag_get_avltree_c(mbag_t s, const char *id,
 mavl_t mbag_get_mavl_c(mbag_t s, const char *id,
 							 mavl_t (creator) ())
 {
-	struct mbag_item *i = mbag_get(s, id);
+/*	struct mbag_item *i = mbag_get(s, id);
 	if (i)
 		return i->u2.data;
 
@@ -556,6 +557,7 @@ mavl_t mbag_get_mavl_c(mbag_t s, const char *id,
 		return NULL;
 	mbag_set_mavl(s, id, avltree);
 	return avltree;
+*/
 }
 
 
@@ -608,7 +610,7 @@ mavl_t mbag_i_get_mbag_c(mbag_t s, uint32_t iid,
 mavl_t mbag_i_get_mavl(mbag_t s, uint32_t id,
 							 mavl_t (creator) ())
 {
-	struct mbag_item *i = mbag_i_get(s, id);
+/*	struct mbag_item *i = mbag_i_get(s, id);
 	if (i)
 		return i->u2.data;
 
@@ -619,6 +621,7 @@ mavl_t mbag_i_get_mavl(mbag_t s, uint32_t id,
 		return NULL;
 	mbag_i_set_mavl(s, id, avltree);
 	return avltree;
+*/
 }
 
 

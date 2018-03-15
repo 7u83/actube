@@ -44,8 +44,8 @@ struct cw_strlist_elem capwap_strings_msg[] = {
 { CAPWAP_MSG_IMAGE_DATA_RESPONSE,"Image Data Response"},
 { CAPWAP_MSG_RESET_REQUEST,"Reset Request"},
 { CAPWAP_MSG_RESET_RESPONSE,"Reset Response"},
-{ CW_MSG_PRIMARY_DISCOVERY_REQUEST,"Primary Discovery Request"},
-{ CW_MSG_PRIMARY_DISCOVERY_RESPONSE,"Primary Discovery Response"},
+{ CAPWAP_MSG_PRIMARY_DISCOVERY_REQUEST,"Primary Discovery Request"},
+{ CAPWAP_MSG_PRIMARY_DISCOVERY_RESPONSE,"Primary Discovery Response"},
 
 /*           Data Transfer Request               21
            Data Transfer Response              22

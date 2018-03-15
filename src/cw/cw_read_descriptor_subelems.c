@@ -50,7 +50,7 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 		
 		
 		if (!elems[i].maxlen) {
-			cw_dbg_version_subelem(DBG_ELEM_ERR, "Not allowed",
+			cw_dbg_version_subelem(DBG_ELEM_ERR, "Can't handle sub-elem, vendor or type unknonw",
 				subtype, vendor_id, data+sub+8, sublen);
 			errors++;
 		} else {
@@ -68,11 +68,11 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 
 
 			/* vendor */
-			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VENDOR);
+			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_SKEY_VENDOR);
 			cw_ktv_add(cfg,key,CW_TYPE_DWORD,data + sub,4);
 	
 			/* version */
-			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_KEY_VERSION);
+			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_SKEY_VERSION);
 			cw_ktv_add(cfg,key,CW_TYPE_BSTR16,data+sub+8,l);
 	
 			sprintf(dbgstr, "%s", key);

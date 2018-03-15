@@ -43,7 +43,7 @@
 
 #include "cw/msgset.h"
 #include "cw/ktv.h"
-
+#include "cw/keys.h"
 
 static struct cw_ElemHandler handlers[] = {
 	{ 
@@ -52,8 +52,9 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
 		NULL,				/* type */
-		"wtp_descriptor",		/* Key */
-		cisco_in_wtp_descriptor	 	/* get */
+		CW_KEY_WTP_DESCRIPTOR,		/* Key */
+		cisco_in_wtp_descriptor, 	/* get */
+		cisco_out_wtp_descriptor	/* put */
 	}
 	,
 	{
@@ -62,8 +63,9 @@ static struct cw_ElemHandler handlers[] = {
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		1,512,				/* min/max length */
 		CW_TYPE_BSTR16,			/* type */
-		"wtp_name",			/* Key */
-		cw_in_generic			/* handler */
+		CW_KEY_WTP_NAME,		/* Key */
+		cw_in_generic,			/* get */
+		cw_out_generic			/* put */
 	}
 
 	,
@@ -71,10 +73,11 @@ static struct cw_ElemHandler handlers[] = {
 		"Board Data Options",		/* name */
 		CW_CISCO_BOARD_DATA_OPTIONS,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
-		2,2,				/* min/max length */
+		4,4,				/* min/max length */
 		CW_TYPE_DWORD,			/* type */
-		"cisco_board_data_options",	/* Key */
-		cw_in_generic			/* handler */
+		"cisco/board-data-options",	/* Key */
+		cw_in_generic,			/* handler */
+		cw_out_generic			/* put */
 	}
 	,
 	{0,0,0,0,0,0,0,0}

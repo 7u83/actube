@@ -21,7 +21,7 @@ int cw_put_ac_name_with_priority(uint8_t *dst,cw_acprio_t * acprio)
 
 int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
-	cw_acpriolist_t prios = mbag_get_mavl(conn->config,CW_ITEM_AC_NAME_WITH_PRIORITY);
+/*	cw_acpriolist_t prios = mbag_get_mavl(conn->config,CW_ITEM_AC_NAME_WITH_PRIORITY);
 	if (!prios)
 		return 0;
 	
@@ -37,5 +37,6 @@ int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uin
 	}
 
 	return d-dst;
+*/
 }
 

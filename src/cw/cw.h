@@ -328,6 +328,10 @@ int cw_read_wtp_descriptor(mavl_t mbag, struct conn *conn,
 			   struct cw_ElemHandler *eh, uint8_t * data, int len,
 			   struct cw_DescriptorSubelemDef *allowed);
 
+int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
+                                 int subelem_id, const char * parent_key);
+
+
 
 extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct conn *conn,
 				    struct cw_ElemHandler *eh, uint8_t * data, int len,

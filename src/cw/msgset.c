@@ -198,17 +198,6 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
 		
-		{
-			struct mlistelem *elem;
-			elem = mlist_get(msgdata->elements_list,&ed);
-			if (elem==NULL){
-				printf("Elem is not in mlist\n");
-			}
-			else{
-				printf("Elem was in mlsit\n");
-			}
-		}
-
 		/* add message elemeent to the elements list */
 		switch ( elemdef->op & 0xff){
 			case CW_IGNORE:
@@ -224,15 +213,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 					mlist_append(msgdata->elements_list, &ed);
 				}
 				break;
-
-
-				
-
 		}
-		
-		
-		
-		
 	}
 
 

@@ -14,6 +14,7 @@
 int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from)
 {
+/*
 	cw_acpriolist_t prios = mbag_get_mavl(conn->config,CW_ITEM_AC_NAME_WITH_PRIORITY);
 	if (!prios)
 		return 0;
@@ -25,7 +26,7 @@ int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8
 	prio->prio=cw_get_byte(data);
 	prio->name=strndup((char*)data+1,len-1);
 	mavl_replace(prios,prio,NULL);	
-
+*/
 	return 1;
 }
 

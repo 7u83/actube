@@ -40,6 +40,7 @@ static int to_str(const struct cw_KTV *data, char *dst, int max_len)
 
 static struct cw_KTV *from_str(struct cw_KTV * data, const char *src)
 {
+	data->type = &cw_type_dword;
 	data->val.dword = atoi(src);
 	return data;
 }

@@ -65,12 +65,14 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 }
 
 
+
 int main (int argc, char **argv)
 {
 	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset;
 	struct conn * conn;
+	FILE * file;
 	
 	parse_args(argc,argv, &bootcfg);
 	
@@ -101,8 +103,16 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 12000;
 	conn->msgset=msgset;
 	conn->local_cfg = cw_ktv_create();
+	
+	file = fopen(bootcfg.cfgfilename,"r");
+	if (file == NULL){
+		cw_log(LOG_ERR,"Cant open file '%s':%s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
-	cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+	cw_ktv_read_file(file,conn->local_cfg,msgset->types_tree);
+
+	cw_run_discovery(conn, "255.255.255.255",NULL);
 
 	return (EXIT_SUCCESS);
 

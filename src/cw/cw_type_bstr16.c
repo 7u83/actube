@@ -65,9 +65,21 @@ static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 
 static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 {
-	return NULL;
+	uint8_t * s;
+	s = bstr16_create_from_str(src);
+	
+	if ( !s )
+		return NULL;
+
+	data->type = &cw_type_bstr16;
+	data->val.ptr = s;
+	return data;
+	
 }
 
+static int len ( struct cw_KTV * data ){
+	return bstr16_len(data->val.ptr);
+}
 
 const struct cw_Type cw_type_bstr16 = {
 	"Bstr16",	/* name */
@@ -75,5 +87,6 @@ const struct cw_Type cw_type_bstr16 = {
 	put,		/* put */
 	get,		/* get */
 	to_str,		/* to_str */
-	from_str	/* from_str */
+	from_str,	/* from_str */
+	len		/* len */
 };

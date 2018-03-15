@@ -5,29 +5,86 @@
 
 
 #include "cisco.h"
+#include "cw/ktv.h"
+#include "cw/keys.h"
+#include "cw/dbg.h"
 
-//#extern mbag_t cisco_config_wtp;
 
-int cisco_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
+
+int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh, struct cw_ElemHandlerParams * params
+			, uint8_t * dst)
 {
+	char key[256];
+	int len;
+/*	// XXX Dummy WTP Descriptor Header */
+	uint8_t *d; 
+	cw_KTV_t * val;
+	
+	d = dst+4;
+	
+	/*cw_ktv_init_byte(&val,8);*/
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
+	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	if (val != NULL)
+		d+=val->type->put(val,d);
+	else{
+		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
+		d+=cw_put_byte(d,0);
+	}
+		
+		sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
+	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	if (val != NULL){
+		d+=val->type->put(val,d);
+	}
+	else{
+		d+=cw_put_byte(d,0);	/*radios in use*/
+	}
 
-//	mbag_t mbag = cisco_config_wtp;
-mbag_t mbag = NULL;
 
-	// XXX Dummy WTP Descriptor Header
-	uint8_t *d = dst+4;
+/*len = handler->type->put(elem,dst+start);*/
 
 
-//int n =conn->radios->count;
-//printf("radio count %d\n",n);
-
-	d+=cw_put_byte(d,conn->radios->count);	//max radios
-	d+=cw_put_byte(d,2);	//radios in use
 
 	d+=cw_put_encryption_capabilities_7(d,1);
 
-	mbag_item_t * i;
+	
+/*        d += cw_put_dword(d, bstrv_get_vendor_id(v));
+        d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
+        d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
+*/
+
+/*	sprintf(key,"%s/%s/%s",eh->key,CW_SKEY_HARDWARE,CW_SKEY_VENDOR);
+	vendor = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_DWORD);
+	sprintf(key,"%s/%s/%s",eh->key,CW_SKEY_HARDWARE,CW_SKEY_VENDOR);
+	version = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_BSTR16);
+	
+	if (vendor == NULL){
+		cw_log(LOG_ERR, "Can't send %s, not found.", key);
+	}
+*/
+
+	/* hardware version sub element */
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+                                 CW_SUBELEM_WTP_HARDWARE_VERSION, key);
+				 
+	/* software version sub element */
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+                                 CW_SUBELEM_WTP_SOFTWARE_VERSION, key);
+
+	/* bootloader  version sub element */
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_BOOTLOADER);
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+                                 CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
+
+
+
+
+/*	mbag_item_t * i;
 	i = mbag_get(mbag,CW_ITEM_WTP_HARDWARE_VERSION);
+	 */
 /*	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_HARDWARE_VERSION,i->u2.data);
 	}
@@ -36,7 +93,7 @@ mbag_t mbag = NULL;
 	}
 */
 
-	i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);
+	/*i = mbag_get(mbag,CW_ITEM_WTP_SOFTWARE_VERSION);*/
 /*
 	if ( i ) {	
 	 	d += cw_put_version(d,CW_SUBELEM_WTP_SOFTWARE_VERSION,i->u2.data);
@@ -54,6 +111,6 @@ mbag_t mbag = NULL;
 	}
 */
 
-	int len = d-dst-4;
-	return len + cw_put_elem_hdr(dst,a->elem_id,len);
+	len = d-dst-4;
+	return len + cw_put_elem_hdr(dst,eh->id,len);
 }	
