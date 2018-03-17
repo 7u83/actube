@@ -105,7 +105,7 @@ int cw_run_discovery(struct conn *conn, const char *addr, const char *bindaddr)
 	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_socktype = SOCK_DGRAM;
-	hints.ai_family = PF_UNSPEC;
+	hints.ai_family = AF_UNSPEC;
 	
 	
 	strncpy(caddr, addr, sizeof(caddr));
