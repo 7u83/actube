@@ -15,7 +15,7 @@
 #include <sys/time.h>
 
 #ifdef __FreeBSD__
-#include <sys/ednian.h>
+#include <sys/endian.h>
 #else
 #include <endian.h>
 #endif
