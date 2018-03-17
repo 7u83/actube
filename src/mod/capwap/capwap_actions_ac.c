@@ -58,7 +58,7 @@ static struct cw_ElemHandler handlers[] = {
 		NULL,				/* type */
 		CW_KEY_WTP_BOARD_DATA,		/* Key */
 		capwap_in_wtp_board_data,	/* get */
-		NULL				/* put */
+		capwap_out_wtp_board_data	/* put */
 	}
 	,
 	{ 
@@ -69,7 +69,7 @@ static struct cw_ElemHandler handlers[] = {
 		NULL,				/* type */
 		CW_KEY_WTP_DESCRIPTOR,		/* Key */
 		capwap_in_wtp_descriptor,	/* get */
-		NULL				/* put */
+		capwap_out_wtp_descriptor,	/* put */
 	}
 	,
 	{ 
@@ -83,7 +83,6 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic				/* put */
 	}
 	,
-	
 	{ 
 		"Vendor Specific Payload",		/* name */
 		CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	/* Element ID */
@@ -95,7 +94,6 @@ static struct cw_ElemHandler handlers[] = {
 		NULL					/* put */
 	}
 	,
-
 	{ 
 		"MTU Discovery Padding",		/* name */
 		CAPWAP_ELEM_MTU_DISCOVERY_PADDING,	/* Element ID */
@@ -108,7 +106,20 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
-	
+	{ 
+		"AC Descriptor",			/* name */
+		CAPWAP_ELEM_AC_DESCRIPTOR,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		0,0,					/* min/max length */
+		NULL,					/* type */
+		CW_KEY_AC_DESCRIPTOR,			/* Key */
+		NULL,					/* get */
+		capwap_out_ac_descriptor		/* put */
+	}
+	,
+
+
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -127,6 +138,18 @@ static struct cw_ElemDef discovery_request_elements[] ={
 
 };
 
+
+static int discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
+static struct cw_ElemDef discovery_response_elements[] ={
+	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_IPV4_LIST,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_IPV6_LIST,			1, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,0,0,0}
+
+};
+
 static struct cw_MsgDef messages[] = {
 	{
 		"Discovery Request",
@@ -135,6 +158,19 @@ static struct cw_MsgDef messages[] = {
 		discovery_request_states,
 		discovery_request_elements
 	},
+	
+	{
+		"Discovery Response",
+		CAPWAP_MSG_DISCOVERY_RESPONSE,
+		CW_RECEIVER_WTP,
+		discovery_response_states,
+		discovery_response_elements
+	},
+
+
+
+	
+	
 /*	{ 
 		"Discovery Request",
 		CAPWAP_MSG_DISCOVERY_REQUEST,
@@ -184,6 +220,11 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return NULL;
 	cw_msgset_add(set,messages, handlers);
+	mavl_add_ptr(set->types_tree,CW_TYPE_BSTR16);
+	mavl_add_ptr(set->types_tree,CW_TYPE_BYTE);
+	mavl_add_ptr(set->types_tree,CW_TYPE_DWORD);
+	mavl_add_ptr(set->types_tree,CW_TYPE_WORD);
+
 	return set;
 }
 
@@ -196,6 +237,8 @@ void test_sets(){
 	}
 	
 	cw_msgset_add(set,messages, handlers);
+
+	
 }
 /*
 	cw_msgset_add(set,messages);

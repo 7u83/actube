@@ -1,10 +1,15 @@
-#include "cw/capwap.h"
-#include "cw/mbag.h"
+#ifndef __ACTUBE_AC_H
+#define __ACTUBE_AC_H
+
+#include "cw/mavl.h"
+
+extern mavl_t actube_global_cfg;
+
 
 extern struct ac_status ac_global_status;
-extern int ac_global_init();
-extern mbag_t ac_config;	
-extern struct cw_actiondef capwap_actions;
+
+
+int actube_global_init();
 
 
 /* the protocol we understand */
@@ -17,3 +22,4 @@ enum {
 
 
 
+#endif

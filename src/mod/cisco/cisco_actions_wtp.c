@@ -31,7 +31,7 @@
 
 #include "include/cipwap_items.h"
 
-#include "mod_cisco.h"
+/*#include "mod_cisco.h"*/
 
 #include "cisco.h"
 #include "cisco80211.h"
@@ -284,7 +284,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id  = CW_CISCO_RAD_NAME,
 		.item_id = CW_ITEM_WTP_NAME, 
 		.out = cw_out_generic,
-		.get = cw_out_get_config,
+/*		.get = cw_out_get_config,*/
 		.mand = 1
 	}
 	,
@@ -321,7 +321,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id  = CW_CISCO_AP_GROUP_NAME,
 		.item_id = CIPWAP_ITEM_WTP_GROUP_NAME, 
 		.out = cw_out_generic,
-		.get = cw_out_get_config,
+		/*.get = cw_out_get_config,*/
 		.mand = 1
 	}
 	,
@@ -333,7 +333,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id  = CW_CISCO_BOARD_DATA_OPTIONS,
 		.item_id = CW_ITEM_CISCO_BOARD_DATA_OPTIONS, 
 		.out = cisco_out_board_data_options,
-		.get = cw_out_get_config,
+/*		.get = cw_out_get_config,*/
 		.mand = 1
 	}
 	,
@@ -359,7 +359,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
 	 	.out = cw_out_generic, 
-		.get = cw_out_get_config,
+/*		.get = cw_out_get_config,*/
 		.mand = 1
 	}
 	,
@@ -493,7 +493,7 @@ static cw_action_out_t actions80211_out[]={
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 		.out = cisco_out_80211_wtp_radio_cfg,
-		.get = cw_out_get_config,
+		/*.get = cw_out_get_config,*/
 		.mand = 1
 	}
 	,

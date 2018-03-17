@@ -16,6 +16,7 @@ struct cw_KTV {
 		uint16_t word;
 		uint8_t byte;
 		void *ptr;
+		int boolean;
 	} val;
 };
 typedef struct cw_KTV cw_KTV_t;
@@ -65,6 +66,9 @@ void cw_kvstore_mavl_delete(const void *data);
 const char *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			   const uint8_t * data, int len);
 
+const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+			const char * str);
+
 int cw_ktv_mavlcmp(const void *v1, const void *v2);
 int cw_ktv_mavlcmp_type_by_name(const void *v1,const void *v2);
 
@@ -79,5 +83,14 @@ void cw_ktv_mavldel(void *data);
 int cw_ktv_read_line (FILE *f, char * key, char * type, char *val);
 int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
+uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
+uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
+
+void cw_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
+		const char *header, const char *prefix, const char *footer );
+		
+extern const cw_Type_t * cw_ktv_std_types[];
+#define CW_KTV_STD_TYPES cw_ktv_std_types
+
 
 #endif	/* __KVT_H */

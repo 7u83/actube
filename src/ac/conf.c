@@ -577,7 +577,8 @@ static int conf_read_mods(cfg_t *cfg){
 
 	for (i=0; i < n; i++){
 		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-		struct cw_Mod * mod = cw_mod_load(modname);
+		struct cw_Mod * mod = cw_mod_load(modname, actube_global_cfg, CW_ROLE_AC);
+		
 		if (!mod)
 			return 0;
 		cw_mod_add_to_list(mod);

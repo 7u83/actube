@@ -53,4 +53,5 @@ int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8
 
 	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 */
+	return 0;
 }

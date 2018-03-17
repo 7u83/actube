@@ -10,6 +10,7 @@ mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2),
 	/*memset(l, 0, sizeof(struct mlist));*/
 
 	l->cmp = cmp;
+	l->del = del;
 	l->data_size=data_size;
 	l->first=NULL;
 	l->last=NULL;

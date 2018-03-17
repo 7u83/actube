@@ -11,8 +11,22 @@ struct cw_Mod *mod_capwap_wtp();
 /*extern int capwap_in_wtp_descriptor(struct conn *conn, struct cw_ElemHandler *eh,
 				    uint8_t * data, int len, struct sockaddr *from);*/
 
-int capwap_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams *params, uint8_t * data,
-			 int len);
+int capwap_in_wtp_descriptor(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, uint8_t * data, int len);
+
+int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst);
+
+int capwap_out_ac_descriptor(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst);
+
+
+
+
+
+
+
+
 /*
 extern int capwap_in_wtp_board_data(struct conn *conn, struct cw_ElemHandler *a,
 				    uint8_t * data, int len, struct sockaddr *from);
@@ -20,7 +34,10 @@ extern int capwap_in_wtp_board_data(struct conn *conn, struct cw_ElemHandler *a,
 int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len);
 
-
+int capwap_out_wtp_board_data(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst);
+			
+			
 int capwap_in_vendor_specific_payload(struct cw_ElemHandler *handler, 
 				struct cw_ElemHandlerParams *params,
 				  uint8_t * data, int len);				    

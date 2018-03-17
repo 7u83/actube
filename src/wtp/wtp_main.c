@@ -25,7 +25,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	int c;
 	opterr = 1;
 	
-	bootcfg->modname = "cisco";
+	bootcfg->modname = "capwap";
 	bootcfg->cfgfilename = "config.ktv";
 	
 	while ( (c = getopt (argc, argv, "p:d:vc:m:h")) != -1) {
@@ -73,6 +73,8 @@ int main (int argc, char **argv)
 	struct cw_MsgSet * msgset;
 	struct conn * conn;
 	FILE * file;
+	mavl_t global_cfg, types_tree;
+	const cw_Type_t ** ti;
 	
 	parse_args(argc,argv, &bootcfg);
 	
@@ -82,11 +84,30 @@ int main (int argc, char **argv)
 		cw_log(LOG_ERR, "Error creating msgset: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	mod = cw_mod_load(bootcfg.modname);
+	
+	global_cfg=cw_ktv_create();
+
+	/* create types tree with default types */
+	types_tree = cw_ktv_create_types_tree();
+	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
+		mavl_add_ptr(types_tree,*ti);
+	}
+
+	file = fopen(bootcfg.cfgfilename,"r");
+	if (file == NULL){
+		cw_log(LOG_ERR,"Cant open file '%s':%s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	cw_ktv_read_file(file,global_cfg,types_tree);
+
+	cw_ktv_dump(global_cfg,DBG_INFO,"----- global cfg start -----","","----- global cfg end -----");
+
+	
+	mod = cw_mod_load(bootcfg.modname, global_cfg, CW_ROLE_WTP);
 	if (mod == NULL){
 		exit (EXIT_FAILURE);
 	}
-	
+		
 	/* Build a message set from our loaded modules */
 	mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
 	mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
@@ -102,15 +123,9 @@ int main (int argc, char **argv)
 	conn->dtls_verify_peer=0;
 	conn->dtls_mtu = 12000;
 	conn->msgset=msgset;
-	conn->local_cfg = cw_ktv_create();
+	conn->local_cfg = global_cfg;
 	
-	file = fopen(bootcfg.cfgfilename,"r");
-	if (file == NULL){
-		cw_log(LOG_ERR,"Cant open file '%s':%s", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
 
-	cw_ktv_read_file(file,conn->local_cfg,msgset->types_tree);
 
 	cw_run_discovery(conn, "255.255.255.255",NULL);
 

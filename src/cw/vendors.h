@@ -22,7 +22,7 @@
  */
 
 /**
- * @defgroup CAPWAPVendors 
+ * @defgroup CAPWAPVendors  List of known CAPWAP vendors
  * @{ */
 
 #ifndef __CW_VENDORS_H

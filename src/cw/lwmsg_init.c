@@ -27,7 +27,7 @@ void lwmsg_init(struct lwmsg * lwmsg, uint8_t * buffer, uint8_t * macaddress,int
 {
 	lwmsg->buffer=buffer;
 	memcpy (lwmsg->buffer,macaddress,6);
-	lwmsg->trnsprthdr=buffer+0; //+6;	
+	lwmsg->trnsprthdr=buffer+0; /*+6;*/
 	LWTH_SET_VERSION(lwmsg->trnsprthdr,LW_VERSION);	
 	LWTH_SET_C_FLAG(lwmsg->trnsprthdr,1);
 	lwmsg->ctrlhdr=buffer+14;

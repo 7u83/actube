@@ -10,15 +10,17 @@
  */
 int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn * conn)
 {
-	uint8_t *d = dst;
+	uint8_t *d;
+
+	d = dst;
 
 	d += cw_put_dword(d, (s->stations << 16) | (s->limit));
 	d += cw_put_dword(d, (s->active_wtps << 16) | (s->max_wtps));
 
 
 	int security = 0;
-	security |= conn->dtls_cert_file ? CW_FLAG_AC_SECURITY_X : 0;
-	security |= conn->dtls_psk ? CW_FLAG_AC_SECURITY_S : 0;
+	security |= conn->dtls_cert_file ? CAPWAP_FLAG_AC_SECURITY_X : 0;
+	security |= conn->dtls_psk ? CAPWAP_FLAG_AC_SECURITY_S : 0;
 
 
 	d += cw_put_dword(d,

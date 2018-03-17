@@ -188,12 +188,12 @@
  */   
 
 
-#define CAPWAP_ELEM_AC_DESCRIPTOR		1	/**< AC Descriptor */
+#define CAPWAP_ELEM_AC_DESCRIPTOR			1	/**< AC Descriptor */
 
-#define CAPWAP_ELEM_AC_IPV4_LIST		2	/**< AC IP V4 List */
-#define CW_ELEM_AC_IPV6_LIST			3	/**< AC IP V6 List */
-#define CW_ELEM_AC_NAME				4	/**< AC Name */
-#define CW_ELEM_AC_NAME_WITH_PRIORITY		5
+#define CAPWAP_ELEM_AC_IPV4_LIST			2	/**< AC IP V4 List */
+#define CAPWAP_ELEM_AC_IPV6_LIST			3	/**< AC IP V6 List */
+#define CAPWAP_ELEM_AC_NAME				4	/**< AC Name */
+#define CW_ELEM_AC_NAME_WITH_PRIORITY			5
 
 /** 
  * In CAPWAP RFC draft 7 the message element 5 was named
@@ -380,9 +380,9 @@
  * @{
  */
 /** X.509 Support */
-#define CW_FLAG_AC_SECURITY_X			2
+#define CAPWAP_FLAG_AC_SECURITY_X			2
 /* PSK Support */
-#define CW_FLAG_AC_SECURITY_S			4
+#define CAPWAP_FLAG_AC_SECURITY_S			4
 /**
  * @}
  */
@@ -432,15 +432,18 @@ struct cwimage_identifier{
 /*
 //extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
 */
+
+/*
 extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
-					  struct radioinfo *radioinfos);
+					  struct radioinfo *radioinfos);*/
+					  
 /*
 //extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
 */
-
+/*
 extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id,
 						  int type, uint8_t * payload, int len);
-
+*/
 
 /*
 extern int hdr_print(char *str, uint8_t * packet, int len);
@@ -464,7 +467,7 @@ extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * ms
 //					       uint8_t * msgelem, int len);
 */
 
-
+/*
 extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem,
 					int len);
 extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * msgelem,
@@ -473,7 +476,7 @@ extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * m
 extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elemtype,
 					       uint8_t * msgelem, int len);
 
-
+*/
 
 
 
@@ -635,6 +638,7 @@ extern struct cw_strlist_elem mbag_item_strings[];
 #define cw_strerror(rc) cw_strrc(rc)
 */
 
+#include "strheap.h"
 
 const char * cw_strerror(int rc);
 int cw_result_is_ok(int rc);
@@ -658,12 +662,14 @@ extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in 
 					 uint8_t * data, int len,struct sockaddr *from);
 */
 
+/*
 extern int cw_in_wtp_name(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			  int len,struct sockaddr *from);
 extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len,struct sockaddr *from);
 extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len,struct sockaddr *from);
+*/
 
 /*
 //extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
@@ -677,21 +683,21 @@ extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * 
 //extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
 				//struct mbag_item *item);
 */
-extern int cw_out_ac_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-extern int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a,
-				 uint8_t * dst);
 
 /*
 //extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
 //                                        uint8_t * dst, struct mbag_item *item);
 */
 
+/*
 extern int cw_out_capwap_control_ip_addr_list(struct conn *conn, struct cw_action_out *a,
 					      uint8_t * dst);
+*/
 
+/*
 extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
 int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
+*/
 
 struct cw_ac_status {
 	int stations;
@@ -729,84 +735,6 @@ enum capwap_states {
 /**
  *@}
  */
-
-
-
-int cw_register_actions_capwap_ac(struct cw_actiondef *def);
-int cw_register_actions_cipwap_ac(struct cw_actiondef *def);
-int cw_register_actions_capwap_wtp(struct cw_actiondef *def);
-
-
-int cw_in_set_state_none(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len);
-struct mbag_item *cw_out_get_outgoing(struct conn *conn, struct cw_action_out *a);
-struct mbag_item *cw_out_get_local(struct conn *conn, struct cw_action_out *a);
-extern int cw_in_check_join_resp(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from);
-
-extern int cw_in_check_disc_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len,struct sockaddr *from);
-int cw_in_check_disc_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			  int len,struct sockaddr *from);
-
-
-int cw_in_check_join_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len,struct sockaddr *from);
-extern int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a,
-					uint8_t * data, int len,struct sockaddr *from);
-extern int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a,
-				       uint8_t * data, int len,struct sockaddr *from);
-int cw_in_check_img_data_resp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			      int len,struct sockaddr *from);
-
-int cw_out_wtp_board_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
-void cw_init_request(struct conn *conn, int msg_id);
-struct mbag_item *cw_out_get_session_id(struct conn *conn, struct cw_action_out *a);
-struct mbag_item *cw_out_get_config(struct conn *conn, struct cw_action_out *a);
-
-
-extern int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from);
-
-int cw_out_ac_name_with_priority(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
-int cw_send_request(struct conn *conn, int msg_id);
-/*
-//int cw_is_utf8(unsigned char *str, size_t len);
-*/
-
-int cw_in_ac_name_with_priority(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from);
-
-int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
-int cw_in_radio_administrative_state(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from);
-int cw_in_ac_descriptor(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from);
-
-int cw_in_radio_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from);
-
-/*
-//int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action, uint8_t * dst);
-*/
-
-int cw_in_check_chng_state_evnt_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len,struct sockaddr *from);
-
-/*
-//int cw_out_radio_operational_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-*/
-
-int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			 int len,struct sockaddr *from);
-
-int cw_radio_set_admin_state(mbag_t radios,int rid, int state,int cause);
-
-int cw_in_radio_administrative_state_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
-		  struct sockaddr *from);
-
 
 
 

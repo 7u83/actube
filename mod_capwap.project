@@ -4,7 +4,6 @@
     <VirtualDirectory Name="mod">
       <VirtualDirectory Name="capwap">
         <File Name="src/mod/capwap/capwap_out_ac_ip_list.c"/>
-        <File Name="src/mod/capwap/capwap_out_wtp_descriptor.c"/>
         <File Name="src/mod/capwap/capwap_actions.h"/>
         <File Name="src/mod/capwap/mod_capwap_ac.c"/>
         <File Name="src/mod/capwap/capwap_in_wtp_board_data.c"/>
@@ -20,6 +19,7 @@
         <File Name="src/mod/capwap/capwap_actions_ac.c"/>
         <File Name="src/mod/capwap/capwap_in_vendor_specific_payload.c"/>
         <File Name="src/mod/capwap/capwap_in_mtu_discovery_padding.c"/>
+        <File Name="src/mod/capwap/capwap_out_wtp_board_data.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

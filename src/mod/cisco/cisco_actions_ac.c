@@ -33,7 +33,7 @@
 
 #include "include/capwap_actions.h"
 
-#include "mod_cisco.h"
+
 #include "cisco.h"
 
 #include "cisco_items.h"
@@ -134,7 +134,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST,
-		.end = cw_in_check_disc_req
+	/*	.end = cw_in_check_disc_req*/
 	}
 	,
 
@@ -262,7 +262,7 @@ static cw_action_in_t actions_in[] = {
 		/* We have to deal with zero-length strings */
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-		.elem_id = CW_ELEM_AC_NAME,
+		.elem_id = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.start = cw_in_generic,
 		.min_len = 0,
@@ -507,7 +507,7 @@ static cw_action_out_t actions_out[]={
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_RAD_NAME,
 		.out=cw_out_generic, 
-		.get = cw_out_get_outgoing
+		/*.get = cw_out_get_outgoing*/
 	}
 	,
 
@@ -528,7 +528,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id = CW_CISCO_AP_LED_STATE_CONFIG,
 		.item_id = CISCO_ITEM_AP_LED_STATE_CONFIG,
 	 	.out = cw_out_generic, 
-		.get = cw_out_get_outgoing,
+		/*.get = cw_out_get_outgoing,*/
 		.mand = 0
 	}
 	,
@@ -541,7 +541,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id = CW_CISCO_AP_LED_FLASH_CONFIG,
 		.item_id = CISCO_ITEM_AP_LED_FLASH_CONFIG,
 	 	.out = cw_out_generic, 
-		.get = cw_out_get_outgoing,
+		/*.get = cw_out_get_outgoing,*/
 		.mand = 0
 	}
 	,
@@ -553,7 +553,7 @@ static cw_action_out_t actions_out[]={
 		.elem_id = CW_CISCO_AP_MODE_AND_TYPE,
 		.item_id = CISCO_ITEM_AP_MODE_AND_TYPE,
 	 	.out = cw_out_generic, 
-		.get = cw_out_get_outgoing,
+		/*.get = cw_out_get_outgoing,*/
 	}
 	,
 
@@ -601,7 +601,7 @@ static cw_action_in_t actions80211_in[] = {
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
-	 	.start = cw_in_radio_generic, 
+	 	/*.start = cw_in_radio_generic, */
 		.mand = 0, 
 		.min_len = 5, 
 		.max_len = 5
@@ -618,7 +618,7 @@ static cw_action_in_t actions80211_in[] = {
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
 		.elem_id = CW_CISCO_SUPPORTED_RATES,
 		.item_id = CW_RADIOITEM80211_SUPPORTED_RATES,
-	 	.start = cw_in_radio_generic, 
+	 	/*.start = cw_in_radio_generic, */
 		.mand = 0, 
 		.min_len = 5, 
 		.max_len = 5

@@ -89,7 +89,6 @@
       <File Name="src/cw/lw_readelem_wtp_name.c"/>
       <File Name="src/cw/capwap_cisco.h"/>
       <File Name="src/cw/cw_in_wtp_reboot_statistics.c"/>
-      <File Name="src/cw/mlist.c"/>
       <File Name="src/cw/netconn.c"/>
       <File Name="src/cw/cw_in_capwap_local_ipv6_address.c"/>
       <File Name="src/cw/cw_out_capwap_local_ip_address.c"/>
@@ -168,7 +167,6 @@
       <File Name="src/cw/mavl_add.c"/>
       <File Name="src/cw/dtls_gnutls_get_cipher.c"/>
       <File Name="src/cw/cw_in_check_cipwap_join_req.c"/>
-      <File Name="src/cw/wtpinfo_readelem_wtp_board_data.c"/>
       <File Name="src/cw/vendors.h"/>
       <File Name="src/cw/cw_read_wtp_descriptor_7.c"/>
       <File Name="src/cw/dbg.h"/>
@@ -220,7 +218,6 @@
       <File Name="src/cw/lwmsg.h"/>
       <File Name="src/cw/cw_check_missing_mand.c"/>
       <File Name="src/cw/format_dot11_fc.c"/>
-      <File Name="src/cw/wtpinfo_lwreadelem_wtp_descriptor.c"/>
       <File Name="src/cw/dbg_strings.c"/>
       <File Name="src/cw/dtls_gnutls.c"/>
       <File Name="src/cw/conn_prepare_configuration_update_request.c"/>
@@ -266,7 +263,6 @@
       <File Name="src/cw/mavl_foreach.c"/>
       <File Name="src/cw/lwapp_cisco.h"/>
       <File Name="src/cw/hdr_print.c"/>
-      <File Name="src/cw/cw_out_wtp_board_data.c"/>
       <File Name="src/cw/mbag_type_str.c"/>
       <File Name="src/cw/cw_init_data_keep_alive_msg.c"/>
       <File Name="src/cw/cw_in_check_chng_state_evnt_req.c"/>
@@ -281,11 +277,7 @@
       <File Name="src/cw/capwap_strings_state.c"/>
       <File Name="src/cw/cw_out_radio_info.c"/>
       <File Name="src/cw/capwap_items.c"/>
-      <File Name="src/mod/cisco/mod_cisco.h"/>
       <File Name="src/cw/cw_filename.c"/>
-      <File Name="src/cw/mdata.h"/>
-      <File Name="src/cw/mdata.c"/>
-      <File Name="src/cw/mdata_elem_new.c"/>
       <File Name="src/cw/cw_type_byte.c"/>
       <File Name="src/cw/cw_type_word.c"/>
       <File Name="src/cw/cw_type_dword.c"/>
@@ -330,7 +322,12 @@
       <File Name="src/cw/cw_ktv_put.c"/>
       <File Name="src/cw/cw_ktv_get.c"/>
       <File Name="src/cw/cw_write_descriptor_subelem.c"/>
+      <File Name="src/cw/cw_ktv_dump.c"/>
+      <File Name="src/cw/cw_ktv_get_word.c"/>
+      <File Name="src/cw/cw_ktv_get_byte.c"/>
+      <File Name="src/cw/cw_ktv_std_types.c"/>
     </VirtualDirectory>
+    <File Name="src/mod/capwap/capwap_out_wtp_descriptor.c"/>
   </VirtualDirectory>
   <Description/>
   <Dependencies/>

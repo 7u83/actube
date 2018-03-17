@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdint.h>
-//#include <netinet/in.h>
+
 
 #include "actube.h"
 #include "wtplist.h"
@@ -63,30 +63,67 @@ static void *alive_thread (void *data)
 
 
 #include <getopt.h>
-static int parse_args (int argc, char *argv[])
+
+
+
+struct bootcfg {
+	const char * cfgfilename;
+};
+
+static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 {
-//	int getopt_ret;
-	int option_index;
+	int c;
+	opterr = 1;
 	
-	static struct option long_options[] = {
-		{"version", optional_argument, NULL, 'v'},
-		{0, 0, 0, 0}
-	};
-	int o;
+	bootcfg->cfgfilename = "config.ktv";
 	
-	while ( (o = getopt_long (argc, argv, "v", long_options, &option_index)) != -1) {
-		switch (o) {
-			case 0:
+	while ( (c = getopt (argc, argv, "vc:d:p:")) != -1) {
+		
+		switch (c) {
+			case 'c':
+				bootcfg->cfgfilename = optarg;
 				break;
-				
 			case 'v':
-				printf ("AC-Tube 0.01, %s\n", SYS_ARCH);
-				exit (0);
+				printf("AC-Tube version 0.0.1, %s\n", SYS_ARCH);
+				exit(EXIT_SUCCESS);
+				break;
+			case 'd':{
+				int b = cw_strlist_get_id(cw_dbg_strings, optarg);
+				if (b==-1){
+					fprintf(stderr,"Invalid debug option: %s\n",optarg);
+					exit(EXIT_FAILURE);
+				}
+				cw_dbg_set_level(b, 1);
+				break;
+			}
+
+			case 'p':
+				cw_mod_set_path(optarg);
+				break;
+			case '?':
+				exit(EXIT_FAILURE);
+			default:
+			case 'h':
+				printf("%s: -vcmh\n",argv[0]);
+				exit(EXIT_SUCCESS);
+				break;
 		}
 	}
-	
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #include "cw/mod.h"
@@ -151,274 +188,55 @@ int stcmp (const void * sa1, const void *sa2)
 	return rc;
 }
 
+
+
+
+
 int main (int argc, char *argv[])
 {
-	mlist_t list;
-	mlistelem_t * elem;
-	
-	list = mlist_create_conststr();
-	
-	
-	mlist_append_ptr(list, "helo");
-	mlist_append_ptr(list, "tobias");	
-	mlist_append_ptr(list, "nase");
-	
-	
-	mlist_foreach(elem,list){
-//		data = mlistelem_dataptr(elem);
-//		char * str = ((char**)data)[0];
-//		printf("%p %p\n",data,str);
-		printf("String: %s\n", mlistelem_get_str(elem));
-	}
-	
-	mlist_destroy(list);
-
-	mlist_foreach(elem,list){
-//		data = mlistelem_dataptr(elem);
-//		char * str = ((char**)data)[0];
-//		printf("%p %p\n",data,str);
-		printf("String: %s\n", mlistelem_get_str(elem));
-	}
-
-	//exit(0);
-	
-	
-/*	mavl_t tree;
-	int i;
-	mavliter_t it;
-	
-	
-	mlist_t list;
-	struct mlistelem * elem;
-	
-	int x;
-	
-	list = mlist_create(NULL,sizeof(int));
-	
-	x=8;
-	mlist_append(list,&x);
-	
-	x=13;
-	mlist_append(list,&x);
-	
-	x=11;
-	mlist_append(list,&x);
-	
-	for(i=0; i<100000000; i++){
-		int val;
-		val = i;
-		mlistelem_t * result;
-		result = mlist_append(list,&val);
-		if (result == NULL){
-			printf("error\n");
-		}
-		
-	}
-
-	printf("Count %d\n",list->count);
-	mlist_foreach(elem,list){
-		int * data = mlistelem_dataptr(elem);
-		printf("Here is %d\n",*data);
-	}
-	
-	
-	exit(0);
-*/
-	
-	/*tree = mavl_create_ptr( (int(*)(const void*,const void*))strcmp,free);
-	 */
-	
-	/*
-		tree = mavl_create_ptr(mycmp,NULL);
-	
-		struct mykv * mdata;
-	
-	
-		mdata = malloc(sizeof(struct mykv));
-		mdata->key=14;
-		mdata->value=15;
-		mavl_add_ptr(tree, mdata);
-	
-		mdata = malloc(sizeof(struct mykv));
-		mdata->key=16;
-		mdata->value=17;
-		mavl_add_ptr(tree, mdata);
-	
-		mdata = malloc(sizeof(struct mykv));
-		mdata->key=12;
-		mdata->value=13;
-		mavl_add_ptr(tree, mdata);
-	
-		mavliter_init(&it,tree);
-		mavliter_foreach(&it){
-			mdata = mavliter_get_ptr(&it);
-			printf("MAVLIT: %d %d\n",mdata->key,mdata->value);
-	
-			struct mykv search;
-			search.key=mdata->key;
-			mdata = mavl_get_ptr(tree,&search);
-			printf("Search T: %d %d\n",mdata->key,mdata->value);
-		}
-	
-		exit(0);
-	*/
-	
-	/*
-		if (tree==NULL)
-			return 0;
-	
-		tree = mavl_create_str();
-	
-		mavl_add_str(tree,cw_strdup("7u83"));
-		mavl_add_str(tree,cw_strdup("Herre"));
-		mavl_add_str(tree,cw_strdup("Tube"));
-		mavl_add_str(tree,cw_strdup("Tobias"));
-		printf("Count: %d\n", mavl_get_count(tree));
-		mavliter_init(&it,tree);
-	
-		mavliter_foreach(&it){
-	
-			printf("iterWert %s\n",mavliter_get_str(&it));
-		}
-	*/
-/*	
-	tree = mavl_create (mycmp, NULL, sizeof (struct mykv));
-	
-	struct mykv nwert;
-	int result;
-	struct mykv * mr;
-	
-	nwert.key = 7;
-	nwert.value = 777;
-	mr = mavl_add_exists (tree, &nwert, &result);
-	printf ("7Result %d: %d %d\n", result, mr->key, mr->value);
-	
-	for (i = 0; i < 10; i++) {
-		//cw_rand(&nwert.key,sizeof(nwert.key));
-		//	printf("Addwert: %u\n",nwert.key);
-		//	printf("add %u\n", i);
-		nwert.key = 9 - i;
-		nwert.value = 100 + i;
-		result=0;
-		mr = mavl_add_exists (tree, &nwert, &result);
-		printf ("Result %d: %d %d\n", result, mr->key, mr->value);
-		
-		
-		
-	}
-	
-	
-	
-	mavliter_init (&it, tree);
-	
-	mavliter_foreach (&it) {
-		struct mykv *kv;
-		kv = mavliter_get (&it);
-		printf ("iterWert %u\n", kv->key);
-	}
-	
-	exit (0);
-*/	
-	
-	
-	
-	
-	
-	/*	mavl_t kv;
-		mavliter_t kviter;
-		uint8_t bytes[] = { 99,4,5,7 };
-	
-	
-		kv = cw_types_mavl_create();
-		//mavl_cmp_kv,cw_type_delete);
-	
-		mavldata_t data, *result;
-	
-		data.kv.key="wtp_board_data";
-		result = cw_type_byte.get(&data,bytes,1);
-		mavl_add(kv,result);
-	
-		data.kv.key="wtp_next_data";
-		result = cw_type_byte.get(&data,bytes+1,1);
-		mavl_add(kv,result);
-	
-	
-		mavliter_init(&kviter,kv);
-		mavliter_foreach(&kviter){
-			char value[500];
-			mavldata_t * data;
-			data = mavliter_get(&kviter);
-			struct cw_Type * type = data->kv.priv;
-			type->to_str(data,value,0);
-	
-			printf("Got %s (%s): %s\n",data->kv.key,type->name, value);
-		}
-	
-		mavl_destroy(kv);
-		exit(0);
-	*/
-	
-	
-	/*	cw_log_init();
-		cw_log(LOG_ERROR,"Hello Debug World222");
-		exit(0);
-	*/
-	/*
-		char * dump_data = "Eine kleine Mickey Maus zog sich mal die Hosen\
-		aus, zog sie wieder an, und du bist dran. Dran bist du noch lange nicht\
-		musst erst sagen, wie alt du bist.";
-	
-		char * result = cw_format_dump(dump_data,strlen(dump_data),NULL);
-	
-		printf("Dump Result:\n%s\n", result);
-		exit(0);
-	*/
-	
-	/*	char data[100];
-		mavl_t im;
-		mavldata_t * val, * val2,itt, itt2, * result, search ;
-		mavliter_t myit;
-	
-		im = mavl_create(mavl_cmp_dword,NULL);
-		itt.dword = 7;
-		itt2.dword = 7;
-	
-	
-		val = mavl_add(im,&itt);
-		val2 = mavl_add(im,&itt2);
-	
-		search.dword = 7;
-		result = mavl_get(im,&search);
-	
-		printf("Result: (%p, %p) (%p, %p) (%p, %p)\n",val, &itt, val2, &itt2, result, &search);
-	
-		exit(0);
-	
-	
-		for (itt.dword=100; itt.dword>0; itt.dword--){
-			printf("Copunting: %d\n",itt.dword);
-			mavl_add(im,&itt);
-		}
-	
-		mavliter_init(&myit,im);
-		mavliter_foreach(&myit){
-			union mavldata * result;
-			result = mavliter_get(&myit);
-			printf("Got Value %d\n",result->dword);
-		}
-	
-		mavl_destroy(im);
-	
-	*/
-	
-	
-	
-	
 	int rc = 0;
-	
+	struct bootcfg bootcfg;
+	FILE * file;
+	mavl_t types_tree, global_cfg;
+	const cw_Type_t **ti;
+
 	/* parse arguments */
-	parse_args (argc, argv);
+	parse_args (argc, argv, &bootcfg);
+
+	/* open config file */
+        file = fopen(bootcfg.cfgfilename,"r");
+        if (file == NULL){
+                cw_log(LOG_ERR,"Cant open config file '%s': %s", 
+				bootcfg.cfgfilename, strerror(errno));
+                exit(EXIT_FAILURE);
+        }
+
+	/* create types tree with default types */
+	types_tree = cw_ktv_create_types_tree();
+	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
+		mavl_add_ptr(types_tree,*ti);
+	}
 	
+	global_cfg = cw_ktv_create();
+	if (global_cfg == NULL){
+		cw_log(LOG_ERR,"Can't create local_cfg: %s",strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+	cw_ktv_read_file(file,global_cfg,types_tree);
+
+	fclose(file);
+	
+	cw_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
+	actube_global_cfg = global_cfg;
+
+
+
+
+
+
+
+
 	cw_log_name = "AC-Tube";
 	
 	if (!read_config ("ac.conf"))

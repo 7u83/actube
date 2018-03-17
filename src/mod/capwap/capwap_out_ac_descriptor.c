@@ -8,48 +8,70 @@
 
 
 #include "cw/cw.h"
+#include "cw/ktv.h"
+#include "cw/keys.h"
 
 
 
-int capwap_out_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) 
-{
+static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char * parent_key){
 
-	uint8_t *d = dst+4;
-	struct mbag_item * i;
-	i = mbag_get(conn->local,CW_ITEM_AC_STATUS);
+	uint8_t *d = dst;
+	uint8_t security;
 	
-	if (!i) {
-		cw_log(LOG_ERR,"Can't send AC Descriptor, no AC Status Item found");
-		return 0; 
-	}
-
-	d+=cw_put_ac_status(d ,(struct cw_ac_status*)(i->u2.data),conn);
-
-/*
-
-	i = mbag_get(conn->local,CW_ITEM_AC_HARDWARE_VERSION);
-	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_AC_HARDWARE_VERSION,i->u2.data);
-	}
-	else {
-		cw_log(LOG_ERR, "Can't send hard version in AC descriptor, not set.");
-	}
-
+	char key[CW_KTV_MAX_KEY_LEN];
 	
-	i = mbag_get(conn->local,CW_ITEM_AC_SOFTWARE_VERSION);
 
-	if ( i ) {	
-	 	d += cw_put_version(d,CW_SUBELEM_AC_SOFTWARE_VERSION,i->u2.data);
+	d += cw_put_word(d,cw_ktv_get_word(global,"ac/ac-descriptor/stations",0));
+	d += cw_put_word(d,cw_ktv_get_word(global,"ac/ac-descriptor/station-limit",0));
+	d += cw_put_word(d,cw_ktv_get_word(global,"ac/ac-descriptor/active-wtps",0));
+	d += cw_put_word(d,cw_ktv_get_word(global,"ac/ac-descriptor/max-wtps",0));
+
+	security = 0;
+	if (cw_ktv_get(local,"dtls-cert-file",CW_TYPE_BSTR16))
+		security |= CAPWAP_FLAG_AC_SECURITY_X;
+		
+	if (cw_ktv_get(local,"dtls-psk",CW_TYPE_BSTR16))
+		security |= CAPWAP_FLAG_AC_SECURITY_S;
+
+	if (security == 0){
+		cw_log(LOG_WARNING,"Attention: no AC security selected");
 	}
-	else {
-		cw_log(LOG_ERR, "Can't send software version in AC descriptor, not set.");
-	}
-*/
-	int len = d-dst-4;
+	d += cw_put_byte(dst,security);
 	
-	return len + cw_put_elem_hdr(dst,a->elem_id,len);
+	sprintf(key,"%s/%s",parent_key,CW_SKEY_RMAC_FIELD);
+	d += cw_put_byte(d,cw_ktv_get_byte(local,key,0));
+	
+	d += cw_put_byte(d,0);
 
+
+	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
+	d += cw_put_byte(d,cw_ktv_get_byte(local,key,0));
+
+	return d - dst;
 }
 
 
+int capwap_out_ac_descriptor(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst)
+{
+	int len;
+	uint8_t *d = dst+4;
+	char key[CW_KTV_MAX_KEY_LEN];
 
+	d+=put_ac_status(params->conn->local_cfg,
+				params->conn->global_cfg,
+				d, eh->key);
+
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+                                 CW_SUBELEM_AC_HARDWARE_VERSION, key);
+ 
+	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+                                 CW_SUBELEM_AC_HARDWARE_VERSION, key);
+
+	len = d-dst-4;
+
+	return len + cw_put_elem_hdr(dst,eh->id,len);
+
+}

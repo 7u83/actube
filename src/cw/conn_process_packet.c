@@ -116,13 +116,14 @@ void cw_init_data_msg(struct conn *conn)
  */
 int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
 {
+	int rc;
 	cw_init_response(conn, rawmsg);
-	if (cw_put_msg(conn, conn->resp_buffer) == -1)
+	rc = cw_put_msg(conn, conn->resp_buffer);
+	if (!cw_result_is_ok(rc))
 		return 0;
 	conn_send_msg(conn, conn->resp_buffer);
 	return 1;
 }
-
 
 
 
@@ -330,10 +331,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 	
-	if (conn->msg_start){
+/*	if (conn->msg_start){
 		conn->msg_start(conn, afm, rawmsg, len, from);
 	}
-
+*/
 	/* Execute start processor for message */
 /*
 //	if (afm->start) {
@@ -353,6 +354,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
+		int rc;
 
 		struct cw_ElemHandlerParams params;
 		int elem_len, elem_id, max_len;
@@ -377,26 +379,16 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		params.msgdata=message;
 		params.mand_found=mand_found;
 		
-		result_code = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); 
+		rc = cw_process_element(&params,0,0,elem_id,elem_data,elem_len); 
 		
 
-		if (cw_result_is_ok(result_code))
+		if (cw_result_is_ok(rc))
 			continue;
 		
-		if (result_code == CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT){
+		if (rc == CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT){
 			mlist_append(unrecognized,&elem);
-		}
-
-
-continue;
-exit(0);
-
-/*		if (!check_len(conn, af, cw_get_elem_data(elem), elem_len, from)) {
 			continue;
 		}
-		cw_dbg_elem(DBG_ELEM, conn, as.msg_id, as.elem_id, cw_get_elem_data(elem),
-			    elem_len);
-*/
 
 
 	}
@@ -426,10 +418,7 @@ exit(0);
 		}
 
 
-		mavliter_init(&it,mand_found);
-		mavliter_foreach(&it){
-			printf("MAnd found: %s", mavliter_get_str(&it));
-		}
+
 		
 		{
 			mlistelem_t *e;
@@ -445,13 +434,10 @@ exit(0);
 	}
 
 
-	//int result_code = 0;
-//int unrecognized =3;
 
+/**	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from); */
 
-	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from);
-
-	if (rct && conn->strict_capwap)
+/*	if (rct && conn->strict_capwap)
 	{
 		result_code = rct;
 	}
@@ -465,11 +451,11 @@ exit(0);
 			conn->msg_end(conn, afm, rawmsg, len, from);
 		}
 	}
-
-	if (unrecognized) {
+*/
+/*	if (unrecognized) {
 		cw_dbg(DBG_RFC, "Message has %d unrecognized message elements.",
 		       unrecognized);
-		/* set only resultcode for request messages */
+		// set only resultcode for request messages 
 
 		if ( (!result_code) && ((afm->msg_id & 1))) {
 			if (conn->strict_capwap) {
@@ -478,14 +464,19 @@ exit(0);
 		}
 
 	}
+*/
+
 
 	/* if we've got a request message, we always have to send a response message */
-	if (as.msg_id & 1) {
+	if (message->type & 1) {
 		if (result_code > 0) {
 			/* the end method gave us an result code>0, so
 			   send an error message */
+printf("Here we are, error response %i %s\n", result_code, cw_strerror(result_code));
+exit(0);
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
+
 			/* All ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);
 		} else {

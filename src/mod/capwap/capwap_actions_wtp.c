@@ -33,7 +33,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
-		.elem_id  = CW_ELEM_AC_NAME,
+		.elem_id  = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -137,7 +137,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id  = CW_ELEM_AC_NAME,
+		.elem_id  = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -628,7 +628,7 @@ static cw_action_out_t actions_out[] = {
 	/* AC Name - Config Status Request - OUT */
 	{
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-		.elem_id = CW_ELEM_AC_NAME,
+		.elem_id = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.out = cw_out_generic,
 	       	.get = cw_out_get_local,

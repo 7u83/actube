@@ -74,6 +74,7 @@ struct conn {
 	
 	mavl_t remote_cfg;
 	mavl_t local_cfg;
+	mavl_t global_cfg;
 	
 	
 

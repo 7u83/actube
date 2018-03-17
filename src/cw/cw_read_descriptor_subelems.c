@@ -44,13 +44,13 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 		
 		/* search sub-element */
 		for (i = 0; elems[i].maxlen; i++) {
-			if (elems[i].type == subtype && elems[i].vendor_id==vendor_id)
+			if (elems[i].type == subtype /* && elems[i].vendor_id==vendor_id*/)
 				break;
 		}
 		
 		
 		if (!elems[i].maxlen) {
-			cw_dbg_version_subelem(DBG_ELEM_ERR, "Can't handle sub-elem, vendor or type unknonw",
+			cw_dbg_version_subelem(DBG_ELEM_ERR, "Can't handle sub-elem, vendor or type unknown",
 				subtype, vendor_id, data+sub+8, sublen);
 			errors++;
 		} else {

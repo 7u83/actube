@@ -29,7 +29,7 @@ struct wtpman{
 	uint8_t * session_id;
 	uint8_t wtp_mactype;
 
-	//struct wtpinfo wtpinfo;
+/*	//struct wtpinfo wtpinfo;*/
 
 
 	int socklistindex;

@@ -2,15 +2,16 @@
 #include "keys.h"
 #include "log.h"
 #include "cw.h"
+#include "dbg.h"
 
 int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
-                                 int subelem_id, const char * parent_key)
+                                 int subelem_id, const char * parent_key )
 {
 	char key[256];
 	cw_KTV_t * vendor, *version ;
 	uint8_t *d;
-	
-	
+
+
 	/*        d += cw_put_dword(d, bstrv_get_vendor_id(v));
 	d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
 	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
@@ -19,7 +20,7 @@ int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
 	vendor = cw_ktv_get (ktvstore, key, CW_TYPE_DWORD);
 	
 	if (vendor == NULL) {
-		cw_log (LOG_ERR, "Can't put subelem %s, not value found.", key);
+		cw_log (LOG_ERR, "Can't put subelem %s, no value found.", key);
 		return 0;
 	}
 	
@@ -28,7 +29,7 @@ int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
 	version = cw_ktv_get (ktvstore, key, CW_TYPE_BSTR16);
 	
 	if (version == NULL) {
-		cw_log (LOG_ERR, "Can't put subelem %s, not value found.", key);
+		cw_log (LOG_ERR, "Can't put subelem %s, no value found.", key);
 		return 0;
 	}
 	

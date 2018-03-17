@@ -17,8 +17,8 @@ struct cw_ac_status ac_status;
 
 struct cw_actiondef capwap_actions;
 
-mbag_t ac_config;
 
+mavl_t actube_global_cfg;
 
 cw_aciplist_t get_aciplist()
 {

@@ -23,7 +23,7 @@
 #include "conn.h"
 #include "cwmsg.h"
 
-#include <stdio.h> //Tube
+#include <stdio.h> 
 
 void cwmsg_addelem_mtu_discovery_padding(struct cwmsg * msg, struct conn* conn)
 {

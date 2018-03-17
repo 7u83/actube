@@ -154,7 +154,7 @@ static cw_action_in_t actions_in[] = {
 		/* We have to deal with zero-length strings */
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
-		.elem_id = CW_ELEM_AC_NAME,
+		.elem_id = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,
 		.start = cw_in_generic2,
 		.min_len = 0,

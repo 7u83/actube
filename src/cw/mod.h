@@ -29,7 +29,7 @@
 
 #include "sock.h"
 #include "conn.h"
-#include "action.h"
+
 
 struct cw_actiondef;
 
@@ -39,16 +39,22 @@ enum {
 	CW_MOD_MODE_BINDINGS
 };
 
+enum {
+	CW_ROLE_AC=1,
+	CW_ROLE_WTP=2
+};
+
 
 
 struct cw_Mod {
 	/** Name of the module */
 	const char *name;
+
 	/** Initializion method */
-	int (*init) ();
+	int (*init) (struct cw_Mod *mod, mavl_t global_cfg, int role);
 
 	/** init_config */
-	int (*init_config) (void * /*mbag_t config*/);
+/*	int (*init_config) (void *);*/
 
 	/** Detect capwap 
 	 * This function is called after receiving and disassembling a complete 
@@ -57,14 +63,9 @@ struct cw_Mod {
 	 * @return 0 if notdetected 
 	**/
 	int (*detect) (struct conn * conn, const uint8_t * rawmsg, int rawlen,
-		       int elems_len, struct sockaddr * from, int mode);
+		int elems_len, struct sockaddr * from, int mode);
 
-	/** used for private data */
-	void *data;
 
-	/** Register actions */
-	int (*register_actions) (struct cw_actiondef * def,int mode);
-	
 	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet * set, int mode);
 	
 	/** 
@@ -73,6 +74,9 @@ struct cw_Mod {
 	 * linked, dll_handle is NULL.
 	 */
 	void * dll_handle;
+
+	/** used for private data */
+	void *data;
 };
 
 
@@ -93,7 +97,7 @@ extern int mod_caching;
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
-struct cw_Mod * cw_mod_load(const char * mod_name);
+struct cw_Mod * cw_mod_load(const char * mod_name, mavl_t global_cfg, int role);
 struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod );
 struct cw_Mod * cw_mod_detect(struct conn *conn, 
 			uint8_t * rawmsg, int len,

@@ -27,8 +27,10 @@ int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types)
 		if (cwtype != NULL){
 		//	printf("Yes! I know the type: %s\n",cwtype->name);
 		}
-		else
+		else {
+			printf("Unknown type: %s\n",typesearch.name);
 			continue;
+		}
 		
 		
 		

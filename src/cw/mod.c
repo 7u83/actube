@@ -193,7 +193,7 @@ void cw_mod_set_path(const char * path){
  * @param mod_name Name of the module
  * @return a pointer to the module interface
  */
-struct cw_Mod * cw_mod_load(const char * mod_name){
+struct cw_Mod * cw_mod_load(const char * mod_name, mavl_t global_cfg, int role){
 	struct cw_Mod search;
 	struct cw_Mod * mod;
 	char mod_filename[CW_MOD_MAX_MOD_NAME_LEN+5];
@@ -266,7 +266,7 @@ struct cw_Mod * cw_mod_load(const char * mod_name){
 		goto errX;
 	}
 	cw_dbg(DBG_MOD, "MOD: %s sucessfull loaded, calling init now.",filename);
-	mod->init();
+	mod->init(mod,global_cfg,role);
 errX:
 	free(filename);
 	return mod;

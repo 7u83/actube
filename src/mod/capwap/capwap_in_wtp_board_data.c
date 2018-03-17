@@ -41,9 +41,12 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 
 
 	do {
+		int subtype;
+		int sublen;
+		
 		val = ntohl(*((uint32_t *) (msgelem + i)));
-		int subtype = (val >> 16) & 0xffff;
-		int sublen = val & 0xffff;
+		subtype = (val >> 16) & 0xffff;
+		sublen = val & 0xffff;
 		i += 4;
 		if (sublen + i > len) {
 			cw_dbg(DBG_ELEM_ERR,
@@ -96,7 +99,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 				key = NULL;
 				break;
 		}
-		if (key){
+		if (key != NULL){
 			char add_key[256];
 			sprintf(add_key,"wtp_board_data/%s",key);
 			cw_ktv_add(cfg,add_key,CW_TYPE_BSTR16,msgelem+i,sublen);

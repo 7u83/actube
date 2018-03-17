@@ -20,7 +20,6 @@ const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct 
 		return NULL;
 	}
 
-printf("Want To Add: %s:%s (%s)\n",key,str,type->name);
 	mresult = type->from_str(&mdata,str);
 	if (!mresult){
 		cw_log(LOG_ERR, "Can't create kvstore element for key %s of type %s: %s",

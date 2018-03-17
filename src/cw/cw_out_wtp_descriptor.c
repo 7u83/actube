@@ -31,7 +31,7 @@ static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 }
 
 
-
+/*
 int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 
@@ -77,7 +77,8 @@ int cw_out_wtp_descriptor(struct conn *conn, struct cw_action_out *a, uint8_t * 
         else {
                 cw_log(LOG_INFO, "Can't send Other Version in WTP descriptor, not set.");
         }
-*/
-	int len = d-dst-4;
-	return len + cw_put_elem_hdr(dst,a->elem_id,len);
+*
+//	int len = d-dst-4;
+//	return len + cw_put_elem_hdr(dst,a->elem_id,len);
 }	
+*/

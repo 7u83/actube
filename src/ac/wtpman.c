@@ -751,10 +751,16 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	wtpman->conn->strict_hdr = conf_strict_headers;
 	wtpman->conn->radios = mbag_i_create();
 	wtpman->conn->radios_upd = mbag_i_create();
-	wtpman->conn->local = ac_config;
+//	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
 	wtpman->conn->capwap_mode = CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
+
+
+
+
+	wtpman->conn->local_cfg = cw_ktv_create();
+	wtpman->conn->global_cfg = actube_global_cfg;
 
 	return wtpman;
 }

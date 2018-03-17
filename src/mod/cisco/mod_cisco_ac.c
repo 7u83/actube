@@ -7,7 +7,7 @@
 
 #include "cw/action.h"
 
-#include "mod_cisco.h"
+/*#include "mod_cisco.h"*/
 #include "../modload.h"
 
 #include "cw/vendors.h"

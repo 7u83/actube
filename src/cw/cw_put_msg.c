@@ -44,6 +44,8 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	struct mlistelem * elem;
 	int len,l;
 
+\
+
 	/* rawout is already initialized, so we can get 
 	 * msg type from buffer */
 	msgptr = rawout + cw_get_hdr_msg_offset(rawout);
@@ -53,8 +55,11 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	if (msg == NULL){
 		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
 			type, cw_strmsg(type));
+		return CAPWAP_RESULT_MSG_UNRECOGNIZED;
 	}
-	
+
+	printf("Message to send: %s (elems %d)\n",msg->name, msg->elements_list->count);
+
 	dst = msgptr+8;
 	len =0;
 	mlist_foreach(elem,msg->elements_list){
@@ -64,7 +69,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-		//printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
+		printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
 
 		if (handler->put == NULL){
 			if (data->mand){
@@ -93,7 +98,32 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	return len;
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	printf("Message to send: %s\n",msg->name);
 
 
