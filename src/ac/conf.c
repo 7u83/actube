@@ -27,7 +27,7 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/cw_util.h"
-#include "cw/action.h"
+
 
 #include "conf.h"
 #include "ac.h"
@@ -38,7 +38,7 @@ uint8_t conf_macaddress_len = 0;
 
 long conf_strict_capwap = 1;
 long conf_strict_headers = 0;
-int conf_capwap_mode = CW_MODE_CAPWAP;
+/*int conf_capwap_mode = CW_MODE_CAPWAP;*/
 
 
 

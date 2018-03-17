@@ -29,7 +29,7 @@
 #include "cw/log.h"
 #include "cw/timer.h"
 #include "cw/cw.h"
-#include "cw/capwap_items.h"
+
 #include "cw/dtls.h"
 #include "cw/dbg.h"
 #include "cw/conn.h"
@@ -46,14 +46,14 @@
 static void reset_echointerval_timer(struct wtpman *wtpman)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
+/*	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
 				    CW_MAX_DISCOVERY_INTERVAL << 8 |
 				    CAPWAP_ECHO_INTERVAL);
-
+*/
 	/* start echinterval timer and put 2 seconds for "safety" on it */
 
-	wtpman->echointerval_timer = cw_timer_start(2+ (ct & 0xff));
-	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr,sock_buf), conf_acname);
+//	wtpman->echointerval_timer = cw_timer_start(2+ (ct & 0xff));
+//	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr,sock_buf), conf_acname);
 //	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
 
 }
@@ -89,7 +89,7 @@ static void wtpman_run_discovery(void *arg)
 
 	time_t timer = cw_timer_start(10);
 
-	extern cw_actionlist_in_t the_tree;
+
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 //	wtpman->conn->actions = &capwap_actions;
@@ -104,12 +104,12 @@ static void wtpman_run_discovery(void *arg)
 		cw_read_messages(wtpman->conn);
 	}
 
-	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
+//	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
-	if (wn) {
+//	if (wn) {
 //              printf("WTP Name: %s\n", wn->data);
 //              exit(0);
-	}
+//	}
 
 	wtpman_remove(wtpman);
 	return;
@@ -185,12 +185,12 @@ static int wtpman_join(void *arg, time_t timer)
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	struct conn *conn = wtpman->conn;
 
-	wtpman->conn->outgoing = mbag_create();
-	wtpman->conn->incomming = mbag_create();
-	conn->config = conn->incomming;
+//	wtpman->conn->outgoing = mbag_create();
+//	wtpman->conn->incomming = mbag_create();
+//	conn->config = conn->incomming;
 //      wtpman->conn->local = ac_config;
 
-	mbag_set_str(conn->local, CW_ITEM_AC_NAME, conf_acname);
+//	mbag_set_str(conn->local, CW_ITEM_AC_NAME, conf_acname);
 
 
 
@@ -232,10 +232,10 @@ static int wtpman_join(void *arg, time_t timer)
 
 static void wtpman_image_data(struct wtpman *wtpman)
 {
-	char sock_buf[SOCK_ADDR_BUFSIZE];
+/*	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct conn *conn = wtpman->conn;
 
-	/* Image upload */
+	// Image upload 
 	const char *filename = mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME, NULL);
 	if (!filename) {
 		cw_log(LOG_ERR,
@@ -278,66 +278,8 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 	fclose(infile);
 	wtpman_remove(wtpman);
+*/
 
-
-}
-
-
-// TODO XXXX
-
-void props_to_sql(struct conn *conn, mbag_t  mb, const char *mid)
-{
-	/*
-	// XXX for the now we use just the IP adress as ID
-	char *wtp_id = sock_addr2str(&conn->addr);
-
-//	cw_dbg(DBG_X, "WTPID: %s\n", wtp_id);
-
-	MAVLITER_DEFINE(it, mb);
-	mavliter_foreach(&it) {
-		mbag_item_t *i = mavliter_get(&it);
-
-		const struct cw_itemdef *cwi;
-
-		if (!mid){
-		    cwi = cw_itemdef_get(conn->actions->items, i->id, NULL);
-		}
-		else{
-		    cwi = cw_itemdef_get(conn->actions->items, mid,i->id);
-		}
-
-		if (!cwi){
-			cw_dbg(DBG_WARN,"No definition for item %s found.",i->id);
-			continue;
-		}
-
-		if (i->type==MBAG_MBAG){
-			if (mid){
-				cw_log(LOG_ERROR,"Depth for %s",i->id);
-				continue;
-			}
-
-			props_to_sql(conn,i->data,i->id);
-			continue;
-		}	
-
-
-		DBGX("SQL ID %s,%s", i->id, cwi->id);
-		DBGX("SQL Type %s,Typecwd %s", i->type->name, cwi->type->name);
-
-		//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
-		char str[256];
-		if (i->type->to_str) {
-			i->type->to_str(i, str);
-			db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
-		} else {
-			cw_log(LOG_ERR, "Can't converto to str for %s", cwi->id,
-			       cwi->sub_id);
-
-		}
-
-	}
-	 */
 }
 
 
@@ -386,7 +328,7 @@ void config_to_sql(struct conn *conn)
 */
 }
 
-void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
+void xradio_to_sql(struct conn *conn, char *wtp_id, int rid, int radio)
 {
 	
 /*	
@@ -427,7 +369,7 @@ void radio_to_sql(struct conn *conn, char *wtp_id, int rid, mbag_t radio)
 */
 }
 
-
+/*
 void radios_to_sql(struct conn *conn)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
@@ -442,7 +384,7 @@ void radios_to_sql(struct conn *conn)
 
 	}
 }
-
+*/
 
 
 
@@ -473,10 +415,11 @@ void wtpman_run_data(void *wtpman_arg)
 static int msg_end_handler(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			     int len, struct sockaddr *from)
 {
-	if (a->msg_id ==CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST) {
+/*	if (a->msg_id ==CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST) {
 		props_to_sql(conn,conn->incomming,0);
 		radios_to_sql(conn);
 	}
+*/
 }
 
 
@@ -565,8 +508,8 @@ static void wtpman_run(void *arg)
 
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
-	props_to_sql(conn,conn->incomming,0);
-	radios_to_sql(conn);
+//	props_to_sql(conn,conn->incomming,0);
+//	radios_to_sql(conn);
 
 
 	conn->msg_end=msg_end_handler;
@@ -590,8 +533,8 @@ static void wtpman_run(void *arg)
 			break;
 		}
 
-		mavl_del_all(conn->outgoing);
-		conn_clear_upd(conn,1);
+//		mavl_del_all(conn->outgoing);
+//		conn_clear_upd(conn,1);
 
 //	props_to_sql(conn,conn->incomming,0);
 //	radios_to_sql(conn);
@@ -602,37 +545,37 @@ static void wtpman_run(void *arg)
 		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 
-			if (!conn->outgoing->count)
-				continue;
+//			if (!conn->outgoing->count)
+//				continue;
 
 			cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 
 			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
-			mavl_merge(conn->config, conn->outgoing);
-			mavl_destroy(conn->outgoing);
-			conn->outgoing = mbag_create();
-			props_to_sql(conn,conn->incomming,0);
-			radios_to_sql(conn);
-			mavl_destroy(r);
+//			mavl_merge(conn->config, conn->outgoing);
+//			mavl_destroy(conn->outgoing);
+//			conn->outgoing = mbag_create();
+//			props_to_sql(conn,conn->incomming,0);
+//			radios_to_sql(conn);
+//			mavl_destroy(r);
 		}
 
 		r = db_get_radio_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 
-			if (!conn->radios_upd->count)
-				continue;
+//			if (!conn->radios_upd->count)
+//				continue;
 
 			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr,sock_buf));
 			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 
 
-			conn_clear_upd(conn,1);
+//			conn_clear_upd(conn,1);
 
 //			mavl_destroy(conn->radios_upd);
 //			conn->radios_upd=mbag_i_create();
 
 
-			radios_to_sql(conn);
+//			radios_to_sql(conn);
 
 			/*
 			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
@@ -749,11 +692,11 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
-	wtpman->conn->radios = mbag_i_create();
-	wtpman->conn->radios_upd = mbag_i_create();
+//	wtpman->conn->radios = mbag_i_create();
+//	wtpman->conn->radios_upd = mbag_i_create();
 //	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
-	wtpman->conn->capwap_mode = CW_MODE_CISCO;
+//	wtpman->conn->capwap_mode = CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
 
 

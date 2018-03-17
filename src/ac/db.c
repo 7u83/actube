@@ -1,13 +1,13 @@
 
 #include <sqlite3.h>
 
-#include "cw/mbag.h"
+
 #include "cw/log.h"
 #include "cw/dbg.h"
-#include "cw/capwap_items.h"
+
 #include "cw/conn.h"
-#include "cw/item.h"
-#include "cw/mbag.h"
+
+
 
 #include "conf.h"
 
@@ -187,9 +187,9 @@ void db_put_radio_prop(const char *wtp_id,const char *rid, const char * key,cons
 		goto errX;
 
 
-	if (!sub_key) 
+/*	if (!sub_key) 
 		sub_key=CW_ITEM_NONE;
-
+*/
 	if (sqlite3_bind_text(stmt_put_radio_prop,4,sub_key,-1,SQLITE_STATIC))
 		goto errX;
 
@@ -272,9 +272,9 @@ void db_put_wtp_prop(const char *wtp_id,const char * id,const char *sub_id,const
 	if(sqlite3_bind_text(put_wtp_prop_stmt,2,id,-1,SQLITE_STATIC))
 		goto errX;
 
-	if (!sub_id) 
+/*	if (!sub_id) 
 		sub_id=CW_ITEM_NONE;
-	
+*/
 
 	if (sqlite3_bind_text(put_wtp_prop_stmt,3,sub_id,-1,SQLITE_STATIC))
 		goto errX;

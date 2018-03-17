@@ -4,7 +4,7 @@
 #include "ac.h"
 #include "conf.h"
 #include "cw/capwap.h"
-#include "cw/capwap_items.h"
+
 #include "cw/aciplist.h"
 #include "socklist.h"
 #include "cw/sock.h"
@@ -15,7 +15,7 @@
 struct cw_ac_status ac_status;
 
 
-struct cw_actiondef capwap_actions;
+
 
 
 mavl_t actube_global_cfg;
