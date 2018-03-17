@@ -38,7 +38,7 @@ int cw_rand_r(uint8_t * dst, int len)
 	int rf;
 	int l;
 
-	rf = open(cw_rand_dev, O_RDONLY | O_NDELAY);
+	rf = open(cw_rand_dev, O_RDONLY | O_NONBLOCK);
 	if (rf < 0) {
 
 		cw_log(LOG_ERR, "Can't open %s: %s", cw_rand_dev, strerror(errno));
