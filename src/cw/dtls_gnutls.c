@@ -22,7 +22,7 @@
 #include <gnutls/gnutls.h>
 #include <gnutls/dtls.h>
 
-#include "mbag.h"
+
 #include "dtls_common.h"
 #include "dtls_gnutls.h"
 

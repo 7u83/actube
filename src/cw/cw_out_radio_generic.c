@@ -1,10 +1,9 @@
 
 
-#include "mbag.h"
-#include "action.h"
+/*
+
 #include "cw.h"
 #include "cw/dbg.h"
-
 
 int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
@@ -18,8 +17,8 @@ cw_dbg(DBG_X,"Radio Generic out %s",a->item_id);
 			continue;
 		}
 
-		/* Size for msg elem header depends on 
-		   vendor specific payload */
+		// Size for msg elem header depends on 
+		  // vendor specific payload 
 		int start = a->vendor_id ? 10 : 4;
 
 		uint8_t * d = dst+l;
@@ -48,3 +47,4 @@ cw_dbg(DBG_X,"Not found! %s for rid %d",a->item_id,radio->u1.iid);
 	return l;
 
 }
+*/

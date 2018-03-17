@@ -12,6 +12,8 @@
 /**
  * Default handler for LWAPP Vendor Specific Payload message elements.
  */
+ 
+ /*
 int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 				  uint8_t * data, int len, struct sockaddr *from)
 {
@@ -23,9 +25,9 @@ int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 	as.elem_id = cw_get_word(data + 4);
 	as.proto = CW_ACTION_PROTO_LWAPP;
 
-/* TODO XXXX
+// TODO XXXX
 	//af = cw_actionlist_in_get(conn->actions->in, &as);
-*/	
+//	
 	af = 0;
 
 	if (!af) {
@@ -39,12 +41,13 @@ int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 	if (af->start) {
 		int afrc = af->start(conn, af, data + 6, len - 6, from);
 		if (af->mand && afrc) {
-			/* add found mandatory message element 
-			   to mand list */
-/* XXXX			stravltree_add(conn->mand, af->item_id); */
+			// add found mandatory message element 
+			   //to mand list 
+// XXXX			stravltree_add(conn->mand, af->item_id); 
 		}
 		return afrc;
 	}
 
 	return 1;
 }
+*/

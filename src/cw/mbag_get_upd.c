@@ -1,10 +1,10 @@
 
 
 
-#include "mbag.h"
+
 #include "log.h"
 
-
+/*
 int mbag_get_upd(mbag_t b, mbag_t b_upd, const char *id, uint8_t *dst, int *found)
 {
 	struct mbag_item *i = mbag_get(b_upd, id);
@@ -29,3 +29,4 @@ int mbag_get_upd(mbag_t b, mbag_t b_upd, const char *id, uint8_t *dst, int *foun
 	return -1;
 
 }
+*/

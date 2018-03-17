@@ -3,7 +3,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "mbag.h"
 #include "log.h"
 #include "dbg.h"
 #include "cw.h"

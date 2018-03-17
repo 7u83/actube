@@ -20,7 +20,7 @@
  * @file
  * @brief Implementation of lw_put_cisco_path_mtu
  */
-#include "mbag.h"
+
 #include "lwapp_cisco.h"
 #include "lw.h"
 #include "vendors.h"

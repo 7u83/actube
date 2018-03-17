@@ -121,9 +121,10 @@ struct cw_wlan {
 
 */
 
-#include "action.h"
 
+/*
 int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+*/
 
 /*
 //extern int cw_register_actions_capwap_80211_wtp(struct cw_actiondef *def);

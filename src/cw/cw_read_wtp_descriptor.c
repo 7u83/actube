@@ -1,7 +1,7 @@
 #include "cw.h"
 
 #include "capwap.h"
-#include "capwap_items.h"
+
 #include "dbg.h"
 #include "ktv.h"
 #include "keys.h"

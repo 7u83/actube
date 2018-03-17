@@ -3,11 +3,12 @@
 #include "conn.h"
 #include "capwap.h"
 //#include "itemstore.h"
-#include "capwap_items.h"
+
 #include "capwap.h"
 
 #include "cw.h"
 
+#define CW_MODE_CISCO 1
 
 static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {

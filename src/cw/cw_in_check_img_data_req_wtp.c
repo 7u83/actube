@@ -4,10 +4,10 @@
 #include "capwap.h"
 #include "dbg.h"
 #include "log.h"
-#include "capwap_items.h"
 
-#include <unistd.h> //Tube
 
+#include <unistd.h> 
+/*
 int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
@@ -20,7 +20,7 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 	return 0;
 
-
+*/
 	/* Check for mandatory elements */
 /*	cw_action_in_t * mlist[60];
 	int n = cw_check_missing_mand(mlist,conn,a);
@@ -63,4 +63,6 @@ int cw_in_check_img_data_req_wtp(struct conn *conn, struct cw_action_in *a, uint
 
 	return CAPWAP_RESULT_IMAGE_DATA_ERROR;
 */
+/*
 }
+ */

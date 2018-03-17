@@ -1,18 +1,15 @@
 
 #include "cw.h"
-#include "capwap_items.h"
-#include "capwap80211.h"
-#include "capwap80211_items.h"
+
 
 #include "radio.h"
 
 #include "dbg.h"
 #include "log.h"
 
-#include "mbag.h"
 
 
-
+/*
 int cw_put_elem_radio_info(uint8_t*dst,int radio_id,mbag_t radio)
 {
 	cw_put_byte(dst+4,radio_id);
@@ -36,9 +33,10 @@ int cw_out_radio_infos(struct conn *conn, struct cw_action_out *a, uint8_t * dst
 
 	}
 	return l;
+	 
 }
 
-
+*/
 
 
 

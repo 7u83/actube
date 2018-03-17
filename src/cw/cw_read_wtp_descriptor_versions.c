@@ -2,7 +2,8 @@
 #include "capwap.h"
 #include "log.h"
 #include "dbg.h"
-#include "capwap_items.h"
+
+/*
 
 int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 {
@@ -33,8 +34,8 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 		char *dmp;
 		char *dmpmem = NULL;
 		if (cw_dbg_is_level(DBG_SUBELEM_DMP)) {
-/*  TODO XXX */
-			dmpmem = NULL; /*cw_dbg_mkdmp(data + i, sublen);*/
+//  TODO XXX 
+			dmpmem = NULL; //cw_dbg_mkdmp(data + i, sublen);
 			dmp = dmpmem;
 		} else
 			dmp = "";
@@ -45,33 +46,10 @@ int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len)
 			free(dmpmem);
 
 		switch (subtype) {
-/*			case CW_SUBELEM_WTP_HARDWARE_VERSION:
-				mbag_set_bstrv(mbag,
-						   CW_ITEM_WTP_HARDWARE_VERSION,
-						   vendor_id, data + i, sublen);
-
-				break;
-			case CW_SUBELEM_WTP_SOFTWARE_VERSION:
-
-				mbag_set_bstrv(mbag,
-						   CW_ITEM_WTP_SOFTWARE_VERSION,
-						   vendor_id, data + i, sublen);
-				break;
-			case CW_SUBELEM_WTP_BOOTLOADER_VERSION:
-
-				mbag_set_bstrv(mbag,
-						   CW_ITEM_WTP_BOOTLOADER_VERSION,
-						   vendor_id, data + i, sublen);
-
-				break;
-			default:
-				cw_dbg(DBG_ELEM_ERR,
-				       "Unknown WTP descriptor subelement, type = %d",
-				       subtype);
-				break;
-*/		}
+		}
 		i += sublen;
 
 	}
 	return 1;
 }
+*/

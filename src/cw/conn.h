@@ -32,7 +32,7 @@
 #include "fragman.h"
 #include "cwmsg.h"
 
-#include "mbag.h"
+
 
 /*#include "action.h"*/
 
@@ -78,7 +78,7 @@ struct conn {
 	
 	
 
-	mbag_t outgoing;
+/*	mbag_t outgoing;
 	mbag_t incomming;
 	mbag_t remote;
 	mbag_t local;
@@ -87,7 +87,7 @@ struct conn {
 	mbag_t radios_upd;
 	mbag_t config;
 	mbag_t config_upd;
-
+*/
 
 	uint8_t session_id[16];
 

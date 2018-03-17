@@ -19,16 +19,18 @@
 
 #include "cw.h"
 #include "log.h"
-#include "capwap_items.h"
+
 
 int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
+	/*
 	mbag_t rs = mbag_create();
 	if (!rs) {
 		cw_log(LOG_ERR,"Can't create REBOOT_STATISITCS");
 		return 0;
 	}		
+*/
 
 /*
     This file is part of libcapwap.
@@ -49,7 +51,7 @@ int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8
 */
 
 
-
+/*
 	mbag_set_word( rs, CW_ITEM_REBOOT_COUNT,cw_get_word(data+0) );
 	mbag_set_word( rs, CW_ITEM_REBOOT_AC_INITIATED_COUNT,cw_get_word(data+2) );
 	mbag_set_word( rs, CW_ITEM_REBOOT_LINK_FAILURE_COUNT,cw_get_word(data+2) );
@@ -61,6 +63,7 @@ int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8
 
 
 	mbag_set_mbag(conn->incomming,CW_ITEM_WTP_REBOOT_STATISTICS,rs);
+*/
 
 	return 1;
 

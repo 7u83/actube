@@ -25,7 +25,7 @@
 
 #include "acpriolist.h"
 
-
+/*
 static int acprio_cmp(const void *x1, const void *x2)
 {
 	cw_acprio_t * p1 = (cw_acprio_t*)x1;
@@ -43,6 +43,7 @@ static void acprio_del(void *d)
 //		free(p->addr);
 	free(d);
 }
+
 
 const struct mbag_typedef mbag_type_acprio = {
 	"acprio",acprio_del
@@ -81,4 +82,4 @@ int cw_acpriolist_get(cw_acpriolist_t l, char * acname){
 	return pf->prio;
 }
 
- 
+ */

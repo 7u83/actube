@@ -1,7 +1,7 @@
 #include "cw.h"
 #include "dbg.h"
 
-
+/*
 int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *a, uint8_t * dst)
 {
 	cw_dbg(DBG_X,"Radio admin updater");
@@ -21,4 +21,4 @@ int cw_out_radio_administrative_states(struct conn *conn, struct cw_action_out *
 	return l;
 }
 
-
+*/

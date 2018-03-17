@@ -1,10 +1,10 @@
-#include "cw/mbag.h"
+
 #include "cw/conn.h"
 #include "cw/rand.h"
 #include "cw/log.h"
-#include "cw/capwap_items.h"
 
 
+/*
 struct mbag_item * capwap_out_get_session_id(struct conn *conn,struct cw_action_out * a)
 {
 	uint8_t session_id[16];
@@ -18,4 +18,4 @@ struct mbag_item * capwap_out_get_session_id(struct conn *conn,struct cw_action_
 	}
 	return mbag_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,slen);
 }
-
+*/

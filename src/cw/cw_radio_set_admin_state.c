@@ -1,10 +1,10 @@
 #include "cw.h"
 #include "dbg.h"
 
-#include "capwap_items.h"
 
 
 
+/*
 int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause)
 {
 	mbag_t radio = mbag_i_get_mbag(radios,rid,NULL);
@@ -18,11 +18,12 @@ int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause)
 		return 1;
 
 
-	/* Set operational state for next config update response. */
+	// Set operational state for next config update response. 
 
 	mbag_set_word(radio,CW_RADIOITEM_OPER_STATE, (state<<8) | 3);
 
 	return 1;
 }
+ */
 
 

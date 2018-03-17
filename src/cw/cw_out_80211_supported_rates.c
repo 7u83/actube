@@ -2,7 +2,7 @@
 #include "capwap80211.h"
 #include "radio.h"
 
-
+/*
 int cw_put_elem_80211_supported_rates(uint8_t*dst,int radio_id,mbag_t radio)
 {
 
@@ -33,3 +33,4 @@ int cw_out_80211_supported_rates(struct conn *conn, struct cw_action_out *a, uin
 }
 
 
+*/

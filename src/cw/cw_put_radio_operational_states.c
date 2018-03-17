@@ -22,16 +22,16 @@
  */
 
 #include "cw.h"
-#include "capwap_items.h"
+
 #include "radio.h"
 
 
 /**
  * Put all radio operational states 
  */
-int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror, int d7mode)
-{
-	uint8_t *d=dst;
+//int xxcw_put_radio_operational_states(struct xaaa * radios, uint8_t * dst, int *nerror, int d7mode)
+//{/
+	//uint8_t *d=dst;
 
 	/* Iterate through all radios and send the CW_RADIO_OPER_STATE item if found.
 	   We assume, that any other processes, dealing with setting the 
@@ -40,46 +40,46 @@ int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 
 //	int nerror=0;
 	
-	*nerror=0;
+//	*nerror=0;
 
-	MAVLITER_DEFINE(it,radios);
-	mavliter_foreach(&it){
+//	MAVLITER_DEFINE(it,radios);
+//	mavliter_foreach(&it){
 
-		mbag_item_t * radioitem = mavliter_get(&it);
-		mbag_item_t *ositem = mbag_get(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
-		if (!ositem){
-			(*nerror)++;
-			continue;
-		}
+//		mbag_item_t * radioitem = mavliter_get(&it);
+//		mbag_item_t *ositem = mbag_get(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
+		//if (!ositem){
+	//		(*nerror)++;
+//			continue;//
+//		}//
 
 
 		/* Put the radio ID */
-		cw_put_byte(d+4,radioitem->u1.iid);
+//		cw_put_byte(d+4,radioitem->u1.iid);
 		
 		/* Get the operational state and cause */
-		uint16_t os = ositem->u2.word;
+//		uint16_t os = ositem->u2.word;
 
-		if ( d7mode ){
-			/* Isolate Oper Sate from cause */
-			uint8_t o=os>>8; 
+//		if ( d7mode ){//
+			// Isolate Oper Sate from cause 
+//			uint8_t o=os>>8; 
 
-			/* Invert oper state for Cisco, if oper state is 2 or 1 */
-			if (o!=0 && o<=2) {
-				/*  2 becomes 1 and 1 becomes 2 */
-				os = (os & 0x00ff ) | ((3-o)<<8);
-			}
-		}
+//			/* Invert oper state for Cisco, if oper state is 2 or 1 */
+//			if (o!=0 && o<=2) {
+//				/*  2 becomes 1 and 1 becomes 2 */
+//				os = (os & 0x00ff ) | ((3-o)<<8);
+//			}
+//		}
 
-		/* Put oper state */
-		cw_put_word(d+5,os);
-		d+=3+cw_put_elem_hdr(d,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
+//		/* Put oper state */
+//		cw_put_word(d+5,os);
+//		d+=3+cw_put_elem_hdr(d,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
 
 		/* delete the operational state item, so it won't be 
 		   sent again, until it is set by a change through
 		   Set Radio Admin State */
-		mbag_del(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
+//		mbag_del(radioitem->u2.data,CW_RADIOITEM_OPER_STATE);
 
-	}
+//	}
 
 
 /*	if (nerror) {
@@ -90,7 +90,7 @@ int xxcw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 		}
 	}
 */
-	return d-dst;
-}
+//	return d-dst;
+//}
 
 

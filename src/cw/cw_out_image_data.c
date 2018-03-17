@@ -2,7 +2,7 @@
 #include <errno.h>
 
 #include "cw.h"
-#include "capwap_items.h"
+
 
 #include "log.h"
 #include "dbg.h"

@@ -18,13 +18,13 @@
 
 #include "log.h"
 
-#include "mbag.h"
-#include "capwap_items.h"
-#include "action.h"
+
+
+
 
 #include "cw.h"
 
-
+/*
 int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 				 uint8_t * dst)
 {
@@ -62,3 +62,4 @@ int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 	int l = d - dst - 4;
 	return l + cw_put_elem_hdr(dst, a->elem_id, l);
 }
+*/

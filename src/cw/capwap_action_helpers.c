@@ -1,9 +1,9 @@
 
-#include "mbag.h"
-#include "action.h"
+
+
 #include "capwap.h"
 
-
+/*
 
 int cw_in_set_state_none(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len)
 {
@@ -60,3 +60,4 @@ struct mbag_item * cw_out_get_session_id(struct conn *conn,struct cw_action_out 
 	return mbag_set_bstrn(conn->local,CW_ITEM_SESSION_ID,session_id,slen);
 }
 
+*/

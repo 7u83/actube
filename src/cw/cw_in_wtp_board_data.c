@@ -23,15 +23,15 @@
 
 
 #include "cw.h"
-#include "capwap_items.h"
 
-#include "mbag.h"
+
+
 
 #include "cw_util.h"
 #include "dbg.h"
 
 
-
+/*
 static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 					int len)
 {
@@ -94,10 +94,14 @@ static void readsubelems_wtp_board_data(mbag_t itemstore, uint8_t * msgelem,
 	} while (i < len);
 }
 
+*/
 
 /**
  * Parse a WTP Board Data messag element and put results to itemstore.
  */
+ 
+ 
+ /*
 int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
@@ -116,3 +120,4 @@ int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * da
 
 	return 1;
 }
+*/

@@ -4,9 +4,9 @@
 #include <arpa/inet.h>
 
 #include "bstr.h"
-#include "mbag.h"
+
 #include "conn.h"
-#include "action.h"
+
 
 #include "lw.h"
 #include "capwap.h"
@@ -271,7 +271,7 @@ int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 
 int cw_put_image_data(uint8_t * dst, FILE * infile);
 
-extern int cw_put_mbag_item(uint8_t * dst, struct mbag_item *item);
+
 
 
 /**
@@ -337,6 +337,7 @@ extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct conn *conn,
 				    struct cw_ElemHandler *eh, uint8_t * data, int len,
 				    struct cw_DescriptorSubelemDef *allowed);
 
+/*
 extern int cw_read_ac_descriptor(mbag_t store, uint8_t * data, int len,
 				 struct cw_DescriptorSubelemDef *allowed);
 
@@ -349,7 +350,7 @@ extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
 extern int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a,
 				   uint8_t * data, int len, struct sockaddr *from);
 
-
+*/
 
 /**
  * @defgroup CWELEMIN Input Handlers for Message Elements
@@ -414,10 +415,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params,
  * @defgroup CWELEMOUT Output Handlers for Message Elements
  * @{
  */
-extern int cw_out_capwap_local_ip_address(struct conn *conn, struct cw_action_out *action,
-					  uint8_t * dst);
-extern int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
-				 uint8_t * dst);
+
 
 
 /**
@@ -427,15 +425,19 @@ extern int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action
  */
 #define cw_out_capwap_local_ip_address_7 cw_out_wtp_ip_address
 
+/*
 extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
 					uint8_t * dst);
+*/
 
 /* helpers */
-extern int cw_put_local_ip_address(int sock, uint8_t * dst, int ipv4elem_id,
+/*extern int cw_put_local_ip_address(int sock, uint8_t * dst, int ipv4elem_id,
 				   int ipv6elem_id);
+*/
+/*
 extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 					   int d7mode);
-
+*/
 void cw_init_request(struct conn *conn, int msg_id);
 
 
@@ -448,7 +450,10 @@ void cw_init_request(struct conn *conn, int msg_id);
  * @defgroup CAPWAP_RADIO Radio Operations
  * @{
  */
+/* 
 extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause);
+ */
+ 
 /*
 //extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
 //extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
@@ -461,7 +466,8 @@ int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
 
 uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 
-int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
+/*int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);*/
+
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
 int cw_result_is_ok( int rc );

@@ -5,7 +5,7 @@
 
 #include "mavl.h"
 
-
+/*
 void conn_clear_upd(struct conn *conn, int merge)
 {
 	if (merge){
@@ -30,3 +30,4 @@ void conn_clear_upd(struct conn *conn, int merge)
 
 }
 
+*/

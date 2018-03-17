@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <errno.h>
 
-#include "mbag.h"
+
 #include "capwap.h"
 #include "dbg.h"
 #include "log.h"
-#include "capwap_items.h"
+
 
 
 int cw_in_check_img_data_req_ac(struct conn *conn, struct cw_action_in *a, uint8_t * data,

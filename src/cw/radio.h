@@ -1,8 +1,8 @@
 #ifndef __CW_RADIO_H
 #define __CW_RADIO_H
 
-#include "mbag.h"
-#include "item.h"
+
+
 #include "conn.h"
 
 
@@ -50,13 +50,13 @@ enum radiodata{
 */
 
 
-
+/*
 int cw_radio_update_oper_states(mbag_t radios,int cause);
 extern struct cw_itemdef capwap_radioitemdefs[];
 extern int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause);
 
 int cw_out_80211_supported_rates(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-
+*/
 
 
 #endif

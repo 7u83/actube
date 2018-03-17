@@ -2,6 +2,8 @@
 #include "cw.h"
 #include "dbg.h"
 
+#define CW_MODE_ZYXEL 7
+
 int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 {
 	uint8_t * ptr; 

@@ -25,7 +25,7 @@
  */
 #include <stdarg.h>
 
-#include "mbag.h"
+
 #include "capwap.h"
 #include "dbg.h"
 #include "sock.h"
@@ -182,8 +182,8 @@ static const char *get_dbg_color_ontext(int level)
 /**
  * Put a list of missing mandatory message elements to debug output
  */
-void cw_dbg_missing_mand(int level, struct conn *conn, cw_action_in_t ** ml, int n,
-			 cw_action_in_t * a)
+void cw_dbg_missing_mand(int level, struct conn *conn, int ** ml, int n,
+			 int  * a)
 {
 	/*
 //      if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
@@ -422,6 +422,7 @@ void cw_dbg(int level, const char *format, ...)
 //int cw_is_utf8(unsigned char *str, size_t len);
 */
 
+/*
 int cw_format_item(char *dst, mbag_item_t * item)
 {
 	*dst = 0;
@@ -435,7 +436,7 @@ int cw_format_item(char *dst, mbag_item_t * item)
 	return 0;
 }
 
-
+*/
 
 
 

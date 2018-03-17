@@ -28,7 +28,7 @@
 
 #include <string.h>
 #include "cw.h"
-#include "capwap_items.h"
+
 
 #include "dbg.h"
 #include "log.h"
@@ -46,8 +46,11 @@
  * It can deal both with IPv4 and IPv6 sockets.
  *
  */
+ 
+ /*
 int cw_out_wtp_ip_address(struct conn *conn, struct cw_action_out *action,
 				   uint8_t * dst)
 {
 	return cw_put_local_ip_address(conn->sock,dst,CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS);
 }
+*/

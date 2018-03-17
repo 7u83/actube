@@ -1,11 +1,12 @@
 #include "capwap.h"
 #include "capwap_cisco.h"
 
-#include "mbag.h"
+
 #include "radio.h"
 #include "log.h"
 #include "dbg.h"
 
+/*
 int cw_put_cisco_wtp_radio_cfg(uint8_t *dst, int rid, mbag_t radio)
 {
 
@@ -59,16 +60,17 @@ exit(0);
 	return 26+2; //+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_WTP_RADIO_CFG,28);
 }
 
+*/
 
-
+/*
 int cw_put_elem_cisco_ap_regulatory_domain(uint8_t *dst,int rid, mbag_t radio)
 {
 	//int l=0;
 	uint8_t *d=dst+10;
 	
-	d+=cw_put_byte(d,rid);		/* Band ID */
-	d+=cw_put_byte(d,1);		/* Set True/False */
-	d+=cw_put_byte(d,rid);		/* Slot ID */
+	d+=cw_put_byte(d,rid);		//Band ID 
+	d+=cw_put_byte(d,1);		// Set True/False 
+	d+=cw_put_byte(d,rid);		//* Slot ID 
 	d+=cw_put_word(d,mbag_get_word(radio,CW_RADIO_REG_DOMAIN,1));
 
 	return 5 + cw_put_elem_vendor_hdr(dst, CW_VENDOR_ID_CISCO, CW_CISCO_AP_REGULATORY_DOMAIN, 5);
@@ -76,8 +78,9 @@ int cw_put_elem_cisco_ap_regulatory_domain(uint8_t *dst,int rid, mbag_t radio)
 
 }
 
+*/
 
-
+/*
 int cw_put_elem_cisco_radio_cfg(uint8_t * dst,int rid, mbag_t radio)
 {
 	int l = cw_put_cisco_wtp_radio_cfg(dst+10,rid,radio);
@@ -169,3 +172,4 @@ int cw_in_cisco_radio_administrative_state_wtp(struct conn *conn, struct cw_acti
 }
 
 
+*/

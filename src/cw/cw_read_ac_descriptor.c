@@ -1,8 +1,8 @@
 #include "cw.h"
-#include "capwap_items.h"
-#include "dbg.h"
-#include "mbag.h"
 
+#include "dbg.h"
+
+/*
 int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len, 
 		struct cw_DescriptorSubelemDef *allowed)
 {
@@ -38,4 +38,4 @@ int cw_read_ac_descriptor(mbag_t store, uint8_t *data, int len,
 	
 }
 
-
+*/

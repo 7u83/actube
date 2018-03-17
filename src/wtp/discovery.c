@@ -39,6 +39,7 @@ static int run_discovery(struct conn *conn)
 
 	timer = cw_timer_start(0);
 
+/*
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
@@ -54,6 +55,7 @@ static int run_discovery(struct conn *conn)
 			break;
 		}
 	}
+*/
 
 /*
 	mbag_t discs;

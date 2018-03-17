@@ -1,11 +1,11 @@
-#include "mbag.h"
-#include "action.h"
+
+
 #include "dbg.h"
-#include "mbag.h"
+
 #include "capwap.h"
 #include "capwap_cisco.h"
 
-
+/*
 int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from)
 {
 
@@ -35,3 +35,4 @@ int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8
 	return 1;
 }
 
+*/

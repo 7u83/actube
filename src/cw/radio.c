@@ -1,6 +1,5 @@
 
-
-
+/*
 #include "radio.h"
 #include "dbg.h"
 
@@ -16,7 +15,7 @@ const char CW_RADIO_SUPPORTED_RATES[]="supported_rates";
 
 
 
-/* Cisco */
+// Cisco 
 
 const char CW_RADIO_OCCUPANCY_LIMIT[]="occupancy_limit";
 const char CW_RADIO_CFP_PERIOD[]="cfp_period";
@@ -52,3 +51,4 @@ int cw_radio_set_all_admin_states(mbag_t radios,int state, int cause)
 
 
 
+*/

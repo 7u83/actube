@@ -45,7 +45,7 @@ static int put_ip(uint8_t *dst /*void *priv*/, cw_acip_t * acip /*void *data*/)
 //	return 1;
 }
 
-
+/*
 int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a,uint8_t *dst) 
 {
 	struct mbag_item * item = mbag_get(conn->local,a->item_id);
@@ -76,3 +76,4 @@ int cw_out_capwap_control_ip_addr_list(struct conn *conn,struct cw_action_out *a
 	return  d-dst;
 }
 
+*/

@@ -29,12 +29,12 @@
 
 #include <errno.h>
 
-#include "mbag.h"
-#include "action.h"
+
+
 #include "log.h"
-#include "mbag.h"
+
 #include "cw.h"
-#include "capwap_items.h"
+
 #include "aciplist.h"
 #include "sock.h"
 

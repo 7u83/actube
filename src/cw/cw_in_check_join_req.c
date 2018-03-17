@@ -3,7 +3,7 @@
 #include "intavltree.h"
 #include "dbg.h"
 #include "log.h"
-#include "capwap_items.h"
+
 #include "format.h"
 #include "connlist.h"
 

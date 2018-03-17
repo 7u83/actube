@@ -186,10 +186,11 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
-	if (cw_is_request(a->msg_id)){
+/*	if (cw_is_request(a->msg_id)){
 		return cw_in_check_generic_req(conn,a,data,len,from);
 	}
 	return cw_in_check_generic_resp(conn,a,data,len,from);
+*/
 	
 }
 
@@ -217,7 +218,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	char sock_buf[SOCK_ADDR_BUFSIZE]; /**< to hold str from sockaddr2str */
 	
-	struct cw_action_in as, *af, *afm;
+	/*struct cw_action_in as, *af, *afm;*/
 
 	int offset = cw_get_hdr_msg_offset(rawmsg);
 

@@ -22,7 +22,7 @@
  */ 
 
 #include "cw.h"
-#include "capwap_items.h"
+
 #include "conn.h"
 
 #include "log.h"
@@ -98,105 +98,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 	return len;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	printf("Message to send: %s\n",msg->name);
-
-
-	/* create search paramaters */
-	cw_action_out_t as;
-
-	as.msg_id = cw_get_msg_type(msgptr);
-	as.item_id = CW_ITEM_NONE;
-	as.vendor_id = 0;
-
-	dst = msgptr+8;
-
-	printf("Put Message\n");
-	exit(0);
-
-	//mlist_t m = cw_actionlist_out_get(conn->actions->out,cw_get_msg_type(msgptr));
-	mlist_t m =0;
-
-	if (!m){
-		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
-			as.msg_id,cw_strmsg(as.msg_id));
-
-		/* invalidate the cache */
-		cw_set_msg_type(msgptr,0);
-		return -1;
-	}
-
-
-	struct mlistelem *e;
-
-	len = 0;
-
-	for (e=m->first; e; e=e->next) {
-		int l;
-		cw_action_out_t *ae=(cw_action_out_t*)e;
-
-		//printf("Put %d %i %s\n",ae->msg_id,ae->elem_id,ae->item_id);
-		if ( ae->item_id ) {
-		//	DBGX("Item ID: %s %p",ae->item_id,CW_ITEM_NONE);
-		}
-
-		if (ae->msg_id != as.msg_id) {
-			/* Element is from next msg, close action */
-			break;
-		}
-		l=0;
-		if (ae->out) {
-
-		//	printf("Out Call with len =%d\n",len);
-
-			l= ae->out(conn, ae, dst+len); 
-//			cw_dbg_elem(DBG_ELEM, conn, ae->msg_id, ae->elem_id, dst+len,l);
-
-		//	printf("Returned len = %d\n",l);
-
-
-			len +=l;
-
-		}
-		
-
-	}
-
-
-	cw_set_msg_elems_len(msgptr, len);
-
-	if (as.msg_id & 1) {
-		/* It's a request, so we have to set seqnum */
-		int s = conn_get_next_seqnum(conn);
-		cw_set_msg_seqnum(msgptr,s);	
-	}
-
-	return len;
 
 }
 

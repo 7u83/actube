@@ -5,7 +5,7 @@
 
 
 
-
+/*
 
 static int to_str(void *item,char *dst)
 {
@@ -123,3 +123,4 @@ const struct mbag_typedef capwap80211_type_rateset = {
 	.get = get,
 	.put = put
 };
+*/

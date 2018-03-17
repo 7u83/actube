@@ -24,7 +24,7 @@
 
 #include <string.h>
 
-#include "mbag.h"
+
 #include "conn.h"
 #include "capwap.h"
 
@@ -43,14 +43,14 @@ void conn_init(struct conn * conn)
 	conn->capwap_mode = 0;
 	conn->strict_capwap=1;
 
-	conn->remote = mbag_create();
+
 
 	conn->process_packet=conn_process_packet;
 	conn->process_message=process_message;
 
 
-	conn->config = mbag_create();
-	conn->config_upd=mbag_create();
+
+
 }
 
 

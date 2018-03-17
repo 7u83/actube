@@ -1,16 +1,16 @@
 
-#include "mbag.h"
+
 #include "capwap.h"
 #include "intavltree.h"
 #include "dbg.h"
 #include "log.h"
-#include "capwap_items.h"
+
 
 int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
 
-	cw_action_in_t * mlist[60];
+	/*cw_action_in_t * mlist[60];*/
 
 	/* Check for mandatory elements */
 /*	int n = cw_check_missing_mand(mlist,conn,a);
@@ -25,7 +25,7 @@ int cw_in_check_cfg_update_req(struct conn *conn, struct cw_action_in *a, uint8_
 */
 	
 	/* set result code to ok and change to configure state */
-	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);
+	/*mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);*/
 
 
 	return 0;
