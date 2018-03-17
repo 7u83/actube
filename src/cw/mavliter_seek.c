@@ -31,7 +31,7 @@
  * @param d element to search for
  * @return element found or NULL if not found
  */
-union mavldata  * mavliter_seek(mavliter_t *i,void *d)
+void * mavliter_seek(mavliter_t *i,void *d)
 {
 	int rc;
 	if (!i->root)

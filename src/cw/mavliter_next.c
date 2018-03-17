@@ -29,7 +29,7 @@
  * @return the element or NULL if there is no next elemeent.
  */
 
-union mavldata * mavliter_next ( mavliter_t *i )
+void * mavliter_next ( mavliter_t *i )
 {
 	while ( i->stack_ptr ) {
 		i->stack_ptr--;

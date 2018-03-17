@@ -24,7 +24,7 @@ int image_update()
 
 	int rc = cw_send_request(conn, CAPWAP_MSG_IMAGE_DATA_REQUEST);
 
-	if (rc < 0) {
+	if (rc < 0) {h
 	}
 
 	if (rc != 0) {

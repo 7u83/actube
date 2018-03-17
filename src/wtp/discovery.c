@@ -10,6 +10,7 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/timer.h"
+#include "cw/cw.h"
 
 #include "wtp.h"
 

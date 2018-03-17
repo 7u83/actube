@@ -20,6 +20,7 @@
         <File Name="src/mod/capwap/capwap_in_vendor_specific_payload.c"/>
         <File Name="src/mod/capwap/capwap_in_mtu_discovery_padding.c"/>
         <File Name="src/mod/capwap/capwap_out_wtp_board_data.c"/>
+        <File Name="src/mod/capwap/capwap_out_wtp_descriptor.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

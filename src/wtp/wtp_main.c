@@ -76,23 +76,32 @@ int main (int argc, char **argv)
 	mavl_t global_cfg, types_tree;
 	const cw_Type_t ** ti;
 	
+	/* read command line args, results are in bootcfg */
 	parse_args(argc,argv, &bootcfg);
 	
 
+	/* create an empty message set */
 	msgset = cw_msgset_create();
 	if (msgset==NULL){
 		cw_log(LOG_ERR, "Error creating msgset: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	
-	global_cfg=cw_ktv_create();
 
-	/* create types tree with default types */
+	/* create an empty global config */
+	global_cfg=cw_ktv_create();
+	if (msgset==NULL){
+		cw_log(LOG_ERR, "Error creating global_cfg: %s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	
+
+	/* create a types tree with default types */
 	types_tree = cw_ktv_create_types_tree();
 	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
 		mavl_add_ptr(types_tree,*ti);
 	}
-
+	
+	/* read the initial config file */
 	file = fopen(bootcfg.cfgfilename,"r");
 	if (file == NULL){
 		cw_log(LOG_ERR,"Cant open file '%s':%s", strerror(errno));
@@ -100,6 +109,7 @@ int main (int argc, char **argv)
 	}
 	cw_ktv_read_file(file,global_cfg,types_tree);
 
+	
 	cw_ktv_dump(global_cfg,DBG_INFO,"----- global cfg start -----","","----- global cfg end -----");
 
 	
@@ -118,6 +128,7 @@ int main (int argc, char **argv)
 		cw_log(LOG_ERR, "Connot create conn: %s", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	
 	
 	conn->detected = 1;
 	conn->dtls_verify_peer=0;

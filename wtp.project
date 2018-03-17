@@ -14,7 +14,6 @@
       <File Name="src/wtp/conf_uci.c"/>
       <File Name="src/wtp/dot11.h"/>
       <File Name="src/wtp/cfg.h"/>
-      <File Name="src/wtp/discovery.c"/>
       <File Name="src/wtp/nlt_cmdnames.c"/>
       <File Name="src/wtp/configure.c"/>
       <File Name="src/wtp/nlt_attrnames.c"/>

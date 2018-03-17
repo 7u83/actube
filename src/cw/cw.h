@@ -436,6 +436,8 @@ extern int cw_put_local_ip_address(int sock, uint8_t * dst, int ipv4elem_id,
 extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
 					   int d7mode);
 
+void cw_init_request(struct conn *conn, int msg_id);
+
 
 /**
  * @}
@@ -463,6 +465,7 @@ int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * d
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
 int cw_result_is_ok( int rc );
+int cw_put_msg(struct conn *conn, uint8_t * rawout);
 
 /**
  * @}

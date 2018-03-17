@@ -413,70 +413,6 @@
 
 
 
-struct cwimage_data {
-	uint8_t *data;
-	uint8_t type;
-	int len;
-	uint32_t vendor_id;
-	uint8_t *identifier;
-};
-
-/*
-struct cwimage_identifier{
-	uint32_t vendor_id;
-	char *name;
-};
-*/
-
-
-/*
-//extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg * cwmsg,struct wtpinfo * wtpinfo);
-*/
-
-/*
-extern void cwmsg_addelem_wtp_radio_infos(struct cwmsg *msg,
-					  struct radioinfo *radioinfos);*/
-					  
-/*
-//extern void cwmsg_addelem_result_code(struct cwmsg *msg, int rc);
-*/
-/*
-extern void cwmsg_addelem_vendor_specific_payload(struct cwmsg *msg, int vendor_id,
-						  int type, uint8_t * payload, int len);
-*/
-
-/*
-extern int hdr_print(char *str, uint8_t * packet, int len);
-*/
-
-/*
-extern int cw_readelem_ecn_support(uint8_t * ecn_support, int type, uint8_t * msgelem,
-				   int len);
-*/
- /*
-//extern int cw_readelem_maximum_message_length(uint16_t * dst, int type, uint8_t * msgelem,
-//					      int len);
-//extern int cw_readelem_ac_name(uint8_t ** dst, int type, uint8_t * msgelem, int len);
-//extern int cw_readelem_wtp_reboot_statistics(struct wtp_reboot_statistics *s, int type,
-//					     uint8_t * msgelem, int len);
-//extern int cw_readelem_cw_local_ip_addr(struct sockaddr *local_ip, int type,
-//					uint8_t * msgelem, int len);
-//extern int cw_readelem_radio_administrative_state(struct radioinfo *radioinfo, int type,
-//						  uint8_t * msgelem, int len);
-//extern int cw_readelem_radio_operational_state(struct radioinfo *radioinfo, int type,
-//					       uint8_t * msgelem, int len);
-*/
-
-/*
-extern int cw_readelem_statistics_timer(uint16_t * timer, int type, uint8_t * msgelem,
-					int len);
-extern int cw_readelem_result_code(uint32_t * result_code, int type, uint8_t * msgelem,
-				   int len);
-
-extern int cw_readelem_vendor_specific_payload(void *data, int msgtype, int elemtype,
-					       uint8_t * msgelem, int len);
-
-*/
 
 
 
@@ -585,14 +521,21 @@ enum cw_reboot_failure_types {
  */
 
 
+
+
+
+
+struct cwimage_data {
+	uint8_t *data;
+	uint8_t type;
+	int len;
+	uint32_t vendor_id;
+	uint8_t *identifier;
+};
+
 extern void cw_read_image_data_request(struct cwimage_data *, uint8_t * msg, int len);
 
-/*
-//extern int cw_readelem_ac_descriptor(struct ac_info *acinfo, int type, uint8_t * msgelem,
-//				     int len);
-//extern int cw_readelem_capwap_local_ip_addr(struct sockaddr *local_ip, int type,
-//					    uint8_t * msgelem, int len);
-*/
+
 
 
 extern int cw_send_echo_response(struct conn *conn, int seqnum,
@@ -650,54 +593,6 @@ const char *cw_strelemp_(cw_strheap_t h, int msg_id);
 
 #define cw_strelemp(p,id) cw_strelemp_((p)->strelem,id)
 
-
-
-
-/*
-//int cw_process_msg(struct conn *conn, uint8_t * rawmsg, int len);
-*/
-
-/*
-extern int cw_in_vendor_specific_payload(struct conn *conn, struct cw_action_in *a,
-					 uint8_t * data, int len,struct sockaddr *from);
-*/
-
-/*
-extern int cw_in_wtp_name(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			  int len,struct sockaddr *from);
-extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len,struct sockaddr *from);
-extern int cw_in_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-				int len,struct sockaddr *from);
-*/
-
-/*
-//extern int cw_out_generic(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len);
-*/
-
-/*
-extern int cw_out_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-*/
-
-/*
-//extern int cw_out_ac_descriptor(struct conn *conn, uint32_t elem_id, uint8_t * dst,
-				//struct mbag_item *item);
-*/
-
-/*
-//extern int cw_out_capwap_control_ip_addrs(struct conn *conn, uint32_t elem_id,
-//                                        uint8_t * dst, struct mbag_item *item);
-*/
-
-/*
-extern int cw_out_capwap_control_ip_addr_list(struct conn *conn, struct cw_action_out *a,
-					      uint8_t * dst);
-*/
-
-/*
-extern int cw_put_msg(struct conn *conn, uint8_t * rawout);
-int cw_out_image_data(struct conn *conn, struct cw_action_out *a, uint8_t * dst);
-*/
 
 struct cw_ac_status {
 	int stations;

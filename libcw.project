@@ -327,7 +327,6 @@
       <File Name="src/cw/cw_ktv_get_byte.c"/>
       <File Name="src/cw/cw_ktv_std_types.c"/>
     </VirtualDirectory>
-    <File Name="src/mod/capwap/capwap_out_wtp_descriptor.c"/>
   </VirtualDirectory>
   <Description/>
   <Dependencies/>

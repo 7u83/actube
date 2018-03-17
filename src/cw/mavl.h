@@ -181,9 +181,9 @@ struct mavliter {
 typedef struct mavliter mavliter_t;
 
 
-union mavldata * mavliter_next ( mavliter_t *i );
+void * mavliter_next ( mavliter_t *i );
 
-union mavldata * mavliter_seek_set ( struct mavliter *i );
+void * mavliter_seek_set ( struct mavliter *i );
 
 void mavliter_init ( mavliter_t *i, mavl_t t );
 
@@ -192,7 +192,7 @@ void * mavliter_get ( mavliter_t *i );
 
 void * mavliter_get_ptr(mavliter_t *i);
 
-extern union mavldata  * mavliter_seek ( mavliter_t *i, void *d );
+void * mavliter_seek ( mavliter_t *i, void *d );
 
 /**
  * Define a AVL Iterator varialble and accociate it with
