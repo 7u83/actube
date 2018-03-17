@@ -25,13 +25,13 @@ endif
 
 ifeq ($(CC),clang)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
 LD		= clang
 endif
 
 ifeq ($(CC),gcc)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
 LD		= gcc
 endif
 
