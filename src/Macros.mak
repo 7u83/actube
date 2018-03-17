@@ -4,7 +4,7 @@ OPENSSL_CFLAGS=../contrib/${OPENSSL_VERSION}/include/
 else
 OPENSSL_LDFLAGS=
 OPENSSL_CFLAGS=
-OPENSSL_LIBS=-lssl -lcrypto -ldl
+OPENSSL_LIBS=-lssl -lcrypto #-ldl
 endif
 
 ifeq ($(USE_CONTRIB_GNUTLS),1)
@@ -25,13 +25,13 @@ endif
 
 ifeq ($(CC),clang)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
-LD		= gcc
+CFLAGS 		+= -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+LD		= clang
 endif
 
 ifeq ($(CC),gcc)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
 LD		= gcc
 endif
 
