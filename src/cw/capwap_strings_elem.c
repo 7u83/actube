@@ -1,7 +1,7 @@
 
 #include "capwap.h"
 
-struct cw_strlist_elem capwap_strings_elem[] = {
+struct cw_StrListElem capwap_strings_elem[] = {
 
 	{CAPWAP_ELEM_AC_DESCRIPTOR, "AC Descriptor"},
 	{CAPWAP_ELEM_AC_IPV4_LIST, "AC IPv4 List"},

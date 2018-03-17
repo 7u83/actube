@@ -2,7 +2,7 @@
 #include "capwap.h"
 #include "vendors.h"
 
-struct cw_strlist_elem capwap_strings_vendor[] = {
+struct cw_StrListElem capwap_strings_vendor[] = {
 { CW_VENDOR_ID_CISCO, "Cisco" },
 { CW_VENDOR_ID_ZYXEL, "Zyxel" },
 { CW_VENDOR_ID_FSF, "FSF"},

@@ -252,8 +252,6 @@
       <File Name="src/cw/cw_type_byte.c"/>
       <File Name="src/cw/cw_type_word.c"/>
       <File Name="src/cw/cw_type_dword.c"/>
-      <File Name="src/cw/debug.h"/>
-      <File Name="src/cw/debug.c"/>
       <File Name="src/cw/mavl_get_ptr.c"/>
       <File Name="src/cw/mavliter_init.c"/>
       <File Name="src/cw/mavl_add_ptr.c"/>
@@ -297,6 +295,9 @@
       <File Name="src/cw/cw_ktv_get_word.c"/>
       <File Name="src/cw/cw_ktv_get_byte.c"/>
       <File Name="src/cw/cw_ktv_std_types.c"/>
+      <File Name="src/cw/dbg_help_strings.c"/>
+      <File Name="src/cw/cw_dbg_set_level.c"/>
+      <File Name="src/cw/cw_dbg_set_level_from_str.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

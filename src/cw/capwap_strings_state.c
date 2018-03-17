@@ -1,7 +1,7 @@
 
 #include "capwap.h"
 
-struct cw_strlist_elem capwap_strings_state[] = {
+struct cw_StrListElem capwap_strings_state[] = {
 { CAPWAP_STATE_DISCOVERY, "Discovery" },
 { CAPWAP_STATE_JOIN,"Join" },
 { CW_STATE_RUN,"Run" },

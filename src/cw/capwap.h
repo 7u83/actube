@@ -551,13 +551,13 @@ extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_le
 /* Message to text stuff */
 
 /* Constants to string conversion lists */
-extern struct cw_strlist_elem capwap_strings_msg[];
-extern struct cw_strlist_elem capwap_strings_state[];
-extern struct cw_strlist_elem capwap_strings_vendor[];
-extern struct cw_strlist_elem capwap_strings_elem[];
-extern struct cw_strlist_elem capwap_strings_result[];
-extern struct cw_strlist_elem capwap_strings_board[];
-extern struct cw_strlist_elem mbag_item_strings[];
+extern struct cw_StrListElem capwap_strings_msg[];
+extern struct cw_StrListElem capwap_strings_state[];
+extern struct cw_StrListElem capwap_strings_vendor[];
+extern struct cw_StrListElem capwap_strings_elem[];
+extern struct cw_StrListElem capwap_strings_result[];
+extern struct cw_StrListElem capwap_strings_board[];
+extern struct cw_StrListElem mbag_item_strings[];
 
 
 

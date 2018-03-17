@@ -57,7 +57,7 @@ void (*cw_dbg_vcb) (int level, const char *fromat, va_list args) = CW_LOG_DEFAUL
 */
 
 
-uint32_t cw_dbg_opt_display = 0;
+uint32_t cw_dbg_opt_display = DBG_DISP_COLORS;
 
 /**
  * Current debug level
@@ -86,7 +86,7 @@ uint32_t cw_dbg_opt_level = 0;
 #define DBG_CLR_RED_I	"\x1b[3;31m"
 
 
-static struct cw_strlist_elem color_on[] = {
+static struct cw_StrListElem color_on[] = {
 	{DBG_PKT_IN, DBG_CLR_YELLO},
 	{DBG_PKT_OUT, DBG_CLR_YELLO_I},
 
@@ -110,19 +110,19 @@ static struct cw_strlist_elem color_on[] = {
 	{CW_STR_STOP, ""}
 };
 
-static struct cw_strlist_elem color_ontext[] = {
+static struct cw_StrListElem color_ontext[] = {
 
 	{DBG_ELEM_DMP, "\x1b[30m"},
 	{CW_STR_STOP, ""}
 };
 
 
-static struct cw_strlist_elem color_off[] = {
+static struct cw_StrListElem color_off[] = {
 
 	{CW_STR_STOP, "\x1b[22;39m\x1b[23m"}
 };
 
-static struct cw_strlist_elem prefix[] = {
+static struct cw_StrListElem prefix[] = {
 	{DBG_INFO, " Info -"},
 	{DBG_PKT_IN, " Pkt IN -"},
 	{DBG_PKT_OUT, " Pkt Out -"},
@@ -413,6 +413,9 @@ void cw_dbg(int level, const char *format, ...)
 
 	va_start(args, format);
 /*	cw_log_vcb(level, fbuf, args);*/
+
+
+
 	cw_log_console_writer.write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
 	va_end(args);
 

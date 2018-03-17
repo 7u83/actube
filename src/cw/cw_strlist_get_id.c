@@ -2,7 +2,7 @@
 
 #include "strlist.h"
 
-int cw_strlist_get_id(struct cw_strlist_elem *s,const char *str)
+int cw_strlist_get_id(struct cw_StrListElem *s,const char *str)
 {
 	while ( s->id!=CW_STR_STOP){
 		if (strcmp(s->str,str)==0)

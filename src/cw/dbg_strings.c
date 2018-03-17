@@ -34,30 +34,36 @@
 /**
  * Debug strings
  */
-struct cw_strlist_elem cw_dbg_strings[] = {
-	{ DBG_INFO, "info" },
-	{ DBG_PKT_IN,   "pkt_in" },
-	{ DBG_PKT_OUT, "pkt_out" },
-	{ DBG_PKT_ERR, "pkt_err" },
-	{ DBG_PKT_DMP, "pkt_dmp" },
-	{ DBG_RFC, "rfc" },
-	{ DBG_SUBELEM, "subelem" },
+struct cw_StrListElem cw_dbg_strings[] = {
+	{ DBG_INFO,	"info" },
+	{ DBG_PKT_IN,	"pkt_in" , "Show headers of incomming CAPWAP packets"},
+	{ DBG_PKT_OUT,	"pkt_out", "Show headers of outgoing CAPWAP packets" },
+	{ DBG_PKT_ERR,	"pkt_err", "Incomming CAPWAP packets with errors, wich would"
+				  "usually silently discarded" },
+	{ DBG_PKT_DMP,	"pkt_dmp", "Dump content of incomming/outgoing packets." 
+				  "Requires pkt_in/pkt_out"},
+	{ DBG_RFC,	"rfc", 	    },
+	{ DBG_SUBELEM,	"subelem" },
 	{ DBG_SUBELEM_DMP, "subelem_dmp" },
-	{ DBG_MSG_IN, "msg_in" },
-	{ DBG_MSG_OUT, "msg_out"},
+	{ DBG_MSG_IN, "msg_in", "Display incomming CAPWAP/LWAPP messages." },
+	{ DBG_MSG_OUT, "msg_out", "Display outgoing CAPWAP/LWAPP messages."},
 	{ DBG_MSG_ERR, "msg_err" },
+	
 	{ DBG_ELEM,  "elem" },
 	{ DBG_ELEM_DETAIL, "elem_detail"},
 	{ DBG_ELEM_DMP, "elem_dmp" },
 	{ DBG_ELEM_ERR, "elem_err" },
+	
 	{ DBG_DTLS, "dtls" },
 	{ DBG_DTLS_BIO, "dtls_bio" },
 	{ DBG_DTLS_BIO_DMP, "dtls_bio_dmp"},
 	{ DBG_DTLS_DETAIL, "dtls_detail"},
+	
 	{ DBG_WARN, "warn" },
+	
 	{ DBG_MOD,"mod"},
-
-	{ DBG_X,"x" },
+	{ DBG_ALL, "all"},
+	
 	{ CW_STR_STOP, NULL } 
 };
 

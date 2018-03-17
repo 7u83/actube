@@ -2,7 +2,7 @@
 #include <errno.h>
 
 #include "mavl.h"
-#include "debug.h"
+
 #include "dbg.h"
 #include "log.h"
 

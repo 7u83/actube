@@ -30,7 +30,7 @@ void (*cw_log_vcb)(int level,const char * fromat, va_list args) = CW_LOG_DEFAULT
 const char * cw_log_name = "actube";
 
 
-static struct cw_strlist_elem prefix[] = {
+static struct cw_StrListElem prefix[] = {
 	{LOG_DEBUG, "DBG"},
 	{LOG_INFO, "INF" },
 	{LOG_NOTICE, "NOTICE"},
@@ -39,7 +39,7 @@ static struct cw_strlist_elem prefix[] = {
 	{CW_STR_STOP, NULL}
 };
 
-static struct cw_strlist_elem prefix_color[] = {
+static struct cw_StrListElem prefix_color[] = {
 	{LOG_DEBUG, ""},
 	{LOG_INFO, "" },
 	{LOG_NOTICE, ""},
@@ -48,7 +48,7 @@ static struct cw_strlist_elem prefix_color[] = {
 	{CW_STR_STOP, NULL}
 };
 
-static struct cw_strlist_elem text_color[] = {
+static struct cw_StrListElem text_color[] = {
 	{LOG_DEBUG, ""},
 	{LOG_INFO, "" },
 	{LOG_NOTICE, ""},
@@ -57,7 +57,7 @@ static struct cw_strlist_elem text_color[] = {
 	{CW_STR_STOP, NULL}
 };
 
-static struct cw_strlist_elem end_color[] = {
+static struct cw_StrListElem end_color[] = {
 	{LOG_DEBUG, ""},
 	{LOG_INFO, "" },
 	{LOG_NOTICE, ""},

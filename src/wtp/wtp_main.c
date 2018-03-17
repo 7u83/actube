@@ -36,12 +36,10 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				exit(EXIT_SUCCESS);
 				break;
 			case 'd':{
-				int b = cw_strlist_get_id(cw_dbg_strings, optarg);
-				if (b==-1){
+				if (!cw_dbg_set_level_from_str(optarg)){
 					fprintf(stderr,"Invalid debug option: %s\n",optarg);
 					exit(EXIT_FAILURE);
 				}
-				cw_dbg_set_level(b, 1);
 				break;
 			}
 			case 'm':

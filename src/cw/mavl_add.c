@@ -222,7 +222,7 @@ void *mavl_add ( struct mavl *t, const void *data, int *exists )
 		else
 			*exists=0;
 	}
-	return d;
+	return (void*)d;
 }
 
 /*

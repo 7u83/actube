@@ -43,6 +43,90 @@
  *@{
  */
 
+/**
+ * Debug levels
+ */ 
+enum cw_dbg_levels{
+	/** Show headers of incomming CAPWAP packets */
+	DBG_PKT_IN=0,
+	
+	/** Show headers of outgoing CAPWAP packets */
+	DBG_PKT_OUT,
+
+	/** Incomming CAPWAP packets with errors, wich would
+	    usually silently discarded */ 
+	DBG_PKT_ERR,
+
+	/** Dump content of incomming packets */
+	DBG_PKT_DMP,
+
+	/** Display incomming CAPWAP/LWAPP messages */
+	DBG_MSG_IN,
+
+	/** Display outgoing CAPWAP/LWAPP messages */
+	DBG_MSG_OUT,
+
+	/** Message errors */
+	DBG_MSG_ERR,
+
+	/** Show message elements  */
+	DBG_ELEM,
+
+	/** Show message element details  */
+	DBG_ELEM_DETAIL,
+
+	/** Error in msg elements */
+	DBG_ELEM_ERR,
+
+	/** Show subelements */
+	DBG_SUBELEM,
+
+	/** Show dump of subelements */
+	DBG_SUBELEM_DMP,
+
+	/** hex dump elements */	
+	DBG_ELEM_DMP,
+
+	/** General infos, like CAPWAP state */
+	DBG_INFO,	
+
+	/** Misc. warnings */
+	DBG_WARN,
+
+	/** RFC related */
+	DBG_RFC,
+
+	/** DTLS related messages */
+	DBG_DTLS,
+
+	/** DTLS BIOs in/out */
+	DBG_DTLS_BIO,
+
+	/** Dump DTLS BIO i/o */
+	DBG_DTLS_BIO_DMP,
+
+	/** Show DTLS Details */
+	DBG_DTLS_DETAIL,
+
+	/** Debug Mods */
+	DBG_MOD,
+	
+	DBG_ALL, 
+	
+	DBG_X
+};
+
+
+#define DBG_LN __FILE__,__LINE__
+
+
+struct dbg_Context{
+	int level;
+};
+
+void cw_dbg_set_level (int level, int on);
+int cw_dbg_set_level_from_str(const char *level);
+
 
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
 
@@ -55,18 +139,6 @@ void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct so
 void cw_dbg(int level, const char *format, ...);
 void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ...);
 
-/*
-#define DBGX(f,...) cw_dbg(DBG_X,f,__VA_ARGS__)  //cw_dbg(DBG_X, f ,__VA_ARGS__)
-//#define DBGX(f,...) cw_dbg(DBG_X, f)
-//#define DBGX(f,...) printf("hallo\n")
-*/
-
-
-/*
-	#define cw_dbg_elem(level,conn,msgtype,msgelemtype,msgbuf,msglen)\
-		 cw_dbg_elem_colored(level,conn,msgtype,msgelemtype,msgbuf,msglen)
-*/
-
 
 #endif
 
@@ -74,18 +146,6 @@ void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ..
  * @defgroup DbgOptions Debug Options
  * @{
  */
-#include "debug.h"
-
-
-
-/* driver specific debugs */
-
-#define DBG_DRV				0x00010000
-#define DBG_DRV_ERR			0x00020000
-
-/* DTLS debugs */
-
-
 
 
 #define DBG_DISP_LINE_NUMBERS		(1<<0)
@@ -103,7 +163,7 @@ void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ..
 
 extern uint32_t cw_dbg_opt_display;
 extern uint32_t cw_dbg_opt_level;
-extern struct cw_strlist_elem cw_dbg_strings[];
+extern struct cw_StrListElem cw_dbg_strings[];
 
 /*
 #define cw_dbg cw_dbg_colored
@@ -137,8 +197,9 @@ void cw_dbg_version_subelem(int level, const char *context, int subtype,
   * @param level debug level to set, allowed values are enumberated in #cw_dbg_levels structure.
   * @param on 1: turns the specified debug level on, 0: turns the specified debug level off.
   */
-#define cw_dbg_set_level(level,on)\
+/*#define cw_dbg_set_level(level,on)\
 	(on ? cw_dbg_opt_level |= (1<<(level)) : (cw_dbg_opt_level &= (-1)^(1<<(level))))
+*/
 
 /**
  * Check if a specific debug level is set.

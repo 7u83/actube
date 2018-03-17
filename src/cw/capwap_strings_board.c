@@ -1,7 +1,7 @@
 
 #include "capwap.h"
 
-struct cw_strlist_elem capwap_strings_board[] = {
+struct cw_StrListElem capwap_strings_board[] = {
 	{CW_BOARDDATA_MODELNO, "Model-No"},
 	{CW_BOARDDATA_SERIALNO,"Serial-No"},
 	{CW_BOARDDATA_BOARDID,"Board-ID"},
