@@ -33,9 +33,16 @@ char * sock_get_primary_if(int family)
         getifaddrs(&ifap);
 
         for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
+
+#ifdef IFF_LOOPBACK		
 		if (ifa->ifa_flags & IFF_LOOPBACK){
 			continue;
 		}
+#else
+		if (strncmp(ifa->ifa_name,"lo",2)==0)
+			continue;
+
+#endif
 
 		if (ifa->ifa_addr == NULL)
 			continue;
