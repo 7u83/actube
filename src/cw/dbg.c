@@ -29,7 +29,7 @@
 #include "dbg.h"
 #include "log.h"
 #include "format.h"
-
+#include "ansi_colors.h"
 
 
 /**
@@ -52,88 +52,63 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 
-#define DBG_CLR_MAGENTA "\x1b[35m"
-#define DBG_CLR_MAGENTA_L "\x1b[95m"
-#define DBG_CLR_MAGENTA_B "\x1b[1;35m"
-#define DBG_CLR_MAGENTA_F "\x1b[2;35m"
-#define DBG_CLR_MAGENTA_I "\x1b[3;35m"
 
-#define DBG_CLR_BLUE	"\x1b[34m"
-#define DBG_CLR_BLUE_B	"\x1b[1;34m"
-#define DBG_CLR_BLUE_L	"\x1b[94m"
-#define DBG_CLR_BLUE_F	"\x1b[2;34m"
-#define DBG_CLR_BLUE_I	"\x1b[3;34m"
-
-#define DBG_CLR_YELLO	"\x1b[33m"
-#define DBG_CLR_YELLO_I "\x1b[3;33m"
-
-#define DBG_CLR_CYAN	"\x1b[36m"
-
-#define DBG_CLR_RED	"\x1b[31m"
-#define DBG_CLR_RED_I	"\x1b[3;31m"
-#define DBG_CLR_RED_L	"\x1b[91m"
-
-#define DBG_CLR_DEFAULT "\x1b[39m"
-#define DBG_CLR_DEFAULT_I "\x1b[3;39m"
-
-#define DBG_CLR_BLACK	"\x1b[30m"
-#define DBG_CLR_BLACK_L	"\x1b[90m"
-#define DBG_CLR_BLACK_LI	"\x1b[3;90m"
-
-#define DBG_CLR_WHITE	"\x1b[37m"
-#define DBG_CLR_WHITE_I	"\x1b[3;37m"
-
-
-#define DBG_CLR_OFF	"\x1b[22;39m\x1b[23m"
-
-
-#define ANSI_DEFAULT	"\x1b[39m"
-#define ANSI_BLUE	"\x1b[34m"
-
-#define ANSI_ITALIC	"\x1b[3m"
-#define ANSI_BOLD	"\x1b[1m"
 
 
 static struct cw_StrListElem color_on[] = {
-	{DBG_PKT_IN, DBG_CLR_YELLO},
-	{DBG_PKT_OUT, DBG_CLR_YELLO_I},
-
-	{DBG_MSG_IN, ANSI_BLUE },
-	{DBG_MSG_OUT, ANSI_BLUE ANSI_ITALIC},
-
+	{DBG_PKT_IN, ANSI_YELLOW},
+	{DBG_PKT_OUT, ANSI_YELLOW ANSI_ITALIC},
+	
+	{DBG_PKT_DMP_IN, ANSI_BYELLOW},
+	{DBG_PKT_DMP_OUT, ANSI_BYELLOW ANSI_ITALIC},
+	
+	{DBG_MSG_IN, ANSI_BLUE ANSI_BOLD},
+	{DBG_MSG_PARSING, ANSI_BLUE },
+	
+	{DBG_MSG_OUT, ANSI_BLUE ANSI_BOLD ANSI_ITALIC},
+	{DBG_MSG_ASSEMBLY, ANSI_BLUE ANSI_ITALIC},
+	
+	
+	{DBG_MSG_IN_DMP, ANSI_BBLUE },
+	{DBG_MSG_OUT_DMP, ANSI_BBLUE ANSI_ITALIC},
+	
 	{DBG_ELEM_IN, ANSI_DEFAULT},
 	{DBG_ELEM_OUT, ANSI_DEFAULT ANSI_ITALIC},
 	
-	{DBG_MSG_ERR, DBG_CLR_RED},
-	{DBG_PKT_ERR, DBG_CLR_RED},
-	{DBG_ELEM_ERR, DBG_CLR_RED},
+	{DBG_MSG_ERR, ANSI_RED},
+	{DBG_PKT_ERR, ANSI_RED},
+	{DBG_ELEM_ERR, ANSI_RED},
 	
-	{DBG_SUBELEM, DBG_CLR_BLACK},
-	{DBG_DTLS, DBG_CLR_MAGENTA_B},
-	{DBG_DTLS_DETAIL, DBG_CLR_MAGENTA},
-	{DBG_DTLS_BIO, DBG_CLR_MAGENTA_L},
+	{DBG_SUBELEM, ANSI_BBLACK},
+	{DBG_DTLS, ANSI_MAGENTA ANSI_BOLD},
+	{DBG_DTLS_DETAIL, ANSI_MAGENTA},
+	{DBG_DTLS_BIO, ANSI_BMAGENTA},
 
-	{DBG_INFO, DBG_CLR_DEFAULT},
+	{DBG_INFO, ANSI_DEFAULT},
 
-	{DBG_RFC, DBG_CLR_RED},
+	{DBG_RFC, ANSI_BRED},
 	{DBG_X, "\x1b[31m"},
-	{DBG_WARN, DBG_CLR_CYAN},
-	{DBG_MOD, DBG_CLR_WHITE},
+	{DBG_WARN, ANSI_CYAN},
+	{DBG_MOD, ANSI_WHITE},
+	
+	
 	{CW_STR_STOP, ""}
 };
 
 struct cw_StrListElem color_ontext[] = {
 
 /*	{DBG_ELEM_DMP, "\x1b[37m"},*/
-	{DBG_ELEM_DMP, DBG_CLR_BLACK_LI},
+	{DBG_ELEM_DMP, ANSI_BBLACK ANSI_ITALIC},
+
 	{CW_STR_STOP, ""}
 };
 
-
+/*
 static struct cw_StrListElem color_off[] = {
 
 	{CW_STR_STOP, "\x1b[22;39m\x1b[23m"}
 };
+*/
 
 static struct cw_StrListElem prefix[] = {
 	{DBG_INFO, " Info -"},
@@ -166,12 +141,14 @@ static const char *get_dbg_color_on(int level)
 	return cw_strlist_get_str(color_on, level);
 }
 
+/*
 static const char *get_dbg_color_off(int level)
 {
 	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
 		return "";
 	return cw_strlist_get_str(color_off, level);
 }
+*/
 
 static const char *get_dbg_prefix(int level)
 {
@@ -187,7 +164,19 @@ const char *get_dbg_color_ontext(int level)
 }
 
 
+/**
+ * Check if a specific debug level is set.
+ * @param level Level to check
+ * @return 0 if leveln is not set, otherwise level is set
+ */
 
+int cw_dbg_is_level(int level)
+{
+	if (level >= DBG_ALL ){
+		return 1;
+	}
+	return (cw_dbg_opt_level & (1<<level));
+}
 
 
 static void cw_dbg_vlog_line(struct cw_LogWriter * writer, 
@@ -266,17 +255,19 @@ void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 		
 	hlen = cw_get_hdr_msg_offset(packet);
 
-	if (cw_dbg_is_level(DBG_PKT_DMP)) {
-		/*
-		char *dmp = cw_dbg_mkdmp_c(packet, len, hlen);
-		*/
-		char * dmp;
-		dmp = cw_format_dump(packet,len,NULL);
+	cw_dbg(level, "%s", buf);
 		
-		cw_dbg(level, "%s%s", buf, dmp);
-		free(dmp);
-	} else
-		cw_dbg(level, "%s", buf);
+	if (cw_dbg_is_level(DBG_PKT_DMP)) {
+		int dlevel;
+		if (level == DBG_PKT_IN){
+			dlevel=DBG_PKT_DMP_IN;
+		}
+		else{
+			dlevel=DBG_PKT_DMP_OUT;
+		}
+		cw_dbg_dmp(dlevel,packet,len,"");
+	} 
+
 }
 
 
@@ -348,6 +339,20 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 		     cw_get_msg_elems_len(msgptr));
 
 	cw_dbg(level, "%s", buf);
+	
+	
+	if (cw_dbg_is_level(DBG_MSG_DMP)){
+		int dlevel;
+		if(level==DBG_MSG_IN){
+			dlevel = DBG_MSG_IN_DMP;
+		}
+		else{
+			dlevel = DBG_MSG_OUT_DMP;
+		}
+		cw_dbg_dmp(dlevel,packet,len,"");
+	}
+	
+
 }
 
 /*
@@ -408,7 +413,7 @@ void cw_dbg_version_subelem(int level, const char *context, int subtype,
 	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
 }
 
-
+/*
 void cw_dbgv(struct cw_LogWriter *writer, int level, const char * format, va_list args)
 {
 	char fbuf[1024];
@@ -429,14 +434,16 @@ void cw_dbgv(struct cw_LogWriter *writer, int level, const char * format, va_lis
 
 
 }
+*/
 
+/*
 void cw_dbgv1(struct cw_LogWriter *writer, int level, const char * format, ...){
 	va_list args;
 	va_start(args, format);
 	cw_dbgv(writer,level,format,args);
 	va_end(args);	
 }
-
+*/
 
 
 void cw_dbg(int level, const char *format, ...){
@@ -456,45 +463,7 @@ void cw_dbg(int level, const char *format, ...){
 	}
 }
 
-static void cw_dbg_help(struct cw_LogWriter *writer, const char *format, ...)
-{
-	va_list args;
 
-/*	if(writer->colored){
-		sprintf(fbuf, "DBG:%s%s %s%s%s",
-			get_dbg_color_on(level),
-			get_dbg_prefix(level),
-			get_dbg_color_ontext(level), format, get_dbg_color_off(level));
-				
-		if (dmp!=NULL){
-			sprintf(dbuf,"%s%s%s",
-				get_dbg_color_ontext(dmp_level),"%s",
-				get_dbg_color_off(dmp_level)
-			);
-		}
-		
-			
-	}
-*/
-	va_start(args, format);	
-	writer->write(LOG_DEBUG,format,args,writer);
-	va_end(args);
-}
-
-static void builddmp(char *fbuf, char *format, int level, char *dmp, int dmp_level, int colored ){
-
-	char dbuf[128];
-	sprintf(fbuf, "DBG:%s%s %s%s%s",get_dbg_color_on(level),
-		get_dbg_prefix(level),get_dbg_color_ontext(level), 
-		format, get_dbg_color_off(level));
-				
-	
-	if (dmp!=NULL){
-		sprintf(dbuf,"%s%s%s",get_dbg_color_ontext(dmp_level),"%s",
-				get_dbg_color_off(dmp_level));
-	}
-	strcat(fbuf,dbuf);
-}
 
 void cw_dbg_elem(int level, struct conn *conn, int msg, 
 			struct cw_ElemHandler * handler,
@@ -502,8 +471,7 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 {
 	char vendorname[256];
 	char vendor_details[265];
-	char *dmp;
-	int i;
+
 	
 	if (!cw_dbg_is_level(level))
 		return;
@@ -523,55 +491,10 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
 		/*dmp = cw_format_dump(msgbuf,len,NULL);*/
 		
-		cw_dbg_dmp(DBG_ELEM_DMP,msgbuf,len,"hallo");
+		cw_dbg_dmp(DBG_ELEM_DMP,msgbuf,len,"");
 	}
 
 	return;
-
-
-
-
-
-	dmp = NULL;	
-	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
-		dmp = cw_format_dump(msgbuf,len,NULL);
-	}
-
-	for (i=0; cw_log_writers[i]; i++){
-		char fbuf[512];
-		
-		if (cw_log_writers[i]->colored){
-			builddmp(fbuf,"%s %d (%s), len=%d ",level,dmp,DBG_ELEM_DMP,cw_log_writers[i]->colored);
-			cw_dbg_help(cw_log_writers[i],fbuf,vendorname,handler->id,handler->name,
-				len, dmp);
-				
-		}
-		else{
-			if (!dmp){
-				cw_dbgv1(cw_log_writers[i],level,"%s %d (%s), len=%d ",vendorname,handler->id,
-					handler->name,len);
-			}
-			else{
-				cw_dbgv1(cw_log_writers[i],level,"%s %d (%s), len=%d\n%s",vendorname,handler->id,
-					handler->name,len,dmp);
-
-			}
-		}
-
-/*			cw_dbg(DBG_ELEM_IN, "%s %d (%s), len=%d%s%s",
-			vendorname,
-		       handler->id, handler->name, len, get_dbg_color_ontext(DBG_ELEM_DMP), dmp);
-*/
-/*			cw_dbg(DBG_ELEM_IN, "%s %d (%s), len=%d", 
-			vendorname,
-			handler->id, handler->name, len);
-*/
-		
-		
-		
-	}
-
-	free(dmp);
 
 }
 

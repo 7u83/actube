@@ -353,7 +353,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	mand_found = mavl_create_conststr();
 	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
 
-	cw_dbg(DBG_MSG_IN,"*** parsing messe elemtns for message of type %d (%s) ***",
+	cw_dbg(DBG_MSG_PARSING ,"*** parsing message elemtns in %d - (%s) ***",
 			message->type,message->name);
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -401,7 +401,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	   
 	cw_check_missing_mand(message,mand_found);
 	
-	cw_dbg(DBG_MSG_IN," *** parsing of message of type %d (%s) done ***", 
+	cw_dbg(DBG_MSG_PARSING," *** done parsing message elements in %d (%s) ***", 
 				message->type,message->name);
 	
 	mavl_destroy(mand_found);
@@ -723,13 +723,16 @@ int cw_read_messages(struct conn *conn)
 
 int cw_read_from(struct conn *conn)
 {
+	uint8_t buf[2024];
+	int len = 2024;
+	
 	if (!conn->readfrom) {
 		cw_log(LOG_ERR, "Fatal error, no readfrom method available.");
 		errno = EPROTO;
 		return -1;
 	}
-	uint8_t buf[2024];
-	int len = 2024;
+
+
 
 	struct sockaddr_storage from;
 	int n = conn->readfrom(conn, buf, len, &from);

@@ -298,6 +298,7 @@
       <File Name="src/cw/dbg_help_strings.c"/>
       <File Name="src/cw/cw_dbg_set_level.c"/>
       <File Name="src/cw/cw_dbg_set_level_from_str.c"/>
+      <File Name="src/cw/ansi_colors.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

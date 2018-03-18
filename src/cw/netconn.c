@@ -207,7 +207,7 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
 		cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 
-		cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,mtu,(struct sockaddr*)&nc->addr);
+//		cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,mtu,(struct sockaddr*)&nc->addr);
 
 		if (nc->write(nc,ptr,mtu)<0)
 			return -1;
@@ -227,7 +227,7 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 
 	cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 
-	cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,msglen,(struct sockaddr*)&nc->addr);
+//	cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,msglen,(struct sockaddr*)&nc->addr);
 
 	return nc->write(nc,ptr,msglen-0);
 }
@@ -239,7 +239,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 
-	cw_dbg_pkt_nc(DBG_PKT_IN, nc, packet, len, from);
+//	cw_dbg_pkt_nc(DBG_PKT_IN, nc, packet, len, from);
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
@@ -309,7 +309,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 		}
 
 
-		cw_dbg_pkt_nc(DBG_PKT_IN, nc, f + 4, *(uint32_t *) f, from);
+//		cw_dbg_pkt_nc(DBG_PKT_IN, nc, f + 4, *(uint32_t *) f, from);
 
 		// XXX: Modify fragman to not throw away CAPWAP headers
 

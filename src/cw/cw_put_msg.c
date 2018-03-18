@@ -58,7 +58,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	}
 
 
-	cw_dbg(DBG_ELEM_OUT,"*** Assenmbling message of type %d (%s) ***", 
+	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assenmbling message of type %d (%s) ***", 
 			msg->type, msg->name);
 	
 	dst = msgptr+8;
@@ -91,7 +91,8 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	}
 
 	cw_set_msg_elems_len(msgptr, len);
-
+	cw_dbg(DBG_MSG_ASSEMBLY,"*** Done assenmbling message of type %d (%s) ***", 
+			msg->type, msg->name);
 	if (type & 1) {
 		/* It's a request, so we have to set seqnum */
 		int s = conn_get_next_seqnum(conn);

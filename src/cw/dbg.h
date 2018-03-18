@@ -66,6 +66,8 @@ enum cw_dbg_levels{
 	/** Display outgoing CAPWAP/LWAPP messages */
 	DBG_MSG_OUT,
 
+	DBG_MSG_DMP,
+	
 	/** Message errors */
 	DBG_MSG_ERR,
 
@@ -115,6 +117,15 @@ enum cw_dbg_levels{
 	DBG_MOD,
 	
 	DBG_ALL, 
+	
+	DBG_PKT_DMP_OUT,
+	DBG_PKT_DMP_IN,
+	
+	DBG_MSG_IN_DMP,
+	DBG_MSG_OUT_DMP,
+	
+	DBG_MSG_ASSEMBLY,
+	DBG_MSG_PARSING,
 	
 	DBG_X
 };
@@ -209,9 +220,10 @@ void cw_dbg_version_subelem(int level, const char *context, int subtype,
  * @param level Level to check
  * @return 0 if leveln is not set, otherwise level is set
  */
+/*
 #define cw_dbg_is_level(level)\
 	(cw_dbg_opt_level & (1<<level))
-
+*/
 
 
 /**
