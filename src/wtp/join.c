@@ -200,7 +200,7 @@ int run_join(struct conn *conn)
 		return 0;
 	}
 
-	cw_dbg(DBG_ELEM, "Joined AC at %s,  Join Result: %d - %s",
+	cw_dbg(DBG_ELEM_IN, "Joined AC at %s,  Join Result: %d - %s",
 	       sock_addr2str(&conn->addr), rc, cw_strresult(rc));
 
 	return 1;

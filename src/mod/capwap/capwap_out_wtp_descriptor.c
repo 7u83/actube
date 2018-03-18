@@ -57,7 +57,7 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);
 
 
-cw_ktv_dump(params->conn->local_cfg,DBG_INFO,"*** ktv dump ***","","*** end of dump ***");
+/*cw_ktv_dump(params->conn->local_cfg,DBG_INFO,"*** ktv dump ***","","*** end of dump ***");*/
 
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);

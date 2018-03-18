@@ -34,5 +34,5 @@ WITH_OPENSSL=1
 # 
 LIBDIR=lib 
 
-CFLAGS=-D_XOPEN_SOURCE=600 -D_BSD_SOURCE -pedantic -std=c90 -Wall
+CFLAGS	:=	-D_XOPEN_SOURCE=600 -D_BSD_SOURCE -pedantic -std=c90 -Wall
  

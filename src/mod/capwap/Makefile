@@ -1,6 +1,3 @@
-include ../../Macros.mak
-include ../../Config.mak
-include ../../Config.local.mak
 
 
 

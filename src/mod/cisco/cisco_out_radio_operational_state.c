@@ -35,7 +35,7 @@ int cisco_out_radio_operational_state(struct conn *conn, struct cw_action_out *a
 
 
 		
-		cw_dbg_elem(DBG_ELEM,conn,1,1,dst+l,l);
+		cw_dbg_elem(DBG_ELEM_IN,conn,1,1,dst+l,l);
 
 	}
 	return l;

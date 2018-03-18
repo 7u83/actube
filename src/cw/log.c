@@ -22,13 +22,8 @@
 #include "strlist.h"
 #include "log.h"
 
-/*
-void (*cw_log_cb)(int level,const char * fromat, ...) = CW_LOG_DEFAULT_LOG;
-void (*cw_log_vcb)(int level,const char * fromat, va_list args) = CW_LOG_DEFAULT_VLOG;
-*/
 
 const char * cw_log_name = "actube";
-
 
 static struct cw_StrListElem prefix[] = {
 	{LOG_DEBUG, "DBG"},
@@ -66,7 +61,7 @@ static struct cw_StrListElem end_color[] = {
 	{CW_STR_STOP, NULL}
 };
 
-static struct cw_LogWriter * writers[] = {
+struct cw_LogWriter * cw_log_writers[] = {
 	&cw_log_syslog_writer,
 	&cw_log_console_writer,
 	NULL
@@ -78,12 +73,10 @@ void cw_log(int prio, const char *format, ...)
 	va_list args;
 	char fbuf[1024];
 	int i;
-	
-	
 
-	for (i=0; writers[i]; i++){
+	for (i=0; cw_log_writers[i]; i++){
 	
-		if (writers[i]->colored){
+		if (cw_log_writers[i]->colored){
 			sprintf(fbuf, "%s%s%s: %s%s",
 				cw_strlist_get_str(prefix_color,prio),
 				cw_strlist_get_str(prefix,prio),
@@ -101,7 +94,7 @@ void cw_log(int prio, const char *format, ...)
 			
 		}
 		va_start(args, format);		
-		writers[i]->write(prio,fbuf,args,writers[i]);
+		cw_log_writers[i]->write(prio,fbuf,args,cw_log_writers[i]);
 		va_end(args);
 	}
 
@@ -110,7 +103,7 @@ void cw_log(int prio, const char *format, ...)
 
 void cw_log_init(){
 	int i;
-	for (i=0; writers[i]; i++){
-		writers[i]->open();
+	for (i=0; cw_log_writers[i]; i++){
+		cw_log_writers[i]->open();
 	}
 }

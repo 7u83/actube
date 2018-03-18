@@ -24,19 +24,11 @@
  * @brief Various debug functions.
  */
 #include <stdarg.h>
+#include <stdint.h>
 
-
-#include "capwap.h"
 #include "dbg.h"
-#include "sock.h"
 #include "log.h"
-#include "strlist.h"
 #include "format.h"
-#include "capwap.h"
-#include "capwap_cisco.h"
-#include "lwapp_cisco.h"
-#include "cw.h"
-#include "msgset.h"
 
 
 
@@ -50,13 +42,6 @@
   * @{
   */
 
-
-/*
-void (*cw_dbg_cb) (int level, const char *format, ...) = CW_LOG_DEFAULT_LOG;
-void (*cw_dbg_vcb) (int level, const char *fromat, va_list args) = CW_LOG_DEFAULT_VLOG;
-*/
-
-
 uint32_t cw_dbg_opt_display = DBG_DISP_COLORS;
 
 /**
@@ -65,15 +50,17 @@ uint32_t cw_dbg_opt_display = DBG_DISP_COLORS;
 uint32_t cw_dbg_opt_level = 0;
 
 
+
+
 #define DBG_CLR_MAGENTA "\x1b[35m"
 #define DBG_CLR_MAGENTA_L "\x1b[95m"
-
 #define DBG_CLR_MAGENTA_B "\x1b[1;35m"
 #define DBG_CLR_MAGENTA_F "\x1b[2;35m"
 #define DBG_CLR_MAGENTA_I "\x1b[3;35m"
 
 #define DBG_CLR_BLUE	"\x1b[34m"
 #define DBG_CLR_BLUE_B	"\x1b[1;34m"
+#define DBG_CLR_BLUE_L	"\x1b[94m"
 #define DBG_CLR_BLUE_F	"\x1b[2;34m"
 #define DBG_CLR_BLUE_I	"\x1b[3;34m"
 
@@ -82,37 +69,63 @@ uint32_t cw_dbg_opt_level = 0;
 
 #define DBG_CLR_CYAN	"\x1b[36m"
 
-
+#define DBG_CLR_RED	"\x1b[31m"
 #define DBG_CLR_RED_I	"\x1b[3;31m"
+#define DBG_CLR_RED_L	"\x1b[91m"
+
+#define DBG_CLR_DEFAULT "\x1b[39m"
+#define DBG_CLR_DEFAULT_I "\x1b[3;39m"
+
+#define DBG_CLR_BLACK	"\x1b[30m"
+#define DBG_CLR_BLACK_L	"\x1b[90m"
+#define DBG_CLR_BLACK_LI	"\x1b[3;90m"
+
+#define DBG_CLR_WHITE	"\x1b[37m"
+#define DBG_CLR_WHITE_I	"\x1b[3;37m"
+
+
+#define DBG_CLR_OFF	"\x1b[22;39m\x1b[23m"
+
+
+#define ANSI_DEFAULT	"\x1b[39m"
+#define ANSI_BLUE	"\x1b[34m"
+
+#define ANSI_ITALIC	"\x1b[3m"
+#define ANSI_BOLD	"\x1b[1m"
 
 
 static struct cw_StrListElem color_on[] = {
 	{DBG_PKT_IN, DBG_CLR_YELLO},
 	{DBG_PKT_OUT, DBG_CLR_YELLO_I},
 
-	{DBG_MSG_IN, DBG_CLR_BLUE},
-	{DBG_MSG_OUT, DBG_CLR_BLUE_I},
+	{DBG_MSG_IN, ANSI_BLUE },
+	{DBG_MSG_OUT, ANSI_BLUE ANSI_ITALIC},
 
-	{DBG_ELEM, "\x1b[39m"},
-	{DBG_MSG_ERR, "\x1b[31m"},
-	{DBG_PKT_ERR, "\x1b[31m"},
-	{DBG_ELEM_ERR, "\x1b[31m"},
-	{DBG_SUBELEM, "\x1b[30m"},
+	{DBG_ELEM_IN, ANSI_DEFAULT},
+	{DBG_ELEM_OUT, ANSI_DEFAULT ANSI_ITALIC},
+	
+	{DBG_MSG_ERR, DBG_CLR_RED},
+	{DBG_PKT_ERR, DBG_CLR_RED},
+	{DBG_ELEM_ERR, DBG_CLR_RED},
+	
+	{DBG_SUBELEM, DBG_CLR_BLACK},
 	{DBG_DTLS, DBG_CLR_MAGENTA_B},
 	{DBG_DTLS_DETAIL, DBG_CLR_MAGENTA},
 	{DBG_DTLS_BIO, DBG_CLR_MAGENTA_L},
 
+	{DBG_INFO, DBG_CLR_DEFAULT},
 
-	{DBG_RFC, "\x1b[31m"},
+	{DBG_RFC, DBG_CLR_RED},
 	{DBG_X, "\x1b[31m"},
 	{DBG_WARN, DBG_CLR_CYAN},
-	{DBG_MOD, "\x1b[91m"},
+	{DBG_MOD, DBG_CLR_WHITE},
 	{CW_STR_STOP, ""}
 };
 
-static struct cw_StrListElem color_ontext[] = {
+struct cw_StrListElem color_ontext[] = {
 
-	{DBG_ELEM_DMP, "\x1b[30m"},
+/*	{DBG_ELEM_DMP, "\x1b[37m"},*/
+	{DBG_ELEM_DMP, DBG_CLR_BLACK_LI},
 	{CW_STR_STOP, ""}
 };
 
@@ -129,7 +142,9 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_MSG_IN, " Msg IN -"},
 	{DBG_MSG_OUT, " Msg Out -"},
 
-	{DBG_ELEM, " Msg Element -"},
+	{DBG_ELEM_IN, " Msg Element -"},
+	{DBG_ELEM_OUT, " Msg Element -"},
+	
 	{DBG_MSG_ERR, " Msg Error -"},
 	{DBG_PKT_ERR, " Pkt Error -"},
 	{DBG_ELEM_ERR, " Elem Error -"},
@@ -163,7 +178,7 @@ static const char *get_dbg_prefix(int level)
 	return cw_strlist_get_str(prefix, level);
 }
 
-static const char *get_dbg_color_ontext(int level)
+const char *get_dbg_color_ontext(int level)
 {
 	if (!(cw_dbg_opt_display & DBG_DISP_COLORS))
 		return "";
@@ -175,7 +190,24 @@ static const char *get_dbg_color_ontext(int level)
 
 
 
+static void cw_dbg_vlog_line(struct cw_LogWriter * writer, 
+		const char * prefix, const char * prefix_color,
+		const char *textcolor,const char * format, va_list args)
+{
+	char fbuf[512];
 
+	if ( writer->colored){
+		sprintf(fbuf,"DBG: %s%s %s%s%s",
+			prefix_color,prefix,textcolor,format,DBG_CLR_OFF);
+	}
+	else{
+		sprintf(fbuf,"DBG: %s %s",
+			prefix,format);
+				
+	}
+	writer->write(LOG_DEBUG,fbuf,args,writer);
+
+}
 
 
 
@@ -247,41 +279,32 @@ void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 		cw_dbg(level, "%s", buf);
 }
 
-void cw_dbg_pkt_nc(int level, struct netconn *nc, uint8_t * packet, int len,
-		   struct sockaddr *from)
-{
-/*	
-	if (!cw_dbg_is_level(level))
-		return;
-
-	char buf[1024];
-	cw_format_pkt_hdr(buf, level, NULL, packet, len, from);
-
-	int hlen = cw_get_hdr_msg_offset(packet);
-
-	if (cw_dbg_is_level(DBG_PKT_DMP)) {
-		char *dmp = cw_dbg_mkdmp_c(packet, len, hlen);
-		cw_dbg(level, "%s%s", buf, dmp);
-		free(dmp);
-	} else
-		cw_dbg(level, "%s", buf);
-*/
-}
-
-
-
-
-
 
 void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ...)
 {
-	char *dmp;
-	
+	char *dmp,*s,*c;
+	struct cw_FormatDumpSettings settings;
+
 	if (!cw_dbg_is_level(level))
 		return;
 
-	dmp = cw_format_dump(data, len, NULL);
-	cw_dbg(level, "%s%s", format, dmp);
+	cw_format_get_dump_defaults(&settings);
+	
+	settings.dump_prefix="  ";
+	settings.newline="\n  ";
+	settings.dump_suffix="\n";
+		
+
+	dmp = cw_format_dump(data, len, &settings);
+
+	/* wrtie the dump line by line to the log file */
+	c=dmp;
+	while ((s=strchr(c,'\n'))!=NULL){
+		*s=0;
+		cw_dbg(level," %s",c);
+		c=s+1;
+	}
+
 	free(dmp);
 }
 
@@ -304,25 +327,18 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	
 	s = buf;
 
-
 	msgptr = cw_get_hdr_msg_ptr(packet);
-/*
-//      int pplen = len - (msgptr-packet);
-*/
 	msg_id = cw_get_msg_id(msgptr);
-	
 
 	search.type = msg_id;
-
 	message = mavl_get(conn->msgset->msgdata,&search);
-	
 
 	if (!message)
-		msname="Unknown";
+		msname=cw_strmsg(msg_id);
 	else
 		msname = message->name;
 	
-	s += sprintf(s, "%s Message (type=%d) ", msname  /*cw_strmsg(msg_id)*/, msg_id);
+	s += sprintf(s, "%s Message (type=%d) ", msname  , msg_id);
 	if (level == DBG_MSG_IN)
 		s += sprintf(s, "from %s ", sock_addr2str(from,sock_buf));
 	else
@@ -330,9 +346,7 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 
 	s += sprintf(s, ", Seqnum: %d ElemLen: %d", cw_get_msg_seqnum(msgptr),
 		     cw_get_msg_elems_len(msgptr));
-/*
-//abort:
- */
+
 	cw_dbg(level, "%s", buf);
 }
 
@@ -395,53 +409,171 @@ void cw_dbg_version_subelem(int level, const char *context, int subtype,
 }
 
 
-void cw_dbg(int level, const char *format, ...)
+void cw_dbgv(struct cw_LogWriter *writer, int level, const char * format, va_list args)
 {
 	char fbuf[1024];
-	va_list args;
 
+	if (writer->colored ){
+		sprintf(fbuf, "DBG:%s%s %s%s%s",
+			get_dbg_color_on(level),
+			get_dbg_prefix(level),
+			get_dbg_color_ontext(level), format, get_dbg_color_off(level)
+		);
+	}
+	else{
+		sprintf(fbuf, "DBG:%s %s",
+			get_dbg_prefix(level), format);
+	}
+
+	writer->write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
+
+
+}
+
+void cw_dbgv1(struct cw_LogWriter *writer, int level, const char * format, ...){
+	va_list args;
+	va_start(args, format);
+	cw_dbgv(writer,level,format,args);
+	va_end(args);	
+}
+
+
+
+void cw_dbg(int level, const char *format, ...){
+	int i;
+	va_list args;
 	
 	if (!(cw_dbg_is_level(level)))
 		return;
-
-	sprintf(fbuf, "DBG:%s%s %s%s%s",
-		get_dbg_color_on(level),
-		get_dbg_prefix(level),
-		get_dbg_color_ontext(level), format, get_dbg_color_off(level)
-	    );
-
-
-	va_start(args, format);
-/*	cw_log_vcb(level, fbuf, args);*/
-
-
-
-	cw_log_console_writer.write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
-	va_end(args);
-
-}
-
-/*
-//int cw_is_utf8(unsigned char *str, size_t len);
-*/
-
-/*
-int cw_format_item(char *dst, mbag_item_t * item)
-{
-	*dst = 0;
-	if (item->type == MBAG_BSTR16) {
-		strncpy(dst, (char *) bstr16_data(item->u2.data), bstr16_len(item->u2.data));
-		*(dst + bstr16_len(item->u2.data)) = 0;
-		return bstr16_len(item->u2.data);
-
-
+	
+	for (i=0; cw_log_writers[i]; i++){
+		va_start(args, format);
+		cw_dbg_vlog_line(cw_log_writers[i],
+			get_dbg_prefix(level),get_dbg_color_on(level),
+			get_dbg_color_ontext(level),
+			format, args);
+		va_end(args);
 	}
-	return 0;
 }
 
+static void cw_dbg_help(struct cw_LogWriter *writer, const char *format, ...)
+{
+	va_list args;
+
+/*	if(writer->colored){
+		sprintf(fbuf, "DBG:%s%s %s%s%s",
+			get_dbg_color_on(level),
+			get_dbg_prefix(level),
+			get_dbg_color_ontext(level), format, get_dbg_color_off(level));
+				
+		if (dmp!=NULL){
+			sprintf(dbuf,"%s%s%s",
+				get_dbg_color_ontext(dmp_level),"%s",
+				get_dbg_color_off(dmp_level)
+			);
+		}
+		
+			
+	}
 */
+	va_start(args, format);	
+	writer->write(LOG_DEBUG,format,args,writer);
+	va_end(args);
+}
+
+static void builddmp(char *fbuf, char *format, int level, char *dmp, int dmp_level, int colored ){
+
+	char dbuf[128];
+	sprintf(fbuf, "DBG:%s%s %s%s%s",get_dbg_color_on(level),
+		get_dbg_prefix(level),get_dbg_color_ontext(level), 
+		format, get_dbg_color_off(level));
+				
+	
+	if (dmp!=NULL){
+		sprintf(dbuf,"%s%s%s",get_dbg_color_ontext(dmp_level),"%s",
+				get_dbg_color_off(dmp_level));
+	}
+	strcat(fbuf,dbuf);
+}
+
+void cw_dbg_elem(int level, struct conn *conn, int msg, 
+			struct cw_ElemHandler * handler,
+			 const uint8_t * msgbuf, int len)
+{
+	char vendorname[256];
+	char vendor_details[265];
+	char *dmp;
+	int i;
+	
+	if (!cw_dbg_is_level(level))
+		return;
+		
+	*vendor_details = 0;
+
+	if (handler->vendor){
+		sprintf(vendorname,"Vendor %s",cw_strvendor(handler->vendor));
+	}
+	else{
+		sprintf(vendorname,"");
+	}
+
+	cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
+			handler->name,len);
+
+	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
+		/*dmp = cw_format_dump(msgbuf,len,NULL);*/
+		
+		cw_dbg_dmp(DBG_ELEM_DMP,msgbuf,len,"hallo");
+	}
+
+	return;
 
 
+
+
+
+	dmp = NULL;	
+	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
+		dmp = cw_format_dump(msgbuf,len,NULL);
+	}
+
+	for (i=0; cw_log_writers[i]; i++){
+		char fbuf[512];
+		
+		if (cw_log_writers[i]->colored){
+			builddmp(fbuf,"%s %d (%s), len=%d ",level,dmp,DBG_ELEM_DMP,cw_log_writers[i]->colored);
+			cw_dbg_help(cw_log_writers[i],fbuf,vendorname,handler->id,handler->name,
+				len, dmp);
+				
+		}
+		else{
+			if (!dmp){
+				cw_dbgv1(cw_log_writers[i],level,"%s %d (%s), len=%d ",vendorname,handler->id,
+					handler->name,len);
+			}
+			else{
+				cw_dbgv1(cw_log_writers[i],level,"%s %d (%s), len=%d\n%s",vendorname,handler->id,
+					handler->name,len,dmp);
+
+			}
+		}
+
+/*			cw_dbg(DBG_ELEM_IN, "%s %d (%s), len=%d%s%s",
+			vendorname,
+		       handler->id, handler->name, len, get_dbg_color_ontext(DBG_ELEM_DMP), dmp);
+*/
+/*			cw_dbg(DBG_ELEM_IN, "%s %d (%s), len=%d", 
+			vendorname,
+			handler->id, handler->name, len);
+*/
+		
+		
+		
+	}
+
+	free(dmp);
+
+}
 
 
 

@@ -116,14 +116,14 @@
 int cw_put_cisco_ap_timesync(uint8_t * dst, time_t time, uint8_t type);
 
 
-
+/*
 int cw_out_cisco_ap_timesync(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
+*/
 
 
-
-
+/*
 int cw_addelem_cisco_ap_regulatory_domain(uint8_t *dst, struct radioinfo * ri);
-
+*/
 
 /**
  * Add a Cisco MWAR message element.
@@ -151,7 +151,10 @@ extern const char * cw_cisco_id_to_str(int elem_id);
 int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct radioinfo *ri);
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
 
+/*
 extern int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
+*/
+
 int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from);
 
 int cw_in_cipwap_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,

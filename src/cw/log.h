@@ -32,13 +32,6 @@
 #define LOG_ERROR LOG_ERR
 #endif
 
-#ifndef CW_LOG_DEFAULT_LOG
-#define CW_LOG_DEFAULT_LOG cw_log_file
-#endif
-#ifndef CW_LOG_DEFAULT_VLOG
-#define CW_LOG_DEFAULT_VLOG cw_log_vfile
-#endif
-
 struct cw_LogWriter {
 	const char * name;
 	int colored;
@@ -53,64 +46,9 @@ extern struct cw_LogWriter cw_log_console_writer;
 
 void cw_log_init();
 void cw_log(int level, const char *format, ...);
-extern const char *cw_log_name;
-
-
-
-/****/
-
-/*extern void (*cw_log_cb) (int level, const char *fromat, ...);
-extern void (*cw_log_vcb) (int level, const char *fromat, va_list args);
-*/
-/* Syslog functins */
-
-
-
-/* Log to File functions */
-
-/*
-void cw_log_vfile(int level,const char * format, va_list args);
-void cw_log_file(int level,const char *format, ...);
-*/
-
-
-
-
-/*
-
-//extern void (*cw_log_debug_cb) (int type, const char *format, ...);
-
-//extern void (*cw_log_debug_cbs[]) (const char *fromat, ...);
-*/
-
-
-/*
-extern int cw_log_debug_dump_(int level, const uint8_t * data, int len,
-			      const char *format, ...);
-
-
-extern void cw_dbg_msgelem_(int msg, int msgelem, const uint8_t * msgbuf, int len);
-
-
-struct conn;
-extern void cw_dbg_missing_mand_elems_(struct conn *conn, int msgtyoe, int *mand);
-
-extern void lw_dbg_elem(int msg_id, int elem_id, const uint8_t * elem_data, int elem_len);
-
-extern int cw_log_debug_level;
-extern int cw_log_str2dbglevel(const char *str);
-
 
 extern const char *cw_log_name;
+extern struct cw_LogWriter * cw_log_writers[];
 
-struct cw_dbg_cfgstrs {
-	const char *name;
-	int level;
-};
-
-extern struct cw_dbg_cfgstrs cw_dbg_cfgstrs[];
-
-
-*/
 
 #endif

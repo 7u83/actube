@@ -353,6 +353,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	mand_found = mavl_create_conststr();
 	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
 
+	cw_dbg(DBG_MSG_IN,"*** parsing messe elemtns for message of type %d (%s) ***",
+			message->type,message->name);
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 		int rc;
@@ -398,6 +400,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	   by calling the "end" function for the message */
 	   
 	cw_check_missing_mand(message,mand_found);
+	
+	cw_dbg(DBG_MSG_IN," *** parsing of message of type %d (%s) done ***", 
+				message->type,message->name);
+	
 	mavl_destroy(mand_found);
 
 	{
