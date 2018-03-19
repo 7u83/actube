@@ -6,8 +6,6 @@
         <File Name="src/mod/cisco/cisco_out_telnet_ssh.c"/>
         <File Name="src/mod/cisco/cisco_out_capwap_up.c"/>
         <File Name="src/mod/cisco/cisco_in_telnet_ssh.c"/>
-        <File Name="src/mod/cisco/cisco_items.c"/>
-        <File Name="src/mod/cisco/capwap_items.h"/>
         <File Name="src/mod/cisco/cisco_in_radio_administrative_state.c"/>
         <File Name="src/mod/cisco/cisco_actions_wtp.c"/>
         <File Name="src/mod/cisco/cisco_out_wtp_descriptor.c"/>
@@ -28,7 +26,6 @@
         <File Name="src/mod/cisco/cisco80211_out_wtp_radio_configuration.c"/>
         <File Name="src/mod/cisco/cisco_in_add_wlan.c"/>
         <File Name="src/mod/cisco/cisco80211_in_mac_operation.c"/>
-        <File Name="src/mod/cisco/cisco_items.h"/>
         <File Name="src/mod/cisco/cisco80211_in_wtp_radio_configuration.c"/>
         <File Name="src/mod/cisco/cisco80211.h"/>
         <File Name="src/mod/cisco/cisco.h"/>
@@ -36,6 +33,7 @@
         <File Name="src/mod/cisco/mod_cisco_wtp.c"/>
         <File Name="src/mod/cisco/cisco80211.c"/>
         <File Name="src/mod/cisco/mod_cisco.h"/>
+        <File Name="src/mod/cisco/capwap_cisco.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

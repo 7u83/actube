@@ -6,19 +6,19 @@ include ../../Config.local.mak
 OBJS=\
 	mod_cisco_ac.o \
 	cisco_actions_ac.o \
-	cisco_actions_wtp.o \
-	cisco_out_ap_timesync.o \
 	cisco_in_wtp_descriptor.o \
-	cisco_out_ac_descriptor.o \
 	cisco_out_wtp_descriptor.o \
-	cisco_out_telnet_ssh.o \
-	cisco_in_ac_descriptor.o\
-	cisco80211.o \
-	cisco_out_board_data_options.o \
+
+#	cisco80211.o \
+#	cisco_out_radio_administrative_state.o \
 	cisco_in_radio_administrative_state.o \
 	cisco_in_spam_vendor_specific.o \
+#	cisco_out_ap_timesync.o \
+	cisco_out_board_data_options.o \
+#	cisco_out_ac_descriptor.o \
+#	cisco_out_telnet_ssh.o \
 	cisco_in_telnet_ssh.o \
-	cisco_items.o \
+	cisco_in_ac_descriptor.o\
 	cisco80211_in_mac_operation.o \
 	cisco80211_in_wtp_radio_configuration.o \
 	cisco80211_out_wtp_radio_configuration.o \
@@ -30,8 +30,6 @@ OBJS=\
 	cisco_out_radio_operational_state.o \
 	cisco_in_radio_operational_state.o \
 	cisco_out_wtp_operational_state.o
-
-#	cisco_out_radio_administrative_state.o \
 
 	
 LIBDIR		:= ../../../lib

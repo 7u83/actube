@@ -27,9 +27,9 @@
 #include <string.h>
 #include <time.h>
 
-#include "lwapp.h"
-#include "cw.h"
-#include "vendors.h"
+#include "cw/lwapp.h"
+#include "cw/cw.h"
+#include "cw/vendors.h"
 
 #define CW_CISCO_MWAR_ADDR			LW_ELEM_AC_ADDRESS			/* 2 */
 #define CW_CISCO_RAD				3
@@ -112,9 +112,9 @@
 #define CW_CISCO_AP_LED_FLASH_CONFIG		254
 
 
-
+/*
 int cw_put_cisco_ap_timesync(uint8_t * dst, time_t time, uint8_t type);
-
+*/
 
 /*
 int cw_out_cisco_ap_timesync(struct conn *conn,struct cw_action_out * a,uint8_t *dst);
@@ -142,6 +142,7 @@ static inline int cw_addelem_cisco_mwar(uint8_t *dst, struct ac_info *acinfo){
 }
 */
 
+/*
 int cw_readelem_cisco_station_cfg(uint8_t *src,int len);
 int cw_addelem_cisco_certificate(uint8_t*dst,uint8_t*src,int len);
 
@@ -150,11 +151,13 @@ extern const char * cw_cisco_id_to_str(int elem_id);
 
 int cw_readelem_cisco_wtp_radio_cfg(int elem_id,uint8_t *elem, int len,struct radioinfo *ri);
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo * ri);
+*/
 
 /*
 extern int cw_out_cisco_ac_descriptor(struct conn *conn,struct cw_action_out * a,uint8_t *dst) ;
 */
 
+/*
 int cw_in_cisco_image_identifier(struct conn *conn,struct cw_action_in * a,uint8_t *data,int len,struct sockaddr *from);
 
 int cw_in_cipwap_wtp_descriptor(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -179,5 +182,5 @@ int cw_in_cisco_radio_cfg(struct conn *conn, struct cw_action_in *a, uint8_t * d
 
 int cw_in_cisco_add_wlan(struct conn *conn, struct cw_action_in *a, uint8_t * data, int len,
 		  struct sockaddr *from);
-
+*/
 #endif

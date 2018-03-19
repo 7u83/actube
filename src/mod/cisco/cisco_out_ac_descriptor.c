@@ -19,8 +19,8 @@
 #include "cw/log.h"
 #include "cw/conn.h"
 
-#include "cw/mbag.h"
-#include "cw/capwap_items.h"
+
+
 #include "cw/cw.h"
 
 extern mbag_t cisco_config;

@@ -3,12 +3,10 @@
   <VirtualDirectory Name="src">
     <VirtualDirectory Name="mod">
       <VirtualDirectory Name="cipwap">
-        <File Name="src/mod/cipwap/cipwap_items.c"/>
         <File Name="src/mod/cipwap/cipwap_actions_ac.c"/>
         <File Name="src/mod/cipwap/mod_cipwap_ac.c"/>
         <File Name="src/mod/cipwap/mod_cipwap.h"/>
         <File Name="src/mod/cipwap/mod_cipwap_wtp.c"/>
-        <File Name="src/mod/cipwap/cipwap_items.h"/>
         <File Name="src/mod/cipwap/cipwap_actions_wtp.c"/>
       </VirtualDirectory>
     </VirtualDirectory>

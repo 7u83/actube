@@ -20,11 +20,13 @@
 #include "cw/cw.h"
 #include "cw/ktv.h"
 #include "cw/log.h"
+#include "cw/dbg.h"
 
 #include "cw/msgset.h"
 #include "cw/keys.h"
 
 #include "mod_capwap.h"
+
 
 static struct cw_ElemHandler handlers[] = {
 
@@ -219,12 +221,16 @@ static struct cw_MsgDef messages[] = {
 struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	if (mode != CW_MOD_MODE_CAPWAP)
 		return NULL;
+	
+	cw_dbg(DBG_INFO,"CAPWAP: Register messages");
+	
 	cw_msgset_add(set,messages, handlers);
 	mavl_add_ptr(set->types_tree,CW_TYPE_BSTR16);
 	mavl_add_ptr(set->types_tree,CW_TYPE_BYTE);
 	mavl_add_ptr(set->types_tree,CW_TYPE_DWORD);
 	mavl_add_ptr(set->types_tree,CW_TYPE_WORD);
 
+	cw_dbg(DBG_INFO,"CAPWAP: Done register messages");
 	return set;
 }
 

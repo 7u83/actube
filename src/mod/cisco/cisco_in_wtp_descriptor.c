@@ -19,7 +19,7 @@
 #include "cw/keys.h"
 #include "cw/cw.h"
 #include "cw/vendors.h"
-#include "cw/capwap_items.h"
+
 
 
 int cisco_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams * params, uint8_t * data,
