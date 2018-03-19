@@ -21,7 +21,7 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 	
 	if (val == NULL) {
 		cw_log(LOG_ERR,
-		       "Error: Can't set sub-element %d from key %s in WTP Board Data. Key not found",type,key);
+		       "Creating WTP Board Data sub-element %d. Key not '%s' found",type,key);
 		return 0;
 	}
 
@@ -54,7 +54,7 @@ int capwap_out_wtp_board_data(struct cw_ElemHandler * eh,
 	
 	if (val ==NULL) {
 		cw_log(LOG_ERR,
-		       "Error: Can't send WTP Board Data element - %s not defined.", key);
+		       "Creating WTP Board Data element. Key '%s' not found.", key);
 		return 0;
 	}
 
