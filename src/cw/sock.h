@@ -86,7 +86,10 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
 
 #define SOCK_ADDR_BUFSIZE 64
 
+/*
 #define SOCK_ADDR_BUF_DEFINE char __sock_buf__[SOCK_ADDR_BUFSIZE]
+*/
+
 
 /**
  * Convert a sockaddr structure to a human readable string
@@ -113,8 +116,8 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
 
 
 
-#define sock_hwaddr2str(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, ":" ) )
-#define sock_hwaddr2idstr(s,l) ( sock_hwaddrtostr( s,l, (char[64]){0}, "" ) )
+#define sock_hwaddr2str(s,l,buf) ( sock_hwaddrtostr( s,l, buf, ":" ) )
+#define sock_hwaddr2idstr(s,l,buf) ( sock_hwaddrtostr( s,l, buf, "" ) )
 
 /*
 //#define sock_addrtostr(s,str,n) sock_addrtostr(s,str,n,1)

@@ -182,13 +182,14 @@ static int mavl_add0 ( struct mavl *t, struct mavlnode **parent, const void ** d
  * Add an element to an AVL tree
  *
  * @param t mavl
- * @param data pointer to element
- *
- * @return A pointer to the element in the tree. If teh returned pointer
- * equals to the pointer given in the data argument, the element has already
- * been in the tree. If the function returns NULL, there was en error, e.g.
- * no memory left. Consult therefore errno.
- *
+ * @param data pointer to the element to add
+ * @param exists pointer to an interger vairable which wil be set to 1, if
+ * the element to add already exists in the tree. If the element did't
+ * exist, the variable ist to 0.
+ * @return A pointer to the element in the tree. If the element was added, 
+ * it the pointer to newly created element. If the element had already existed,
+ * the pointer points to the existing element. mavl_add returns thero, if 
+ * something else went wrong. Therefore consult errno.
  * @example mavl_add_example.c
  */
 

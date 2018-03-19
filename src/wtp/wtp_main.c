@@ -108,7 +108,7 @@ int main (int argc, char **argv)
 	cw_ktv_read_file(file,global_cfg,types_tree);
 
 	
-	cw_ktv_dump(global_cfg,DBG_INFO,"----- global cfg start -----","","----- global cfg end -----");
+	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
 
 	
 	mod = cw_mod_load(bootcfg.modname, global_cfg, CW_ROLE_WTP);

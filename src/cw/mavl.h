@@ -157,8 +157,11 @@ void *mavl_replace_data ( struct mavl *t, void *data, int len );
 
 
 
-
+/**
+ * An alias gor #mavl_get
+ */
 #define mavl_find(t,d) mavl_get(t,d)
+
 #define mavl_find_ptr(tree,search_ptr) mavl_get_ptr(tree,search_ptr)
 #define mavl_insert(t,d) mavl_add(t,d)
 

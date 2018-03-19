@@ -227,7 +227,7 @@ int main (int argc, char *argv[])
 
 	fclose(file);
 	
-	cw_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
+	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
 	actube_global_cfg = global_cfg;
 
 

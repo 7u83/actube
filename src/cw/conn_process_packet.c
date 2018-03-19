@@ -355,7 +355,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	mand_found = mavl_create_conststr();
 	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
 
-	cw_dbg(DBG_MSG_PARSING ,"*** parsing message elemtns in %d - (%s) ***",
+	cw_dbg(DBG_MSG_PARSING ,"*** Parsing message of type %d - (%s) ***",
 			message->type,message->name);
 	/* iterate through message elements */
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
@@ -394,6 +394,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			mlist_append(unrecognized,&elem);
 			continue;
 		}
+		
+		if (rc < 0 ){
+			continue;
+		}
 
 
 	}
@@ -403,32 +407,16 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	   
 	cw_check_missing_mand(message,mand_found);
 	
-	cw_dbg(DBG_MSG_PARSING," *** done parsing message elements in %d (%s) ***", 
+	cw_dbg(DBG_MSG_PARSING," *** Done parsing message of type %d (%s) ***", 
 				message->type,message->name);
 	
 	mavl_destroy(mand_found);
+	
+	cw_dbg_ktv_dump(conn->remote_cfg,DBG_CFG_DMP,
+		" *** Remote CFG dump ***", "CFG:", " *** End of remote CFG dump");
 
 	{
 
-		mavliter_t it;
-		const struct cw_Type * type;
-		cw_dbg (DBG_INFO, "********** THE REMOTE CFG **************\n");
-		mavliter_init(&it,conn->remote_cfg);
-
-
-		mavliter_foreach(&it){
-			char value[500];
-			struct cw_KTV * data;
-			data = mavliter_get(&it);
-			type = data->type;
-			type->to_str(data,value,0);
-		
-			cw_dbg(DBG_INFO,"RMTCFG: %s (%s): %s",data->key,type->name, value);
-		}
-
-
-
-		
 		{
 			mlistelem_t *e;
 			mlist_foreach(e,unrecognized){

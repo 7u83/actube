@@ -167,8 +167,8 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 						    elemdef->vendor, elemdef->id);
 		/* check if a handler for our element already exists */
 		if (!handler) {
-			cw_log(LOG_ERR, "No handler for message element: %d %d %d",
-			       elemdef->proto, elemdef->vendor, elemdef->id);
+			cw_log(LOG_ERR, "Creating message set: No handler for message element: %d %d %d [%s]",
+			       elemdef->proto, elemdef->vendor, elemdef->id, cw_strelem(elemdef->id));
 			continue;
 		}
 		

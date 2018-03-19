@@ -55,7 +55,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 			return;
 		}
 
-		cw_dbg(DBG_SUBELEM, "Reading WTP board data sub-element, type=%d, len=%d",
+		cw_dbg(DBG_SUBELEM, "WTP board data sub-element, type=%d, len=%d",
 		       subtype, sublen);
 
 		switch (subtype) {

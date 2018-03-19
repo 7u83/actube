@@ -90,6 +90,7 @@ static struct cw_StrListElem color_on[] = {
 	{DBG_X, "\x1b[31m"},
 	{DBG_WARN, ANSI_CYAN},
 	{DBG_MOD, ANSI_WHITE},
+	{DBG_CFG_DMP, ANSI_BCYAN }, 
 	
 	
 	{CW_STR_STOP, ""}
@@ -129,6 +130,7 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_DTLS_DETAIL, " DTLS - "},
 	{DBG_WARN, " Warning - "},
 	{DBG_MOD, " Mod - "},
+
 	{DBG_X, "XXXXX - "},
 
 	{CW_STR_STOP, ""}
@@ -466,9 +468,7 @@ void cw_dbg(int level, const char *format, ...){
 
 
 void cw_dbg_elem(int level, struct conn *conn, int msg, 
-			struct cw_ElemHandler * handler, 
-			struct cw_ElemHandlerParams *params,
-			 const uint8_t * msgbuf, int len)
+	struct cw_ElemHandler * handler, const uint8_t * msgbuf, int len)
 {
 	char vendorname[256];
 	char vendor_details[265];
@@ -486,17 +486,9 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 		sprintf(vendorname,"");
 	}
 
-	if (params->elem == NULL) {
-		cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
+
+	cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
 			handler->name,len);
-	}else {
-		char str[512];
-		params->elem->type->to_str(params->elem,str,512);
-		cw_dbg(level,"%s %d (%s), len=%d, val=%s ",vendorname,handler->id,
-			handler->name,len, str);
-		
-	}
-	
 	
 	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
 		/*dmp = cw_format_dump(msgbuf,len,NULL);*/
@@ -509,6 +501,33 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 }
 
 
+
+void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
+		const char *header, const char *prefix, const char *footer )
+{
+	char value[500];
+	struct cw_KTV * data;
+	mavliter_t it;
+	const struct cw_Type * type;
+	
+	if (header != NULL)
+		cw_dbg (dbglevel, header);
+	
+	mavliter_init(&it,ktv);
+
+	mavliter_foreach(&it){
+		
+		data = mavliter_get(&it);
+		type = data->type;
+		type->to_str(data,value,0);
+		
+		cw_dbg(dbglevel,"%s%s (%s): %s",prefix,data->key,type->name, value);
+	}
+	
+	if (footer != NULL)
+		cw_dbg (dbglevel, footer);
+
+}
 
 
 

@@ -4,7 +4,7 @@
 #include "log.h"
 #include "dbg.h"
 
-const char * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+cw_KTV_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *type,
 			const uint8_t * data, int len)
 {
 	cw_KTV_t mdata, *mresult;
@@ -15,7 +15,7 @@ const char * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *
 */
 	mdata.key=cw_strdup(key);
 	if (!mdata.key){
-		cw_log(LOG_ERR, "Can't allocate memory for key %s: %s",
+		cw_log(LOG_ERR, "Can't allocate memory for KTV key %s: %s",
 				key,strerror(errno));
 		return NULL;
 	}
@@ -35,8 +35,8 @@ const char * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *
 		free(mdata.key);
 		if (type->del)
 			type->del(&mdata);
-		return key;
+		return mresult;
 	}
 
-	return mdata.key;
+	return mresult;
 }

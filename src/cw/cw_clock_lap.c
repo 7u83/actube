@@ -11,5 +11,3 @@ double cw_clock_lap(struct timeval *tv)
 	gettimeofday(&lap, NULL);
 	return (cw_timevaltodouble(&lap) - cw_timevaltodouble(tv)) / 1000000.0;
 }
-
-

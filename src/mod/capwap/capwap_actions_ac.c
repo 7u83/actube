@@ -54,7 +54,7 @@ static struct cw_ElemHandler handlers[] = {
 		"WTP Board Data",		/* name */
 		CAPWAP_ELEM_WTP_BOARD_DATA,	/* Element ID */
 		0,0,				/* Vendor / Proto */
-		4,128,				/* min/max length */
+		14,1024,			/* min/max length */
 		NULL,				/* type */
 		CW_KEY_WTP_BOARD_DATA,		/* Key */
 		capwap_in_wtp_board_data,	/* get */
@@ -65,7 +65,7 @@ static struct cw_ElemHandler handlers[] = {
 		"WTP Descriptor",		/* name */
 		CAPWAP_ELEM_WTP_DESCRIPTOR,	/* Element ID */
 		0,0,				/* Vendor / Proto */
-		4,128,				/* min/max length */
+		33,1024,			/* min/max length */
 		NULL,				/* type */
 		CW_KEY_WTP_DESCRIPTOR,		/* Key */
 		capwap_in_wtp_descriptor,	/* get */

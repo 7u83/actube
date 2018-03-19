@@ -48,8 +48,8 @@ static const char * ssl_version2str(int version)
 			return "TLSv1";
 		case DTLS1_VERSION:
 			return "DTLSv1";
-//		case DTLS1_2_VERSION:
-//			return "DTLSv1.2";
+/*		case DTLS1_2_VERSION:
+			return "DTLSv1.2"; */
 	}
 	return "Version unknown";
 }
@@ -65,7 +65,7 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 		s += sprintf(s,"SSL msg in: ");
 
 	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
-//	cw_dbg(DBG_DTLS_DETAIL,buffer);
+/*	cw_dbg(DBG_DTLS_DETAIL,buffer); */
 }
 #endif
 
@@ -121,7 +121,7 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
       if (rsa_1024)
         rsa_tmp=rsa_1024;
       else
-        exit(0); //should_not_happen_in_this_example();
+        exit(0); /* should_not_happen_in_this_example(); */
       break;
     default:
       /* Generating a key on the fly is very costly, so use what is there */
@@ -139,9 +139,10 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
 
 int dtls_openssl_init()
 {
+	int rc;
 	const char * version = SSLeay_version(SSLEAY_VERSION);
 	cw_dbg(DBG_INFO,"Init SSL library - %s",version);
-	int rc = SSL_library_init();
+	rc = SSL_library_init();
 	ERR_clear_error();
 	SSL_load_error_strings();
 	OpenSSL_add_all_algorithms();
@@ -151,11 +152,12 @@ int dtls_openssl_init()
 
 int dtls_openssl_log_error_queue(const char *txt)
 {
+	char errstr[256];
+	
 	int e = ERR_get_error();
 	if (e==0)
 		return 0;
 
-	char errstr[256];
 	while (e!=0){
 		ERR_error_string(e,errstr);
 		cw_log(LOG_ERR,"%s - %s",txt,errstr);
@@ -166,16 +168,18 @@ int dtls_openssl_log_error_queue(const char *txt)
 
 int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt)
 {
+	char errstr[256];
+	int e;
 	int en = errno; /* save errno */
 
 	if (!ssl){
 		return dtls_openssl_log_error_queue(txt);
 	}
 
-	int e;
+
 	e = SSL_get_error(ssl,rc);
 
-	char errstr[256];
+
 	ERR_error_string(e,errstr);
 	cw_log(LOG_ERR,"%s - %s","SSSSS",errstr);
 
@@ -254,10 +258,8 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 /*	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
 */
-
-
-	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");
 	const char * sessid = "9123456789";
+/*	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");*/
 	memcpy(id,sessid,strlen(sessid));
 	*id_len=strlen(sessid);
 	return 1;
@@ -267,11 +269,11 @@ int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len
 
 static int dtls_verify_peer_callback (int ok, X509_STORE_CTX *ctx) 
 {
-	printf ("Verify callback called with ok = %d\n",ok);
+/*	printf ("Verify callback called with ok = %d\n",ok);*/
 
-//	SSL *ssl;
+/*//	SSL *ssl;
 //	ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
-
+*/
 	char buf[1024];
 	X509   *err_cert;
 
@@ -304,6 +306,7 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
+	int rc;
 	struct dtls_openssl_data * d = malloc(sizeof(struct dtls_openssl_data));
 	if (!d)
 		return NULL;
@@ -317,7 +320,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 	
-	int rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
+	rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
 		dtls_openssl_log_error(0,rc,"DTLS setup cipher error:");
 		dtls_openssl_data_destroy(d);	
@@ -372,28 +375,29 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	
 
 
-//	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);
+/*//	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);*/
 	SSL_CTX_set_options(d->ctx, SSL_OP_NO_SSLv2 |SSL_OP_NO_SSLv3 );
-//	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);
+/*//	SSL_CTX_set_generate_session_id(d->ctx,generate_session_id);*/
 
 
 	SSL_CTX_set_timeout(d->ctx,30);
-
+/*
 //	rc =SSL_CTX_set_max_proto_version (d->ctx,DTLS1_VERSION);
 //	printf("MAXMAMX = %d\n",rc);
+*/
 
-
+/*
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER, dtls_verify_callback);
 
 //	SSL_CTX_set_tmp_rsa_callback(d->ctx,tmp_rsa_callback);
 
 //	SSL_CTX_set_mode(d->ctx,SSL_MODE_SEND_SERVERHELLO_TIME);
+*/
 
 
 
-
-
+/*
 // rsa_512 = RSA_generate_key(512,RSA_F4,NULL,NULL);
 // if (rsa_512 == NULL)
 //     evaluate_error_queue();
@@ -404,7 +408,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 //	printf ("Ver cookie rc %d\n",rc);
-
+*/
 
 /*
 	if (conn->dtls_key_file && conn->dtls_cert_file){
@@ -489,15 +493,17 @@ out_err:
 
 
 #include <arpa/inet.h>
-//#include <socket.h>
+/*//#include <socket.h>*/
 #include <netinet/in.h>
 
 int dtls_openssl_shutdown(struct conn *conn)
 {
+	struct dtls_openssl_data * d ;
+	
 	conn->write = conn->send_packet;
 	conn->read = conn->recv_packet;
 
-	struct dtls_openssl_data * d = (struct dtls_openssl_data*)conn->dtls_data;
+	d = (struct dtls_openssl_data*)conn->dtls_data;
 	if (!d)
 		return 0;
 
@@ -525,13 +531,14 @@ int dtls_openssl_shutdown(struct conn *conn)
 
 
 
-//int cookie_initialized=0;
+/*//int cookie_initialized=0;
 //#define COOKIE_SECRET_LENGTH 16
 //unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
-
+*/
 int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	char sock_buf2[SOCK_ADDR_BUFSIZE];
 	
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
@@ -540,7 +547,7 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 	/* we "missuse" sockaddr2str to convert our cookie to a hex str */
 	cw_dbg(DBG_DTLS,"DTLS session cookie for %s generated: %s",
-		sock_addr2str(&conn->addr,sock_buf), sock_hwaddr2idstr(conn->dtls_cookie,sizeof(conn->dtls_cookie)));
+		sock_addr2str(&conn->addr,sock_buf), sock_hwaddr2idstr(conn->dtls_cookie,sizeof(conn->dtls_cookie),sock_buf2));
 
 	memcpy(cookie,conn->dtls_cookie,sizeof(conn->dtls_cookie));
 	*cookie_len=sizeof(conn->dtls_cookie);
@@ -548,17 +555,15 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 }
 
-
-
-
 int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	char sock_buf2[SOCK_ADDR_BUFSIZE];	
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
 
 	cw_dbg(DBG_DTLS,"Verifying DTLS cookie from %s: %s",
-		sock_addr2str(&conn->addr,sock_buf),sock_hwaddr2idstr(conn->dtls_cookie,len));
+		sock_addr2str(&conn->addr,sock_buf),sock_hwaddr2idstr(conn->dtls_cookie,len,sock_buf2));
 
 	if (len != sizeof(conn->dtls_cookie)){
 		return 0;

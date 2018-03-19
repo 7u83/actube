@@ -88,7 +88,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		l = handler->put(handler,&params,dst+len);
 				
 		if(l>0)
-			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,&params,dst+len,l);
+			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
 		len += l;
 	}
 

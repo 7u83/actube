@@ -6,6 +6,18 @@
 
 #include "mavl.h"
 
+
+/**
+ * @addtogroup DATAMGMT Data Structures & Algos
+ * @{
+ */
+
+
+/**
+ * @defgroup KTV Key-Type-Value-Store
+ * @{
+ */
+
 #define CW_KTV_MAX_KEY_LEN 1024
 
 struct cw_KTV {
@@ -21,7 +33,12 @@ struct cw_KTV {
 };
 typedef struct cw_KTV cw_KTV_t;
 
-
+/**
+ * @class cw_Type
+ * @author 7u83
+ * @file ktv.h
+ * @brief Representation of a cw_Type objetc
+ */
 struct cw_Type {
 	/** A human readable name for this type */
 	const char *name;
@@ -36,8 +53,13 @@ struct cw_Type {
 	struct cw_KTV *(*get) (struct cw_KTV * data, const uint8_t * src, int len);
 
 	/** A pointer to a function to convert elements of this type to a string.
-	    This function is mainly used to store elements to an SQL database
-	    or to json strings */
+	  * This function is mainly used to store elements to an SQL database
+	  * or to json strings 
+	  * @param data pointer to KTV object
+	  * @param dst buffer where to put the string in
+	  * @param max_len maximum length of buffer
+	  * @return The number of bytes written to dst
+	*/
 	int (*to_str) (const struct cw_KTV * data, char *dst, int max_len);
 
 	/** Cereate an item of this type from a string, which was previously
@@ -63,7 +85,7 @@ extern const struct cw_Type cw_type_bstr16;
 /*
 void cw_kvstore_mavl_delete(const void *data);
  */
-const char *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
+cw_KTV_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			   const uint8_t * data, int len);
 
 const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type,
@@ -74,6 +96,10 @@ int cw_ktv_mavlcmp_type_by_name(const void *v1,const void *v2);
 
 void cw_ktv_mavldel(void *data);
 
+/**
+ * Create a KTV store 
+ * @return a #mavl_t object representing the KTV store
+ */
 #define cw_ktv_create()\
 	mavl_create(cw_ktv_mavlcmp, cw_ktv_mavldel, sizeof(cw_KTV_t))
 	
@@ -85,12 +111,13 @@ int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
-
-void cw_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
-		const char *header, const char *prefix, const char *footer );
 		
 extern const cw_Type_t * cw_ktv_std_types[];
 #define CW_KTV_STD_TYPES cw_ktv_std_types
 
+/**
+ * @}  KTV
+ * @}  DATAMGMT
+ */
 
 #endif	/* __KVT_H */

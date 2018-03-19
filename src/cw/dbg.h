@@ -112,6 +112,8 @@ enum cw_dbg_levels{
 
 	/** Show DTLS Details */
 	DBG_DTLS_DETAIL,
+	
+	DBG_CFG_DMP,
 
 	/** Debug Mods */
 	DBG_MOD,
@@ -133,17 +135,18 @@ enum cw_dbg_levels{
 
 #define DBG_LN __FILE__,__LINE__
 
-
+/*
 struct dbg_Context{
 	int level;
 };
+*/
 
 void cw_dbg_set_level (int level, int on);
 int cw_dbg_set_level_from_str(const char *level);
 
-
+/*
 void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
-
+*/
 /*
 void cw_dbg_missing_mand(int level,struct conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
 */
@@ -195,9 +198,7 @@ void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, .
 
 
 void cw_dbg_elem(int level, struct conn *conn, int msg, 
-		struct cw_ElemHandler * handler, struct 
-			cw_ElemHandlerParams * params,
-			 const uint8_t * msgbuf, int len);
+		struct cw_ElemHandler * handler, const uint8_t * msgbuf, int len);
 
 
 void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struct sockaddr *from);
@@ -206,7 +207,8 @@ void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct so
 char * cw_dbg_mkdmp(const uint8_t * data, int len);
 void cw_dbg_version_subelem(int level, const char *context, int subtype, 
 		uint32_t vendor_id, const uint8_t * vstr, int len);
-
+void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
+		const char *header, const char *prefix, const char *footer );
 
 /**
   * Set debug level

@@ -17,6 +17,9 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	
 	struct cw_ElemHandler * handler;
 	struct cw_ElemData * elem_data, elem_data_search;
+	int rc;
+	
+	params->elem=NULL;
 	
 	/* try to retrieve a handler for this message element */
 	handler = cw_msgset_get_elemhandler(params->conn->msgset,proto, vendor, elem_id);
@@ -37,10 +40,6 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 
-	if (elem_data->mand){
-		mavl_add_str(params->mand_found,handler->key);
-	}
-
 	/* check the length of the message */
 	if (len < handler->min_len) {
 		cw_dbg(DBG_ELEM_ERR,
@@ -49,6 +48,13 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		       handler->min_len);
 		return -1;
 	}
+
+
+	if (elem_data->mand){
+		mavl_add_str(params->mand_found,handler->key);
+	}
+
+
 	if (len > handler->max_len && handler->max_len) {
 		cw_dbg(DBG_ELEM_ERR,
 		       "%d (%s) message element too big, len=%d, max len=%d", handler->id,
@@ -57,8 +63,11 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		return -1;
 	}
 
-	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler, params,
+	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler,
 				data,len);
 
-	return handler->get(handler, params, data, len);
+	rc = handler->get(handler, params, data, len);
+
+
+	return rc;
 }

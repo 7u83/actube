@@ -42,7 +42,7 @@ typedef time_t cw_timer_t;
  * @code 
  * cw_timer_t timer = cw_timer_start(60);
  * while (!cw_timer_timeout(timer)){
- *   // Do something for max. 60 seconds ...
+ *   @startcomment Do something for max. 60 seconds ... @endcomment
  * }
  * @endcode
  */
@@ -78,7 +78,7 @@ typedef time_t cw_timer_t;
  * @code
  * CW_CLOCK_DEFINE(clk);
  * cw_clock_start(clk);
- * // do something ...
+ * @startcomment do something ... @endcomment
  * int t = cw_clock_lap(clk);
  * printf("Caclulation took %d seconds\n",t);
  * @endcode

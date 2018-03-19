@@ -43,7 +43,6 @@
       <File Name="src/cw/radioinfo.h"/>
       <File Name="src/cw/capwap80211.h"/>
       <File Name="src/cw/conn_init.c"/>
-      <File Name="src/cw/item_strings.c"/>
       <File Name="src/cw/strheap.h"/>
       <File Name="src/cw/cw_in_check_join_req.c"/>
       <File Name="src/cw/cw_put_radio_operational_states.c"/>
@@ -236,7 +235,6 @@
       <File Name="src/cw/timer.h"/>
       <File Name="src/cw/mavl_foreach.c"/>
       <File Name="src/cw/lwapp_cisco.h"/>
-      <File Name="src/cw/hdr_print.c"/>
       <File Name="src/cw/cw_init_data_keep_alive_msg.c"/>
       <File Name="src/cw/capwap_strings_item.c"/>
       <File Name="src/cw/cw_out_ac_name_with_priority.c"/>
@@ -299,6 +297,7 @@
       <File Name="src/cw/cw_dbg_set_level.c"/>
       <File Name="src/cw/cw_dbg_set_level_from_str.c"/>
       <File Name="src/cw/ansi_colors.h"/>
+      <File Name="src/cw/cw_clock_lap.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

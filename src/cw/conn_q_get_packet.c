@@ -21,6 +21,7 @@
 
 uint8_t * conn_q_get_packet(struct conn * conn)
 {
+	int qrpos;
 	struct timespec timespec;
 	clock_gettime(CLOCK_REALTIME,&timespec);
 	timespec.tv_sec++;
@@ -30,7 +31,7 @@ uint8_t * conn_q_get_packet(struct conn * conn)
 		return NULL;
 	};
 
-	int qrpos = conn->qrpos+1;
+	qrpos = conn->qrpos+1;
 	if (qrpos==conn->qsize)
 		qrpos=0;
 	conn->qrpos=qrpos;
