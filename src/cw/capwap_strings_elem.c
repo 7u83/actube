@@ -8,7 +8,7 @@ struct cw_StrListElem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_AC_IPV6_LIST, "AC IPv6 List"},
 	{CAPWAP_ELEM_AC_NAME, "AC Name"},
 	{CW_ELEM_AC_NAME_WITH_PRIORITY, "AC Name with Priority"},
-//	{CW_ELEM_AC_NAME_WITH_INDEX, "AC Name with Index"},
+/*	{CW_ELEM_AC_NAME_WITH_INDEX, "AC Name with Index"}, */
 	{CAPWAP_ELEM_AC_TIMESTAMP, "AC Timestamp"},
 	{CW_ELEM_ADD_MAC_ACL_ENTRY, "Add MAC ACL Entry"},
 	{CW_ELEM_ADD_STATION, "Add Station"},

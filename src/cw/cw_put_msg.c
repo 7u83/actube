@@ -83,11 +83,13 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 
 		params.conn=conn;
 		params.elemdata = data;
+		params.elem=NULL;
+		
 		l = handler->put(handler,&params,dst+len);
 		len += l;
 		
 		if(l>0)
-			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
+			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,&params,dst+len,l);
 	}
 
 	cw_set_msg_elems_len(msgptr, len);

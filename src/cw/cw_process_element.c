@@ -57,7 +57,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		return -1;
 	}
 
-	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler, 
+	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler, params,
 				data,len);
 
 	return handler->get(handler, params, data, len);

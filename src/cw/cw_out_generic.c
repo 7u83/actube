@@ -15,7 +15,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	int start, len;
 	/* Get the element to put */
 
-	search.key=handler->key;
+	search.key=(char*)handler->key;
 	elem = mavl_get(params->conn->local_cfg, &search);
 
 	/* Size for msg elem header depends on 
@@ -44,6 +44,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		return 0;
 	} 
 	len = handler->type->put(elem,dst+start);
+	params->elem = elem;
 
 	/*(cw_put_mbag_item(dst + start, item);*/
 

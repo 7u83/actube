@@ -194,7 +194,9 @@ void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, .
 
 
 
-extern void cw_dbg_elem(int level, struct conn *conn, int msg, struct cw_ElemHandler * handler,
+void cw_dbg_elem(int level, struct conn *conn, int msg, 
+		struct cw_ElemHandler * handler, struct 
+			cw_ElemHandlerParams * params,
 			 const uint8_t * msgbuf, int len);
 
 

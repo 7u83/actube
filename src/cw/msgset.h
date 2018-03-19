@@ -5,6 +5,7 @@
 #include "sock.h"
 #include "mavl.h"
 #include "conn.h"
+#include "ktv.h"
 
 struct cw_MsgSet {
 	mavl_t msgdata;
@@ -35,6 +36,7 @@ struct cw_ElemHandlerParams {
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
+	cw_KTV_t * elem;
 };
 
 struct cw_ElemHandler {

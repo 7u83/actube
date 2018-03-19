@@ -466,7 +466,8 @@ void cw_dbg(int level, const char *format, ...){
 
 
 void cw_dbg_elem(int level, struct conn *conn, int msg, 
-			struct cw_ElemHandler * handler,
+			struct cw_ElemHandler * handler, 
+			struct cw_ElemHandlerParams *params,
 			 const uint8_t * msgbuf, int len)
 {
 	char vendorname[256];
@@ -485,9 +486,18 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 		sprintf(vendorname,"");
 	}
 
-	cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
+	if (params->elem == NULL) {
+		cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
 			handler->name,len);
-
+	}else {
+		char str[512];
+		params->elem->type->to_str(params->elem,str,512);
+		cw_dbg(level,"%s %d (%s), len=%d, val=%s ",vendorname,handler->id,
+			handler->name,len, str);
+		
+	}
+	
+	
 	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
 		/*dmp = cw_format_dump(msgbuf,len,NULL);*/
 		

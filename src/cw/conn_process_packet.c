@@ -183,16 +183,18 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 
 }
 
+/*
 int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
-/*	if (cw_is_request(a->msg_id)){
-		return cw_in_check_generic_req(conn,a,data,len,from);
-	}
-	return cw_in_check_generic_resp(conn,a,data,len,from);
-*/
+//	if (cw_is_request(a->msg_id)){
+//		return cw_in_check_generic_req(conn,a,data,len,from);
+//	}
+//	return cw_in_check_generic_resp(conn,a,data,len,from);
+
 	
 }
+*/
 
 /*
 void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn, 
@@ -214,8 +216,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 {
 	mavl_t mand_found;
 	mlist_t unrecognized;
-	
-	
+	struct cw_MsgData search;
+	struct cw_MsgData * message;
+
 	char sock_buf[SOCK_ADDR_BUFSIZE]; /**< to hold str from sockaddr2str */
 	
 	/*struct cw_action_in as, *af, *afm;*/
@@ -278,11 +281,10 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	cw_dbg_msg(DBG_MSG_IN, conn, rawmsg, len, from);
 
 	/* prepare struct for search operation */
-	struct cw_MsgData search;
 	search.type = cw_get_msg_id(msg_ptr);
 	
 	/* Search message */
-	struct cw_MsgData * message;
+	
 	message = mavl_find(conn->msgset->msgdata,&search);
 		
 	int result_code = 0;
@@ -723,6 +725,7 @@ int cw_read_messages(struct conn *conn)
 
 int cw_read_from(struct conn *conn)
 {
+	struct sockaddr_storage from;
 	uint8_t buf[2024];
 	int len = 2024;
 	
@@ -734,7 +737,7 @@ int cw_read_from(struct conn *conn)
 
 
 
-	struct sockaddr_storage from;
+	
 	int n = conn->readfrom(conn, buf, len, &from);
 	if (n < 0)
 		return n;
