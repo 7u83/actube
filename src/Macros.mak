@@ -18,11 +18,6 @@ GNUTLS_LDFLAGS=
 endif
 
 
-ifndef ARCH
-	ARCH = $(shell uname -m)
-endif
-
-
 ifeq ($(CC),clang)
 LDFLAGS		+= -g -L/usr/local/lib 
 CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../

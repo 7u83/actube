@@ -1,4 +1,4 @@
-
+include ../../Defs.mak
 
 
 OBJS=\

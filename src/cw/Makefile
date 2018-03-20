@@ -1,3 +1,4 @@
+include ../Defs.mak
 include ../CWConfig.mak
 -include ../Config.local.mak
 include ../Macros.mak

@@ -1,3 +1,4 @@
+include ../Defs.mak
 include ../Config.mak
 include ../WtpConfig.mak
 -include ../Config.local.mak

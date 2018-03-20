@@ -1,3 +1,5 @@
+include ../Defs.mak
+
 include ../Config.mak
 include ../ACConfig.mak
 -include ../Config.local.mak

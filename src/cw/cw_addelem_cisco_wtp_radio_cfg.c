@@ -1,5 +1,5 @@
 #include "capwap.h"
-
+#include "cw.h"
 
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo *ri)
 {
