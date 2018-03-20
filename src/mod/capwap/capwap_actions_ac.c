@@ -120,6 +120,17 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"AC Name",				/* name */
+		CAPWAP_ELEM_AC_NAME,			/* Element ID */
+		0,0,					/* Vendor / Proto */
+		0,0,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"ac-name",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
 
 
 	{0,0,0,0,0,0,0,0}

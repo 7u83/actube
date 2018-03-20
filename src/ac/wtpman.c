@@ -704,6 +704,9 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->local_cfg = cw_ktv_create();
 	wtpman->conn->global_cfg = actube_global_cfg;
+	wtpman->conn->local_cfg = actube_global_cfg;
+
+
 
 	return wtpman;
 }

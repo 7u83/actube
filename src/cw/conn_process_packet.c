@@ -415,7 +415,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	cw_dbg_ktv_dump(conn->remote_cfg,DBG_CFG_DMP,
 		" *** Remote CFG dump ***", "CFG:", " *** End of remote CFG dump");
 
-	{
+/*	{
 
 		{
 			mlistelem_t *e;
@@ -429,7 +429,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		}
 	
 	}
-
+*/
 
 
 /**	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from); */
@@ -474,7 +474,7 @@ exit(0);
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
 
-			/* All ok, send regular response message */
+			/* All is ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);
 		} else {
 			/* the request message is ignored, no response

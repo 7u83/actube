@@ -1,5 +1,5 @@
 #include "capwap.h"
-#include "capwap_cisco.h"
+
 
 int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo *ri)
 {
@@ -21,6 +21,6 @@ int cw_addelem_cisco_wtp_radio_cfg(uint8_t*dst,struct radioinfo *ri)
 
 	cw_put_dword(dst+10+22,0x3538);	// ?
 
-	return 28+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_WTP_RADIO_CFG,28);
+/*	return 28+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_WTP_RADIO_CFG,28);*/
 }
 
