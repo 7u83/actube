@@ -41,6 +41,7 @@ struct wtpman{
 
 };
 
+/*
 struct wtp{
 		
 
@@ -48,6 +49,8 @@ struct wtp{
 
 
 //extern void wtpman_run(void *arg);
+*/
+
 extern struct wtpman * wtpman_create();
 
 extern struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr);

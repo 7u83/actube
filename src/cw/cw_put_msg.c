@@ -38,6 +38,7 @@
  */
 int cw_put_msg(struct conn *conn, uint8_t * rawout)
 {
+	char details[1024];
 	uint8_t *msgptr,*dst;
 	int type;
 	struct cw_MsgData * msg;
@@ -87,11 +88,17 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		params.conn=conn;
 		params.elemdata = data;
 		params.elem=NULL;
+		params.msgdata=msg;
+		params.debug_details=details;
+		*details=0;
 		
 		l = handler->put(handler,&params,dst+len);
 				
 		if(l>0)
 			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
+		if (strlen(details)){
+			cw_dbg(DBG_ELEM_DETAIL,"  %s",params.debug_details);
+		}
 		len += l;
 	}
 

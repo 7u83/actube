@@ -11,6 +11,7 @@
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
+	char detail[128];
 	struct cw_KTV * elem, search;
 	int start, len;
 	/* Get the element to put */
@@ -29,8 +30,8 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		}
 		if ( params->elemdata->mand) {
 			cw_log(LOG_ERR,
-			       "Can't put mandatory element %s %d - (%s) into %s. No value for '%s' found.",
-				vendor, handler->id, handler->name, "nona"			       	       
+			       "Can't put mandatory element %s %d-(%s) into %s. No value for '%s' found.",
+				vendor, handler->id, handler->name, params->msgdata->name
 			       , handler->key
 			    );
 		}
@@ -44,6 +45,13 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		return 0;
 	} 
 	len = handler->type->put(elem,dst+start);
+	
+	
+	handler->type->to_str(elem,detail,120);
+	sprintf(params->debug_details, "  Value = %s", detail);
+	
+
+	
 	params->elem = elem;
 
 	/*(cw_put_mbag_item(dst + start, item);*/

@@ -35,6 +35,9 @@ static int put(const cw_KTV_t *data, uint8_t * dst)
 
 static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 {
+	if (max_len<3){
+		return 0;
+	}
 	return sprintf(dst, "%d", data->val.byte);
 }
 

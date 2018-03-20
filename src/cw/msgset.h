@@ -37,6 +37,7 @@ struct cw_ElemHandlerParams {
 	struct sockaddr *from;
 	mavl_t mand_found;
 	cw_KTV_t * elem;
+	char * debug_details;
 };
 
 struct cw_ElemHandler {
