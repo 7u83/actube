@@ -113,6 +113,9 @@ int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
+
+cw_KTV_t * cw_ktv_idx_get(mavl_t ktv, const char *key, int idx, const cw_Type_t * type);
+
 		
 extern const cw_Type_t * cw_ktv_std_types[];
 #define CW_KTV_STD_TYPES cw_ktv_std_types

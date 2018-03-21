@@ -74,7 +74,7 @@ static int read_key (FILE *f, char *key, int max_len, struct parser * p)
 
 	n=0;
 	while(c!=EOF && n<max_len){
-		if (!isalnum(c) && !strchr("_/-()@#|{}[]",c)/*strchr(": \t\n\a",c)*/){
+		if (!isalnum(c) && !strchr("._/-()@#|{}[]",c)/*strchr(": \t\n\a",c)*/){
 			unget_char(c,f,p);
 			break;
 		}

@@ -229,15 +229,10 @@ int main (int argc, char *argv[])
 	actube_global_cfg = global_cfg;
 
 	cw_dbg_opt_level=0xffffffff;
-	cw_dbg(DBG_INFO,"Hello world\n");
+	cw_dbg(DBG_INFO,"Hello world");
+
 
 	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
-	printf("Dumped\n");
-	exit(0);
-	
-
-
-
 
 	cw_log_name = "AC-Tube";
 	

@@ -299,6 +299,7 @@
       <File Name="src/cw/ansi_colors.h"/>
       <File Name="src/cw/cw_clock_lap.c"/>
       <File Name="src/cw/cw_type_ipaddress.c"/>
+      <File Name="src/cw/cw_ktv_idx_get.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
