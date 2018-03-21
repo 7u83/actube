@@ -224,13 +224,17 @@ int main (int argc, char *argv[])
 	cw_ktv_read_file(file,global_cfg,types_tree);
 
 	fclose(file);
-	
-	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
+
+
 	actube_global_cfg = global_cfg;
 
+	cw_dbg_opt_level=0xffffffff;
+	cw_dbg(DBG_INFO,"Hello world\n");
 
-
-
+	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
+	printf("Dumped\n");
+	exit(0);
+	
 
 
 
@@ -255,6 +259,8 @@ int main (int argc, char *argv[])
 //	cw_mod_set_mod_path("../../lib/actube");
 	//cw_mod_load("capwap");
 	
+
+
 	
 	
 	

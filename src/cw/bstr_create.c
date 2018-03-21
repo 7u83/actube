@@ -25,6 +25,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+#include "bstr.h"
+
 /**
  * Creates a bstr_t string.
  * @param data source data to create the string from
@@ -34,7 +37,7 @@
  * The bstr_t string returned is allocated by malloc. So remember to free 
  * this resource if you don't need it anymore.
  */
-uint8_t * bstr_create(uint8_t *data, uint8_t len)
+uint8_t * bstr_create(const uint8_t *data, uint8_t len)
 {
 	uint8_t * str = malloc(1+len*sizeof(uint8_t));
 	if (!str)	
@@ -43,3 +46,4 @@ uint8_t * bstr_create(uint8_t *data, uint8_t len)
 	memcpy(str+1,data,len);
 	return str;
 }
+

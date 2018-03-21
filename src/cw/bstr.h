@@ -49,7 +49,7 @@ typedef uint8_t* bstr_t;
  *@}
  */
 
-extern uint8_t * bstr_create(uint8_t *data, uint8_t len);
+extern uint8_t * bstr_create(const uint8_t *data, uint8_t len);
 extern uint8_t * bstr_create_from_cfgstr(const char * s);
 extern uint8_t * bstr_replace( bstr_t * dst, uint8_t * bstr);
 
@@ -65,12 +65,12 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
 /**
  * Return the data of a bstr_t string.
  */ 
-#define bstr_data(s) ((s)+1)
+#define bstr_data(s) (((uint8_t*)(s))+1)
 
 /**
  * Return the actual size in memory a bstr_t string needs.
  */ 
-#define bstr_size(len) (len+1)
+#define bstr_size(len) ((len)+1)
 
 /**
  *@defgroup BSTRConstants Constants
