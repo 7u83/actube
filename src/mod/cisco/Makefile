@@ -1,6 +1,5 @@
-include ../../Macros.mak
-include ../../Config.mak
-include ../../Config.local.mak
+include ../../Defs.mak
+
 
 
 OBJS=\
