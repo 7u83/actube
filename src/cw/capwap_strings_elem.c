@@ -56,7 +56,7 @@ struct cw_StrListElem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_RESERVED_46, "Reserved 46"},
 	{CAPWAP_ELEM_WTP_RADIO_STATISTICS, "WTP Radio Statistics"},
 	{CAPWAP_ELEM_WTP_REBOOT_STATISTICS, "WTP Reboot Statistics"},
-	{CW_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION, "WTP Static IP Address Information"},
+	{CAPWAP_ELEM_WTP_STATIC_IP_ADDRESS_INFORMATION, "WTP Static IP Address Information"},
 
 
 /* Cisco's CAPWAP definitions (CAPWAP draft 7) */
