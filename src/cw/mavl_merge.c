@@ -27,7 +27,7 @@
 
 static void mavlnode_move(mavl_t m,mavl_t t, struct mavlnode *n)
 {
-	struct mavlnode * mn = mavl_get_node(m,mavlnode_dataptr(n));
+	struct mavlnode * mn = mavlnode_get(m,mavlnode_dataptr(n));
 	if (mn) {
 		if (m->del) {
 			m->del(mavlnode_dataptr(mn));

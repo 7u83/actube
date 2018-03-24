@@ -50,6 +50,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				break;
 			case 'c':
 				bootcfg->cfgfilename = optarg;
+				break;
 			case '?':
 				exit(EXIT_FAILURE);
 			default:
@@ -98,13 +99,15 @@ int main (int argc, char **argv)
 	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
 		mavl_add_ptr(types_tree,*ti);
 	}
-	
+
 	/* read the initial config file */
 	file = fopen(bootcfg.cfgfilename,"r");
+
 	if (file == NULL){
-		cw_log(LOG_ERR,"Cant open file '%s':%s", strerror(errno));
+		cw_log(LOG_ERR,"Can't open file '%s':%s",bootcfg.cfgfilename, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+
 	cw_ktv_read_file(file,global_cfg,types_tree);
 
 	
@@ -133,8 +136,8 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 12000;
 	conn->msgset=msgset;
 	conn->local_cfg = global_cfg;
-	
-
+	conn->remote_cfg = cw_ktv_create();
+	conn->receiver = CW_RECEIVER_WTP;
 
 	cw_run_discovery(conn, "255.255.255.255",NULL);
 

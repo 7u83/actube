@@ -38,7 +38,7 @@
  */
 int lw_readelem_wtp_name(uint8_t ** dst, int type, uint8_t * msgelem, int len)
 {
-	if (type != LW_ELEM_WTP_NAME)
+	if (type != LWAPP_ELEM_WTP_NAME)
 		return 0;
 
 	

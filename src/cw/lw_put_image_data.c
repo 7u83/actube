@@ -9,7 +9,7 @@ int lw_put_image_data(uint8_t *dst,FILE *infile)
 		return 1;
 	}
 
-	int bytes = fread(dst+3,1,LW_BLOCKSIZE_IMAGE_DATA,infile);
+	int bytes = fread(dst+3,1,LWAPP_BLOCKSIZE_IMAGE_DATA,infile);
 
 	if ( ferror(infile)) {
 		lw_put_byte(dst+0,5);

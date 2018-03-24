@@ -94,7 +94,7 @@ static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 }
 
 static int len ( struct cw_KTV * data ){
-	return bstr16_len(data->val.ptr);
+	return bstr_len(data->val.ptr);
 }
 
 

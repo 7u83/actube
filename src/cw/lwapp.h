@@ -49,7 +49,7 @@
 #define LWAPP_DATA_PORT_STR "12223"
 
 /** Block Size for Image Data */
-#define LW_BLOCKSIZE_IMAGE_DATA 1024
+#define LWAPP_BLOCKSIZE_IMAGE_DATA 1024
 
 
 /**@}*/
@@ -91,11 +91,11 @@
 */
 
 
-#define LW_MSG_DISCOVERY_REQUEST		1
-#define LW_MSG_DISCOVERY_RESPONSE		2
+#define LWAPP_MSG_DISCOVERY_REQUEST		1
+#define LWAPP_MSG_DISCOVERY_RESPONSE		2
 
-#define LW_MSG_JOIN_REQUEST			3
-#define LW_MSG_JOIN_RESPONSE			4
+#define LWAPP_MSG_JOIN_REQUEST			3
+#define LWAPP_MSG_JOIN_RESPONSE			4
 
 /*
                   Join ACK                             5
@@ -125,11 +125,11 @@
 
 /* LWAPP message elements */
 
-#define LW_ELEM_AC_ADDRESS				2
-#define LW_ELEM_WTP_DESCRIPTOR 				3
-#define LW_ELEM_WTP_NAME				5
-#define LW_ELEM_AC_DESCRIPTOR				6
-#define LW_ELEM_ADD_WLAN				7
+#define LWAPP_ELEM_AC_ADDRESS				2
+#define LWAPP_ELEM_WTP_DESCRIPTOR 			3
+#define LWAPP_ELEM_WTP_NAME				5
+#define LWAPP_ELEM_AC_DESCRIPTOR			6
+#define LWAPP_ELEM_ADD_WLAN				7
 
 #define LW_ELEM_MAC_OPERATION				11
 #define LW_ELEM_TX_POWER				12

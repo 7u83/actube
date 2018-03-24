@@ -31,47 +31,47 @@
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
-		"Discovery Type",		/* name */
-		CAPWAP_ELEM_DISCOVERY_TYPE,	/* Element ID */
-		0,0,				/* Vendor / Proto */
-		1,1,				/* min/max length */
-		CW_TYPE_BYTE,			/* type */
-		CW_KEY_DISCOVERY_TYPE,		/* Key */
-		cw_in_generic,			/* get */
-		cw_out_generic			/* put */
+		"Discovery Type",			/* name */
+		CAPWAP_ELEM_DISCOVERY_TYPE,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		CW_KEY_DISCOVERY_TYPE,			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
 	}
 	,
 	{ 
-		"WTP Mac Type",			/* name */
-		CAPWAP_ELEM_WTP_MAC_TYPE,	/* Element ID */
-		0,0,				/* Vendor / Proto */
-		1,1,				/* min/max length */
-		CW_TYPE_BYTE,			/* type */
-		CW_KEY_WTP_MAC_TYPE,		/* Key */
-		cw_in_generic,			/* get */
-		cw_out_generic			/* put */
+		"WTP Mac Type",				/* name */
+		CAPWAP_ELEM_WTP_MAC_TYPE,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		CW_KEY_WTP_MAC_TYPE,			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
 	}
 	,
 	{ 
-		"WTP Board Data",		/* name */
-		CAPWAP_ELEM_WTP_BOARD_DATA,	/* Element ID */
-		0,0,				/* Vendor / Proto */
-		14,1024,			/* min/max length */
-		NULL,				/* type */
-		CW_KEY_WTP_BOARD_DATA,		/* Key */
-		capwap_in_wtp_board_data,	/* get */
-		capwap_out_wtp_board_data	/* put */
+		"WTP Board Data",			/* name */
+		CAPWAP_ELEM_WTP_BOARD_DATA,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		14,1024,				/* min/max length */
+		NULL,					/* type */
+		CW_KEY_WTP_BOARD_DATA,			/* Key */
+		capwap_in_wtp_board_data,		/* get */
+		capwap_out_wtp_board_data		/* put */
 	}
 	,
 	{ 
-		"WTP Descriptor",		/* name */
-		CAPWAP_ELEM_WTP_DESCRIPTOR,	/* Element ID */
-		0,0,				/* Vendor / Proto */
-		33,1024,			/* min/max length */
-		NULL,				/* type */
-		CW_KEY_WTP_DESCRIPTOR,		/* Key */
-		capwap_in_wtp_descriptor,	/* get */
-		capwap_out_wtp_descriptor,	/* put */
+		"WTP Descriptor",			/* name */
+		CAPWAP_ELEM_WTP_DESCRIPTOR,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		33,1024,				/* min/max length */
+		NULL,					/* type */
+		CW_KEY_WTP_DESCRIPTOR,			/* Key */
+		capwap_in_wtp_descriptor,		/* get */
+		capwap_out_wtp_descriptor,		/* put */
 	}
 	,
 	{ 
@@ -136,10 +136,10 @@ static struct cw_ElemHandler handlers[] = {
 		"CAPWAP Control IPv4 Address",		/* name */
 		CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	/* Element ID */
 		0,0,					/* Vendor / Proto */
-		0,0,					/* min/max length */
+		6,6,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"capwap-control-ip-address",		/* Key */
-		NULL,					/* get */
+		capwap_in_capwap_control_ip_address,	/* get */
 		capwap_out_capwap_control_ip_address	/* put */
 	},
 	
@@ -147,10 +147,10 @@ static struct cw_ElemHandler handlers[] = {
 		"CAPWAP Control IPv6 Address",		/* name */
 		CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	/* Element ID */
 		0,0,					/* Vendor / Proto */
-		0,0,					/* min/max length */
+		18,18,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"capwap-control-ip-address",		/* Key */
-		NULL,					/* get */
+		capwap_in_capwap_control_ip_address,	/* get */
 		capwap_out_capwap_control_ip_address	/* put */
 	}
 	

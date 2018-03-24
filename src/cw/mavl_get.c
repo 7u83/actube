@@ -20,7 +20,6 @@
  * @brief Implementation of mavl_get
  */ 
 
-#include <stdio.h>
 
 #include "mavl.h"
 

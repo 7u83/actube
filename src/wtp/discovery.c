@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
+
 #include "cw/capwap.h"
 #include "cw/conn.h"
 #include "cw/sock.h"
@@ -24,12 +25,7 @@ static int run_discovery(struct conn *conn)
 	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 	
 	
-	cw_ktv_add(conn->local_cfg, "discovery_type", CW_TYPE_BYTE, &dtype,1);
-/*	mbag_set_byte(conn->outgoing, CW_ITEM_DISCOVERY_TYPE,
-			      CAPWAP_DISCOVERY_TYPE_UNKNOWN);
-*/
-
-
+	/*cw_ktv_add(conn->local_cfg, "discovery-type", CW_TYPE_BYTE, &dtype,17);*/
 
 
 	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
@@ -39,11 +35,11 @@ static int run_discovery(struct conn *conn)
 
 	timer = cw_timer_start(0);
 
-/*
+
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
-		mavl_del_all(conn->incomming);
+		/*mavl_del_all(conn->incomming);*/
 
 		rc = cw_read_from(conn);
 
@@ -55,7 +51,7 @@ static int run_discovery(struct conn *conn)
 			break;
 		}
 	}
-*/
+
 
 /*
 	mbag_t discs;

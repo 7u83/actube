@@ -28,7 +28,7 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
-	int len;
+	int len,l;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 
 	cw_KTV_t * val;
@@ -75,5 +75,8 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
                                  CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
 
 	len = d-dst-4;
-	return len + cw_put_elem_hdr(dst,eh->id,len);
+	l = len + cw_put_elem_hdr(dst,eh->id,len);
+	
+	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,eh,dst,l);
+	return l;
 }

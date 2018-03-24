@@ -233,7 +233,13 @@ int main (int argc, char *argv[])
 
 
 	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
-
+	
+/*	int idx;
+	idx = cw_ktv_idx_get(global_cfg,"capwap-control-ip-address/address",0,CW_TYPE_IPADDRESS);
+	printf("IDX: %d\n");
+	
+exit(0);
+*/
 	cw_log_name = "AC-Tube";
 	
 	if (!read_config ("ac.conf"))

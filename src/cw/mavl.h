@@ -115,7 +115,7 @@ typedef struct mavl * mavl_t;
 /**
  * @param node node 
  */
-#define mavlnode_dataptr(node) (((uint8_t*)(node))+sizeof(struct mavlnode))
+#define mavlnode_dataptr(node) ((void*)(((uint8_t*)(node))+sizeof(struct mavlnode)))
 
 struct mavl *mavl_create ( int ( *cmp ) ( const void *, const void * ),
                            void ( *del ) ( void * ), size_t data_size );
@@ -129,8 +129,9 @@ void mavl_destroy ( struct mavl *t );
 void mavl_del_all ( struct mavl *t );
 void mavl_merge ( mavl_t m, mavl_t t );
 void mavlnode_destroy ( struct mavl *t, struct mavlnode *n );
-struct mavlnode *mavl_get_node ( struct mavl *t, void *data );
-
+struct mavlnode *mavlnode_get ( struct mavl *t, void *data );
+struct mavlnode * mavl_get_node_cmp(struct mavl *t ,void *data,
+	int ( *cmp ) ( const void *, const void * ));
 
 
 

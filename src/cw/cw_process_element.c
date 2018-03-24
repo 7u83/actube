@@ -2,6 +2,7 @@
 
 #include "cw.h"
 #include "dbg.h"
+#include "log.h"
 
 /**
  * @brief Process a CAPWAP message element
@@ -66,6 +67,10 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler,
 				data,len);
 
+	if (handler->get == NULL){
+		cw_log(LOG_ERR,"No get method defined for %d %s",handler->id,handler->name);
+		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
+	}
 	rc = handler->get(handler, params, data, len);
 
 

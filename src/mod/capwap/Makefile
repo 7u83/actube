@@ -15,7 +15,8 @@ OBJS=\
 	capwap_in_session_id.o \
 	capwap_in_vendor_specific_payload.o \
 	capwap_in_mtu_discovery_padding.o \
-	capwap_out_capwap_control_ip_address.o 
+	capwap_out_capwap_control_ip_address.o \
+	capwap_in_capwap_control_ip_address.o 
 
 
 LIBDIR		:= ../../../lib

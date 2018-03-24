@@ -55,7 +55,7 @@
 /**
  * Same as #lw_set_word, but no return value
  */
-#define lw_set_word(dst,b) \
+#define lw_set_word(dst,w) \
 	(*((uint16_t*)(dst)) = htons(w))
 
 /**

@@ -22,6 +22,7 @@
         <File Name="src/mod/capwap/capwap_out_wtp_board_data.c"/>
         <File Name="src/mod/capwap/capwap_out_wtp_descriptor.c"/>
         <File Name="src/mod/capwap/capwap_out_capwap_control_ip_address.c"/>
+        <File Name="src/mod/capwap/capwap_in_capwap_control_ip_address.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

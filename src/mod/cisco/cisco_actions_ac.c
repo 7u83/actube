@@ -81,8 +81,9 @@ static struct cw_ElemHandler handlers[] = {
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
-	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_RAD_NAME,		1, 0},	
-	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	1, 0},	
+	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},	
+	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_RAD_NAME,		1, 0},
+	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	0, 0},
 	{0,0,0,00}
 	
 };

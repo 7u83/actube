@@ -23,12 +23,12 @@ $(OBJDIR)/%.o:%.c
 $(SNAME) : $(OBJS) $(MODOBJS)
 	@mkdir -p $(LIBARCHDIR)
 	@echo "  $(AR) $(SNAME)"
-	$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
+	@$(AR) rcs $(SNAME) $(OBJS) $(MODOBJS)
 
 $(DNAME) : $(OBJS) $(MODOBJS)
 	@mkdir -p $(LIBARCHDIR)
 	@echo "  $(CC) $(DNAME)"
-	$(LD) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
+	@$(LD) -L$(LIBARCHDIR) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(MODOBJS) $(SLIBS) $(LIBS)
 
 $(MODNAME) : $(DNAME)
 	cp $(DNAME) $(MODNAME)

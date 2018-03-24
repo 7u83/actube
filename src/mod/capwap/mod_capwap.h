@@ -23,7 +23,9 @@ int capwap_out_ac_descriptor(struct cw_ElemHandler * eh,
 int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst);		
 
-
+int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len);
 
 
 

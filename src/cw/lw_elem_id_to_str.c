@@ -7,16 +7,16 @@ const char * lw_elem_id_to_str(int elem_id)
 {
 
 	switch (elem_id){
-		case LW_ELEM_AC_ADDRESS:
+		case LWAPP_ELEM_AC_ADDRESS:
 			return "AC Address";
 
-		case LW_ELEM_WTP_DESCRIPTOR:
+		case LWAPP_ELEM_WTP_DESCRIPTOR:
 			return "WTP Descriptor";
 		
-		case LW_ELEM_WTP_NAME:
+		case LWAPP_ELEM_WTP_NAME:
 			return "WTP Name";
 
-		case LW_ELEM_AC_DESCRIPTOR:
+		case LWAPP_ELEM_AC_DESCRIPTOR:
 			return "AC Descriptor";
 
 		case LW_ELEM_AC_NAME:

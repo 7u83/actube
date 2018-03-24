@@ -21,46 +21,28 @@
  * @brief Implements cw_in_capwap_control_ip_address
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
+#include "mod_capwap.h"
 
 
-#include <errno.h>
-
-
-
-#include "log.h"
-
-#include "cw.h"
-
-#include "aciplist.h"
-#include "sock.h"
-
-
-
-int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
-				 uint8_t * data, int len,struct sockaddr *from)
+int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len)
 {
-/*	cw_acip_t * acip;	
-	cw_aciplist_t list =
-	    mbag_get_mavl_c(conn->incomming,a->item_id,cw_aciplist_create);
-
-	if (!list) {
-		cw_log(LOG_ERR, "Error: Can't allocate CAWPAP IP Adress List");
-		return 0;
-	}
-
-
-	acip = malloc(sizeof(cw_acip_t));
-	if (!acip) {
-		cw_log(LOG_ERR,"Can't allocate memory for acv4ip: %s",strerror(errno));
-			return 0;
-	}
-
+	char key[CW_KTV_MAX_KEY_LEN];
+	int idx;
 	
-	if (a->elem_id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
+	sprintf(key,"%s/address",eh->key);
+	idx = cw_ktv_idx_get(params->conn->remote_cfg,key,0,CW_TYPE_IPADDRESS);
+	
+	printf("SKEY is %s , idx: %d\n",key,idx);
+
+	sprintf(key,"%s/address.%d",eh->key,idx+1);
+	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_IPADDRESS,data,len-2);
+	
+	sprintf(key,"%s/wtps.%d",eh->key,idx+1);
+	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_WORD,data+len-2,2);
+	
+/*	if (handler-id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
 		struct sockaddr_in addr;
 		memcpy(&addr.sin_addr,data,4);
 		addr.sin_family=AF_INET;
@@ -78,10 +60,10 @@ int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
 		memcpy(&acip->ip,&addr,sizeof(addr));
 		acip->index = cw_get_word(data+16);
 	}
-
-
-	cw_aciplist_replace(list,acip);
 */
+
+
+
 
 	return 1;
 }

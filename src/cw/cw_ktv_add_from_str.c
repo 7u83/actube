@@ -4,7 +4,8 @@
 #include "log.h"
 #include "dbg.h"
 
-const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, 
+			const struct cw_Type *type,
 			const char * str)
 {
 	cw_KTV_t mdata, *mresult;

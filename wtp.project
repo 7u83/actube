@@ -27,6 +27,7 @@
       <File Name="src/wtp/join.c"/>
       <File Name="src/wtp/sulking.c"/>
       <File Name="src/wtp/wtpdrv.h"/>
+      <File Name="src/wtp/discovery.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

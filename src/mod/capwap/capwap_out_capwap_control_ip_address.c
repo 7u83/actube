@@ -1,3 +1,6 @@
+
+#include "cw/cw.h"
+#include "cw/dbg.h"
 #include "mod_capwap.h"
 
 /*
@@ -47,40 +50,56 @@ static int put_ip(uint8_t *dst void *priv, cw_acip_t * acip void *data)
 int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	int i;
-	int wtps;	
-	
-
-	cw_KTV_t * address;
-
 	char key[CW_KTV_MAX_KEY_LEN];
-	
-	i=0; 
-	
-	sprintf(key,"%s/address.%d",eh->key,i);
-	address = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_IPADDRESS);
-	
-	sprintf(key,"%s/wtps.%d",eh->key,i);
-	wtps = cw_ktv_get_word(params->conn->local_cfg,key,0);
-	
-	while (address != NULL) {
-		char str[100];
-		printf("Yea!");
-		address->type->to_str(address,str,10);
-		printf("Hier isses: %s, %d\n",str,wtps);
+	int i;
+	int wtps;
+	cw_KTV_t * address;
+	uint8_t *d;
 
-		i++;
+	d = dst;
+	i=0; 
+	do {
+		uint8_t * msg;
+		int l;
+
 		sprintf(key,"%s/address.%d",eh->key,i);
 		address = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_IPADDRESS);
 		sprintf(key,"%s/wtps.%d",eh->key,i);
-		wtps = cw_ktv_get_word(params->conn->local_cfg,key,0);	
-	}
+		wtps = cw_ktv_get_word(params->conn->local_cfg,key,0);
+		i++;
+		if (address==NULL){
+			break;
+		}
+		
+		msg = d;
+		
+		l = address->type->len(address);
 
-	
-	
-	
+		switch(eh->id){
+			case CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS:
+				if (l!=4){
+					continue;
+				}
+				break;
+			case CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS:
+				if (l!=16){
+					continue;
+				}
+				break;
+			default:
+				continue;
+		}
+		
+		l = address->type->put(address,d+4);
+		l+=cw_put_word(dst+4+l,wtps);
+		l+=cw_put_elem_hdr(d,eh->id,l);
+		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,eh,d+4,l-4);
+		
+		d+=l;
+	}while(address != NULL);
 
-	return 10;
+
+	return d-dst;
 }
 
 /*

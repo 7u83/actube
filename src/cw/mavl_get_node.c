@@ -17,12 +17,10 @@
 */
 
 
-#include <stdio.h>
-
 #include "mavl.h"
 
 
-struct mavlnode * mavl_get_node(struct mavl *t ,void *data)
+struct mavlnode * mavlnode_get(struct mavl *t ,void *data)
 {
 	struct mavlnode *n = t->root;
 	while(n){
@@ -36,4 +34,3 @@ struct mavlnode * mavl_get_node(struct mavl *t ,void *data)
 	}
 	return NULL;
 }
-

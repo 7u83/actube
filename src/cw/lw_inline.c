@@ -14,16 +14,6 @@ int lw_put_data(uint8_t*dst,const uint8_t*data,uint16_t len)
 	return len;
 }
 
-/**
- * Put a #bstr_t to an output buffer
- * @param dst Destination 
- * @param b bstr to put
- * @return The number of bytes put
- */
-int lw_put_bstr(uint8_t * dst, const bstr_t b){
-	lw_put_data(dst,bstr_data(b),bstr_len(b));
-	return bstr_len(b);
-}
 
 /**
  * Put a #bstr16_t to an output buffer

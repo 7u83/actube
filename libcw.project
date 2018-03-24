@@ -38,7 +38,6 @@
       <File Name="src/cw/conn_get_response.c"/>
       <File Name="src/cw/dtls_bio.c"/>
       <File Name="src/cw/rand.h"/>
-      <File Name="src/cw/mbag_type_bstr.c"/>
       <File Name="src/cw/cw_in_cisco_image_identifier.c"/>
       <File Name="src/cw/radioinfo.h"/>
       <File Name="src/cw/capwap80211.h"/>
@@ -289,7 +288,6 @@
       <File Name="src/cw/cw_ktv_put.c"/>
       <File Name="src/cw/cw_ktv_get.c"/>
       <File Name="src/cw/cw_write_descriptor_subelem.c"/>
-      <File Name="src/cw/cw_ktv_dump.c"/>
       <File Name="src/cw/cw_ktv_get_word.c"/>
       <File Name="src/cw/cw_ktv_get_byte.c"/>
       <File Name="src/cw/cw_ktv_std_types.c"/>
@@ -300,6 +298,8 @@
       <File Name="src/cw/cw_clock_lap.c"/>
       <File Name="src/cw/cw_type_ipaddress.c"/>
       <File Name="src/cw/cw_ktv_idx_get.c"/>
+      <File Name="src/cw/lw_put_bstr.c"/>
+      <File Name="src/cw/mavl_get_node_cmp..c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

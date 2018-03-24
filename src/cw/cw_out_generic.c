@@ -13,7 +13,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 {
 	char detail[128];
 	struct cw_KTV * elem, search;
-	int start, len;
+	int start, len, l;
 	/* Get the element to put */
 
 	search.key=(char*)handler->key;
@@ -50,16 +50,18 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	handler->type->to_str(elem,detail,120);
 	sprintf(params->debug_details, "  Value = %s", detail);
 	
-
-	
 	params->elem = elem;
-
-	/*(cw_put_mbag_item(dst + start, item);*/
 
 	if (handler->vendor)
 		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
 
-	return len + cw_put_elem_hdr(dst, handler->id, len);
+	
+
+	l = len + cw_put_elem_hdr(dst, handler->id, len);
+	
+	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
+	
+	return l;
 }
 
 

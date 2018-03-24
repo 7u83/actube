@@ -94,12 +94,12 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		
 		l = handler->put(handler,&params,dst+len);
 				
-		if(l>0)
+	/*	if(l>0)
 			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
 		if (strlen(details)){
 			cw_dbg(DBG_ELEM_DETAIL,"  %s",params.debug_details);
 		}
-		len += l;
+	*/	len += l;
 	}
 
 	cw_set_msg_elems_len(msgptr, len);
@@ -111,7 +111,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		cw_set_msg_seqnum(msgptr,s);
 	}
 
-	return len;
+	return CAPWAP_RESULT_SUCCESS;
 
 
 }
