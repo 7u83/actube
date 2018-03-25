@@ -50,6 +50,17 @@ static struct cw_ElemHandler handlers[] = {
 		cisco_out_wtp_descriptor	/* put */
 	}
 	,
+	{ 
+		"AC Descriptor (Cisco)",	/* name */
+		CAPWAP_ELEM_AC_DESCRIPTOR,	/* Element ID */
+		0,0,				/* Vendor / Proto */
+		4,128,				/* min/max length */
+		NULL,				/* type */
+		"ac-descriptor",		/* Key */
+		cisco_in_ac_descriptor, 	/* get */
+		NULL, /*cisco_out_ac_descriptor	*/	/* put */
+	}
+	,
 	{
 		"RAD Name -> CAPWAP WTP Name",	/* name */
 		CW_CISCO_RAD_NAME,		/* Element ID */
@@ -60,7 +71,6 @@ static struct cw_ElemHandler handlers[] = {
 		cw_in_generic,			/* get */
 		cw_out_generic			/* put */
 	}
-
 	,
 	{
 		"Board Data Options",		/* name */
@@ -73,6 +83,18 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic			/* put */
 	}
 	,
+	{
+		"AP Time Sync",			/* name */
+		CISCO_ELEM_AP_TIMESYNC,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
+		4,4,				/* min/max length */
+		CW_TYPE_DWORD,			/* type */
+		"cisco/ap-timesync",		/* Key */
+		cw_in_generic,			/* handler */
+		cw_out_generic			/* put */
+	}
+	,
+	
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -88,6 +110,14 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	
 };
 
+static int discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
+static struct cw_ElemDef discovery_response_elements[] ={
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,		1, 0},
+	{0,0,0,00}
+	
+};
+
+
 static struct cw_MsgDef messages[] = {
 	{
 		"Discovery Request",
@@ -96,11 +126,15 @@ static struct cw_MsgDef messages[] = {
 		discovery_request_states,
 		discovery_request_elements
 	},
-
+	{
+		"Discovery Response",
+		CAPWAP_MSG_DISCOVERY_RESPONSE,
+		CW_RECEIVER_WTP,
+		discovery_response_states,
+		discovery_response_elements
+	},
 	{0,0,0,0}
-	
-	
-	
+
 };
 
 
