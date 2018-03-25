@@ -44,12 +44,13 @@ int conn_recv_packet_(struct conn *conn, uint8_t * buf, int len, int flags)
 int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 			 struct sockaddr_storage *from)
 {
+	int n;
 	socklen_t al;
 
 	al = sizeof(struct sockaddr_storage);
 	memset(from, 0, sizeof(struct sockaddr_storage));
 
-	int n;
+
 	while ((n = recvfrom(conn->sock, (char *) buf, len, 0, (struct sockaddr*)from, &al)) < 0) {
 		if (errno != EINTR) {
 			if (errno == EAGAIN)
@@ -66,14 +67,16 @@ int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 
 int conn_recv_packet_x(struct conn *conn, uint8_t * buf, int len, int flags)
 {
+	int port;
 	socklen_t al;
+	int n;
 	struct sockaddr_storage from;
 
 
 	al = sizeof(struct sockaddr_storage);
 	memset(&from, 0, sizeof(struct sockaddr_storage));
 
-	int n;
+
 	while ((n = recvfrom(conn->sock, (char *) buf, len, flags, (struct sockaddr*)&from, &al)) < 0) {
 		if (errno != EINTR) {
 			if (errno == EAGAIN)
@@ -85,10 +88,10 @@ int conn_recv_packet_x(struct conn *conn, uint8_t * buf, int len, int flags)
 
 
 
-//	cw_log(LOG_ERR,"Received a packet from %s, len = %d\n",sock_addr2str_p(&from),n);
+/*//	cw_log(LOG_ERR,"Received a packet from %s, len = %d\n",sock_addr2str_p(&from),n);*/
 
 
-	int port = sock_getport((struct sockaddr*)&from);
+	port = sock_getport((struct sockaddr*)&from);
 
 	if (port == 5247){
 		conn->process_packet(conn,buf,n,(struct sockaddr*)&from);

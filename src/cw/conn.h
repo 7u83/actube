@@ -49,7 +49,7 @@ struct cw_action_in;
 #define CONN_MAX_MSG_LENGTH 65536
 
 
-#include "netconn.h"
+
 #include "connlist.h"
 
 

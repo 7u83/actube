@@ -54,7 +54,7 @@
  */
 char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addport)
 {
-	char d[maxlen];
+	char d[512];
 	int port;
 
 

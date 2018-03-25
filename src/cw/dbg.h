@@ -228,7 +228,7 @@ void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel,
 #define cw_dbg_is_level(level)\
 	(cw_dbg_opt_level & (1<<level))
 */
-
+int cw_dbg_is_level(int level);
 
 /**
  *@}

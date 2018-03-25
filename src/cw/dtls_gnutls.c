@@ -16,6 +16,7 @@
 
 */
 
+
 #include <stdlib.h>
 #include <errno.h>
 
@@ -105,6 +106,8 @@ static int verify_cert(gnutls_session_t sess)
 
 static void dtls_log_cb(int level, const char * str)
 {
+	char buf[2048];
+	char *c;
 	if (!cw_dbg_is_level(DBG_DTLS_DETAIL))
 		return;
 
@@ -120,15 +123,18 @@ static void dtls_log_cb(int level, const char * str)
 
 	
 	
-	char buf[2048];
+
 	strcpy(buf,str);
-	char *c = strchr(buf,'\n');
+	c = strchr(buf,'\n');
 	*c=0;
 	cw_dbg(DBG_DTLS_DETAIL,"%s",buf);
 }
 
 struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 {
+	const char *errpos;
+	int rc;
+	int bits;
 	struct dtls_gnutls_data *d = malloc(sizeof(struct dtls_gnutls_data));
 	if (!d)
 		return 0;
@@ -139,7 +145,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 	gnutls_certificate_allocate_credentials(&d->x509_cred);
 
 
-	int rc;
+
 
 	/* Set credentials */
 
@@ -157,7 +163,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 
 
-	int bits;
+
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_INSECURE);
 #else
@@ -175,7 +181,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 
 	/* Set ciphers */
-	const char *errpos;
+	
 	rc = gnutls_priority_init(&d->priority_cache, conn->dtls_cipher, &errpos);
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS - Can't init ciphers '%s' at '%s' : %s", conn->dtls_cipher,

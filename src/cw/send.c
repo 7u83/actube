@@ -14,17 +14,22 @@
 int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 {
 	int packetlen = len;
-
+	int fragoffset;
+	int hlen;
+	
+	uint8_t * ptr;
+	int mtu;
+	
 	cw_dbg_msg(DBG_MSG_OUT, conn,rawmsg, packetlen,(struct sockaddr*)&conn->addr);
 
 
-	uint8_t * ptr = rawmsg;
+	ptr = rawmsg;
 
-	int fragoffset = 0;
+	fragoffset = 0;
 
-	int hlen = cw_get_hdr_hlen(rawmsg)*4;
+	hlen = cw_get_hdr_hlen(rawmsg)*4;
 
-	int mtu = conn->mtu;
+	mtu = conn->mtu;
 
 	while (packetlen>mtu){
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
@@ -32,10 +37,10 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
 
-//		if (conn->write_data(conn,ptr,mtu)<0)
+/*		if (conn->write_data(conn,ptr,mtu)<0)*/
 			return -1;
 
-		// XXX Fragmentation stuff..
+/*		// XXX Fragmentation stuff..*/
 		ptr +=mtu-hlen;
 		fragoffset+=(mtu-hlen)/8;
 
@@ -54,9 +59,9 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 	cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,packetlen,(struct sockaddr*)&conn->addr);
 
-//	return conn->write_data(conn,ptr,packetlen-0);
+/*//	return conn->write_data(conn,ptr,packetlen-0);*/
 
-
+	return 0;
 }
 
 
@@ -67,6 +72,9 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 int cw_send_request(struct conn *conn,int msg_id)
 {
+	time_t timer;
+	int i;
+	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	cw_init_request(conn, msg_id);
 	if ( cw_put_msg(conn, conn->req_buffer) == -1 ){
@@ -76,13 +84,13 @@ int cw_send_request(struct conn *conn,int msg_id)
 	conn_send_msg(conn, conn->req_buffer);
 
 	
-	int i;
-	int rc=-1;
+
+	rc=-1;
 	for (i=0; i<conn->max_retransmit && rc<0; i++){
 		if ( i>0 ){
 			cw_log(LOG_WARNING,"Retransmitting request ... %d",i);
 		}
-		time_t timer = cw_timer_start(conn->retransmit_interval);
+		timer = cw_timer_start(conn->retransmit_interval);
 		while (!cw_timer_timeout(timer) && rc<0){
 	
         	        rc =cw_read_messages(conn);
@@ -112,7 +120,7 @@ int cw_send_request(struct conn *conn,int msg_id)
 }
 
 
-// XXX find a better name for this function 
+/*// XXX find a better name for this function */
 int cw_send_custom_request_2(struct conn *conn,int msg_id)
 {
 

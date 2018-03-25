@@ -36,11 +36,12 @@ int sock_getifinfo(const struct sockaddr *addr, char *ifname, struct sockaddr *b
 		   struct sockaddr *netmask)
 {
 	struct ifaddrs *ifap, *ifa;
-
+	int rc;
+	
 	if (getifaddrs(&ifap) == -1)
 		return 0;
 
-	int rc = 0;
+	rc = 0;
 	for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
 
 		if (sock_cmpaddr(addr, ifa->ifa_addr, 0))
@@ -56,7 +57,7 @@ int sock_getifinfo(const struct sockaddr *addr, char *ifname, struct sockaddr *b
 				       sock_addrlen(ifa->ifa_netmask));
 		}
 		if (ifname)
-			strcpy(ifname, ifa->ifa_name);	//, strlen(ifa->ifa_name));
+			strcpy(ifname, ifa->ifa_name);	/*, strlen(ifa->ifa_name));*/
 
 		rc = 1;
 		break;

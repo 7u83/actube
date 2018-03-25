@@ -39,6 +39,7 @@
  */
 int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 {
+	int ret;
 	if (conn->dtls_buffer_len == 0) {
 		int len = conn->recv_packet(conn, conn->dtls_buffer, 2048);
 		if (len < 4)
@@ -59,7 +60,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 	}
 
 	memcpy(out, conn->dtls_buffer + conn->dtls_buffer_pos, conn->dtls_buffer_len);
-	int ret = conn->dtls_buffer_len;
+	ret = conn->dtls_buffer_len;
 	conn->dtls_buffer_len = 0;
 	cw_dbg(DBG_DTLS_BIO, "SSL BIO read: (maxlen = %d), read %d, remain %d", maxlen,
 	       ret, conn->dtls_buffer_len);
@@ -77,9 +78,10 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 int dtls_bio_write(struct conn *conn, const char *data, int len)
 {
 	uint8_t buffer[2048];
+	int rc;
 	*((uint32_t *) buffer) = htonl(1 << 24);
 	memcpy(buffer + 4, data, len);
-	int rc = conn->send_packet(conn, buffer, len + 4);
+	rc = conn->send_packet(conn, buffer, len + 4);
 	if (rc >= 0)
 		rc -= 4;
 

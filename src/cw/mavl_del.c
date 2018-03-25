@@ -238,11 +238,11 @@ void *mavl_del(struct mavl *t, const void *data)
 	if (!t->root)
 		return NULL;
 
-	d = data;
+	d = (void*)data;
 	rc = mavl_del0(t, &t->root, d);
 	if (rc == 2)
 		return NULL;
-	return data;
+	return (void*)data;
 }
 
 

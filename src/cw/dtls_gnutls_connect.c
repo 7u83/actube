@@ -38,6 +38,7 @@
  */
 int dtls_gnutls_connect(struct conn *conn)
 {
+	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
 	d = dtls_gnutls_data_create(conn,
@@ -46,7 +47,7 @@ int dtls_gnutls_connect(struct conn *conn)
 	if (!d)
 		return 0;
 
-//      gnutls_dh_set_prime_bits(d->session, 512);
+/*//      gnutls_dh_set_prime_bits(d->session, 512);*/
 /*#if GNUTLS_VERSION_NUMBER >= 0x030100
 	gnutls_handshake_set_timeout(d->session, GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);
 
@@ -55,7 +56,7 @@ int dtls_gnutls_connect(struct conn *conn)
 	gnutls_dtls_set_mtu(d->session, 1500);
 */
 
-	int rc;
+
 	cw_dbg(DBG_DTLS,"Starting handshake");
 	do {
 		rc = gnutls_handshake(d->session);

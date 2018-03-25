@@ -28,11 +28,12 @@
 int sock_getifaddr(const char * ifname,int family, int type,struct sockaddr * sa)
 {
         struct ifaddrs *ifap,*ifa;
-        
+	int rc;
+	
 	if ( getifaddrs(&ifap)==-1)
 		return 0;
 
-	int rc=0;
+	rc = 0;
         for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
 		if (strcmp(ifname,ifa->ifa_name))
 			continue;
@@ -52,21 +53,21 @@ int sock_getifaddr(const char * ifname,int family, int type,struct sockaddr * sa
 				memcpy (sa, ifa->ifa_addr, sock_addrlen(ifa->ifa_addr));
 				rc=1;
 				break;
-//			case IFF_BROADCAST:
+/*			case IFF_BROADCAST:
 //				memcpy (sa, ifa->ifa_broadaddr, sock_addrlen(ifa->ifa_addr));
 //				rc=1;
 //				break;
-			default:
+*/			default:
 				break;
 
 		}
-//		rc=1;
+/*		rc=1;*/
 		break;
 
 
         }
 
-//	printf("safam: %i\n",sa->sa_family);
+/*	printf("safam: %i\n",sa->sa_family);*/
         freeifaddrs(ifap);
 	return rc;
 }

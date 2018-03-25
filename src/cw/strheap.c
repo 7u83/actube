@@ -37,9 +37,10 @@ int cw_strheap_register_strings(cw_strheap_t h, struct cw_StrListElem *s)
 
 
 const char * cw_strheap_get(cw_strheap_t h, int id) {
+	struct cw_StrListElem *r;
 	struct cw_StrListElem s;
 	s.id=id;
-	struct cw_StrListElem *r = mavl_get(h,&s);
+	r = mavl_get(h,&s);
 	if (r) 
 		return r->str;
 	return NULL;

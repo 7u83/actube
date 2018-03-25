@@ -99,16 +99,19 @@ int cw_get_hdr_msg_total_len(uint8_t * rawmsg)
 
 int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 {
+	int rmac_len;
+	int hlen;
+	
 	if (!rmac) {
 		cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 0);
 		cw_set_hdr_hlen(th, 2);
 		return 0;
 	}
-	int rmac_len = bstr_len(rmac);
+	rmac_len = bstr_len(rmac);
 	memcpy(cw_get_hdr_rmac(th), rmac, rmac_len + 1);
 	cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 1);
 
-	int hlen = 4 + rmac_len / 4;
+	hlen = 4 + rmac_len / 4;
 
 	if (rmac_len % 4 != 0) {
 		hlen++;

@@ -4,7 +4,10 @@
 
 uint8_t * bstr_create_from_str(const char *s)
 {
-	int l = strlen(s);
+	int msize;
+	uint8_t * mem;
+	int l;
+	l= strlen(s);
 	if (s[0]!='.')
 		return bstr_create((uint8_t*)s,l);
 
@@ -19,10 +22,10 @@ uint8_t * bstr_create_from_str(const char *s)
 
 	/* the string starts with ".x" - read hexbytes */
 	l-=2;
-	int msize=l/2;	
+	msize=l/2;	
 	if(l&1)
 		msize++;
-	uint8_t * mem = malloc(1+msize);
+	mem = malloc(1+msize);
 	*((uint8_t*)mem)=msize;
 	cw_format_scan_hex_bytes(mem+2,s+2,l);
 	return mem;		

@@ -35,11 +35,11 @@
 int sock_getbroadcastaddr(const struct sockaddr * addr,struct sockaddr * broadcastaddr)
 {
         struct ifaddrs *ifap,*ifa;
-        
+	int rc;
 	if ( getifaddrs(&ifap)==-1)
 		return 0;
 
-	int rc=0;
+	rc=0;
         for (ifa = ifap; ifa != NULL; ifa = ifa->ifa_next) {
 
 		if (sock_cmpaddr(addr,ifa->ifa_addr,0))

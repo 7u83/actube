@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "mlist.h"
 
 struct mlistelem * mlist_replace(mlist_t list, void *data)

@@ -32,12 +32,13 @@
  * released using free.
  */
 char * cw_filename(const char * path, const char * name, const char * ext){
-	
+	int name_len;
+	int ext_len;	
 	int size=0;
 	
 	int path_len;
 	char c;
-	
+	char * result;
 	char * slash="";
 	
 	path_len = strlen(path);
@@ -49,10 +50,10 @@ char * cw_filename(const char * path, const char * name, const char * ext){
 		}
 	}
 	
-	int name_len = strlen (name);
+	name_len = strlen (name);
 	
 	
-	int ext_len;
+
 	
 	if (ext != NULL){
 		if (ext[0]=='.'){
@@ -64,7 +65,7 @@ char * cw_filename(const char * path, const char * name, const char * ext){
 		ext_len=-1;
 
 	size = (path_len) + name_len + (ext_len+1) + 1;
-	char * result = malloc(size);
+	result = malloc(size);
 	if (!result)
 		return NULL;
 		

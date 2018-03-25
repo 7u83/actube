@@ -231,13 +231,3 @@ void *mavl_add ( struct mavl *t, const void *data, int *exists )
 	}
 	return (void*)d;
 }
-
-/*
-void *mavl_add ( struct mavl *t, const void *data)
-{
-	return mavl_add_exists(t,data,NULL);
-}
-*/
-
-
- 

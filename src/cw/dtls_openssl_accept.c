@@ -26,18 +26,20 @@
 
 int dtls_openssl_accept(struct conn *conn)
 {
+	struct dtls_openssl_data *d;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	int i, rc;
 	
 	if (!conn->dtls_data)
 		conn->dtls_data =
 		    dtls_openssl_data_create(conn, DTLSv1_server_method(),
 					     dtls_openssl_bio_method());
 
-	struct dtls_openssl_data *d = (struct dtls_openssl_data *) conn->dtls_data;
+	d = (struct dtls_openssl_data *) conn->dtls_data;
 	if (!d)
 		return 0;
 
-	int i, rc;
+
 	for (i = 0; i < conn->wait_dtls; i++) {
 		rc = SSL_accept(d->ssl);
 		if (rc == 1) {

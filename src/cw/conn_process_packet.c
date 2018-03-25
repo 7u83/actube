@@ -218,7 +218,11 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	mlist_t unrecognized;
 	struct cw_MsgData search;
 	struct cw_MsgData * message;
-
+	int result_code;
+	int *i;
+	uint8_t *elems_ptr;
+	uint8_t *elem;
+	
 	char sock_buf[SOCK_ADDR_BUFSIZE]; /**< to hold str from sockaddr2str */
 	
 	/*struct cw_action_in as, *af, *afm;*/
@@ -287,7 +291,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	message = mavl_find(conn->msgset->msgdata,&search);
 		
-	int result_code = 0;
+	result_code = 0;
 	
 	if (!message){
 		/* Message is unknown */
@@ -315,7 +319,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	}
 
 	/* Check if current state is in state of message */
-	int *i = message->states;
+	i = message->states;
 	for (i=message->states; *i; i++){
 		if(*i==conn->capwap_state)
 			break;
@@ -346,8 +350,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 */
 
 
-	uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
-	uint8_t *elem;
+	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
+
 
 	/* Create an avltree to catch the found mandatory elements */
 /*	//conn->mand = stravltree_create();*/
@@ -503,6 +507,8 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 		    struct sockaddr *from)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	uint8_t seqnum;
+	int s1,s2,sd;
 
 	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
 
@@ -517,11 +523,11 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	/* It's a request message, check if seqnum is right and if
 	 * we have already sent a response message*/
 
-	uint8_t seqnum = cw_get_msg_seqnum(msgptr);
+	seqnum = cw_get_msg_seqnum(msgptr);
 
-	int s1 = conn->last_seqnum_received;
-	int s2 = seqnum;
-	int sd = s2 - s1;
+	s1 = conn->last_seqnum_received;
+	s2 = seqnum;
+	sd = s2 - s1;
 
 	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
@@ -557,7 +563,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	cw_dbg(DBG_MSG_ERR, "Retransmitting response message to %s, seqnum=%d",
 	       sock_addr2str(&conn->addr, sock_buf), s2);
 
-	// XXX untested
+	/*// XXX untested*/
 	conn_send_msg(conn, conn->resp_buffer);
 	errno = EAGAIN;
 	return -1;
@@ -574,7 +580,10 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-
+	int preamble;
+	int offs;
+	int payloadlen;
+	
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
@@ -584,7 +593,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 		return -1;
 	}
 
-	int preamble = cw_get_hdr_preamble(packet);
+	preamble = cw_get_hdr_preamble(packet);
 
 	if ((preamble & 0xf0) != (CAPWAP_VERSION << 4)) {
 		/* wrong version */
@@ -606,10 +615,10 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 	}
 
 
-	int offs = cw_get_hdr_msg_offset(packet);
+	offs = cw_get_hdr_msg_offset(packet);
 
 
-	int payloadlen = len - offs;
+	payloadlen = len - offs;
 	if (payloadlen < 0) {
 		/* Eleminate messages with wrong header size */
 		cw_dbg(DBG_PKT_ERR,
@@ -637,6 +646,8 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 	if (cw_get_hdr_flag_f(packet)) {
 		/* fragmented, add the packet to fragman */
 		uint8_t *f;
+		int rc;
+		
 		f = fragman_add(conn->fragman, packet, offs, payloadlen);
 		if (f == NULL) {
 			errno = EAGAIN;
@@ -645,18 +656,18 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 
 
 		cw_dbg_pkt(DBG_PKT_IN, conn, f + 4, *(uint32_t *) f, from);
-//		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);
+/*//		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);*/
 
-		// XXX: Modify fragman to not throw away CAPWAP headers
+/*		// XXX: Modify fragman to not throw away CAPWAP headers*/
 
-		int rc = conn->process_message(conn, f + 4, *(uint32_t *) f, from);
+		rc = conn->process_message(conn, f + 4, *(uint32_t *) f, from);
 
 		free(f);
 		return rc;
 	}
 
 	/* not fragmented, we have a complete message */
-//	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);
+/*//	cw_dbg_msg(DBG_MSG_IN, conn, packet, len, from);*/
 	return conn->process_message(conn, packet, len, from);
 }
 
@@ -713,6 +724,7 @@ int cw_read_messages(struct conn *conn)
 
 int cw_read_from(struct conn *conn)
 {
+	int n;
 	struct sockaddr_storage from;
 	uint8_t buf[2024];
 	int len = 2024;
@@ -726,7 +738,7 @@ int cw_read_from(struct conn *conn)
 
 
 	
-	int n = conn->readfrom(conn, buf, len, &from);
+	n = conn->readfrom(conn, buf, len, &from);
 	if (n < 0)
 		return n;
 

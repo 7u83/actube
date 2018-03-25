@@ -100,7 +100,7 @@ static int len ( struct cw_KTV * data ){
 
 const struct cw_Type cw_type_ipaddress = {
 	"IPAddress",		/* name */
-	NULL,			/* del */
+	del,			/* del */
 	put,			/* put */
 	get,			/* get */
 	to_str,			/* to_str */

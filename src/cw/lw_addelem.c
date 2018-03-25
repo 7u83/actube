@@ -21,10 +21,11 @@ int lw_addelem(uint8_t*dst, uint8_t type, uint8_t *msgelem, uint16_t len)
 
 int lw_addelem_vendor_specific(uint8_t *dst,uint32_t vendor_id,uint16_t elem_id, uint8_t *value, int len)
 {
+	int l ;
 	lw_put_dword(dst+3,vendor_id);
 	lw_put_word(dst+7,elem_id);
 	memcpy(dst+9,value,len);
-	int l = len+9;
+	l= len+9;
 	*dst=LW_ELEM_VENDOR_SPECIFIC;
 	lw_put_word(dst+1,l);	
 	return l;	
