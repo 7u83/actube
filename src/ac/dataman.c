@@ -5,6 +5,7 @@
 #include "cw/timer.h"
 #include "cw/cw.h"
 #include "cw/format.h"
+#include "cw/netconn.h"
 
 #include "cw/log.h"
 #include "cw/dbg.h"

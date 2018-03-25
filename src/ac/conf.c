@@ -190,10 +190,11 @@ static int init_vendor_id()
 	return 1;
 }
 
+/*
 static int init_version()
 {
 
-	/* Init hardware version */
+	// Init hardware version 
 	if (!conf_hardware_version) {
 		struct utsname u;
 		int rc = uname(&u);
@@ -210,31 +211,26 @@ static int init_version()
 	bstr_replace(&conf_hardware_version,
 		     bstr_create_from_cfgstr((char *) conf_hardware_version));
 
-	/* software version */
+	// software version 
 	if (!conf_software_version)
 		conf_software_version = (bstr_t) strdup(CONF_DEFAULT_SOFTWARE_VERSION);
 	bstr_replace(&conf_software_version,
 		     bstr_create_from_cfgstr((char *) conf_software_version));
 
 
-	/* Cisco hardware version */
+	// Cisco hardware version 
 	if (!conf_cisco_hardware_version)
 		conf_cisco_hardware_version =
 		    (bstr_t) strdup(CONF_DEFAULT_CISCO_HARDWARE_VERSION);
 	bstr_replace(&conf_cisco_hardware_version,
 		     bstr_create_from_cfgstr((char *) conf_cisco_hardware_version));
 
-	/* Cisco software version */
-/*
-	if (!conf_cisco_software_version)
-		conf_cisco_software_version=(bstr_t)strdup(CONF_DEFAULT_CISCO_SOFTWARE_VERSION);
-	bstr_replace(&conf_cisco_software_version,bstr_create_from_cfgstr((char*)conf_cisco_software_version));
-*/
 
 
 
 	return 1;
 }
+*/
 
 static int init_control_port()
 {
@@ -809,9 +805,9 @@ int read_config(const char *filename)
 	if (!init_acname())
 		return 0;
 
-	if (!init_version())
+/*	if (!init_version())
 		return 0;
-
+*/
 
 	if (!init_vendor_id())
 		return 0;

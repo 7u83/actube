@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-#include "cw/netconn.h"
+/*#include "cw/netconn.h"*/
 
 #include "wtpman.h"
 

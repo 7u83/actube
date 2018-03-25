@@ -20,7 +20,11 @@
  * @file 
  * @brief Definition of vendor IDs
  */
-
+/** 
+ * @addtogroup CAPWAP 
+ * @{
+ */
+ 
 /**
  * @defgroup CAPWAPVendors  List of known CAPWAP vendors
  * @{ */
@@ -37,5 +41,6 @@
 #define CW_VENDOR_ID_FORTINET	12356
 
 /** @} */
+/** @} CAPWAP */
 
 #endif
