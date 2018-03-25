@@ -5,6 +5,7 @@ OBJS=\
 	mod_capwap_ac.o \
 	capwap_actions_ac.o \
 	capwap_in_wtp_board_data.o \
+	capwap_in_ac_descriptor.o \
 	capwap_out_wtp_board_data.o \
 	capwap_out_ac_descriptor.o \
 	capwap_out_get_session_id.o \

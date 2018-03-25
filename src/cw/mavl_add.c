@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Implementation of mavl_add
+ */
+
 #include "mavl.h"
 
 static struct mavlnode *mavlnode_create ( struct mavl *t, const void *data )
@@ -179,20 +184,21 @@ static int mavl_add0 ( struct mavl *t, struct mavlnode **parent, const void ** d
 
 
 /**
+ * @brief mavl add function
  * Add an element to an AVL tree
- *
  * @param t mavl
  * @param data pointer to the element to add
  * @param exists pointer to an interger vairable which wil be set to 1, if
  * the element to add already exists in the tree. If the element did't
  * exist, the variable ist to 0.
+
  * @return A pointer to the element in the tree. If the element was added, 
  * it the pointer to newly created element. If the element had already existed,
  * the pointer points to the existing element. mavl_add returns thero, if 
  * something else went wrong. Therefore consult errno.
- * @example mavl_add_example.c
+ * 
+ * 
  */
-
 void *mavl_add ( struct mavl *t, const void *data, int *exists )
 {
 	const void * d;
@@ -232,3 +238,6 @@ void *mavl_add ( struct mavl *t, const void *data)
 	return mavl_add_exists(t,data,NULL);
 }
 */
+
+
+ 

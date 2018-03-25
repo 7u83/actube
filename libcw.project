@@ -129,7 +129,6 @@
       <File Name="src/cw/cwmsg_addelem_80211_add_wlan.c"/>
       <File Name="src/cw/dot11.h"/>
       <File Name="src/cw/cw_in_check_generic_resp.c"/>
-      <File Name="src/cw/cw_in_ac_descriptor.c"/>
       <File Name="src/cw/mavl_foreach_lr.c"/>
       <File Name="src/cw/mavl_get.c"/>
       <File Name="src/cw/sock_setport.c"/>
@@ -300,6 +299,7 @@
       <File Name="src/cw/cw_ktv_idx_get.c"/>
       <File Name="src/cw/lw_put_bstr.c"/>
       <File Name="src/cw/mavl_get_node_cmp..c"/>
+      <File Name="src/cw/cw_ktv_read_struct.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

@@ -20,11 +20,19 @@
 
 #define CW_KTV_MAX_KEY_LEN 1024
 
+/**
+ * @struct cw_KTV
+ * @file ktv.h
+ * @brief Structure to store a key-type-value element.
+ */
 struct cw_KTV {
+	/** The key for this element. A string. */
 	char *key;
+	/** Teh type of this element. */
 	const struct cw_Type *type;
+	/** The value for this element */
 	union {
-		uint32_t dword;
+		uint32_t dword;	
 		uint16_t word;
 		uint8_t byte;
 		void *ptr;
@@ -71,6 +79,17 @@ struct cw_Type {
 	
 };
 typedef struct cw_Type cw_Type_t;
+
+
+struct cw_KTVStruct {
+	const struct cw_Type * type;
+	const char * key;
+	int len;
+	int position;
+};
+typedef struct cw_KTVStruct cw_KTVStruct_t;
+int cw_ktv_read_struct(mavl_t ktv,cw_KTVStruct_t * stru, const char *pkey, 
+	uint8_t * data, int len);
 
 extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;

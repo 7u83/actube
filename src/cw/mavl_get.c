@@ -25,6 +25,7 @@
 
 /**
  * Get an AVL tree element.
+ * @param t pointer to mavl_t
  * @param data Element to get
  * @return pointer to element or NULL if not found. 
  */ 

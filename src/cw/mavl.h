@@ -25,6 +25,9 @@
 /**
  * @addtogroup DATAMGMT
  * @{
+ * 
+ * @defgroup MAVL Mavl Tree
+ * @{
  */
 
 
@@ -40,26 +43,13 @@
 
 
 
-
-/**
- * @defgroup MAVL_CONSTANTS Constants
- * @{
- */
-
 /** Maximum AVL Tree depth.
     The number of nodes is calculated by 2^depth.
     So a value of 32 should be enough for around 4
     billion nodes. */
 #define MAVL_MAX_DEPTH	32
 
-/**
- * @}
- */
 
-/**
- * @addtogroup MAVLStructures Structures
- * @{
- */
 
 
 /**
@@ -97,9 +87,6 @@ struct mavl {
 	size_t data_size;
 };
 
-/**
- * @}
- */
 
 /**
  * MAVL AVL Tree type
@@ -107,10 +94,6 @@ struct mavl {
 typedef struct mavl * mavl_t;
 
 
-/**
- * @defgroup MAVL_FUNCTIONS Functions
- * @{
- */
 
 /**
  * @param node node 
@@ -121,6 +104,7 @@ struct mavl *mavl_create ( int ( *cmp ) ( const void *, const void * ),
                            void ( *del ) ( void * ), size_t data_size );
 
 void *mavl_add ( struct mavl *t, const void *data, int *exists );
+
 /*void *mavl_add ( struct mavl *t,  const void *data );*/
 void * mavl_get ( struct mavl *t , const void *data );
 void *mavl_del ( struct mavl *t, const void *data );
@@ -148,9 +132,6 @@ int mavl_foreach_from_lr ( struct mavl *t, struct mavlnode *n, void *data,
 
 
 
-/**
- * @}
- */
 
 
 
@@ -159,7 +140,7 @@ void *mavl_replace_data ( struct mavl *t, void *data, int len );
 
 
 /**
- * An alias gor #mavl_get
+ * This macro is an alias for #mavl_get
  */
 #define mavl_find(t,d) mavl_get(t,d)
 
@@ -292,9 +273,10 @@ void * mavl_add_ptr ( mavl_t tree, const void *ptr );
 #define mavliter_get_str(iter) ((char*)(mavliter_get_ptr(iter)))
 
 /**
+ * @} MAVL
  * 
- * @}
- * datamanag
+ * @} DATAMGMT
+ * 
  */
 
 

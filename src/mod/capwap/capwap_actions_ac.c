@@ -115,7 +115,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* min/max length */
 		NULL,					/* type */
 		CW_KEY_AC_DESCRIPTOR,			/* Key */
-		NULL,					/* get */
+		capwap_in_ac_descriptor,		/* get */
 		capwap_out_ac_descriptor		/* put */
 	}
 	,

@@ -299,8 +299,8 @@
 #define CW_SUBELEM_WTP_BOOTLOADER_VERSION		2
 #define CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION		3
 
-#define CW_SUBELEM_AC_HARDWARE_VERSION			4
-#define CW_SUBELEM_AC_SOFTWARE_VERSION			5
+#define CAPWAP_SUBELEM_AC_HARDWARE_VERSION		4
+#define CAPWAP_SUBELEM_AC_SOFTWARE_VERSION			5
 
 
 /* Frame tunnnel mode bits */
@@ -524,7 +524,7 @@ enum cw_reboot_failure_types {
 
 
 
-
+/*
 struct cwimage_data {
 	uint8_t *data;
 	uint8_t type;
@@ -546,7 +546,7 @@ extern void cw_send_image_file(struct conn *conn, FILE * infile);
 extern int cw_readmsg_configuration_status_response(uint8_t * elems, int elems_len);
 extern int cw_readmsg_configuration_update_request(uint8_t * elems, int elems_len);
 
-
+*/
 
 /* Message to text stuff */
 
@@ -558,9 +558,6 @@ extern struct cw_StrListElem capwap_strings_elem[];
 extern struct cw_StrListElem capwap_strings_result[];
 extern struct cw_StrListElem capwap_strings_board[];
 extern struct cw_StrListElem mbag_item_strings[];
-
-
-
 
 
 

@@ -345,20 +345,18 @@ extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct conn *conn,
 				    struct cw_ElemHandler *eh, uint8_t * data, int len,
 				    struct cw_DescriptorSubelemDef *allowed);
 
-/*
-extern int cw_read_ac_descriptor(mbag_t store, uint8_t * data, int len,
-				 struct cw_DescriptorSubelemDef *allowed);
 
-extern int cw_read_wtp_descriptor_versions(mbag_t mbag, uint8_t * data, int len);
+int cw_read_ac_descriptor(mavl_t store,
+			   struct cw_ElemHandler *eh,
+			   struct cw_ElemHandlerParams * params,
+			   uint8_t *data, int len, 
+			struct cw_DescriptorSubelemDef *allowed);
 
 
-extern int cw_in_check_generic_resp(struct conn *conn, struct cw_action_in *a,
-				    uint8_t * data, int len, struct sockaddr *from);
 
-extern int cw_in_check_generic_req(struct conn *conn, struct cw_action_in *a,
-				   uint8_t * data, int len, struct sockaddr *from);
 
-*/
+
+
 
 /**
  * @defgroup CWELEMIN Input Handlers for Message Elements

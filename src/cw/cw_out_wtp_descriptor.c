@@ -1,11 +1,6 @@
 #include "log.h"
 #include "capwap.h"
 #include "conn.h"
-#include "capwap.h"
-//#include "itemstore.h"
-
-#include "capwap.h"
-
 #include "cw.h"
 
 #define CW_MODE_CISCO 1

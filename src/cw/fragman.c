@@ -80,9 +80,10 @@ static struct frag * frag_get(struct frag * frags, int fragid)
 static struct frag * frag_new(struct frag * frags, int fragid)
 {
         struct timespec t;
+	int i;
 	clock_gettime(CLOCK_REALTIME,&t);
 
-	int i;
+
 	for (i=0; i<FRAG_MAXIDS; i++){
 		if (frags[i].buffer==NULL || (t.tv_sec - frags[i].t.tv_sec>FRAG_TTL) ){
 
@@ -126,19 +127,22 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 {
 	struct frag * f;
 	uint32_t val0,val1;
-
+	int fragid,fragoffset;
+	int dst;
+	int ti;
+	
 	/* read the transport header dword 0,
 	 * contains hlen*/	
 	val0 = ntohl(*((uint32_t*)packet));
-//	int hlen = (val0 >> 19) & 0x1f;
+/*	int hlen = (val0 >> 19) & 0x1f;*/
 
 	/* read the transport header dword 1,
 	 * contains fragid and fragoffset */	
 	val1 = ntohl(*(((uint32_t*)packet)+1));
-	int fragid = val1>>16;
-	int fragoffset=(val1 >>3) & 0x1fff;
+	fragid = val1>>16;
+	fragoffset=(val1 >>3) & 0x1fff;
 
-//	printf("Fragid = %i, offset = %i\n",fragid,fragoffset);
+/*//	printf("Fragid = %i, offset = %i\n",fragid,fragoffset);*/
 	
 	/* determine size of payload */
 /*	int payloadlen = len - hlen*4;
@@ -160,7 +164,7 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 
 	errno = 0;
 
-	int dst = fragoffset*8;
+	dst = fragoffset*8;
 
 	/* copy fragment*/
 	if (dst + payloadlen < FRAG_MAXSIZE) {
@@ -172,9 +176,9 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 		f->bytesneeded=dst+payloadlen;
 	}
 
-	int ti;
+	
 	for (ti=0; ti<16; ti++){
-//		printf("%02X ",(f->buffer+4)[ti]);
+/*//		printf("%02X ",(f->buffer+4)[ti]);*/
 
 	}
 
@@ -182,12 +186,12 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 	if (f->bytesneeded>0 && f->bytesneeded<=f->bytesreceived){
 		uint8_t * r=f->buffer;
 		f->buffer=0;
-//		printf("last bytes need %i\n",f->bytesneeded);
+/*//		printf("last bytes need %i\n",f->bytesneeded);*/
 		*((uint32_t*)(r))=f->bytesneeded;
 		return r; 
 	}
 
-//	printf("Fragman bytes needed: %i, received  %i\n",f->bytesneeded,f->bytesreceived);
+/*//	printf("Fragman bytes needed: %i, received  %i\n",f->bytesneeded,f->bytesreceived);*/
 	return NULL;
 }
 
