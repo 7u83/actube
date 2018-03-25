@@ -39,7 +39,7 @@
 
 
 /**
- *@defgroup DBG DBG
+ *@addtogroup LOGDBG
  *@{
  */
 
@@ -231,5 +231,5 @@ void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel,
 int cw_dbg_is_level(int level);
 
 /**
- *@}
+ *@} LOGDBG
  */

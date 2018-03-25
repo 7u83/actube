@@ -23,7 +23,7 @@
 
 
 /**
- * @addtogroup DATAMGMT
+ * @addtogroup ALGOS
  * @{
  * 
  * @defgroup MAVL Mavl Tree
@@ -275,7 +275,7 @@ void * mavl_add_ptr ( mavl_t tree, const void *ptr );
 /**
  * @} MAVL
  * 
- * @} DATAMGMT
+ * @} ALGOS
  * 
  */
 

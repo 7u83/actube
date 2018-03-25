@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 
-#include "conn.h"
+/*#include "conn.h"*/
 #include "bstr.h"
 
 
@@ -68,7 +68,7 @@
 /**
  * Read a byte from input buffer
  * @param src Pointer to input buffer
- * @return the byte red
+ * @return the byte reed
  */
 #define lw_get_byte(src)\
 	(*(uint8_t*)(src))
@@ -93,10 +93,6 @@
 
 
 
-/* the following functions are defined as static inline and not as 
-   macro to avoid any side effects */
-
-
 int lw_put_data(uint8_t*dst,const uint8_t*data,uint16_t len);
 int lw_put_bstr(uint8_t * dst, const bstr_t b);
 int lw_put_bstr16(uint8_t * dst, const bstr16_t b);
@@ -108,34 +104,21 @@ int lw_put_vendor(uint8_t * dst, uint32_t vendorid,
 
 
 
-
-
-
-/**
- * @defgroup LWAPP_IN_HANDLER Input Handlers
- * @{
- */
+/*
 int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 				  uint8_t * data, int len, struct sockaddr *from);
-
-/**
- * @}
- */
+*/
 
 
-/**
- * @defgroup LWAPP_MISC Misc Functions
- * @{
- */
+
 extern uint16_t lw_checksum(uint8_t *d,int len);
 extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
-/**
- * @}
- */
 
 
+#define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+
 /**
- * @}
+ * @} LW
  */
 
 #endif

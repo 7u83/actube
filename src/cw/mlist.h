@@ -29,9 +29,17 @@
 
 
 /**
- * @defgroup MLIST MLIST
+ * @addtogroup ALGOS
  * @{
  */
+
+/**
+ * @defgroup MLIST Mlist 
+ * @{
+ */
+
+
+
 
 /**
  * Element of an mlist. 
@@ -88,10 +96,12 @@ extern struct mlistelem *mlist_find(mlist_t l, struct mlistelem *start, void *da
 #define mlist_create_conststr() mlist_create(NULL,NULL,sizeof(const char*))
 mlistelem_t * mlist_append_ptr (mlist_t list, void * ptr);
 
-
-
 /**
- * @}
+ * @} MLIST
+ */
+ 
+/**
+ * @} ALGOS
  */
 
 #endif

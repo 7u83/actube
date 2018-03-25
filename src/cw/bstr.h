@@ -19,10 +19,8 @@
 /**
  * @file
  * @brief Definitions for bstr functions
- * @defgroup Bstr BSTR 
  * @brief BSTR is used to store binary strings.
  * We can see them anywhere.
- * @{
  */
 
 #ifndef __BSTR_H
@@ -31,6 +29,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+
+/**
+ * @addtogroup ALGOS
+ * @{
+ */
+
+/**
+ * @defgroup Bstr BSTR (Binary strings)
+ * @{
+ */
 
 /**
  * @defgroup BSTRTypes Types
@@ -82,6 +90,11 @@ extern int bstr_to_str(char *dst, bstr_t str,char * def);
  */ 
 #define BSTR_MAX_LEN 254
 
+/**
+ * Maximum length of a #bstr16_t string 
+ */
+#define BSTR16_MAX_LEN (0xffff-2)
+
 /**@}*/
 
 
@@ -115,10 +128,6 @@ typedef uint8_t *bstr16_t;
  * size this objects needs in memory to be stored.
  */ 
 #define bstr16_size(l) (l+2)
-/**
-   Maximum length of a #bstr16_t string 
-*/
-#define BSTR16_MAX_LEN (0xffff-2)
 
 /*
 static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
@@ -148,7 +157,9 @@ extern uint8_t * bstr16_create_from_cfgstr(const char * s);
  * The difference is, that the first four bytes of the 
  * string data containing a vendor id.
  */
-typedef uint8_t * bstrv_t;
+
+/*typedef uint8_t * bstrv_t;*/
+
 
 /**
  *@}
@@ -181,5 +192,9 @@ uint8_t * bstrv_create(uint32_t vendor_id, uint8_t *data, uint8_t len);
 
 #endif
 
-/**@}*/
+/**@} BSTR
+ */
 
+/**
+ * @} AGLOS
+ */

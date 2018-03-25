@@ -22,6 +22,11 @@
  *@brief Definitions for logging and debugging.
  */
 
+/**
+ * @defgroup LOGDBG Logging & Debugging
+ * @{
+ */
+
 #ifndef __CW_LOG_H
 #define __CW_LOG_H
 
@@ -51,5 +56,9 @@ void cw_log(int level, const char *format, ...);
 extern const char *cw_log_name;
 extern struct cw_LogWriter * cw_log_writers[];
 
+
+/**
+ * @} LOGDBG
+ */
 
 #endif

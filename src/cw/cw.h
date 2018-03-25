@@ -13,6 +13,11 @@
 #include "msgset.h"
 
 /**
+ * @addtogroup CAPWAP
+ * @{
+ */
+
+/**
  * @defgroup CW CW
  * @{
  */
@@ -300,7 +305,7 @@ int cw_put_image_data(uint8_t * dst, FILE * infile);
 int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len);
 int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr);
 int cw_put_elem_result_code(uint8_t * dst, uint32_t code);
-int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v);
+/*int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v);*/
 
 
 
@@ -514,6 +519,11 @@ char *cw_strdup(const char *s);
 
 /**
  *@}
+ */
+
+
+/**
+ *@} CAPWAP
  */
 
 #endif

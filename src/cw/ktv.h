@@ -8,13 +8,13 @@
 
 
 /**
- * @addtogroup DATAMGMT Data Structures & Algos
+ * @addtogroup ALGOS
  * @{
  */
 
 
 /**
- * @defgroup KTV Key-Type-Value-Store
+ * @defgroup KTV KTV Store (Key-Type-Value-Store)
  * @{
  */
 
@@ -141,7 +141,7 @@ extern const cw_Type_t * cw_ktv_std_types[];
 
 /**
  * @}  KTV
- * @}  DATAMGMT
+ * @}  ALGOS
  */
 
 #endif	/* __KVT_H */

@@ -39,11 +39,15 @@
 /* capwap version and iana number */
 
 /**
- *@defgroup CAPWAP CAPWAP Defintions from RFC5415
- *@{
+ * @defgroup CAPWAP CAPWAP 
+ * @{
  */
 
 
+/** 
+ * @defgroup CAPWAP_DEFS   Definitions from RFC5415
+ * @{
+ */
 
 /**
  *@defgroup CAPWAPConstants CAPWAP General Constants 
@@ -632,7 +636,9 @@ enum capwap_states {
 
 
 #endif
-
 /**
- *@}
+ * @} CAPWAP_DEFS
+ */
+/**
+ * @} CAPWAP
  */

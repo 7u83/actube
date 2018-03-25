@@ -195,7 +195,7 @@
  */
 
 
-#define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
+
 
 /*
 
