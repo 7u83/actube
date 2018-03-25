@@ -35,10 +35,10 @@
  */
 int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding)
 {
-	lw_put_dword(dst,LW_VENDOR_ID_CISCO);
-	lw_put_word(dst+4,LW_CISCO_PATH_MTU);
-	lw_put_word(dst+6,max);
-	lw_put_word(dst+8,padding+4);
+	lw_set_dword(dst,LW_VENDOR_ID_CISCO);
+	lw_set_word(dst+4,LW_CISCO_PATH_MTU);
+	lw_set_word(dst+6,max);
+	lw_set_word(dst+8,padding+4);
 	memset(dst+10,0,padding);
 	return padding+10;
 }

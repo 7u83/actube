@@ -178,12 +178,12 @@ void cw_set_hdr_rid(uint8_t * th, int rid);
  */
 #define cw_set_datamsg_elems_len(msgptr,len) (cw_put_word(msgptr,len));
 
-#define cw_set_msg_id(msgptr,t) cw_put_dword(msgptr,t)
+#define cw_set_msg_id(msgptr,t) cw_set_dword(msgptr,t)
 #define cw_set_msg_type(msgptr,t) cw_set_msg_id(msgptr,t)
-#define cw_set_msg_seqnum(msgptr,s) cw_put_byte( (msgptr) +4,s);
-#define cw_set_msg_elems_len(msgptr,n) (cw_put_word((msgptr)+5,((n)+3)))
+#define cw_set_msg_seqnum(msgptr,s) cw_set_byte( (msgptr) +4,s);
+#define cw_set_msg_elems_len(msgptr,n) (cw_set_word((msgptr)+5,((n)+3)))
 
-#define cw_set_msg_flags(msgptr,f) (cw_put_byte( (msgptr)+7,f))
+#define cw_set_msg_flags(msgptr,f) (cw_set_byte( (msgptr)+7,f))
 
 /**
  * Check if a message id is from request msg 
@@ -267,8 +267,13 @@ int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac);
  */
 
 #define cw_put_elem_hdr(dst,type,len) \
-	(cw_put_dword(dst, (((uint32_t)type)<<16) | (len)),4)
+	(cw_set_dword(dst, (((uint32_t)type)<<16) | (len)),4)
 
+/**
+ * same as #cw_put_elem_hdrm but without return value
+ */
+#define cw_set_elem_hdr(dst,type,len) \
+	(cw_set_dword(dst, (((uint32_t)type)<<16) | (len)))
 
 int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 					 uint16_t elemid, uint16_t len);

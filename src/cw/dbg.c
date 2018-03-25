@@ -244,7 +244,7 @@ void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
 
-	int hlen;
+/*	int hlen;*/
 	char buf[1024];
 
 	if (!cw_dbg_is_level(level))
@@ -255,7 +255,7 @@ void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
 	else
 		cw_format_pkt_hdr(buf, 0,  packet, len, from);
 		
-	hlen = cw_get_hdr_msg_offset(packet);
+/*	hlen = cw_get_hdr_msg_offset(packet);*/
 
 	cw_dbg(level, "%s", buf);
 		
@@ -483,7 +483,7 @@ void cw_dbg_elem(int level, struct conn *conn, int msg,
 		sprintf(vendorname,"Vendor %s",cw_strvendor(handler->vendor));
 	}
 	else{
-		sprintf(vendorname,"");
+		sprintf(vendorname,"%s","");
 	}
 
 

@@ -3,15 +3,15 @@
 void * ktvn(struct mavl *t ,const void *search)
 {
 	
-	struct mavlnode *n,*lastl,*lastb;
-	lastb = NULL; lastl=NULL;
+	struct mavlnode *n,/**lastl,*/*lastb;
+	lastb = NULL; /*lastl=NULL;*/
 	n = t->root;
 	while(n){
 		int rc;
-		const cw_KTV_t *c1,*c2;
-		c1=search;
+/*		const cw_KTV_t;*//* *c1,*c2;*/
+		/*c1=search;
 		c2=mavlnode_dataptr(n);
-		
+		*/
 		
 		rc = t->cmp(search,mavlnode_dataptr(n));
 		
@@ -23,7 +23,7 @@ void * ktvn(struct mavl *t ,const void *search)
 		}
 		
 		if (rc<0){
-			lastl = n;
+			/*lastl = n;*/
 			if (n->left==NULL){
 				return mavlnode_dataptr(lastb);
 				

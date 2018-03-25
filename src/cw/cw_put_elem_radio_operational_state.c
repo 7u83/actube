@@ -14,7 +14,7 @@ int xcw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7m
 	uint8_t *d=dst;
 
 	/* Put the radio ID */
-	cw_put_byte(d+4,rid);
+	cw_set_byte(d+4,rid);
 
 	if ( d7mode ){
 		/* Isolate Oper Sate from cause */
@@ -28,7 +28,7 @@ int xcw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7m
 	}
 
 	/* Put oper state */
-	cw_put_word(d+5,os);
+	cw_set_word(d+5,os);
 	d+=3+cw_put_elem_hdr(d,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
 
 	return d-dst;

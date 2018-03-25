@@ -50,7 +50,7 @@
  * Same as #lw_set_byte, but w/o return value
  */
 #define lw_set_byte(dst,b) \
-	(*(dst)=b);
+	(*(dst)=b)
 
 /**
  * Same as #lw_set_word, but no return value

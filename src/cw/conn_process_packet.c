@@ -75,8 +75,8 @@ void cw_init_request(struct conn *conn, int msg_id)
 	uint8_t *msgptr;
 	
 	/* zero the first 8 bytes */
-	cw_put_dword(buffer + 0, 0);
-	cw_put_dword(buffer + 4, 0);
+	cw_set_dword(buffer + 0, 0);
+	cw_set_dword(buffer + 4, 0);
 
 	/* unencrypted */
 	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);
@@ -100,8 +100,8 @@ void cw_init_request(struct conn *conn, int msg_id)
 void cw_init_data_msg(struct conn *conn)
 {
 	uint8_t *buffer = conn->req_buffer;
-	cw_put_dword(buffer + 0, 0);
-	cw_put_dword(buffer + 4, 0);
+	cw_set_dword(buffer + 0, 0);
+	cw_set_dword(buffer + 4, 0);
 
 	/* unencrypted */
 	cw_set_hdr_preamble(buffer, CAPWAP_VERSION << 4 | 0);

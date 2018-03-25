@@ -133,9 +133,9 @@ int cw_put_elem_vendor_hdr(uint8_t * dst, uint32_t vendorid,
 					 uint16_t elemid, uint16_t len)
 {
 
-	cw_put_elem_hdr(dst, CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
-	cw_put_dword(dst + 4, vendorid);
-	cw_put_word(dst + 8, elemid);
+	cw_set_elem_hdr(dst, CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, len + 6);
+	cw_set_dword(dst + 4, vendorid);
+	cw_set_word(dst + 8, elemid);
 	return 10;
 }
 
@@ -166,7 +166,7 @@ int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr)
 
 int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
 {
-	cw_put_dword(dst + 4, code);
+	cw_set_dword(dst + 4, code);
 	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
 }
 
@@ -187,15 +187,15 @@ int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v)
 
 
 int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause) {
-	cw_put_byte(dst+4,rid);
-	cw_put_byte(dst+5,state);
-	cw_put_byte(dst+6,cause);
+	cw_set_byte(dst+4,rid);
+	cw_set_byte(dst+5,state);
+	cw_set_byte(dst+6,cause);
 	return 3+cw_put_elem_hdr(dst,CW_ELEM_RADIO_OPERATIONAL_STATE,3);
 }
 
 int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state) {
-	cw_put_byte(dst+4,rid);
-	cw_put_byte(dst+5,state);
+	cw_set_byte(dst+4,rid);
+	cw_set_byte(dst+5,state);
 	return 2+cw_put_elem_hdr(dst,CW_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
 }
 

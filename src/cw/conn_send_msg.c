@@ -31,7 +31,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 
 	while (packetlen>mtu){
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
-		cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
+		cw_set_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,mtu,(struct sockaddr*)&conn->addr);
 
@@ -52,7 +52,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 	else
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,0);
 
-	cw_put_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
+	cw_set_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
 
 
 	cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,packetlen,(struct sockaddr*)&conn->addr);

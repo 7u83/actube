@@ -15,7 +15,7 @@ int cw_format_scan_hex_bytes(uint8_t *dst,const char *s, int len)
 	int rc ;
 	int err=0;
 	int val;
-	int c;
+	unsigned int c;
 	int i;
 
 	if ( len & 1){

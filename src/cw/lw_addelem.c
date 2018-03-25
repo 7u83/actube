@@ -22,12 +22,12 @@ int lw_addelem(uint8_t*dst, uint8_t type, uint8_t *msgelem, uint16_t len)
 int lw_addelem_vendor_specific(uint8_t *dst,uint32_t vendor_id,uint16_t elem_id, uint8_t *value, int len)
 {
 	int l ;
-	lw_put_dword(dst+3,vendor_id);
-	lw_put_word(dst+7,elem_id);
+	lw_set_dword(dst+3,vendor_id);
+	lw_set_word(dst+7,elem_id);
 	memcpy(dst+9,value,len);
 	l= len+9;
 	*dst=LW_ELEM_VENDOR_SPECIFIC;
-	lw_put_word(dst+1,l);	
+	lw_set_word(dst+1,l);	
 	return l;	
 }
 
@@ -37,9 +37,9 @@ int lw_addelem_vendor_specific(uint8_t *dst,uint32_t vendor_id,uint16_t elem_id,
  */ 
 int lw_addelem_cisco_padding(uint8_t *dst, int len)
 {
-	lw_put_dword(dst+3,LW_VENDOR_ID_CISCO);
-	lw_put_word(dst+7,LW_CISCO_PATH_MTU);
-	lw_put_word(dst+9,len);
+	lw_set_dword(dst+3,LW_VENDOR_ID_CISCO);
+	lw_set_word(dst+7,LW_CISCO_PATH_MTU);
+	lw_set_word(dst+9,len);
 	memset(dst+11,0,len);
 	return lw_put_elem_hdr(dst,LW_ELEM_VENDOR_SPECIFIC,11+len);
 }

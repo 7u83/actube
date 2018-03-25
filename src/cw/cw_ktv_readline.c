@@ -117,7 +117,7 @@ static int read_type(FILE *f, char *type, int max_len, struct parser *p)
 	
 	if (c==':'){
 		unget_char(c,f,p);
-		sprintf(type,"");
+		sprintf(type,"%s","");
 		return 0;
 	}
 		

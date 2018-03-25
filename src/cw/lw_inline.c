@@ -58,8 +58,8 @@ int lw_put_elem_hdr(uint8_t *dst,uint8_t type,uint16_t len)
 int lw_put_vendor(uint8_t * dst, uint32_t vendorid,
 					 uint16_t elemid, uint16_t len)
 {
-	lw_put_dword(dst + 0, vendorid);
-	lw_put_word(dst + 4, elemid);
+	lw_set_dword(dst + 0, vendorid);
+	lw_set_word(dst + 4, elemid);
 	return 6;
 }
 
