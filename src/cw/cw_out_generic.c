@@ -44,10 +44,10 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		}
 		return 0;
 	} 
-	len = handler->type->put(elem,dst+start);
+	len = ((const cw_Type_t*)(handler->type))->put(elem,dst+start);
 	
 	
-	handler->type->to_str(elem,detail,120);
+	((const cw_Type_t*)(handler->type))->to_str(elem,detail,120);
 	sprintf(params->debug_details, "  Value = %s", detail);
 	
 	params->elem = elem;

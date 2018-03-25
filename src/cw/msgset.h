@@ -40,10 +40,7 @@ struct cw_ElemHandlerParams {
 	char * debug_details;
 };
 
-union handlerType{
-	const struct cw_Type type;
-	int x;
-};
+
 
 struct cw_ElemHandler {
 	const char * name;
@@ -52,8 +49,8 @@ struct cw_ElemHandler {
 	int proto;
 	int min_len;
 	int max_len;
-	const struct cw_Type * type;
-/*	union handlerType type; */
+	/*const struct cw_Type * type;*/
+	const void * type;
 	const char * key;
         int (*get)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, 
 		uint8_t*data, int len);

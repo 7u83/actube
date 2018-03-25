@@ -172,13 +172,13 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			continue;
 		}
 		
-		if (handler->type != NULL){
+/*		if (handler->type != NULL){
 			if (mavl_add_ptr( set->types_tree, handler->type ) == NULL){
 				cw_log(LOG_ERR, "Can't add type from handler: %s", strerror(errno));
 				continue;
 			}
 		}
-		
+*/		
 
 		ed.id = elemdef->id;
 		ed.proto = elemdef->proto;

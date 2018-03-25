@@ -35,8 +35,17 @@
 
 /* #include "include/capwap_actions.h" */
 
+/*
+	const struct cw_Type * type;
+	const char * key;
+	int len;
+	int position;
+*/
 
-
+static cw_KTVStruct_t ap_time_sync[] = {
+	{CW_TYPE_DWORD, "timestamp", 4,-1},
+	{CW_TYPE_BYTE, "type", 1,-1}
+};
 
 static struct cw_ElemHandler handlers[] = {
 	{ 
@@ -87,11 +96,11 @@ static struct cw_ElemHandler handlers[] = {
 		"AP Time Sync",			/* name */
 		CISCO_ELEM_AP_TIMESYNC,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
-		4,4,				/* min/max length */
-		CW_TYPE_DWORD,			/* type */
+		5,5,				/* min/max length */
+		ap_time_sync,			/* type */
 		"cisco/ap-timesync",		/* Key */
-		cw_in_generic,			/* handler */
-		cw_out_generic			/* put */
+		NULL,				/* handler */
+		NULL				/* put */
 	}
 	,
 	
