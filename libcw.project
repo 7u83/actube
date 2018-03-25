@@ -263,6 +263,7 @@
       <File Name="src/cw/mavl_get_node_cmp..c"/>
       <File Name="src/cw/cw_ktv_read_struct.c"/>
       <File Name="src/cw/algos.h"/>
+      <File Name="src/cw/cw_in_generic_struct.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

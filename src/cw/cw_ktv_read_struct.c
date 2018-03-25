@@ -1,7 +1,7 @@
 #include "ktv.h"
 #include "dbg.h"
 
-int cw_ktv_read_struct(mavl_t ktv,cw_KTVStruct_t * stru, const char *pkey, 
+int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len)
 {
 	char key[CW_KTV_MAX_KEY_LEN];

@@ -44,7 +44,8 @@
 
 static cw_KTVStruct_t ap_time_sync[] = {
 	{CW_TYPE_DWORD, "timestamp", 4,-1},
-	{CW_TYPE_BYTE, "type", 1,-1}
+	{CW_TYPE_BYTE, "type", 1,-1},
+	{NULL,NULL,0,0}
 };
 
 static struct cw_ElemHandler handlers[] = {
@@ -99,11 +100,23 @@ static struct cw_ElemHandler handlers[] = {
 		5,5,				/* min/max length */
 		ap_time_sync,			/* type */
 		"cisco/ap-timesync",		/* Key */
-		NULL,				/* handler */
+		cw_in_generic_struct,		/* handler */
 		NULL				/* put */
 	}
 	,
-	
+
+	{
+		"MWAR Type",			/* name */
+		CISCO_ELEM_MWAR_TYPE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
+		1,1,				/* min/max length */
+		CW_TYPE_BYTE,			/* type */
+		"cisco/mwar-type",		/* Key */
+		cw_in_generic,			/* handler */
+		cw_out_generic			/* put */
+	}
+	,
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -111,8 +124,8 @@ static struct cw_ElemHandler handlers[] = {
 
 static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
-	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},
-	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},	
+/*	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},*/
+	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_RAD_NAME,		1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	0, 0},
 	{0,0,0,00}
@@ -122,6 +135,7 @@ static struct cw_ElemDef discovery_request_elements[] ={
 static int discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,		1, 0},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,		0, 0},
 	{0,0,0,00}
 	
 };

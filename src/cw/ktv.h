@@ -88,7 +88,7 @@ struct cw_KTVStruct {
 	int position;
 };
 typedef struct cw_KTVStruct cw_KTVStruct_t;
-int cw_ktv_read_struct(mavl_t ktv,cw_KTVStruct_t * stru, const char *pkey, 
+int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len);
 
 extern const struct cw_Type cw_type_byte;

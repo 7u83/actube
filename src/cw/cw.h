@@ -381,6 +381,9 @@ int cw_in_generic(struct conn * conn, struct cw_ElemHandler * handler,
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 
+int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
+
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
 

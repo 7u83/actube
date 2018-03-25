@@ -45,8 +45,6 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 		/* search sub-element */
 		for (i = 0; elems[i].maxlen; i++) {
 			
-			printf("subcmp: %d %d\n",elems[i].type,subtype);
-			
 			if (elems[i].type == subtype /* && elems[i].vendor_id==vendor_id*/)
 				break;
 		}
