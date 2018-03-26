@@ -557,7 +557,7 @@ static int conf_read_dbg_level(cfg_t * cfg)
 }
 
 struct cw_Mod ** conf_mods; 
-char *conf_mods_dir = NULL;
+char *conf_mods_dir = "";
 
 /*
  * Read the module names from config file
