@@ -1,5 +1,5 @@
 include ../../Config.mak
-include ../../Config.local.mak
+-include ../../Config.local.mak
 include ../../Macros.mak
 
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))

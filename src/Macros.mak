@@ -36,6 +36,12 @@ CFLAGS 		+= -Wall -Wunusupported  -Wimplicit-function-declaration -I /usr/local/
 LD		= tcc 
 endif
 
+ifeq ($(CC),cc)
+LDFLAGS		+= -g -L/usr/local/lib 
+CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+LD		= cc
+endif
+
 
 
 CFLAGS		+= -DWITH_IPV6 -DWITH_RMAC_SUPPORT

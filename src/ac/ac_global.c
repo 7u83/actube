@@ -52,8 +52,8 @@ cw_aciplist_t get_aciplist()
 			acip->index=3;
 		
 
-//		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
-
+/*//		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
+*/
 		cw_aciplist_add(aciplist,acip);
 
 		
@@ -104,8 +104,8 @@ int handle_echo_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 
 int ac_global_init()
 {
-//	mod_set_actions_registered_cb(setup_actions);
-
+/*//	mod_set_actions_registered_cb(setup_actions);
+*/
 
 /*
 	ac_config = mbag_create();

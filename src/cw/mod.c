@@ -31,7 +31,7 @@
 #include "log.h"
 #include "file.h"
 #include "cw.h"
-#include "cw/msgset.h"
+#include "msgset.h"
 
 /*
 static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,

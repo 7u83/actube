@@ -10,7 +10,7 @@
 #include "conf.h"
 
 #include "cw/capwap.h"
-//#include "cw/capwap_80211.h"
+/*//#include "cw/capwap_80211.h"*/
 #include "cw/aciplist.h"
 
 

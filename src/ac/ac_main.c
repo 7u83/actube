@@ -145,8 +145,8 @@ int mycmp (void *e1, void *e2)
 	struct mykv * k1 = e1;
 	struct mykv * k2 = e2;
 	
-//printf("My CMP: %d and %d\n", k1->key, k2->key);
-
+/*//printf("My CMP: %d and %d\n", k1->key, k2->key);
+*/
 	if (k1->key > k2->key)
 		return 1;
 		
@@ -255,11 +255,13 @@ exit(0);
 	
 	/* Warn, if the "secret" debugging feature for
 	   developers is turned on ;) */
+
+/*
 //	DBGX("Attention! %s", "DBG X is ON!");
 
 //	cw_mod_set_mod_path("../../lib/actube");
 	//cw_mod_load("capwap");
-	
+	*/
 
 
 	
@@ -345,16 +347,17 @@ int ac_run()
 		conf_parse_listen_addr (conf_listen_addrs[i], addr, port, &proto);
 		
 		
-		//struct sockaddr sa;
+	/*	//struct sockaddr sa;*/
 		
 		
 		socklist_add_unicast (addr, port, proto);
 		
+		/*
 //#ifdef WITH_LWAPP
 //		if (conf_lwapp)
 //			socklist_add_unicast(conf_listen_addrs[i], conf_lw_control_port,
 //					     AC_PROTO_LWAPP);
-//#endif
+//#endif*/
 	}
 	
 	
@@ -400,7 +403,7 @@ int ac_run()
 	
 	
 	
-	//get_acinfo();
+	/*//get_acinfo();*/
 	
 	
 	while (1) {
@@ -574,7 +577,7 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 
 void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
-	//int sock = socklist[index].reply_sockfd;
+	/*//int sock = socklist[index].reply_sockfd;*/
 	
 	uint8_t *m = buffer + 6;
 	uint32_t val = ntohl (* ( (uint32_t *) (m)));
@@ -588,7 +591,7 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	int version = LWTH_GET_VERSION (m);
 	
 	if (version != LW_VERSION) {
-//              cw_log_debug1("Discarding LWAPP packet, wrong verson");
+/*//              cw_log_debug1("Discarding LWAPP packet, wrong verson");*/
 		return;
 	}
 	
@@ -596,7 +599,7 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	printf ("LEN = %d\n", l);
 	
 	if (l + 12 != len) {
-		//      cw_log_debug1("Discarding LWAPP packet, wrong length");
+/*		//      cw_log_debug1("Discarding LWAPP packet, wrong length");*/
 		return;
 	}
 	
@@ -621,10 +624,10 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 			return;
 		};
 		
-		//wtpman_lw_start(wtpman);
+		/*//wtpman_lw_start(wtpman);*/
 	}
 	
-	//wtpman_lw_addpacket(wtpman,buffer,len);
+	/*//wtpman_lw_addpacket(wtpman,buffer,len);*/
 	wtplist_unlock();
 }
 

@@ -52,9 +52,11 @@ static void reset_echointerval_timer(struct wtpman *wtpman)
 */
 	/* start echinterval timer and put 2 seconds for "safety" on it */
 
+/*
 //	wtpman->echointerval_timer = cw_timer_start(2+ (ct & 0xff));
 //	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr,sock_buf), conf_acname);
 //	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
+*/
 
 }
 
@@ -92,25 +94,26 @@ static void wtpman_run_discovery(void *arg)
 
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-//	wtpman->conn->actions = &capwap_actions;
+/*//	wtpman->conn->actions = &capwap_actions;*/
 
 /*	wtpman->conn->outgoing = mbag_create();
 	wtpman->conn->incomming = mbag_create();
 */	
-	wtpman->conn->remote_cfg = cw_ktv_create(); //mavl_cmp_kv,NULL,1312);
+	wtpman->conn->remote_cfg = cw_ktv_create(); /*//mavl_cmp_kv,NULL,1312);*/
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		cw_read_messages(wtpman->conn);
 	}
 
+/*
 //	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
 
 //	if (wn) {
 //              printf("WTP Name: %s\n", wn->data);
 //              exit(0);
 //	}
-
+*/
 	wtpman_remove(wtpman);
 	return;
 
@@ -185,6 +188,7 @@ static int wtpman_join(void *arg, time_t timer)
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	struct conn *conn = wtpman->conn;
 
+/*
 //	wtpman->conn->outgoing = mbag_create();
 //	wtpman->conn->incomming = mbag_create();
 //	conn->config = conn->incomming;
@@ -192,13 +196,15 @@ static int wtpman_join(void *arg, time_t timer)
 
 //	mbag_set_str(conn->local, CW_ITEM_AC_NAME, conf_acname);
 
-
+*/
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
+
+/*
 //	wtpman->conn->actions = &capwap_actions;
 
 //      wtpman->conn->itemstore = mbag_create();
-
+*/
 
 	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr,sock_buf));
 
@@ -404,7 +410,7 @@ void wtpman_run_data(void *wtpman_arg)
 	cw_log(LOG_ERR, "I am the data thread**********************************************************************\n");
 	while (1) {
 		sleep(5);
-//		conn->write_data(conn, data, 100);
+/*//		conn->write_data(conn, data, 100);*/
 		cw_log(LOG_ERR, "O was the data thread***********************************************************\n");
 	}
 
@@ -469,11 +475,11 @@ static void wtpman_run(void *arg)
 
 
 
-
+/*
 //	cw_dbg(DBG_INFO, "Creating data thread");
 //	pthread_t thread;
 //	pthread_create(&thread, NULL, (void *) wtpman_run_data, (void *) wtpman);
-
+*/
 
 	/* here the WTP has joined, now we assume an image data request  
 	   or an configuration status request. Nothing else. 
@@ -505,12 +511,12 @@ static void wtpman_run(void *arg)
 
 
 	conn->capwap_state = CW_STATE_RUN;
-
+/*
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
 //	props_to_sql(conn,conn->incomming,0);
 //	radios_to_sql(conn);
-
+*/
 
 	conn->msg_end=msg_end_handler;
 	/* The main run loop */
@@ -524,8 +530,9 @@ static void wtpman_run(void *arg)
 				break;
 		}
 
-//		cw_dbg(DBG_X, "Time left: %d",
-//		       cw_timer_timeleft(wtpman->echointerval_timer));
+/*//		cw_dbg(DBG_X, "Time left: %d",
+//*/
+		       cw_timer_timeleft(wtpman->echointerval_timer);
 		if (cw_timer_timeout(wtpman->echointerval_timer)) {
 
 			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",
@@ -533,42 +540,48 @@ static void wtpman_run(void *arg)
 			break;
 		}
 
+/*
 //		mavl_del_all(conn->outgoing);
 //		conn_clear_upd(conn,1);
 
 //	props_to_sql(conn,conn->incomming,0);
 //	radios_to_sql(conn);
-
+*/
 
 
 		mavl_t r;
 		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 
+	/*		
 //			if (!conn->outgoing->count)
 //				continue;
-
+*/
 			cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 
 			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+
+/*
 //			mavl_merge(conn->config, conn->outgoing);
 //			mavl_destroy(conn->outgoing);
 //			conn->outgoing = mbag_create();
 //			props_to_sql(conn,conn->incomming,0);
 //			radios_to_sql(conn);
 //			mavl_destroy(r);
+*/
 		}
 
 		r = db_get_radio_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 
-//			if (!conn->radios_upd->count)
+/*
+			//			if (!conn->radios_upd->count)
 //				continue;
-
+*/
 			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr,sock_buf));
 			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 
-
+/*
 //			conn_clear_upd(conn,1);
 
 //			mavl_destroy(conn->radios_upd);
@@ -576,7 +589,7 @@ static void wtpman_run(void *arg)
 
 
 //			radios_to_sql(conn);
-
+*/
 			/*
 			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
 			mavl_merge(conn->config, conn->outgoing);
@@ -612,7 +625,7 @@ static void wtpman_run_dtls(void *arg)
 		wtpman_remove(wtpman);
 		return;
 	}
-//      time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
+/*//      time_t timer = cw_timer_start(wtpman->conn->wait_dtls);*/
 
 	/* establish dtls session */
 	if (!wtpman_establish_dtls(wtpman)) {
@@ -660,8 +673,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-	int sockfd = replyfd;	//socklist[socklistindex].reply_sockfd;
-
+	int sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;
+*/
 
 	struct sockaddr dbgaddr;
 	socklen_t dbgaddrl = sizeof(dbgaddr);
@@ -670,9 +683,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	cw_dbg(DBG_INFO, "Creating wtpman on socket %d, %s:%d", sockfd,
 	       sock_addr2str(&dbgaddr,sock_buf), sock_getport(&dbgaddr));
 
+/*
 //extern int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 //                        struct sockaddr *from);
-
+*/
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	wtpman->conn->receiver = CW_RECEIVER_AC;
 
@@ -680,9 +694,9 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	sock_copyaddr(&wtpman->conn->data_addr, (struct sockaddr *) &wtpman->conn->addr);
 
 
-
+/*
 //      wtpman->conn->process_packet = conn_process_packet2;
-
+*/
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
@@ -692,13 +706,14 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
+/*
 //	wtpman->conn->radios = mbag_i_create();
 //	wtpman->conn->radios_upd = mbag_i_create();
 //	wtpman->conn->local = ac_config;
 //wtpman->conn->capwap_mode=0; //CW_MODE_STD; //CISCO;
 //	wtpman->conn->capwap_mode = CW_MODE_CISCO;
 //wtpman->conn->strict_capwap_hdr=0;
-
+*/
 
 
 
@@ -752,8 +767,11 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 
 void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-//      uint8_t * m = packet+12;
+
+	/*
+	//      uint8_t * m = packet+12;
 //      int l = LWTH_GET_LENGTH(packet+6);
+*/
 
 	uint8_t *msg = packet + 12;
 
@@ -762,7 +780,9 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 	int msglen = LWMSG_GET_LEN(msg);
 	printf("Type is %d, Len is %d\n", msgtype, msglen);
 
+/*
 //      uint8_t *msgdata = LWMSG_GET_DATA(msg);
+*/
 
 /*
 	int c=0; 
@@ -776,7 +796,8 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 
 */
 
-	//uint8_t *data;
+	/*//uint8_t *data;*/
+	
 /*
 	lw_foreach_msgelem(data,msgdata,msglen){
 		int eltype = LWMSGELEM_GET_TYPE(data);
@@ -790,6 +811,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 	}
 */
 
+/*
 //      char wi[4096];
 //      wtpinfo_print(wi, &wtpman->wtpinfo);
 //      printf("WTPINFO: \n%s\n", wi);
@@ -802,7 +824,7 @@ void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 
 //      conn_send_packet(wtpman->conn,buffer,60);
 
-
+*/
 
 
 }
