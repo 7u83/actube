@@ -52,4 +52,7 @@ lib/
 obj/
 bin/
 src/Config.local.mak
+src/ac/actube
+src/wtp/wtp
+
 
