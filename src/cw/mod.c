@@ -154,6 +154,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	}
 	if (bindings_mod) {
 		cached_set->bindings = bindings_mod->name;
+		bindings_mod->register_messages(cached_set->msgset, CW_MOD_MODE_BINDINGS);
 	}
 /*
 //	if (actions_registered_cb)
