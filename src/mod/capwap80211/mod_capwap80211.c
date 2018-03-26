@@ -45,15 +45,27 @@ static int register_actions(struct cw_actiondef *actions, int mode)
 }
 */
 
+struct cw_Mod mod_capwap80211 = {
+	"capwap80211",			/* name */
+	init,				/* init */
+	detect,				/* detect */
+	capwap80211_register_msgset,	/* register_messages */
+	NULL,				/* dll_handle */
+	NULL				/* data */
+};
 
+/*
 static struct cw_Mod capwap80211_ac = {
 	.name = "capwap80211",
 	.init = init,
 	.detect = detect,
 
 };
+*/
 
+/*
 struct cw_Mod *mod_capwap80211_ac()
 {
 	return &capwap80211_ac;
 }
+*/
