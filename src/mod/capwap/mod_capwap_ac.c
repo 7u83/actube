@@ -47,7 +47,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 }
 
 
-static struct cw_Mod capwap_data = {
+struct cw_Mod mod_capwap = {
 	"capwap",			/* name */
 	init,				/* init */
 	detect,				/* detect */
@@ -57,7 +57,8 @@ static struct cw_Mod capwap_data = {
 };
 
 
-
+/*
 struct cw_Mod * mod_capwap(){
 	return &capwap_data;
 }
+*/

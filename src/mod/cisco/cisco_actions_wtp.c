@@ -489,7 +489,7 @@ static cw_action_out_t actions80211_out[]={
 	{
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 		.out = cisco_out_80211_wtp_radio_cfg,
 		/*.get = cw_out_get_config,*/

@@ -190,7 +190,7 @@ int netconn_send_packet(struct netconn *nc, const uint8_t * buffer, int len)
 int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 {
 
-//	int msglen = cw_get_hdr_msg_total_len(rawmsg);
+/*	int msglen = cw_get_hdr_msg_total_len(rawmsg);*/
 
 
 	uint8_t * ptr = rawmsg;
@@ -199,15 +199,15 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 
 	int hlen = cw_get_hdr_hlen(rawmsg)*4;
 
-//	int mtu = nc->mtu;
+/*	int mtu = nc->mtu; */
 
 	int mtu = 1400;
 
 	while (msglen>mtu){
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
-		cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
+		cw_set_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 
-//		cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,mtu,(struct sockaddr*)&nc->addr);
+/*///		cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,mtu,(struct sockaddr*)&nc->addr);*/
 
 		if (nc->write(nc,ptr,mtu)<0)
 			return -1;
@@ -225,9 +225,9 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 	else
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,0);
 
-	cw_put_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
+	cw_set_dword(ptr+4, nc->fragid<<16 | fragoffset<<3 );
 
-//	cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,msglen,(struct sockaddr*)&nc->addr);
+/*//	cw_dbg_pkt_nc(DBG_PKT_OUT,nc,ptr,msglen,(struct sockaddr*)&nc->addr);*/
 
 	return nc->write(nc,ptr,msglen-0);
 }
@@ -239,7 +239,7 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 
-//	cw_dbg_pkt_nc(DBG_PKT_IN, nc, packet, len, from);
+/*//	cw_dbg_pkt_nc(DBG_PKT_IN, nc, packet, len, from);*/
 	if (len < 8) {
 		/* packet too short */
 		cw_dbg(DBG_PKT_ERR,
@@ -309,10 +309,10 @@ int netconn_process_packet(struct netconn *nc, uint8_t * packet, int len,
 		}
 
 
-//		cw_dbg_pkt_nc(DBG_PKT_IN, nc, f + 4, *(uint32_t *) f, from);
+/*//		cw_dbg_pkt_nc(DBG_PKT_IN, nc, f + 4, *(uint32_t *) f, from);
 
 		// XXX: Modify fragman to not throw away CAPWAP headers
-
+*/
 		int rc = nc->process_message(nc, f + 4, *(uint32_t *) f, from);
 
 		free(f);

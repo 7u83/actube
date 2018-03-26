@@ -21,7 +21,7 @@ static cw_action_in_t actions_wtp_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE, 
-		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 //	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
@@ -38,7 +38,7 @@ static cw_action_in_t actions_wtp_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,
 		.item_id = CW_RADIOITEM80211_WTP_RADIO_INFORMATION,
 //	 	.start = cw_in_radio_generic, 
 		.mand = 1, 
@@ -74,7 +74,7 @@ cw_action_out_t actions_out[]={
 	{
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
 		.item_id = CW_ITEM_RADIO_INFOS ,
-	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
+	 	.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 
 		.out = cw_out_radio_infos, 
 		.mand = 1
 	}
@@ -86,7 +86,7 @@ cw_action_out_t actions_out[]={
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
 		.item_id = CW_ITEM_RADIO_INFOS ,
-	 	.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION, 
+	 	.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 
 		.out = cw_out_radio_infos, 
 		.mand = 1
 	}

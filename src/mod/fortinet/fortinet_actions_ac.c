@@ -251,7 +251,7 @@ static cw_action_in_t actions80211_in[] = {
 
 		.capwap_state = CAPWAP_STATE_DISCOVERY, 
 		.msg_id = CAPWAP_MSG_DISCOVERY_REQUEST, 
-		.elem_id = CW_ELEM80211_WTP_RADIO_INFORMATION,
+		.elem_id = CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,
 		.item_id = "radio_information",
 	 	.start = cw_in_radio_generic, 
 		.mand = 0, 

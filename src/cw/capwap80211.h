@@ -84,7 +84,7 @@ enum radioelems {
 	/** IEEE 802.11 WTP Radio Fail Alarm Indication */
 	CW_ELEM80211_WTP_RADIO_FAIL_ALARM_IDICATION=1047,
 	/** IEEE 802.11 Radio Information Message Element */
-	CW_ELEM80211_WTP_RADIO_INFORMATION = 1048
+	CAPWAP80211_ELEM_WTP_RADIO_INFORMATION = 1048
 };
 
 /**

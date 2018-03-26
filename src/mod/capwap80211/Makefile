@@ -1,11 +1,17 @@
+include ../../Defs.mak
+
 
 OBJS=\
 	mod_capwap80211_ac.o \
-	mod_capwap80211_wtp.o \
-	capwap80211_actions_ac.o \
-	capwap80211_actions_wtp.o
 
-NAME=libcapwap80211.a
+
+LIBDIR		:= ../../../lib
+LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
+OBJDIR		:= ../../../obj/mod_capwap80211/$(ARCH)
+SNAME		:= $(LIBARCHDIR)/libmod_capwap80211.a
+DNAME		:= $(LIBARCHDIR)/mod_capwap80211.so
+MODNAME		:= $(LIBDIR)/mod_capwap80211.so
+SLIBS		:= -lcw
 
 include ../Mod.mak
 
