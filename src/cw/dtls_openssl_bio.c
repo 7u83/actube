@@ -28,6 +28,8 @@
 #include "dtls.h"
 
 
+#include <openssl/bio.h>
+
 #include "conn.h"
 #include "log.h"
 #include "dbg.h"
