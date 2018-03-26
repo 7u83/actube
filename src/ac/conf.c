@@ -557,7 +557,7 @@ static int conf_read_dbg_level(cfg_t * cfg)
 }
 
 struct cw_Mod ** conf_mods; 
-char *conf_mods_dir = "";
+char *conf_mods_dir = NULL;
 
 /*
  * Read the module names from config file
@@ -749,6 +749,8 @@ int read_config(const char *filename)
 		CFG_END()
 	};
 	cfg_t *cfg;
+
+	conf_mods_dir=cw_strdup("");
 	
 	if (!init_control_port())
 		return 0;
