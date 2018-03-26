@@ -31,9 +31,6 @@
 #include "conn.h"
 
 
-struct cw_actiondef;
-
-
 enum {
 	CW_MOD_MODE_CAPWAP,
 	CW_MOD_MODE_BINDINGS
@@ -85,12 +82,15 @@ extern struct cw_Mod mod_null;
 
 #define MOD_NULL (&mod_null)
 
+/*
 struct cw_actiondef * mod_cache_add(struct conn *conn,struct cw_Mod *c, struct cw_Mod *b);
-
+*/
 
 #define mod_init_config(mod,cfg) (mod->init_config ? mod->init_config(cfg):1)
 
+/*
 void mod_set_actions_registered_cb(void (*fun) (struct cw_Mod *, struct cw_Mod *, struct cw_actiondef *));
+*/
 
 extern int mod_caching;
 
