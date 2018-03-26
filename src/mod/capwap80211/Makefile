@@ -3,6 +3,7 @@ include ../../Defs.mak
 
 OBJS=\
 	mod_capwap80211.o \
+	capwap80211_messages.o \
 
 
 LIBDIR		:= ../../../lib
