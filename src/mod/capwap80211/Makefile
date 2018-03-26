@@ -2,7 +2,7 @@ include ../../Defs.mak
 
 
 OBJS=\
-	mod_capwap80211_ac.o \
+	mod_capwap80211.o \
 
 
 LIBDIR		:= ../../../lib

@@ -8,12 +8,10 @@ OBJS=\
 	capwap_in_ac_descriptor.o \
 	capwap_out_wtp_board_data.o \
 	capwap_out_ac_descriptor.o \
-	capwap_out_get_session_id.o \
 	capwap_out_get_idle_timeout.o \
 	capwap_out_wtp_descriptor.o \
 	capwap_in_wtp_descriptor.o \
 	capwap_out_ac_ip_list.o \
-	capwap_in_session_id.o \
 	capwap_in_vendor_specific_payload.o \
 	capwap_in_mtu_discovery_padding.o \
 	capwap_out_capwap_control_ip_address.o \

@@ -8,10 +8,6 @@
 
 #include "mod_capwap.h"
 
-
-
-extern int capwap_register_actions_ac(struct cw_actiondef *def);
-
 static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
 {
 	cw_dbg(DBG_INFO,"CAPWAP: Inititalizing mod_capwap.");

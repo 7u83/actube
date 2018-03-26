@@ -189,7 +189,7 @@ static struct cw_Mod capwap_ac = {
 */
 
 
-static struct cw_Mod cisco_data = {
+struct cw_Mod mod_cisco = {
 	"cisco",			/* name */
 	init,				/* init */
 	detect,				/* detect */
@@ -202,8 +202,9 @@ static struct cw_Mod cisco_data = {
 
 
 
-
+/*
 struct cw_Mod *mod_cisco()
 {
 	return &cisco_data;
 }
+*/

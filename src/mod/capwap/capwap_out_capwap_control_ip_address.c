@@ -59,7 +59,7 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 	d = dst;
 	i=0; 
 	do {
-		uint8_t * msg;
+/*		uint8_t * msg;*/
 		int l;
 
 		sprintf(key,"%s/address.%d",eh->key,i);
@@ -71,7 +71,7 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 			break;
 		}
 		
-		msg = d;
+/*		msg = d;*/
 		
 		l = address->type->len(address);
 

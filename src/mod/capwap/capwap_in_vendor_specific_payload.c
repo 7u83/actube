@@ -32,10 +32,11 @@ int capwap_in_vendor_specific_payload(struct cw_ElemHandler *handler,
 		       params->msgdata->name, cw_strstate(params->conn->capwap_state));
 		return 0;
 	}
-	
+
+/*	
 //	cw_dbg_elem(DBG_ELEM_IN,params->conn,0,vhandler, data+6,len-6);
 	//vhandler->get(vhandler, params, data+6, len-6);
-	
+*/
 	cw_process_element(params,0,vendor_id,elem_id,data+6,len-6);
 
 	return 1;
