@@ -1,0 +1,22 @@
+capwap/ac-descriptor/hardware/version:Bstr16: "ACTube 1.0"
+capwap/ac-descriptor/hardware/vendor:Bastr16: 12346
+capwap/ssl-cert:Bstr16: "/usr/local/etc/ssl/tube.ssl"
+capwap/ssl-key:Bstr16: "/usr/local/etc/key"
+ac-descriptor/stations:Word:05
+ac-descriptor/station-limit:Word:6
+ac-descriptor/active-wtps:Word:7
+ac-descriptor/max-wtps:Word:8
+
+ac-descriptor/software/version:Bstr16:.x090103
+ac-descriptor/software/vendor:Dword:.1234
+ac-descriptor/hardware/vendor:Dword:1234567
+ac-descriptor/hardware/version:Bstr16:"1.7.3"
+ac-name:Bstr16:"actubes name"
+
+capwap-control-ip-address/address.0:IPAddress:192.168.0.1
+capwap-control-ip-address/address.1:IPAddress:192.168.0.7
+capwap-control-ip-address/address.2:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
+capwap-control-ip-address/wtps.0:Word:13
+capwap-control-ip-address/wtps.1:Word:11
+capwap-control-ip-address/wtps.2:Word:113
+
