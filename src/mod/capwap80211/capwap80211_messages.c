@@ -19,7 +19,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* min/max length */
 		CW_TYPE_DWORD,						/* type */
 		"wtp-radio-information",			/* Key */
-		NULL,						/* get */
+		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic				/* put */
 	}
 	,
