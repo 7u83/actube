@@ -1,0 +1,31 @@
+     
+   # hallo	
+windows:Word:124
+
+basic/mod:Bstr16:cisco
+
+ansi/hallo:Dword:1
+discovery-type:Byte:0
+wtp-frame-tunnel-mode:Byte:3
+wtp-mac-type:Byte:7
+
+
+wtp-board-data/vendor:Dword:1234567
+
+wtp-board-data/model-no:Bstr16:WFAT1234
+wtp-board-data/serial-no:Bstr16:12345
+wtp-board-data/board-id:Bstr16:Boardi177
+wtp-board-data/board-revision:Bstr16:Rev 0.1
+wtp-board-data/mac-address:Bstr16:0cff00aa34
+
+wtp-descriptor/hardware/vendor:Dword:906090
+wtp-descriptor/hardware/version:Bstr16:.x171312
+wtp-descriptor/software/vendor:Dword:906090
+wtp-descriptor/software/version:Bstr16:.x171312
+wtp-descriptor/bootloader/vendor:Dword:906090
+wtp-descriptor/bootloader/version:Bstr16:.x171312
+wtp-descriptor/max-radios:Byte:2
+
+radio/1/wtp-radio-information:Dword:012
+radio/2/wtp-radio-information:Dword:013
+
