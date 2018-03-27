@@ -13,15 +13,16 @@
 
 static struct cw_ElemHandler handlers[] = {
 	{
-	 "80211 WTP Radio Information",	/* name */
-	 CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	/* Element ID */
-	 0, 0,			/* Vendor / Proto */
-	 0, 0,			/* min/max length */
-	 NULL,			/* type */
-	 "wtp-radio_information",	/* Key */
-	 NULL,			/* get */
-	 NULL			/* put */
-	 },
+		"80211 WTP Radio Information",			/* name */
+		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		0, 0,						/* min/max length */
+		CW_TYPE_DWORD,						/* type */
+		"wtp-radio-information",			/* Key */
+		NULL,						/* get */
+		cw_out_radio_generic				/* put */
+	}
+	,
 	{NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL}
 
 
@@ -41,7 +42,9 @@ static struct cw_MsgDef messages[] = {
 	 CAPWAP_MSG_DISCOVERY_REQUEST,
 	 CW_RECEIVER_AC,
 	 discovery_request_states,
-	 discovery_request_elements},
+	 discovery_request_elements
+	}
+	,
 	{0, 0, 0, 0, 0}
 };
 
@@ -53,7 +56,6 @@ int mode;
 		return NULL;
 
 	cw_dbg(DBG_INFO, "CAPWAP80211: Register messages");
-
 	cw_msgset_add(set, messages, handlers);
 	cw_dbg(DBG_INFO, "CAPWAP0211: Done register messages");
 

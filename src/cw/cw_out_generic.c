@@ -19,9 +19,6 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	search.key=(char*)handler->key;
 	elem = mavl_get(params->conn->local_cfg, &search);
 
-	/* Size for msg elem header depends on 
-	   vendor specific payload */
-	start = handler->vendor ? 10 : 4;
 
 	if (elem == NULL) {
 		const char *vendor="";
@@ -44,23 +41,21 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		}
 		return 0;
 	} 
+
+	/* Size for msg elem header depends on 
+	   vendor specific payload */
+	start = handler->vendor ? 10 : 4;
 	len = ((const cw_Type_t*)(handler->type))->put(elem,dst+start);
-	
-	
-	((const cw_Type_t*)(handler->type))->to_str(elem,detail,120);
+
+/*	((const cw_Type_t*)(handler->type))->to_str(elem,detail,120);
 	sprintf(params->debug_details, "  Value = %s", detail);
-	
-	params->elem = elem;
+	params->elem = elem;*/
 
 	if (handler->vendor)
 		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
 
-	
-
 	l = len + cw_put_elem_hdr(dst, handler->id, len);
-	
 	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
-	
 	return l;
 }
 

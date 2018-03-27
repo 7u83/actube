@@ -4,9 +4,7 @@
     <VirtualDirectory Name="mod">
       <VirtualDirectory Name="capwap80211">
         <File Name="src/mod/capwap80211/mod_capwap80211.h"/>
-        <File Name="src/mod/capwap80211/capwap80211_actions_wtp.c"/>
         <File Name="src/mod/capwap80211/capwap80211_out_wtp_radio_cfg.c"/>
-        <File Name="src/mod/capwap80211/capwap80211_actions_ac.c"/>
         <File Name="src/mod/capwap80211/mod_capwap80211.c"/>
         <File Name="src/mod/capwap80211/capwap80211_messages.c"/>
       </VirtualDirectory>

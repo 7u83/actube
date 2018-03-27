@@ -14,7 +14,8 @@
 #include "wtp.h"
 
 struct bootcfg{
-	const char * modname;
+	const char * modnames[32];
+	int nmods;
 	const char * modpath;
 	const char * cfgfilename;
 };
@@ -25,7 +26,6 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	int c;
 	opterr = 1;
 	
-	bootcfg->modname = "capwap";
 	bootcfg->cfgfilename = "config.ktv";
 	
 	while ( (c = getopt (argc, argv, "p:d:vc:m:h")) != -1) {
@@ -43,7 +43,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				break;
 			}
 			case 'm':
-				bootcfg->modname = optarg;
+				bootcfg->modnames[bootcfg->nmods++] = optarg;
 				break;
 			case 'p':
 				cw_mod_set_path(optarg);
@@ -74,9 +74,18 @@ int main (int argc, char **argv)
 	FILE * file;
 	mavl_t global_cfg, types_tree;
 	const cw_Type_t ** ti;
+	int i;
+
+	bootcfg.nmods=0;
 	
 	/* read command line args, results are in bootcfg */
 	parse_args(argc,argv, &bootcfg);
+
+	if (bootcfg.nmods==0){
+		bootcfg.modnames[0]="capwap";
+		bootcfg.modnames[1]="capwap80211";
+		bootcfg.nmods=2;
+	}
 	
 
 	/* create an empty message set */
@@ -113,15 +122,16 @@ int main (int argc, char **argv)
 	
 	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
 
-	
-	mod = cw_mod_load(bootcfg.modname, global_cfg, CW_ROLE_WTP);
-	if (mod == NULL){
-		exit (EXIT_FAILURE);
+	for (i=0;i<bootcfg.nmods; i++){	
+		mod = cw_mod_load(bootcfg.modnames[i], global_cfg, CW_ROLE_WTP);
+		if (mod == NULL){
+			exit (EXIT_FAILURE);
+		}
+		/* Build a message set from our loaded modules */
+		mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
+		mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
 	}
-		
-	/* Build a message set from our loaded modules */
-	mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
-	mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
+	
 
 	/* create a connection object */
 	conn = conn_create_noq(-1, NULL);
@@ -138,6 +148,7 @@ int main (int argc, char **argv)
 	conn->local_cfg = global_cfg;
 	conn->remote_cfg = cw_ktv_create();
 	conn->receiver = CW_RECEIVER_WTP;
+	conn->wbid=1;
 
 	cw_run_discovery(conn, "255.255.255.255",NULL);
 

@@ -235,8 +235,12 @@ MISCSRC=\
 DTLSSRC+=\
 	dtls_bio.c\
 
+
+RADIOSRC=\
+	cw_out_radio_generic.c
+
 #SRC=$(wildcard *.c)
-SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(MISCSRC)
+SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(MISCSRC)
 
 OBJS=$(patsubst %.c,%.o,$(SRC))
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
