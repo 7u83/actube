@@ -265,6 +265,7 @@
       <File Name="src/cw/algos.h"/>
       <File Name="src/cw/cw_in_generic_struct.c"/>
       <File Name="src/cw/cw_out_radio_generic.c"/>
+      <File Name="src/cw/cw_read_radio_generic.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
