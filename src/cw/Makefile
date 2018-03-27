@@ -237,7 +237,9 @@ DTLSSRC+=\
 
 
 RADIOSRC=\
-	cw_out_radio_generic.c
+	cw_out_radio_generic.c\
+	cw_read_radio_generic.c\
+
 
 #SRC=$(wildcard *.c)
 SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(MISCSRC)
