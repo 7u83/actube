@@ -59,6 +59,8 @@ static int run_discovery(struct conn *conn)
 	}
 
 	
+	
+	
 /*
 	mbag_t discs;
 	discs = mbag_get_mavl(conn->remote, CW_ITEM_DISCOVERIES);

@@ -13,7 +13,7 @@
 
 static struct cw_ElemHandler handlers[] = {
 	{
-		"80211 WTP Radio Information",			/* name */
+		"IEEE 802.11 WTP Radio Information",			/* name */
 		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		0, 0,						/* min/max length */
