@@ -17,7 +17,7 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		0, 0,						/* min/max length */
-		CW_TYPE_DWORD,						/* type */
+		CW_TYPE_DWORD,					/* type */
 		"wtp-radio-information",			/* Key */
 		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic				/* put */

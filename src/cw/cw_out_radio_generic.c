@@ -51,11 +51,9 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	len =0;
 	
 	radios = cw_ktv_get_byte(params->conn->local_cfg,"wtp-descriptor/max-radios",0);
-	printf("Must put radios: %d\n",radios);
 
 	for(i=1;i<radios+1;i++){
 		l = cw_put_radio_generic(handler,i,params,dst+len);
-		printf("put radio %i, returns %d\n",i,l);
 		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
 		len+=l;
 	}

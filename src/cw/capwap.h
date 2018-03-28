@@ -561,7 +561,7 @@ extern struct cw_StrListElem capwap_strings_vendor[];
 extern struct cw_StrListElem capwap_strings_elem[];
 extern struct cw_StrListElem capwap_strings_result[];
 extern struct cw_StrListElem capwap_strings_board[];
-extern struct cw_StrListElem mbag_item_strings[];
+/*extern struct cw_StrListElem mbag_item_strings[];*/
 
 
 
@@ -574,7 +574,7 @@ extern struct cw_StrListElem mbag_item_strings[];
 
 #define cw_strboardelem(id) cw_strlist_get_str(capwap_strings_board,id)
 
-#define cw_stritem(id) cw_strlist_get_str(mbag_item_strings,(id))
+/*#define cw_stritem(id) cw_strlist_get_str(mbag_item_strings,(id))*/
 
 /*
 #define cw_strrc(rc) \

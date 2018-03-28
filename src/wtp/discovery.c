@@ -21,7 +21,9 @@ static int run_discovery(struct conn *conn)
 /*//      conn->incomming = mbag_create();*/
 	time_t timer;
 	uint8_t dtype=0;
-
+	mlist_t discovery_results;
+	struct sockaddr_storage from;
+	
 	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 	
 	
@@ -35,14 +37,15 @@ static int run_discovery(struct conn *conn)
 
 	timer = cw_timer_start(0);
 
-
+	
+	discovery_results = mlist_create(NULL,NULL,sizeof(void*));
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
+		char addr_str[SOCK_ADDR_BUFSIZE];
 		/*mavl_del_all(conn->incomming);*/
 
-		rc = cw_read_from(conn);
-
+		rc = cw_read_from(conn, &from);
 		if (rc<0) {
 			if (errno==EAGAIN)
 				continue;
@@ -50,9 +53,12 @@ static int run_discovery(struct conn *conn)
 			cw_log(LOG_ERROR,"Error reading messages: %s",strerror(errno));
 			break;
 		}
+		cw_dbg(DBG_INFO,"Received Discovery Response from %s", sock_addr2str(&from,addr_str));
+		mlist_append_ptr(discovery_results,conn->remote_cfg);
+		conn->remote_cfg=cw_ktv_create();
 	}
 
-
+	
 /*
 	mbag_t discs;
 	discs = mbag_get_mavl(conn->remote, CW_ITEM_DISCOVERIES);

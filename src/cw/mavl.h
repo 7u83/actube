@@ -259,8 +259,17 @@ static inline void *mavl_replace(struct mavl *t,void *data){
 
 
 void mavl_freeptr(void *ptr);
+
+/**
+ * Create a mavl_t object which stores pointers. 
+ * @param cmp a pointer to the compare function
+ * @param del a pointer to a delete function
+ * @return The mavl_t object or NULL if an error has occured.
+ */
 #define mavl_create_ptr(cmp,del)\
 	mavl_create(cmp,del,sizeof(void*))
+	
+	
 int mavl_cmpstr(const void *p1, const void *p2);
 #define mavl_create_str() mavl_create_ptr(mavl_cmpstr,mavl_freeptr)
 #define mavl_create_conststr() mavl_create_ptr(mavl_cmpstr,NULL)
@@ -271,6 +280,7 @@ void * mavl_add_ptr ( mavl_t tree, const void *ptr );
 #define mavl_add_str(tree,str) mavl_add_ptr(tree,str)
 #define mavl_get_str(tree,search) ((char *)(mavl_get_ptr(tree,search)))
 #define mavliter_get_str(iter) ((char*)(mavliter_get_ptr(iter)))
+#define mavliter_get_conststr(iter) ((const char*)(mavliter_get_ptr(iter)))
 
 /**
  * @} MAVL

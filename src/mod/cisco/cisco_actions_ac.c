@@ -18,6 +18,7 @@
 
 
 #include "cw/capwap.h"
+#include "cw/capwap80211.h"
 #include "cw/msgset.h"
 #include "cw/ktv.h"
 #include "cw/keys.h"
@@ -61,7 +62,7 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 	{ 
-		"AC Descriptor (Cisco)",	/* name */
+		"AC Descriptor (Cisco LWAPP)",	/* name */
 		CAPWAP_ELEM_AC_DESCRIPTOR,	/* Element ID */
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
@@ -134,8 +135,9 @@ static struct cw_ElemDef discovery_request_elements[] ={
 
 static int discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_response_elements[] ={
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,		1, 0},
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,		0, 0},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,			0, 0},
+	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	0, 0},
 	{0,0,0,00}
 	
 };
@@ -143,15 +145,15 @@ static struct cw_ElemDef discovery_response_elements[] ={
 
 static struct cw_MsgDef messages[] = {
 	{
-		"Discovery Request",
-		CAPWAP_MSG_DISCOVERY_REQUEST,
-		CW_RECEIVER_AC,
+		NULL,				/* name */
+		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
+		CW_RECEIVER_AC,			
 		discovery_request_states,
 		discovery_request_elements
 	},
 	{
-		"Discovery Response",
-		CAPWAP_MSG_DISCOVERY_RESPONSE,
+		NULL,				/* name */
+		CAPWAP_MSG_DISCOVERY_RESPONSE,	/* type */
 		CW_RECEIVER_WTP,
 		discovery_response_states,
 		discovery_response_elements

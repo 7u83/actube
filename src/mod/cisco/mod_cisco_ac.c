@@ -8,20 +8,23 @@
 
 
 /*#include "mod_cisco.h"*/
-#include "../modload.h"
+/*#include "../modload.h"*/
 
 #include "cw/vendors.h"
 
+#include "mod_cisco.h"
 
 
-
+/*
 extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
 extern int cisco_register_actions_ac(struct cw_actiondef *def);
+*/
 
 /*mbag_t cisco_config = NULL;*/
 
 static struct cw_Mod * capwap_mod = NULL;
- 
+static struct cw_Mod * capwap80211_mod = NULL; 
+
 
 static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 {
@@ -30,29 +33,24 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 		case CW_MOD_MODE_CAPWAP:
 		{
 			capwap_mod->register_messages(set, CW_MOD_MODE_CAPWAP);
+			capwap80211_mod->register_messages(set, CW_MOD_MODE_BINDINGS);
+			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+
 
 		/*	cw_dbg(DBG_MOD,"Cisco: loading cisco message set");*/
-			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+			
 /*			cw_dbg(DBG_INFO, "Initialized mod_cisco with %d messages", 7);*/
 			break;
 		}
-/*		case CW_MOD_MODE_BINDINGS:
+		case CW_MOD_MODE_BINDINGS:
 		{
-			return 0;
-			struct cw_Mod *cmod = cw_mod_load("capwap80211"); //modload_ac("capwap80211");
-			if (!cmod) {
-				cw_log(LOG_ERR,
-				       "Can't initialize mod_cisco, failed to load base mod mod_capwap80211");
-				return 1;
-			}
-			cmod->register_messages(set, CW_MOD_MODE_BINDINGS);
-			int rc = cisco_register_actions80211_ac(set);
-			cw_dbg(DBG_INFO, "Initialized mod_cisco 80211 with %d actions", 12);
-			return 0;
+			break;
 		}
-*/
+
 
 	}
+
+
 
 	cw_dbg(DBG_INFO,"CISCO: Done register messages");
 	return 0;
@@ -89,6 +87,11 @@ static int init(struct cw_Mod *mod, mavl_t global_cfg, int role)
 	capwap_mod = cw_mod_load("capwap",global_cfg,role);
 	if (capwap_mod == NULL){
 		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap");
+	}
+
+	capwap80211_mod = cw_mod_load("capwap80211", global_cfg,role);
+	if (capwap_mod == NULL){
+		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap80211");
 	}
 	
 	/*cisco_config = mbag_create();*/
@@ -128,7 +131,7 @@ static int init(struct cw_Mod *mod, mavl_t global_cfg, int role)
 		free(str);
 	}
 */
-errX:
+/*errX:*/
 	if (hardware_version)
 		free (hardware_version);
 	if (software_version)

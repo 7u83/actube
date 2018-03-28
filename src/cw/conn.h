@@ -309,7 +309,7 @@ extern int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
 			 struct sockaddr_storage *from);
 
 int conn_send_msg(struct conn * conn, uint8_t *rawmsg);
-int cw_read_from(struct conn * conn);
+int cw_read_from(struct conn * conn, struct sockaddr_storage * from);
 
 int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
 

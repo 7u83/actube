@@ -722,29 +722,3 @@ int cw_read_messages(struct conn *conn)
 	return -1;
 }
 
-int cw_read_from(struct conn *conn)
-{
-	int n;
-	struct sockaddr_storage from;
-	uint8_t buf[2024];
-	int len = 2024;
-	
-	if (!conn->readfrom) {
-		cw_log(LOG_ERR, "Fatal error, no readfrom method available.");
-		errno = EPROTO;
-		return -1;
-	}
-
-
-
-	
-	n = conn->readfrom(conn, buf, len, &from);
-	if (n < 0)
-		return n;
-
-	if (n > 0) {
-		return conn->process_packet(conn, buf, n, (struct sockaddr *) &from);
-	}
-	errno = EAGAIN;
-	return -1;
-}
