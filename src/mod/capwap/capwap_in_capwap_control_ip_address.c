@@ -34,7 +34,7 @@ int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh,
 	sprintf(key,"%s/address",eh->key);
 	idx = cw_ktv_idx_get(params->conn->remote_cfg,key,0,CW_TYPE_IPADDRESS);
 	
-	printf("SKEY is %s , idx: %d\n",key,idx);
+/*	printf("SKEY is %s , idx: %d\n",key,idx);*/
 
 	sprintf(key,"%s/address.%d",eh->key,idx+1);
 	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_IPADDRESS,data,len-2);

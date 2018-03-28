@@ -107,7 +107,8 @@ CWSRC=\
 	cw_type_word.c\
 	cw_util.c\
 	cw_write_descriptor_subelem.c\
-	cw_read_from.c
+	cw_read_from.c \
+	cw_write_radio_element.c\
 
 
 LWSRC=\
