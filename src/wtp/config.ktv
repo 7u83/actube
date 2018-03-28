@@ -6,8 +6,8 @@ basic/mod:Bstr16:cisco
 
 ansi/hallo:Dword:1
 discovery-type:Byte:0
-wtp-frame-tunnel-mode:Byte:3
-wtp-mac-type:Byte:7
+wtp-frame-tunnel-mode:Byte:1
+wtp-mac-type:Byte:2
 
 
 wtp-board-data/vendor:Dword:1234567
@@ -26,7 +26,8 @@ wtp-descriptor/bootloader/vendor:Dword:906090
 wtp-descriptor/bootloader/version:Bstr16:.x171312
 wtp-descriptor/max-radios:Byte:2
 
-radio/1/wtp-radio-information:Dword:01
-radio/2/wtp-radio-information:Dword:02
+radio/0/wtp-radio-information:Dword:01
+radio/1/wtp-radio-information:Dword:15
+radio/2/wtp-radio-information:Dword:03
 
 wtp-name:Bstr16:WFAT01

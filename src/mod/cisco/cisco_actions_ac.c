@@ -117,7 +117,17 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic			/* put */
 	}
 	,
-
+	{
+		"80211 WTP Radio Information - Cisco",			/* name */
+		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		0, 0,						/* min/max length */
+		CW_TYPE_DWORD,					/* type */
+		"wtp-radio-information",			/* Key */
+		cw_in_radio_generic,				/* get */
+		cisco_out_radio_generic				/* put */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };

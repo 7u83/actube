@@ -34,6 +34,7 @@
         <File Name="src/mod/cisco/cisco80211.c"/>
         <File Name="src/mod/cisco/mod_cisco.h"/>
         <File Name="src/mod/cisco/capwap_cisco.h"/>
+        <File Name="src/mod/cisco/cisco_out_radio_generic.c"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

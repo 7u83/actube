@@ -8,6 +8,8 @@ OBJS=\
 	cisco_in_wtp_descriptor.o \
 	cisco_out_wtp_descriptor.o \
 	cisco_in_ac_descriptor.o\
+	cisco_out_radio_generic.o\
+
 
 #	cisco80211.o \
 #	cisco_out_radio_administrative_state.o \
