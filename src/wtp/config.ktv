@@ -27,7 +27,6 @@ wtp-descriptor/bootloader/version:Bstr16:.x171312
 wtp-descriptor/max-radios:Byte:2
 
 radio/0/wtp-radio-information:Dword:01
-radio/1/wtp-radio-information:Dword:15
-radio/2/wtp-radio-information:Dword:03
+radio/1/wtp-radio-information:Dword:02
 
 wtp-name:Bstr16:WFAT01

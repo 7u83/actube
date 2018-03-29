@@ -75,6 +75,12 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
 	/*	printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);*/
+		if (handler==NULL){
+			cw_log(LOG_ERR,"Can't put message element %d %d %, no handler defined.",
+					data->proto,data->vendor,data->id);
+			continue;
+		}
+
 
 		if (handler->put == NULL){
 			if (data->mand){
