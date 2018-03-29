@@ -16,11 +16,53 @@
 #include "wtp.h"
 
 
+int cw_select_ac(mlist_t aclist){
+	mlistelem_t * e;
+	mavl_t best_ac;
+	
+	best_ac=NULL;
+	
+	mlist_foreach(e,aclist){
+		char str[1024];
+		char key[CW_KTV_MAX_KEY_LEN];
+		mavl_t cfg;
+		int i;
+		
+		cw_KTV_t * val;
+		cfg = mlistelem_get_ptr(e);
+		val = cw_ktv_get(cfg,"ac-name", CW_TYPE_BSTR16);
+		if (val==NULL)
+			continue;
+		if (best_ac==NULL){
+			best_ac=cfg;
+		}
+		
+		
+		val->type->to_str(val,str,1024);
+		
+		i=0; 
+		do {
+			sprintf(key,"%s.%d","capwap-control-ip-address/wtps",i);
+			val = cw_ktv_get(cfg,key,CW_TYPE_WORD);
+			if (val == NULL)
+				break;
+			
+		}while(1);
+		printf("Here we have an AC: %s\n",str);
+		
+		
+	}
+	
+	
+	
+	return 0;
+}
+
 static int run_discovery(struct conn *conn)
 {
 /*//      conn->incomming = mbag_create();*/
 	time_t timer;
-	uint8_t dtype=0;
+/*	uint8_t dtype=0;*/
 	mlist_t discovery_results;
 	struct sockaddr_storage from;
 	
@@ -58,7 +100,7 @@ static int run_discovery(struct conn *conn)
 		conn->remote_cfg=cw_ktv_create();
 	}
 
-	
+	cw_select_ac(discovery_results);
 	
 	
 /*
