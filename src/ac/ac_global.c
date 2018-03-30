@@ -5,14 +5,14 @@
 #include "conf.h"
 #include "cw/capwap.h"
 
-#include "cw/aciplist.h"
+/*#include "cw/aciplist.h"*/
 #include "socklist.h"
 #include "cw/sock.h"
 #include "cw/dbg.h"
 
 #include "wtpman.h"
 
-struct cw_ac_status ac_status;
+/*struct cw_ac_status ac_status;*/
 
 
 
@@ -20,6 +20,7 @@ struct cw_ac_status ac_status;
 
 mavl_t actube_global_cfg;
 
+/*
 cw_aciplist_t get_aciplist()
 {
 	int i=0;
@@ -52,8 +53,8 @@ cw_aciplist_t get_aciplist()
 			acip->index=3;
 		
 
-/*//		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
-*/
+/ * //		printf ("Adding IP %s\n",sock_addr2str(&acip->ip));	
+* /
 		cw_aciplist_add(aciplist,acip);
 
 		
@@ -61,6 +62,7 @@ cw_aciplist_t get_aciplist()
 	return aciplist;
 }
 
+*/
 
 
 
@@ -70,12 +72,12 @@ cw_aciplist_t get_aciplist()
 
 
 
-
-
+/*
 void * get_iplist(void * arg)
 {
 	return get_aciplist();
 }
+*/
 
 void release_iplist(void *arg,void *data)
 {

@@ -70,8 +70,6 @@ int cw_select_ac(mavl_t local_cfg,mlist_t aclist){
 			i++;
 			en++;
 		}while(1);
-		printf("Here we have an AC: %s\n",acname);
-		
 		
 	}
 	
