@@ -13,8 +13,9 @@
 
 #include "wtp.h"
 
+#define MAX_MODS 32
 struct bootcfg{
-	const char * modnames[32];
+	const char * modnames[MAX_MODS];
 	int nmods;
 	const char * modpath;
 	const char * cfgfilename;
@@ -43,6 +44,10 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				break;
 			}
 			case 'm':
+				if (bootcfg->nmods>MAX_MODS){
+					fprintf(stderr,"Too many modules\n");
+					exit(EXIT_FAILURE);
+				}
 				bootcfg->modnames[bootcfg->nmods++] = optarg;
 				break;
 			case 'p':
@@ -63,7 +68,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	return 0;
 }
 
-
+#include "cw/rand.h"
 
 int main (int argc, char **argv)
 {
@@ -75,7 +80,8 @@ int main (int argc, char **argv)
 	mavl_t global_cfg, types_tree;
 	const cw_Type_t ** ti;
 	int i;
-
+	
+	
 	bootcfg.nmods=0;
 	
 	/* read command line args, results are in bootcfg */
@@ -146,7 +152,7 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 12000;
 	conn->msgset=msgset;
 	conn->local_cfg = global_cfg;
-	conn->remote_cfg = cw_ktv_create();
+	conn->remote_cfg = NULL;
 	conn->receiver = CW_RECEIVER_WTP;
 	conn->wbid=1;
 

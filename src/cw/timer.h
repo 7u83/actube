@@ -74,12 +74,18 @@ typedef time_t cw_timer_t;
  * and #cw_clock_lap.
  * @param c name of the variable
  *
- * Example:
- * @code
+ * Example
+ * @code{.c}
+ * #include "cw/timer.h"
+ * 
  * CW_CLOCK_DEFINE(clk);
+ * int t;
+ * 
  * cw_clock_start(clk);
+ *
  * @startcomment do something ... @endcomment
- * int t = cw_clock_lap(clk);
+ *
+ * t = cw_clock_lap(clk);
  * printf("Caclulation took %d seconds\n",t);
  * @endcode
  * 

@@ -89,6 +89,7 @@ CWSRC=\
 	cw_put_msg.c\
 	cw_radio_set_admin_state.c\
 	cw_rand.c\
+	cw_randint.c\
 	cw_read_ac_descriptor.c\
 	cw_read_descriptor_subelems.c\
 	cw_readelem_statistics_timer.c\
@@ -186,6 +187,7 @@ SOCKSRC=\
 LOGSRC=\
 	log.c\
 	log_file.c\
+	log_errno.c\
 	log_syslog.c\
 	dbg.c\
 	dbg_strings.c\

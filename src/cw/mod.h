@@ -74,6 +74,8 @@ struct cw_Mod {
 
 	/** used for private data */
 	void *data;
+	
+	int (*setup_cfg)(struct conn *conn);
 };
 
 

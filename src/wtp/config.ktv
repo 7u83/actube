@@ -1,5 +1,3 @@
-capwap/vars/MaxDiscoveries:Word:10
-capwap/vars/MaxRetransmit:Word:4
 
      
 windows:Word:124
@@ -38,5 +36,11 @@ wtp-fallback:Byte:1
 ac-name-with-priority/TubesACx:Byte:3
 ac-name-with-priority/"ac2":Byte:01
 
+
+capwap-timers/max-discovery-interval:Byte:0
+capwap-timers/min-discovery-interval:Byte:0
+capwap-timers/echo-interval:Byte:3
+
+"discovery-interval":Byte:1
 
 

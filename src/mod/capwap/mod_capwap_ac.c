@@ -11,6 +11,11 @@
 static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
 {
 	cw_dbg(DBG_INFO,"CAPWAP: Inititalizing mod_capwap.");
+	
+	
+	
+	
+	
 	switch (role){
 		case CW_ROLE_AC:{
 			cw_dbg(DBG_MOD, "CAPWAP: Initialiazing mod_capwap in AC mode");	
@@ -42,6 +47,14 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 1;
 }
 
+int static setup_cfg(struct conn  * conn)
+{
+	
+	
+	return 0;
+		
+}
+
 
 struct cw_Mod mod_capwap = {
 	"capwap",			/* name */
@@ -49,12 +62,6 @@ struct cw_Mod mod_capwap = {
 	detect,				/* detect */
 	capwap_register_msg_set,	/* register_messages */
 	NULL,				/* dll_handle */
-	NULL				/* data */
+	NULL,				/* data */
+	setup_cfg			/* setup_cfg */
 };
-
-
-/*
-struct cw_Mod * mod_capwap(){
-	return &capwap_data;
-}
-*/

@@ -52,6 +52,7 @@ extern struct cw_LogWriter cw_log_console_writer;
 
 void cw_log_init();
 void cw_log(int level, const char *format, ...);
+void cw_log_errno(char * format, ...);
 
 extern const char *cw_log_name;
 extern struct cw_LogWriter * cw_log_writers[];
