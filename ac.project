@@ -22,7 +22,6 @@
       <File Name="src/ac/dataman.h"/>
       <File Name="src/ac/socklist.h"/>
     </VirtualDirectory>
-    <File Name="src/wtp/discovery.c"/>
   </VirtualDirectory>
   <Description/>
   <Dependencies/>

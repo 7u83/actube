@@ -17,20 +17,26 @@
 #include "wtp.h"
 
 
-mavl_t cw_select_ac(mavl_t local_cfg, mlist_t aclist)
+
+
+
+int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
 {
 	mlistelem_t *e;
-	mavl_t iplist;
+	/*mavl_t iplist;*/
 	int en;
 
-	iplist = cw_ktv_create();
-	if (iplist == NULL)
-		return 0;
+	/*iplist = cw_ktv_create();
+	if (iplist == NULL){
+		cw_log_errno("cw_select_ac: Can't allocate memory for aciplist");
+		return NULL;
+	}
+	*/
 
 	en = 0;
 
 	/* for each discovery response */
-	mlist_foreach(e, aclist) {
+	mlist_foreach(e, dis->results) {
 		char acname[CAPWAP_MAX_AC_NAME_LEN + 1];
 		char key[CW_KTV_MAX_KEY_LEN];
 		mavl_t remote_cfg;
@@ -61,13 +67,12 @@ mavl_t cw_select_ac(mavl_t local_cfg, mlist_t aclist)
 			if (val == NULL)
 				break;
 
-
 			sprintf(key, "%s.%d", "capwap-control-ip-address/address", i);
 			ipval = cw_ktv_get(remote_cfg, key, CW_TYPE_IPADDRESS);
 
 			sprintf(key, "%04d%05d%04d", prio, val->val.word, en);
 
-			cw_ktv_add(iplist, key, CW_TYPE_SYSPTR, (uint8_t *) (&ipval),
+			cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, (uint8_t *) (&ipval),
 				   sizeof(ipval));
 			i++;
 			en++;
@@ -75,32 +80,48 @@ mavl_t cw_select_ac(mavl_t local_cfg, mlist_t aclist)
 
 	}
 
-	cw_dbg_ktv_dump(iplist, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
-	{
-		mavliter_t i;
-		mavliter_init(&i, iplist);
 
-		mavliter_foreach(&i) {
-			char ipstr[100];
-			char *rk;
-			cw_KTV_t *val;
-			val = mavliter_get(&i);
-			rk = val->key;
-			val = val->val.ptr;
-			val->type->to_str(val, ipstr, 100);
-			printf("PTRVAL(%s): %s - %s\n", rk, val->key, ipstr);
-		}
-	}
 
+	return 1;
+}
+
+
+void cw_discovery_free_results(struct cw_DiscoveryResult * dis)
+{
+	if (dis->prio_ac != NULL)
+		mavl_destroy(dis->prio_ac);
+	if (dis->prio_ip != NULL)
+		mavl_destroy(dis->prio_ip);
+	if (dis->results != NULL)
+		mlist_destroy(dis->results);
+}
+
+
+
+int cw_discovery_init_results(struct cw_DiscoveryResult *dis)
+{
+	dis->results = mlist_create(NULL, NULL, sizeof(void *));
+	if (dis->results==NULL)
+		goto errX;
+	dis->prio_ac=cw_ktv_create();
+	if (dis->prio_ac==NULL)
+		goto errX;
+	dis->prio_ip=cw_ktv_create();
+	if (dis->prio_ac==NULL)
+		goto errX;
+	return 1;
+errX:
+	cw_discovery_free_results(dis);
 	return 0;
 }
 
-static int run_discovery(struct conn *conn)
+
+static int run_discovery(struct conn *conn, struct cw_DiscoveryResult * dis)
 {
 	time_t timer;
-	mlist_t discovery_results;
 	struct sockaddr_storage from;
 	int delay, min, max;
+
 	
 	
 	min = cw_ktv_get_byte(conn->local_cfg,"capwap-timers/min-discovery-interval",
@@ -127,7 +148,9 @@ static int run_discovery(struct conn *conn)
 	timer = cw_timer_start(cw_ktv_get_byte(conn->local_cfg, "discovery-interval",
 					       CAPWAP_DISCOVERY_INTERVAL))-1;
 
-	discovery_results = mlist_create(NULL, NULL, sizeof(void *));
+	/*discovery_results = mlist_create(NULL, NULL, sizeof(void *));*/
+	
+	
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
@@ -149,26 +172,35 @@ static int run_discovery(struct conn *conn)
 		}
 		cw_dbg(DBG_INFO, "Received Discovery Response from %s",
 		       sock_addr2str(&from, addr_str));
-		mlist_append_ptr(discovery_results, conn->remote_cfg);
+		mlist_append_ptr(dis->results, conn->remote_cfg);
 	}
 
-	cw_select_ac(conn->local_cfg, discovery_results);
+	cw_select_ac(conn->local_cfg, dis);
 
 
 
 	return 1;
 }
 
+
+
+
 /**
  * Run discovery for on address (eg broadcast 255.255.255.255)
  */
-int cw_run_discovery(struct conn *conn, const char *addr, const char *bindaddr)
+int cw_run_discovery(struct conn *conn, const char *addr, const char *bindaddr, 
+		struct cw_DiscoveryResult * dis)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct sockaddr_storage dstaddr;
 	char caddr[256], control_port[64];
 
 	int rc;
+	/*struct cw_DiscoveryResult dis;*/
+	
+	
+	/*dis.results = mlist_create(NULL, NULL, sizeof(void *));*/
+	
 
 	/* get addr of destination */
 	struct addrinfo hints;
@@ -258,7 +290,7 @@ int cw_run_discovery(struct conn *conn, const char *addr, const char *bindaddr)
 		cw_dbg(DBG_INFO, "Discovery to %s",
 		       sock_addr2str_p(&conn->addr, sock_buf));
 
-		run_discovery(conn);
+		run_discovery(conn, dis);
 
 		conn->readfrom = NULL;
 		close(sockfd);

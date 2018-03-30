@@ -156,7 +156,29 @@ int main (int argc, char **argv)
 	conn->receiver = CW_RECEIVER_WTP;
 	conn->wbid=1;
 
-	cw_run_discovery(conn, "255.255.255.255",NULL);
+	struct cw_DiscoveryResult dis;
+	cw_discovery_init_results(&dis);
+	
+	
+	
+	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
+
+	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
+	{
+		mavliter_t i;
+		mavliter_init(&i, dis.prio_ip);
+
+		mavliter_foreach(&i) {
+			char ipstr[100];
+			char *rk;
+			cw_KTV_t *val;
+			val = mavliter_get(&i);
+			rk = val->key;
+			val = val->val.ptr;
+			val->type->to_str(val, ipstr, 100);
+			printf("PTRVAL(%s): %s - %s\n", rk, val->key, ipstr);
+		}
+	}
 
 	return (EXIT_SUCCESS);
 
