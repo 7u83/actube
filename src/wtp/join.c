@@ -14,8 +14,8 @@
 #include "cw/sock.h"
 #include "cw/dtls.h"
 #include "cw/aciplist.h"
-#include "cw/capwap_items.h"
-#include "cw/mbag.h"
+
+
 
 /*
 #define acinfo_log acinfo_log_
@@ -96,6 +96,7 @@ acinfo.result_code=99;
 
 int run_join_d(struct sockaddr *sa)
 {
+	char addrstr[SOCK_ADDR_BUFSIZE];
 	struct conn *conn = get_conn();
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 
@@ -125,7 +126,7 @@ int run_join_d(struct sockaddr *sa)
 	}
 */
 
-	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa));
+	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa, addrstr));
 
 	int dtls_conf_ok=0;
 
@@ -147,7 +148,7 @@ int run_join_d(struct sockaddr *sa)
 
 	if (!dtls_conf_ok){
 		cw_log(LOG_ERR,"Can't establish DTLS connection with %s, neither psk nor cert set in config",
-			sock_addr2str(sa));
+			sock_addr2str(sa,addrstr));
 		close(sockfd);
 		return 0;
 	}
@@ -157,14 +158,14 @@ int run_join_d(struct sockaddr *sa)
 	if (rc != 1) {
 		dtls_shutdown(conn);
 		cw_log(LOG_ERR, "Can't establish DTLS connection with %s",
-		       sock_addr2str(sa));
+		       sock_addr2str(sa,addrstr));
 		close(sockfd);
 		return 0;
 	}
 
 
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
-	       sock_addr2str(sa));
+	       sock_addr2str(sa,addrstr));
 
 
 
@@ -172,36 +173,41 @@ int run_join_d(struct sockaddr *sa)
 }
 
 
+
+
+
+
 int run_join(struct conn *conn)
 {
-
+	char addrstr[SOCK_ADDR_BUFSIZE];
+/*	
 //      cw_init_request(conn, CW_MSG_JOIN_REQUEST);
 //      if ( cw_put_msg(conn, conn->req_buffer) == -1 )
 //              return 0;
 //
 //      conn_send_msg(conn, conn->req_buffer);
+*/
 
+/*	mbag_del_all(conn->incomming);*/
 
-	mbag_del_all(conn->incomming);
-
-	//mbag_del (conn->incomming,CW_ITEM_RESULT_CODE);
+/*	//mbag_del (conn->incomming,CW_ITEM_RESULT_CODE);*/
 
 	int rc = cw_send_request(conn, CAPWAP_MSG_JOIN_REQUEST);
 
 	if (!cw_result_is_ok(rc)) {
 		if (rc > 0) {
 			cw_log(LOG_ERR, "Can't Join AC at %s, AC said: %d - %s.",
-			       sock_addr2str(&conn->addr), rc, cw_strerror(rc));
+			       sock_addr2str(&conn->addr,addrstr), rc, cw_strerror(rc));
 
 		} else {
 			cw_log(LOG_ERR, "Can't Join AC at %s: %d - %s.",
-			       sock_addr2str(&conn->addr), errno, cw_strerror(rc));
+			       sock_addr2str(&conn->addr,addrstr), errno, cw_strerror(rc));
 		}
 		return 0;
 	}
 
 	cw_dbg(DBG_ELEM_IN, "Joined AC at %s,  Join Result: %d - %s",
-	       sock_addr2str(&conn->addr), rc, cw_strresult(rc));
+	       sock_addr2str(&conn->addr,addrstr), rc, cw_strresult(rc));
 
 	return 1;
 }
@@ -211,12 +217,13 @@ int run_join(struct conn *conn)
 int join()
 {
 	struct conn *conn = get_conn();
-
+	mavliter_t ii;
+	char addrstr[SOCK_ADDR_BUFSIZE];
 	printf("Join\n");
 
-	mbag_del_all(conn->incomming);
+	/*mbag_del_all(conn->incomming);*/
 
-	cw_aciplist_t iplist =
+/*	cw_aciplist_t iplist =
 	    mbag_get_mavl(conn->local, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
 	if (!iplist) {
 		cw_log(LOG_ERR, "No IPs to join controller.");
@@ -227,16 +234,16 @@ int join()
 		cw_log(LOG_ERR, "No IPs to join controller. IP list is empty.");
 		return 0;
 	}
+*/
 
-
-	DEFINE_AVLITER(ii, iplist);
-	avliter_foreach(&ii) {
+	/*DEFINE_AVLITER(ii, iplist);*/
+	mavliter_foreach(&ii) {
 
 		cw_acip_t *ip = avliter_get(&ii);
 
 
 		cw_dbg(DBG_INFO, "Going to join CAWAP controller on %s",
-		       sock_addr2str_p(&ip->ip));
+		       sock_addr2str_p(&ip->ip,addrstr));
 
 		int rc = run_join_d((struct sockaddr *) &ip->ip);
 

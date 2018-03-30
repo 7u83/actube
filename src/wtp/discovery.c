@@ -16,44 +16,80 @@
 #include "wtp.h"
 
 
-int cw_select_ac(mlist_t aclist){
+int cw_select_ac(mavl_t local_cfg,mlist_t aclist){
 	mlistelem_t * e;
-	mavl_t best_ac;
+	int en;
+	mavl_t iplist;
 	
-	best_ac=NULL;
-	
+	iplist=cw_ktv_create();
+	if (iplist == NULL)
+		return 0;
+
+	en=0;
+
+	/* for each discovery response */
 	mlist_foreach(e,aclist){
 		char str[1024];
 		char key[CW_KTV_MAX_KEY_LEN];
-		mavl_t cfg;
+		mavl_t remote_cfg;
 		int i;
-		
 		cw_KTV_t * val;
-		cfg = mlistelem_get_ptr(e);
-		val = cw_ktv_get(cfg,"ac-name", CW_TYPE_BSTR16);
+		int prio;
+		
+		remote_cfg = mlistelem_get_ptr(e);
+		
+		/* get ac name */
+		val = cw_ktv_get(remote_cfg,"ac-name", CW_TYPE_BSTR16);
 		if (val==NULL)
 			continue;
-		if (best_ac==NULL){
-			best_ac=cfg;
-		}
-		
 		
 		val->type->to_str(val,str,1024);
+		sprintf(key,"ac-name-with-priority/%s",str);
+		
+		printf("Get prio: %s\n",key);
+		
+		prio = cw_ktv_get_byte(local_cfg,key,255);
 		
 		i=0; 
 		do {
+			cw_KTV_t * ipval;
 			sprintf(key,"%s.%d","capwap-control-ip-address/wtps",i);
-			val = cw_ktv_get(cfg,key,CW_TYPE_WORD);
+			val = cw_ktv_get(remote_cfg,key,CW_TYPE_WORD);
 			if (val == NULL)
 				break;
 			
+			sprintf(key,"%s.%d","capwap-control-ip-address/address",i);
+			printf("ipvalkey: %s\n",key);
+			ipval = cw_ktv_get(remote_cfg,key,CW_TYPE_IPADDRESS);
+
+			sprintf(key,"%04d%05d%04d",prio,val->val.word,en);
+			en++;
+			printf("This is the key: %s\n",key);
+			
+			cw_ktv_add(iplist,key,CW_TYPE_SYSPTR,(uint8_t*)(&ipval),sizeof(ipval));
+			i++;	
 		}while(1);
 		printf("Here we have an AC: %s\n",str);
 		
 		
 	}
 	
-	
+	cw_dbg_ktv_dump(iplist,DBG_INFO,"=== IP list ===", "IP", "=== END IP List ===");
+	{
+		mavliter_t i;
+		mavliter_init(&i,iplist);
+		
+		mavliter_foreach(&i){
+			char ipstr[100];
+			char *rk;
+			cw_KTV_t * val;
+			val = mavliter_get(&i);
+			rk = val->key;
+			val = val->val.ptr;
+			val->type->to_str(val,ipstr,100);
+			printf("PTRVAL(%s): %s - %s\n",rk,val->key,ipstr);
+		}
+	}
 	
 	return 0;
 }
@@ -100,7 +136,7 @@ static int run_discovery(struct conn *conn)
 		conn->remote_cfg=cw_ktv_create();
 	}
 
-	cw_select_ac(discovery_results);
+	cw_select_ac(conn->local_cfg,discovery_results);
 	
 	
 /*

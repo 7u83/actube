@@ -1,5 +1,7 @@
+capwap/vars/MaxDiscoveries:Word:10
+capwap/vars/MaxRetransmit:Word:4
+
      
-   # hallo	
 windows:Word:124
 
 basic/mod:Bstr16:cisco
@@ -24,9 +26,17 @@ wtp-descriptor/software/vendor:Dword:906090
 wtp-descriptor/software/version:Bstr16:.x171312
 wtp-descriptor/bootloader/vendor:Dword:906090
 wtp-descriptor/bootloader/version:Bstr16:.x171312
-wtp-descriptor/max-radios:Byte:2
+wtp-descriptor/max-radios:Byte:3
 
 radio/0/wtp-radio-information:Dword:01
 radio/1/wtp-radio-information:Dword:02
 
 wtp-name:Bstr16:WFAT01
+
+
+wtp-fallback:Byte:1
+"ac-name-with-priority/TubesAC":Byte:3
+ac-name-with-priority/"ac2":Byte:01
+
+
+

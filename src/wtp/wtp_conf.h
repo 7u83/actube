@@ -129,7 +129,7 @@ extern long conf_echo_interval;
 extern long conf_max_retransmit;
 extern long conf_retransmit_interval;
 
-//extern long conf_dbg_level;
+
 extern int conf_mtu_discovery;
 extern int conf_mtu;
 

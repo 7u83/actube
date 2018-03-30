@@ -268,6 +268,7 @@
       <File Name="src/cw/cw_read_radio_generic.c"/>
       <File Name="src/cw/cw_read_from.c"/>
       <File Name="src/cw/cw_write_radio_element.c"/>
+      <File Name="src/cw/cw_type_sysptr.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

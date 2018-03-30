@@ -1,5 +1,11 @@
 #include "ktv.h"
-
+/**
+ * @brief Default function to compare two values of type #cw_KTV_t.
+ *  
+ * @param v1
+ * @param v2
+ * @return 
+ */
 int cw_ktv_mavlcmp(const void *v1, const void *v2)
 {
 	char *d1,*d2;

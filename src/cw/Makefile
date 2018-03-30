@@ -105,6 +105,7 @@ CWSRC=\
 	cw_type_dword.c\
 	cw_type_ipaddress.c\
 	cw_type_word.c\
+	cw_type_sysptr.c\
 	cw_util.c\
 	cw_write_descriptor_subelem.c\
 	cw_read_from.c \

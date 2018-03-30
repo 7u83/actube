@@ -7,12 +7,14 @@ struct parser {
 	int pos;
 	int prevpos;
 	char error[256];
+	int quote;
+	FILE *f;
 };
 
-static int get_char(FILE * f, struct parser *p)
+static int get_char(struct parser *p)
 {
 	int c;
-	c = fgetc (f);
+	c = fgetc (p->f);
 	p->pos++;
 	if (c=='\n'){
 		p->prevpos=p->pos;
@@ -22,8 +24,9 @@ static int get_char(FILE * f, struct parser *p)
 	return c;
 }
 
-static void unget_char(int c, FILE *f, struct parser *p){
-	ungetc(c,f);
+
+static void unget_char(struct parser *p,int c){
+	ungetc(c,p->f);
 	if (c=='\n'){
 		p->line--;
 		p->pos=p->prevpos;
@@ -32,11 +35,71 @@ static void unget_char(int c, FILE *f, struct parser *p){
 		p->pos--;
 }
 
-static int skip_chars (FILE *f, const char * chars, struct parser * p )
+
+
+static int get_char_q(struct parser *p)
+{
+	int c;
+
+	while(1) {
+		c = get_char(p);
+		if (c==EOF || c=='\n')
+			return c;
+	
+		if(c=='"' && !p->quote){
+			p->quote=1;
+			continue;
+		}
+		if(c=='"' && p->quote){
+			p->quote=0;
+			continue;
+		}
+		break;
+	}
+	
+	
+	if (!p->quote)
+		return c;
+			
+	if (c!='\\')
+		return c;
+			
+	c = get_char(p);
+	switch(c){
+		case EOF:
+			return c;
+		case 'n':
+			return '\n';
+			
+		case '\\':
+			return '\\';
+		case '"':
+			return '"';
+		default:
+			unget_char(p,c);
+			return '\\';
+	}
+			
+	/* We will never reach here */
+	/* return c;*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+static int skip_chars (struct parser *p, const char * chars)
 {
 	int c;
 	
-	while ( (c = get_char (f, p)) != EOF) {
+	while ( (c = get_char (p)) != EOF) {
 		if (strchr (chars, c))
 			continue;
 		return c;
@@ -44,11 +107,11 @@ static int skip_chars (FILE *f, const char * chars, struct parser * p )
 	return c;
 }
 
-static int skip_to_chars (FILE *f, const char *chars, struct parser * p)
+static int skip_to_chars (struct parser *p, const char *chars)
 {
 	int c;
 	
-	while ( (c = get_char (f, p)) != EOF) {
+	while ( (c = get_char (p)) != EOF) {
 		if (strchr (chars, c))
 			return c;
 	}
@@ -57,30 +120,32 @@ static int skip_to_chars (FILE *f, const char *chars, struct parser * p)
 
 
 
-static int read_key (FILE *f, char *key, int max_len, struct parser * p)
+static int read_key (struct parser *p, char *key, int max_len)
 {
 	int c,n;
 
 	do {
-		c = skip_chars (f, " \t\n\a\v", p);
+		c = skip_chars (p, " \t\n\a\v");
 		if (c == '#') {
-			c = skip_to_chars (f, "\n\a",p);
+			c = skip_to_chars (p, "\n\a");
 			
 		} else {
 			break;
 		}
 	} while (c != EOF);
-
+	
+	unget_char(p,c);
+	c=get_char_q(p);
 
 	n=0;
 	while(c!=EOF && n<max_len){
-		if (!isalnum(c) && !strchr("._/-()@#|{}[]",c)/*strchr(": \t\n\a",c)*/){
-			unget_char(c,f,p);
+		if (!p->quote && !isalnum(c) && !strchr("._/-()@#|{}[]\\",c)/*strchr(": \t\n\a",c)*/){
+			unget_char(p,c);
 			break;
 		}
 
 		key[n]=c;
-		c=get_char(f,p);
+		c=get_char_q(p);
 		n++;
 
 	}
@@ -92,10 +157,10 @@ static int read_key (FILE *f, char *key, int max_len, struct parser * p)
 static int skip_to_colon(FILE *f,struct parser * p)
 {
 	int c;
-	c = skip_chars (f, " \t", p);
+	c = skip_chars (p, " \t");
 	if (c!=':'){
 		if (c=='\n'){
-			unget_char(c,f,p);
+			unget_char(p,c);
 			sprintf(p->error,"Error at line %d, pos %d: Unexpected EOL, collon expected.", p->line, p->pos);
 			return 0;
 		}
@@ -106,24 +171,24 @@ static int skip_to_colon(FILE *f,struct parser * p)
 }
 
 
-static int read_type(FILE *f, char *type, int max_len, struct parser *p)
+static int read_type(struct parser *p, char *type, int max_len)
 {
 	int c,n;
 	
-	if (!skip_to_colon(f,p))
+	if (!skip_to_colon(p->f,p))
 		return -1;
 
-	c = skip_chars (f, " \t", p);
+	c = skip_chars (p, " \t");
 	
 	if (c==':'){
-		unget_char(c,f,p);
+		unget_char(p,c);
 		sprintf(type,"%s","");
 		return 0;
 	}
 		
 	if (!isalpha(c)){
 		if (c=='\n'){
-			unget_char(c,f,p);
+			unget_char(p,c);
 			sprintf(p->error,"Error at line %d, pos %d: Unexpected EOL.", p->line, p->pos);
 			return -1;
 		}
@@ -135,26 +200,27 @@ static int read_type(FILE *f, char *type, int max_len, struct parser *p)
 	n=0;
 	while(c!=EOF && n<max_len){
 		if (!isalnum(c) && !strchr("_/-.()@#|{}[]",c)/*strchr(": \t\n\a",c)*/){
-			unget_char(c,f,p);
+			unget_char(p,c);
 			break;
 		}
 
 		type[n]=c;
-		c=get_char(f,p);
+		c=get_char(p);
 		n++;
 	}
 	type[n]=0;
 	return n;
 }
 
-static int read_val(FILE *f, char *val, int max_len, struct parser *p){
+
+static int read_val(struct parser *p, char *val, int max_len){
 	int c,n,quote;
-	if (!skip_to_colon(f,p))
+	if (!skip_to_colon(p->f,p))
 		return -1;
-	c = skip_chars (f, " \t", p);
+	c = skip_chars (p, " \t");
 	if (c=='"'){
 		quote=1;
-		c=get_char(f,p);
+		c=get_char(p);
 	}
 	else{
 		quote=0;
@@ -169,7 +235,7 @@ static int read_val(FILE *f, char *val, int max_len, struct parser *p){
 		}
 		if (quote){
 			if (c=='\\'){
-				c = get_char(f,p);
+				c = get_char(p);
 				switch(c){
 					case 'n':
 						c='\n';
@@ -179,13 +245,13 @@ static int read_val(FILE *f, char *val, int max_len, struct parser *p){
 					case '"':
 						break;
 					default:
-						unget_char(c,f,p);
+						unget_char(p,c);
 						c='\\';
 				}
 			}
 		}
 		val[n++]=c;
-		c=get_char(f,p);
+		c=get_char(p);
 	}
 	
 	
@@ -214,14 +280,16 @@ int cw_ktv_read_line (FILE *f, char * key, char * type, char *val)
 	p.line=1;
 	p.pos=0;
 	p.prevpos=0;
+	p.quote=0;
+	p.f=f;
 		
-	n = read_key (f,key,CW_KTV_MAX_KEY_LEN,&p);
-	n = read_type (f,type,CW_KTV_MAX_KEY_LEN,&p);
+	n = read_key (&p,key,CW_KTV_MAX_KEY_LEN);
+	n = read_type (&p,type,CW_KTV_MAX_KEY_LEN);
 	if (n==-1){
 		return -1;
 	}
 
-	n = read_val (f,val,CW_KTV_MAX_KEY_LEN,&p);
+	n = read_val (&p,val,CW_KTV_MAX_KEY_LEN);
 	if (n==-1){
 		return -1;
 	}

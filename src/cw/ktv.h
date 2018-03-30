@@ -96,12 +96,14 @@ extern const struct cw_Type cw_type_word;
 extern const struct cw_Type cw_type_dword;
 extern const struct cw_Type cw_type_bstr16;
 extern const struct cw_Type cw_type_ipaddress;
+extern const struct cw_Type cw_type_sysptr;
 
 #define CW_TYPE_BYTE (&cw_type_byte)
 #define CW_TYPE_WORD (&cw_type_word)
 #define CW_TYPE_DWORD (&cw_type_dword)
 #define CW_TYPE_BSTR16 (&cw_type_bstr16)
 #define CW_TYPE_IPADDRESS (&cw_type_ipaddress)
+#define CW_TYPE_SYSPTR (&cw_type_sysptr)
 
 /*
 void cw_kvstore_mavl_delete(const void *data);

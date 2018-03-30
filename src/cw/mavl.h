@@ -16,7 +16,7 @@
 */
 
 /**
- * @file
+ * @file mavl.h
  * @brief MAVL, Mini AVL Tree,
  * Yet another AVL Tree implementation
  */
