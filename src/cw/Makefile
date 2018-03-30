@@ -191,8 +191,6 @@ LOGSRC=\
 	dbg_strings.c\
 
 MISCSRC=\
-	aciplist.c\
-	acpriolist.c\
 	bstr16_create.c\
 	bstr16_create_from_str.c\
 	bstr_create.c\

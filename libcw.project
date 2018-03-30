@@ -18,7 +18,6 @@
       <File Name="src/cw/bstr.h"/>
       <File Name="src/cw/mavl_get_node.c"/>
       <File Name="src/cw/dtls_openssl_connect.c"/>
-      <File Name="src/cw/acpriolist.c"/>
       <File Name="src/cw/lw_elem_id_to_str.c"/>
       <File Name="src/cw/cw_put_elem_radio_administrative_state.c"/>
       <File Name="src/cw/lwapp.h"/>
@@ -56,7 +55,6 @@
       <File Name="src/cw/bstr_replace.c"/>
       <File Name="src/cw/sock_receive.c"/>
       <File Name="src/cw/capwap_80211_actions.h"/>
-      <File Name="src/cw/acpriolist.h"/>
       <File Name="src/cw/sock_hwaddrtostr.c"/>
       <File Name="src/cw/mavliter_next.c"/>
       <File Name="src/cw/lw_msg_id_to_str.c"/>
@@ -116,7 +114,6 @@
       <File Name="src/cw/sock_setport.c"/>
       <File Name="src/cw/cw_strlist_get_id.c"/>
       <File Name="src/cw/sock.h"/>
-      <File Name="src/cw/aciplist.c"/>
       <File Name="src/cw/log_syslog.c"/>
       <File Name="src/cw/lw_put_ac_descriptor.c"/>
       <File Name="src/cw/conn_destroy.c"/>
@@ -195,7 +192,6 @@
       <File Name="src/cw/cw_readelem_statistics_timer.c"/>
       <File Name="src/cw/cw_read_ac_descriptor.c"/>
       <File Name="src/cw/conn_prepare_image_data_request.c"/>
-      <File Name="src/cw/aciplist.h"/>
       <File Name="src/cw/timer.h"/>
       <File Name="src/cw/mavl_foreach.c"/>
       <File Name="src/cw/lwapp_cisco.h"/>

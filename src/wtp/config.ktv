@@ -35,7 +35,7 @@ wtp-name:Bstr16:WFAT01
 
 
 wtp-fallback:Byte:1
-"ac-name-with-priority/TubesAC":Byte:3
+ac-name-with-priority/TubesACx:Byte:3
 ac-name-with-priority/"ac2":Byte:01
 
 

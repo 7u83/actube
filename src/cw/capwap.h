@@ -345,6 +345,7 @@
 */
 
 #define CW_SESSION_ID_LEN	16
+#define CAPWAP_MAX_AC_NAME_LEN		512
 
 
 /* capwap timer default values */
@@ -364,7 +365,7 @@
 #define CAPWAP_STATISTICS_TIMER		120
 
 
-#define CW_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)
+/*#define CW_TIMERS			((CW_DISCOVERY_INTERVAL << 8) | CAPWAP_ECHO_INTERVAL)*/
 
 /*
 //#define CAPWAP_CIPHER "PSK-AES128-CBC-SHA:"
@@ -594,7 +595,7 @@ const char *cw_strelemp_(cw_strheap_t h, int msg_id);
 
 #define cw_strelemp(p,id) cw_strelemp_((p)->strelem,id)
 
-
+/*
 struct cw_ac_status {
 	int stations;
 	int limit;
@@ -604,6 +605,7 @@ struct cw_ac_status {
 	int rmac_field;
 	int dtls_policy;
 };
+*/
 
 /**
  *@defgroup CAPWAP CAPWAP

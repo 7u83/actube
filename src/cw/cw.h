@@ -311,7 +311,7 @@ int cw_put_elem_result_code(uint8_t * dst, uint32_t code);
 
 
 
-extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);
+/*extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);*/
 
 
 struct cw_DescriptorSubelemDef {

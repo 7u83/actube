@@ -18,8 +18,8 @@
 
 int cw_select_ac(mavl_t local_cfg,mlist_t aclist){
 	mlistelem_t * e;
-	int en;
 	mavl_t iplist;
+	int en;
 	
 	iplist=cw_ktv_create();
 	if (iplist == NULL)
@@ -29,47 +29,48 @@ int cw_select_ac(mavl_t local_cfg,mlist_t aclist){
 
 	/* for each discovery response */
 	mlist_foreach(e,aclist){
-		char str[1024];
+		char acname[CAPWAP_MAX_AC_NAME_LEN+1];
 		char key[CW_KTV_MAX_KEY_LEN];
 		mavl_t remote_cfg;
-		int i;
-		cw_KTV_t * val;
-		int prio;
+		cw_KTV_t * val, *ipval;
+		int prio,i;
 		
 		remote_cfg = mlistelem_get_ptr(e);
 		
 		/* get ac name */
 		val = cw_ktv_get(remote_cfg,"ac-name", CW_TYPE_BSTR16);
-		if (val==NULL)
-			continue;
+		if (val==NULL){
+			/* this should not happen, because AC Name is a
+			 * amndatory message element */
+			prio=255;
+		}
+		else{
+			/* Get priority for AC from 
+			 * ac-name-with-priority list */
+			val->type->to_str(val,acname,CAPWAP_MAX_AC_NAME_LEN);
+			sprintf(key,"ac-name-with-priority/%s",acname);
+			prio = cw_ktv_get_byte(local_cfg,key,255);
+		}
 		
-		val->type->to_str(val,str,1024);
-		sprintf(key,"ac-name-with-priority/%s",str);
-		
-		printf("Get prio: %s\n",key);
-		
-		prio = cw_ktv_get_byte(local_cfg,key,255);
-		
+		/* for each control ip address the AC has sent */
 		i=0; 
 		do {
-			cw_KTV_t * ipval;
 			sprintf(key,"%s.%d","capwap-control-ip-address/wtps",i);
 			val = cw_ktv_get(remote_cfg,key,CW_TYPE_WORD);
 			if (val == NULL)
 				break;
 			
+			
 			sprintf(key,"%s.%d","capwap-control-ip-address/address",i);
-			printf("ipvalkey: %s\n",key);
 			ipval = cw_ktv_get(remote_cfg,key,CW_TYPE_IPADDRESS);
 
 			sprintf(key,"%04d%05d%04d",prio,val->val.word,en);
-			en++;
-			printf("This is the key: %s\n",key);
-			
+
 			cw_ktv_add(iplist,key,CW_TYPE_SYSPTR,(uint8_t*)(&ipval),sizeof(ipval));
-			i++;	
+			i++;
+			en++;
 		}while(1);
-		printf("Here we have an AC: %s\n",str);
+		printf("Here we have an AC: %s\n",acname);
 		
 		
 	}
