@@ -148,12 +148,15 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	       bindings_mod->name);
 
 
+	cached_set->capwap = capwap_mod->name;
+	cached_set->bindings = bindings_mod->name;
+	
 	if (capwap_mod != MOD_NULL) {
-		cached_set->capwap = capwap_mod->name;
+
 		capwap_mod->register_messages(cached_set->msgset, CW_MOD_MODE_CAPWAP);
 	}
 	if (bindings_mod != MOD_NULL) {
-		cached_set->bindings = bindings_mod->name;
+
 		bindings_mod->register_messages(cached_set->msgset, CW_MOD_MODE_BINDINGS);
 	}
 /*
