@@ -13,8 +13,9 @@
 #include "cw/dbg.h"
 #include "cw/sock.h"
 #include "cw/dtls.h"
-#include "cw/aciplist.h"
 
+
+#include "wtp.h"
 
 
 /*
@@ -94,10 +95,11 @@ acinfo.result_code=99;
 
 */
 
-int run_join_d(struct sockaddr *sa)
+int run_join_d(struct conn * conn, struct sockaddr *sa)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
-	struct conn *conn = get_conn();
+/*	struct conn *conn = get_conn();*/
+
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 
 	int sockfd;
@@ -130,7 +132,7 @@ int run_join_d(struct sockaddr *sa)
 
 	int dtls_conf_ok=0;
 
-	if (conf_dtls_psk) {
+	if (conn->dtls_psk) {
 		conn->dtls_psk = conf_dtls_psk;
 		conn->dtls_psk_len = strlen(conn->dtls_psk);
 		conn->dtls_cipher = conf_dtls_cipher;
@@ -214,12 +216,12 @@ int run_join(struct conn *conn)
 
 
 
-int join()
+int join(struct conn * conn, struct cw_DiscoveryResult dis)
 {
-	struct conn *conn = get_conn();
+
 	mavliter_t ii;
 	char addrstr[SOCK_ADDR_BUFSIZE];
-	printf("Join\n");
+
 
 	/*mbag_del_all(conn->incomming);*/
 
@@ -236,16 +238,17 @@ int join()
 	}
 */
 
-	/*DEFINE_AVLITER(ii, iplist);*/
+
 	mavliter_foreach(&ii) {
 
-		cw_acip_t *ip = avliter_get(&ii);
+/*		cw_acip_t *ip = avliter_get(&ii);*/
 
 
-		cw_dbg(DBG_INFO, "Going to join CAWAP controller on %s",
+	/*	cw_dbg(DBG_INFO, "Going to join CAWAP controller on %s",
 		       sock_addr2str_p(&ip->ip,addrstr));
+*/
 
-		int rc = run_join_d((struct sockaddr *) &ip->ip);
+/*		int rc = run_join_d((struct sockaddr *) &ip->ip);
 
 		if (rc<=0)
 			continue;
@@ -255,7 +258,7 @@ int join()
 			conn->capwap_state = CW_STATE_CONFIGURE;
 			return 1;
 		}
-
+*/
 
 
 	}

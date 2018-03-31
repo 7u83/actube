@@ -346,21 +346,8 @@ int ac_run()
 		
 		conf_parse_listen_addr (conf_listen_addrs[i], addr, port, &proto);
 		
-		
-	/*	//struct sockaddr sa;*/
-		
-		
 		socklist_add_unicast (addr, port, proto);
-		
-		/*
-//#ifdef WITH_LWAPP
-//		if (conf_lwapp)
-//			socklist_add_unicast(conf_listen_addrs[i], conf_lw_control_port,
-//					     AC_PROTO_LWAPP);
-//#endif*/
 	}
-	
-	
 	
 	if (socklist_len == 0) {
 		cw_log (LOG_ERR, "Fatal error: Could not setup any listen socket");
