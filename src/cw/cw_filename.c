@@ -31,52 +31,49 @@
  * @return a pointer to the create filename which has to be 
  * released using free.
  */
-char * cw_filename(const char * path, const char * name, const char * ext){
+char *cw_filename(const char *path, const char *name, const char *ext)
+{
 	int name_len;
-	int ext_len;	
-	int size=0;
-	
+	int ext_len;
+	int size = 0;
+
 	int path_len;
 	char c;
-	char * result;
-	char * slash="";
-	
+	char *result;
+	char *slash = "";
+
 	path_len = strlen(path);
-	if (path_len>0){
-		c = path[path_len-1];
-		if (!strchr(CW_FILE_PATH_DELIMITERS,c)){
+	if (path_len > 0) {
+		c = path[path_len - 1];
+		if (!strchr(CW_FILE_PATH_DELIMITERS, c)) {
 			path_len++;
 			slash = "/";
 		}
 	}
-	
-	name_len = strlen (name);
-	
-	
 
-	
-	if (ext != NULL){
-		if (ext[0]=='.'){
+	name_len = strlen(name);
+
+	if (ext != NULL) {
+		if (ext[0] == '.') {
 			ext++;
 		}
 		ext_len = strlen(ext);
-	}
-	else
-		ext_len=-1;
+	} else
+		ext_len = -1;
 
-	size = (path_len) + name_len + (ext_len+1) + 1;
+	size = (path_len) + name_len + (ext_len + 1) + 1;
 	result = malloc(size);
 	if (!result)
 		return NULL;
-		
-	strncpy(result,path,path_len);
-	result[path_len]=0;
-	strcat(result,slash);
-	strcat(result,name);
-	if (ext){
-		strcat(result,".");
-		strcat(result,ext);
+
+	strncpy(result, path, path_len);
+	result[path_len] = 0;
+	strcat(result, slash);
+	strcat(result, name);
+	if (ext) {
+		strcat(result, ".");
+		strcat(result, ext);
 	}
-	
+
 	return result;
 }
