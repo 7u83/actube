@@ -164,6 +164,9 @@ int main (int argc, char **argv)
 	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
 
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
+
+
+
 	{
 		mavliter_t i;
 		mavliter_init(&i, dis.prio_ip);
@@ -172,13 +175,23 @@ int main (int argc, char **argv)
 			char ipstr[100];
 			char *rk;
 			cw_KTV_t *val;
+			mavl_t cfg;
+			
 			val = mavliter_get(&i);
 			rk = val->key;
 			val = val->val.ptr;
 			val->type->to_str(val, ipstr, 100);
 			printf("PTRVAL(%s): %s - %s\n", rk, val->key, ipstr);
+			
+			
+			cfg = cw_ktv_get_sysptr(dis.prio_ac,rk,NULL);
+			
+			cw_dbg_ktv_dump(cfg,DBG_INFO,"----- dump of remote","dmp","endof of remote -------");
+			
 		}
 	}
+
+	cw_discovery_free_results(&dis);
 
 	return (EXIT_SUCCESS);
 

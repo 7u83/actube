@@ -70,6 +70,8 @@ CWSRC=\
 	cw_ktv_get_byte.c\
 	cw_ktv_get.c\
 	cw_ktv_get_word.c\
+	cw_ktv_get_dword.c\
+	cw_ktv_get_sysptr.c\
 	cw_ktv_idx_get.c\
 	cw_ktv_mavlcmp.c\
 	cw_ktv_mavlcmp_type_by_name.c\

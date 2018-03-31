@@ -94,7 +94,13 @@ extern struct mlistelem *mlist_find(mlist_t l, struct mlistelem *start, void *da
 #define mlistelem_get_ptr(elem) (*((void**)(mlistelem_dataptr(elem))))
 #define mlistelem_get_str(elem) mlistelem_get_ptr(elem)
 #define mlist_create_conststr() mlist_create(NULL,NULL,sizeof(const char*))
+
+
 mlistelem_t * mlist_append_ptr (mlist_t list, void * ptr);
+
+/*#define mlist_append_ptr(list,ptr) mlist_append(list,&(ptr))*/
+
+
 
 /**
  * @} MLIST

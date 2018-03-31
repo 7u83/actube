@@ -74,6 +74,8 @@ int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
 
 			cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, (uint8_t *) (&ipval),
 				   sizeof(ipval));
+			cw_ktv_add(dis->prio_ac, key, CW_TYPE_SYSPTR, (uint8_t *)(&remote_cfg),
+				sizeof(remote_cfg));
 			i++;
 			en++;
 		} while (1);
@@ -97,10 +99,20 @@ void cw_discovery_free_results(struct cw_DiscoveryResult * dis)
 }
 
 
+static void result_del(void * data)
+{
+	
+	mavl_t todelete = *((void**)data);
+	mavl_destroy(todelete);
+	
+	
+	/*mavl_t*/
+}
 
 int cw_discovery_init_results(struct cw_DiscoveryResult *dis)
 {
-	dis->results = mlist_create(NULL, NULL, sizeof(void *));
+	
+	dis->results = mlist_create(NULL, result_del, sizeof(void *));
 	if (dis->results==NULL)
 		goto errX;
 	dis->prio_ac=cw_ktv_create();

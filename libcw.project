@@ -267,6 +267,8 @@
       <File Name="src/cw/cw_type_sysptr.c"/>
       <File Name="src/cw/log_errno.c"/>
       <File Name="src/cw/cw_randint.c"/>
+      <File Name="src/cw/cw_ktv_get_sysptr.c"/>
+      <File Name="src/cw/cw_ktv_get_dword.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

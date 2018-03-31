@@ -6,10 +6,11 @@
 
 void cw_ktv_mavldel(void *data)
 {
-	struct cw_KTV *kvt = data;
+	struct cw_KTV *ktv = data;
+	/*printf("KTV Del Key,Type: %s %s\n", ktv->key,ktv->type->name);*/
+	if (ktv->type->del){
+		ktv->type->del(data);
+	}
 
-	if (kvt->type->del)
-		kvt->type->del(data);
-
-	free(kvt->key);
+	free(ktv->key);
 }
