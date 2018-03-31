@@ -36,6 +36,7 @@ struct cw_KTV {
 		uint16_t word;
 		uint8_t byte;
 		void *ptr;
+		char *str;
 		int boolean;
 	} val;
 };
@@ -95,6 +96,7 @@ extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;
 extern const struct cw_Type cw_type_dword;
 extern const struct cw_Type cw_type_bstr16;
+extern const struct cw_Type cw_type_str;
 extern const struct cw_Type cw_type_ipaddress;
 extern const struct cw_Type cw_type_sysptr;
 
@@ -104,6 +106,7 @@ extern const struct cw_Type cw_type_sysptr;
 #define CW_TYPE_BSTR16 (&cw_type_bstr16)
 #define CW_TYPE_IPADDRESS (&cw_type_ipaddress)
 #define CW_TYPE_SYSPTR (&cw_type_sysptr)
+#define CW_TYPE_STR (&cw_type_str)
 
 /*
 void cw_kvstore_mavl_delete(const void *data);

@@ -12,10 +12,6 @@ static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
 {
 	cw_dbg(DBG_INFO,"CAPWAP: Inititalizing mod_capwap.");
 	
-	
-	
-	
-	
 	switch (role){
 		case CW_ROLE_AC:{
 			cw_dbg(DBG_MOD, "CAPWAP: Initialiazing mod_capwap in AC mode");	
@@ -52,7 +48,6 @@ int static setup_cfg(struct conn  * conn)
 	
 	
 	return 0;
-		
 }
 
 

@@ -105,6 +105,7 @@ CWSRC=\
 	cw_strlist_get_str.c\
 	cw_type_bstr16.c\
 	cw_type_byte.c\
+	cw_type_str.c\
 	cw_type_dword.c\
 	cw_type_ipaddress.c\
 	cw_type_word.c\
@@ -126,6 +127,7 @@ LWSRC=\
 	lw_put_80211_wtp_wlan_radio_configuration.c\
 	lw_put_ac_descriptor.c\
 	lw_put_bstr.c\
+	lw_put_str.c\
 	lw_put_cisco_path_mtu.c\
 	lw_put_image_data.c\
 	lw_put_sockaddr.c\

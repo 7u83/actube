@@ -49,6 +49,12 @@
  */
 #define cw_put_data lw_put_data
 
+
+/**
+ * Put a 0-terminated string
+ */
+#define cw_put_str lw_put_str
+
 /**
  * Put a bstr_t object
  * see #lw_put_bstr
