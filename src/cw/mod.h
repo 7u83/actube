@@ -36,10 +36,6 @@ enum {
 	CW_MOD_MODE_BINDINGS
 };
 
-enum {
-	CW_ROLE_AC=1,
-	CW_ROLE_WTP=2
-};
 
 
 
@@ -49,9 +45,6 @@ struct cw_Mod {
 
 	/** Initializion method */
 	int (*init) (struct cw_Mod *mod, mavl_t global_cfg, int role);
-
-	/** init_config */
-/*	int (*init_config) (void *);*/
 
 	/** Detect capwap 
 	 * This function is called after receiving and disassembling a complete 

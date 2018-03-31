@@ -123,10 +123,14 @@
 
 
 
-
+/*
 #define CW_RECEIVER_AC 1
 #define CW_RECEIVER_WTP 1
+*/
 
+#define	CW_ROLE_AC	1
+#define CW_ROLE_WTP	2
+#define CW_ROLE_BOTH	(CW_ROLE_AC | CW_ROLE_WTP)
 
 
 
