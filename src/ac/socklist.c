@@ -88,7 +88,8 @@ int socklist_find_reply_socket(struct sockaddr *sa, int port)
 {
 	int bestindex = -1;
 	int i;
-
+	uint32_t addr,mask,saddr;
+	
 
 	for (i = 0; i < socklist_len; i++) {
 		/* we want only an unicast socket for reply */
@@ -123,13 +124,13 @@ int socklist_find_reply_socket(struct sockaddr *sa, int port)
 			continue;
 
 		/* get our source address and netmask */
-		uint32_t addr =
+		addr =
 		    ((struct sockaddr_in *) &socklist[i].addr)->sin_addr.s_addr;
-		uint32_t mask =
+		mask =
 		    ((struct sockaddr_in *) &socklist[i].netmask)->sin_addr.s_addr;
 
 		/* get source of requested address */
-		uint32_t saddr = ((struct sockaddr_in *) sa)->sin_addr.s_addr;
+		saddr = ((struct sockaddr_in *) sa)->sin_addr.s_addr;
 
 		/* if the request comes from the same subnet where our
 		 * socket is cconnected, this is our new best socked.
@@ -146,15 +147,15 @@ int socklist_find_reply_socket(struct sockaddr *sa, int port)
 
 static int find_reply_socket(struct sockaddr *sa, int bc)
 {
-
-/*	//printf("Looking for best sock of: %s\n",sock_addr2str(sa));*/
-
+	unsigned int snlen;
+	struct sockaddr_storage bcaddr;
+		
 	int bestsockfd = -1;
 	int i;
 	for (i = 0; i < socklist_len; i++) {
 		struct sockaddr_storage sn;
 		memset(&sn, 0, sizeof(sn));
-		unsigned int snlen = sizeof(struct sockaddr_storage);
+		snlen = sizeof(struct sockaddr_storage);
 
 		if (getsockname(socklist[i].sockfd, (struct sockaddr *) &sn, &snlen) < 0) {
 			continue;
@@ -179,7 +180,7 @@ static int find_reply_socket(struct sockaddr *sa, int bc)
 		if (!bc)
 			return bestsockfd;
 
-		struct sockaddr_storage bcaddr;
+
 
 		if (!sock_getbroadcastaddr
 		    ((struct sockaddr *) &sn, (struct sockaddr *) &bcaddr))
@@ -218,13 +219,15 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 
 	struct addrinfo hints;
 	struct addrinfo *res, *res0;
+	int rc;
+	
 	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_family = PF_UNSPEC;
 	hints.ai_flags = AI_PASSIVE;
 
-	int rc = getaddrinfo(addr, port, &hints, &res0);
+	rc = getaddrinfo(addr, port, &hints, &res0);
 	if (rc != 0) {
 		cw_log(LOG_ERR, "Can't bind multicast address '%s': %s", addr,
 		       gai_strerror(rc));
@@ -233,6 +236,10 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 
 	for (res = res0; res; res = res->ai_next) {
 		struct sockaddr *sa = res->ai_addr;
+		void *opt;
+		int optlen;
+		int rfd;
+
 		int sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 		/* create socket */
 		if (sockfd == -1) {
@@ -251,19 +258,18 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 		}
 
 		/* use setsockopt() to request that the kernel joins a multicast group */
-		void *opt;
-		int optlen;
 		if (res->ai_addr->sa_family == AF_INET) {
-
+			struct sockaddr_in *sain;
+			char sinin[100];
 			struct ip_mreq mreq;
 			memset(&mreq, 0, sizeof(mreq));
-			struct sockaddr_in *sain = (struct sockaddr_in *) res->ai_addr;
+			sain = (struct sockaddr_in *) res->ai_addr;
 			mreq.imr_multiaddr.s_addr = sain->sin_addr.s_addr;
 			mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 			opt = &mreq;
 			optlen = sizeof(mreq);
 
-			char sinin[100];
+
 			sock_addrtostr((struct sockaddr *) sain, sinin, 100,1);
 
 			if (setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, opt, optlen)
@@ -277,15 +283,14 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 		}
 		if (res->ai_addr->sa_family == AF_INET6) {
 			struct ipv6_mreq mreq;
+			struct sockaddr_in6 *sain6;
 			memset(&mreq, 0, sizeof(mreq));
-			struct sockaddr_in6 *sain6 = (struct sockaddr_in6 *) res->ai_addr;
-/*//                      mreq.ipv6mr_multiaddr.s_addr=sain->sin_addr.s_addr;*/
+			sain6 = (struct sockaddr_in6 *) res->ai_addr;
+
 			memcpy(&mreq.ipv6mr_multiaddr.s6_addr, &sain6->sin6_addr.s6_addr,
 			       sizeof(sain6->sin6_addr.s6_addr));
-/*//                      int si  = sizeof(sain6->sin6_addr.s6_addr);
 
-//                      int i = sain6->sin6_addr.s6_addr;                       
-*/			mreq.ipv6mr_interface = 0;	/*//htonl(INADDR_ANY);*/
+			mreq.ipv6mr_interface = 0;	/* htonl(INADDR_ANY);*/
 			opt = &mreq;
 			optlen = sizeof(mreq);
 			if (setsockopt(sockfd, IPPROTO_IPV6, IPV6_JOIN_GROUP, opt, optlen)
@@ -297,7 +302,7 @@ int socklist_add_multicast(const char *addr, const char *port, int ac_proto)
 			}
 		}
 
-		int rfd = find_reply_socket(sa, 0);
+		rfd = find_reply_socket(sa, 0);
 
 		socklist[socklist_len].sockfd = sockfd;
 /*//		socklist[socklist_len].reply_sockfd = rfd;*/
@@ -333,20 +338,20 @@ static int socklist_check_size()
 int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	struct addrinfo hints;
+	struct addrinfo *res, *res0;
+	int rc;
 
 	if (!socklist_check_size())
 		return 0;
-	
 
-	struct addrinfo hints;
-	struct addrinfo *res, *res0;
 	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_family = PF_UNSPEC;
 	hints.ai_flags = AI_PASSIVE;
 
-	int rc = getaddrinfo(addr, port, &hints, &res0);
+	rc = getaddrinfo(addr, port, &hints, &res0);
 	if (rc != 0) {
 		cw_log(LOG_ERR, "Can't bind unicast address '%s': %s", addr,
 		       gai_strerror(rc));
@@ -357,7 +362,9 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		char ifname[64];
 		struct sockaddr netmask;
 		struct sockaddr broadcast;
-
+		struct sockaddr *sa;
+		int sockfd;
+		
 		ifname[0] = 0;
 		rc = sock_getifinfo(res->ai_addr, ifname, &broadcast, &netmask);
 		if (!rc) {
@@ -366,8 +373,8 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		}
 
 		/* Bind the control port */
-		struct sockaddr *sa = res->ai_addr;
-		int sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
+		sa = res->ai_addr;
+		sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 		/* create socket */
 		if (sockfd == -1) {
 			cw_log(LOG_ERR, "Can't create unicast socket: %s",
@@ -446,11 +453,14 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 
 int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 {
+	struct addrinfo hints;
+	struct addrinfo *res, *res0;
+	int rc;
+	int sockfd;
+	
 	if (!socklist_check_size())
 		return 0;
 
-	struct addrinfo hints;
-	struct addrinfo *res, *res0;
 	memset(&hints, 0, sizeof(hints));
 
 	hints.ai_socktype = SOCK_DGRAM;
@@ -458,16 +468,16 @@ int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 	hints.ai_flags = AI_PASSIVE;
 
 
-	int rc = getaddrinfo(addr, port, &hints, &res0);
+	rc = getaddrinfo(addr, port, &hints, &res0);
 	if (rc != 0) {
 		cw_log(LOG_ERR, "Can't bind broadcast address '%s': %s", addr,
 		       gai_strerror(rc));
 		return 0;
 	}
 
-	int sockfd;
-	for (res = res0; res; res = res->ai_next) {
 
+	for (res = res0; res; res = res->ai_next) {
+		int rfd;
 		struct sockaddr *sa = res->ai_addr;
 		sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
 
@@ -498,8 +508,7 @@ int socklist_add_broadcast(const char *addr, const char *port, int ac_proto)
 			continue;
 		}
 
-
-		int rfd = find_reply_socket(sa, 1);
+		rfd = find_reply_socket(sa, 1);
 
 		socklist[socklist_len].sockfd = sockfd;
 /*//		socklist[socklist_len].reply_sockfd = rfd;*/
