@@ -30,9 +30,9 @@
 #ifndef __CW_LOG_H
 #define __CW_LOG_H
 
+#include <syslog.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <syslog.h>
 
 #ifndef LOG_ERROR
 #define LOG_ERROR LOG_ERR

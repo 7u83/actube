@@ -1,6 +1,11 @@
 
 #include <stdio.h>
 
+#include <arpa/inet.h>
+#include <netinet/in.h>
+
+
+
 #include "format.h"
 #include "cw.h"
 #include "ktv.h"
