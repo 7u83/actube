@@ -20,25 +20,25 @@ endif
 
 ifeq ($(CC),clang)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -fPIC $(OPTFLAGS) -D_REENTRANT  -I /usr/local/include -I../
 LD		= clang
 endif
 
 ifeq ($(CC),gcc)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -fPIC $(OPTFLAGS) -D_REENTRANT  -I /usr/local/include -I../
 LD		= gcc
 endif
 
 ifeq ($(CC),tcc)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -Wall -Wunusupported  -Wimplicit-function-declaration -I /usr/local/include -I../
+CFLAGS 		+= -Wall $(OPTFLAGS) -Wunusupported  -Wimplicit-function-declaration -I /usr/local/include -I../
 LD		= tcc 
 endif
 
 ifeq ($(CC),cc)
 LDFLAGS		+= -g -L/usr/local/lib 
-CFLAGS 		+= -fPIC -g -O0 -D_REENTRANT  -I /usr/local/include -I../
+CFLAGS 		+= -fPIC $(OPTFLAGS)  -D_REENTRANT  -I /usr/local/include -I../
 LD		= cc
 endif
 

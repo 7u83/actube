@@ -103,10 +103,21 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
 	int sockfd;
-
+	
+	int rsec,lsec;
+	
+	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
+	rsec = cw_ktv_get_byte(conn->remote_cfg,"ac-descriptor/security",0);
+	
+	if ((lsec & rsec) == 0){
+		cw_log(LOG_ERR, "Can't establish DTLS with AC, my sec: %d, remote sec %d",lsec,rsec);
+		return 0;
+	}
+	
 /*	struct conn *conn = get_conn();*/
 
 	conn->capwap_state = CAPWAP_STATE_JOIN;
+
 
 
 	sockfd = socket(sa->sa_family, SOCK_DGRAM, 0);
@@ -218,8 +229,6 @@ int run_join(struct conn *conn)
 	return 1;
 }
 
-
-
 int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 {
 
@@ -232,6 +241,7 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 		char * rk;
 		char ipstr[100];
 		char ac_name[CAPWAP_MAX_AC_NAME_LEN];
+		struct sockaddr_storage sockaddr;
 		
 		val = mavliter_get(&ii);
 		rk = val->key;
@@ -248,7 +258,16 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 			strcpy(ac_name,"");
 		}
 		
+		
 		cw_dbg(DBG_INFO, "Going to join CAPWAP controller '%s' at %s.",ac_name,ipstr);
+		
+		conn->remote_cfg=rcfg;
+		
+		/*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"remopte ac","preifx**: ","bottom");
+		*/
+		
+		sock_strtoaddr(ipstr,(struct sockaddr*)(&sockaddr));
+		run_join_d(conn,(struct sockaddr*)(&sockaddr));
 	}
 
 

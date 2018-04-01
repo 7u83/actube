@@ -159,6 +159,8 @@ int main (int argc, char **argv)
 			mod->setup_cfg(conn);
 	}
 
+/*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");*/
+
 
 
 

@@ -1,7 +1,8 @@
 capwap/ac-descriptor/hardware/version:Bstr16: "ACTube 1.0"
 capwap/ac-descriptor/hardware/vendor:Bastr16: 12346
-capwap/ssl-cert:Bstr16: "/usr/local/etc/ssl/tube.ssl"
-capwap/ssl-key:Bstr16: "/usr/local/etc/key"
+capwap/ssl-cert:Str: "/usr/local/etc/ssl/tube.ssl"
+capwap/ssl-key:Str: "/usr/local/etc/key"
+
 ac-descriptor/stations:Word:05
 ac-descriptor/station-limit:Word:6
 ac-descriptor/active-wtps:Word:7

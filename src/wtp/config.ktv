@@ -4,6 +4,8 @@
 
 capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
 capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
+cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
+cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
      
 discovery-type:Byte:0
 wtp-frame-tunnel-mode:Byte:1

@@ -191,6 +191,16 @@ static struct cw_Mod capwap_ac = {
 };
 */
 
+int static setup_cfg(struct conn  * conn)
+{
+	int security;
+	
+	security = cw_setup_dtls(conn,conn->local_cfg,"cisco",CAPWAP_CIPHER);
+	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
+
+	return 0;
+}
+
 
 struct cw_Mod mod_cisco = {
 	"cisco",			/* name */
@@ -198,7 +208,8 @@ struct cw_Mod mod_cisco = {
 	detect,				/* detect */
 	register_messages,		/* register_messages */
 	NULL,				/* dll_handle */
-	NULL				/* data */
+	NULL,				/* data */
+	setup_cfg			/* setup_cfg */
 };
 
 
