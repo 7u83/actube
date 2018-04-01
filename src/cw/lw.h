@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 
-/*#include "conn.h"*/
 #include "bstr.h"
 
 
@@ -36,7 +35,7 @@
 	(*((uint16_t*)(dst)) = htons(w),2)
 
 /**
- * Put a dword to to an output buffer. The dword
+ * Put a dword to an output buffer. The dword
  * is converted to network byte order.
  *
  * @param dst destination buffer
@@ -102,18 +101,13 @@ int lw_put_vendor(uint8_t * dst, uint32_t vendorid,
 					 uint16_t elemid, uint16_t len);
 
 
-
-
 /*
 int lw_in_vendor_specific(struct conn *conn, struct cw_action_in *a,
 				  uint8_t * data, int len, struct sockaddr *from);
 */
 
 
-
-extern uint16_t lw_checksum(uint8_t *d,int len);
-extern int lw_put_sockaddr(uint8_t *dst, struct sockaddr_storage *addr);
-
+uint16_t lw_checksum(uint8_t *d,int len);
 
 #define lw_foreach_elem(d,msg,len) for(d=msg; d<msg+len; d=d+3+LWMSGELEM_GET_LEN(d))
 
