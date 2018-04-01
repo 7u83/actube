@@ -65,22 +65,6 @@ CWSRC=\
 	cw_in_radio_generic.c\
 	cw_in_wtp_reboot_statistics.c\
 	cw_is_printable.c\
-	cw_ktv_add.c\
-	cw_ktv_add_from_str.c\
-	cw_ktv_get_byte.c\
-	cw_ktv_get.c\
-	cw_ktv_get_word.c\
-	cw_ktv_get_dword.c\
-	cw_ktv_get_sysptr.c\
-	cw_ktv_get_str.c\
-	cw_ktv_idx_get.c\
-	cw_ktv_mavlcmp.c\
-	cw_ktv_mavlcmp_type_by_name.c\
-	cw_ktv_mavldel.c\
-	cw_ktv_read_file.c\
-	cw_ktv_readline.c\
-	cw_ktv_read_struct.c\
-	cw_ktv_std_types.c\
 	cw_load_file.c\
 	cw_out_generic.c\
 	cw_out_radio_administrative_states.c\
@@ -115,6 +99,26 @@ CWSRC=\
 	cw_write_descriptor_subelem.c\
 	cw_read_from.c \
 	cw_write_radio_element.c\
+
+KTVSRC=\
+	cw_ktv_add.c\
+	cw_ktv_replace.c\
+	cw_ktv_add_from_str.c\
+	cw_ktv_get_byte.c\
+	cw_ktv_set_byte.c\
+	cw_ktv_get.c\
+	cw_ktv_get_word.c\
+	cw_ktv_get_dword.c\
+	cw_ktv_get_sysptr.c\
+	cw_ktv_get_str.c\
+	cw_ktv_idx_get.c\
+	cw_ktv_mavlcmp.c\
+	cw_ktv_mavlcmp_type_by_name.c\
+	cw_ktv_mavldel.c\
+	cw_ktv_read_file.c\
+	cw_ktv_readline.c\
+	cw_ktv_read_struct.c\
+	cw_ktv_std_types.c\
 
 
 LWSRC=\
@@ -251,7 +255,7 @@ RADIOSRC=\
 
 
 #SRC=$(wildcard *.c)
-SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(MISCSRC)
+SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC)
 
 OBJS=$(patsubst %.c,%.o,$(SRC))
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
