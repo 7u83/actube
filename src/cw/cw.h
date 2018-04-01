@@ -3,9 +3,9 @@
 
 #include <arpa/inet.h>
 
-#include "bstr.h"
+/*#include "bstr.h"*/
 
-#include "conn.h"
+/*#include "conn.h"*/
 
 
 #include "lw.h"
@@ -311,11 +311,12 @@ int cw_put_image_data(uint8_t * dst, FILE * infile);
  */
 #define cw_put_encryption_capabilities_7(dst,cap) cw_put_word(dst,cap)
 
-
+/*
 int cw_addelem(uint8_t * dst, uint16_t type, uint8_t * data, uint16_t len);
 int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr);
+*/
 int cw_put_elem_result_code(uint8_t * dst, uint32_t code);
-/*int cw_put_version(uint8_t * dst, uint16_t subelem_id, bstrv_t v);*/
+
 
 
 
@@ -375,7 +376,7 @@ int cw_read_ac_descriptor(mavl_t store,
 			struct cw_DescriptorSubelemDef *allowed);
 
 
-
+int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * default_cipher);
 
 
 
@@ -462,19 +463,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params,
  */
 #define cw_out_capwap_local_ip_address_7 cw_out_wtp_ip_address
 
-/*
-extern int cw_out_wtp_reboot_statistics(struct conn *conn, struct cw_action_out *a,
-					uint8_t * dst);
-*/
 
-/* helpers */
-/*extern int cw_put_local_ip_address(int sock, uint8_t * dst, int ipv4elem_id,
-				   int ipv6elem_id);
-*/
-/*
-extern int cw_put_radio_operational_states(mbag_t radios, uint8_t * dst, int *nerror,
-					   int d7mode);
-*/
 void cw_init_request(struct conn *conn, int msg_id);
 
 
@@ -491,10 +480,6 @@ void cw_init_request(struct conn *conn, int msg_id);
 extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause);
  */
  
-/*
-//extern int cw_put_elem_radio_administrative_state(uint8_t *dst,int radio_id,mbag_t radio);
-//extern int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int os, int d7mode);
-*/
 
 int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause);
 int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
@@ -515,25 +500,6 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout);
  */
 
 
-/*
-struct cw_ip{
-	struct sockaddr_storage ip;
-	uint32_t wtp_count;
-};
-
-typedef struct cw_ip cw_acip_t;
-
-typedef struct mavl * cw_aciplist_t;
-
-extern cw_iplist_t cw_aciplist_create();
-
-#define cw_aciplist_destroy(l) mavl_destroy(l)
-#define cw_aciplist_add(l,elem) mavl_add(l,elem)
-#define cw_aciplist_del(l,elem) mavl_del(l,elem) 
-#define cw_aciplist_foreach(l,callback,cbpriv) mavl_foreach_asc(l,callback,cbpriv)
-#define cw_aciplist_replace(l,r) mavl_replace(l,r)
-
-*/
 
 char *cw_strdup(const char *s);
 
