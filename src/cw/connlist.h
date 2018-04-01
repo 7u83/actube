@@ -18,7 +18,7 @@ struct connlist {
 };
 
 
-struct connlist *connlist_create(int len);
+struct connlist *connlist_create(int len, int cmpports);
 void connlist_lock(struct connlist *cl);
 void connlist_unlock(struct connlist *cl);
 void conlist_destroy(struct connlist *cl);

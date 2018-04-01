@@ -4,7 +4,8 @@
 
 
 #include "conn.h"
-#include "dtls.h"
+/*#include "dtls.h"*/
+#include "dtls_common.h"
 #include "dtls_gnutls.h"
 
 struct dtls_ssl_cert dtls_gnutls_get_peers_cert(struct conn * conn,unsigned int n)

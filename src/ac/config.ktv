@@ -7,6 +7,7 @@ ac-descriptor/stations:Word:05
 ac-descriptor/station-limit:Word:6
 ac-descriptor/active-wtps:Word:7
 ac-descriptor/max-wtps:Word:8
+ac-descriptor/security:Byte:2
 
 ac-descriptor/software/version:Bstr16:.x090103
 ac-descriptor/software/vendor:Dword:.1234
@@ -15,7 +16,7 @@ ac-descriptor/hardware/version:Bstr16:"1.7.3"
 ac-name:Bstr16:"TubesAC"
 
 capwap-control-ip-address/address.0:IPAddress:192.168.0.14
-capwap-control-ip-address/address.1:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
+#capwap-control-ip-address/address.1:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
 capwap-control-ip-address/wtps.0:Word:0
-capwap-control-ip-address/wtps.1:Word:11
+#capwap-control-ip-address/wtps.1:Word:11
 

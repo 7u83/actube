@@ -43,7 +43,7 @@ static struct connlist * connlist;
 int wtplist_init()
 {
 
-	connlist  = connlist_create(0);
+	connlist  = connlist_create(0,0);
 	if (!connlist)
 		return 0;
 

@@ -274,6 +274,7 @@
       <File Name="src/cw/cw_setup_dtls.c"/>
       <File Name="src/cw/cw_ktv_replace.c"/>
       <File Name="src/cw/cw_ktv_set_byte.c"/>
+      <File Name="src/cw/conn_q_wait_packet.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

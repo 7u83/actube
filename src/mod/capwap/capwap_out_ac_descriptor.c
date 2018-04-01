@@ -24,7 +24,9 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/station-limit",0));
 	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/active-wtps",0));
 	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/max-wtps",0));
-
+	
+	d += cw_put_byte(d,cw_ktv_get_byte(global,"ac-descriptor/security",0));
+/*	
 	security = 0;
 	if (cw_ktv_get(local,"dtls-cert-file",CW_TYPE_BSTR16))
 		security |= CAPWAP_FLAG_AC_SECURITY_X;
@@ -36,7 +38,7 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 		cw_log(LOG_WARNING,"No AC security selected");
 	}
 	d += cw_put_byte(dst,security);
-	
+*/	
 	sprintf(key,"%s/%s",parent_key,CW_SKEY_RMAC_FIELD);
 	d += cw_put_byte(d,cw_ktv_get_byte(local,key,0));
 	

@@ -38,6 +38,7 @@
 int dtls_gnutls_accept(struct conn *conn)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	char cookie_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
 	uint8_t buffer[2048];
 	int tlen, rc;
@@ -48,13 +49,12 @@ int dtls_gnutls_accept(struct conn *conn)
 	
 	gnutls_key_generate(&cookie_key, GNUTLS_COOKIE_KEY_SIZE);
 	cw_dbg(DBG_DTLS, "Session cookie for %s generated: %s",
-	       sock_addr2str(&conn->addr,sock_buf), sock_hwaddrtostr((uint8_t *) (&cookie_key),
-							     sizeof(cookie_key),sock_buf,""));
+	       sock_addr2str(&conn->addr,sock_buf), 
+	       sock_hwaddrtostr((uint8_t *) (&cookie_key),
+		sizeof(cookie_key),cookie_buf,""));
 
 
 	memset(&prestate, 0, sizeof(prestate));
-
-
 
 	tlen = dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
 

@@ -35,15 +35,23 @@
 #include "sock.h"
 
 
+#include "dbg.h"
+
+static int cmp_by_addr_p ( const void * d1, const void *d2 )
+{
+	struct conn * c1 = * ( void ** ) d1 ;
+	struct conn * c2 = * ( void ** ) d2 ;
+	return sock_cmpaddr ( ( struct sockaddr* ) &c1->addr, ( struct sockaddr* ) &c2->addr, 1 );
+}
 
 
 static int cmp_by_addr ( const void * d1, const void *d2 )
 {
 	struct conn * c1 = * ( void ** ) d1 ;
 	struct conn * c2 = * ( void ** ) d2 ;
-	
-	return sock_cmpaddr ( ( struct sockaddr* ) &c1->addr, ( struct sockaddr* ) &c2->addr, 1 );
+	return sock_cmpaddr ( ( struct sockaddr* ) &c1->addr, ( struct sockaddr* ) &c2->addr, 0 );
 }
+
 
 static int cmp_by_session_id ( const void *d1, const void  *d2 )
 {
@@ -52,7 +60,13 @@ static int cmp_by_session_id ( const void *d1, const void  *d2 )
 	return memcmp ( c1->session_id, c2->session_id, 16 );
 }
 
-struct connlist * connlist_create ( int len )
+/**
+ * @brief Create a connection list
+ * @param len initial length
+ * @param cmpports compare ports
+ * @return the create connection list or NULL if an error has occured.
+ */
+struct connlist * connlist_create ( int len, int cmpports )
 {
 
 	struct connlist * cl = malloc ( sizeof ( struct connlist ) );
@@ -60,8 +74,12 @@ struct connlist * connlist_create ( int len )
 	if ( !cl )
 		return 0;
 		
-		
-	cl->by_addr = mavl_create_ptr ( cmp_by_addr, NULL );
+	if (cmpports){
+		cl->by_addr = mavl_create_ptr ( cmp_by_addr_p, NULL );
+	}
+	else{
+		cl->by_addr = mavl_create_ptr ( cmp_by_addr, NULL );
+	}
 	
 	if ( !cl->by_addr ) {
 		free ( cl );

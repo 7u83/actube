@@ -45,7 +45,7 @@
 
 static void reset_echointerval_timer(struct wtpman *wtpman)
 {
-	char sock_buf[SOCK_ADDR_BUFSIZE];
+/*	char sock_buf[SOCK_ADDR_BUFSIZE];*/
 /*	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
 				    CW_MAX_DISCOVERY_INTERVAL << 8 |
 				    CAPWAP_ECHO_INTERVAL);
@@ -66,7 +66,6 @@ static int msg_start_handler(struct conn *conn, struct cw_action_in *a, uint8_t 
 {
 	struct wtpman *wtpman = conn->data;
 	reset_echointerval_timer(wtpman);
-
 	return 0;
 }
 
@@ -85,38 +84,23 @@ static void wtpman_remove(struct wtpman *wtpman)
 
 static void wtpman_run_discovery(void *arg)
 {
-
-
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
 	time_t timer = cw_timer_start(10);
 
-
-
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-/*//	wtpman->conn->actions = &capwap_actions;*/
-
-/*	wtpman->conn->outgoing = mbag_create();
-	wtpman->conn->incomming = mbag_create();
-*/	
-	wtpman->conn->remote_cfg = cw_ktv_create(); /*//mavl_cmp_kv,NULL,1312);*/
+	wtpman->conn->remote_cfg = cw_ktv_create(); 
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
-		cw_read_messages(wtpman->conn);
+		int rc;
+		rc = cw_read_messages(wtpman->conn);
+		if (cw_result_is_ok(rc)){
+			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
+		}
 	}
 
-/*
-//	struct mbag_item *wn = mbag_get(wtpman->conn->incomming, CW_ITEM_WTP_NAME);
-
-//	if (wn) {
-//              printf("WTP Name: %s\n", wn->data);
-//              exit(0);
-//	}
-*/
-	wtpman_remove(wtpman);
 	return;
-
 }
 
 /*
@@ -138,6 +122,7 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 static int wtpman_establish_dtls(void *arg)
 {
+	int dtls_ok;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
@@ -145,7 +130,7 @@ static int wtpman_establish_dtls(void *arg)
 	wtpman->conn->dtls_cipher = conf_sslcipher;
 
 	/* setup DTSL certificates */
-	int dtls_ok = 0;
+	dtls_ok = 0;
 	if (conf_sslkeyfilename && conf_sslcertfilename) {
 
 
@@ -186,6 +171,7 @@ static int wtpman_establish_dtls(void *arg)
 
 static int wtpman_join(void *arg, time_t timer)
 {
+	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	struct conn *conn = wtpman->conn;
@@ -210,7 +196,7 @@ static int wtpman_join(void *arg, time_t timer)
 
 	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr,sock_buf));
 
-	int rc;
+	
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
@@ -301,7 +287,7 @@ void wtpman_run_data(void *wtpman_arg)
 {
 
 	return;
-
+/*
 	struct wtpman *wtpman = (struct wtpman *) wtpman_arg;
 	struct conn *conn = wtpman->conn;
 
@@ -312,10 +298,10 @@ void wtpman_run_data(void *wtpman_arg)
 	cw_log(LOG_ERR, "I am the data thread**********************************************************************\n");
 	while (1) {
 		sleep(5);
-/*//		conn->write_data(conn, data, 100);*/
+/ //		conn->write_data(conn, data, 100); /
 		cw_log(LOG_ERR, "O was the data thread***********************************************************\n");
 	}
-
+*/
 
 }
 
@@ -324,33 +310,59 @@ void wtpman_run_data(void *wtpman_arg)
 
 static void wtpman_run(void *arg)
 {
+	int rc ;
+	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	struct conn *conn;
 
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
 	wtpman->conn->seqnum = 0;
-	struct conn *conn = wtpman->conn;
+	conn = wtpman->conn;
 
 
+	/* We were invoked with an unencrypted packet, 
+	 * so assume, it is a discovery request */
+	if (!wtpman->dtlsmode){
+		wtpman_run_discovery(arg);
+		if (conn->capwap_state==CAPWAP_STATE_DISCOVERY){
+			wtpman_remove(wtpman);
+			return;
+		}
+	}
 
 
 	/* reject connections to our multi- or broadcast sockets */
-/*	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
-		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
+	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
+		cw_dbg(DBG_DTLS,"Reject multi");
+/*		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
 		       CLIENT_IP);
+*/		wtpman_remove(wtpman);
+
+		return;
+	}
+
+cw_dbg(DBG_INFO,"Wait for next packedt");
+	/* wait for next packet */
+	rc = conn_q_wait_packet(conn,30);
+	if (rc != 0){
+cw_dbg(DBG_INFO,"Wait for next packedt no next remove");		
 		wtpman_remove(wtpman);
 		return;
 	}
-*/
+	
 
-	time_t timer = cw_timer_start(wtpman->conn->wait_dtls);
 
+
+	timer = cw_timer_start(wtpman->conn->wait_dtls);
+
+cw_dbg(DBG_INFO,"Establish DTSL Timer done");
 	/* establish dtls session */
-/*	if (!wtpman_establish_dtls(wtpman)) {
+	if (!wtpman_establish_dtls(wtpman)) {
 		wtpman_remove(wtpman);
 		return;
 	}
-*/
+cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 
 	/* dtls is established, goto join state */
 	if (!wtpman_join(wtpman, timer)) {
@@ -378,7 +390,7 @@ static void wtpman_run(void *arg)
 	   or an configuration status request. Nothing else. 
 	 */
 
-	int rc = 0;
+	rc = 0;
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
 		rc = cw_read_messages(wtpman->conn);
@@ -542,6 +554,7 @@ void wtpman_destroy(struct wtpman *wtpman)
 
 struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 {
+	int sockfd, replyfd;;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman;
 	wtpman = malloc(sizeof(struct wtpman));
@@ -550,7 +563,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 	memset(wtpman, 0, sizeof(struct wtpman));
 
 
-	int replyfd;
+	
 	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 
 		int port = sock_getport(&socklist[socklistindex].addr);
@@ -566,7 +579,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-	int sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;
+	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;
 */
 
 	struct sockaddr dbgaddr;
@@ -625,41 +638,14 @@ void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 	conn_q_add_packet(wtpman->conn, packet, len);
 }
 
-
-
-
-
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
-	
+	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d",dtlsmode);
+	wtpman->dtlsmode=dtlsmode;
 	pthread_create(&wtpman->thread, NULL, (void *) wtpman_run,
 		       (void *) wtpman);
 	return;
-
-	
-/*	
-	
-	if (dtlsmode) {
-		cw_dbg(DBG_INFO, "Starting wtpman in DTLS mode");
-		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_dtls,
-			       (void *) wtpman);
-	} else {
-		cw_dbg(DBG_INFO, "Starting wtpman in non-dtls mode");
-
-		if (nodtls) {
-			wtpman->conn->process_message = xprocess_message;
-			pthread_create(&wtpman->thread, NULL, (void *) wtpman_run,
-				       (void *) wtpman);
-			return;
-
-		}
-
-		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_discovery,
-			       (void *) wtpman);
-	}
-
- */
- }
+}
 
 
 

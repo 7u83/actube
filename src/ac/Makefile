@@ -99,5 +99,5 @@ deps:
 	makedepend *.c -f.depend
 
 
--include $(AC_DEPS)
+-include .depend
 

@@ -11,7 +11,7 @@
 #include "cw/msgset.h"
 #include "cw/cw.h"
 
-
+#include "cw/dtls.h"
 #include "wtp.h"
 
 #define MAX_MODS 32
@@ -161,7 +161,7 @@ int main (int argc, char **argv)
 
 /*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");*/
 
-
+	dtls_init();
 
 
 	cw_discovery_init_results(&dis);

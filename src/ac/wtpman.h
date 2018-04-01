@@ -26,6 +26,7 @@ struct wtpman{
 	int socklistindex;
 	int connected;
 
+	int dtlsmode;
 
 	cw_timer_t echointerval_timer; 
 

@@ -105,9 +105,14 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 	int sockfd;
 	
 	int rsec,lsec;
-	
+	int rc;
+
+printf("JOINFD: %s\n",sock_addr2str_p(sa,addrstr));
+
 	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
 	rsec = cw_ktv_get_byte(conn->remote_cfg,"ac-descriptor/security",0);
+
+	printf("Anding my and remote %d %d %d\n",lsec,rsec, rsec & lsec);
 	
 	if ((lsec & rsec) == 0){
 		cw_log(LOG_ERR, "Can't establish DTLS with AC, my sec: %d, remote sec %d",lsec,rsec);
@@ -132,10 +137,10 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 
 	/* we call connect to bind this socket to a local IP address,
 	 * which we can later obtain by getsockname */
-/*	rc = connect(sockfd, (struct sockaddr *) sa,
+	rc = connect(sockfd, (struct sockaddr *) sa,
 		     sock_addrlen((struct sockaddr *) sa));
 
-	if (rc < 0) {
+/*	if (rc < 0) {
 		cw_log(LOG_ERR, "Can't connect to %s: %s\n", sock_addr2str(sa),
 		       strerror(errno));
 		close(sockfd);
@@ -169,6 +174,9 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 		close(sockfd);
 		return 0;
 	}
+*/
+
+
 
 
 	rc = dtls_connect(conn);
@@ -185,7 +193,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 	       sock_addr2str(sa,addrstr));
 
 
-*/
+
 	return 1;
 }
 
@@ -267,6 +275,7 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 		*/
 		
 		sock_strtoaddr(ipstr,(struct sockaddr*)(&sockaddr));
+		sock_setport((struct sockaddr*)&sockaddr,5246);
 		run_join_d(conn,(struct sockaddr*)(&sockaddr));
 	}
 

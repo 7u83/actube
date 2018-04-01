@@ -224,6 +224,7 @@ MISCSRC=\
 	conn_process_packet.c\
 	conn_q_add_packet.c\
 	conn_q_get_packet.c\
+	conn_q_wait_packet.c\
 	conn_q_recv_packet.c\
 	conn_recv_packet.c\
 	conn_send_data_packet.c\

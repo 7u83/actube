@@ -532,7 +532,10 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	
 	wtplist_lock();
 	struct wtpman *wtpman = wtplist_get (addr);
-	
+
+printf("Seaching for packet %s\n",sock_addr2str(addr,sock_buf));
+
+
 	if (!wtpman) {
 	
 		wtpman = wtpman_create (index, addr);
@@ -592,11 +595,12 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	
 	wtplist_lock();
 	struct wtpman *wtpman = wtplist_get (addr);
-	
+
+
 	if (!wtpman) {
 	
 		wtpman = wtpman_create (index, addr);
-		
+
 		if (!wtpman) {
 			cw_log (LOG_ERR, "Error creating wtpman: %s", strerror (errno));
 			wtplist_unlock();

@@ -32,15 +32,15 @@
 	#define dtls_shutdown dtls_gnutls_shutdown
 	#define dtls_get_cipher dtls_gnutls_get_cipher
 	#define dtls_get_peers_cert dtls_gnutls_get_peers_cert
+#endif
 
-#else
+#ifdef WITH_OPENSSL
 	#include "dtls_openssl.h"
 	#define dtls_init dtls_openssl_init
 	#define dtls_accept dtls_openssl_accept
 	#define dtls_connect dtls_openssl_connect
 	#define dtls_shutdown dtls_openssl_shutdown
 	#define dtls_get_cipher dtls_openssl_get_cipher
-
 #endif
 
 

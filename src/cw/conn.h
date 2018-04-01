@@ -298,6 +298,7 @@ struct cwrmsg *conn_wait_for_message(struct conn *conn, time_t timer);
 
 struct cwrmsg *conn_wait_for_request(struct conn *conn, int *msglist, time_t timer);
 
+int conn_q_wait_packet(struct conn * conn, int seconds);
 
 #define conn_is_error(conn) (conn->dtls_error)
 

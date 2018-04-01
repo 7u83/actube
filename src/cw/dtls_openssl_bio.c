@@ -25,7 +25,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include "dtls_openssl.h"
-#include "dtls.h"
+#include "dtls_common.h"
 
 
 #include <openssl/bio.h>
