@@ -242,6 +242,7 @@ MISCSRC=\
 
 DTLSSRC+=\
 	dtls_bio.c\
+	cw_setup_dtls.c
 
 
 RADIOSRC=\
