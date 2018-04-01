@@ -50,9 +50,22 @@ static int put ( const struct cw_KTV *data, uint8_t * dst )
 
 static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 {
-	strncpy(dst,data->val.str,max_len-1);
+
+	
+	int l;
+	l = strlen(data->val.str);
+	strcpy(dst,data->val.str);
+	return l;
+	
+	if (l<max_len){
+		strcpy(dst,data->val.str);
+		return l;
+	}
+	
+	memcpy(dst,data->val.str,max_len);
+
 	dst[max_len]=0;
-	return strlen(data->val.str)+1;
+	return max_len;
 }
 
 static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
