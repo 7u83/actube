@@ -1,5 +1,12 @@
 #include "cw.h"
-
+/**
+ * @brief Setup DTLS parameters from config
+ * @param conn
+ * @param cfg
+ * @param prefix
+ * @param default_cipher
+ * @return 
+ */
 int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * default_cipher)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
