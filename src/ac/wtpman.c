@@ -21,7 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-#include <unistd.h> // sleep
+#include <unistd.h> 
 
 
 #include "cw/capwap.h"
@@ -119,6 +119,7 @@ static void wtpman_run_discovery(void *arg)
 
 }
 
+/*
 int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 		     struct sockaddr *from)
 {
@@ -132,6 +133,7 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	return process_message(conn, rawmsg, rawlen, from);
 }
 
+*/
 
 
 static int wtpman_establish_dtls(void *arg)
@@ -291,106 +293,6 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 
 
-void config_to_sql(struct conn *conn)
-{
-	
-/*
-	// XXX for the moment we use just the IP adress as ID
-	char *wtp_id = sock_addr2str(&conn->addr);
-
-//	cw_dbg(DBG_X, "WTPID: %s\n", wtp_id);
-
-	MAVLITER_DEFINE(it, conn->incomming);
-	mavliter_foreach(&it) {
-		mbag_item_t *i = mavliter_get(&it);
-
-		const struct cw_itemdef *cwi =
-		    cw_itemdef_get(conn->actions->items, i->id, NULL);
-
-		cw_dbg(DBG_X,"ID GOT: %s",i->id);
-
-		if (cwi) {
-			DBGX("SQL ID %s,%s", i->id, cwi->id);
-			DBGX("SQL Type %s,Typecwd %s", i->type->name, cwi->type->name);
-
-			//              printf("%s != %s ?\n",i->type->name,cwi->type->name);
-			char str[256];
-			if (i->type->to_str) {
-				i->type->to_str(i, str);
-				db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
-			} else {
-				cw_log(LOG_ERR, "Can't converto to str for %s", cwi->id,
-				       cwi->sub_id);
-
-			}
-
-
-		} else {
-			//      DBGX("ID %d",i->id);
-
-		}
-
-	}
-*/
-}
-
-void xradio_to_sql(struct conn *conn, char *wtp_id, int rid, int radio)
-{
-	
-/*	
-	MAVLITER_DEFINE(it, radio);
-	mavliter_foreach(&it) {
-		mbag_item_t *i = mavliter_get(&it);
-
-		const struct cw_itemdef *cwi =
-		    cw_itemdef_get(conn->actions->radioitems, i->id, NULL);
-		if (cwi) {
-			char str[4096];
-			if (i->type->to_str) {
-				i->type->to_str(i, str);
-//				printf("I would put RID: %d, %s=>%s\n",rid,cwi->id,str);
-
-				char srid[6];
-				sprintf(srid,"%d",rid);
-
-				db_put_radio_prop(wtp_id,srid,cwi->id,cwi->sub_id,str);
-
-//				db_put_wtp_prop(wtp_id, cwi->id, cwi->sub_id, str);
-			} else {
-				cw_log(LOG_ERR, "Can't converto to str for %s", cwi->id,
-				       cwi->sub_id);
-
-			}
-
-
-		} else {
-			//      DBGX("ID %d",i->id);
-
-		}
-
-	}
-
-
-//		int rid = ((struct mbag_item*)mavliter_get(&it))->iid;
-*/
-}
-
-/*
-void radios_to_sql(struct conn *conn)
-{
-	char sock_buf[SOCK_ADDR_BUFSIZE];
-	char *wtp_id = sock_addr2str(&conn->addr,sock_buf);
-	MAVLITER_DEFINE(it, conn->radios);
-	mavliter_foreach(&it) {
-		struct mbag_item * i = mavliter_get(&it);
-		int rid = i->u1.iid;
-
-		radio_to_sql(conn,wtp_id,rid,i->u2.data);
-
-
-	}
-}
-*/
 
 
 
@@ -418,15 +320,6 @@ void wtpman_run_data(void *wtpman_arg)
 }
 
 
-static int msg_end_handler(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			     int len, struct sockaddr *from)
-{
-/*	if (a->msg_id ==CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST) {
-		props_to_sql(conn,conn->incomming,0);
-		radios_to_sql(conn);
-	}
-*/
-}
 
 
 static void wtpman_run(void *arg)
@@ -518,7 +411,7 @@ static void wtpman_run(void *arg)
 //	radios_to_sql(conn);
 */
 
-	conn->msg_end=msg_end_handler;
+	/*conn->msg_end=msg_end_handler;*/
 	/* The main run loop */
 	reset_echointerval_timer(wtpman);
 
@@ -733,14 +626,19 @@ void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 }
 
 
-int nodtls = 0;
+
 
 
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
+	
+	pthread_create(&wtpman->thread, NULL, (void *) wtpman_run,
+		       (void *) wtpman);
+	return;
 
-
-
+	
+/*	
+	
 	if (dtlsmode) {
 		cw_dbg(DBG_INFO, "Starting wtpman in DTLS mode");
 		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_dtls,
@@ -759,80 +657,11 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 		pthread_create(&wtpman->thread, NULL, (void *) wtpman_run_discovery,
 			       (void *) wtpman);
 	}
-}
+
+ */
+ }
 
 
 
 
 
-void wtpman_lw_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
-{
-
-	/*
-	//      uint8_t * m = packet+12;
-//      int l = LWTH_GET_LENGTH(packet+6);
-*/
-
-	uint8_t *msg = packet + 12;
-
-
-	int msgtype = LWMSG_GET_TYPE(msg);
-	int msglen = LWMSG_GET_LEN(msg);
-	printf("Type is %d, Len is %d\n", msgtype, msglen);
-
-/*
-//      uint8_t *msgdata = LWMSG_GET_DATA(msg);
-*/
-
-/*
-	int c=0; 
-	while (c < msglen){
-		int eltype = LWMSGELEM_GET_TYPE(data);
-		int ellen = LWMSGELEM_GET_LEN(data);
-		printf ("ELEM TYPE: %d, LEN: %d\n",eltype,ellen);
-		c+=ellen+3;
-		data=data+ellen+3;
-	}	
-
-*/
-
-	/*//uint8_t *data;*/
-	
-/*
-	lw_foreach_msgelem(data,msgdata,msglen){
-		int eltype = LWMSGELEM_GET_TYPE(data);
-		int ellen = LWMSGELEM_GET_LEN(data);
-		uint8_t * eldata = LWMSGELEM_GET_DATA(data);
-
-		wtpinfo_lwreadelem_wtp_descriptor(&wtpman->wtpinfo,eltype,eldata,ellen);
-
-		printf ("ELEM TYPE: %d, LEN: %d\n",eltype,ellen);
-
-	}
-*/
-
-/*
-//      char wi[4096];
-//      wtpinfo_print(wi, &wtpman->wtpinfo);
-//      printf("WTPINFO: \n%s\n", wi);
-
-
-
-//      char buffer[2048];
-//      struct lwmsg lwmsg;
-//      lwmsg_init(&lwmsg, buffer,conf_macaddress,LWMSG_DISCOVERY_RESPONSE,conn_get_next_seqnum(wtpman->conn));
-
-//      conn_send_packet(wtpman->conn,buffer,60);
-
-*/
-
-
-}
-
-
-/*
-void wtpman_lw_start(struct wtpman *wtpman)
-{
-
-}
-*/

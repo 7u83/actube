@@ -14,12 +14,6 @@
 struct wtpman{
 	pthread_t thread;
 
-	/* packet queue */
-/*	uint8_t * q[WTPMAN_QSIZE];
-	int qrpos;
-	int qwpos;
-	sem_t q_sem;
-*/
 	struct conn * conn;
 
 
@@ -28,9 +22,6 @@ struct wtpman{
 	uint8_t * wtp_location;
 	uint8_t * session_id;
 	uint8_t wtp_mactype;
-
-/*	//struct wtpinfo wtpinfo;*/
-
 
 	int socklistindex;
 	int connected;
@@ -51,9 +42,9 @@ struct wtp{
 //extern void wtpman_run(void *arg);
 */
 
-extern struct wtpman * wtpman_create();
+struct wtpman * wtpman_create();
 
-extern struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr);
+struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr);
 
 extern void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len);
 extern void wtpman_destroy(struct wtpman * wtpman);

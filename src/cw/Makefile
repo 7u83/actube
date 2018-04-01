@@ -38,7 +38,6 @@ endif
 
 
 CWSRC=\
-	cw_addelem_capwap_local_ip_addr.c\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
 	cw_dbg_elem.c\

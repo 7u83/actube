@@ -8,10 +8,11 @@ include ../Macros.mak
 
 
 LIBARCHDIR=../../lib/$(ARCH)
+INCL= -I/usr/local/include -I../
+LDFLAGS+=-L$(LIBARCHDIR) 
+#CFLAGS += -W -g -O0 -D_REENTRANT -DIPV6 $(INCL) -I../ -DSYS_ARCH=\"${ARCH}\"
 
-LDFLAGS+=-g -L/usr/local/lib -L$(LIBARCHDIR) 
-CFLAGS += -W -g -O0 -D_REENTRANT -DIPV6 -I/usr/local/include -I../ -DSYS_ARCH=\"${ARCH}\"
-
+CFLAGS+=-DSYS_ARCH=\"$(ARCH)\"
 
 #LIBS+=-lcapwap
 #LIBS+=-lcapwap80211
@@ -92,7 +93,11 @@ clean:
 clean_deps:
 	$(AC_DEPS) 
 	
-deps: $(AC_SRC) 
-	$(LD) -MD -E $(AC_SRCS) $(CFLAGS) >/dev/null
+deps:  
+	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
+#	makedepend $(AC_SRC) -f.depend -p$(OBJDIR)/
+	makedepend *.c -f.depend
+
 
 -include $(AC_DEPS)
+
