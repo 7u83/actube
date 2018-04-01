@@ -309,7 +309,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	/* maybe we have to check this too: if (!(message->type & 1)) 
 	 * means unexpected response message
 	 * */
-	if (!(message->receiver & conn->receiver)) {
+	if (!(message->receiver & conn->role)) {
 		cw_dbg(DBG_MSG_ERR,
 		       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
 		       search.type, cw_strmsg(search.type),
