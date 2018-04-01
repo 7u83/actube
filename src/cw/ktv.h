@@ -114,6 +114,9 @@ void cw_kvstore_mavl_delete(const void *data);
 cw_KTV_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			   const uint8_t * data, int len);
 
+cw_KTV_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+			const uint8_t * data, int len);
+
 const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type,
 			const char * str);
 
@@ -136,6 +139,8 @@ int cw_ktv_read_line (FILE *f, char * key, char * type, char *val);
 int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
+cw_KTV_t * cw_ktv_set_byte(mavl_t ktv,const char * key, uint8_t byte);
+
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
 uint32_t cw_ktv_get_dword(mavl_t ktv,const char *key, uint32_t def);
 void * cw_ktv_get_sysptr(mavl_t ktv,const char *key, void * def);
