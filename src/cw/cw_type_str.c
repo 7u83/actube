@@ -39,19 +39,17 @@ static struct cw_KTV *get ( struct cw_KTV * data, const uint8_t * src, int len )
 	s[len]=0;
 
 	data->type = &cw_type_str;
-	data->val.str = s;
+	data->val.str = (char*)s;
 	return data;
 }
 
 static int put ( const struct cw_KTV *data, uint8_t * dst )
 {
-	return cw_put_str ( dst, data->val.str );
+	return cw_put_str ( dst, (uint8_t*)data->val.str );
 }
 
 static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 {
-	int l;
-	
 	strncpy(dst,data->val.str,max_len-1);
 	dst[max_len]=0;
 	return strlen(data->val.str)+1;
@@ -59,7 +57,7 @@ static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 
 static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 {
-	uint8_t * s;
+	char * s;
 	s = cw_strdup(src);
 	
 	if ( !s )

@@ -9,6 +9,7 @@
 #include "cw/dbg.h"
 #include "cw/log.h"
 #include "cw/msgset.h"
+#include "cw/cw.h"
 
 
 #include "wtp.h"
@@ -153,7 +154,7 @@ int main (int argc, char **argv)
 	conn->msgset=msgset;
 	conn->local_cfg = global_cfg;
 	conn->remote_cfg = NULL;
-	conn->receiver = CW_RECEIVER_WTP;
+	conn->receiver = CW_ROLE_WTP;
 	conn->wbid=1;
 
 	struct cw_DiscoveryResult dis;

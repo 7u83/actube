@@ -95,6 +95,10 @@ acinfo.result_code=99;
 
 */
 
+
+
+
+
 int run_join_d(struct conn * conn, struct sockaddr *sa)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
@@ -127,7 +131,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 		return -1;
 	}
 */
-
+/*
 	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa, addrstr));
 
 	int dtls_conf_ok=0;
@@ -170,7 +174,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 	       sock_addr2str(sa,addrstr));
 
 
-
+*/
 	return 1;
 }
 
