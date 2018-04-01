@@ -1,14 +1,13 @@
+#capwap/ssl-certfile:Str:../../ssl/certs/wtp.crt
 
+
+
+capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
+capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
      
-windows:Word:124
-
-basic/mod:Bstr16:cisco
-
-ansi/hallo:Dword:1
 discovery-type:Byte:0
 wtp-frame-tunnel-mode:Byte:1
 wtp-mac-type:Byte:2
-
 
 wtp-board-data/vendor:Dword:1234567
 
@@ -31,11 +30,9 @@ radio/1/wtp-radio-information:Dword:02
 
 wtp-name:Bstr16:WFAT01
 
-
 wtp-fallback:Byte:1
-ac-name-with-priority/TubesACx:Byte:3
+ac-name-with-priority/TubesAC:Byte:3
 ac-name-with-priority/"ac2":Byte:01
-
 
 capwap-timers/max-discovery-interval:Byte:0
 capwap-timers/min-discovery-interval:Byte:0

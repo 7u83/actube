@@ -157,14 +157,14 @@ static struct cw_MsgDef messages[] = {
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
-		CW_RECEIVER_AC,			
+		CW_ROLE_AC,			
 		discovery_request_states,
 		discovery_request_elements
 	},
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_RESPONSE,	/* type */
-		CW_RECEIVER_WTP,
+		CW_ROLE_WTP,
 		discovery_response_states,
 		discovery_response_elements
 	},

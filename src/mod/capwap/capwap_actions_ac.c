@@ -190,7 +190,7 @@ static struct cw_MsgDef messages[] = {
 	{
 		"Discovery Request",
 		CAPWAP_MSG_DISCOVERY_REQUEST,
-		CW_RECEIVER_AC,
+		CW_ROLE_AC,
 		discovery_request_states,
 		discovery_request_elements
 	},
@@ -198,7 +198,7 @@ static struct cw_MsgDef messages[] = {
 	{
 		"Discovery Response",
 		CAPWAP_MSG_DISCOVERY_RESPONSE,
-		CW_RECEIVER_WTP,
+		CW_ROLE_WTP,
 		discovery_response_states,
 		discovery_response_elements
 	},

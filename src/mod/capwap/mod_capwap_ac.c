@@ -43,10 +43,13 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 	return 1;
 }
 
+
 int static setup_cfg(struct conn  * conn)
 {
-	
-	
+	int security;
+	security = cw_setup_dtls(conn,conn->local_cfg,"capwap",CAPWAP_CIPHER);
+	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
+
 	return 0;
 }
 

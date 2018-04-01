@@ -271,6 +271,9 @@
       <File Name="src/cw/cw_ktv_get_dword.c"/>
       <File Name="src/cw/cw_type_str.c"/>
       <File Name="src/cw/cw_ktv_get_str.c"/>
+      <File Name="src/cw/cw_setup_dtls.c"/>
+      <File Name="src/cw/cw_ktv_replace.c"/>
+      <File Name="src/cw/cw_ktv_set_byte.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

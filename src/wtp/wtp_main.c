@@ -81,7 +81,7 @@ int main (int argc, char **argv)
 	mavl_t global_cfg, types_tree;
 	const cw_Type_t ** ti;
 	int i;
-	
+	struct cw_DiscoveryResult dis;
 	
 	bootcfg.nmods=0;
 	
@@ -129,6 +129,24 @@ int main (int argc, char **argv)
 	
 	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
 
+	/* create a connection object */
+	conn = conn_create_noq(-1, NULL);
+	if (conn==NULL){
+		cw_log(LOG_ERR, "Connot create conn: %s", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+
+/*	conn->mod=mod;*/
+	conn->detected = 1;
+	conn->dtls_verify_peer=0;
+	conn->dtls_mtu = 12000;
+	conn->msgset=msgset;
+	conn->local_cfg = global_cfg;
+	conn->remote_cfg = NULL;
+	conn->role = CW_ROLE_WTP;
+	conn->wbid=1;
+
 	for (i=0;i<bootcfg.nmods; i++){	
 		mod = cw_mod_load(bootcfg.modnames[i], global_cfg, CW_ROLE_WTP);
 		if (mod == NULL){
@@ -137,37 +155,17 @@ int main (int argc, char **argv)
 		/* Build a message set from our loaded modules */
 		mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
 		mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
+		if (mod->setup_cfg)
+			mod->setup_cfg(conn);
 	}
-	
 
-	/* create a connection object */
-	conn = conn_create_noq(-1, NULL);
-	if (conn==NULL){
-		cw_log(LOG_ERR, "Connot create conn: %s", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-	
-	
-	conn->detected = 1;
-	conn->dtls_verify_peer=0;
-	conn->dtls_mtu = 12000;
-	conn->msgset=msgset;
-	conn->local_cfg = global_cfg;
-	conn->remote_cfg = NULL;
-	conn->receiver = CW_ROLE_WTP;
-	conn->wbid=1;
 
-	struct cw_DiscoveryResult dis;
+
+
 	cw_discovery_init_results(&dis);
-	
-	
-	
 	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
-
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
-
-
-
+/*
 	{
 		mavliter_t i;
 		mavliter_init(&i, dis.prio_ip);
@@ -191,6 +189,8 @@ int main (int argc, char **argv)
 			
 		}
 	}
+*/
+	join(conn,&dis);
 
 	cw_discovery_free_results(&dis);
 

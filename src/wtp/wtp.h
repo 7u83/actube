@@ -27,6 +27,7 @@ int cw_run_discovery(struct conn *conn, const char *acaddr, const char *bindaddr
 
 int cw_discovery_init_results(struct cw_DiscoveryResult *dis);
 void cw_discovery_free_results(struct cw_DiscoveryResult * dis);
+int join(struct conn * conn, struct cw_DiscoveryResult * dis);
 
 struct conn * get_conn();
 

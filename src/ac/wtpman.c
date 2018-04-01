@@ -688,7 +688,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 //                        struct sockaddr *from);
 */
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
-	wtpman->conn->receiver = CW_RECEIVER_AC;
+	wtpman->conn->role = CW_ROLE_AC;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr, (struct sockaddr *) &wtpman->conn->addr);

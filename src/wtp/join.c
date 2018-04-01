@@ -13,7 +13,7 @@
 #include "cw/dbg.h"
 #include "cw/sock.h"
 #include "cw/dtls.h"
-
+#include "cw/mavl.h"
 
 #include "wtp.h"
 
@@ -102,12 +102,12 @@ acinfo.result_code=99;
 int run_join_d(struct conn * conn, struct sockaddr *sa)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
+	int sockfd;
+
 /*	struct conn *conn = get_conn();*/
 
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 
-	int sockfd;
-	int rc;
 
 	sockfd = socket(sa->sa_family, SOCK_DGRAM, 0);
 	if (sockfd == -1) {
@@ -131,9 +131,9 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 		return -1;
 	}
 */
-/*
-	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa, addrstr));
 
+	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa, addrstr));
+/*
 	int dtls_conf_ok=0;
 
 	if (conn->dtls_psk) {
@@ -220,11 +220,36 @@ int run_join(struct conn *conn)
 
 
 
-int join(struct conn * conn, struct cw_DiscoveryResult dis)
+int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 {
 
 	mavliter_t ii;
-	char addrstr[SOCK_ADDR_BUFSIZE];
+	mavliter_init(&ii,dis->prio_ip);
+
+	mavliter_foreach(&ii){
+		cw_KTV_t * val,*ac;
+		mavl_t rcfg;
+		char * rk;
+		char ipstr[100];
+		char ac_name[CAPWAP_MAX_AC_NAME_LEN];
+		
+		val = mavliter_get(&ii);
+		rk = val->key;
+		val = val->val.ptr;
+		val->type->to_str(val, ipstr, 100);
+		
+		rcfg = cw_ktv_get_sysptr(dis->prio_ac,rk,NULL);
+		
+		ac=cw_ktv_get(rcfg,"ac-name",CW_TYPE_BSTR16);
+		if (ac != NULL){
+			ac->type->to_str(ac,ac_name,sizeof(ac_name));
+		}
+		else{
+			strcpy(ac_name,"");
+		}
+		
+		cw_dbg(DBG_INFO, "Going to join CAPWAP controller '%s' at %s.",ac_name,ipstr);
+	}
 
 
 	/*mbag_del_all(conn->incomming);*/

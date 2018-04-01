@@ -40,7 +40,7 @@ static struct cw_MsgDef messages[] = {
 	{
 	 "Discovery Request",
 	 CAPWAP_MSG_DISCOVERY_REQUEST,
-	 CW_RECEIVER_AC,
+	 CW_ROLE_AC,
 	 discovery_request_states,
 	 discovery_request_elements
 	}
