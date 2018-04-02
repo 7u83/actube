@@ -149,6 +149,7 @@ MAVLSRC=\
 	mavl_foreach_lr.c\
 	mavl_freeptr.c\
 	mavl_get.c\
+	mavl_get_ext.c\
 	mavl_get_node.c\
 	mavl_get_node_cmp..c\
 	mavl_get_ptr.c\

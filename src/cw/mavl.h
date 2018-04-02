@@ -93,7 +93,8 @@ struct mavl {
  */
 typedef struct mavl * mavl_t;
 
-
+#define MAVL_FIND_FIRST 1
+#define MAVL_FIND_LAST  2
 
 /**
  * @param node node 
@@ -107,6 +108,8 @@ void *mavl_add ( struct mavl *t, const void *data, int *exists );
 
 /*void *mavl_add ( struct mavl *t,  const void *data );*/
 void * mavl_get ( struct mavl *t , const void *data );
+void * mavl_get_ext(struct mavl *t ,const void *search, int mode);
+
 void *mavl_del ( struct mavl *t, const void *data );
 void *mavl_replace ( struct mavl *t, const void *data, int * result );
 void mavl_destroy ( struct mavl *t );
@@ -118,8 +121,8 @@ struct mavlnode * mavl_get_node_cmp(struct mavl *t ,void *data,
 	int ( *cmp ) ( const void *, const void * ));
 
 
-
-
+#define mavl_get_first(tree,search) mavl_get_ext(tree,search,MAVL_FIND_FIRST)
+#define mavl_get_last(tree,search) mavl_get_ext(tree,search,MAVL_FIND_LAST)
 
 
 

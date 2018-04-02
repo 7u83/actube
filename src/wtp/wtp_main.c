@@ -23,6 +23,8 @@ struct bootcfg{
 };
 
 
+
+
 static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 {
 	int c;
@@ -82,6 +84,9 @@ int main (int argc, char **argv)
 	const cw_Type_t ** ti;
 	int i;
 	struct cw_DiscoveryResult dis;
+	
+	
+	
 	
 	bootcfg.nmods=0;
 	

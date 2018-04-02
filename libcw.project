@@ -275,6 +275,7 @@
       <File Name="src/cw/cw_ktv_replace.c"/>
       <File Name="src/cw/cw_ktv_set_byte.c"/>
       <File Name="src/cw/conn_q_wait_packet.c"/>
+      <File Name="src/cw/mavl_get_ext.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

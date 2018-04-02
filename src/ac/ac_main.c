@@ -175,6 +175,7 @@ void mavl_walk (struct mavlnode  * node)
 	
 }
 
+/*
 int stcmp (const void * sa1, const void *sa2)
 {
 	const char **s1 = sa1;
@@ -185,9 +186,93 @@ int stcmp (const void * sa1, const void *sa2)
 	printf ("CMP %s, %s = %d\n", *s1, *s2, rc);
 	return rc;
 }
+*/
 
+#include "discovery_cache.h"
+tester()
+{
+	struct cw_DiscoveryCache * cache;
+	struct sockaddr_storage a1,a2,a3,a4,a5,a6;
 
+	cache = discovery_cache_create(10);
+	
+	sock_strtoaddr("192.168.0.2:11",(struct sockaddr*)&a1);
 
+	sock_strtoaddr("192.168.0.1:3",(struct sockaddr*)&a3);
+	sock_strtoaddr("192.168.0.1:6",(struct sockaddr*)&a4);
+	sock_strtoaddr("192.168.0.1:9",(struct sockaddr*)&a5);
+	sock_strtoaddr("192.168.0.1:1",(struct sockaddr*)&a6);
+	sock_strtoaddr("192.168.0.1:2",(struct sockaddr*)&a2);
+
+	discovery_cache_add(cache, (struct sockaddr*)&a1,"capwap","ciscon");
+
+	discovery_cache_add(cache, (struct sockaddr*)&a3,"capwap","ciscoc");
+	discovery_cache_add(cache, (struct sockaddr*)&a4,"capwap","ciscod");
+	discovery_cache_add(cache, (struct sockaddr*)&a5,"capwap","ciscoe");
+	discovery_cache_add(cache, (struct sockaddr*)&a6,"capwap","ciscof");
+	discovery_cache_add(cache, (struct sockaddr*)&a2,"capwap","ciscob");
+	
+	{
+		struct cw_DiscoveryCacheElem * elem;
+		struct sockaddr_storage s;
+		
+		sock_strtoaddr("192.168.0.1:800", (struct sockaddr*)&s);
+		
+		
+		elem = discovery_cache_get(cache,(struct sockaddr*)&s);
+		if (elem){
+			printf("Found  = %s %s\n", elem->mod_capwap, elem->mod_bindings);
+		}
+		else{
+			printf("no elem\n");
+		}
+		
+	}
+	
+}
+
+static int ibcmp(const void *v1, const void *v2)
+{
+	int *i1,*i2;
+	i1=v1;i2=v2;
+	
+	return *i1-*i2;
+}
+
+void tester1()
+{
+	mavl_t tree;
+	int val;
+	mavliter_t it;
+
+	tree = mavl_create(ibcmp,NULL,sizeof(int));
+	val = 3;
+	mavl_add(tree,&val,NULL);
+	val = 7;
+	mavl_add(tree,&val,NULL);
+	
+	val = 2; 
+	mavl_add(tree,&val,NULL);
+	
+	mavliter_init(&it,tree);
+	mavliter_foreach(&it){
+		int *result;
+		result = mavliter_get(&it);
+		printf("Result: %i\n",*result);
+	}
+	
+	val = 2;
+	mavl_del(tree,&val);
+	
+
+	mavliter_init(&it,tree);
+	mavliter_foreach(&it){
+		int *result;
+		result = mavliter_get(&it);
+		printf("Result: %i\n",*result);
+	}
+
+}
 
 
 int main (int argc, char *argv[])
@@ -197,6 +282,11 @@ int main (int argc, char *argv[])
 	FILE * file;
 	mavl_t types_tree, global_cfg;
 	const cw_Type_t **ti;
+tester1();
+exit(0);
+
+
+
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
