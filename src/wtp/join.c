@@ -241,11 +241,12 @@ int run_join(struct conn *conn)
 
 int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 {
+/*
 struct sockaddr_storage s;
 sock_strtoaddr("192.168.0.14:5246",(struct sockaddr*)&s);
 run_join_d(conn,(struct sockaddr*)&s);
 exit(0);
-
+*/
 	mavliter_t ii;
 	mavliter_init(&ii,dis->prio_ip);
 

@@ -15,6 +15,6 @@ int conn_q_wait_packet(struct conn * conn, int seconds)
 	if (sem_timedwait(&conn->q_sem,&timespec)==-1){
 		return EAGAIN;
 	};
-
+	sem_post(&conn->q_sem);
 	return 0;
 }

@@ -165,9 +165,9 @@ int main (int argc, char **argv)
 
 
 	cw_discovery_init_results(&dis);
-/*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
+	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
-*/
+
 /*
 	{
 		mavliter_t i;

@@ -21,6 +21,7 @@
       <File Name="src/ac/ac.h"/>
       <File Name="src/ac/dataman.h"/>
       <File Name="src/ac/socklist.h"/>
+      <File Name="src/ac/discovery_cache.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

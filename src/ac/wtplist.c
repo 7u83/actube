@@ -24,7 +24,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-#define MAX_WTPS 200
+/*#define MAX_WTPS 200*/
 
 #include <stdio.h>
 
@@ -81,9 +81,11 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 struct wtpman * wtplist_get_by_session_id(uint8_t *session_id)
 {
 	struct conn  search;
+	struct conn * conn;
+	
 	memcpy (search.session_id, session_id,16);
 
-	struct conn * conn = connlist_get_by_session_id(connlist,&search);
+	conn = connlist_get_by_session_id(connlist,&search);
 	return conn->data;
 }
 

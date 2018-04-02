@@ -14,12 +14,6 @@ LDFLAGS+=-L$(LIBARCHDIR)
 
 CFLAGS+=-DSYS_ARCH=\"$(ARCH)\"
 
-#LIBS+=-lcapwap
-#LIBS+=-lcapwap80211
-#LIBS+=-lcipwap
-#LIBS+=-lcisco
-#LIBS+=-lfortinet
-#LIBS+=-lzyxel
 LIBS+=-lcw
 LIBS+=-lrt
 LIBS+=-lpthread
@@ -63,6 +57,7 @@ AC_OBJS = \
 	socklist.o \
 	db.o \
 	ac_global.o \
+	discovery_cache.o\
 	${AC_MODULES}
 
 

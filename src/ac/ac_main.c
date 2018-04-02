@@ -533,8 +533,6 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	wtplist_lock();
 	struct wtpman *wtpman = wtplist_get (addr);
 
-printf("Seaching for packet %s\n",sock_addr2str(addr,sock_buf));
-
 
 	if (!wtpman) {
 	
