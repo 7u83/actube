@@ -109,8 +109,10 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 
 printf("JOINFD: %s\n",sock_addr2str_p(sa,addrstr));
 
-	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
+/*	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
 	rsec = cw_ktv_get_byte(conn->remote_cfg,"ac-descriptor/security",0);
+*/
+lsec = rsec =4;
 
 	printf("Anding my and remote %d %d %d\n",lsec,rsec, rsec & lsec);
 	
@@ -239,6 +241,10 @@ int run_join(struct conn *conn)
 
 int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 {
+struct sockaddr_storage s;
+sock_strtoaddr("192.168.0.14:5246",(struct sockaddr*)&s);
+run_join_d(conn,(struct sockaddr*)&s);
+exit(0);
 
 	mavliter_t ii;
 	mavliter_init(&ii,dis->prio_ip);

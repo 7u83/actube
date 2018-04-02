@@ -4,7 +4,7 @@
 
 capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
 capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
-capwap/ssl-cipher:Str:ALL
+capwap/ssl-cipher:Str:NORMAL
 
 cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
 cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
