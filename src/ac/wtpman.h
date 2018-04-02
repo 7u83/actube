@@ -45,7 +45,7 @@ struct wtp{
 
 struct wtpman * wtpman_create();
 
-struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr);
+struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr, int dtlsmode);
 
 extern void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len);
 extern void wtpman_destroy(struct wtpman * wtpman);

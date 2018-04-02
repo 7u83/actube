@@ -173,11 +173,11 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg, int l
 	bmod = 
 	    cw_mod_detect(conn, rawmsg, len, elems_len, from, CW_MOD_MODE_BINDINGS);
 
+	
 	cw_dbg(DBG_INFO, "Mods deteced: %s,%s", cmod->name, bmod->name);
 
-/*
-//	struct cw_actiondef *ad = mod_cache_add(conn,cmod, bmod);
-*/
+	conn->cmod = cmod;
+	conn->bmod = bmod;
 
 	return cw_mod_get_msg_set(conn,cmod,bmod);
 

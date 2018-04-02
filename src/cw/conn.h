@@ -178,6 +178,7 @@ struct conn {
 	char *dtls_psk;
 	int dtls_psk_len;
 
+	struct cw_Mod *cmod, *bmod;
 
 	char *dtls_cert_file;
 	char *dtls_key_file;

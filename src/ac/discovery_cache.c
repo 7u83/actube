@@ -3,8 +3,14 @@
 #include "cw/sock.h"
 #include "cw/mlist.h"
 #include "cw/mavl.h"
+#include "cw/mod.h"
 
 #include "discovery_cache.h"
+struct cw_DiscoveryCacheElem{
+	struct sockaddr_storage addr;
+	struct cw_Mod *cmod, *bmod;
+	uint32_t ctrlo, ctrhi;
+};
 
 struct cw_DiscoveryCache{
 	int len;
@@ -74,7 +80,7 @@ struct cw_DiscoveryCache * discovery_cache_create(int len)
 		goto errX;
 
 	for (i=0; i<len; i++){
-		cache->queue[i].mod_capwap=NULL;
+		cache->queue[i].cmod=NULL;
 	}
 
 	cache->byaddr = mavl_create_ptr(cmpaddr,NULL);
@@ -97,18 +103,19 @@ errX:
 }
 
 void discovery_cache_add(struct cw_DiscoveryCache *cache, 
-	struct sockaddr * addr, const char * mod_capwap, const char * mod_bindings)
+	struct sockaddr * addr, struct cw_Mod  * mod_capwap, struct cw_Mod * mod_bindings)
 {
 	struct cw_DiscoveryCacheElem * cur = cache->queue+cache->qpos;
-	if (cur->mod_capwap==NULL){
+	if (cur->cmod!=NULL){
 		/* delete here */
-		mavl_del(cache->byaddr,cur);
-		mavl_del(cache->byaddr,cur);
+		void * ptr = &cur;
+		mavl_del(cache->byaddr,ptr);
+		mavl_del(cache->byaddr,ptr);
 
 	}
 	
-	cur->mod_capwap=mod_capwap;
-	cur->mod_bindings=mod_bindings;
+	cur->cmod=mod_capwap;
+	cur->bmod=mod_bindings;
 	sock_copyaddr(&cur->addr,addr);
 	
 	cur->ctrhi=cache->ctrhi;
@@ -127,35 +134,50 @@ void discovery_cache_add(struct cw_DiscoveryCache *cache,
 	
 }
 
-
-struct cw_DiscoveryCacheElem * discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr)
+int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr, 
+			struct cw_Mod ** modcapwap, struct cw_Mod **modbindings)
 {
 	struct cw_DiscoveryCacheElem * elem, ** result, *search_ptr, search;
 	sock_copyaddr(&search.addr,addr);
 	search.ctrhi=search.ctrlo=0;
 	
+	search_ptr = &search;
+	result = mavl_get(cache->byaddrp ,&search_ptr);
+	if (result != NULL){
+		elem = *result;
+		if (elem != NULL){
+			mavl_del(cache->byaddr,result);
+			mavl_del(cache->byaddrp,result);
+			*modcapwap=elem->cmod;
+			*modbindings=elem->bmod;
+			
+			elem->cmod=NULL;
+			return 1;
+		}
+	}
 
-	elem = mavl_get_ptr(cache->byaddrp ,&search);
-	if (elem != NULL)
-		return elem;
 
-	search.mod_capwap="hallo";
 	search_ptr = &search;
 	/*elem = *((struct cw_DiscoveryCacheElem **)
 */
 	result = mavl_get_first(cache->byaddr, &search_ptr);
 	if (result == NULL)
-		return NULL;
-	
+		return 0;
+
 	elem = *result;
 	if (elem != NULL){
 		if (sock_cmpaddr((struct sockaddr*)&elem->addr,addr,0)!=0)
-			return NULL;
+			return 0;
 			
 		mavl_del(cache->byaddr,result);
 		mavl_del(cache->byaddrp,result);
+		
+		*modcapwap=elem->cmod;
+		*modbindings=elem->bmod;
+		
+		elem->cmod=NULL;
 	}
 	
-	return NULL;
+	return 1;
 	
 }

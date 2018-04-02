@@ -11,14 +11,11 @@
 #include "cw/dbg.h"
 
 #include "wtpman.h"
-
-/*struct cw_ac_status ac_status;*/
-
-
-
-
+#include "discovery_cache.h"
 
 mavl_t actube_global_cfg;
+
+
 
 /*
 cw_aciplist_t get_aciplist()
@@ -104,37 +101,18 @@ int handle_echo_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
 }
 */
 
+
+struct cw_DiscoveryCache * discovery_cache;
+
 int ac_global_init()
 {
-/*//	mod_set_actions_registered_cb(setup_actions);
-*/
-
-/*
-	ac_config = mbag_create();
-	mbag_set_str(ac_config, CW_ITEM_AC_NAME, conf_acname);
-	mbag_set_ptr(ac_config, CW_ITEM_AC_STATUS, &ac_status);
-
-	ac_status.stations = 0;
-	ac_status.limit = 1000;
-	ac_status.active_wtps = 10;
-	ac_status.max_wtps = 200;
-	ac_status.security = CW_FLAG_AC_SECURITY_X | CW_FLAG_AC_SECURITY_S;
-	ac_status.rmac_field = CW_FLAG_RMAC_SUPPORTED;
-	ac_status.dtls_policy = CAPWAP_FLAG_DTLS_POLICY_C; // | CW_FLAG_DTLS_POLICY_D;
+	/* initialize discovery cache */
+	discovery_cache = discovery_cache_create(100);
+	if (discovery_cache==NULL)
+		goto errX;
 
 
-	mbag_set_bstrv(ac_config, CW_ITEM_AC_HARDWARE_VERSION, 0,
-				 bstr_data(conf_hardware_version), bstr_len(conf_hardware_version));
-	mbag_set_bstrv(ac_config, CW_ITEM_AC_SOFTWARE_VERSION, 0,
-				 bstr_data(conf_software_version), bstr_len(conf_software_version));
-
-
-	mbag_set_str(ac_config,CW_ITEM_AC_IMAGE_DIR,conf_image_dir);
-
-//	mbag_set_avltree(ac_config, CW_ITEM_AC_IP_LIST, aciplist);
-
-	
-	mbag_set_fun(ac_config, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, get_iplist,release_iplist,(void*)771);
-*/
 	return 1;
+errX:
+	return 0;
 }

@@ -57,6 +57,7 @@ static void *alive_thread (void *data)
 		sleep (5);
 		db_ping();
 	}
+	return NULL;
 }
 
 
@@ -187,50 +188,7 @@ int stcmp (const void * sa1, const void *sa2)
 	return rc;
 }
 */
-
-#include "discovery_cache.h"
-tester()
-{
-	struct cw_DiscoveryCache * cache;
-	struct sockaddr_storage a1,a2,a3,a4,a5,a6;
-
-	cache = discovery_cache_create(10);
-	
-	sock_strtoaddr("192.168.0.2:11",(struct sockaddr*)&a1);
-
-	sock_strtoaddr("192.168.0.1:3",(struct sockaddr*)&a3);
-	sock_strtoaddr("192.168.0.1:6",(struct sockaddr*)&a4);
-	sock_strtoaddr("192.168.0.1:9",(struct sockaddr*)&a5);
-	sock_strtoaddr("192.168.0.1:1",(struct sockaddr*)&a6);
-	sock_strtoaddr("192.168.0.1:2",(struct sockaddr*)&a2);
-
-	discovery_cache_add(cache, (struct sockaddr*)&a1,"capwap","ciscon");
-
-	discovery_cache_add(cache, (struct sockaddr*)&a3,"capwap","ciscoc");
-	discovery_cache_add(cache, (struct sockaddr*)&a4,"capwap","ciscod");
-	discovery_cache_add(cache, (struct sockaddr*)&a5,"capwap","ciscoe");
-	discovery_cache_add(cache, (struct sockaddr*)&a6,"capwap","ciscof");
-	discovery_cache_add(cache, (struct sockaddr*)&a2,"capwap","ciscob");
-	
-	{
-		struct cw_DiscoveryCacheElem * elem;
-		struct sockaddr_storage s;
-		
-		sock_strtoaddr("192.168.0.1:800", (struct sockaddr*)&s);
-		
-		
-		elem = discovery_cache_get(cache,(struct sockaddr*)&s);
-		if (elem){
-			printf("Found  = %s %s\n", elem->mod_capwap, elem->mod_bindings);
-		}
-		else{
-			printf("no elem\n");
-		}
-		
-	}
-	
-}
-
+/*
 static int ibcmp(const void *v1, const void *v2)
 {
 	int *i1,*i2;
@@ -238,40 +196,30 @@ static int ibcmp(const void *v1, const void *v2)
 	
 	return *i1-*i2;
 }
+*/
 
+#include "discovery_cache.h"
 void tester1()
 {
-	mavl_t tree;
-	int val;
-	mavliter_t it;
+	struct cw_DiscoveryCache * cache;
+	struct sockaddr_storage addr;
+	int rc;
+	const char *c,*b;
+	
+	cache = discovery_cache_create(1);
+	
+	sock_strtoaddr("192.168.0.12:1234",(struct sockaddr*)&addr);
+	discovery_cache_add(cache,(struct sockaddr*)&addr,"Nase","Loeffel");
 
-	tree = mavl_create(ibcmp,NULL,sizeof(int));
-	val = 3;
-	mavl_add(tree,&val,NULL);
-	val = 7;
-	mavl_add(tree,&val,NULL);
+	sock_strtoaddr("192.168.0.13:1234",(struct sockaddr*)&addr);
+	discovery_cache_add(cache,(struct sockaddr*)&addr,"Nase","Loeffel");
+
 	
-	val = 2; 
-	mavl_add(tree,&val,NULL);
+	rc = discovery_cache_get(cache,(struct sockaddr*)&addr,&c,&b);
 	
-	mavliter_init(&it,tree);
-	mavliter_foreach(&it){
-		int *result;
-		result = mavliter_get(&it);
-		printf("Result: %i\n",*result);
+	if (rc) {
+		printf("RC: %d, %s %s\n",rc,c,b);
 	}
-	
-	val = 2;
-	mavl_del(tree,&val);
-	
-
-	mavliter_init(&it,tree);
-	mavliter_foreach(&it){
-		int *result;
-		result = mavliter_get(&it);
-		printf("Result: %i\n",*result);
-	}
-
 }
 
 
@@ -282,11 +230,6 @@ int main (int argc, char *argv[])
 	FILE * file;
 	mavl_t types_tree, global_cfg;
 	const cw_Type_t **ti;
-tester1();
-exit(0);
-
-
-
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
@@ -376,10 +319,7 @@ exit(0);
 	
 	/* Init DTLS library */
 	dtls_init();
-	
-	
-	
-	
+		
 	ac_global_init();
 	
 	if (!socklist_init())
@@ -626,7 +566,7 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 
 	if (!wtpman) {
 	
-		wtpman = wtpman_create (index, addr);
+		wtpman = wtpman_create (index, addr, preamble & 0xf);
 		
 		
 		if (!wtpman) {
@@ -652,10 +592,10 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 }
 
 
-
+/*
 void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
-	/*//int sock = socklist[index].reply_sockfd;*/
+	//int sock = socklist[index].reply_sockfd;
 	
 	uint8_t *m = buffer + 6;
 	uint32_t val = ntohl (* ( (uint32_t *) (m)));
@@ -665,11 +605,11 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	
 	
 	
-	/* first of all check preamble */
+	// first of all check preamble 
 	int version = LWTH_GET_VERSION (m);
 	
 	if (version != LW_VERSION) {
-/*//              cw_log_debug1("Discarding LWAPP packet, wrong verson");*/
+//              cw_log_debug1("Discarding LWAPP packet, wrong verson");
 		return;
 	}
 	
@@ -677,7 +617,7 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	printf ("LEN = %d\n", l);
 	
 	if (l + 12 != len) {
-/*		//      cw_log_debug1("Discarding LWAPP packet, wrong length");*/
+		//      cw_log_debug1("Discarding LWAPP packet, wrong length");
 		return;
 	}
 	
@@ -703,14 +643,14 @@ void process_lw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 			return;
 		};
 		
-		/*//wtpman_lw_start(wtpman);*/
+		//wtpman_lw_start(wtpman);
 	}
 	
-	/*//wtpman_lw_addpacket(wtpman,buffer,len);*/
+	//wtpman_lw_addpacket(wtpman,buffer,len);
 	wtplist_unlock();
 }
 
-
+*/
 
 
 
@@ -721,8 +661,8 @@ void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, in
 			process_cw_ctrl_packet (index, addr, buffer, len);
 			return;
 			
-		case AC_PROTO_LWAPP:
+		/*case AC_PROTO_LWAPP:
 			process_lw_ctrl_packet (index, addr, buffer, len);
-			return;
+			return;*/
 	}
 }

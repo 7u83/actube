@@ -43,6 +43,8 @@
 #include "wtplist.h"
 #include "cw/ktv.h"
 
+#include "actube.h"
+
 static void reset_echointerval_timer(struct wtpman *wtpman)
 {
 /*	char sock_buf[SOCK_ADDR_BUFSIZE];*/
@@ -97,6 +99,15 @@ static void wtpman_run_discovery(void *arg)
 		rc = cw_read_messages(wtpman->conn);
 		if (cw_result_is_ok(rc)){
 			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
+			
+			cw_dbg(DBG_INFO,"Discovery has detected mods: %s %s", 
+				wtpman->conn->bmod->name,wtpman->conn->cmod->name);
+
+			wtplist_lock();
+			discovery_cache_add(discovery_cache,(struct sockaddr*)&wtpman->conn->addr,
+				wtpman->conn->bmod,wtpman->conn->cmod);
+			wtplist_unlock();
+			
 		}
 	}
 
@@ -283,10 +294,10 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 
 
-void wtpman_run_data(void *wtpman_arg)
+void * wtpman_run_data(void *wtpman_arg)
 {
 
-	return;
+	return NULL;
 /*
 	struct wtpman *wtpman = (struct wtpman *) wtpman_arg;
 	struct conn *conn = wtpman->conn;
@@ -308,8 +319,9 @@ void wtpman_run_data(void *wtpman_arg)
 
 
 
-static void wtpman_run(void *arg)
+static void * wtpman_run(void *arg)
 {
+		mavl_t r;
 	int rc ;
 	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
@@ -320,15 +332,12 @@ static void wtpman_run(void *arg)
 	wtpman->conn->seqnum = 0;
 	conn = wtpman->conn;
 
-
 	/* We were invoked with an unencrypted packet, 
 	 * so assume, it is a discovery request */
 	if (!wtpman->dtlsmode){
 		wtpman_run_discovery(arg);
-		if (conn->capwap_state==CAPWAP_STATE_DISCOVERY){
-			wtpman_remove(wtpman);
-			return;
-		}
+		wtpman_remove(wtpman);
+		return NULL;
 	}
 
 
@@ -339,44 +348,33 @@ static void wtpman_run(void *arg)
 		       CLIENT_IP);
 */		wtpman_remove(wtpman);
 
-		return;
+		return NULL;
 	}
-
-cw_dbg(DBG_INFO,"Wait for next packedt");
-	/* wait for next packet */
-	rc = conn_q_wait_packet(conn,30);
-	if (rc != 0){
-cw_dbg(DBG_INFO,"Wait for next packedt no next remove");		
-		wtpman_remove(wtpman);
-		return;
-	}
-	
-
 
 
 	timer = cw_timer_start(wtpman->conn->wait_dtls);
 
-cw_dbg(DBG_INFO,"Establish DTSL Timer done");
+
 	/* establish dtls session */
 	if (!wtpman_establish_dtls(wtpman)) {
 		wtpman_remove(wtpman);
-		return;
+		return NULL;
 	}
-cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
+
 
 	/* dtls is established, goto join state */
 	if (!wtpman_join(wtpman, timer)) {
 		wtpman_remove(wtpman);
-		return;
+		return NULL;
 	}
 
 
-	conn->msg_start = msg_start_handler;
 
-
+/*
 	cw_dbg(DBG_INFO, "WTP from %s has joined with session id: %s",
 			sock_addr2str_p(&conn->addr,sock_buf),
 			format_bin2hex(conn->session_id,16));
+*/
 
 
 
@@ -387,7 +385,7 @@ cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 */
 
 	/* here the WTP has joined, now we assume an image data request  
-	   or an configuration status request. Nothing else. 
+	   or a configuration status request. Nothing else. 
 	 */
 
 	rc = 0;
@@ -403,14 +401,14 @@ cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 	if (!cw_result_is_ok(rc)) {
 		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
 		wtpman_remove(wtpman);
-		return;
+		return NULL;
 
 	}
 
 
 	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
 		wtpman_image_data(wtpman);
-		return;
+		return NULL;
 	}
 
 
@@ -437,14 +435,14 @@ cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 
 /*//		cw_dbg(DBG_X, "Time left: %d",
 //*/
-		       cw_timer_timeleft(wtpman->echointerval_timer);
+	       /*cw_timer_timeleft(wtpman->echointerval_timer);*/
+	       
 		if (cw_timer_timeout(wtpman->echointerval_timer)) {
 
 			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",
 			       sock_addr2str_p(&conn->addr,sock_buf));
 			break;
 		}
-
 /*
 //		mavl_del_all(conn->outgoing);
 //		conn_clear_upd(conn,1);
@@ -454,7 +452,7 @@ cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 */
 
 
-		mavl_t r;
+	
 		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
 		if (r) {
 
@@ -512,7 +510,7 @@ cw_dbg(DBG_INFO,"Establish DTSL Timer xxx");
 
 	db_ping_wtp(sock_addr2str_p(&conn->addr,sock_buf), "");
 	wtpman_remove(wtpman);
-	return;
+	return NULL;
 }
 
 
@@ -552,18 +550,19 @@ void wtpman_destroy(struct wtpman *wtpman)
 
 
 
-struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
+struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dtlsmode)
 {
-	int sockfd, replyfd;;
+	struct sockaddr dbgaddr;
+	socklen_t dbgaddrl;
+	int sockfd, replyfd;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
+	
 	struct wtpman *wtpman;
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
 		return 0;
 	memset(wtpman, 0, sizeof(struct wtpman));
 
-
-	
 	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 
 		int port = sock_getport(&socklist[socklistindex].addr);
@@ -579,34 +578,51 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr)
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;
-*/
+	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;*/
+	
+	
+	
+	
+	
 
-	struct sockaddr dbgaddr;
-	socklen_t dbgaddrl = sizeof(dbgaddr);
+
+	dbgaddrl = sizeof(dbgaddr);
 	getsockname(sockfd, &dbgaddr, &dbgaddrl);
 
 	cw_dbg(DBG_INFO, "Creating wtpman on socket %d, %s:%d", sockfd,
 	       sock_addr2str(&dbgaddr,sock_buf), sock_getport(&dbgaddr));
 
-/*
-//extern int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
-//                        struct sockaddr *from);
-*/
+
+
 	wtpman->conn = conn_create(sockfd, srcaddr, 100);
 	wtpman->conn->role = CW_ROLE_AC;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr, (struct sockaddr *) &wtpman->conn->addr);
 
-
-/*
-//      wtpman->conn->process_packet = conn_process_packet2;
-*/
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
+
+
+	/* when created caused by a packet in DTLS mode, we try
+	 * to find out the modules to load, for detected connection 
+	 * from discovery request */
+	if (dtlsmode){
+		int rc;
+		struct cw_Mod *cmod, *bmod;
+		
+		rc = discovery_cache_get(discovery_cache,srcaddr,&cmod,&bmod);
+		if (rc){
+			cw_dbg(DBG_INFO, "Initializing with mod %s %s",cmod,bmod);
+			wtpman->conn->msgset = cw_mod_get_msg_set(wtpman->conn,cmod,bmod);
+			wtpman->conn->detected=1;
+		}
+	}
+
+
+
 
 	wtpman->conn->mods = conf_mods;
 
@@ -642,7 +658,7 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
 	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d",dtlsmode);
 	wtpman->dtlsmode=dtlsmode;
-	pthread_create(&wtpman->thread, NULL, (void *) wtpman_run,
+	pthread_create(&wtpman->thread, NULL, wtpman_run,
 		       (void *) wtpman);
 	return;
 }
