@@ -169,7 +169,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_INSECURE);
 #else
-*/	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_HIGH);
+*/	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_LEGACY);
 /*#endif*/
 
         /* Generate Diffie-Hellman parameters - for use with DHE
@@ -177,7 +177,11 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
          * be wise to regenerate parameters often.
          */
         gnutls_dh_params_init(&d->dh_params);
+
+	cw_dbg(DBG_DTLS,"Generating DH params, %d",bits);
         gnutls_dh_params_generate2(d->dh_params, bits);
+	cw_dbg(DBG_DTLS,"DH params generated, %d",bits);
+
         gnutls_certificate_set_dh_params(d->x509_cred, d->dh_params);
 
 

@@ -45,6 +45,9 @@ struct dtls_openssl_data{
 
 extern int dtls_openssl_init();
 
+#define CAPWAP_CIPHER	"ALL"
+
+
 struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio);
 extern int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned int max_psk_len);
 extern int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
