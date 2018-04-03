@@ -42,7 +42,7 @@ struct cw_StrListElem capwap_strings_elem[] = {
 	{CW_ELEM_RADIO_OPERATIONAL_STATE, "Radio Operational State"},
 	{CW_ELEM_RESULT_CODE, "Result Code"},
 	{CW_ELEM_RETURNED_MESSAGE_ELEMENT, "Returned Message Element"},
-	{CW_ELEM_SESSION_ID, "Session ID"},
+	{CAPWAP_ELEM_SESSION_ID, "Session ID"},
 	{CW_ELEM_STATISTICS_TIMER, "Statistics Timer"},
 	{CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD, "Vendor Specific Payload"},
 	{CAPWAP_ELEM_WTP_BOARD_DATA, "WTP Board Data"},

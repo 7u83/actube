@@ -94,7 +94,7 @@ static cw_action_in_t actions_in[] = {
 		/* Cisco uses 4 byte session ids */
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CW_MSG_JOIN_REQUEST, 
-		.elem_id = CW_ELEM_SESSION_ID,
+		.elem_id = CAPWAP_ELEM_SESSION_ID,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_SESSION_ID, 
 		.mand = 1, 

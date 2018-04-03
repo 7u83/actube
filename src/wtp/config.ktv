@@ -32,6 +32,8 @@ wtp-descriptor/max-radios:Byte:3
 
 radio/0/wtp-radio-information:Dword:01
 radio/1/wtp-radio-information:Dword:02
+radio/2/wtp-radio-information:Dword:03
+
 
 wtp-name:Bstr16:WFAT01
 

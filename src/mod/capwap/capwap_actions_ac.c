@@ -179,6 +179,18 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic				/* put */
 	}
 	,
+	{ 
+		"Session ID",				/* name */
+		CAPWAP_ELEM_SESSION_ID,			/* Element ID */
+		0,0,					/* Vendor / Proto */
+		CAPWAP_SESSION_ID_LEN,CAPWAP_SESSION_ID_LEN,	/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"session-id",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
 
 
 	{0,0,0,0,0,0,0,0}
@@ -216,7 +228,7 @@ static struct cw_ElemDef join_request_elements[] ={
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_NAME,			1, 0},
-	/* Session ID */
+	{0,0,CAPWAP_ELEM_SESSION_ID,			1, 0},
 	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
 	

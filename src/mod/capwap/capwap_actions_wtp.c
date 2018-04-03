@@ -555,7 +555,7 @@ static cw_action_out_t actions_out[] = {
 	/* Session ID - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_SESSION_ID,
+		.elem_id  = CAPWAP_ELEM_SESSION_ID,
 		.item_id = CW_ITEM_SESSION_ID, 
 		.out = cw_out_generic,
 		.get = cw_out_get_session_id,

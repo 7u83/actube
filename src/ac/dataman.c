@@ -104,7 +104,7 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
-		if (cw_get_elem_id(elem) == CW_ELEM_SESSION_ID){
+		if (cw_get_elem_id(elem) == CAPWAP_ELEM_SESSION_ID){
 			uint8_t sessid[16];
 			memset(sessid,0,16);
 

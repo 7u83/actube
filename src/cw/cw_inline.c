@@ -199,9 +199,10 @@ int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state) {
 	return 2+cw_put_elem_hdr(dst,CW_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
 }
 
+
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len){
 	memcpy(dst+4,session_id,len);
-	return len+cw_put_elem_hdr(dst,CW_ELEM_SESSION_ID,len);
+	return len+cw_put_elem_hdr(dst,CAPWAP_ELEM_SESSION_ID,len);
 }
 
 
