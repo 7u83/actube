@@ -407,7 +407,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST, 
-		.elem_id  = CW_ELEM_LOCATION_DATA,
+		.elem_id  = CAPWAP_ELEM_LOCATION_DATA,
 		.item_id = CW_ITEM_LOCATION_DATA, 
 		.start  = cw_in_generic2,
 		.min_len = 1,
@@ -512,7 +512,7 @@ static cw_action_out_t actions_out[] = {
 	/* Location Data - Join Request  */
 	{
 		.msg_id = CAPWAP_MSG_JOIN_REQUEST, 
-		.elem_id  = CW_ELEM_LOCATION_DATA,
+		.elem_id  = CAPWAP_ELEM_LOCATION_DATA,
 		.item_id = CW_ITEM_LOCATION_DATA, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,

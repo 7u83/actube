@@ -91,7 +91,7 @@ static void wtpman_run_discovery(void *arg)
 	time_t timer = cw_timer_start(10);
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-	wtpman->conn->remote_cfg = cw_ktv_create(); 
+
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
@@ -101,11 +101,11 @@ static void wtpman_run_discovery(void *arg)
 			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
 			
 			cw_dbg(DBG_INFO,"Discovery has detected mods: %s %s", 
-				wtpman->conn->bmod->name,wtpman->conn->cmod->name);
+				wtpman->conn->cmod->name,wtpman->conn->bmod->name);
 
 			wtplist_lock();
 			discovery_cache_add(discovery_cache,(struct sockaddr*)&wtpman->conn->addr,
-				wtpman->conn->bmod,wtpman->conn->cmod);
+				wtpman->conn->cmod,wtpman->conn->bmod);
 			wtplist_unlock();
 			
 		}
@@ -137,11 +137,12 @@ static int wtpman_establish_dtls(void *arg)
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
+
 	/* setup cipher */
-	wtpman->conn->dtls_cipher = conf_sslcipher;
+/*	wtpman->conn->dtls_cipher = conf_sslcipher;*/
 
 	/* setup DTSL certificates */
-	dtls_ok = 0;
+/*	dtls_ok = 0;
 	if (conf_sslkeyfilename && conf_sslcertfilename) {
 
 
@@ -153,9 +154,9 @@ static int wtpman_establish_dtls(void *arg)
 		cw_dbg(DBG_DTLS, "Using cert file %s", wtpman->conn->dtls_cert_file);
 		dtls_ok = 1;
 	}
-
+*/
 	/* setup DTLS psk */
-	if (conf_dtls_psk) {
+/*	if (conf_dtls_psk) {
 		wtpman->conn->dtls_psk = conf_dtls_psk;
 		wtpman->conn->dtls_psk_len = strlen(conf_dtls_psk);
 		dtls_ok = 1;
@@ -166,7 +167,7 @@ static int wtpman_establish_dtls(void *arg)
 		       "Can't establish DTLS session, neither psk nor certs set in config file.");
 		return 0;
 	}
-
+*/
 	/* try to accept the connection */
 	if (!dtls_accept(wtpman->conn)) {
 		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s",
@@ -321,7 +322,7 @@ void * wtpman_run_data(void *wtpman_arg)
 
 static void * wtpman_run(void *arg)
 {
-		mavl_t r;
+	mavl_t r;
 	int rc ;
 	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
@@ -331,6 +332,8 @@ static void * wtpman_run(void *arg)
 
 	wtpman->conn->seqnum = 0;
 	conn = wtpman->conn;
+
+	wtpman->conn->remote_cfg = cw_ktv_create(); 
 
 	/* We were invoked with an unencrypted packet, 
 	 * so assume, it is a discovery request */
@@ -606,20 +609,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 	}
 
 
-	/* when created caused by a packet in DTLS mode, we try
-	 * to find out the modules to load, for detected connection 
-	 * from discovery request */
-	if (dtlsmode){
-		int rc;
-		struct cw_Mod *cmod, *bmod;
-		
-		rc = discovery_cache_get(discovery_cache,srcaddr,&cmod,&bmod);
-		if (rc){
-			cw_dbg(DBG_INFO, "Initializing with mod %s %s",cmod,bmod);
-			wtpman->conn->msgset = cw_mod_get_msg_set(wtpman->conn,cmod,bmod);
-			wtpman->conn->detected=1;
-		}
-	}
+
 
 
 
@@ -638,12 +628,25 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 */
 
 
-
 	wtpman->conn->local_cfg = cw_ktv_create();
 	wtpman->conn->global_cfg = actube_global_cfg;
 	wtpman->conn->local_cfg = actube_global_cfg;
 
-
+	/* when created caused by a packet in DTLS mode, we try
+	 * to find out the modules to load, for detected connection 
+	 * from discovery request */
+	if (dtlsmode){
+		int rc;
+		struct cw_Mod *cmod, *bmod;
+		
+		rc = discovery_cache_get(discovery_cache,srcaddr,&cmod,&bmod);
+		if (rc){
+			cw_dbg(DBG_INFO, "Initializing with mod %s %s",cmod->name,bmod->name);
+			wtpman->conn->msgset = cw_mod_get_msg_set(wtpman->conn,cmod,bmod);
+			wtpman->conn->detected=1;
+			cmod->setup_cfg(wtpman->conn);
+		}
+	}
 
 	return wtpman;
 }

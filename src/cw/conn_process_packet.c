@@ -276,7 +276,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			errno = EAGAIN;
 			return -1;
 		}
-		
+		conn->cmod->setup_cfg(conn);
 		conn->msgset= set;
 		conn->detected = 1;
 	}

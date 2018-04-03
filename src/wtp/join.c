@@ -107,26 +107,16 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 	int rsec,lsec;
 	int rc;
 
-printf("JOINFD: %s\n",sock_addr2str_p(sa,addrstr));
-
-/*	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
+	/* Check if we support the same auth methods as the AC */
+	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
 	rsec = cw_ktv_get_byte(conn->remote_cfg,"ac-descriptor/security",0);
-*/
-lsec = rsec =4;
-
-	printf("Anding my and remote %d %d %d\n",lsec,rsec, rsec & lsec);
-	
 	if ((lsec & rsec) == 0){
 		cw_log(LOG_ERR, "Can't establish DTLS with AC, my sec: %d, remote sec %d",lsec,rsec);
 		return 0;
 	}
-	
-/*	struct conn *conn = get_conn();*/
 
+	/* setup a socket */
 	conn->capwap_state = CAPWAP_STATE_JOIN;
-
-
-
 	sockfd = socket(sa->sa_family, SOCK_DGRAM, 0);
 	if (sockfd == -1) {
 		cw_log(LOG_ERR, "Can't create socket: %s\n", strerror(errno));
@@ -142,44 +132,15 @@ lsec = rsec =4;
 	rc = connect(sockfd, (struct sockaddr *) sa,
 		     sock_addrlen((struct sockaddr *) sa));
 
-/*	if (rc < 0) {
-		cw_log(LOG_ERR, "Can't connect to %s: %s\n", sock_addr2str(sa),
-		       strerror(errno));
+	if (rc < 0) {
+		cw_log(LOG_ERR, "Can't connect to %s: %s\n", 
+			sock_addr2str(sa,addrstr),strerror(errno));
 		close(sockfd);
 		return -1;
 	}
-*/
+
 
 	cw_dbg(DBG_DTLS, "Establishing DTLS session with %s", sock_addr2str(sa, addrstr));
-/*
-	int dtls_conf_ok=0;
-
-	if (conn->dtls_psk) {
-		conn->dtls_psk = conf_dtls_psk;
-		conn->dtls_psk_len = strlen(conn->dtls_psk);
-		conn->dtls_cipher = conf_dtls_cipher;
-		dtls_conf_ok=1;
-	}
-
-	if (conf_sslkeyfilename && conf_sslcertfilename) {
-
-		conn->dtls_key_file = conf_sslkeyfilename;
-		conn->dtls_cert_file = conf_sslcertfilename;
-		conn->dtls_key_pass = conf_sslkeypass;
-		conn->dtls_cipher = conf_dtls_cipher;
-		dtls_conf_ok=1;
-	}
-
-	if (!dtls_conf_ok){
-		cw_log(LOG_ERR,"Can't establish DTLS connection with %s, neither psk nor cert set in config",
-			sock_addr2str(sa,addrstr));
-		close(sockfd);
-		return 0;
-	}
-*/
-
-
-
 
 	rc = dtls_connect(conn);
 	if (rc != 1) {
@@ -194,8 +155,7 @@ lsec = rsec =4;
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
 	       sock_addr2str(sa,addrstr));
 
-
-
+	run_join(conn);
 	return 1;
 }
 
@@ -241,12 +201,6 @@ int run_join(struct conn *conn)
 
 int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 {
-/*
-struct sockaddr_storage s;
-sock_strtoaddr("192.168.0.14:5246",(struct sockaddr*)&s);
-run_join_d(conn,(struct sockaddr*)&s);
-exit(0);
-*/
 	mavliter_t ii;
 	mavliter_init(&ii,dis->prio_ip);
 
@@ -277,57 +231,11 @@ exit(0);
 		cw_dbg(DBG_INFO, "Going to join CAPWAP controller '%s' at %s.",ac_name,ipstr);
 		
 		conn->remote_cfg=rcfg;
-		
-		/*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"remopte ac","preifx**: ","bottom");
-		*/
-		
+
 		sock_strtoaddr(ipstr,(struct sockaddr*)(&sockaddr));
 		sock_setport((struct sockaddr*)&sockaddr,5246);
 		run_join_d(conn,(struct sockaddr*)(&sockaddr));
-	}
-
-
-	/*mbag_del_all(conn->incomming);*/
-
-/*	cw_aciplist_t iplist =
-	    mbag_get_mavl(conn->local, CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST);
-	if (!iplist) {
-		cw_log(LOG_ERR, "No IPs to join controller.");
-		return 0;
-	}
-
-	if (!mavl_get_count(iplist)){
-		cw_log(LOG_ERR, "No IPs to join controller. IP list is empty.");
-		return 0;
-	}
-*/
-
-
-	mavliter_foreach(&ii) {
-
-/*		cw_acip_t *ip = avliter_get(&ii);*/
-
-
-	/*	cw_dbg(DBG_INFO, "Going to join CAWAP controller on %s",
-		       sock_addr2str_p(&ip->ip,addrstr));
-*/
-
-/*		int rc = run_join_d((struct sockaddr *) &ip->ip);
-
-		if (rc<=0)
-			continue;
-
-		rc = run_join(conn);
-		if (rc) {
-			conn->capwap_state = CW_STATE_CONFIGURE;
-			return 1;
-		}
-*/
-
 
 	}
-
-
 	return 0;
-
 }

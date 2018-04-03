@@ -156,6 +156,31 @@ static struct cw_ElemHandler handlers[] = {
 	
 	,
 
+	{ 
+		"Location Data",			/* name */
+		CAPWAP_ELEM_LOCATION_DATA,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,CAPWAP_MAX_LOCATION_DATA_LEN,		/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"location-data",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+	{ 
+		"WTP Name",				/* name */
+		CAPWAP_ELEM_WTP_NAME,			/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,CAPWAP_MAX_WTP_NAME_LEN,		/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"wtp-name",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -171,7 +196,6 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_MTU_DISCOVERY_PADDING,		0, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
-
 };
 
 
@@ -185,6 +209,29 @@ static struct cw_ElemDef discovery_response_elements[] ={
 	{0,0,0,0,0}
 
 };
+
+static int join_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef join_request_elements[] ={
+	{0,0,CAPWAP_ELEM_LOCATION_DATA,			1, 0},
+	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_NAME,			1, 0},
+	/* Session ID */
+	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
+	
+/*	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
+
+	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},	
+	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
+	{0,0,CAPWAP_ELEM_MTU_DISCOVERY_PADDING,		0, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+*/
+	{0,0,0,0,0}
+};
+
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -203,7 +250,13 @@ static struct cw_MsgDef messages[] = {
 		discovery_response_elements
 	},
 
-
+	{
+		"Join Request",
+		CAPWAP_MSG_JOIN_REQUEST,
+		CW_ROLE_AC,
+		join_request_states,
+		join_request_elements
+	},
 
 	
 	

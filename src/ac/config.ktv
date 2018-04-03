@@ -20,3 +20,11 @@ capwap-control-ip-address/address.0:IPAddress:192.168.0.14
 capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
+
+capwap/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
+capwap/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+capwap/ssl-cipher:Str:NORMAL
+#capwap/ssl-psk:Str:"HalloWelt"
+
+
+
