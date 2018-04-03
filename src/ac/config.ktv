@@ -15,7 +15,7 @@ ac-descriptor/hardware/vendor:Dword:1234567
 ac-descriptor/hardware/version:Bstr16:"1.7.3"
 ac-name:Bstr16:"TubesAC"
 
-capwap-control-ip-address/address.0:IPAddress:192.168.0.14
+capwap-control-ip-address/address.0:IPAddress:192.168.0.131
 #capwap-control-ip-address/address.1:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
 capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
