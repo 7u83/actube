@@ -50,7 +50,7 @@
  */
 
 /**
- *@defgroup CAPWAPConstants CAPWAP General Constants 
+ *@defgroup CAPWAPConstants General Constants 
  *@brief General constants as defined in RFC5415
  *@{
  */
@@ -71,7 +71,8 @@
 /** CAPWAP Data Port */
 #define CAPWAP_DATA_PPORT 5247
 
-/** CAWPAP DataPort as String */
+/** CAWPAP DataPort as string constant.
+ * @see CAPWAP_DATA_PORT */
 #define CAPWAP_DATA_PORT_STR "5247"
 
 /**@}*/
@@ -79,7 +80,7 @@
 
 
 /**
- *@defgroup CAPWAPHeaderFlags CAPWAP Header Flags
+ *@defgroup CAPWAPHeaderFlags Header Flags
  *@brief The CAPWAP control header flags
  * 
  *@{
@@ -99,7 +100,7 @@
 
 
 /**
- * @defgroup CAPWAPWBIDS CAPWAP Wireless binding IDs
+ * @defgroup CAPWAPWBIDS Wireless binding IDs
  * @{
  */
 #define CAPWAP_WBID_RESERVED1	0
@@ -115,7 +116,7 @@
  
 
 /**
- * @defgroup CAPWAPMessages CAPWAP message types as defined in RFC 5416
+ * @defgroup CAPWAPMessages  Message types as defined in RFC 5416
  * @{
  */
 /**
@@ -186,7 +187,7 @@
 
 
 /**
- * @defgroup CAPWAPMsgElems CAPWAP Message Elements 
+ * @defgroup CAPWAPMsgElems Message Elements 
  * @brief CAPWAP message elements as defined in  RFC 5415
  * @{
  */   
@@ -297,26 +298,38 @@
 #define CW_FLAG_RMAC_SUPPORTED		1
 #define CW_FLAG_RMAC_NOT_SUPPORTED	2
 
-
+/**
+ * @defgroup DESCRIPTORSUBELEM Descriptor sub-elements
+ * @{
+ */
 #define CW_SUBELEM_WTP_HARDWARE_VERSION			0
 #define CW_SUBELEM_WTP_SOFTWARE_VERSION			1
 #define CW_SUBELEM_WTP_BOOTLOADER_VERSION		2
 #define CW_SUBELEM_WTP_OTHERSOFTWARE_VERSION		3
 
 #define CAPWAP_SUBELEM_AC_HARDWARE_VERSION		4
-#define CAPWAP_SUBELEM_AC_SOFTWARE_VERSION			5
-
-
-/* Frame tunnnel mode bits */
-#define CW_WTP_FRAME_TUNNEL_MODE_R	1	/* Reserved */
-#define CW_WTP_FRAME_TUNNEL_MODE_L	2	/* Local bridging */
-#define CW_WTP_FRAME_TUNNEL_MODE_E	4	/* 802.3 mode */
-#define CW_WTP_FRAME_TUNNEL_MODE_N	8	/* native mode */
-
+#define CAPWAP_SUBELEM_AC_SOFTWARE_VERSION		5
+/**
+ * @}
+ */
 
 
 /**
- * @defgroup CAPWAPDiscoveryTypes CAPWAP Discovery Types
+ * @defgroup FRAMETUNNELBITS Frame-tunnel-mode Bits
+ * @{
+ */
+ 
+#define CW_WTP_FRAME_TUNNEL_MODE_R	1	/**< Reserved */
+#define CW_WTP_FRAME_TUNNEL_MODE_L	2	/**< Local bridging */
+#define CW_WTP_FRAME_TUNNEL_MODE_E	4	/**< 802.3 mode */
+#define CW_WTP_FRAME_TUNNEL_MODE_N	8	/**< native mode */
+/**
+ * @}
+ */
+
+
+/**
+ * @defgroup CAPWAPDiscoveryTypes Discovery Types
  * @brief CAPWAP Discovery Types defined in RFC5415
  * @{
  */
