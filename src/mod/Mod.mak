@@ -9,6 +9,15 @@ OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 CFLAGS+= -I ../../ -I../ -I../../include
 
+ifeq ($(SSL_LIBRARY),GNUTLS)
+CFLAGS+=-DWITH_GNUTLS
+endif
+
+ifeq ($(SSL_LIBRARY),OPENSSL)
+CFLAGS+=-DWITH_OPENSSL
+endif
+
+
 
 SRCS = $(OBJS:.o=.c) 
 

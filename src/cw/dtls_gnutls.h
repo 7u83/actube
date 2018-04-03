@@ -35,6 +35,8 @@ const char * dtls_gnutls_get_cipher(struct conn * conn, char * dst);
 struct dtls_ssl_cert dtls_gnutls_get_peers_cert(struct conn * conn,unsigned int n);
 extern int dtls_gnutls_shutdown(struct conn *conn);
 
+#define CAPWAP_CIPHER	"+RSA:+AES-128-CBC:+SHA1:"
+
 
 /* functions used only by capwap libray */
 
