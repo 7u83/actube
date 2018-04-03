@@ -56,7 +56,7 @@ int dtls_gnutls_accept(struct conn *conn)
 
 	memset(&prestate, 0, sizeof(prestate));
 
-	tlen = dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));
+	/*tlen = dtls_gnutls_bio_read(conn, buffer, sizeof(buffer));*/
 
 	gnutls_dtls_cookie_send(&cookie_key, &conn->addr, sizeof(conn->addr),
 				&prestate, (gnutls_transport_ptr_t) conn, dtls_gnutls_bio_write);

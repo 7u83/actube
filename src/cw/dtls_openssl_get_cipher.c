@@ -19,18 +19,23 @@
 
 #include "dtls_openssl.h"
 
-const char * dtls_openssl_get_cipher(struct conn * conn)
+const char * dtls_openssl_get_cipher(struct conn * conn, char *dst)
 {
 	struct dtls_openssl_data * d;
 	const SSL_CIPHER * c;
-	if (!conn->dtls_data)
-		return "None";
+	if (!conn->dtls_data){
+		sprintf(dst, "%s","None");
+		return dst;
+	}
 
 	d = (struct dtls_openssl_data*)conn->dtls_data;
 
-	if ( !d->ssl )
-		return "None";
+	if ( !d->ssl ){
+		sprintf(dst, "%s","None");
+		return dst;
+	}
 
 	c = SSL_get_current_cipher(d->ssl);
-	return SSL_CIPHER_get_name(c);
+	sprintf(dst,"%s",SSL_CIPHER_get_name(c));
+	return dst;
 }

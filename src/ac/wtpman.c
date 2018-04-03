@@ -133,6 +133,7 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 
 static int wtpman_establish_dtls(void *arg)
 {
+	char cipherstr[512];
 	int dtls_ok;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
@@ -175,9 +176,9 @@ static int wtpman_establish_dtls(void *arg)
 		return 0;
 	}
 
-	cw_dbg(DBG_DTLS, "DTLS session established with %s, cipher=%s",
-	       sock_addr2str_p(&wtpman->conn->addr,sock_buf), dtls_get_cipher(wtpman->conn));
-
+	cw_dbg(DBG_DTLS, "DTLS session established with %s, %s",
+	       sock_addr2str_p(&wtpman->conn->addr,sock_buf), dtls_get_cipher(wtpman->conn,cipherstr));
+exit(0);
 	return 1;
 }
 

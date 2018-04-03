@@ -53,7 +53,7 @@ extern int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned 
 extern int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len);
 extern int dtls_openssl_write(struct conn * conn, const uint8_t *buffer, int len);
 extern int dtls_openssl_connect(struct conn * conn);
-extern const char * dtls_openssl_get_cipher(struct conn * conn);
+extern const char * dtls_openssl_get_cipher(struct conn * conn, char *dst);
 
 extern int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt);
 

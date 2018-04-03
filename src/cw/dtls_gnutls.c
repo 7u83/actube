@@ -111,19 +111,13 @@ static void dtls_log_cb(int level, const char * str)
 	if (!cw_dbg_is_level(DBG_DTLS_DETAIL))
 		return;
 
-	switch (level){
+/*	switch (level){
 		case 2:
 		case 6:
 		case 4:
 			return;
-
-
 	}
-
-
-	
-	
-
+*/
 	strcpy(buf,str);
 	c = strchr(buf,'\n');
 	*c=0;
@@ -141,6 +135,14 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 	gnutls_global_set_log_level(10);
 	gnutls_global_set_log_function(dtls_log_cb);
+	
+	rc = gnutls_init(&d->session, config); 
+	if (rc < 0) {
+		cw_log(LOG_ERR, "DTLS - Can't init session: %s", gnutls_strerror(rc));
+		dtls_gnutls_data_destroy(d);
+		return 0;
+	}
+
 
 	gnutls_certificate_allocate_credentials(&d->x509_cred);
 
@@ -163,12 +165,13 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 
 
-
+/*
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_INSECURE);
 #else
-	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_WEAK);
-#endif
+*/	bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_HIGH);
+/*#endif*/
+
         /* Generate Diffie-Hellman parameters - for use with DHE
          * kx algorithms. When short bit length is used, it might
          * be wise to regenerate parameters often.
@@ -181,7 +184,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 
 	/* Set ciphers */
-	
+/*
 	rc = gnutls_priority_init(&d->priority_cache, conn->dtls_cipher, &errpos);
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS - Can't init ciphers '%s' at '%s' : %s", conn->dtls_cipher,
@@ -191,16 +194,6 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 	}
 
 
-	rc = gnutls_init(&d->session, config); 
-	if (rc < 0) {
-		cw_log(LOG_ERR, "DTLS - Can't init session: %s", gnutls_strerror(rc));
-		dtls_gnutls_data_destroy(d);
-		return 0;
-	}
-
-	gnutls_transport_set_ptr(d->session, conn);
-
-
 	rc = gnutls_priority_set(d->session, d->priority_cache);
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS - Can't set priority: %s", gnutls_strerror(rc));
@@ -208,9 +201,18 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 		return 0;
 	}
 
+*/
+	rc = gnutls_priority_set_direct(d->session,conn->dtls_cipher,&errpos);
+	if (rc < 0) {
+		cw_log(LOG_ERR, "DTLS - Can't init ciphers '%s' at '%s' : %s", conn->dtls_cipher,
+		       errpos, gnutls_strerror(rc));
+		dtls_gnutls_data_destroy(d);
+		return 0;
+	}
+
+
 
 	rc = gnutls_credentials_set(d->session, GNUTLS_CRD_CERTIFICATE, d->x509_cred);
-
 	if (rc < 0) {
 		cw_log(LOG_ERR, "DTLS - Can't set credentials: %s", gnutls_strerror(rc));
 		dtls_gnutls_data_destroy(d);
@@ -219,7 +221,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 	gnutls_certificate_set_verify_function(d->x509_cred,verify_cert);
 
-
+	gnutls_transport_set_ptr(d->session, conn);
 	gnutls_transport_set_pull_function(d->session, dtls_gnutls_bio_read);
 	gnutls_transport_set_push_function(d->session, dtls_gnutls_bio_write);
 	gnutls_transport_set_pull_timeout_function(d->session, dtls_gnutls_bio_wait);
@@ -227,7 +229,6 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 
 #if GNUTLS_VERSION_NUMBER >= 0x030100
 	gnutls_handshake_set_timeout(d->session, GNUTLS_DEFAULT_HANDSHAKE_TIMEOUT);
-
 	gnutls_dtls_set_data_mtu(d->session, conn->dtls_mtu);
 #endif
 	gnutls_dtls_set_mtu(d->session, conn->dtls_mtu);
