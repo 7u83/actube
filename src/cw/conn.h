@@ -177,6 +177,7 @@ struct conn {
 
 	char *dtls_psk;
 	int dtls_psk_len;
+	int dtls_dhbits;
 
 	struct cw_Mod *cmod, *bmod;
 

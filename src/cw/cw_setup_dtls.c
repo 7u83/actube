@@ -39,5 +39,8 @@ int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * de
 		security |= CAPWAP_FLAG_AC_SECURITY_X;
 	}
 
+	sprintf(key,"%s/%s",prefix,"ssl-dhbits");
+	conn->dtls_dhbits = cw_ktv_get_word(cfg,key,1024);
+
 	return security;
 }

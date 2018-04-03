@@ -4,8 +4,8 @@
 
 capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
 capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
+#capwap/ssl-cipher:Str: +RSA:+AES-128-CBC:+SHA1
 #capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
-capwap/ssl-cipher:Str: +DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
 #capwap/ssl-psk:Str:"HalloWelt"
 
 cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"

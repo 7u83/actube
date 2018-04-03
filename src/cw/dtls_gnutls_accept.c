@@ -43,9 +43,13 @@ int dtls_gnutls_accept(struct conn *conn)
 	uint8_t buffer[2048];
 	int tlen, rc;
 	time_t c_timer;
+	int bits;
 
 	gnutls_datum_t cookie_key;
 	gnutls_dtls_prestate_st prestate;
+	
+	
+
 	
 	gnutls_key_generate(&cookie_key, GNUTLS_COOKIE_KEY_SIZE);
 	cw_dbg(DBG_DTLS, "Session cookie for %s generated: %s",
@@ -105,6 +109,24 @@ int dtls_gnutls_accept(struct conn *conn)
 	d = dtls_gnutls_data_create(conn,GNUTLS_SERVER | GNUTLS_DATAGRAM);
 	if (!d)
 		return 0;
+
+
+	/* Generate Diffie-Hellman parameters - for use with DHE
+         * kx algorithms. When short bit length is used, it might
+         * be wise to regenerate parameters often.
+         */
+	/*bits = gnutls_sec_param_to_pk_bits(GNUTLS_PK_DH, GNUTLS_SEC_PARAM_LEGACY);*/
+	bits = conn->dtls_dhbits;
+	
+	gnutls_dh_params_init(&d->dh_params);
+
+	cw_dbg(DBG_DTLS,"Generating DH params, %d",bits);
+        gnutls_dh_params_generate2(d->dh_params, bits);
+	cw_dbg(DBG_DTLS,"DH params generated, %d",bits);
+
+        gnutls_certificate_set_dh_params(d->x509_cred, d->dh_params);
+
+
 
 	gnutls_certificate_server_set_request(d->session,GNUTLS_CERT_REQUEST);
 	gnutls_dtls_prestate_set(d->session, &prestate);
