@@ -85,10 +85,12 @@ CWSRC=\
 	cw_save_file.c\
 	cw_setstr.c\
 	cw_strdup.c\
+	cw_stricmp.c\
 	cw_strlist_get_id.c\
 	cw_strlist_get_str.c\
 	cw_type_bstr16.c\
 	cw_type_byte.c\
+	cw_type_bool.c\
 	cw_type_str.c\
 	cw_type_dword.c\
 	cw_type_ipaddress.c\
