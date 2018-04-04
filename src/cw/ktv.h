@@ -142,6 +142,7 @@ int cw_ktv_read_line (FILE *f, char * key, char * type, char *val);
 int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
+uint8_t cw_ktv_get_bool(mavl_t ktv,const char *key, uint8_t def);
 cw_KTV_t * cw_ktv_set_byte(mavl_t ktv,const char * key, uint8_t byte);
 bstr16_t cw_ktv_get_bstr16(mavl_t ktv,const char *key, bstr16_t def);
 

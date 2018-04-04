@@ -106,6 +106,7 @@ KTVSRC=\
 	cw_ktv_replace.c\
 	cw_ktv_add_from_str.c\
 	cw_ktv_get_byte.c\
+	cw_ktv_get_bool.c\
 	cw_ktv_get_bstr16.c\
 	cw_ktv_set_byte.c\
 	cw_ktv_get.c\
