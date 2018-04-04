@@ -34,13 +34,14 @@
 #include "sock.h"
 /**
  * Establish a DTLS connection using gnutls library
- * @see #dtls_connect
+ * @see #dtls_connec
  */
 int dtls_gnutls_connect(struct conn *conn)
 {
 	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct dtls_gnutls_data *d;
+	gnutls_datum_t key;
 	d = dtls_gnutls_data_create(conn,
 				    GNUTLS_CLIENT | GNUTLS_DATAGRAM | GNUTLS_NONBLOCK);
 
@@ -55,6 +56,50 @@ int dtls_gnutls_connect(struct conn *conn)
 #endif
 	gnutls_dtls_set_mtu(d->session, 1500);
 */
+
+/*
+	if (conn->dtls_psk != NULL){
+		key.data=(unsigned char*)conn->dtls_psk;
+		key.size=strlen(conn->dtls_psk);
+	
+		rc = gnutls_credentials_set(d->session, GNUTLS_CRD_PSK, &key);
+		if (rc<0) {
+			cw_log(LOG_ERR, "DTLS - Can't set x.509 credentials: %s", gnutls_strerror(rc));
+			dtls_gnutls_data_destroy(d);
+			return 0;
+
+		}
+	}
+
+*/
+
+
+	if (conn->dtls_psk_enable){
+		gnutls_psk_client_credentials_t cred;
+		rc = gnutls_psk_allocate_client_credentials(&cred);
+		if (rc != 0) {
+			cw_dbg(DBG_DTLS,"gnutls_psk_allocate_client_credentials() failed.\n");
+			return 0;
+		}
+		
+		
+		key.size = bstr16_len(conn->dtls_psk);
+		key.data = bstr16_data(conn->dtls_psk);
+		
+		
+		/* Put the username and key into the structure we use to tell GnuTLs what
+		// the credentials are. The example server doesn't care about usernames, so
+		// we use "Alice" here.*/
+		rc = gnutls_psk_set_client_credentials(cred, "Alice", &key, GNUTLS_PSK_KEY_RAW);
+		rc = gnutls_credentials_set(d->session, GNUTLS_CRD_PSK, cred);
+		if (rc != 0) {
+			cw_log(LOG_ERR,"gnutls_credentials_set() failed.");
+		}
+
+	
+	
+	}
+
 
 
 	cw_dbg(DBG_DTLS,"Starting handshake");

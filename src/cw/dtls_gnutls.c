@@ -128,6 +128,7 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 {
 	const char *errpos;
 	int rc;
+	gnutls_datum_t key;
 	int bits;
 	struct dtls_gnutls_data *d = malloc(sizeof(struct dtls_gnutls_data));
 	if (!d)
@@ -204,16 +205,18 @@ struct dtls_gnutls_data *dtls_gnutls_data_create(struct conn *conn,int config)
 		return 0;
 	}
 
+	
+
 
 	rc = gnutls_credentials_set(d->session, GNUTLS_CRD_CERTIFICATE, d->x509_cred);
 	if (rc < 0) {
-		cw_log(LOG_ERR, "DTLS - Can't set credentials: %s", gnutls_strerror(rc));
+		cw_log(LOG_ERR, "DTLS - Can't set x.509 credentials: %s", gnutls_strerror(rc));
 		dtls_gnutls_data_destroy(d);
 		return 0;
 	}
 
 	gnutls_certificate_set_verify_function(d->x509_cred,verify_cert);
-
+	gnutls_session_set_ptr(d->session, conn);
 	gnutls_transport_set_ptr(d->session, conn);
 	gnutls_transport_set_pull_function(d->session, dtls_gnutls_bio_read);
 	gnutls_transport_set_push_function(d->session, dtls_gnutls_bio_write);

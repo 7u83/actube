@@ -294,7 +294,8 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 {
 	BIO * b = SSL_get_rbio(ssl);
 	struct conn * conn = b->ptr;
-	int l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
+	
+	int l = bstr16_len(conn->dtls_psk) < max_psk_len ? bstr16_len(conn->dtls_psk) : max_psk_len;
 	memcpy(psk,conn->dtls_psk,l);
 	return l;
 }

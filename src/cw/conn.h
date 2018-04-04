@@ -175,9 +175,11 @@ struct conn {
 	int (*dtls_start) (struct conn *);
 	int (*dtls_accept) (struct conn *);
 
-	char *dtls_psk;
-	int dtls_psk_len;
+	bstr16_t dtls_psk;
+	int dtls_psk_enable;
+
 	int dtls_dhbits;
+	int (*dtls_get_psk)(struct conn *,const char *user,uint8_t**psk, int *len);
 
 	struct cw_Mod *cmod, *bmod;
 

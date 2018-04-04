@@ -502,7 +502,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout);
 
 
 char *cw_strdup(const char *s);
-int cw_strcicmp(char const *a, char const *b);
+int cw_stricmp(char const *a, char const *b);
 
 
 /**

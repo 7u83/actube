@@ -77,13 +77,13 @@ static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 	
 }
 
-static int len ( struct cw_KTV * data ){
+static int len (cw_KTV_t * data ){
 	return bstr16_len(data->val.ptr);
 }
 
-static void * data(struct cw_KTV_t * data)
+static void * data(cw_KTV_t * data)
 {
-	return bstr16_data(data);
+	return bstr16_data(data->val.ptr);
 }
 
 const struct cw_Type cw_type_bstr16 = {

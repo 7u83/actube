@@ -2,14 +2,15 @@
 
 
 
-capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
-capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
+#capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
+#capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
 #capwap/ssl-cipher:Str: +RSA:+AES-128-CBC:+SHA1
-#capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
-#capwap/ssl-psk:Str:"HalloWelt"
+capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+capwap/ssl-psk:Bstr16:"HalloWelt"
+capwap/ssl-psk-enable:Bool:true
 
-cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
-cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
+#cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
+#cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
      
 discovery-type:Byte:0
 wtp-frame-tunnel-mode:Byte:1
@@ -47,7 +48,6 @@ capwap-timers/min-discovery-interval:Byte:0
 capwap-timers/echo-interval:Byte:3
 
 "discovery-interval":Byte:1
-
 
 location-data:Bstr16:Entangeled
 

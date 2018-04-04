@@ -1,9 +1,7 @@
-capwap/ac-descriptor/hardware/version:Bstr16: "ACTube 1.0"
-capwap/ac-descriptor/hardware/vendor:Bastr16: 12346
-capwap/ssl-cert:Str: "/usr/local/etc/ssl/tube.ssl"
-capwap/ssl-key:Str: "/usr/local/etc/key"
-capwap/ssl-dhbits:Word: 2048
+#
 
+capwap/ac-descriptor/hardware/version:Bstr16: "ACTube 1.0"
+capwap/ac-descriptor/hardware/vendor:Bstr16: 12346
 ac-descriptor/stations:Word:05
 ac-descriptor/station-limit:Word:6
 ac-descriptor/active-wtps:Word:7
@@ -23,11 +21,21 @@ capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
 
-capwap/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
-capwap/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
-capwap/ssl-cipher:Str:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
-#capwap/ssl-psk:Str:"HalloWelt"
+#capwap/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
+#capwap/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+
+capwap/ssl-cipher:Str:+DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+capwap/ssl-psk-enable:Bool:true
+capwap/ssl-psk:Bstr16:"HalloWelt"
+capwap/ssl-dhbits:Word: 64
 
 
-actube/listen::192.168.0.1
+psk:Bstr16:1234
+psk/ap1:Bstr16:hallo
+
+#capwap/ssl-psk:Str:HalloWelt1
+
+
+
+actube/listen:Bstr16:192.168.0.1
 

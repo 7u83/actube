@@ -2,7 +2,7 @@
 
 #include "cw.h"
 
-int cw_strcicmp(char const *a, char const *b)
+int cw_stricmp(char const *a, char const *b)
 {
     for (;; a++, b++) {
         int d = tolower(*a) - tolower(*b);

@@ -34,8 +34,8 @@ static BIO_METHOD bio_methods = {
 
 	snprintf(identity, max_identity_len, "CLient_identity");
 
-	l = conn->dtls_psk_len < max_psk_len ? conn->dtls_psk_len : max_psk_len;
-	memcpy(psk, conn->dtls_psk, l);
+	l = bstr16_len(conn->dtls_psk) < max_psk_len ? bstr16_len(conn->dtls_psk) : max_psk_len;
+	memcpy(psk, bstr16_data(conn->dtls_psk), l);
 	return l;
 
 }
