@@ -473,11 +473,11 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		if (result_code > 0) {
 			/* the end method gave us an result code>0, so
 			   send an error message */
-printf("Here we are, error response %i %s\n", result_code, cw_strerror(result_code));
-exit(0);
+
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
-
+			/*cw_ktv_add_word(conn->local_cfg,"result_code")*/
+			
 			/* All is ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);
 		} else {

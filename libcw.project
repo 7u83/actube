@@ -278,6 +278,8 @@
       <File Name="src/cw/mavl_get_ext.c"/>
       <File Name="src/cw/cw_type_bool.c"/>
       <File Name="src/cw/cw_ktv_get_bstr16.c"/>
+      <File Name="src/cw/cw_ktv_set_word.c"/>
+      <File Name="src/cw/cw_ktv_set_dword.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

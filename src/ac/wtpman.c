@@ -178,7 +178,7 @@ static int wtpman_establish_dtls(void *arg)
 
 	cw_dbg(DBG_DTLS, "DTLS session established with %s, %s",
 	       sock_addr2str_p(&wtpman->conn->addr,sock_buf), dtls_get_cipher(wtpman->conn,cipherstr));
-exit(0);
+
 	return 1;
 }
 

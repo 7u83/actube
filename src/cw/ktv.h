@@ -144,6 +144,9 @@ cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
 uint8_t cw_ktv_get_bool(mavl_t ktv,const char *key, uint8_t def);
 cw_KTV_t * cw_ktv_set_byte(mavl_t ktv,const char * key, uint8_t byte);
+cw_KTV_t * cw_ktv_set_dword(mavl_t ktv,const char * key, uint32_t dword);
+cw_KTV_t * cw_ktv_set_word(mavl_t ktv,const char * key, uint16_t word);
+
 bstr16_t cw_ktv_get_bstr16(mavl_t ktv,const char *key, bstr16_t def);
 
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
