@@ -77,6 +77,8 @@ struct cw_Type {
 
 	
 	int (*len)(cw_KTV_t *);
+
+	void *(*data)(cw_KTV_t *);
 	
 };
 typedef struct cw_Type cw_Type_t;
