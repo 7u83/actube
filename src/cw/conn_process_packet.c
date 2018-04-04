@@ -476,7 +476,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
-			/*cw_ktv_add_word(conn->local_cfg,"result_code")*/
+			cw_ktv_set_dword(conn->local_cfg,"result-code",result_code);
 			
 			/* All is ok, send regular response message */
 			cw_send_response(conn, rawmsg, len);

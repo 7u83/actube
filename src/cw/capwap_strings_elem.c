@@ -40,7 +40,7 @@ struct cw_StrListElem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_MTU_DISCOVERY_PADDING, "MTU Discovery Padding"},
 	{CW_ELEM_RADIO_ADMINISTRATIVE_STATE, "Radio Administrative State"},
 	{CW_ELEM_RADIO_OPERATIONAL_STATE, "Radio Operational State"},
-	{CW_ELEM_RESULT_CODE, "Result Code"},
+	{CAPWAP_ELEM_RESULT_CODE, "Result Code"},
 	{CW_ELEM_RETURNED_MESSAGE_ELEMENT, "Returned Message Element"},
 	{CAPWAP_ELEM_SESSION_ID, "Session ID"},
 	{CW_ELEM_STATISTICS_TIMER, "Statistics Timer"},

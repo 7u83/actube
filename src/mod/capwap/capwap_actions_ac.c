@@ -191,6 +191,29 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"Result Code",				/* name */
+		CAPWAP_ELEM_RESULT_CODE,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		4,4,					/* min/max length */
+		CW_TYPE_DWORD,				/* type */
+		"result-code",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+	{ 
+		"ECN Support",				/* name */
+		CAPWAP_ELEM_ECN_SUPPORT,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"ecn-support",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
 
 
 	{0,0,0,0,0,0,0,0}
@@ -243,7 +266,20 @@ static struct cw_ElemDef join_request_elements[] ={
 	{0,0,0,0,0}
 };
 
+static int join_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef join_response_elements[] ={
+	{0,0,CAPWAP_ELEM_RESULT_CODE,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
+	{0,0,CAPWAP_ELEM_ECN_SUPPORT,			1, 0},
+/*	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
+	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
+	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},
+	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},*/
+	{0,0,0,0,0}
 
+};
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -270,6 +306,15 @@ static struct cw_MsgDef messages[] = {
 		join_request_elements
 	},
 
+	{
+		"Join Response",
+		CAPWAP_MSG_JOIN_RESPONSE,
+		CW_ROLE_WTP,
+		join_response_states,
+		join_response_elements
+	},
+
+	
 	
 	
 /*	{ 

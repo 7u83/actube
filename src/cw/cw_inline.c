@@ -167,7 +167,7 @@ int cw_addelem_bstr(uint8_t * dst, uint16_t type, const bstr_t bstr)
 int cw_put_elem_result_code(uint8_t * dst, uint32_t code)
 {
 	cw_set_dword(dst + 4, code);
-	return 4 + cw_put_elem_hdr(dst, CW_ELEM_RESULT_CODE, 4);
+	return 4 + cw_put_elem_hdr(dst, CAPWAP_ELEM_RESULT_CODE, 4);
 }
 
 
