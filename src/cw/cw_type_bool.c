@@ -23,14 +23,14 @@
 
 static cw_KTV_t *get(cw_KTV_t * data, const uint8_t * src, int len)
 {
-	data->type = &cw_type_byte;
-	data->val.byte = cw_get_byte(src);
+	data->type = &cw_type_bool;
+	data->val.boolean = cw_get_byte(src);
 	return data;
 }
 
 static int put(const cw_KTV_t *data, uint8_t * dst)
 {
-	return cw_put_byte(dst, data->val.byte);
+	return cw_put_byte(dst, data->val.boolean);
 }
 
 static int to_str(const cw_KTV_t *data, char *dst, int max_len)
@@ -46,6 +46,7 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 
 static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 {
+	data->type = &cw_type_bool;
 	if (cw_stricmp(src,"true") == 0){
 		data->val.boolean=1;
 		return data;
