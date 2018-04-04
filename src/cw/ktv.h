@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "mavl.h"
-
+#include "bstr.h"
 
 /**
  * @addtogroup ALGOS
@@ -143,6 +143,7 @@ int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types);
 cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type);
 uint8_t cw_ktv_get_byte(mavl_t ktv,const char *key, uint8_t def);
 cw_KTV_t * cw_ktv_set_byte(mavl_t ktv,const char * key, uint8_t byte);
+bstr16_t cw_ktv_get_bstr16(mavl_t ktv,const char *key, bstr16_t def);
 
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def);
 uint32_t cw_ktv_get_dword(mavl_t ktv,const char *key, uint32_t def);
