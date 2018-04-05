@@ -9,6 +9,16 @@ capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
 capwap/ssl-psk:Bstr16:"HalloWelt"
 capwap/ssl-psk-enable:Bool:true
 
+
+cisco/ssl-certfile:Str:"../../ssl/certs/wtp-cisco.crt"
+cisco/ssl-keyfile:Str:"../../ssl/certs/wtp-cisco.key"
+#capwap/ssl-cipher:Str: +RSA:+AES-128-CBC:+SHA1
+#capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+#capwap/ssl-psk:Bstr16:"HalloWelt"
+#capwap/ssl-psk-enable:Bool:true
+
+
+
 #cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
 #cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
      
@@ -30,18 +40,17 @@ wtp-descriptor/software/vendor:Dword:906090
 wtp-descriptor/software/version:Bstr16:.x171312
 wtp-descriptor/bootloader/vendor:Dword:906090
 wtp-descriptor/bootloader/version:Bstr16:.x171312
-wtp-descriptor/max-radios:Byte:3
+wtp-descriptor/max-radios:Byte:2
 
-radio/0/wtp-radio-information:Dword:01
-radio/1/wtp-radio-information:Dword:02
-radio/2/wtp-radio-information:Dword:03
-
+radio/0/wtp-radio-information:Dword:3
+radio/1/wtp-radio-information:Dword:1
+#NGAB
 
 wtp-name:Bstr16:WFAT01
 
 wtp-fallback:Byte:1
 ac-name-with-priority/TubesAC:Byte:3
-ac-name-with-priority/"ac2":Byte:01
+ac-name-with-priority/"ac2":Byte:05
 
 capwap-timers/max-discovery-interval:Byte:0
 capwap-timers/min-discovery-interval:Byte:0
