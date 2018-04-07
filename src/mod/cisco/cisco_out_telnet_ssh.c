@@ -50,7 +50,7 @@ int cw_cisco_put_telnet_ssh(struct conn *conn,uint8_t type,const char * item_id,
 	if (l==0)
 		return 0;
 	cw_dbg(DBG_X,"CISL = %d",l);
-	return l + cw_put_elem_vendor_hdr(dst, CW_VENDOR_ID_CISCO, CW_CISCO_SPAM_VENDOR_SPECIFIC, l);
+	return l + cw_put_elem_vendor_hdr(dst, CW_VENDOR_ID_CISCO, CISCO_ELEM_SPAM_VENDOR_SPECIFIC, l);
 
 }
 

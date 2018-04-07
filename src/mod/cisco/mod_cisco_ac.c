@@ -195,6 +195,7 @@ int static setup_cfg(struct conn  * conn)
 {
 	int security;
 	
+	
 	security = cw_setup_dtls(conn,conn->local_cfg,"cisco",CAPWAP_CIPHER);
 	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
 

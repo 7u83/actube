@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#include "lwapp.h"
+#include "cw/lwapp.h"
 
 
 /**
@@ -42,7 +42,7 @@
 
 #define LW_CISCO_PRIMED_DISCOVERY_TIMEOUT	50
 #define LW_CISCO_DELETE_WLAN			52
-#define LW_CISCO_PATH_MTU			73
+#define CISCO_LWELEM_PATH_MTU			73
 #define LW_CISCO_PRIMED_JOIN_TIMEOUT		85
 #define LW_CISCO_AP_DTLS_DATA_CFG		74
 

@@ -25,7 +25,7 @@ uint8_t arr1[] = {
 
 	int l=sizeof(arr1);
 	l = l + lw_put_vendor(dst+10, LW_VENDOR_ID_CISCO, LW_CISCO_DOT11R_WLC_MAC_AND_IP, l);
-	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_SPAM_VENDOR_SPECIFIC,l);
+	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CISCO_ELEM_SPAM_VENDOR_SPECIFIC,l);
 
 
 
@@ -37,6 +37,6 @@ uint8_t arr1[] = {
 	memcpy(d,&(((struct sockaddr_in *) &ss)->sin_addr),4);
 	 l=4;
 	l = l + lw_put_vendor(dst+10, LW_VENDOR_ID_CISCO, LW_CISCO_MANAGER_IP_ADDR, l);
-	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CW_CISCO_SPAM_VENDOR_SPECIFIC,l);
+	return l+cw_put_elem_vendor_hdr(dst,CW_VENDOR_ID_CISCO,CISCO_ELEM_SPAM_VENDOR_SPECIFIC,l);
 }
 
