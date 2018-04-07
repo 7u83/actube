@@ -28,22 +28,6 @@
 #include "capwap_cisco.h"
 #include "mod_cisco.h"
 
-/*#include "cw/strheap.h"
-#include "cw/radio.h"
-#include "cw/capwap_cisco.h"
-#include "cw/capwap80211.h"
-#include "cw/lwapp_cisco.h"
-#include "cw/cw_80211.h"
-*/
-
-/* #include "include/capwap_actions.h" */
-
-/*
-	const struct cw_Type * type;
-	const char * key;
-	int len;
-	int position;
-*/
 
 static cw_KTVStruct_t ap_time_sync[] = {
 	{CW_TYPE_DWORD, "timestamp", 4,-1},
@@ -270,7 +254,7 @@ static struct cw_ElemDef join_request_elements[] ={
 
 static int join_response_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef join_response_elements[] ={
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
 
 
