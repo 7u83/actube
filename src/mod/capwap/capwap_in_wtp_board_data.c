@@ -101,7 +101,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 		}
 		if (key != NULL){
 			char add_key[256];
-			sprintf(add_key,"wtp_board_data/%s",key);
+			sprintf(add_key,"wtp-board-data/%s",key);
 			cw_ktv_add(cfg,add_key,CW_TYPE_BSTR16,msgelem+i,sublen);
 			
 		}

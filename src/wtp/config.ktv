@@ -2,25 +2,23 @@
 
 
 
-#capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
-#capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
+capwap/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
+capwap/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
 #capwap/ssl-cipher:Str: +RSA:+AES-128-CBC:+SHA1
+
+#capwap/ssl-cipher:Str:ALL
+
 capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
 capwap/ssl-psk:Bstr16:"HalloWelt"
 capwap/ssl-psk-enable:Bool:true
 
 
-cisco/ssl-certfile:Str:"../../ssl/certs/wtp-cisco.crt"
-cisco/ssl-keyfile:Str:"../../ssl/certs/wtp-cisco.key"
-#capwap/ssl-cipher:Str: +RSA:+AES-128-CBC:+SHA1
-#capwap/ssl-cipher:Str: +DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
-#capwap/ssl-psk:Bstr16:"HalloWelt"
-#capwap/ssl-psk-enable:Bool:true
+cisco/ssl-certfile:Str:"../../ssl/certs/wtpc.crt"
+cisco/ssl-keyfile:Str:"../../ssl/certs/wtpc.key"
+cisco/ssl-cipher:Str:ALL
 
 
 
-#cisco/ssl-certfile:Str:"../../ssl/certs/wtp.crt"
-#cisco/ssl-keyfile:Str:"../../ssl/certs/wtp.key"
      
 discovery-type:Byte:0
 wtp-frame-tunnel-mode:Byte:1
@@ -34,13 +32,29 @@ wtp-board-data/board-id:Bstr16:Boardi177
 wtp-board-data/board-revision:Bstr16:Rev 0.1
 wtp-board-data/mac-address:Bstr16:0cff00aa34
 
-wtp-descriptor/hardware/vendor:Dword:906090
-wtp-descriptor/hardware/version:Bstr16:.x171312
-wtp-descriptor/software/vendor:Dword:906090
-wtp-descriptor/software/version:Bstr16:.x171312
-wtp-descriptor/bootloader/vendor:Dword:906090
-wtp-descriptor/bootloader/version:Bstr16:.x171312
+wtp-descriptor/hardware/vendor:Dword:4232704
+wtp-descriptor/hardware/version:Bstr16: .x01000000
+wtp-descriptor/software/vendor:Dword:4232704
+wtp-descriptor/software/version:Bstr16: .x07036500
+wtp-descriptor/bootloader/vendor:Dword:4232704
+wtp-descriptor/bootloader/version:Bstr16: .x0C030800
 wtp-descriptor/max-radios:Byte:2
+
+
+
+
+cisco/board-data-options :Dword: 16777217
+discovery-type :Byte: 0
+wtp-descriptor/bootloader/vendor :Dword: 4232704
+wtp-descriptor/bootloader/version :Bstr16: .x0c041200
+wtp-descriptor/hardware/vendor :Dword: 4232704
+wtp-descriptor/hardware/version :Bstr16: .x01000000
+wtp-descriptor/max-radios :Byte: 2
+wtp-descriptor/radios-in-use :Byte: 2
+wtp-descriptor/software/vendor :Dword: 4232704
+wtp-descriptor/software/version :Bstr16: .x07036500
+wtp-frame-tunnel-mode :Byte: 4
+wtp-mac-type :Byte: 1
 
 radio/0/wtp-radio-information:Dword:3
 radio/1/wtp-radio-information:Dword:1

@@ -195,7 +195,7 @@ static cw_action_out_t actions_out[]={
 	{
 		.msg_id = CW_MSG_JOIN_REQUEST, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
-		.elem_id  = CW_CISCO_AP_GROUP_NAME,
+		.elem_id  = CISCO_ELEM_AP_GROUP_NAME,
 		.item_id = CW_ITEM_WTP_GROUP_NAME, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,

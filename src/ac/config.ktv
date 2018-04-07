@@ -2,28 +2,38 @@
 
 capwap/ac-descriptor/hardware/version:Bstr16: "ACTube 1.0"
 capwap/ac-descriptor/hardware/vendor:Bstr16: 12346
-ac-descriptor/stations:Word:05
-ac-descriptor/station-limit:Word:6
-ac-descriptor/active-wtps:Word:7
-ac-descriptor/max-wtps:Word:8
-ac-descriptor/security:Byte:2
 
-ac-descriptor/software/version:Bstr16:.x090103
-ac-descriptor/software/vendor:Dword:.1234
-ac-descriptor/hardware/vendor:Dword:1234567
-ac-descriptor/hardware/version:Bstr16:"1.7.3"
+
+ac-descriptor/avtive-wtps :Word: 0
+ac-descriptor/dtls-policy :Byte: 0
+ac-descriptor/hardware/vendor :Dword: 4232704
+ac-descriptor/hardware/version :Bstr16: .x01000001
+ac-descriptor/max-wtps :Word: 200
+ac-descriptor/r-mac-field :Byte: 1
+ac-descriptor/reserved1 :Byte: 0
+ac-descriptor/security :Byte: 2
+ac-descriptor/software/vendor :Dword: 4232704
+ac-descriptor/software/version :Bstr16: .x07056600
+ac-descriptor/station-limit :Word: 1000
+ac-descriptor/stations :Word: 0
+
+
+
+
 ac-name:Bstr16:"TubesAC"
 
 #capwap-control-ip-address/address.0:IPAddress:1192.168.0.14
-capwap-control-ip-address/address.0:IPAddress:172.16.66.229
+capwap-control-ip-address/address.0:IPAddress:192.168.0.14
 #capwap-control-ip-address/address.0:IPAddress:192.168.0.131
 #capwap-control-ip-address/address.1:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
 capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
 
-#capwap/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
-#capwap/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+cisco/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
+cisco/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+cisco/ssl-cipher:Str:+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+cisco/ssl-dhbits:Word:2048
 
 capwap/ssl-cipher:Str:+DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
 capwap/ssl-psk-enable:Bool:true

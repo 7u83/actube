@@ -15,7 +15,6 @@
 static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char * parent_key){
 
 	uint8_t *d = dst;
-	uint8_t security;
 	
 	char key[CW_KTV_MAX_KEY_LEN];
 	

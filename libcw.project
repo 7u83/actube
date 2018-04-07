@@ -82,7 +82,6 @@
       <File Name="src/cw/cw_get_mod_ac.c"/>
       <File Name="src/cw/lw_put_image_data.c"/>
       <File Name="src/cw/mod.c"/>
-      <File Name="src/cw/cwmsg.h"/>
       <File Name="src/cw/cw_in_ac_name_with_priority.c"/>
       <File Name="src/cw/cw_in_check_disc_req.c"/>
       <File Name="src/cw/fragman.h"/>
@@ -183,7 +182,6 @@
       <File Name="src/cw/connlist.c"/>
       <File Name="src/cw/lw_put_80211_wtp_wlan_radio_configuration.c"/>
       <File Name="src/cw/cw_put_image_data.c"/>
-      <File Name="src/cw/cw_util.c"/>
       <File Name="src/cw/conn_create_noq.c"/>
       <File Name="src/cw/mavl_del.c"/>
       <File Name="src/cw/mavl_create.c"/>
@@ -280,6 +278,9 @@
       <File Name="src/cw/cw_ktv_get_bstr16.c"/>
       <File Name="src/cw/cw_ktv_set_word.c"/>
       <File Name="src/cw/cw_ktv_set_dword.c"/>
+      <File Name="src/cw/mlist_delete.c"/>
+      <File Name="src/cw/cw_out_generic_struct.c"/>
+      <File Name="src/cw/cw_ktv_write_struct.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

@@ -31,6 +31,9 @@ int capwap_in_ac_descriptor(struct cw_ElemHandler *eh,
 			struct cw_ElemHandlerParams *params, 
 			uint8_t * data, int len);
 
+int capwap_out_capwap_local_ip_address(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst);
+
 
 /*
 extern int capwap_in_wtp_board_data(struct conn *conn, struct cw_ElemHandler *a,

@@ -215,7 +215,41 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"Maximum Message Length",		/* name */
+		CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		2,2,					/* min/max length */
+		CW_TYPE_WORD,				/* type */
+		"maximum-message-length",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
 
+	{ 
+		"CAPWAP Local IPv4 Address",		/* name */
+		CAPWAP_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		4,4,					/* min/max length */
+		CW_TYPE_IPADDRESS,			/* type */
+		"capwap-local-ip-address",		/* Key */
+		cw_in_generic,				/* get */
+		capwap_out_capwap_local_ip_address	/* put */
+	}
+	,
+	{ 
+		"CAPWAP Local IPv6 Address",		/* name */
+		CAPWAP_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		16,16,					/* min/max length */
+		CW_TYPE_IPADDRESS,			/* type */
+		"capwap-local-ip-address",		/* Key */
+		cw_in_generic,				/* get */
+		capwap_out_capwap_local_ip_address	/* put */
+	}
+
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -254,6 +288,12 @@ static struct cw_ElemDef join_request_elements[] ={
 	{0,0,CAPWAP_ELEM_SESSION_ID,			1, 0},
 	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
+	{0,0,CAPWAP_ELEM_ECN_SUPPORT,			1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,	1, 0},
+	
+	{0,0,CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,	0, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	
 /*	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
 

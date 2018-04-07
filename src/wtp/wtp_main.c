@@ -23,6 +23,13 @@ struct bootcfg{
 };
 
 
+bstr_t get_base_rmac()
+{
+
+	static  uint8_t rm[8]={0x00,0x3a,0x99,0x04,0xfa,0xc0};
+	return bstr_create(rm, 6);
+}
+
 
 
 static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
@@ -167,6 +174,8 @@ int main (int argc, char **argv)
 /*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");*/
 
 	dtls_init();
+
+	conn->base_rmac = get_base_rmac();
 
 
 	cw_discovery_init_results(&dis);

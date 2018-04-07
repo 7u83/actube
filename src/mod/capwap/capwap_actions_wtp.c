@@ -190,7 +190,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN, 
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE, 
-		.elem_id = CW_ELEM_MAXIMUM_MESSAGE_LENGTH,
+		.elem_id = CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,
 	 	.start = cw_in_generic2, 
 		.item_id = CW_ITEM_MAXIMUM_MESSAGE_LENGTH, 
 		.min_len = 2, 
