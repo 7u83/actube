@@ -134,7 +134,7 @@ static struct cw_ElemHandler handlers[] = {
 
 	{ 
 		"CAPWAP Control IPv4 Address",		/* name */
-		CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	/* Element ID */
+		CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		6,6,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
@@ -145,7 +145,7 @@ static struct cw_ElemHandler handlers[] = {
 	
 	{ 
 		"CAPWAP Control IPv6 Address",		/* name */
-		CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	/* Element ID */
+		CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		18,18,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
@@ -272,8 +272,8 @@ static int discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
 	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
-	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},
-	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	1, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 
@@ -312,6 +312,14 @@ static struct cw_ElemDef join_response_elements[] ={
 	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
 	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
 	{0,0,CAPWAP_ELEM_ECN_SUPPORT,			1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,	1, 0},
+
+	{0,0,CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,	0, 0},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	
 /*	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
 	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
 	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},

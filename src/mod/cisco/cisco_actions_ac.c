@@ -268,7 +268,15 @@ static struct cw_ElemDef join_request_elements[] ={
 	
 };
 
+static int join_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef join_response_elements[] ={
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
 
+
+	{0,0,0,00}
+	
+};
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -292,6 +300,14 @@ static struct cw_MsgDef messages[] = {
 		join_request_states,
 		join_request_elements
 	},
+	{
+		NULL,				/* name */
+		CAPWAP_MSG_JOIN_RESPONSE,	/* type */
+		CW_ROLE_WTP,
+		join_response_states,
+		join_response_elements
+	},
+
 	{0,0,0,0}
 
 };

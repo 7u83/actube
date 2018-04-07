@@ -295,14 +295,23 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	if (!message){
 		/* Message is unknown */
+		if (search.type & 1){
+			cw_dbg(DBG_MSG_ERR, 
+				"Message type %d [%s] unrecognized, sending response.",
+				search.type, cw_strmsg(search.type),
+				cw_strstate(conn->capwap_state));
+			result_code = CAPWAP_RESULT_MSG_UNRECOGNIZED;
+			cw_send_error_response(conn, rawmsg, result_code);
+			errno = EAGAIN;
+			return -1;
+		}
 		cw_dbg(DBG_MSG_ERR, 
-			"Message type %d (%s) unrecognized, sending response.",
-			search.type, cw_strmsg(search.type),
-			cw_strstate(conn->capwap_state));
-		result_code = CAPWAP_RESULT_MSG_UNRECOGNIZED;
-		cw_send_error_response(conn, rawmsg, result_code);
+			"Message type %d [%s] unrecognized, discarding.",
+		search.type, cw_strmsg(search.type),
+		cw_strstate(conn->capwap_state));
 		errno = EAGAIN;
 		return -1;
+
 	}
 
 	/* Throw away unexpected messages */

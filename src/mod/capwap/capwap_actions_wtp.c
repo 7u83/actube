@@ -46,7 +46,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
-		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
+		.elem_id  = CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address,
 		.min_len = 6,
@@ -60,7 +60,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_DISCOVERY,
 		.msg_id = CAPWAP_MSG_DISCOVERY_RESPONSE,
-		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
+		.elem_id  = CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
 		.min_len = 18,
@@ -163,7 +163,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
-		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
+		.elem_id  = CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address,
 		.min_len = 6,
@@ -176,7 +176,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CAPWAP_STATE_JOIN,
 		.msg_id = CAPWAP_MSG_JOIN_RESPONSE,
-		.elem_id  = CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
+		.elem_id  = CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,
 		.item_id = CW_ITEM_CAPWAP_CONTROL_IP_ADDRESS_LIST, 
 		.start  = cw_in_capwap_control_ip_address, // Change to v6 handler
 		.min_len = 18,

@@ -76,12 +76,12 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 		l = address->type->len(address);
 
 		switch(eh->id){
-			case CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS:
+			case CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS:
 				if (l!=4){
 					continue;
 				}
 				break;
-			case CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS:
+			case CAPWAP_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS:
 				if (l!=16){
 					continue;
 				}

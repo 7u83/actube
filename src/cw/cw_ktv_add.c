@@ -10,9 +10,6 @@ cw_KTV_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *ty
 	cw_KTV_t mdata, *mresult;
 	int exists;
 
-/*	cw_dbg(DBG_ELEM,"KVStore (%p,%d) add elem (%s): %s", kvstore, kvstore->count,
-			type->name, key );
-*/
 	mdata.key=cw_strdup(key);
 	if (!mdata.key){
 		cw_log(LOG_ERR, "Can't allocate memory for KTV key %s: %s",
@@ -27,7 +24,8 @@ cw_KTV_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *ty
 		free(mdata.key);
 		return NULL;
 	}
-	
+
+	mavl_del(kvtstore,&mdata);
 	mresult = mavl_add(kvtstore, &mdata, &exists);
 	if (exists){
 		cw_log(LOG_ERR, "Element already exists %s", key);

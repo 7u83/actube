@@ -43,6 +43,13 @@ static struct cw_ElemDef join_request_elements[] = {
 
 };
 
+static int join_response_states[] = { CAPWAP_STATE_JOIN, 0 };
+static struct cw_ElemDef join_response_elements[] = {
+	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 1, 0},
+	{0, 0, 0, 0, 0}
+
+};
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -59,6 +66,14 @@ static struct cw_MsgDef messages[] = {
 	 CW_ROLE_AC,
 	 join_request_states,
 	 join_request_elements
+	}
+	,
+	{
+	 "Join Request",
+	 CAPWAP_MSG_JOIN_RESPONSE,
+	 CW_ROLE_AC,
+	 join_response_states,
+	 join_response_elements
 	}
 	,
 	{0, 0, 0, 0, 0}
