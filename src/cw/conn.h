@@ -39,10 +39,9 @@
 /*#include "mbag.h"*/
 
 #include "intavltree.h"
-
+#include "bstr.h"
 
 #include "mod.h"
-
 
 struct cw_action_in;
 

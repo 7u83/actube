@@ -25,6 +25,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	/* try to retrieve a handler for this message element */
 	handler = cw_msgset_get_elemhandler(params->conn->msgset,proto, vendor, elem_id);
 	if (!handler) {
+		
 		cw_dbg(DBG_ELEM_ERR, "Unrecognized message element: %d, ignoring", 
 			elem_id);
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;

@@ -93,6 +93,10 @@ struct cw_KTVStruct {
 typedef struct cw_KTVStruct cw_KTVStruct_t;
 int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len);
+int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pkey, 
+	uint8_t * dst);
+
+
 
 extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;

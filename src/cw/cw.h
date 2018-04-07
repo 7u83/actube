@@ -399,7 +399,10 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
-			
+
+int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
+
 int cw_in_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 
@@ -483,6 +486,11 @@ extern int cw_radio_set_admin_state(mbag_t radios,int rid, int state, int cause)
 
 int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int cause);
 int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
+
+
+
+int cw_put_local_ip_address(uint8_t *dst, int id, int ipv_id, int ipv6_id, 
+				uint8_t *src, int len);
 
 
 

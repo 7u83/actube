@@ -198,11 +198,12 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
 		
-		/* add message elemeent to the elements list */
+		/* add/delete/replace message elemeent to/from/in the elements list */
 		switch ( elemdef->op & 0xff){
 			case CW_IGNORE:
 				break;
 			case CW_DELETE:
+				mlist_delete(msgdata->elements_list, &ed);
 				break;
 			case CW_APPEND:
 				mlist_append(msgdata->elements_list, &ed);

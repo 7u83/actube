@@ -59,6 +59,7 @@ CWSRC=\
 	cw_in_check_join_resp.c\
 	cw_in_generic.c\
 	cw_in_generic_struct.c\
+	cw_out_generic_struct.c\
 	cw_init_data_keep_alive_msg.c\
 	cw_inline.c\
 	cw_in_radio_generic.c\
@@ -96,7 +97,6 @@ CWSRC=\
 	cw_type_ipaddress.c\
 	cw_type_word.c\
 	cw_type_sysptr.c\
-	cw_util.c\
 	cw_write_descriptor_subelem.c\
 	cw_read_from.c \
 	cw_write_radio_element.c\
@@ -123,13 +123,13 @@ KTVSRC=\
 	cw_ktv_read_file.c\
 	cw_ktv_readline.c\
 	cw_ktv_read_struct.c\
+	cw_ktv_write_struct.c\
 	cw_ktv_std_types.c\
 
 
 LWSRC=\
 	lw_addelem.c\
 	lw_checksum.c\
-	lw_cisco_id_to_str.c\
 	lw_elem_id_to_str.c\
 	lw_inline.c\
 	lw_msg_id_to_str.c\
@@ -138,7 +138,6 @@ LWSRC=\
 	lw_put_ac_descriptor.c\
 	lw_put_bstr.c\
 	lw_put_str.c\
-	lw_put_cisco_path_mtu.c\
 	lw_put_image_data.c\
 	lw_put_sockaddr.c\
 	lw_readelem_wtp_name.c\
@@ -172,6 +171,7 @@ MAVLSRC=\
 
 MLISTSRC=\
 	mlist_append.c\
+	mlist_delete.c\
 	mlist_append_ptr.c\
 	mlist_create.c\
 	mlist_destroy.c\

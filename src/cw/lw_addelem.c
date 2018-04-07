@@ -2,13 +2,13 @@
 
 
 #include "lwapp.h"
-#include "lwapp_cisco.h"
+/*#include "lwapp_cisco.h"*/
 
 #include "lw.h"
 #include "vendors.h"
 
 
-
+/*
 int lw_addelem(uint8_t*dst, uint8_t type, uint8_t *msgelem, uint16_t len)
 {
 	*dst = type;
@@ -30,11 +30,15 @@ int lw_addelem_vendor_specific(uint8_t *dst,uint32_t vendor_id,uint16_t elem_id,
 	lw_set_word(dst+1,l);	
 	return l;	
 }
+*/
+
 
 /**
  * Add the vendor specific elem Cisco Padding
  * @param dst destination
  */ 
+
+/*
 int lw_addelem_cisco_padding(uint8_t *dst, int len)
 {
 	lw_set_dword(dst+3,LW_VENDOR_ID_CISCO);
@@ -43,6 +47,7 @@ int lw_addelem_cisco_padding(uint8_t *dst, int len)
 	memset(dst+11,0,len);
 	return lw_put_elem_hdr(dst,LW_ELEM_VENDOR_SPECIFIC,11+len);
 }
+*/
 
 /*
 int lw_put_cisco_path_mtu(uint8_t *dst, uint16_t max, uint16_t padding)

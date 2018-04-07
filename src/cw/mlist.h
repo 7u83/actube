@@ -72,6 +72,8 @@ typedef struct mlist * mlist_t;
 mlist_t mlist_create(int (*cmp) (const void *v1, const void *v2), void (*del)(void *), size_t data_size);
 
 struct mlistelem *mlist_append(mlist_t l, void *data);
+struct mlistelem * mlist_delete(mlist_t list, void *data);
+
 struct mlistelem * mlist_get(mlist_t list, const void *data);
 void mlist_destroy(mlist_t l);
 struct mlistelem *mlist_replace(mlist_t l, void *data);

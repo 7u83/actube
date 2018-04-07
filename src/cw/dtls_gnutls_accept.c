@@ -102,7 +102,7 @@ int dtls_gnutls_accept(struct conn *conn)
 		if (tlen < 0 && errno == EAGAIN)
 			continue;
 		if (tlen < 0) {
-			/* something went wrong, iwe should log a message */
+			/* something went wrong, we should log a message */
 			continue;
 		}
 

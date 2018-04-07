@@ -102,6 +102,10 @@ static int len ( struct cw_KTV * data ){
 	return bstr_len(data->val.ptr);
 }
 
+static void * data(cw_KTV_t * data)
+{
+	return bstr_data(data->val.ptr);
+}
 
 const struct cw_Type cw_type_ipaddress = {
 	"IPAddress",		/* name */
@@ -110,7 +114,8 @@ const struct cw_Type cw_type_ipaddress = {
 	get,			/* get */
 	to_str,			/* to_str */
 	from_str,		/* from_str */
-	len			/* len */
+	len,			/* len */
+	data			/* data */
 };
 
 

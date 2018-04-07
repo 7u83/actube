@@ -521,7 +521,7 @@ void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel,
 		type = data->type;
 		type->to_str(data,value,0);
 		
-		cw_dbg(dbglevel,"%s%s (%s): %s",prefix,data->key,type->name, value);
+		cw_dbg(dbglevel,"%s%s :%s: %s",prefix,data->key,type->name, value);
 	}
 	
 	if (footer != NULL)
