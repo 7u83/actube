@@ -31,7 +31,7 @@
 #include "cw/cw.h"
 #include "cw/vendors.h"
 
-#define CW_CISCO_MWAR_ADDR			LW_ELEM_AC_ADDRESS			/* 2 */
+#define CISCO_ELEM_MWAR_ADDR			LWAPP_ELEM_AC_ADDRESS			/* 2 */
 #define CW_CISCO_RAD				3
 #define CW_CISCO_RAD_SLOT			4
 #define CW_CISCO_RAD_NAME			LWAPP_ELEM_WTP_NAME			/* 5 */
@@ -77,7 +77,7 @@
 
 #define CW_CISCO_AP_UPTIME			108
 
-#define CW_CISCO_AP_GROUP_NAME			123
+#define CISCO_ELEM_AP_GROUP_NAME		123
 #define CW_CISCO_AP_LED_STATE_CONFIG		125
 #define CW_CISCO_AP_MODEL			127
 #define CW_CISCO_AP_RESET_BUTTON_STATE		128
