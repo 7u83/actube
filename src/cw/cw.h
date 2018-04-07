@@ -492,7 +492,7 @@ int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
 int cw_put_local_ip_address(uint8_t *dst, int id, int ipv_id, int ipv6_id, 
 				uint8_t *src, int len);
 
-
+int cw_detect_nat(struct conn *conn);
 
 uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 
