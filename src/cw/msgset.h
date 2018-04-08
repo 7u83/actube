@@ -70,7 +70,7 @@ struct cw_MsgDef{
 
 	
 	struct cw_ElemDef * elements;
-
+	int (*postprocess)(struct conn * conn);
 };
 
 
@@ -82,6 +82,8 @@ struct cw_MsgData{
 	mavl_t elements_tree;
 	mlist_t elements_list;
 	mlist_t mand_keys;  /**< Keys of mandatory elements */
+
+	int (*postprocess)(struct conn * conn);
 };
 
 

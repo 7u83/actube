@@ -144,7 +144,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
-		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cisco_in_radio_administrative_state,
 		.min_len=2,
@@ -204,7 +204,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
-		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 //		.start = cw_in_radio_generic,
 		.start = cisco_in_radio_administrative_state,

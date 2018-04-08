@@ -421,7 +421,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
-		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.start = cw_in_radio_generic,
 		.min_len=2,
@@ -639,7 +639,7 @@ static cw_action_out_t actions_out[] = {
 	/* Radio Admin State - Config Status Request - OUT */
 	{
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
 		.out = cw_out_radio_generic,
 //		.out = cw_out_radio_administrative_states,
@@ -665,7 +665,7 @@ static cw_action_out_t actions_out[] = {
 	/* Statistics Timer - Join Request */
 	{
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, 
-		.elem_id  = CW_ELEM_STATISTICS_TIMER,
+		.elem_id  = CAPWAP_ELEM_STATISTICS_TIMER,
 		.item_id = CW_ITEM_STATISTICS_TIMER, 
 		.out = cw_out_generic,
 		.get = cw_out_get_config,

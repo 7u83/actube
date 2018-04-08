@@ -428,53 +428,11 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	cw_dbg_ktv_dump(conn->remote_cfg,DBG_CFG_DMP,
 		" *** Remote CFG dump ***", "CFG:", " *** End of remote CFG dump");
 
-/*	{
 
-		{
-			mlistelem_t *e;
-			mlist_foreach(e,unrecognized){
-				uint8_t * elem = *(uint8_t**)mlistelem_dataptr(e);
-				int elem_len = cw_get_elem_len(elem);
-				//int elem_data=cw_get_elem_data(elem);
-				int elem_id = cw_get_elem_id(elem);				
-				printf("Unrecognized: %d %d\n",elem_id,elem_len);
-			}
-		}
-	
+
+	if (message->postprocess){
+		message->postprocess(conn);
 	}
-*/
-
-
-/**	int rct = cw_in_check_generic(conn, afm, rawmsg, len, from); */
-
-/*	if (rct && conn->strict_capwap)
-	{
-		result_code = rct;
-	}
-	else {
-
-		if (afm->end) {
-			result_code = afm->end(conn, afm, rawmsg, len, from);
-
-		}
-		if (conn->msg_end){
-			conn->msg_end(conn, afm, rawmsg, len, from);
-		}
-	}
-*/
-/*	if (unrecognized) {
-		cw_dbg(DBG_RFC, "Message has %d unrecognized message elements.",
-		       unrecognized);
-		// set only resultcode for request messages 
-
-		if ( (!result_code) && ((afm->msg_id & 1))) {
-			if (conn->strict_capwap) {
-				result_code = CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
-			}
-		}
-
-	}
-*/
 
 
 	/* if we've got a request message, we always have to send a response message */

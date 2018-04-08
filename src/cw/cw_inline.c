@@ -196,7 +196,7 @@ int cw_put_elem_radio_operational_state(uint8_t * dst, int rid, int state, int c
 int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state) {
 	cw_set_byte(dst+4,rid);
 	cw_set_byte(dst+5,state);
-	return 2+cw_put_elem_hdr(dst,CW_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
+	return 2+cw_put_elem_hdr(dst,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,2);
 }
 
 

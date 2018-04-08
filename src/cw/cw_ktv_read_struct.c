@@ -12,6 +12,8 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 	pos=0; i=0;
 	while (stru[i].type != NULL){
 		char dbstr[100];
+		if(stru[i].position!=-1)
+			pos=stru[i].position;
 		
 		sprintf(key,"%s/%s",pkey,stru[i].key);
 		result = cw_ktv_add(ktv,key,stru[i].type,data+pos,stru[i].len);
@@ -21,8 +23,7 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 	
 		if(stru[i].position == -1)
 			pos+=stru[i].len;
-		else
-			pos=stru[i].position;
+
 		i++;
 	}
 

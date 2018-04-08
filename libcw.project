@@ -127,7 +127,6 @@
       <File Name="src/cw/sock_addrtostr.c"/>
       <File Name="src/cw/dtls_openssl.h"/>
       <File Name="src/cw/cw_addelem_vendor_specific_payload.c"/>
-      <File Name="src/cw/cw_in_radio_generic.c"/>
       <File Name="src/cw/cw_in_check_cfg_update_req.c"/>
       <File Name="src/cw/cw_msg_init.c"/>
       <File Name="src/cw/cw_read_wtp_descriptor.c"/>
@@ -281,6 +280,9 @@
       <File Name="src/cw/mlist_delete.c"/>
       <File Name="src/cw/cw_out_generic_struct.c"/>
       <File Name="src/cw/cw_ktv_write_struct.c"/>
+      <File Name="src/cw/cw_detect_nat.c"/>
+      <File Name="src/cw/cw_in_generic_enum.c"/>
+      <File Name="src/cw/cw_in_radio_generic_struct.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

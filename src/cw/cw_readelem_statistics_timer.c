@@ -4,7 +4,7 @@
 
 int cw_readelem_statistics_timer(uint16_t *timer, int type, uint8_t * msgelem, int len)
 {
-	if (type != CW_ELEM_STATISTICS_TIMER)
+	if (type != CAPWAP_ELEM_STATISTICS_TIMER)
 		return 0;
 
 	if (len!=2){

@@ -213,6 +213,9 @@ static int wtpman_join(void *arg, time_t timer)
 	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
+			if (errno == EAGAIN)
+				continue;
+				
 			break;
 		}
 	}
@@ -374,11 +377,10 @@ static void * wtpman_run(void *arg)
 
 
 
-/*
 	cw_dbg(DBG_INFO, "WTP from %s has joined with session id: %s",
 			sock_addr2str_p(&conn->addr,sock_buf),
 			format_bin2hex(conn->session_id,16));
-*/
+
 
 
 

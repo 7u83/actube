@@ -53,7 +53,7 @@ static struct cw_ElemDef join_response_elements[] = {
 
 static struct cw_MsgDef messages[] = {
 	{
-	 "Discovery Request",
+	 NULL,
 	 CAPWAP_MSG_DISCOVERY_REQUEST,
 	 CW_ROLE_AC,
 	 discovery_request_states,
@@ -61,7 +61,7 @@ static struct cw_MsgDef messages[] = {
 	}
 	,
 	{
-	 "Join Request",
+	 NULL,
 	 CAPWAP_MSG_JOIN_REQUEST,
 	 CW_ROLE_AC,
 	 join_request_states,
@@ -69,7 +69,7 @@ static struct cw_MsgDef messages[] = {
 	}
 	,
 	{
-	 "Join Request",
+	 NULL,
 	 CAPWAP_MSG_JOIN_RESPONSE,
 	 CW_ROLE_AC,
 	 join_response_states,

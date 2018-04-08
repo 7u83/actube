@@ -27,6 +27,11 @@
 
 #include "capwap_cisco.h"
 #include "mod_cisco.h"
+#include "cw/dbg.h"
+#include "cw/format.h"
+
+static int postprocess_discovery();
+
 
 
 static cw_KTVStruct_t ap_time_sync[] = {
@@ -45,10 +50,94 @@ static cw_KTVStruct_t mwar_addr[] = {
 static cw_KTVStruct_t cisco_lw_path_mtu[] = {
 	{CW_TYPE_WORD, "max", 2,-1},
 	{CW_TYPE_WORD, "len", 2,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_uptime[] = {
+	{CW_TYPE_DWORD, "current-uptime", 4,-1},
+	{CW_TYPE_DWORD, "last-uptime", 4,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_username_and_password[] = {
+	{CW_TYPE_STR,	"username",		33,	-1	},
+	{CW_TYPE_STR,	"password",		121,	-1	},
+	{CW_TYPE_STR,	"enable-password",	121,	33+121	},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_loghost_config[] = {
+	{CW_TYPE_IPADDRESS,	"loghost",		4,	-1	},
+	{CW_TYPE_STR,		"last-joined-ap",	32,	-1	},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_led_state_config[] = {
+	{CW_TYPE_BYTE,		"led-state",		1,	-1},
+	{CW_TYPE_BYTE,		"save-flag",		1,	-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVEnum_t cisco_ap_telnet_ssh[] ={
+	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic },
+	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic },
+	{0,0,0,0}
+};
+
+static cw_KTVStruct_t cisco_multi_domain_cabability[]={
+	{CW_TYPE_BYTE,		"reserved",		1,	-1},
+	{CW_TYPE_WORD,		"first-channel",	2,	-1},
+	{CW_TYPE_WORD,		"number-of-channels",	2,	-1},
+	{CW_TYPE_WORD,		"max-tx-power-level",	2,	-1},
+	{NULL,NULL,0,0}
+};
+
+
+static cw_KTVStruct_t cisco_wtp_board_data[]={
+	{CW_TYPE_WORD,		"card-id",		2,	-1},
+	{CW_TYPE_WORD,		"card-revision",	2,	-1},
+	{CW_TYPE_DWORD,		"wtp-model-lo",		4,	-1},
+	{CW_TYPE_DWORD,		"wtp-model-hi",		4,	-1},
+	{CW_TYPE_STR,		"wtp-serial-number",	16,	-1},
+	
+	{CW_TYPE_BSTR16,	"ethernet-mac-address",	6,	40},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_led_flash_config[]={
+	{CW_TYPE_BYTE,		"flahs-enable",		1,	0},
+	{CW_TYPE_DWORD,		"flsh-sec",		4,	4},
+	{CW_TYPE_BYTE,		"save-flag",		4,	8},
+
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_static_ip_addr[]={
+	{CW_TYPE_IPADDRESS,"address",	4,-1},
+	{CW_TYPE_IPADDRESS,"netmask",	4,-1},
+	{CW_TYPE_IPADDRESS,"gateway",	4,-1},
+	{CW_TYPE_IPADDRESS,"unknown",	4,-1},
+	{CW_TYPE_BOOL,"enabled",	1,-1},
+	{NULL,NULL,0,0}
 };
 
 
 static struct cw_ElemHandler handlers[] = {
+	
+	{ 
+		"AC Name -(zero-length allowed)",	/* name */
+		CAPWAP_ELEM_AC_NAME,			/* Element ID */
+		0,0,					/* Vendor / Proto */
+		0,CAPWAP_MAX_AC_NAME_LEN,		/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"ac-name",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+	
+	
 	{ 
 		"WTP Descriptor (Draft 7)",	/* name */
 		CAPWAP_ELEM_WTP_DESCRIPTOR,	/* Element ID */
@@ -117,7 +206,7 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 	{
-		"80211 WTP Radio Information - Cisco",			/* name */
+		"80211 WTP Radio Information - Cisco",		/* name */
 		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		0, 0,						/* min/max length */
@@ -202,11 +291,188 @@ static struct cw_ElemHandler handlers[] = {
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		0,0,					/* min/max length */
 		cisco_lw_path_mtu,			/* type */
-		"cisco/lw_path_mtu",			/* Key */
+		"cisco/lw-path-mtu",			/* Key */
 		cw_in_generic_struct,			/* get */
 		cisco_out_lw_path_mtu			/* put */
 	}
 	,
+	
+	{ 
+		"AP Uptime",				/* name */
+		CISCO_ELEM_AP_UPTIME,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		8,8,					/* min/max length */
+		cisco_ap_uptime,			/* type */
+		"cisco/ap-uptime",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+	
+	{ 
+		"AP Username and Password",		/* name */
+		CISCO_LWELEM_AP_USERNAME_PASSWORD,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		0,0,					/* min/max length */
+		cisco_ap_username_and_password,		/* type */
+		"cisco/ap-username-and-password",	/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+	{ 
+		"Loghost Config",			/* name */
+		CISCO_LWELEM_AP_LOGHOST_CONFIG,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		36,36,					/* min/max length */
+		cisco_loghost_config,			/* type */
+		"cisco/loghost-config",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+	{ 
+		"AP LED State COnfig",			/* name */
+		CISCO_ELEM_AP_LED_STATE_CONFIG,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		2,2,					/* min/max length */
+		cisco_ap_led_state_config,		/* type */
+		"cisco/ap-led-state-config",		/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+	{ 
+		"AP Telnet SSH",			/* name */
+		CISCO_LWELEM_AP_TELNET_SSH,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		2,2,					/* min/max length */
+		cisco_ap_telnet_ssh,			/* type */
+		"cisco/ap-telnet-ssh",			/* Key */
+		cw_in_generic_enum,			/* get */
+		NULL					/* put */
+	}
+	,
+	{ 
+		"AP Log Facility",			/* name */
+		CISCO_ELEM_AP_LOG_FACILITY,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/ap-log-facility",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+	{ 
+		"802.11 Multi Domain Capability",	/* name */
+		CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		8,8,					/* min/max length */
+		cisco_multi_domain_cabability,			/* type */
+		"cisco-multi-domain-capability",	/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		NULL					/* put */
+	}
+	,
+	
+	{ 
+		"Cisco WTP Board Data",			/* name */
+		CISCO_ELEM_WTP_BOARD_DATA,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		8,48,					/* min/max length */
+		cisco_wtp_board_data,			/* type */
+		"cisco/wtp-board-data",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct,			/* put */
+	},
+	{ 
+		"AP LED Flash Config",			/* name */
+		CISCO_ELEM_AP_LED_FLASH_CONFIG,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		0,48,					/* min/max length */
+		cisco_ap_led_flash_config,		/* type */
+		"cisco/ap-led-flash-config",		/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	},
+
+	{ 
+		"AP Pre Std Switch Config",		/* name */
+		CISCO_ELEM_AP_PRE_STD_SWITCH_CONFIG,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/ap-pre-std-switch-config",	/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"AP Power Injector Config",		/* name */
+		CISCO_ELEM_AP_POWER_INJECTOR_CONFIG,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		8,8,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/ap-power-injector-config",	/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"AP Mode And Type",			/* name */
+		CISCO_ELEM_AP_MODE_AND_TYPE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		2,2,					/* min/max length */
+		CW_TYPE_WORD,				/* type */
+		"cisco/ap-mode-and-type",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"AP Sub Mode",				/* name */
+		CISCO_LWELEM_AP_SUBMODE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/ap-sub-mode",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+	{ 
+		"AP Static IP Address",			/* name */
+		CISCO_ELEM_AP_STATIC_IP_ADDR,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		17,17,					/* min/max length */
+		cisco_ap_static_ip_addr,		/* type */
+		"cisco/ap-satic-ip-addr",		/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	},
+
+	{ 
+		"AP Min IOS Version",			/* name */
+		CISCO_ELEM_AP_MIN_IOS_VERSION,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		0,32,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/ap-min-ios-version",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"AP Backup Software Version",		/* name */
+		CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		0,32,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/ap-backup-software-version",	/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -256,33 +522,64 @@ static int join_response_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef join_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
-
+	{0,0,			CAPWAP_ELEM_ECN_SUPPORT,	0, CW_DELETE},
 
 	{0,0,0,00}
 	
 };
 
+
+static int configuration_status_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef configuration_status_request_elements[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_BOARD_DATA,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_FLASH_CONFIG,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_PRE_STD_SWITCH_CONFIG,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_POWER_INJECTOR_CONFIG,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODE_AND_TYPE,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_STATIC_IP_ADDR,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MIN_IOS_VERSION,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	0, 0},
+
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		1, 0},
+	
+	{0,0,0,00}
+	
+};
+
+
 static struct cw_MsgDef messages[] = {
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
-		CW_ROLE_AC,			
+		CW_ROLE_AC,			/* role */
 		discovery_request_states,
-		discovery_request_elements
+		discovery_request_elements,
+		NULL
 	},
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_RESPONSE,	/* type */
 		CW_ROLE_WTP,
 		discovery_response_states,
-		discovery_response_elements
+		discovery_response_elements,
+		
 	},
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_JOIN_REQUEST,	/* type */
 		CW_ROLE_AC,
 		join_request_states,
-		join_request_elements
+		join_request_elements,
+		postprocess_discovery		/* postprocess */
 	},
 	{
 		NULL,				/* name */
@@ -292,12 +589,19 @@ static struct cw_MsgDef messages[] = {
 		join_response_elements
 	},
 
+
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* type */
+		CW_ROLE_AC,
+		configuration_status_request_states,
+		configuration_status_request_elements,
+		NULL					/* postprocess */
+	},
+
 	{0,0,0,0}
 
 };
-
-
-
 
 
 
@@ -308,3 +612,30 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
         return set;
 }
 
+
+
+static void set_ac_version(struct conn * conn)
+{
+	cw_KTV_t * wtpver;
+	char verstr[512];
+	wtpver = cw_ktv_get(conn->remote_cfg,"wtp-descriptor/software/version", CW_TYPE_BSTR16);
+	if (wtpver){
+		
+		cw_format_version(verstr,wtpver->type->data(wtpver),wtpver->type->len(wtpver));
+		
+		cw_dbg(DBG_INFO, "Cisco - Setting AC software version to: %s", verstr);
+		
+		mavl_del(conn->local_cfg,&wtpver);
+		cw_ktv_add(conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16,
+			wtpver->type->data(wtpver),wtpver->type->len(wtpver));
+	}
+
+}
+
+static int postprocess_discovery(struct conn *conn){
+	if (conn->role != CW_ROLE_AC )
+		return 0;
+	set_ac_version(conn);
+	cw_detect_nat(conn);
+	return 1;
+}

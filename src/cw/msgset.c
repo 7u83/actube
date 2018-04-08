@@ -264,21 +264,22 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		struct cw_MsgData *msg;
 		int exists;
 
-		/* Look if message already exists */
+		/* add the message */
 		search.type = msgdef->type;
 		msg = mavl_add(set->msgdata, &search, &exists);
-
 		if (msg == NULL) {
 			cw_log(LOG_ERR, "Can't create messae");
 			return 0;
 		}
 
+		/* Look if message already exists */
 		if (!exists) {
+			/* message is fresh createt, initialize data */
 			msg->elements_tree = mavl_create(cmp_elemdata, NULL,
 							 sizeof(struct cw_ElemData));
 			msg->mand_keys=NULL;
-			
 			msg->elements_list = mlist_create(cmp_elemdata,NULL,sizeof(struct cw_ElemData));
+			msg->postprocess=NULL;
 		}
 
 		/* Overwrite the found message */
@@ -286,6 +287,9 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->name = msgdef->name;
 		if (msgdef->states)
 			msg->states = msgdef->states;
+		if (msgdef->postprocess != NULL)
+			msg->postprocess = msgdef->postprocess;
+			
 		msg->receiver = msgdef->receiver;
 
 

@@ -37,6 +37,7 @@
         <File Name="src/mod/cisco/cisco_out_radio_generic.c"/>
         <File Name="src/mod/cisco/cisco_out_capwap_local_ip_address.c"/>
         <File Name="src/mod/cisco/cisco_out_lw_path_mtu.c"/>
+        <File Name="src/mod/cisco/lwapp_cisco.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
   </VirtualDirectory>

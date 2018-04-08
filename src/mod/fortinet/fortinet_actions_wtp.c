@@ -122,7 +122,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
-		.elem_id = CW_ELEM_RADIO_ADMINISTRATIVE_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_ITEM_RADIO_ADMINISTRATIVE_STATE,
 		.start = cisco_in_radio_administrative_state_wtp,
 		.mand = 1

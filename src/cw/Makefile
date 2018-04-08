@@ -59,10 +59,11 @@ CWSRC=\
 	cw_in_check_join_resp.c\
 	cw_in_generic.c\
 	cw_in_generic_struct.c\
+	cw_in_radio_generic_struct.c\
+	cw_in_generic_enum.c\
 	cw_out_generic_struct.c\
 	cw_init_data_keep_alive_msg.c\
 	cw_inline.c\
-	cw_in_radio_generic.c\
 	cw_in_wtp_reboot_statistics.c\
 	cw_is_printable.c\
 	cw_load_file.c\
@@ -100,6 +101,7 @@ CWSRC=\
 	cw_write_descriptor_subelem.c\
 	cw_read_from.c \
 	cw_write_radio_element.c\
+	cw_detect_nat.c\
 
 KTVSRC=\
 	cw_ktv_add.c\

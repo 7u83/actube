@@ -7,6 +7,7 @@
 #include "mavl.h"
 #include "bstr.h"
 
+
 /**
  * @addtogroup ALGOS
  * @{
@@ -90,7 +91,17 @@ struct cw_KTVStruct {
 	int len;
 	int position;
 };
+
 typedef struct cw_KTVStruct cw_KTVStruct_t;
+
+struct cw_KTVEnum{
+	int value;
+	const char * name;
+	const struct cw_Type * type;
+	int (*fun)();
+};
+typedef struct cw_KTVEnum cw_KTVEnum_t;
+
 int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len);
 int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pkey, 

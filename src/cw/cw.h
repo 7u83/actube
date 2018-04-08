@@ -397,6 +397,9 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 
+int cw_in_generic_enum(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
+
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
 
@@ -404,6 +407,9 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 			, uint8_t * dst);
 
 int cw_in_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
+
+int cw_in_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 
 int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params

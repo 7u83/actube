@@ -27,6 +27,17 @@
 
 #include "mod_capwap.h"
 
+static cw_KTVStruct_t wtp_reboot_statistics[] = {
+	{CW_TYPE_WORD, "reboot-count", 2,-1},
+	{CW_TYPE_WORD, "ac-initiated-count", 2,-1},
+	{CW_TYPE_WORD, "link-failure-count", 2,-1},
+	{CW_TYPE_WORD, "sw-failure-count", 2,-1},
+	{CW_TYPE_WORD, "hw-failure-count", 2,-1},
+	{CW_TYPE_WORD, "other-failure-count", 2,-1},
+	{CW_TYPE_WORD, "unknown-failure-count", 2,-1},
+	{CW_TYPE_WORD, "last-failure-type", 2,-1},	
+	{NULL,NULL,0,0}
+};
 
 static struct cw_ElemHandler handlers[] = {
 
@@ -124,7 +135,7 @@ static struct cw_ElemHandler handlers[] = {
 		"AC Name",				/* name */
 		CAPWAP_ELEM_AC_NAME,			/* Element ID */
 		0,0,					/* Vendor / Proto */
-		0,0,					/* min/max length */
+		1,CAPWAP_MAX_AC_NAME_LEN,		/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"ac-name",				/* Key */
 		cw_in_generic,				/* get */
@@ -250,6 +261,43 @@ static struct cw_ElemHandler handlers[] = {
 	}
 
 	,
+	
+	{ 
+		"Statitsics Timer",			/* name */
+		CAPWAP_ELEM_STATISTICS_TIMER,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		2,2,					/* min/max length */
+		CW_TYPE_WORD,				/* type */
+		"statistics-timer",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+	{
+		"WTP Reboot Statistics",		/* name */
+		CAPWAP_ELEM_WTP_REBOOT_STATISTICS,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		15,15,					/* min/max length */
+		wtp_reboot_statistics,			/* type */
+		"wtp-reboot-statistics",		/* Key */
+		cw_in_generic_struct,			/* handler */
+		cw_out_generic_struct			/* put */
+	}
+	,
+
+	{
+		"Radio Administrative State",			/* name */
+		CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		2, 2,						/* min/max length */
+		CW_TYPE_BYTE,					/* type */
+		"admin-state",					/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic				/* put */
+	}
+	,
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -294,15 +342,7 @@ static struct cw_ElemDef join_request_elements[] ={
 	
 	{0,0,CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,	0, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
-	
-/*	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
 
-	{0,0,CAPWAP_ELEM_WTP_DESCRIPTOR,		1, 0},	
-	{0,0,CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_MAC_TYPE,			1, 0},
-	{0,0,CAPWAP_ELEM_MTU_DISCOVERY_PADDING,		0, 0},
-	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
-*/
 	{0,0,0,0,0}
 };
 
@@ -319,15 +359,23 @@ static struct cw_ElemDef join_response_elements[] ={
 
 	{0,0,CAPWAP_ELEM_MAXIMUM_MESSAGE_LENGTH,	0, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
-	
-/*	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
-	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
-	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS,	1, 0},
-	{0,0,CW_ELEM_CAPWAP_CONTROL_IPV6_ADDRESS,	1, 0},
-	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},*/
+
 	{0,0,0,0,0}
 
 };
+
+
+static int configuration_status_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef configuration_status_request_elements[] ={
+	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
+	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
+	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		1, 0},
+	{0,0,CAPWAP_ELEM_WTP_REBOOT_STATISTICS,		1, 0},
+	
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,0,0,0}
+};
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -362,6 +410,13 @@ static struct cw_MsgDef messages[] = {
 		join_response_elements
 	},
 
+	{
+		"Configuration Status Request",			/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* msg type */
+		CW_ROLE_AC,					/* role */
+		configuration_status_request_states,		/* allowed states */
+		configuration_status_request_elements		/* msg elements */
+	},
 	
 	
 	
