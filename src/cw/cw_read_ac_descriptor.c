@@ -13,7 +13,7 @@ cw_KTVStruct_t acstatus [] = {
 	/* type	        key	   	len,	pos */ 
 	{CW_TYPE_WORD, "stations", 	2,	-1},
 	{CW_TYPE_WORD, "station-limit", 2,	-1},
-	{CW_TYPE_WORD, "avtive-wtps",	2,	-1},
+	{CW_TYPE_WORD, "active-wtps",	2,	-1},
 	{CW_TYPE_WORD, "max-wtps",	2,	-1},
 	{CW_TYPE_BYTE, "security",	1,	-1},
 	{CW_TYPE_BYTE, "r-mac-field",	1,	-1},

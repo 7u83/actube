@@ -283,6 +283,7 @@
       <File Name="src/cw/cw_detect_nat.c"/>
       <File Name="src/cw/cw_in_generic_enum.c"/>
       <File Name="src/cw/cw_in_radio_generic_struct.c"/>
+      <File Name="src/cw/cw_write_header.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

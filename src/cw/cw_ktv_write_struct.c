@@ -21,11 +21,12 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		result = cw_ktv_get(ktv,key,stru[i].type);
 		
 		if (result == NULL){
-			cw_log(LOG_ERR,"Can't put %s, no value found",key);
-			continue;
+			cw_log(LOG_ERR,"Can't put %s, no value found, filling zero.",key);
+			memset(dst+pos,0,stru[i].len);
 		}
-		
-		result->type->put(result,dst+pos);
+		else{
+			result->type->put(result,dst+pos);
+		}
 
 		pos+=stru[i].len;
 

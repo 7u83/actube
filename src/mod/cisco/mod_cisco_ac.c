@@ -13,7 +13,7 @@
 #include "cw/vendors.h"
 
 #include "mod_cisco.h"
-
+#include "capwap_cisco.h"
 
 /*
 extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
@@ -58,6 +58,7 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 
 }
 
+/*
 static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 	
 	if (cfg && cfg->filename && cfg->line)
@@ -66,21 +67,22 @@ static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 	else if (cfg && cfg->filename)
 		cw_log(LOG_ERR, "MOD Cisco cfg file in %s:", cfg->filename);
 }
+*/
 
 static int init(struct cw_Mod *mod, mavl_t global_cfg, int role)
 {
-	uint8_t * str;
+/*	uint8_t * str;*/
 	static char * hardware_version; /*strdup(".x01000001");*/
 	static char * software_version; /* = NULL; */
-	cfg_t *cfg;
+/*	cfg_t *cfg;*/
 	
 	int rc = 1;
-	cfg_opt_t opts[] = {
+/*	cfg_opt_t opts[] = {
 		CFG_SIMPLE_STR("hardware_version", &hardware_version),
 		CFG_SIMPLE_STR("software_version",&software_version),
 		CFG_END()
 	};
-
+*/
 	cw_dbg(DBG_INFO, "CISCO: Initialiazing mod_cisco ...");
 	cw_dbg(DBG_MOD, "CISCO: Loading base module: capwap");
 	
@@ -191,10 +193,38 @@ static struct cw_Mod capwap_ac = {
 };
 */
 
+static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
+{
+	if (handler->proto == 0){
+		if (handler->vendor)
+			return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
+
+		return  len + cw_put_elem_hdr(dst, handler->id, len);
+	}
+	/* put the lwap elem header */
+	lw_set_dword(dst + 10, handler->vendor);
+	lw_set_word(dst + 14, handler->id);
+	return len + 6 + cw_put_elem_vendor_hdr(dst, handler->vendor, 
+		CISCO_ELEM_SPAM_VENDOR_SPECIFIC, len+6);	
+	
+}
+
+static int header_len(struct cw_ElemHandler * handler)
+{
+	if (handler->proto==0) 
+		return handler->vendor ? 10 : 4;
+	
+	return 16;
+}
+
+
+
 int static setup_cfg(struct conn  * conn)
 {
 	int security;
 	
+	conn->write_header=write_header;
+	conn->header_len=header_len;
 	
 	security = cw_setup_dtls(conn,conn->local_cfg,"cisco",CAPWAP_CIPHER);
 	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);

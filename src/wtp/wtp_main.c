@@ -208,7 +208,11 @@ int main (int argc, char **argv)
 	}
 */
 	join(conn,&dis);
-
+	mavl_merge(conn->local_cfg,conn->remote_cfg);
+	
+	
+	configure(conn);
+	
 	cw_discovery_free_results(&dis);
 
 	return (EXIT_SUCCESS);

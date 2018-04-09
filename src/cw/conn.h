@@ -40,6 +40,7 @@
 
 #include "intavltree.h"
 #include "bstr.h"
+#include "msgset.h"
 
 #include "mod.h"
 
@@ -75,7 +76,8 @@ struct conn {
 	mavl_t local_cfg;
 	mavl_t global_cfg;
 	
-	
+	int (*write_header)(struct cw_ElemHandler * handler, uint8_t * dst, int len);
+	int (*header_len)(struct cw_ElemHandler *handler);
 
 /*	mbag_t outgoing;
 	mbag_t incomming;

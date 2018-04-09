@@ -30,6 +30,9 @@
 #include "conn.h"
 #include "sock.h"
 
+#include "msgset.h"
+#include "cw.h"
+
 
 
 /**

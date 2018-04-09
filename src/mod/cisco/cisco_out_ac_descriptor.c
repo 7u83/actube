@@ -20,12 +20,12 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 	char key[CW_KTV_MAX_KEY_LEN];
 	
 
-	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/stations",0));
-	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/station-limit",0));
-	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/active-wtps",0));
-	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/max-wtps",0));
+	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/stations",0));
+	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/station-limit",0));
+	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/active-wtps",0));
+	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/max-wtps",0));
 	
-	d += cw_put_byte(d,cw_ktv_get_byte(global,"ac-descriptor/security",0));
+	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/security",0));
 /*	
 	security = 0;
 	if (cw_ktv_get(local,"dtls-cert-file",CW_TYPE_BSTR16))
@@ -40,14 +40,14 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 	d += cw_put_byte(dst,security);
 */	
 	sprintf(key,"%s/%s",parent_key,"ac-descriptor/r-mac-field");
-	d += cw_put_byte(d,cw_ktv_get_byte(global,"ac-descriptor/r-mac-field",0));
+	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/r-mac-field",0));
 		/*d += cw_put_byte(d,3);*/
 	
 	d += cw_put_byte(d,0);
 
 
 	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
-	d += cw_put_byte(d,cw_ktv_get_byte(local,key,0));
+	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/dtls-policy",0));
 
 	return d - dst;
 }

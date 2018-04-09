@@ -27,6 +27,21 @@
 
 #include "conn.h"
 #include "capwap.h"
+#include "cw.h"
+
+static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
+{
+	if (handler->vendor)
+		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
+
+	return  len + cw_put_elem_hdr(dst, handler->id, len);
+}
+
+static int header_len(struct cw_ElemHandler * handler)
+{
+	return handler->vendor ? 10 : 4;
+}
+
 
 /**
  * Basic initialization of a conn object 
@@ -48,7 +63,8 @@ void conn_init(struct conn * conn)
 	conn->process_packet=conn_process_packet;
 	conn->process_message=process_message;
 
-
+	conn->write_header = write_header;
+	conn->header_len = header_len;
 
 
 }

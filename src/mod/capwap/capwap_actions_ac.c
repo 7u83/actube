@@ -35,7 +35,7 @@ static cw_KTVStruct_t wtp_reboot_statistics[] = {
 	{CW_TYPE_WORD, "hw-failure-count", 2,-1},
 	{CW_TYPE_WORD, "other-failure-count", 2,-1},
 	{CW_TYPE_WORD, "unknown-failure-count", 2,-1},
-	{CW_TYPE_WORD, "last-failure-type", 2,-1},	
+	{CW_TYPE_BYTE, "last-failure-type", 1,-1},	
 	{NULL,NULL,0,0}
 };
 

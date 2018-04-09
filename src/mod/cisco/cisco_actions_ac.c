@@ -122,6 +122,14 @@ static cw_KTVStruct_t cisco_ap_static_ip_addr[]={
 };
 
 
+static cw_KTVStruct_t cisco_ap_regulatory_domain[]={
+	{CW_TYPE_BOOL,"set",1,-1},
+	{CW_TYPE_BYTE,"slot",1,-1},
+	{CW_TYPE_BYTE,"code0",1,-1},
+	{CW_TYPE_BYTE,"code1",1,-1},
+	{NULL,NULL,0,0}
+};
+
 static struct cw_ElemHandler handlers[] = {
 	
 	{ 
@@ -472,6 +480,30 @@ static struct cw_ElemHandler handlers[] = {
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
+	
+	{ 
+		"AP Ethernet Port Type",		/* name */
+		CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		3,3,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/ap-ethernet-port-type",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ /* it's wrong to store the reg domain in radio/xy/...
+	   and has to be corected in the future */
+	 
+		"AP Regulatory Domain",			/* name */
+		CISCO_ELEM_AP_REGULATORY_DOMAIN,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,5,					/* min/max length */
+		cisco_ap_regulatory_domain,		/* type */
+		"cisco/regulatory-domain",		/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		NULL					/* put */
+	},
 
 	{0,0,0,0,0,0,0,0}
 
@@ -520,8 +552,10 @@ static struct cw_ElemDef join_request_elements[] ={
 
 static int join_response_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef join_response_elements[] ={
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
+
 	{0,0,			CAPWAP_ELEM_ECN_SUPPORT,	0, CW_DELETE},
 
 	{0,0,0,00}
@@ -545,11 +579,13 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_STATIC_IP_ADDR,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MIN_IOS_VERSION,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_REGULATORY_DOMAIN,	1, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	1, 0},
 	
 	{0,0,0,00}
 	
@@ -561,9 +597,9 @@ static struct cw_MsgDef messages[] = {
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
 		CW_ROLE_AC,			/* role */
-		discovery_request_states,
-		discovery_request_elements,
-		NULL
+		discovery_request_states,	/* states */
+		discovery_request_elements,	/* elements */
+		postprocess_discovery		/* postprocess fun */
 	},
 	{
 		NULL,				/* name */

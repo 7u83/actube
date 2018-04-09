@@ -44,17 +44,21 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 
 	/* Size for msg elem header depends on 
 	   vendor specific payload */
-	start = handler->vendor ? 10 : 4;
+	/* start = handler->vendor ? 10 : 4; */
+	start = params->conn->header_len(handler);
+	
 	len = ((const cw_Type_t*)(handler->type))->put(elem,dst+start);
 
 /*	((const cw_Type_t*)(handler->type))->to_str(elem,detail,120);
 	sprintf(params->debug_details, "  Value = %s", detail);
 	params->elem = elem;*/
 
-	if (handler->vendor)
+/*	if (handler->vendor)
 		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
 
-	l = len + cw_put_elem_hdr(dst, handler->id, len);
+	l = len + cw_put_elem_hdr(dst, handler->id, len); */
+	l = params->conn->write_header(handler,dst,len);
+	
 	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
 	return l;
 }
