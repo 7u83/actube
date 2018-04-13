@@ -10,14 +10,20 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 	
 	int len,i,l;
 	int radios;
-	int fint, sr;
+	int idx, sr;
+	int pos;
+	uint8_t * mdst;
 	
 	len =0;
 
 	i=0;
 
+	pos = 0;
+	mdst = dst;
 	
 	do {
+		
+		
 		sprintf(key,handler->key,i);
 		search.key=key;
 		/*elem = mavl_get(params->conn->local_cfg, &search);*/
@@ -25,15 +31,37 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 		if(elem != NULL){
 			printf("Elem key: %s",elem->key);
 		}
-		sr = sscanf(elem->key,handler->key,&fint);
+		sr = sscanf(elem->key,handler->key,&idx);
 		
 		if (sr!=1)
 			break;
-		if (fint<=i)
+		if (idx<=i)
 			break;
 
-		printf("Here we are '%s'! --> %d\n",key,fint);
-		i=fint+1;
+		sprintf(key,handler->key,idx);
+
+		printf("Here we are '%s'! --> %d\n",key,idx);
+
+
+		pos = params->conn->header_len(handler);
+		
+		pos += cw_put_byte(mdst+pos,idx);
+		pos += cw_ktv_write_struct(params->conn->local_cfg,handler->type,key,mdst+pos);
+		
+		mdst += params->conn->write_header(handler,mdst,pos);
+		
+	
+		
+
+
+		
+
+		i=idx+1;
+		
+		
+		
+		
+		
 		
 	}while(1);
 	

@@ -65,8 +65,8 @@ cisco/regulatory-domain/019/code0 :Byte: 0
 cisco/regulatory-domain/019/code1 :Byte: 1
 cisco/regulatory-domain/019/set :Bool: true
 cisco/regulatory-domain/019/slot :Byte: 0
-cisco/regulatory-domain/01/code0 :Byte: 0
-cisco/regulatory-domain/01/code1 :Byte: 1
-cisco/regulatory-domain/01/set :Bool: true
-cisco/regulatory-domain/01/slot :Byte: 1
+cisco/regulatory-domain/001/code0 :Byte: 0
+cisco/regulatory-domain/001/code1 :Byte: 1
+cisco/regulatory-domain/001/set :Bool: true
+cisco/regulatory-domain/001/slot :Byte: 1
 
