@@ -35,7 +35,7 @@ wtp-descriptor/software/vendor :Dword: 4232704
 wtp-descriptor/software/version :Bstr16: .x06036500
 wtp-frame-tunnel-mode :Byte: 4
 wtp-mac-type :Byte: 1
-wtp-name :Bstr16: APc47d.4f3a.f8a6
+wtp-name :Bstr16: WFAT-01
 
 
 capwap-timers/max-discovery-interval:Byte:0
@@ -61,10 +61,10 @@ radio/0/cisco/regulatory-domain/set :Bool: true
 radio/0/cisco/regulatory-domain/slot :Byte: 0
 
 
-cisco/regulatory-domain/019/code0 :Byte: 0
-cisco/regulatory-domain/019/code1 :Byte: 1
-cisco/regulatory-domain/019/set :Bool: true
-cisco/regulatory-domain/019/slot :Byte: 0
+cisco/regulatory-domain/000/code0 :Byte: 0
+cisco/regulatory-domain/000/code1 :Byte: 1
+cisco/regulatory-domain/000/set :Bool: true
+cisco/regulatory-domain/000/slot :Byte: 0
 cisco/regulatory-domain/001/code0 :Byte: 0
 cisco/regulatory-domain/001/code1 :Byte: 1
 cisco/regulatory-domain/001/set :Bool: true

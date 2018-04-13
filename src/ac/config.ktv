@@ -29,7 +29,6 @@ ac-descriptor/software/vendor :Dword: 4232704
 ac-descriptor/software/version :Bstr16: .x07036500
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
-ac-name :Bstr16: CiscoAC73
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.14
 capwap-control-ip-address/wtps.0 :Word: 2
 cisco/mwar-type :Byte: 0
