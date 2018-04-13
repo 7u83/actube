@@ -1,0 +1,72 @@
+cisco/ssl-certfile:Str:"../../ssl/certs/wtpc.crt"
+cisco/ssl-keyfile:Str:"../../ssl/certs/wtpc.key"
+cisco/ssl-cipher:Str:ALL
+
+
+
+discovery-type :Byte: 0
+
+capwap-local-ip-address :IPAddress: 192.168.0.14
+cisco/ap-group-name :Bstr16: default-group
+cisco/board-data-options :Dword: 16777217
+cisco/lw_path_mtu/len :Word: 1095
+cisco/lw_path_mtu/max :Word: 1485
+cisco/mwar-addr/address :IPAddress: 192.168.0.180
+cisco/mwar-addr/mwar-type :Byte: 1
+cisco/mwar-addr/unknown :Word: 0
+
+location-data :Bstr16: default location
+maximum-message-length :Word: 14000
+radio/0/wtp-radio-information :Dword: 1
+radio/1/wtp-radio-information :Dword: 2
+session-id :Bstr16: .x00006215
+wtp-board-data/board-id :Bstr16: .x0000
+wtp-board-data/mac-address :Bstr16: .x902b34de9ef1
+wtp-board-data/model-no :Bstr16: AIR-LAP1142N-E-K9   
+wtp-board-data/serial-no :Bstr16: FCZ1406W232
+wtp-board-data/vendor :Dword: 4232704
+wtp-descriptor/bootloader/vendor :Dword: 4232704
+wtp-descriptor/bootloader/version :Bstr16: .x0c041200
+wtp-descriptor/hardware/vendor :Dword: 4232704
+wtp-descriptor/hardware/version :Bstr16: .x01000000
+wtp-descriptor/max-radios :Byte: 2
+wtp-descriptor/radios-in-use :Byte: 2
+wtp-descriptor/software/vendor :Dword: 4232704
+wtp-descriptor/software/version :Bstr16: .x06036500
+wtp-frame-tunnel-mode :Byte: 4
+wtp-mac-type :Byte: 1
+wtp-name :Bstr16: APc47d.4f3a.f8a6
+
+
+capwap-timers/max-discovery-interval:Byte:0
+capwap-timers/min-discovery-interval:Byte:0
+capwap-timers/echo-interval:Byte:3
+
+ac-name-with-priority/TubesAC:Byte:3
+
+wtp-reboot-statistics/ac-initiated-count :Word: 2
+wtp-reboot-statistics/hw-failure-count :Word: 0
+wtp-reboot-statistics/last-failure-type :Byte: 0
+wtp-reboot-statistics/link-failure-count :Word: 522
+wtp-reboot-statistics/other-failure-count :Word: 13
+wtp-reboot-statistics/reboot-count :Word: 0
+wtp-reboot-statistics/sw-failure-count :Word: 0
+wtp-reboot-statistics/unknown-failure-count :Word: 0
+
+
+
+radio/0/cisco/regulatory-domain/code0 :Byte: 0
+radio/0/cisco/regulatory-domain/code1 :Byte: 1
+radio/0/cisco/regulatory-domain/set :Bool: true
+radio/0/cisco/regulatory-domain/slot :Byte: 0
+
+
+cisco/regulatory-domain/019/code0 :Byte: 0
+cisco/regulatory-domain/019/code1 :Byte: 1
+cisco/regulatory-domain/019/set :Bool: true
+cisco/regulatory-domain/019/slot :Byte: 0
+cisco/regulatory-domain/01/code0 :Byte: 0
+cisco/regulatory-domain/01/code1 :Byte: 1
+cisco/regulatory-domain/01/set :Bool: true
+cisco/regulatory-domain/01/slot :Byte: 1
+
