@@ -205,6 +205,7 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 	mavliter_init(&ii,dis->prio_ip);
 
 	mavliter_foreach(&ii){
+		int rc;
 		cw_KTV_t * val,*ac;
 		mavl_t rcfg;
 		char * rk;
@@ -234,7 +235,9 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 
 		sock_strtoaddr(ipstr,(struct sockaddr*)(&sockaddr));
 		sock_setport((struct sockaddr*)&sockaddr,5246);
-		run_join_d(conn,(struct sockaddr*)(&sockaddr));
+		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr));
+		if (rc)
+			return 1;
 
 	}
 	return 0;

@@ -386,10 +386,15 @@ int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * de
  * @{
  */
  
- /*
-int cw_in_generic(struct conn * conn, struct cw_ElemHandler * handler,  
-		uint8_t * elem_data, int elem_len, struct sockaddr * from);
-*/
+ 
+ 
+int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
+int cw_in_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
+		uint8_t * elem_data, int elem_len);
+
+int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
 
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);

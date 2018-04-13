@@ -284,6 +284,9 @@
       <File Name="src/cw/cw_in_generic_enum.c"/>
       <File Name="src/cw/cw_in_radio_generic_struct.c"/>
       <File Name="src/cw/cw_write_header.c"/>
+      <File Name="src/cw/cw_in_idx_generic.c"/>
+      <File Name="src/cw/cw_in_idx_generic_struct.c"/>
+      <File Name="src/cw/cw_out_idx_generic_struct.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

@@ -500,9 +500,9 @@ static struct cw_ElemHandler handlers[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		5,5,					/* min/max length */
 		cisco_ap_regulatory_domain,		/* type */
-		"cisco/regulatory-domain",		/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		NULL					/* put */
+		"cisco/regulatory-domain/%03d",		/* Key */
+		cw_in_idx_generic_struct,		/* get */
+		cw_out_idx_generic_struct		/* put */
 	},
 
 	{0,0,0,0,0,0,0,0}
