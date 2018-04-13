@@ -46,7 +46,7 @@ void * ktvn(struct mavl *t ,const void *search)
 
 
 
-int cw_ktv_idx_get(mavl_t ktv, const char *key, int idx, const cw_Type_t * type)
+int cw_ktv_idx_get(mavl_t ktv, const char *key)
 {
 	char ikey[CW_KTV_MAX_KEY_LEN];
 	cw_KTV_t search, * result;
@@ -55,7 +55,9 @@ int cw_ktv_idx_get(mavl_t ktv, const char *key, int idx, const cw_Type_t * type)
 	sprintf(ikey,"%s.%d",key,65536);
 		
 	search.key=ikey;
-	result = ktvn(ktv,&search);
+	/*//result = ktvn(ktv,&search);*/
+	
+	result = mavl_get_last(ktv,&search);
 	
 	if (result == NULL){
 		return -1;

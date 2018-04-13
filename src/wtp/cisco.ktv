@@ -70,3 +70,9 @@ cisco/regulatory-domain/001/code1 :Byte: 1
 cisco/regulatory-domain/001/set :Bool: true
 cisco/regulatory-domain/001/slot :Byte: 1
 
+
+tube.0/main : Byte : 12
+tube.0/zumsel : Byte : 12
+tube.1/main : Byte : 12
+tube.1/zumsel : Byte : 12
+

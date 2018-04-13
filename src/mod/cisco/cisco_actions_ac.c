@@ -67,8 +67,8 @@ static cw_KTVStruct_t cisco_ap_username_and_password[] = {
 };
 
 static cw_KTVStruct_t cisco_loghost_config[] = {
-	{CW_TYPE_IPADDRESS,	"loghost",		4,	-1	},
-	{CW_TYPE_STR,		"last-joined-ap",	32,	-1	},
+	{CW_TYPE_IPADDRESS,	"loghost",		4,	-1},
+	{CW_TYPE_STR,		"last-joined-ap",	32,	-1},
 	{NULL,NULL,0,0}
 };
 
@@ -105,8 +105,8 @@ static cw_KTVStruct_t cisco_wtp_board_data[]={
 };
 
 static cw_KTVStruct_t cisco_ap_led_flash_config[]={
-	{CW_TYPE_BYTE,		"flahs-enable",		1,	0},
-	{CW_TYPE_DWORD,		"flsh-sec",		4,	4},
+	{CW_TYPE_BYTE,		"flash-enable",		1,	0},
+	{CW_TYPE_DWORD,		"flash-sec",		4,	4},
 	{CW_TYPE_BYTE,		"save-flag",		4,	8},
 
 	{NULL,NULL,0,0}
@@ -122,13 +122,49 @@ static cw_KTVStruct_t cisco_ap_static_ip_addr[]={
 };
 
 
-static cw_KTVStruct_t cisco_ap_regulatory_domain[]={
+static cw_KTVStruct_t cisco_ap_regulatory_domain4[]={
 	{CW_TYPE_BOOL,"set",1,-1},
 	{CW_TYPE_BYTE,"slot",1,-1},
 	{CW_TYPE_BYTE,"code0",1,-1},
 	{CW_TYPE_BYTE,"code1",1,-1},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
+	{CW_TYPE_BYTE,"band-id",1,-1},
+	{CW_TYPE_BOOL,"set",1,-1},
+	{CW_TYPE_BYTE,"slot",1,-1},
+	{CW_TYPE_BYTE,"code0",1,-1},
+	{CW_TYPE_BYTE,"code1",1,-1},
+	{NULL,NULL,0,0}
+};
+
+
+int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len)
+{
+	char key[CW_KTV_MAX_KEY_LEN];
+	int idx;
+	void * type;
+
+	idx = cw_ktv_idx_get(params->conn->remote_cfg,eh->key);
+
+	sprintf(key,"%s.%d",eh->key,idx+1);
+	
+	if(len==4)
+		type = cisco_ap_regulatory_domain4;
+	if(len==5)
+		type = cisco_ap_regulatory_domain5;
+	cw_ktv_read_struct(params->conn->remote_cfg,type,key,data,len);
+	
+
+
+	return 1;
+}
+
+
+
 
 static struct cw_ElemHandler handlers[] = {
 	
@@ -499,10 +535,10 @@ static struct cw_ElemHandler handlers[] = {
 		CISCO_ELEM_AP_REGULATORY_DOMAIN,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		5,5,					/* min/max length */
-		cisco_ap_regulatory_domain,		/* type */
-		"cisco/regulatory-domain/%03d",		/* Key */
-		cw_in_idx_generic_struct,		/* get */
-		cw_out_idx_generic_struct		/* put */
+		cisco_ap_regulatory_domain4,		/* type */
+		"cisco/ap-regulatory-domain",		/* Key */
+		cisco_in_ap_regulatory_domain,		/* get */
+		NULL /*cw_out_idx_generic_struct*/	/* put */
 	},
 
 	{0,0,0,0,0,0,0,0}
@@ -668,7 +704,8 @@ static void set_ac_version(struct conn * conn)
 
 }
 
-static int postprocess_discovery(struct conn *conn){
+static int postprocess_discovery(struct conn *conn)
+{
 	if (conn->role != CW_ROLE_AC )
 		return 0;
 	set_ac_version(conn);

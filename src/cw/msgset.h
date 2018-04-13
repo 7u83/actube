@@ -4,7 +4,7 @@
 #include "mlist.h"
 #include "sock.h"
 #include "mavl.h"
-#include "conn.h"
+
 #include "ktv.h"
 
 struct cw_MsgSet {

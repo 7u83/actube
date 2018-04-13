@@ -169,7 +169,7 @@ uint32_t cw_ktv_get_dword(mavl_t ktv,const char *key, uint32_t def);
 void * cw_ktv_get_sysptr(mavl_t ktv,const char *key, void * def);
 char * cw_ktv_get_str(mavl_t ktv,const char *key, char * def);
 
-int cw_ktv_idx_get(mavl_t ktv, const char *key, int idx, const cw_Type_t * type);
+int cw_ktv_idx_get(mavl_t ktv, const char *key);
 
 		
 extern const cw_Type_t * cw_ktv_std_types[];

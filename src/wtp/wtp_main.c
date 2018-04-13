@@ -95,6 +95,8 @@ int main (int argc, char **argv)
 	
 	
 	
+	
+	
 	bootcfg.nmods=0;
 	
 	/* read command line args, results are in bootcfg */
@@ -170,9 +172,14 @@ int main (int argc, char **argv)
 		if (mod->setup_cfg)
 			mod->setup_cfg(conn);
 	}
+{
+int idx;
+cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");
+idx = cw_ktv_idx_get(conn->local_cfg,"tube",0,NULL);
+printf("IDX: %d\n",idx);
 
-/*cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");*/
-
+exit(0);
+}
 	dtls_init();
 
 	conn->base_rmac = get_base_rmac();
