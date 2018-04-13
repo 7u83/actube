@@ -1,3 +1,6 @@
+
+#include <ctype.h>
+
 #include "ktv.h"
 /**
  * @brief Default function to compare two values of type #cw_KTV_t.
@@ -34,8 +37,21 @@ int cw_ktv_mavlcmp(const void *v1, const void *v2)
 		return rc;
 	}
 	
-	i1 = atoi(d1+1);
-	i2 = atoi(d2+1);
+	d1++;
+	d2++;
+	i1 = atoi(d1);
+	i2 = atoi(d2);
 	
-	return i1-i2;
+	rc = i1-i2;
+	if (rc != 0)
+		return rc;
+	
+	while (isdigit(*d1))
+		d1++;
+	while (isdigit(*d2))
+		d2++;
+	
+	return strcmp(d1,d2);
+	
+	
 }
