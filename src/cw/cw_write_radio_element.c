@@ -11,7 +11,7 @@ int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandle
 	
 	len =0;
 	
-	sprintf(key,"radio/%d/%s",idx,handler->key);
+	sprintf(key,"radio.%d/%s",idx,handler->key);
 	
 	/*printf("Looking for key: %s\n",key);*/
 	

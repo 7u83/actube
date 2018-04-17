@@ -43,9 +43,6 @@ void * ktvn(struct mavl *t ,const void *search)
 	
 }
 
-
-
-
 int cw_ktv_idx_get(mavl_t ktv, const char *key)
 {
 	char ikey[CW_KTV_MAX_KEY_LEN];

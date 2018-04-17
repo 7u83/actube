@@ -130,6 +130,7 @@ KTVSRC=\
 	cw_ktv_read_struct.c\
 	cw_ktv_write_struct.c\
 	cw_ktv_std_types.c\
+	cw_ktv_base_exists.c\
 
 
 LWSRC=\
@@ -263,6 +264,7 @@ DTLSSRC+=\
 
 RADIOSRC=\
 	cw_out_radio_generic.c\
+	cw_out_radio_generic_struct.c\
 	cw_read_radio_generic.c\
 
 

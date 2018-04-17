@@ -172,6 +172,7 @@ int main (int argc, char **argv)
 		if (mod->setup_cfg)
 			mod->setup_cfg(conn);
 	}
+/*
 {
 int idx;
 cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");
@@ -180,6 +181,7 @@ printf("IDX: %d\n",idx);
 
 exit(0);
 }
+ */
 	dtls_init();
 
 	conn->base_rmac = get_base_rmac();

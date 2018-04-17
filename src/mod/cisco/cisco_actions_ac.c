@@ -157,14 +157,84 @@ int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh,
 	if(len==5)
 		type = cisco_ap_regulatory_domain5;
 	cw_ktv_read_struct(params->conn->remote_cfg,type,key,data,len);
-	
-
 
 	return 1;
 }
 
 
+int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst)
 
+{
+	char key[CW_KTV_MAX_KEY_LEN];
+	char testkey[CW_KTV_MAX_KEY_LEN];
+	int idx;
+	void * type;
+	cw_KTV_t * result, search;
+	int len,start;
+	uint8_t * ob;
+
+
+	idx = 0;
+	ob = dst;
+
+	do {
+		sprintf(key,"%s.%d",eh->key,idx);
+		search.key=key;
+		result = mavl_get_first(params->conn->local_cfg,&search);
+		if (result==NULL)
+			break;
+		if (strncmp(result->key,key,strlen(key))!=0)
+			break;
+		
+		sprintf(testkey,"%s/%s",key,"band-id");
+		result = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_BYTE);
+		if (result==NULL){
+			type = cisco_ap_regulatory_domain4;
+		}
+		else{
+			type = cisco_ap_regulatory_domain5;
+		}
+		
+		start = params->conn->header_len(eh);
+		len = cw_ktv_write_struct(params->conn->local_cfg,type,key,ob+start);
+		ob += params->conn->write_header(eh,ob,len);
+		
+		idx++;
+		
+	}while(1);
+
+
+	sprintf(key,"%s.%d",eh->key,idx+1);
+/*	if(len==4)
+		type = cisco_ap_regulatory_domain4;
+	if(len==5)
+		type = cisco_ap_regulatory_domain5;
+	cw_ktv_read_struct(params->conn->remote_cfg,type,key,data,len);
+*/
+	return ob-dst;
+}
+
+static cw_KTVStruct_t cisco_ap_model[]={
+	{CW_TYPE_STR,"model",30,-1},
+	{CW_TYPE_STR,"image",30,30},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_wtp_radio_config[]={
+	{CW_TYPE_BYTE,"cfg-type",1,-1},
+	{CW_TYPE_WORD,"occupancy-limit",2,-1},
+	{CW_TYPE_BYTE,"cfg-period",1,-1},
+	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
+	{CW_TYPE_BSTR16,"bss-id",6,-1},
+	{CW_TYPE_WORD,"beacon-period",2,-1},
+	{CW_TYPE_BSTR16,"country-str1",3,-1},
+	{CW_TYPE_BSTR16,"country-str2",3,-1},
+	{CW_TYPE_BYTE,"gpr-period",1,-1},
+	{CW_TYPE_DWORD,"reg",4,-1},
+	{CW_TYPE_BYTE,"max-stations",1,-1},
+	{NULL,NULL,0,0}
+};
 
 static struct cw_ElemHandler handlers[] = {
 	
@@ -376,7 +446,7 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 	{ 
-		"AP LED State COnfig",			/* name */
+		"AP LED State Config",			/* name */
 		CISCO_ELEM_AP_LED_STATE_CONFIG,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		2,2,					/* min/max length */
@@ -491,8 +561,8 @@ static struct cw_ElemHandler handlers[] = {
 		17,17,					/* min/max length */
 		cisco_ap_static_ip_addr,		/* type */
 		"cisco/ap-satic-ip-addr",		/* Key */
-		cw_in_generic_struct,				/* get */
-		cw_out_generic_struct				/* put */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
 	},
 
 	{ 
@@ -534,12 +604,48 @@ static struct cw_ElemHandler handlers[] = {
 		"AP Regulatory Domain",			/* name */
 		CISCO_ELEM_AP_REGULATORY_DOMAIN,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		5,5,					/* min/max length */
+		4,5,					/* min/max length */
 		cisco_ap_regulatory_domain4,		/* type */
 		"cisco/ap-regulatory-domain",		/* Key */
 		cisco_in_ap_regulatory_domain,		/* get */
-		NULL /*cw_out_idx_generic_struct*/	/* put */
+		cisco_out_ap_regulatory_domain		/* put */
 	},
+	
+	{ 
+		"AP Model",				/* name */
+		CISCO_ELEM_AP_MODEL,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		60,60,					/* min/max length */
+		cisco_ap_model,				/* type */
+		"cisco/ap-model",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct,			/* put */
+	},
+	
+	{ 
+		"Reset Button State",			/* name */
+		CISCO_ELEM_RESET_BUTTON_STATE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BOOL,				/* type */
+		"cisco/reset-button-state",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"WTP Radio Configuration",		/* name */
+		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		27,27,					/* min/max length */
+		cisco_wtp_radio_config,			/* type */
+		"cisco/wtp-radio-config",		/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	}
+	,
+
+
 
 	{0,0,0,0,0,0,0,0}
 
@@ -616,6 +722,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MIN_IOS_VERSION,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_REGULATORY_DOMAIN,	1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
@@ -627,6 +736,17 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	
 };
 
+static int configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef configuration_status_response_elements[] ={
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
+	
+	{0,0,0,0}
+};
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -670,6 +790,16 @@ static struct cw_MsgDef messages[] = {
 		configuration_status_request_elements,
 		NULL					/* postprocess */
 	},
+
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,	/* type */
+		CW_ROLE_WTP,
+		configuration_status_response_states,
+		configuration_status_response_elements,
+		NULL					/* postprocess */
+	},
+
 
 	{0,0,0,0}
 

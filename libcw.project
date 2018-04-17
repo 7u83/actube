@@ -287,6 +287,8 @@
       <File Name="src/cw/cw_in_idx_generic.c"/>
       <File Name="src/cw/cw_in_idx_generic_struct.c"/>
       <File Name="src/cw/cw_out_idx_generic_struct.c"/>
+      <File Name="src/cw/cw_out_radio_generic_struct.c"/>
+      <File Name="src/cw/cw_ktv_base_exists.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

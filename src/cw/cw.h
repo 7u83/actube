@@ -419,6 +419,9 @@ int cw_in_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHa
 
 int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
+			
+int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
 
 extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a,
 				       uint8_t * data, int len, struct sockaddr *from);

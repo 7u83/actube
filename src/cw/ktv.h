@@ -39,6 +39,7 @@ struct cw_KTV {
 		void *ptr;
 		char *str;
 		int boolean;
+		float float_val;
 	} val;
 };
 typedef struct cw_KTV cw_KTV_t;
@@ -170,7 +171,7 @@ void * cw_ktv_get_sysptr(mavl_t ktv,const char *key, void * def);
 char * cw_ktv_get_str(mavl_t ktv,const char *key, char * def);
 
 int cw_ktv_idx_get(mavl_t ktv, const char *key);
-
+cw_KTV_t * cw_ktv_base_exists(mavl_t ktvstore, const char *basekey);
 		
 extern const cw_Type_t * cw_ktv_std_types[];
 #define CW_KTV_STD_TYPES cw_ktv_std_types

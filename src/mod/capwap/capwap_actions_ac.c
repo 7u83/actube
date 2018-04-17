@@ -39,6 +39,13 @@ static cw_KTVStruct_t wtp_reboot_statistics[] = {
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t capwap_timers[] = {
+	
+	{CW_TYPE_BYTE, "max-discovery-interval", 1,-1},
+	{CW_TYPE_BYTE, "echo-interval", 1,-1},
+	{NULL,NULL,0,0}
+};
+
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
@@ -298,6 +305,20 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{
+		"CAPWAP Timers",			/* name */
+		CAPWAP_ELEM_CAPWAP_TIMERS,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		2, 2,						/* min/max length */
+		capwap_timers,					/* type */
+		"capwap-timers",					/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	}
+	,
+
+
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -376,6 +397,15 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0,0,0,0,0}
 };
 
+static int configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef configuration_status_response_elements[] ={
+	{0,0,CAPWAP_ELEM_CAPWAP_TIMERS,			1, 0},
+	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
+	
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,0,0,0}
+};
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -418,7 +448,14 @@ static struct cw_MsgDef messages[] = {
 		configuration_status_request_elements		/* msg elements */
 	},
 	
-	
+	{
+		"Configuration Status Response",		/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,	/* msg type */
+		CW_ROLE_WTP,					/* role */
+		configuration_status_response_states,		/* allowed states */
+		configuration_status_response_elements		/* msg elements */
+	},
+
 	
 /*	{ 
 		"Discovery Request",

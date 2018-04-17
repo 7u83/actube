@@ -19,7 +19,7 @@ int cw_in_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPa
 	}
 	
 	radio=cw_get_byte(elem_data);
-	sprintf(key,"radio/%d/%s",radio,handler->key);
+	sprintf(key,"radio.%d/%s",radio,handler->key);
 	
 	result = cw_ktv_add(params->conn->remote_cfg, key, 
 				handler->type, elem_data+1,elem_len-1);
