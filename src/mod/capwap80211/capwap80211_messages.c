@@ -131,7 +131,7 @@ static int capwap80211_in_crate_set(struct cw_ElemHandler *eh,
 	radio = cw_get_byte(data);
 	for (i=0; i<len-1; i++){
 		int rate = (data+1)[i];
-		
+		sprintf(d,"%0.1f",dot11_rate2float(val & 0x7f));
 	}
 	
 
