@@ -221,6 +221,7 @@ exit(0);
 	
 	
 	configure(conn);
+	run(conn);
 	
 	cw_discovery_free_results(&dis);
 

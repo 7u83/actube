@@ -648,7 +648,7 @@ enum capwap_states {
 	CW_STATE_IMAGE_DATA,
 	CW_STATE_UPDATE,
 	/** Run State */
-	CW_STATE_RUN
+	CAPWAP_STATE_RUN
 };
 
 /**
