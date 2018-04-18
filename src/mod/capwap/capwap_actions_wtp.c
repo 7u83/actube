@@ -227,7 +227,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id  = CW_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,
+		.elem_id  = CAPWAP_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,
 		.item_id = CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD, 
 		.start  = cw_in_radio_generic,
 		.min_len = 3,
@@ -241,7 +241,7 @@ static cw_action_in_t actions_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
-		.elem_id  = CW_ELEM_IDLE_TIMEOUT,
+		.elem_id  = CAPWAP_ELEM_IDLE_TIMEOUT,
 		.item_id = CW_ITEM_IDLE_TIMEOUT, 
 		.start  = cw_in_generic2,
 		.min_len = 4,
@@ -684,7 +684,7 @@ static cw_action_out_t actions_out[] = {
 	/* Radio Operational State(s) - Change State Event */
 	{
 		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
-		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 //		.out = cw_out_radio_operational_state,
 		.out = cw_out_radio_generic,		

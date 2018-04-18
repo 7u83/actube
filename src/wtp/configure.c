@@ -34,6 +34,8 @@ int configure(struct conn * conn)
 		/*cfg_to_json();*/
 		return 0;
 	}
+	
+	cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"Config ***","CFG: ", "End config ***");
 
 	return 1;
 }

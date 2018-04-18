@@ -31,10 +31,10 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP80211_ELEM_RATE_SET,			/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		3, 0,						/* min/max length */
-		NULL,						/* type */
+		CW_TYPE_BSTR16,					/* type */
 		"rate_set",					/* Key */
-		capwap80211_in_crate_set,			/* get */
-		NULL						/* put */
+		cw_in_radio_generic,					/* get */
+		cw_out_radio_generic					/* put */
 	}
 	,
 	{NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL}
@@ -126,14 +126,14 @@ static int capwap80211_in_crate_set(struct cw_ElemHandler *eh,
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
-	int radio;
+/*	int radio;
 	int i;
 	radio = cw_get_byte(data);
 	for (i=0; i<len-1; i++){
 		int rate = (data+1)[i];
 		sprintf(d,"%0.1f",dot11_rate2float(val & 0x7f));
 	}
-	
+*/	
 
 }
 

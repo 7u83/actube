@@ -139,6 +139,19 @@ static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t cisco_mac_operation[]={
+	{CW_TYPE_BYTE,"reserved",1,-1},
+	{CW_TYPE_WORD,"rts-threshold",2,-1},
+	{CW_TYPE_BYTE,"short-retry",1,-1},
+	{CW_TYPE_BYTE,"long-retry",1,-1},
+	{CW_TYPE_WORD,"fragmentation-threshold",2,-1},
+	{CW_TYPE_DWORD,"tx-msdu-lifetime",4,-1},
+	{CW_TYPE_DWORD,"rx-msdu-lifetime",4,-1},
+	{NULL,NULL,0,0}
+};
+
+
+
 
 int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
@@ -233,6 +246,57 @@ static cw_KTVStruct_t cisco_wtp_radio_config[]={
 	{CW_TYPE_BYTE,"gpr-period",1,-1},
 	{CW_TYPE_DWORD,"reg",4,-1},
 	{CW_TYPE_BYTE,"max-stations",1,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_tx_power[]={
+	{CW_TYPE_BYTE,"reserved",1,-1},
+	{CW_TYPE_WORD,"current-tx-power",2,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_ap_qos[]={
+	{CW_TYPE_BYTE,"tag-packets",1,-1},
+	{CW_TYPE_BYTE,"uranium-queue-depth",1,-1},
+	{CW_TYPE_WORD,"uranium-cwmin",2,-1},
+	{CW_TYPE_WORD,"uranium-cwmax",2,-1},
+	{CW_TYPE_BYTE,"uranium-aifs",1,-1},
+	{CW_TYPE_WORD,"uranium-cbr",2,-1},
+	{CW_TYPE_BYTE,"uranium-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"uranium-dscp-tag",1,-1},
+	
+	{CW_TYPE_BYTE,"platinum-queue-depth",1,-1},
+	{CW_TYPE_WORD,"platinum-cwmin",2,-1},
+	{CW_TYPE_WORD,"platinum-cwmax",2,-1},
+	{CW_TYPE_BYTE,"platinum-aifs",1,-1},
+	{CW_TYPE_WORD,"platinum-cbr",2,-1},
+	{CW_TYPE_BYTE,"platinum-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"platinum-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"gold-queue-depth",1,-1},
+	{CW_TYPE_WORD,"gold-cwmin",2,-1},
+	{CW_TYPE_WORD,"gold-cwmax",2,-1},
+	{CW_TYPE_BYTE,"gold-aifs",1,-1},
+	{CW_TYPE_WORD,"gold-cbr",2,-1},
+	{CW_TYPE_BYTE,"gold-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"gold-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"silver-queue-depth",1,-1},
+	{CW_TYPE_WORD,"silver-cwmin",2,-1},
+	{CW_TYPE_WORD,"silver-cwmax",2,-1},
+	{CW_TYPE_BYTE,"silver-aifs",1,-1},
+	{CW_TYPE_WORD,"silver-cbr",2,-1},
+	{CW_TYPE_BYTE,"silver-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"silver-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"bronze-queue-depth",1,-1},
+	{CW_TYPE_WORD,"bronze-cwmin",2,-1},
+	{CW_TYPE_WORD,"bronze-cwmax",2,-1},
+	{CW_TYPE_BYTE,"bronze-aifs",1,-1},
+	{CW_TYPE_WORD,"bronze-cbr",2,-1},
+	{CW_TYPE_BYTE,"bronze-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"bronze-dscp-tag",1,-1},
+
 	{NULL,NULL,0,0}
 };
 
@@ -484,7 +548,7 @@ static struct cw_ElemHandler handlers[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		8,8,					/* min/max length */
 		cisco_multi_domain_cabability,			/* type */
-		"cisco-multi-domain-capability",	/* Key */
+		"cisco/multi-domain-capability",	/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		NULL					/* put */
 	}
@@ -645,6 +709,60 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"MWAR Hash Value",			/* name */
+		CISCO_LWELEM_MWAR_HASH_VALUE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,64,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/mwar-hash-value",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"Mac Operation",			/* name */
+		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		16,16,					/* min/max length */
+		cisco_mac_operation,			/* type */
+		"cisco/mac-operation",			/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	},
+
+	{ 
+		"Tx Power",				/* name */
+		CISCO_ELEM_TX_POWER,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		4,4,					/* min/max length */
+		cisco_tx_power,				/* type */
+		"cisco/tx-power",			/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	},
+
+	{ 
+		"AP Quality of Service",		/* name */
+		CISCO_ELEM_AP_QOS,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		52,52,					/* min/max length */
+		cisco_ap_qos,				/* type */
+		"cisco/ap-qos",				/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	},
+
+	{ 
+		"Air Space Capability",			/* name */
+		CISCO_ELEM_AIRSPACE_CAPABILITY,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		2,2,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/air-space-capability",		/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic				/* put */
+	},
 
 
 	{0,0,0,0,0,0,0,0}
@@ -738,12 +856,21 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 
 static int configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef configuration_status_response_elements[] ={
+	{0,0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1,0},
+	{0,0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	1,0},
+	
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_QOS,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AIRSPACE_CAPABILITY,		0, 0},
+	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,	1, 0},
 	
 	{0,0,0,0}
 };

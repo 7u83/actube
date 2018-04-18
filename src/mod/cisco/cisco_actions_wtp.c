@@ -247,7 +247,7 @@ static cw_action_in_t actions_in[] = {
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.vendor_id = LW_VENDOR_ID_CISCO,
-		.elem_id = LW_CISCO_MWAR_HASH_VALUE,
+		.elem_id = CISCO_LWELEM_MWAR_HASH_VALUE,
 		.item_id = CIPWAP_ITEM_AC_HASH_VALUE,
 		.start = cw_in_generic, //cisco_in_telnet_ssh
 	}
@@ -405,7 +405,7 @@ static cw_action_out_t actions_out[]={
 	/* Radio Operational State  - OUT */
 	{
 		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
-		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 	 	.out = cisco_out_radio_operational_state,
 		.mand = 1
@@ -426,7 +426,7 @@ static cw_action_in_t actions80211_in[] = {
 	{
 		.capwap_state = CW_STATE_CONFIGURE, 
 		.msg_id= CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
-		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 //		.start = cw_in_radio_generic, //operational_state,
 		.start = cisco_in_radio_operational_state, //operational_state,
@@ -440,7 +440,7 @@ static cw_action_in_t actions80211_in[] = {
 	{
 		.capwap_state = CW_STATE_RUN, 
 		.msg_id= CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,
-		.elem_id = CW_ELEM_RADIO_OPERATIONAL_STATE,
+		.elem_id = CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
 //		.start = cw_in_radio_generic, //operational_state,
 		.start = cisco_in_radio_operational_state, //operational_state,

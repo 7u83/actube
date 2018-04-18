@@ -46,6 +46,14 @@ static cw_KTVStruct_t capwap_timers[] = {
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t radio_operational_state[] = {
+	
+	{CW_TYPE_BYTE, "state", 1,-1},
+	{CW_TYPE_BYTE, "cause", 1,-1},
+	{NULL,NULL,0,0}
+};
+
+
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
@@ -316,7 +324,52 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic_struct				/* put */
 	}
 	,
+	{
+		"Decryption Error Report Period",		/* name */
+		CAPWAP_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,	/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		3, 3,						/* min/max length */
+		CW_TYPE_WORD,					/* type */
+		"decryption-error-report-period",		/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic				/* put */
+	}
+	,
 
+	{
+		"Idle Timeout",					/* name */
+		CAPWAP_ELEM_IDLE_TIMEOUT,			/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		4, 4,						/* min/max length */
+		CW_TYPE_DWORD,					/* type */
+		"idle-timeout",					/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic					/* put */
+	}
+	,
+
+	{
+		"WTP Fallback",					/* name */
+		CAPWAP_ELEM_WTP_FALLBACK,			/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		1, 1,						/* min/max length */
+		CW_TYPE_BYTE,					/* type */
+		"wtp-fallback",					/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic					/* put */
+	}
+	,
+	{
+		"Radio Operational State",			/* name */
+		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		3, 3,						/* min/max length */
+		radio_operational_state,			/* type */
+		"operational-state",				/* Key */
+		cw_in_radio_generic_struct,			/* get */
+		cw_out_radio_generic_struct			/* put */
+	}
+	,
 
 
 	{0,0,0,0,0,0,0,0}
@@ -399,10 +452,12 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 
 static int configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef configuration_status_response_elements[] ={
-	{0,0,CAPWAP_ELEM_CAPWAP_TIMERS,			1, 0},
-	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
+	{0,0,CAPWAP_ELEM_CAPWAP_TIMERS,				1, 0},
+	{0,0,CAPWAP_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,	1, 0},
+	{0,0,CAPWAP_ELEM_IDLE_TIMEOUT,				1, 0},
+	{0,0,CAPWAP_ELEM_WTP_FALLBACK,				1, 0},
 	
-	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,		0, CW_IGNORE},
 	{0,0,0,0,0}
 };
 
