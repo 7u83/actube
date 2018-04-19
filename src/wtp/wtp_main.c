@@ -142,6 +142,10 @@ int main (int argc, char **argv)
 
 	
 	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
+	
+	
+	/*clean_cfg(global_cfg);*/
+	
 
 	/* create a connection object */
 	conn = conn_create_noq(-1, NULL);
@@ -216,11 +220,16 @@ exit(0);
 		}
 	}
 */
+	mavl_del_all(conn->remote_cfg);
 	join(conn,&dis);
+	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
-	
+	mavl_del_all(conn->remote_cfg);
 	configure(conn);
+	clean_cfg(conn->remote_cfg);
+	mavl_merge(conn->local_cfg,conn->remote_cfg);
+	
 	run(conn);
 	
 	cw_discovery_free_results(&dis);

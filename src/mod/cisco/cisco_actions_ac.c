@@ -308,6 +308,61 @@ static cw_KTVStruct_t cisco_ap_core_dump[]={
 };
 
 
+int cisco_in_with_index(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len)
+{
+	char key[CW_KTV_MAX_KEY_LEN];
+	int idx;
+	
+	idx = cw_get_byte(data);
+	sprintf(key,"%s.%d",eh->key,idx);
+	cw_ktv_add(params->conn->remote_cfg,key,eh->type,data+1,len-1);
+	return 1;
+
+}
+
+
+int cisco_out_with_index(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst)
+
+{
+	char key[CW_KTV_MAX_KEY_LEN];
+	int idx;
+	cw_KTV_t * result, search;
+	int len,start;
+	uint8_t * ob;
+
+
+	idx = 0;
+	ob = dst;
+
+	do {
+		sprintf(key,"%s.%d",eh->key,idx);
+		search.key=key;
+		result = mavl_get_first(params->conn->local_cfg,&search);
+		if (result==NULL)
+			break;
+		if (strncmp(result->key,key,strlen(key))!=0)
+			break;
+	
+		start = params->conn->header_len(eh);
+		len = cw_put_byte(ob+start,idx);
+		
+		len += result->type->put(result,ob+start+len);
+
+		ob += params->conn->write_header(eh,ob,len);
+		
+		idx++;
+		
+	}while(1);
+
+	return ob-dst;
+}
+
+
+
+
 
 static struct cw_ElemHandler handlers[] = {
 	
@@ -349,7 +404,7 @@ static struct cw_ElemHandler handlers[] = {
 	,
 	{
 		"RAD Name -> CAPWAP WTP Name",	/* name */
-		CW_CISCO_RAD_NAME,		/* Element ID */
+		CISCO_ELEM_RAD_NAME,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		1,512,				/* min/max length */
 		CW_TYPE_BSTR16,			/* type */
@@ -794,6 +849,53 @@ static struct cw_ElemHandler handlers[] = {
 		cw_in_generic_struct,			/* get */
 		cw_out_generic_struct			/* put */
 	},
+	
+	{ 
+		"Statitsics Timer",			/* name */
+		CISCO_ELEM_STATISTICS_TIMER,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		2,2,					/* min/max length */
+		CW_TYPE_WORD,				/* type */
+		"statistics-timer",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+	
+	{ 
+		"AC Name with Index",			/* name */
+		CISCO_ELEM_AC_NAME_WITH_INDEX,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,513,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/ac-name-with-index",		/* Key */
+		cisco_in_with_index,			/* get */
+		cisco_out_with_index			/* put */
+	}
+	,
+	
+	{ 
+		"AC IP Address with Index",		/* name */
+		CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		5,5,					/* min/max length */
+		CW_TYPE_IPADDRESS,			/* type */
+		"cisco/ac-ip-addr-with-index",		/* Key */
+		cisco_in_with_index,			/* get */
+		cisco_out_with_index			/* put */
+	}
+	,
+	{ 
+		"AP Failover Priority",			/* name */
+		CISCO_LWELEM_AP_FAILOVER_PRIORITY,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/ap-failover-priority",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
 
 	{0,0,0,0,0,0,0,0}
 
@@ -804,7 +906,7 @@ static int discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
 static struct cw_ElemDef discovery_request_elements[] ={
 /*	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},*/
 	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},
-	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_RAD_NAME,		1, 0},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_RAD_NAME,		1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	0, 0},
 	{0,0,0,00}
 	
@@ -873,12 +975,16 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
+	
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	1, 0},
 	
 	{0,0,0,00}
 	
@@ -927,13 +1033,18 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_LOCATION_DATA,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RAD_NAME,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_STATISTICS_TIMER,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	0, 0},
 	
 	{0,0,0,00}
 	

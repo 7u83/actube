@@ -172,7 +172,8 @@ char * cw_ktv_get_str(mavl_t ktv,const char *key, char * def);
 
 int cw_ktv_idx_get(mavl_t ktv, const char *key);
 cw_KTV_t * cw_ktv_base_exists(mavl_t ktvstore, const char *basekey);
-		
+int cw_ktv_save(mavl_t ktvstore, const char * filename);
+	
 extern const cw_Type_t * cw_ktv_std_types[];
 #define CW_KTV_STD_TYPES cw_ktv_std_types
 

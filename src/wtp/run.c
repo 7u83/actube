@@ -116,7 +116,23 @@ static void do_update(struct conn * conn)
 
 }
 
+void clean_cfg(mavl_t cfg)
+{
+	char key[CW_KTV_MAX_KEY_LEN];
+	cw_KTV_t search;
+	int i;
+	int max;
+	max = cw_ktv_idx_get(cfg,"radio");
+	for (i=0;i<max+1;i++){
+		sprintf(key,"radio.%d/wtp-radio-information",i);
+		search.key = key;
+		mavl_del(cfg,&search);
+	}
+	
+	
 
+	
+}
 
 
 int run(struct conn * conn)
@@ -147,9 +163,14 @@ int run(struct conn * conn)
 				continue;
 			}
 
+
+			
 			if ( !cw_result_is_ok(rc))
 				break;
-
+			clean_cfg(conn->remote_cfg);
+			mavl_merge(conn->local_cfg,conn->remote_cfg);
+			cw_ktv_save(conn->local_cfg,"cisco.ktv");
+			
 
 			/*cw_dbg(DBG_X,"We hav a message processed");*/
 

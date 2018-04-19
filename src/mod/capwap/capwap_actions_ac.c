@@ -473,6 +473,12 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0,0,0,0,0}
 };
 
+static int configuration_update_response_states[] = {CAPWAP_STATE_RUN,0};
+static struct cw_ElemDef configuration_update_response_elements[] ={
+	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
+
+	{0,0,0,0,0}
+};
 
 
 static int echo_request_states[] = {CAPWAP_STATE_RUN,0};
@@ -546,6 +552,13 @@ static struct cw_MsgDef messages[] = {
 		configuration_update_request_elements		/* msg elements */
 	},
 
+	{
+		"Configuration Update Reponse",			/* name */
+		CAPWAP_MSG_CONFIGURATION_UPDATE_RESPONSE,	/* msg type */
+		CW_ROLE_WTP,					/* role */
+		configuration_update_response_states,		/* allowed states */
+		configuration_update_response_elements		/* msg elements */
+	},
 
 
 	{
