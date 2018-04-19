@@ -46,7 +46,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 	int len,l;
 	
 	cw_dbg(DBG_INFO, "Number of elements in ktv: %d",conn->local_cfg->count);
-	cw_dbg_ktv_dump(conn->local_cfg,DBG_CFG_DMP,"Local CFG","LOCAL:","End Local CFG");
+/*	cw_dbg_ktv_dump(conn->local_cfg,DBG_CFG_DMP,"Local CFG","LOCAL:","End Local CFG");*/
 
 	/* rawout is already initialized, so we can get 
 	 * msg type from buffer */

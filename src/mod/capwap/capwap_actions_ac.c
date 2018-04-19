@@ -464,10 +464,10 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 
 static int configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef configuration_update_request_elements[] ={
-	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
-	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
-	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_REBOOT_STATISTICS,		1, 0},
+
+	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
+	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		0, 0},
+
 	
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
@@ -477,18 +477,12 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 
 static int echo_request_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef echo_request_elements[] ={
-	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
-	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
-	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		1, 0},
-	{0,0,CAPWAP_ELEM_WTP_REBOOT_STATISTICS,		1, 0},
-	
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
 
 static int echo_response_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef echo_response_elements[] ={
-
 	{0,0,0,0,0}
 };
 

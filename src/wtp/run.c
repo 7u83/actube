@@ -90,6 +90,13 @@ static void update_radios(struct conn * conn, mbag_t result)
 static void do_update(struct conn * conn)
 {
 	int rc;
+
+	cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:", "DUMP done -------");
+
+
+
+
+
 	if (!update)
 		return;
 	update=0;
@@ -117,7 +124,7 @@ int run(struct conn * conn)
 
 
 
-	conn->capwap_state = CW_STATE_RUN;
+	conn->capwap_state = CAPWAP_STATE_RUN;
 
 /*	conn->msg_end=handle_update_req;*/
 
@@ -133,7 +140,8 @@ int run(struct conn * conn)
 		
 
 
-		while (!cw_timer_timeout(timer) && conn->capwap_state == CW_STATE_RUN) {
+		while (!cw_timer_timeout(timer) && conn->capwap_state == CAPWAP_STATE_RUN) {
+			mavl_del_all(conn->remote_cfg);
 			rc = cw_read_messages(conn);
 			if (rc < 0 && errno == EAGAIN) {
 				continue;
@@ -167,7 +175,7 @@ int run(struct conn * conn)
 
 
 
-	} while (conn->capwap_state == CW_STATE_RUN);
+	} while (conn->capwap_state == CAPWAP_STATE_RUN);
 
 
 /*

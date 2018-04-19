@@ -419,7 +419,7 @@ static void * wtpman_run(void *arg)
 
 
 
-	conn->capwap_state = CW_STATE_RUN;
+	conn->capwap_state = CAPWAP_STATE_RUN;
 /*
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
@@ -432,7 +432,7 @@ static void * wtpman_run(void *arg)
 	reset_echointerval_timer(wtpman);
 
 	rc = 0;
-	while (wtpman->conn->capwap_state == CW_STATE_RUN) {
+	while (wtpman->conn->capwap_state == CAPWAP_STATE_RUN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)

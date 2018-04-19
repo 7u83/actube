@@ -300,6 +300,15 @@ static cw_KTVStruct_t cisco_ap_qos[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t cisco_ap_core_dump[]={
+	{CW_TYPE_IPADDRESS,"tftp-server",4,-1},
+	{CW_TYPE_BOOL,"enable",1,16},
+	{CW_TYPE_STR,"filename",100,17},
+	{NULL,NULL,0,0}
+};
+
+
+
 static struct cw_ElemHandler handlers[] = {
 	
 	{ 
@@ -764,6 +773,27 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_radio_generic				/* put */
 	},
 
+	{ 
+		"Location Data",			/* name */
+		CISCO_ELEM_LOCATION_DATA,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		0,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"location-data",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"AP Core Dump",			/* name */
+		CISCO_ELEM_AP_CORE_DUMP,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		0,1024,					/* min/max length */
+		cisco_ap_core_dump,				/* type */
+		"cisco/ap-core-dump",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	},
 
 	{0,0,0,0,0,0,0,0}
 
@@ -825,7 +855,7 @@ static struct cw_ElemDef join_response_elements[] ={
 
 static int configuration_status_request_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef configuration_status_request_elements[] ={
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
@@ -859,7 +889,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0,0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1,0},
 	{0,0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	1,0},
 	
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
@@ -874,6 +904,42 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	
 	{0,0,0,0}
 };
+
+
+static int configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};
+static struct cw_ElemDef configuration_update_request_elements[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_BOARD_DATA,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_FLASH_CONFIG,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_PRE_STD_SWITCH_CONFIG,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_POWER_INJECTOR_CONFIG,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODE_AND_TYPE,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_STATIC_IP_ADDR,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MIN_IOS_VERSION,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_REGULATORY_DOMAIN,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_LOCATION_DATA,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
+
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	0, 0},
+	
+	{0,0,0,00}
+	
+};
+
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -926,6 +992,17 @@ static struct cw_MsgDef messages[] = {
 		configuration_status_response_elements,
 		NULL					/* postprocess */
 	},
+
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,	/* type */
+		CW_ROLE_WTP,
+		configuration_update_request_states,
+		configuration_update_request_elements,
+		NULL					/* postprocess */
+	},
+
+
 
 
 	{0,0,0,0}

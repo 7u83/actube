@@ -425,9 +425,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	mavl_destroy(mand_found);
 	
-	cw_dbg_ktv_dump(conn->remote_cfg,DBG_CFG_DMP,
+/*	cw_dbg_ktv_dump(conn->remote_cfg,DBG_CFG_DMP,
 		" *** Remote CFG dump ***", "CFG:", " *** End of remote CFG dump");
-
+*/
 
 
 	if (message->postprocess){
