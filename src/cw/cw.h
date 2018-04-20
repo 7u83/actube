@@ -390,6 +390,13 @@ int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * de
  
 int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
+		
+int cw_in_generic_with_index(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len);
+int cw_out_generic_with_index(struct cw_ElemHandler * eh, 
+		struct cw_ElemHandlerParams * params, uint8_t * dst);
+		
 int cw_in_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len);
 

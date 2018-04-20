@@ -10,7 +10,10 @@ ac-descriptor/software/version :Bstr16: .x07036500
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
 ac-name :Bstr16: CiscoAC73
-ac-name-with-priority/TubesAC :Byte: 3
+ac-name-with-index.0 :Bstr16: CiscoAC73
+ac-name-with-index.1 :Bstr16: nudelnudel
+ac-name-with-index.2 :Bstr16: nadelnalde
+ac-name-with-priority/X1 :Byte: 3
 ac-name-with-priority/ac2 :Byte: 5
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.173
 capwap-control-ip-address/address.1 :IPAddress: d96c:4c0a:da6c:4c0a:db6c:4c0a:dc6c:4c0a
@@ -25,10 +28,7 @@ capwap-timers/min-discovery-interval :Byte: 0
 cisco/ac-ip-addr-with-index.0 :IPAddress: 0.0.0.0
 cisco/ac-ip-addr-with-index.1 :IPAddress: 9.9.9.9
 cisco/ac-ip-addr-with-index.2 :IPAddress: 8.8.8.8
-cisco/ac-name-with-index.0 :Bstr16: CiscoAC73
-cisco/ac-name-with-index.1 :Bstr16: nudelnudel
-cisco/ac-name-with-index.2 :Bstr16: nadelnalde
-cisco/ap-failover-priority :Byte: 4
+cisco/ap-failover-priority :Byte: 2
 cisco/ap-group-name :Bstr16: default-group
 cisco/ap-led-state-config/led-state :Byte: 1
 cisco/ap-led-state-config/save-flag :Byte: 1
@@ -43,9 +43,14 @@ cisco/ap-regulatory-domain.1/set :Bool: true
 cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1524133283
+cisco/ap-timesync/timestamp :Dword: 1524181577
 cisco/ap-timesync/type :Byte: 0
 cisco/board-data-options :Dword: 16777217
+cisco/loghost-config/last-joined-ap :Str: 
+cisco/loghost-config/loghost.0 :IPAddress: 7.7.1.3
+cisco/loghost-config/loghost.1 :IPAddress: 0.0.0.0
+cisco/loghost-config/loghost.2 :IPAddress: 0.0.0.0
+cisco/loghost-config/loghost.3 :IPAddress: 0.0.0.0
 cisco/lw_path_mtu/len :Word: 1095
 cisco/lw_path_mtu/max :Word: 1485
 cisco/mwar-addr/address :IPAddress: 192.168.0.180
@@ -59,6 +64,7 @@ cisco/ssl-keyfile :Str: ../../ssl/certs/wtpc.key
 discovery-type :Byte: 0
 idle-timeout :Dword: 300
 location-data :Bstr16: "superposition\"tobias"
+lwapp20 :Bstr16: .x000001
 maximum-message-length :Word: 4096
 radio.0/admin-state :Byte: 1
 radio.0/cisco-multi-domain-capability/first-channel :Word: 1

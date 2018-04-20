@@ -38,7 +38,7 @@ result-code :Dword: 0
 
 
 
-ac-name:Bstr16:"CiscoAC73"
+ac-name:Bstr16:"X1"
 
 #capwap-control-ip-address/address.0:IPAddress:1192.168.0.14
 capwap-control-ip-address/address.0:IPAddress:192.168.0.14

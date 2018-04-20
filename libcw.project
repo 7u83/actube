@@ -290,6 +290,8 @@
       <File Name="src/cw/cw_out_radio_generic_struct.c"/>
       <File Name="src/cw/cw_ktv_base_exists.c"/>
       <File Name="src/cw/cw_ktv_save.c"/>
+      <File Name="src/cw/cw_in_generic_with_index.c"/>
+      <File Name="src/cw/cw_out_generic_with_index.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

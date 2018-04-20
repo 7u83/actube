@@ -198,14 +198,14 @@
 #define CAPWAP_ELEM_AC_IPV4_LIST			2	/**< AC IP V4 List */
 #define CAPWAP_ELEM_AC_IPV6_LIST			3	/**< AC IP V6 List */
 #define CAPWAP_ELEM_AC_NAME				4	/**< AC Name */
-#define CW_ELEM_AC_NAME_WITH_PRIORITY			5
+#define CAPWAP_ELEM_AC_NAME_WITH_PRIORITY		5	/**< AC Name with Priority */
 
 /** 
  * In CAPWAP RFC draft 7 the message element 5 was named
  * AC Name With Index. So we define it here with this name
  * to be compatible. 
  * @see CW_ELEM_AC_NAME_WITH_PRIORITY */
-#define CW_ELEM_AC_NAME_WITH_INDEX			CW_ELEM_AC_NAME_WITH_PRIORITY
+#define CW_ELEM_AC_NAME_WITH_INDEX			CAPWAP_ELEM_AC_NAME_WITH_PRIORITY
 
 #define CAPWAP_ELEM_AC_TIMESTAMP			6
 /**@{

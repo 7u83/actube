@@ -58,6 +58,7 @@ CWSRC=\
 	cw_in_check_join_req.c\
 	cw_in_check_join_resp.c\
 	cw_in_generic.c\
+	cw_in_generic_with_index.c\
 	cw_in_generic_struct.c\
 	cw_in_radio_generic_struct.c\
 	cw_in_idx_generic.c\
@@ -71,6 +72,7 @@ CWSRC=\
 	cw_is_printable.c\
 	cw_load_file.c\
 	cw_out_generic.c\
+	cw_out_generic_with_index.c\
 	cw_out_radio_administrative_states.c\
 	cw_process_element.c\
 	cw_put_elem_radio_administrative_state.c\

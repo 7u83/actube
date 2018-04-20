@@ -371,7 +371,17 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
-
+	{ 
+		"AC Name with Priority",		/* name */
+		CAPWAP_ELEM_AC_NAME_WITH_PRIORITY,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,513,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"ac-name-with-index",			/* Key */
+		cw_in_generic_with_index,		/* get */
+		cw_out_generic_with_index		/* put */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -446,6 +456,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_REBOOT_STATISTICS,		1, 0},
 	
+	{0,0,CAPWAP_ELEM_AC_NAME_WITH_PRIORITY,		0, 0},
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
@@ -473,8 +484,40 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0,0,0,0,0}
 };
 
+
+
+
 static int configuration_update_response_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef configuration_update_response_elements[] ={
+	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
+
+	{0,0,0,0,0}
+};
+
+static int change_state_event_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef change_state_event_request_elements[] ={
+
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,0,0,0}
+};
+
+static int change_state_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef change_state_event_response_elements[] ={
+	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
+
+	{0,0,0,0,0}
+};
+
+
+static int wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef wtp_event_request_elements[] ={
+
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
+	{0,0,0,0,0}
+};
+
+static int wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef wtp_event_response_elements[] ={
 	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
 
 	{0,0,0,0,0}
@@ -558,6 +601,38 @@ static struct cw_MsgDef messages[] = {
 		CW_ROLE_WTP,					/* role */
 		configuration_update_response_states,		/* allowed states */
 		configuration_update_response_elements		/* msg elements */
+	},
+
+	{
+		"Change State Event Request",			/* name */
+		CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,		/* msg type */
+		CW_ROLE_AC,					/* role */
+		change_state_event_request_states,		/* allowed states */
+		change_state_event_request_elements		/* msg elements */
+	},
+
+	{
+		"Change State Event Reponse",			/* name */
+		CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE,		/* msg type */
+		CW_ROLE_WTP,					/* role */
+		change_state_event_response_states,		/* allowed states */
+		change_state_event_response_elements		/* msg elements */
+	},
+
+	{
+		"WTP Event Request",			/* name */
+		CAPWAP_MSG_WTP_EVENT_REQUEST,		/* msg type */
+		CW_ROLE_AC,					/* role */
+		wtp_event_request_states,		/* allowed states */
+		wtp_event_request_elements		/* msg elements */
+	},
+
+	{
+		"WTP Event Reponse",			/* name */
+		CAPWAP_MSG_WTP_EVENT_RESPONSE,		/* msg type */
+		CW_ROLE_WTP,					/* role */
+		wtp_event_response_states,		/* allowed states */
+		wtp_event_response_elements		/* msg elements */
 	},
 
 

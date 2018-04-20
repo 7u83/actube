@@ -319,7 +319,6 @@ int cisco_in_with_index(struct cw_ElemHandler *eh,
 	sprintf(key,"%s.%d",eh->key,idx);
 	cw_ktv_add(params->conn->remote_cfg,key,eh->type,data+1,len-1);
 	return 1;
-
 }
 
 
@@ -868,9 +867,9 @@ static struct cw_ElemHandler handlers[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		1,513,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"cisco/ac-name-with-index",		/* Key */
-		cisco_in_with_index,			/* get */
-		cisco_out_with_index			/* put */
+		"ac-name-with-index",			/* Key */
+		cw_in_generic_with_index,		/* get */
+		cw_out_generic_with_index		/* put */
 	}
 	,
 	
@@ -881,8 +880,8 @@ static struct cw_ElemHandler handlers[] = {
 		5,5,					/* min/max length */
 		CW_TYPE_IPADDRESS,			/* type */
 		"cisco/ac-ip-addr-with-index",		/* Key */
-		cisco_in_with_index,			/* get */
-		cisco_out_with_index			/* put */
+		cw_in_generic_with_index,		/* get */
+		cw_out_generic_with_index		/* put */
 	}
 	,
 	{ 
@@ -896,6 +895,20 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic				/* put */
 	}
 	,
+
+	{ 
+		"LWAPP 20",				/* name */
+		CISCO_LWELEM_20,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,11,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"lwapp20",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+
 
 	{0,0,0,0,0,0,0,0}
 
@@ -958,7 +971,8 @@ static struct cw_ElemDef join_response_elements[] ={
 static int configuration_status_request_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
-	
+
+
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
@@ -975,7 +989,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, CW_IGNORE},
 	
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
@@ -985,7 +999,8 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	1, 0},
-	
+
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_20,	1, 0},
 	{0,0,0,00}
 	
 };
@@ -1050,7 +1065,19 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	
 };
 
+static int wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef wtp_event_request_elements[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
+	{0,0,0,0,0}
+};
+
+static int wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+static struct cw_ElemDef wtp_event_response_elements[] ={
+/*	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},*/
+
+	{0,0,0,0,0}
+};
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -1114,6 +1141,21 @@ static struct cw_MsgDef messages[] = {
 	},
 
 
+	{
+		NULL,					/* name */
+		CAPWAP_MSG_WTP_EVENT_REQUEST,		/* msg type */
+		CW_ROLE_AC,					/* role */
+		wtp_event_request_states,		/* allowed states */
+		wtp_event_request_elements		/* msg elements */
+	},
+
+	{
+		NULL,					/* name */
+		CAPWAP_MSG_WTP_EVENT_RESPONSE,		/* msg type */
+		CW_ROLE_WTP,					/* role */
+		wtp_event_response_states,		/* allowed states */
+		wtp_event_response_elements		/* msg elements */
+	},
 
 
 	{0,0,0,0}
