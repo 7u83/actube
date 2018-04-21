@@ -332,6 +332,20 @@ static cw_KTVStruct_t cisco_vlan[]={
 	{CW_TYPE_WORD,"id",2,-1},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_rouge_and_mss[]={
+	{CW_TYPE_BOOL,"enable",1,-1},
+	{CW_TYPE_WORD,"tcp-adjust-mss",2,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_rouge_detections[]={
+	{CW_TYPE_BOOL,"rouge-detection",1,-1},
+	{CW_TYPE_BSTR16,"rest",6,-1},
+	{NULL,NULL,0,0}
+};
+
+
 /*
 int cisco_in_with_index(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
@@ -934,6 +948,31 @@ static struct cw_ElemHandler handlers[] = {
 	,
 
 
+	{ 
+		"TCP Adjust MSS",				/* name */
+		CISCO_LWELEM_TCP_ADJUST_MSS,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		3,3,					/* min/max length */
+		cisco_rouge_and_mss,				/* type */
+		"cisco/rouge-and-mss",				/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+
+
+	{ 
+		"Rouge Detection",				/* name */
+		CISCO_LWELEM_ROUGE_DETECTION,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		7,7,					/* min/max length */
+		cisco_rouge_detections,				/* type */
+		"cisco/rouge-detection",				/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+
 
 	{0,0,0,0,0,0,0,0}
 
@@ -1024,7 +1063,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
 
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
 
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_20,	1, 0},
@@ -1079,6 +1120,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_STATISTICS_TIMER,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
+	
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},
@@ -1088,6 +1130,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
+
 	
 	{0,0,0,00}
 	

@@ -192,7 +192,7 @@ exit(0);
 
 
 	cw_discovery_init_results(&dis);
-	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);
+	cw_run_discovery(conn, "255.255.255.255","172.16.66.100", &dis);
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
 
 /*
