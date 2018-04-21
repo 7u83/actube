@@ -93,16 +93,31 @@ static cw_KTVStruct_t cisco_multi_domain_cabability[]={
 };
 
 
+
+
 static cw_KTVStruct_t cisco_wtp_board_data[]={
-	{CW_TYPE_WORD,		"card-id",		2,	-1},
-	{CW_TYPE_WORD,		"card-revision",	2,	-1},
-	{CW_TYPE_DWORD,		"wtp-model-lo",		4,	-1},
-	{CW_TYPE_DWORD,		"wtp-model-hi",		4,	-1},
-	{CW_TYPE_STR,		"wtp-serial-number",	16,	-1},
-	
-	{CW_TYPE_BSTR16,	"ethernet-mac-address",	6,	40},
+	{CW_TYPE_WORD,		"card-id",			2,	-1},
+	{CW_TYPE_WORD,		"card-revision",		2,	-1},
+	{CW_TYPE_DWORD,		"wtp-model-lo",			4,	-1},
+	{CW_TYPE_DWORD,		"wtp-model-hi",			4,	-1},
+	{CW_TYPE_STR,		"wtp-serial-number",		16,	-1},
+	{CW_TYPE_BYTE,		"options/ant-type",		1,	36},
+	{CW_TYPE_BYTE,		"options/flex-connect",		1,	-1},
+	{CW_TYPE_BYTE,		"options/ap-type",		1,	-1},
+	{CW_TYPE_BYTE,		"options/failover-priority",	1,	-1},
+	{CW_TYPE_BSTR16,	"ethernet-mac-address",		6,	40},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_wtp_board_data_options[]={
+	{CW_TYPE_BYTE,		"ant-type",		1,	-1},
+	{CW_TYPE_BYTE,		"flex-connect",		1,	-1},
+	{CW_TYPE_BYTE,		"ap-type",		1,	-1},
+	{CW_TYPE_BYTE,		"failover-priority",	1,	-1},
+
+	{NULL,NULL,0,0}
+};
+
 
 static cw_KTVStruct_t cisco_ap_led_flash_config[]={
 	{CW_TYPE_BYTE,		"flash-enable",		1,	0},
@@ -150,7 +165,12 @@ static cw_KTVStruct_t cisco_mac_operation[]={
 	{NULL,NULL,0,0}
 };
 
-
+static cw_KTVStruct_t cisco_ap_power_injector_config[]={
+	{CW_TYPE_BYTE,"state",1,-1},
+	{CW_TYPE_BYTE,"selection",1,-1},
+	{CW_TYPE_BSTR16,"sitch-mac-address",6,-1},
+	{NULL,NULL,0,0}
+};
 
 
 int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh, 
@@ -307,7 +327,12 @@ static cw_KTVStruct_t cisco_ap_core_dump[]={
 	{NULL,NULL,0,0}
 };
 
-
+static cw_KTVStruct_t cisco_vlan[]={
+	{CW_TYPE_BOOL,"tagging",1,-1},
+	{CW_TYPE_WORD,"id",2,-1},
+	{NULL,NULL,0,0}
+};
+/*
 int cisco_in_with_index(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
@@ -359,7 +384,7 @@ int cisco_out_with_index(struct cw_ElemHandler * eh,
 	return ob-dst;
 }
 
-
+*/
 
 
 
@@ -417,10 +442,10 @@ static struct cw_ElemHandler handlers[] = {
 		CW_CISCO_BOARD_DATA_OPTIONS,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		4,4,				/* min/max length */
-		CW_TYPE_DWORD,			/* type */
-		"cisco/board-data-options",	/* Key */
-		cw_in_generic,			/* handler */
-		cw_out_generic			/* put */
+		cisco_wtp_board_data_options,	/* type */
+		"cisco/wtp-board-data/options",	/* Key */
+		cw_in_generic_struct,		/* handler */
+		cw_out_generic_struct		/* put */
 	}
 	,
 	{
@@ -654,10 +679,10 @@ static struct cw_ElemHandler handlers[] = {
 		CISCO_ELEM_AP_POWER_INJECTOR_CONFIG,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		8,8,					/* min/max length */
-		CW_TYPE_BSTR16,				/* type */
+		cisco_ap_power_injector_config,		/* type */
 		"cisco/ap-power-injector-config",	/* Key */
-		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
 	},
 
 	{ 
@@ -885,26 +910,26 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 	{ 
-		"AP Failover Priority",			/* name */
-		CISCO_LWELEM_AP_FAILOVER_PRIORITY,	/* Element ID */
-		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
-		1,1,					/* min/max length */
-		CW_TYPE_BYTE,				/* type */
-		"cisco/ap-failover-priority",		/* Key */
-		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		"AP Failover Priority",					/* name */
+		CISCO_LWELEM_AP_FAILOVER_PRIORITY,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,			/* Vendor / Proto */
+		1,1,							/* min/max length */
+		CW_TYPE_BYTE,						/* type */
+		"cisco/wtp-board-data/options/failover-priority",	/* Key */
+		cw_in_generic,						/* get */
+		cw_out_generic						/* put */
 	}
 	,
 
 	{ 
-		"LWAPP 20",				/* name */
-		CISCO_LWELEM_20,		/* Element ID */
+		"VLAN",					/* name */
+		CISCO_LWELEM_VLAN,			/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
-		1,11,					/* min/max length */
-		CW_TYPE_BSTR16,				/* type */
-		"lwapp20",				/* Key */
-		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		3,3,					/* min/max length */
+		cisco_vlan,				/* type */
+		"cisco/vlan",				/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
 	}
 	,
 
@@ -998,7 +1023,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_SUBMODE,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
+
+
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_20,	1, 0},
 	{0,0,0,00}
@@ -1022,7 +1049,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AIRSPACE_CAPABILITY,		0, 0},
 	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,	1, 0},
-	
+
 	{0,0,0,0}
 };
 
@@ -1060,6 +1087,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_ETHERNET_PORT_SUBTYPE,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
 	
 	{0,0,0,00}
 	

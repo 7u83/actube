@@ -218,6 +218,7 @@ static int wtpman_join(void *arg, time_t timer)
 				
 			break;
 		}
+cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP","---------end dump --------");
 	}
 
 	if (rc != 0) {
@@ -403,6 +404,8 @@ static void * wtpman_run(void *arg)
 				break;
 		}
 	}
+
+cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP","---------end dump --------");
 
 	if (!cw_result_is_ok(rc)) {
 		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
