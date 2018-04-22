@@ -96,7 +96,7 @@ cisco/wtp-board-data/failover-priority :Bstr16: .x01010003
 cisco/wtp-board-data/options/ant-type :Byte: 1
 cisco/wtp-board-data/options/ap-type :Byte: 0
 cisco/wtp-board-data/options/failover-priority :Byte: 2
-cisco/wtp-board-data/options/flex-connect :Byte: 0
+cisco/wtp-board-data/options/flex-connect :Byte: 1
 cisco/wtp-board-data/wtp-model-hi :Dword: 0
 cisco/wtp-board-data/wtp-model-lo :Dword: 0
 cisco/wtp-board-data/wtp-serial-number :Str: FCZ1406W232
@@ -216,3 +216,8 @@ wtp-reboot-statistics/other-failure-count :Word: 13
 wtp-reboot-statistics/reboot-count :Word: 0
 wtp-reboot-statistics/sw-failure-count :Word: 0
 wtp-reboot-statistics/unknown-failure-count :Word: 0
+
+cisco/ap-mode-and-type/mode :Byte: 0
+cisco/ap-mode-and-type/type :Byte: 15
+
+cisco/ap-model/model :Str: AIR-LAP1142N-E-K9
