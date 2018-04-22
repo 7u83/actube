@@ -63,6 +63,8 @@ CWSRC=\
 	cw_in_radio_generic_struct.c\
 	cw_in_idx_generic.c\
 	cw_in_idx_generic_struct.c\
+	cw_in_generic_indexed_enum.c\
+	cw_out_generic_indexed_enum.c\
 	cw_in_generic_enum.c\
 	cw_out_generic_struct.c\
 	cw_out_idx_generic_struct.c\

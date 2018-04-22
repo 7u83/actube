@@ -59,12 +59,35 @@ static cw_KTVStruct_t cisco_ap_uptime[] = {
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_username_and_password[] = {
+static cw_KTVStruct_t cisco_login[] = {
 	{CW_TYPE_STR,	"username",		33,	-1	},
 	{CW_TYPE_STR,	"password",		121,	-1	},
 	{CW_TYPE_STR,	"enable-password",	121,	33+121	},
+	{CW_TYPE_WORD,	"option",		2,	275	},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_8021xlogin[] = {
+	{CW_TYPE_STR,	"username",		33,	-1	},
+	{CW_TYPE_STR,	"password",		121,	-1	},
+	{CW_TYPE_WORD,	"option",		2,	275	},
+	{NULL,NULL,0,0}
+};
+
+
+static cw_KTVEnum_t cisco_ap_username_and_password_enum[] ={
+	{2,	"802.1x-credentials",	cisco_8021xlogin, cw_in_generic_struct, cw_ktv_write_struct },
+
+	{1,	"login-credentials",	cisco_login, cw_in_generic_struct, cw_ktv_write_struct },
+
+	{0,0,0,0}
+};
+
+
+static cw_KTVIndexed_t cisco_ap_username_and_password = {
+	276,cisco_ap_username_and_password_enum
+};
+
 
 static cw_KTVStruct_t cisco_loghost_config[] = {
 	{CW_TYPE_IPADDRESS,	"loghost",		4,	-1},
@@ -78,10 +101,14 @@ static cw_KTVStruct_t cisco_ap_led_state_config[] = {
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVEnum_t cisco_ap_telnet_ssh[] ={
-	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic },
-	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic },
+static cw_KTVEnum_t cisco_ap_telnet_ssh_enum[] ={
+	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic, NULL },
+	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic, NULL },
 	{0,0,0,0}
+};
+
+static cw_KTVIndexed_t cisco_ap_telnet_ssh = {
+	1,cisco_ap_telnet_ssh_enum
 };
 
 static cw_KTVStruct_t cisco_multi_domain_cabability[]={
@@ -323,7 +350,7 @@ static cw_KTVStruct_t cisco_ap_qos[]={
 static cw_KTVStruct_t cisco_ap_core_dump[]={
 	{CW_TYPE_IPADDRESS,"tftp-server",4,-1},
 	{CW_TYPE_BOOL,"enable",1,16},
-	{CW_TYPE_STR,"filename",100,17},
+	{CW_TYPE_STR,"filename",199,17},
 	{NULL,NULL,0,0}
 };
 
@@ -345,7 +372,14 @@ static cw_KTVStruct_t cisco_rouge_detections[]={
 	{NULL,NULL,0,0}
 };
 
-
+static cw_KTVStruct_t cisco_ap_venue_settings[]={
+	{CW_TYPE_WORD,"group",2,-1},
+	{CW_TYPE_BYTE,"type",1,-1},
+	{CW_TYPE_STR,"language",3,-1},
+	{CW_TYPE_STR,"name",-1,7},
+	{NULL,NULL,0,0}
+	
+};
 /*
 int cisco_in_with_index(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
@@ -594,10 +628,10 @@ static struct cw_ElemHandler handlers[] = {
 		CISCO_LWELEM_AP_USERNAME_PASSWORD,	/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		0,0,					/* min/max length */
-		cisco_ap_username_and_password,		/* type */
+		&cisco_ap_username_and_password,		/* type */
 		"cisco/ap-username-and-password",	/* Key */
-		cw_in_generic_struct,			/* get */
-		cw_out_generic_struct			/* put */
+		cw_in_generic_indexed_enum,		/* get */
+		cw_out_generic_indexed_enum		/* put */
 	}
 	,
 	{ 
@@ -627,10 +661,10 @@ static struct cw_ElemHandler handlers[] = {
 		CISCO_LWELEM_AP_TELNET_SSH,		/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		2,2,					/* min/max length */
-		cisco_ap_telnet_ssh,			/* type */
+		&cisco_ap_telnet_ssh,			/* type */
 		"cisco/ap-telnet-ssh",			/* Key */
-		cw_in_generic_enum,			/* get */
-		NULL					/* put */
+		cw_in_generic_indexed_enum,		/* get */
+		cw_out_generic_indexed_enum		/* put */
 	}
 	,
 	{ 
@@ -960,6 +994,19 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"AP Venue Settings",				/* name */
+		CISCO_ELEM_AP_VENUE_SETTINGS,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,1024,					/* min/max length */
+		cisco_ap_venue_settings,				/* type */
+		"cisco/ap-venue-settings",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+
+
 
 	{ 
 		"Rouge Detection",				/* name */
@@ -972,6 +1019,7 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic_struct			/* put */
 	}
 	,
+
 
 
 	{0,0,0,0,0,0,0,0}
@@ -1054,8 +1102,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 	
-
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		1, 0},
@@ -1120,7 +1169,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_STATISTICS_TIMER,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
-	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},

@@ -98,10 +98,18 @@ typedef struct cw_KTVStruct cw_KTVStruct_t;
 struct cw_KTVEnum{
 	int value;
 	const char * name;
-	const struct cw_Type * type;
-	int (*fun)();
+	const void * type;
+	int (*fun_in)();
+	int (*fun_out)();
 };
 typedef struct cw_KTVEnum cw_KTVEnum_t;
+
+
+struct cw_KTVIndexed{
+	int idxpos;
+	void *type;
+};
+typedef struct cw_KTVIndexed cw_KTVIndexed_t;
 
 int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len);

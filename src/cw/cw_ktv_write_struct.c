@@ -15,7 +15,8 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		if (stru[i].position!=-1){
 			pos=stru[i].position;
 		}
-		memset(dst+pos,0,stru[i].len);
+		if (stru[i].len!=-1)
+			memset(dst+pos,0,stru[i].len);
 		
 		sprintf(key,"%s/%s",pkey,stru[i].key);
 		result = cw_ktv_get(ktv,key,stru[i].type);
@@ -27,8 +28,10 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		else{
 			result->type->put(result,dst+pos);
 		}
-
-		pos+=stru[i].len;
+		if (stru[i].len!=-1)
+			pos+=stru[i].len;
+		else	
+			pos+=result->type->len(result);
 
 	}
 
