@@ -20,7 +20,7 @@ capwap-control-ip-address/address.1 :IPAddress: d96c:4c0a:da6c:4c0a:db6c:4c0a:dc
 capwap-control-ip-address/address.2 :IPAddress: 192.168.0.173
 capwap-control-ip-address/wtps.0 :Word: 1
 capwap-control-ip-address/wtps.1 :Word: 10
-capwap-control-ip-address/wtps.2 :Word: 1
+capwap-control-ip-address/wtps.2 :Word: 2
 capwap-local-ip-address :IPAddress: 172.16.66.50
 capwap-timers/echo-interval :Byte: 30
 capwap-timers/max-discovery-interval :Byte: 10
@@ -36,7 +36,9 @@ cisco/ap-group-name :Bstr16: default-group
 cisco/ap-led-state-config/led-state :Byte: 1
 cisco/ap-led-state-config/save-flag :Byte: 1
 cisco/ap-log-facility :Byte: 0
-cisco/ap-mode-and-type :Word: 0
+cisco/ap-mode-and-type/mode :Byte: 2
+cisco/ap-mode-and-type/type :Byte: 0
+cisco/ap-model/model :Str: AIR-LAP1142N-E-K9
 cisco/ap-power-injector-config/selection :Byte: 0
 cisco/ap-power-injector-config/sitch-mac-address :Bstr16: .x000000000000
 cisco/ap-power-injector-config/state :Byte: 17
@@ -52,7 +54,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1524384616
+cisco/ap-timesync/timestamp :Dword: 1524392152
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -63,7 +65,7 @@ cisco/ap-username-and-password/login-credentials/password :Str: $1$N03U$Y1wEFRdF
 cisco/ap-username-and-password/login-credentials/username :Str: Tobias
 cisco/ap-venue-settings/group :Word: 2
 cisco/ap-venue-settings/language :Str: en
-cisco/ap-venue-settings/name :Str: bumm
+cisco/ap-venue-settings/name :Str: 
 cisco/ap-venue-settings/type :Byte: 1
 cisco/board-data-options :Dword: 16777217
 cisco/loghost-config/last-joined-ap :Str: 
@@ -216,8 +218,3 @@ wtp-reboot-statistics/other-failure-count :Word: 13
 wtp-reboot-statistics/reboot-count :Word: 0
 wtp-reboot-statistics/sw-failure-count :Word: 0
 wtp-reboot-statistics/unknown-failure-count :Word: 0
-
-cisco/ap-mode-and-type/mode :Byte: 0
-cisco/ap-mode-and-type/type :Byte: 15
-
-cisco/ap-model/model :Str: AIR-LAP1142N-E-K9

@@ -497,6 +497,9 @@ static struct cw_ElemDef configuration_update_response_elements[] ={
 static int change_state_event_request_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef change_state_event_request_elements[] ={
 
+	{0,0,CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	1,0},
+	{0,0,CAPWAP_ELEM_RESULT_CODE,			1,0},
+	
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
