@@ -18,7 +18,7 @@ ac-name-with-priority/ac2 :Byte: 5
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.1 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.2 :IPAddress: 192.168.0.173
-capwap-control-ip-address/wtps.0 :Word: 1
+capwap-control-ip-address/wtps.0 :Word: 0
 capwap-control-ip-address/wtps.1 :Word: 2
 capwap-control-ip-address/wtps.2 :Word: 2
 capwap-local-ip-address :IPAddress: 172.16.66.50
@@ -43,28 +43,28 @@ cisco/ap-power-injector-config/selection :Byte: 0
 cisco/ap-power-injector-config/sitch-mac-address :Bstr16: .x000000000000
 cisco/ap-power-injector-config/state :Byte: 17
 cisco/ap-pre-std-switch-config :Byte: 0
-cisco/ap-regulatory-domain.0/code0 :Byte: 0
 cisco/ap-regulatory-domain.0/band-id :Byte: 0
+cisco/ap-regulatory-domain.0/code0 :Byte: 0
 cisco/ap-regulatory-domain.0/code1 :Byte: 1
 cisco/ap-regulatory-domain.0/set :Bool: true
 cisco/ap-regulatory-domain.0/slot :Byte: 0
-cisco/ap-regulatory-domain.1/code0 :Byte: 0
 cisco/ap-regulatory-domain.1/band-id :Byte: 1
+cisco/ap-regulatory-domain.1/code0 :Byte: 0
 cisco/ap-regulatory-domain.1/code1 :Byte: 1
 cisco/ap-regulatory-domain.1/set :Bool: true
 cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1524467346
+cisco/ap-timesync/timestamp :Dword: 1524480600
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
 cisco/ap-username-and-password/802.1x-credentials/username :Str: 
-cisco/ap-username-and-password/login-credentials/enable-password :Str: $1$2Iyi$8m7Disb6SL0kuwPU5.6tN.
-cisco/ap-username-and-password/login-credentials/option :Word: 513
-cisco/ap-username-and-password/login-credentials/password :Str: $1$N03U$Y1wEFRdFpNF/YjQf0e.Vc0
-cisco/ap-username-and-password/login-credentials/username :Str: Tobias
+cisco/ap-username-and-password/login-credentials/enable-password :Str: $1$nPEe$k81RL0xZkiYryiUh.yM2J1
+cisco/ap-username-and-password/login-credentials/option :Word: 1025
+cisco/ap-username-and-password/login-credentials/password :Str: $1$R1hh$.3Jgrg.1DHuxmiQVDNqxB.
+cisco/ap-username-and-password/login-credentials/username :Str: admin
 cisco/ap-venue-settings/group :Word: 2
 cisco/ap-venue-settings/language :Str: en
 cisco/ap-venue-settings/name :Str: 
@@ -82,7 +82,7 @@ cisco/lw_path_mtu/max :Word: 1485
 cisco/mwar-addr/address :IPAddress: 192.168.0.180
 cisco/mwar-addr/mwar-type :Byte: 1
 cisco/mwar-addr/unknown :Word: 0
-cisco/mwar-hash-value :Bstr16: 25f312452fcb0a908007304aa201d175d0516d7a
+cisco/mwar-hash-value :Bstr16: 88ba29f4725fcbc8fd02843186b94692f107ecb0
 cisco/mwar-type :Byte: 1
 cisco/rouge-and-mss/enable :Bool: false
 cisco/rouge-and-mss/mss :Word: 666
@@ -106,6 +106,7 @@ cisco/wtp-board-data/options/flex-connect :Byte: 1
 cisco/wtp-board-data/wtp-model-hi :Dword: 0
 cisco/wtp-board-data/wtp-model-lo :Dword: 0
 cisco/wtp-board-data/wtp-serial-number :Str: FCZ1406W232
+cisco/wtp-use-ac-version :Bool: true
 discovery-type :Byte: 0
 idle-timeout :Dword: 300
 location-data :Bstr16: "superposition\"tobias"
@@ -136,11 +137,12 @@ radio.0/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.0/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.0/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
 radio.0/cisco/wtp-radio-config/country-str1 :Bstr16: .x444500
-radio.0/cisco/wtp-radio-config/country-str2 :Bstr16: DE
+radio.0/cisco/wtp-radio-config/country-str2 :Bstr16: DE 
 radio.0/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.0/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 100
 radio.0/cisco/wtp-radio-config/reg :Dword: 65536
+radio.0/cisco/wtp-radio-config/unknown75 :Byte: 0
 radio.0/decryption-error-report-period :Word: 120
 radio.0/operational-state/cause :Byte: 0
 radio.0/operational-state/state :Byte: 2
@@ -177,17 +179,18 @@ radio.1/cisco/multi-domain-capability/number-of-channels :Word: 4
 radio.1/cisco/multi-domain-capability/reserved :Byte: 1
 radio.1/cisco/tx-power/current-tx-power :Word: 0
 radio.1/cisco/tx-power/reserved :Byte: 1
-radio.1/cisco/wtp-radio-config/beacon-period :Word: 999
+radio.1/cisco/wtp-radio-config/beacon-period :Word: 100
 radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b90
 radio.1/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.1/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
 radio.1/cisco/wtp-radio-config/country-str1 :Bstr16: .x444500
-radio.1/cisco/wtp-radio-config/country-str2 :Bstr16: DE
+radio.1/cisco/wtp-radio-config/country-str2 :Bstr16: DE 
 radio.1/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.1/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.1/cisco/wtp-radio-config/occupancy-limit :Word: 100
 radio.1/cisco/wtp-radio-config/reg :Dword: 65536
+radio.1/cisco/wtp-radio-config/unknown75 :Byte: 1
 radio.1/decryption-error-report-period :Word: 120
 radio.1/operational-state/cause :Byte: 0
 radio.1/operational-state/state :Byte: 2
@@ -237,7 +240,7 @@ wtp-descriptor/hardware/version :Bstr16: .x01000000
 wtp-descriptor/max-radios :Byte: 2
 wtp-descriptor/radios-in-use :Byte: 2
 wtp-descriptor/software/vendor :Dword: 4232704
-wtp-descriptor/software/version :Bstr16: .x06036500
+wtp-descriptor/software/version :Bstr16: .x07056600
 wtp-fallback :Byte: 1
 wtp-frame-tunnel-mode :Byte: 4
 wtp-mac-type :Byte: 1

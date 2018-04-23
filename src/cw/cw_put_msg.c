@@ -61,6 +61,9 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		return CAPWAP_RESULT_MSG_UNRECOGNIZED;
 	}
 
+	if (msg->preprocess){
+		msg->preprocess(conn);
+	}
 
 	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assenmbling message of type %d (%s) ***", 
 			msg->type, msg->name);

@@ -40,19 +40,16 @@ static cw_KTVStruct_t wtp_reboot_statistics[] = {
 };
 
 static cw_KTVStruct_t capwap_timers[] = {
-	
 	{CW_TYPE_BYTE, "max-discovery-interval", 1,-1},
 	{CW_TYPE_BYTE, "echo-interval", 1,-1},
 	{NULL,NULL,0,0}
 };
 
 static cw_KTVStruct_t radio_operational_state[] = {
-	
 	{CW_TYPE_BYTE, "state", 1,-1},
 	{CW_TYPE_BYTE, "cause", 1,-1},
 	{NULL,NULL,0,0}
 };
-
 
 static struct cw_ElemHandler handlers[] = {
 

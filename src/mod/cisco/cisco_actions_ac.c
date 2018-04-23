@@ -31,6 +31,7 @@
 #include "cw/format.h"
 
 static int postprocess_discovery();
+static int preprocess_join_request();
 
 
 
@@ -295,7 +296,7 @@ static cw_KTVStruct_t cisco_ap_model[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_wtp_radio_config[]={
+static cw_KTVStruct_t cisco_wtp_radio_config73[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
@@ -309,6 +310,25 @@ static cw_KTVStruct_t cisco_wtp_radio_config[]={
 	{CW_TYPE_BYTE,"max-stations",1,-1},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_wtp_radio_config75[]={
+	{CW_TYPE_BYTE,"cfg-type",1,-1},
+	{CW_TYPE_WORD,"occupancy-limit",2,-1},
+	{CW_TYPE_BYTE,"cfg-period",1,-1},
+	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
+	{CW_TYPE_BSTR16,"bss-id",6,-1},
+	{CW_TYPE_WORD,"beacon-period",2,-1},
+	{CW_TYPE_BSTR16,"country-str1",3,-1},
+	{CW_TYPE_BSTR16,"country-str2",3,-1},
+	{CW_TYPE_BYTE,"gpr-period",1,-1},
+	{CW_TYPE_DWORD,"reg",4,-1},
+	{CW_TYPE_BYTE,"max-stations",1,-1},
+	{CW_TYPE_BYTE,"unknown75",1,-1},
+	{NULL,NULL,0,0}
+};
+
+
+
 
 static cw_KTVStruct_t cisco_tx_power[]={
 	{CW_TYPE_BYTE,"reserved",1,-1},
@@ -437,7 +457,7 @@ static cw_KTVStruct_t cisco_ssc_hash[]={
 };
 
 
-static struct cw_ElemHandler handlers[] = {
+static struct cw_ElemHandler handlers73[] = {
 	
 	{ 
 		"AC Name -(zero-length allowed)",	/* name */
@@ -839,7 +859,7 @@ static struct cw_ElemHandler handlers[] = {
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		27,27,					/* min/max length */
-		cisco_wtp_radio_config,			/* type */
+		cisco_wtp_radio_config73,			/* type */
 		"cisco/wtp-radio-config",		/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct		/* put */
@@ -1257,6 +1277,7 @@ static struct cw_MsgDef messages[] = {
 		CW_ROLE_AC,			/* role */
 		discovery_request_states,	/* states */
 		discovery_request_elements,	/* elements */
+		NULL,				/* preprocess fun */
 		postprocess_discovery		/* postprocess fun */
 	},
 	{
@@ -1273,6 +1294,7 @@ static struct cw_MsgDef messages[] = {
 		CW_ROLE_AC,
 		join_request_states,
 		join_request_elements,
+		preprocess_join_request,	/* preprocess fun */
 		postprocess_discovery		/* postprocess */
 	},
 	{
@@ -1342,11 +1364,30 @@ static struct cw_MsgDef messages[] = {
 };
 
 
+static struct cw_ElemHandler handlers75[] = {
+	{ 
+		"WTP Radio Configuration  (Version >= 7.5)",/* name */
+		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		28,28,					/* min/max length */
+		cisco_wtp_radio_config75,			/* type */
+		"cisco/wtp-radio-config",		/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	}
+	,
+	{0,0,0,0,0,0,0,0}
+};
+
+static struct cw_MsgDef messages75[] = {
+	{0,0,0,0}
+};
+
 
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
         if (mode != CW_MOD_MODE_CAPWAP)
                 return NULL;
-        cw_msgset_add(set,messages, handlers);
+        cw_msgset_add(set,messages, handlers73);
         return set;
 }
 
@@ -1360,21 +1401,63 @@ static void set_ac_version(struct conn * conn)
 	if (wtpver){
 		
 		cw_format_version(verstr,wtpver->type->data(wtpver),wtpver->type->len(wtpver));
-		
 		cw_dbg(DBG_INFO, "Cisco - Setting AC software version to: %s", verstr);
-		
+	
 		mavl_del(conn->local_cfg,&wtpver);
 		cw_ktv_add(conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16,
 			wtpver->type->data(wtpver),wtpver->type->len(wtpver));
-	}
 
+		if(wtpver->type->len(wtpver)==4){
+			uint32_t rv;
+			rv = cw_get_dword(wtpver->type->data(wtpver));
+			if (rv >= 0x07056600){
+				cw_msgset_add(conn->msgset,messages75, handlers75);
+			}
+		}
+	}
 }
 
 static int postprocess_discovery(struct conn *conn)
 {
-	if (conn->role != CW_ROLE_AC )
+	if (conn->role == CW_ROLE_AC ){
+		set_ac_version(conn);
+		cw_detect_nat(conn);
+	}
+	return 1;
+}
+
+static int preprocess_join_request(struct conn *conn)
+{
+	cw_KTV_t * ver;
+	int use_ac_version;
+	char verstr[512];
+
+	if (conn->role != CW_ROLE_WTP)
 		return 0;
-	set_ac_version(conn);
-	cw_detect_nat(conn);
+		
+	use_ac_version = cw_ktv_get_bool(conn->local_cfg,"cisco/wtp-use-ac-version",0);
+
+	if (use_ac_version){
+		ver = cw_ktv_get(conn->remote_cfg,"ac-descriptor/software/version", CW_TYPE_BSTR16);
+		cw_ktv_replace(conn->local_cfg,"wtp-descriptor/software/version",CW_TYPE_BSTR16,
+			ver->type->data(ver),ver->type->len(ver));
+			
+		cw_format_version(verstr,ver->type->data(ver),ver->type->len(ver));
+		cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
+		
+	}
+	else{
+		ver = cw_ktv_get(conn->local_cfg,"wtp-descriptor/software/version", CW_TYPE_BSTR16);
+		cw_format_version(verstr,ver->type->data(ver),ver->type->len(ver));
+		cw_dbg(DBG_INFO, "Cisco - WTP Using own software version: %s", verstr);
+	}
+	
+	if(ver->type->len(ver)==4){
+		uint32_t rv;
+		rv = cw_get_dword(ver->type->data(ver));
+		if (rv >= 0x07056600){
+			cw_msgset_add(conn->msgset,messages75, handlers75);
+		}
+	}
 	return 1;
 }

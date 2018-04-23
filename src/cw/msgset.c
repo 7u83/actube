@@ -280,6 +280,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->mand_keys=NULL;
 			msg->elements_list = mlist_create(cmp_elemdata,NULL,sizeof(struct cw_ElemData));
 			msg->postprocess=NULL;
+			msg->preprocess=NULL;
 		}
 
 		/* Overwrite the found message */
@@ -289,6 +290,8 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->states = msgdef->states;
 		if (msgdef->postprocess != NULL)
 			msg->postprocess = msgdef->postprocess;
+		if (msgdef->preprocess != NULL)
+			msg->preprocess = msgdef->preprocess;
 			
 		msg->receiver = msgdef->receiver;
 
