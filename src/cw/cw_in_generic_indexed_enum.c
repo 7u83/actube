@@ -45,7 +45,7 @@ int cw_in_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemHa
 		sprintf(key,"%s/%u",handler->key,val);
 	}
 	
-	
+	memset(&thandler,0,sizeof(thandler));
 	thandler.type=e->type;
 	thandler.key=key;
 	return e->fun_in(&thandler,params,elem_data+f,elem_len-l);
