@@ -32,7 +32,7 @@ endif
 
 
 #SRC=$(wildcard *.c)
-SRC=wtp_main.c discovery.c join.c configure.c run.c
+SRC=wtp_main.c discovery.c join.c configure.c run.c changestate.c
 
 OBJS=$(patsubst %.c,%.o,$(SRC))
 OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))

@@ -231,6 +231,10 @@ exit(0);
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
+	
+	changestate(conn);
+	
+	
 	run(conn);
 	
 	cw_discovery_free_results(&dis);

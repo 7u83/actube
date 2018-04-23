@@ -57,9 +57,9 @@ struct cw_ElemHandler {
 		
 	int (*put)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, uint8_t * dst);
 
-/*        
-	int (*end_in)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
-*/
+	int (*mkkey)(const char *pkey, uint8_t*data, int len, char *dst);
+
+
 };
 
 struct cw_MsgDef{

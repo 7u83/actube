@@ -535,6 +535,7 @@ static struct cw_ElemDef echo_request_elements[] ={
 
 static int echo_response_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef echo_response_elements[] ={
+	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
 

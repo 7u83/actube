@@ -237,6 +237,24 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 
 	idx = 0;
 	ob = dst;
+	
+
+	type = NULL;
+	result = cw_ktv_get(params->conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16);
+	if (result!=NULL){
+		if(result->type->len(result)==4){
+			uint32_t rv;
+			rv = cw_get_dword(result->type->data(result));
+			if (rv >= 0x07056600){
+				type = cisco_ap_regulatory_domain5;
+			}
+			else{
+				type = cisco_ap_regulatory_domain4;
+			}
+		}
+		
+	}
+
 
 	do {
 		sprintf(key,"%s.%d",eh->key,idx);
@@ -247,13 +265,15 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		if (strncmp(result->key,key,strlen(key))!=0)
 			break;
 		
-		sprintf(testkey,"%s/%s",key,"band-id");
-		result = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_BYTE);
-		if (result==NULL){
-			type = cisco_ap_regulatory_domain4;
-		}
-		else{
-			type = cisco_ap_regulatory_domain5;
+		if(type == NULL){
+			sprintf(testkey,"%s/%s",key,"band-id");
+			result = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_BYTE);
+			if (result==NULL){
+				type = cisco_ap_regulatory_domain4;
+			}
+			else{
+				type = cisco_ap_regulatory_domain5;
+			}
 		}
 		
 		start = params->conn->header_len(eh);
@@ -266,12 +286,6 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 
 
 	sprintf(key,"%s.%d",eh->key,idx+1);
-/*	if(len==4)
-		type = cisco_ap_regulatory_domain4;
-	if(len==5)
-		type = cisco_ap_regulatory_domain5;
-	cw_ktv_read_struct(params->conn->remote_cfg,type,key,data,len);
-*/
 	return ob-dst;
 }
 
@@ -387,7 +401,40 @@ static cw_KTVStruct_t cisco_ap_mode_and_type[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t cisco_add_wlan[]={
+	{CW_TYPE_BYTE,"radio-id",1,-1},
+	{CW_TYPE_WORD,"wlan-capability",2,-1},
+	{CW_TYPE_BYTE,"wlan-id",1,-1},
+	{CW_TYPE_DWORD,"encryption-policy",4,-1},
 
+	{CW_TYPE_BSTR16,"wep-key",13,9},
+	{CW_TYPE_BYTE,"encryption",1,42},
+	
+	{CW_TYPE_BOOL,"broadcast-ssid",1,426},
+	{CW_TYPE_WORD,"session-timout",2,475},
+	{CW_TYPE_BYTE, "dtim-period",1,541},
+	{CW_TYPE_STR, "ssid-a",30,545},
+	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
+	{CW_TYPE_BYTE, "max-stations",1,580},
+	
+	{NULL,NULL,0,0}
+};
+
+static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
+{
+	int wlan_id,radio_id;
+	
+	radio_id = cw_get_byte(data);
+	wlan_id = cw_get_byte(data+3);
+	sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+	return 1;
+}
+
+static cw_KTVStruct_t cisco_ssc_hash[]={
+	{CW_TYPE_BOOL,"validate",1,-1},
+	{CW_TYPE_BSTR16,"hash",-1,-1},
+	{NULL,NULL,0,0}
+};
 
 
 static struct cw_ElemHandler handlers[] = {
@@ -974,6 +1021,42 @@ static struct cw_ElemHandler handlers[] = {
 	}
 	,
 
+	{ 
+		"Add Cisco WLAN",			/* name */
+		CISCO_ELEM_ADD_WLAN,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		7,1117,					/* min/max length */
+		cisco_add_wlan,				/* type */
+		"radio/wlan",				/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct,			/* put */
+		cisoc_add_wlan_mkkey
+	}
+	,
+
+	{ 
+		"SSC Hash Validation",			/* name */
+		CISCO_LWELEM_SSC_HASH_VALIDATION,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BOOL,				/* type */
+		"cisco/ssh-hash-validation",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	}
+	,
+
+	{ 
+		"SSC Hash",					/* name */
+		CISCO_LWELEM_SSC_HASH,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		1,331,					/* min/max length */
+		cisco_ssc_hash,				/* type */
+		"cisco/hash",				/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	}
+	,
 
 
 	{0,0,0,0,0,0,0,0}
@@ -1125,6 +1208,8 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		0, 0},
@@ -1133,6 +1218,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_FAILOVER_PRIORITY,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH,			0, 0},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
 
@@ -1154,6 +1242,13 @@ static struct cw_ElemDef wtp_event_response_elements[] ={
 
 	{0,0,0,0,0}
 };
+
+static int wtp_echo_response_states[] = {CAPWAP_STATE_RUN,0};
+static struct cw_ElemDef wtp_echo_response_elements[] ={
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
+	{0,0,0,0,0}
+};
+
 
 static struct cw_MsgDef messages[] = {
 	{
@@ -1233,6 +1328,14 @@ static struct cw_MsgDef messages[] = {
 		wtp_event_response_elements		/* msg elements */
 	},
 
+
+	{
+		NULL,					/* name */
+		CAPWAP_MSG_ECHO_RESPONSE,		/* msg type */
+		CW_ROLE_WTP,					/* role */
+		wtp_echo_response_states,		/* allowed states */
+		wtp_echo_response_elements		/* msg elements */
+	},
 
 	{0,0,0,0}
 
