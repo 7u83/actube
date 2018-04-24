@@ -294,6 +294,7 @@
       <File Name="src/cw/cw_out_generic_with_index.c"/>
       <File Name="src/cw/cw_in_generic_indexed_enum.c"/>
       <File Name="src/cw/cw_out_generic_indexed_enum.c"/>
+      <File Name="src/cw/cw_ktv_del_sub.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

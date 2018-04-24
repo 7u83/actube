@@ -16,10 +16,27 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 			pos=stru[i].position;
 		
 		sprintf(key,"%s/%s",pkey,stru[i].key);
-		if (stru[i].len==-1)
-			l = len-pos;
-		else 
-			l = stru[i].len;
+		
+		switch (stru[i].len){
+			case CW_KTVSTRUCT_L8:
+				l = cw_get_byte(data+pos);
+				pos ++;
+				break;
+			case CW_KTVSTRUCT_L16:
+				l = cw_get_word(data+pos);
+				pos ++;
+				break;
+			case -1:
+				l = len-pos;
+				break;
+			default:
+				l = stru[i].len;
+				if (pos+l > l){
+					l = len-pos;
+				}
+			
+		}
+
 		result = cw_ktv_add(ktv,key,stru[i].type,data+pos,l);
 		
 		stru[i].type->to_str(result,dbstr,100);

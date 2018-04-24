@@ -95,6 +95,9 @@ struct cw_KTVStruct {
 
 typedef struct cw_KTVStruct cw_KTVStruct_t;
 
+#define CW_KTVSTRUCT_L16	-2
+#define CW_KTVSTRUCT_L8		-3
+
 struct cw_KTVEnum{
 	int value;
 	const char * name;
@@ -140,6 +143,8 @@ void cw_kvstore_mavl_delete(const void *data);
  */
 cw_KTV_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
 			   const uint8_t * data, int len);
+
+void cw_ktv_del_sub(mavl_t ktvstore, const char *basekey);
 
 cw_KTV_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
 			const uint8_t * data, int len);

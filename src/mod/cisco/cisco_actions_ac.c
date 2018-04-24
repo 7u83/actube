@@ -383,7 +383,7 @@ static cw_KTVStruct_t cisco_ap_qos[]={
 
 static cw_KTVStruct_t cisco_ap_core_dump[]={
 	{CW_TYPE_IPADDRESS,"tftp-server",4,-1},
-	{CW_TYPE_BOOL,"enable",1,16},
+	{CW_TYPE_BOOL,"compression",1,16},
 	{CW_TYPE_STR,"filename",199,17},
 	{NULL,NULL,0,0}
 };
@@ -440,6 +440,24 @@ static cw_KTVStruct_t cisco_add_wlan[]={
 	{NULL,NULL,0,0}
 };
 
+
+static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh, 
+		struct cw_ElemHandlerParams *params, 
+			uint8_t * data,	 int len)
+{
+	int wlan_id, radio_id;
+	char key[CW_KTV_MAX_KEY_LEN];
+	
+	radio_id=cw_get_byte(data);
+	wlan_id=cw_get_word(data+1);
+	sprintf(key,"radio.%d/wlan.%d",radio_id,wlan_id);
+	cw_ktv_del_sub(params->conn->local_cfg,key);
+	cw_dbg(DBG_INFO,"Del WLAN rid=%d, id=%d",wlan_id);
+	return 0;
+}
+
+
+
 static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
 {
 	int wlan_id,radio_id;
@@ -449,6 +467,25 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 	sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
 	return 1;
 }
+
+static cw_KTVStruct_t cisco_add_lwwlan[]={
+	{CW_TYPE_STR, "ssid",-1,10},
+	{NULL,NULL,0,0}
+};
+
+static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
+{
+	int wlan_id,radio_id;
+	
+	radio_id = cw_get_byte(data);
+	wlan_id = cw_get_byte(data+1);
+	sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+	return 1;
+}
+
+
+
+
 
 static cw_KTVStruct_t cisco_ssc_hash[]={
 	{CW_TYPE_BOOL,"validate",1,-1},
@@ -1053,6 +1090,20 @@ static struct cw_ElemHandler handlers73[] = {
 		cisoc_add_wlan_mkkey
 	}
 	,
+	
+	{ 
+		"Add Cisco WLAN (LWAPP)",		/* name */
+		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		7,1117,					/* min/max length */
+		cisco_add_lwwlan,			/* type */
+		"radio/wlan",				/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct,			/* put */
+		cisoc_add_lwwlan_mkkey
+	}
+	,
+
 
 	{ 
 		"SSC Hash Validation",			/* name */
@@ -1075,6 +1126,18 @@ static struct cw_ElemHandler handlers73[] = {
 		"cisco/hash",				/* Key */
 		cw_in_generic_struct,				/* get */
 		cw_out_generic_struct				/* put */
+	}
+	,
+	{ 
+		"Delete WLAN (Cisco LWAPP)",		/* name */
+		CISCO_LWELEM_DELETE_WLAN,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		4,4,					/* min/max length */
+		NULL,					/* type */
+		"cisco-del-wlan",			/* Key */
+		cisco_in_lw_del_wlan,			/* get */
+		NULL,					/* put */
+		NULL
 	}
 	,
 
@@ -1241,6 +1304,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH,			0, 0},
 
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DELETE_WLAN,		0, 0},
+	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
 

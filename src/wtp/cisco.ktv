@@ -18,7 +18,7 @@ ac-name-with-priority/ac2 :Byte: 5
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.1 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.2 :IPAddress: 192.168.0.173
-capwap-control-ip-address/wtps.0 :Word: 0
+capwap-control-ip-address/wtps.0 :Word: 1
 capwap-control-ip-address/wtps.1 :Word: 2
 capwap-control-ip-address/wtps.2 :Word: 2
 capwap-local-ip-address :IPAddress: 172.16.66.50
@@ -29,8 +29,8 @@ cisco/ac-ip-addr-with-index.0 :IPAddress: 1.1.1.1
 cisco/ac-ip-addr-with-index.1 :IPAddress: 9.9.9.9
 cisco/ac-ip-addr-with-index.2 :IPAddress: 3.3.3.3
 cisco/ap-core-dump/enable :Bool: false
-cisco/ap-core-dump/filename :Str: 
-cisco/ap-core-dump/tftp-server :IPAddress: 0.0.0.0
+cisco/ap-core-dump/filename :Str: 7.7.7.7
+cisco/ap-core-dump/tftp-server :IPAddress: 7.7.7.7
 cisco/ap-failover-priority :Byte: 3
 cisco/ap-group-name :Bstr16: default-group
 cisco/ap-led-state-config/led-state :Byte: 1
@@ -56,7 +56,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1524480600
+cisco/ap-timesync/timestamp :Dword: 1524549734
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -97,7 +97,7 @@ cisco/vlan/id :Word: 0
 cisco/vlan/tagging :Bool: false
 cisco/wtp-board-data/card-id :Word: 0
 cisco/wtp-board-data/card-revision :Word: 0
-cisco/wtp-board-data/ethernet-mac-address :Bstr16: .xc47d4f3af8a6
+cisco/wtp-board-data/ethernet-mac-address :Bstr16: .xe47d4f3af8a6
 cisco/wtp-board-data/failover-priority :Bstr16: .x01010003
 cisco/wtp-board-data/options/ant-type :Byte: 1
 cisco/wtp-board-data/options/ap-type :Byte: 0
@@ -132,12 +132,12 @@ radio.0/cisco/multi-domain-capability/reserved :Byte: 1
 radio.0/cisco/tx-power/current-tx-power :Word: 0
 radio.0/cisco/tx-power/reserved :Byte: 1
 radio.0/cisco/wtp-radio-config/beacon-period :Word: 100
-radio.0/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b90
+radio.0/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b9000644445004445200a00010000c800
 radio.0/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.0/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.0/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
-radio.0/cisco/wtp-radio-config/country-str1 :Bstr16: .x444500
-radio.0/cisco/wtp-radio-config/country-str2 :Bstr16: DE 
+radio.0/cisco/wtp-radio-config/country-str1 :Bstr16: .x4445004445200a00010000c800
+radio.0/cisco/wtp-radio-config/country-str2 :Bstr16: .x4445200a00010000c800
 radio.0/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.0/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 100
@@ -180,12 +180,12 @@ radio.1/cisco/multi-domain-capability/reserved :Byte: 1
 radio.1/cisco/tx-power/current-tx-power :Word: 0
 radio.1/cisco/tx-power/reserved :Byte: 1
 radio.1/cisco/wtp-radio-config/beacon-period :Word: 100
-radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b90
+radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b9000644445004445200a00010000c801
 radio.1/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.1/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
-radio.1/cisco/wtp-radio-config/country-str1 :Bstr16: .x444500
-radio.1/cisco/wtp-radio-config/country-str2 :Bstr16: DE 
+radio.1/cisco/wtp-radio-config/country-str1 :Bstr16: .x4445004445200a00010000c801
+radio.1/cisco/wtp-radio-config/country-str2 :Bstr16: .x4445200a00010000c801
 radio.1/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.1/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.1/cisco/wtp-radio-config/occupancy-limit :Word: 100
@@ -203,6 +203,7 @@ radio.1/wlan.0/encryption-policy :Dword: 16777216
 radio.1/wlan.0/max-stations :Byte: 155
 radio.1/wlan.0/radio-id :Byte: 1
 radio.1/wlan.0/session-timout :Word: 0
+radio.1/wlan.0/ssid :Str: Schlosspark
 radio.1/wlan.0/ssid-a :Str: Schlosspark
 radio.1/wlan.0/wep-key :Bstr16: .xaa0c0a02000000000000000000
 radio.1/wlan.0/wlan-capability :Word: 1

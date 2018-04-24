@@ -136,6 +136,7 @@ KTVSRC=\
 	cw_ktv_std_types.c\
 	cw_ktv_base_exists.c\
 	cw_ktv_save.c\
+	cw_ktv_del_sub.c\
 
 
 LWSRC=\
