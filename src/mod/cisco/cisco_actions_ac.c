@@ -515,27 +515,12 @@ static cw_KTVStruct_t cisco_ssc_hash[]={
 };
 
 
-static cw_KTVValRange_t range_bool[] = {
-	{0,0,"false"},
-	{1,65536, "true"},
-	{0,0,NULL}
-};
 
-static cw_KTVValRange_t range_operstate[] = {
-	{1,1,"Disabled"},
-	{2,2,"Enabled"},
-	{0,0,NULL}
+static cw_KTVStruct_t cisco_hardware_info[]={
+	{CW_TYPE_STR, "ram-type",20,-1},
+	{CW_TYPE_STR, "cpu",40,40},
+	{NULL,NULL,0,0}
 };
-
-static cw_KTVValRange_t range_cause[] = {
-	{0,0,"Normal"},
-	{1,1,"Radio Failure"},
-	{2,2,"Software Failure"},
-	{3,3,"Administratively Set"},
-	{0,0,NULL}
-	
-};
-
 
 
 
@@ -1232,6 +1217,18 @@ static struct cw_ElemHandler handlers73[] = {
 	}
 	,
 
+	{ 
+		"Hardware Info",			/* name */
+		CISCO_LWELEM_HARDWARE_INFO,		/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		17,417,					/* min/max length */
+		cisco_hardware_info,			/* type */
+		"cisco/hardware-info",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	},
+
+
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -1323,7 +1320,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AC_IP_ADDR_WITH_INDEX,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
-
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
 
 
@@ -1408,7 +1405,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 static int wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};
 static struct cw_ElemDef wtp_event_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
-
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
 	{0,0,0,0,0}
 };
 
