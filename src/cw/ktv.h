@@ -44,6 +44,9 @@ struct cw_KTV {
 };
 typedef struct cw_KTV cw_KTV_t;
 
+
+
+
 /**
  * @class cw_Type
  * @author 7u83
@@ -92,6 +95,31 @@ struct cw_KTVStruct {
 	int len;
 	int position;
 };
+
+
+enum cw_Types  {
+	CW_BYTE,
+	CW_WORD,
+	CW_DWORD,
+	CW_STR
+
+};
+
+
+struct cw_KTVValRange {
+	int min,max;
+	const char * name;
+};
+typedef struct cw_KTVValRange cw_KTVValRange_t;
+
+struct cw_KTVData {
+	int position;
+	uint8_t type;
+	const char *key;
+	int len;
+	struct cw_KTVValRange *ranges;
+};
+typedef struct cw_KTVData cw_KTVData_t;
 
 typedef struct cw_KTVStruct cw_KTVStruct_t;
 
