@@ -17,14 +17,14 @@ static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
 			cw_dbg(DBG_MOD, "CAPWAP: Initialiazing mod_capwap in AC mode");	
 			cw_ktv_add_from_str(global_cfg,	
 				"capwap/ac-descriptor/hardware/version",
-				CW_TYPE_BSTR16,"0.0.0.1");
+				CW_TYPE_BSTR16,NULL,"0.0.0.1");
 			cw_ktv_add_from_str(global_cfg,
-				"capwap/ac-descriptor/hardware/vendor",CW_TYPE_DWORD,"0");
+				"capwap/ac-descriptor/hardware/vendor",CW_TYPE_DWORD,NULL,"0");
 			cw_ktv_add_from_str(global_cfg,	
 				"capwap/ac-descriptor/software/version",
-				CW_TYPE_BSTR16,"0.0.0.1");
+				CW_TYPE_BSTR16, NULL, "0.0.0.1");
 			cw_ktv_add_from_str(global_cfg,
-				"capwap/ac-descriptor/software/vendor",CW_TYPE_DWORD,"0");
+				"capwap/ac-descriptor/software/vendor",CW_TYPE_DWORD, NULL, "0");
 		}
 		break;
 	}

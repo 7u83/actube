@@ -31,7 +31,7 @@ int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types)
 			continue;
 		}
 
-		cw_ktv_add_from_str(ktv,key,cwtype,val);
+		cw_ktv_add_from_str(ktv,key,cwtype,NULL,val);
 	
 
 	}while(rc==0);

@@ -106,6 +106,10 @@ static void * data(cw_KTV_t * data)
 {
 	return bstr_data(data->val.ptr);
 }
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_IPADDRESS->name;
+}
 
 const struct cw_Type cw_type_ipaddress = {
 	"IPAddress",		/* name */
@@ -115,7 +119,8 @@ const struct cw_Type cw_type_ipaddress = {
 	to_str,			/* to_str */
 	from_str,		/* from_str */
 	len,			/* len */
-	data			/* data */
+	data,			/* data */
+	get_type_name
 };
 
 

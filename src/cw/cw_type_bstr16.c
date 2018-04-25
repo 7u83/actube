@@ -86,6 +86,11 @@ static void * data(cw_KTV_t * data)
 	return bstr16_data(data->val.ptr);
 }
 
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_BSTR16->name;
+}
+
 const struct cw_Type cw_type_bstr16 = {
 	"Bstr16",	/* name */
 	del,		/* del */
@@ -94,5 +99,6 @@ const struct cw_Type cw_type_bstr16 = {
 	to_str,		/* to_str */
 	from_str,	/* from_str */
 	len,		/* len */
-	data		/* data */
+	data,		/* data */
+	get_type_name		/* get_type_name */
 };

@@ -30,10 +30,10 @@ int cw_read_wtp_descriptor_7(mavl_t cfg, struct conn *conn,
 	char key[64];
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_MAX_RADIOS);
-	cw_ktv_add(cfg,key,CW_TYPE_BYTE,data,1);
+	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data,1);
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_RADIOS_IN_USE);
-	cw_ktv_add(cfg,key,CW_TYPE_BYTE,data+1,1);
+	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data+1,1);
 	
 
 	pos = 2;

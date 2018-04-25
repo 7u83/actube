@@ -5,6 +5,7 @@
 #include "dbg.h"
 
 cw_KTV_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+			const void * valguard,
 			const uint8_t * data, int len)
 {
 	cw_KTV_t mdata, *mresult;

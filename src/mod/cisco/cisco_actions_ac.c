@@ -473,6 +473,27 @@ static cw_KTVStruct_t cisco_add_lwwlan[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVValRange_t oper_val_state[]={
+	{1,1,"disabled"},
+	{2,2,"enabled"},
+	{0,0,NULL}
+};
+
+static cw_KTVValRange_t oper_val_cause[]={
+	{0,0,"Normal"},
+	{1,1,"Radio Failure"},
+	{2,2,"Software Failure"},
+	{3,3,"Administratively Set"},
+	{0,0,NULL}
+};
+
+static cw_KTVStruct_t cisco_radio_oper_state[]={
+	{CW_TYPE_BYTE, "state", 1, -1, oper_val_state},
+	{CW_TYPE_BYTE, "cause", 1, -1,oper_val_cause},
+	{NULL,NULL,0,0}
+};
+
+
 static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
 {
 	int wlan_id,radio_id;
@@ -515,40 +536,10 @@ static cw_KTVValRange_t range_cause[] = {
 	
 };
 
-static cw_KTVData_t radio_operational_state[] = {
-	{0, CW_BYTE, "state", 1, range_operstate},
-	{0, CW_BYTE, "cause", 1, range_cause},
-
-	{0,0,NULL,0}
-};
-
-static cw_KTVData_t radio_admin_state[] = {
-	{0, CW_BYTE, "state", 1, range_operstate},
-	{0, CW_BYTE, "cause", 1, range_cause},
-
-	{0,0,NULL,0}
-};
 
 
-static const char * get_name(cw_KTVValRange_t *range,int x)
-{
-	
-}
 
-
-static int read_struct(cw_KTVData_t *stru, const char *parentkey) 
-{
-	char key[CW_KTV_MAX_KEY_LEN];
-	int pos;
-	
-	pos = 0;
-	while (stru->key != NULL){
-		if (stru->position!=-1)
-			pos = stru->position;
-		
-	}
-	return 0;
-}
+/*
 
 static int cisco_data(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
@@ -566,7 +557,7 @@ static int cisco_data(struct cw_ElemHandler *eh,
 	cw_dbg(DBG_INFO,"Del WLAN rid=%d, id=%d",wlan_id);
 	return 0;
 }
-
+*/
 
 static struct cw_ElemHandler handlers73[] = {
 	
@@ -1221,22 +1212,21 @@ static struct cw_ElemHandler handlers73[] = {
 		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		3,3,					/* min/max length */
-		radio_operational_state,		/* type */
-		"radio_operational_state",		/* Key */
-		cisco_data,				/* get */
+		cisco_radio_oper_state,			/* type */
+		"operational-state",			/* Key */
+		cw_in_radio_generic_struct,		/* get */
 		NULL,					/* put */
-		NULL
+		NULL					/* mkkey */
 	}
 	,
-
 	{ 
 		"Radio Administrative State Cisco",	/* name */
 		CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		2,2,					/* min/max length */
-		radio_admin_state,		/* type */
-		"radio_admin_state",		/* Key */
-		cisco_data,				/* get */
+		NULL,					/* type */
+		"radio-admin-state",			/* Key */
+		NULL,					/* get */
 		NULL,					/* put */
 		NULL
 	}
@@ -1570,7 +1560,7 @@ static void set_ac_version(struct conn * conn)
 		cw_dbg(DBG_INFO, "Cisco - Setting AC software version to: %s", verstr);
 	
 		mavl_del(conn->local_cfg,&wtpver);
-		cw_ktv_add(conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16,
+		cw_ktv_add(conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16, NULL,
 			wtpver->type->data(wtpver),wtpver->type->len(wtpver));
 
 		if(wtpver->type->len(wtpver)==4){
@@ -1605,7 +1595,7 @@ static int preprocess_join_request(struct conn *conn)
 
 	if (use_ac_version){
 		ver = cw_ktv_get(conn->remote_cfg,"ac-descriptor/software/version", CW_TYPE_BSTR16);
-		cw_ktv_replace(conn->local_cfg,"wtp-descriptor/software/version",CW_TYPE_BSTR16,
+		cw_ktv_replace(conn->local_cfg,"wtp-descriptor/software/version",CW_TYPE_BSTR16, NULL,
 			ver->type->data(ver),ver->type->len(ver));
 			
 		cw_format_version(verstr,ver->type->data(ver),ver->type->len(ver));

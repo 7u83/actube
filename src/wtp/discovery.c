@@ -72,9 +72,9 @@ int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
 
 			sprintf(key, "%04d%05d%04d", prio, val->val.word, en);
 
-			cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, (uint8_t *) (&ipval),
+			cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, NULL, (uint8_t *) (&ipval), 
 				   sizeof(ipval));
-			cw_ktv_add(dis->prio_ac, key, CW_TYPE_SYSPTR, (uint8_t *)(&remote_cfg),
+			cw_ktv_add(dis->prio_ac, key, CW_TYPE_SYSPTR, NULL, (uint8_t *)(&remote_cfg),
 				sizeof(remote_cfg));
 			i++;
 			en++;

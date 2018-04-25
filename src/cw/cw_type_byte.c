@@ -33,12 +33,32 @@ static int put(const cw_KTV_t *data, uint8_t * dst)
 	return cw_put_byte(dst, data->val.byte);
 }
 
+static const char * get_guardstr(int val, const cw_KTVValRange_t * valrange)
+{
+	while(valrange->name!=NULL){
+		if(val>=valrange->min && val<=valrange->max)
+			return valrange->name;
+		valrange++;
+	}
+	return NULL;
+}
+
+
 static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 {
-	/*if (max_len<3){
-		return 0;
-	}*/
+	if (data->valguard!=NULL){
+		const char * name;
+		name = get_guardstr(data->val.byte,data->valguard);
+		if (name != NULL){
+			return sprintf(dst,"%s",name);
+		}
+	}
+	
+		/*if (max_len<3){
+			return 0;
+		}*/
 	return sprintf(dst, "%d", data->val.byte);
+
 }
 
 static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
@@ -50,7 +70,20 @@ static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 
 static int len (cw_KTV_t * data)
 {
-	return sizeof(uint8_t);
+	return sizeof(data->val.byte);
+}
+
+static void * data(cw_KTV_t * data)
+{
+	return &data->val.byte;
+}
+
+static const char * get_type_name(cw_KTV_t *data)
+{
+	if (data->valguard != NULL){
+		return CW_TYPE_STR->name;
+	}
+	return CW_TYPE_BYTE->name;
 }
 
 const struct cw_Type cw_type_byte = {
@@ -60,5 +93,7 @@ const struct cw_Type cw_type_byte = {
 	get,			/* get */
 	to_str,			/* to_str */
 	from_str,		/* from_str */ 
-	len			/* len */
+	len,			/* len */
+	data,			/* data */
+	get_type_name		/* get_type_name */
 };

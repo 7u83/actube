@@ -15,7 +15,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 	}
 	
 	result = cw_ktv_add(params->conn->remote_cfg, handler->key, 
-				handler->type, elem_data,elem_len);
+				handler->type,NULL, elem_data,elem_len);
 	
 	params->elem=result;
 	

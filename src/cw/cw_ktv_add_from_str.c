@@ -6,6 +6,7 @@
 
 const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, 
 			const struct cw_Type *type,
+			const void * valguard,
 			const char * str)
 {
 	cw_KTV_t mdata, *mresult;
@@ -15,6 +16,7 @@ const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key,
 			type->name, key );
 */
 	mdata.key=cw_strdup(key);
+	mdata.valguard=valguard;
 	if (!mdata.key){
 		cw_log(LOG_ERR, "Can't allocate memory for key %s: %s",
 				key,strerror(errno));

@@ -17,7 +17,7 @@ int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPara
 	sprintf(key,handler->key,idx);
 	
 	result = cw_ktv_add(params->conn->remote_cfg, key, 
-				handler->type, elem_data+1,elem_len-1);
+				handler->type, NULL, elem_data+1,elem_len-1);
 	
 	params->elem=result;
 	

@@ -9,6 +9,6 @@ int cw_in_generic_with_index(struct cw_ElemHandler *eh,
 	
 	idx = cw_get_byte(data);
 	sprintf(key,"%s.%d",eh->key,idx);
-	cw_ktv_add(params->conn->remote_cfg,key,eh->type,data+1,len-1);
+	cw_ktv_add(params->conn->remote_cfg,key,eh->type,NULL,data+1,len-1);
 	return 1;
 }

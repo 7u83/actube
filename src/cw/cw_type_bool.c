@@ -79,6 +79,11 @@ static void * data( cw_KTV_t * data)
 	return & data->val.boolean;
 }
 
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_BOOL->name;
+}
+
 const struct cw_Type cw_type_bool = {
 	"Bool",			/* name */
 	NULL,			/* del */
@@ -87,5 +92,6 @@ const struct cw_Type cw_type_bool = {
 	to_str,			/* to_str */
 	from_str,		/* from_str */ 
 	len,			/* len */
-	data			/* data */ 
+	data,			/* data */ 
+	get_type_name		/* get_type_name */
 };

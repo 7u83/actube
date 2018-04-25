@@ -41,6 +41,7 @@ struct cw_KTV {
 		int boolean;
 		float float_val;
 	} val;
+	const void * valguard;
 };
 typedef struct cw_KTV cw_KTV_t;
 
@@ -84,26 +85,12 @@ struct cw_Type {
 	int (*len)(cw_KTV_t *);
 
 	void *(*data)(cw_KTV_t *);
+	const char * (*get_type_name)(cw_KTV_t*);
+	
+	int (*cast)(cw_KTV_t *);
 	
 };
 typedef struct cw_Type cw_Type_t;
-
-
-struct cw_KTVStruct {
-	const struct cw_Type * type;
-	const char * key;
-	int len;
-	int position;
-};
-
-
-enum cw_Types  {
-	CW_BYTE,
-	CW_WORD,
-	CW_DWORD,
-	CW_STR
-
-};
 
 
 struct cw_KTVValRange {
@@ -112,16 +99,21 @@ struct cw_KTVValRange {
 };
 typedef struct cw_KTVValRange cw_KTVValRange_t;
 
-struct cw_KTVData {
-	int position;
-	uint8_t type;
-	const char *key;
-	int len;
-	struct cw_KTVValRange *ranges;
-};
-typedef struct cw_KTVData cw_KTVData_t;
 
+struct cw_KTVStruct {
+	const struct cw_Type * type;
+	const char * key;
+	int len;
+	int position;
+	const void * valguard;
+};
 typedef struct cw_KTVStruct cw_KTVStruct_t;
+
+
+
+
+
+
 
 #define CW_KTVSTRUCT_L16	-2
 #define CW_KTVSTRUCT_L8		-3
@@ -169,15 +161,18 @@ extern const struct cw_Type cw_type_bool;
 /*
 void cw_kvstore_mavl_delete(const void *data);
  */
-cw_KTV_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type,
+cw_KTV_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type, 
+			const void * valguard, 
 			   const uint8_t * data, int len);
 
 void cw_ktv_del_sub(mavl_t ktvstore, const char *basekey);
 
 cw_KTV_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+			const void * valguard,
 			const uint8_t * data, int len);
 
-const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type, 
+			const void * valguard,
 			const char * str);
 
 int cw_ktv_mavlcmp(const void *v1, const void *v2);

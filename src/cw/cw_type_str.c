@@ -85,6 +85,13 @@ static int len ( struct cw_KTV * data ){
 	return strlen (data->val.str);
 }
 
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_STR->name;
+}
+
+
+
 const struct cw_Type cw_type_str = {
 	"Str",		/* name */
 	del,		/* del */
@@ -92,5 +99,7 @@ const struct cw_Type cw_type_str = {
 	get,		/* get */
 	to_str,		/* to_str */
 	from_str,	/* from_str */
-	len		/* len */
+	len,		/* len */
+	NULL,		/* data */
+	get_type_name	/* get_type_name */
 };

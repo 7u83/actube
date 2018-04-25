@@ -46,12 +46,21 @@ static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 	return data;
 }
 
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_WORD->name;
+}
+
 const struct cw_Type cw_type_word = {
 	"Word",			/* name */
 	NULL,			/* del */
 	put,			/* put */
 	get,			/* get */
 	to_str,			/* to_str */
-	from_str		/* from_str */ 
+	from_str,		/* from_str */ 
+	NULL,
+	NULL,
+	get_type_name
+	
 };
 

@@ -37,10 +37,10 @@ int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh,
 /*	printf("SKEY is %s , idx: %d\n",key,idx);*/
 
 	sprintf(key,"%s/address.%d",eh->key,idx+1);
-	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_IPADDRESS,data,len-2);
+	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_IPADDRESS,NULL,data,len-2);
 	
 	sprintf(key,"%s/wtps.%d",eh->key,idx+1);
-	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_WORD,data+len-2,2);
+	cw_ktv_add(params->conn->remote_cfg,key,CW_TYPE_WORD,NULL,data+len-2,2);
 	
 /*	if (handler-id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
 		struct sockaddr_in addr;

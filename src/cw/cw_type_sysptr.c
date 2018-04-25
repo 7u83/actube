@@ -64,6 +64,11 @@ static int len ( struct cw_KTV * data ){
 	return sizeof(void*);
 }
 
+static const char * get_type_name(cw_KTV_t *data)
+{
+	return CW_TYPE_SYSPTR->name;
+}
+
 const struct cw_Type cw_type_sysptr = {
 	"Sysptr",	/* name */
 	del,		/* del */
@@ -71,5 +76,7 @@ const struct cw_Type cw_type_sysptr = {
 	get,		/* get */
 	to_str,		/* to_str */
 	from_str,	/* from_str */
-	len		/* len */
+	len,		/* len */
+	NULL,		/* data */
+	get_type_name   /* get_type_name */
 };

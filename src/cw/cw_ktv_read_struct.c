@@ -37,7 +37,7 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 			
 		}
 
-		result = cw_ktv_add(ktv,key,stru[i].type,data+pos,l);
+		result = cw_ktv_add(ktv,key,stru[i].type,stru[i].valguard,data+pos,l);
 		
 		stru[i].type->to_str(result,dbstr,100);
 		cw_dbg(DBG_ELEM_DETAIL, "Read (%d): %s: %s",pos,key,dbstr);
