@@ -19,13 +19,28 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 			memset(dst+pos,0,stru[i].len);
 		
 		sprintf(key,"%s/%s",pkey,stru[i].key);
-		result = cw_ktv_get(ktv,key,stru[i].type);
+		result = cw_ktv_get(ktv,key,NULL);
+		
+
 		
 		if (result == NULL){
 			cw_log(LOG_ERR,"Can't put %s, no value found, filling zero.",key);
 			memset(dst+pos,0,stru[i].len);
 		}
 		else{
+			result->valguard=stru[i].valguard;
+			if (strcmp(stru[i].type->name,result->type->name)){
+				printf("Type mismatch: %s != %s\n",stru[i].type->name,result->type->name);
+				if (stru[i].type->cast != NULL){
+					if (!stru[i].type->cast(result)){
+						cw_log(LOG_ERR,"Can't cast from %s to %s",result->type->name,stru[i].type->name);
+						exit(0);
+					}
+				}
+							
+
+			}
+			
 			result->type->put(result,dst+pos);
 		}
 		if (stru[i].len!=-1)

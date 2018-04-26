@@ -29,7 +29,7 @@ ac-descriptor/software/vendor :Dword: 4232704
 ac-descriptor/software/version :Bstr16: .x07036500
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
-capwap-control-ip-address/address.0 :IPAddress: 192.168.0.14
+capwap-control-ip-address/address.0 :IPAddress: 192.168.56.1
 capwap-control-ip-address/wtps.0 :Word: 2
 cisco/mwar-type :Byte: 0
 maximum-message-length :Word: 4096
@@ -48,8 +48,8 @@ capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
 
-cisco/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
-cisco/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+cisco/ssl-keyfile:Str:"../../ssl/certs/cisco-ac.key"
+cisco/ssl-certfile:Str:"../../ssl/certs/cisco-ac.pem"
 cisco/ssl-cipher:Str:NORMAL 
 #+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
 cisco/ssl-dhbits:Word:2048

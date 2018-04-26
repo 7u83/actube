@@ -20,7 +20,7 @@ int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
 	vendor = cw_ktv_get (ktvstore, key, CW_TYPE_DWORD);
 	
 	if (vendor == NULL) {
-		cw_log (LOG_ERR, "Can't put subelem %s, no value found.", key);
+		cw_log (LOG_ERR, "Can't put subelem %s, no value of type Dword found.", key);
 		return 0;
 	}
 	
@@ -29,7 +29,7 @@ int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
 	version = cw_ktv_get (ktvstore, key, CW_TYPE_BSTR16);
 	
 	if (version == NULL) {
-		cw_log (LOG_ERR, "Can't put subelem %s, no value found.", key);
+		cw_log (LOG_ERR, "Can't put subelem %s, no value of type Bstr16 found.", key);
 		return 0;
 	}
 	

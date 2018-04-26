@@ -146,8 +146,8 @@ radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 100
 radio.0/cisco/wtp-radio-config/reg :Dword: 65536
 radio.0/cisco/wtp-radio-config/unknown75 :Byte: 0
 radio.0/decryption-error-report-period :Word: 120
-radio.0/operational-state/cause :Byte: 0
-radio.0/operational-state/state :Byte: 2
+radio.0/operational-state/cause :Str: 0
+radio.0/operational-state/state :Str: enabled
 radio.0/rate_set :Bstr16: .x82848b960c1218243048606c
 radio.0/wlan.0/allow-aaa-override :Byte: 1
 radio.0/wlan.0/broadcast-ssid :Bool: true
@@ -212,7 +212,7 @@ radio/wlan/radio-od :Byte: 1
 radio/wlan/wlan-capability :Word: 17
 radio/wlan/wlan-id :Byte: 0
 result-code :Dword: 0
-session-id: .x00006215
+session-id:Bstr16: .x00006215
 statistics-timer :Word: 60
 tube.0/main :Byte: 12
 tube.0/zumsel :Byte: 12

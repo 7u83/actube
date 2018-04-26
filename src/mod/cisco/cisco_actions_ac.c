@@ -1200,7 +1200,7 @@ static struct cw_ElemHandler handlers73[] = {
 		cisco_radio_oper_state,			/* type */
 		"operational-state",			/* Key */
 		cw_in_radio_generic_struct,		/* get */
-		NULL,					/* put */
+		cw_out_radio_generic_struct,		/* put */
 		NULL					/* mkkey */
 	}
 	,
@@ -1258,7 +1258,7 @@ static struct cw_ElemDef join_request_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_GROUP_NAME,	1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_ADDR,		1, 0},
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,1, CW_IGNORE},
+	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
 
 	

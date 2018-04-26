@@ -61,9 +61,31 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 
 }
 
+static int get_guardval(const char *str, const cw_KTVValRange_t * valrange)
+{
+	while(valrange->name!=NULL){
+		if(strcmp(str,valrange->name)==0)
+			return valrange->min;
+		valrange++;
+	}
+	return -1;
+}
+
+
 static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 {
 	data->type = &cw_type_byte;
+	if (data->valguard != NULL){
+		int rc;
+		rc = get_guardval(src,data->valguard);
+		if (rc != -1){
+			data->val.byte = rc;
+			return data;
+		}
+		
+	}
+	
+
 	data->val.byte = atoi(src);
 	return data;
 }
@@ -86,6 +108,20 @@ static const char * get_type_name(cw_KTV_t *data)
 	return CW_TYPE_BYTE->name;
 }
 
+static int cast(cw_KTV_t * data)
+{
+	if (strcmp(data->type->name,CW_TYPE_BYTE->name)==0)
+		return 1;
+	if (strcmp(data->type->name,CW_TYPE_STR->name)==0){
+		char *src = data->val.ptr;
+		CW_TYPE_BYTE->from_str(data,src);
+		free(src);
+		return 1;
+	}
+	return 0;
+}
+
+
 const struct cw_Type cw_type_byte = {
 	"Byte",			/* name */
 	NULL,			/* del */
@@ -95,5 +131,6 @@ const struct cw_Type cw_type_byte = {
 	from_str,		/* from_str */ 
 	len,			/* len */
 	data,			/* data */
-	get_type_name		/* get_type_name */
+	get_type_name,		/* get_type_name */
+	cast
 };
