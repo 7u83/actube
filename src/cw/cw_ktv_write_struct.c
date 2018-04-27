@@ -18,7 +18,13 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		if (stru[i].len!=-1)
 			memset(dst+pos,0,stru[i].len);
 		
-		sprintf(key,"%s/%s",pkey,stru[i].key);
+		
+		if (stru[i].key!=NULL)
+			sprintf(key,"%s/%s",pkey,stru[i].key);
+		else	
+			sprintf(key,"%s",pkey);
+
+
 		result = cw_ktv_get(ktv,key,NULL);
 		
 

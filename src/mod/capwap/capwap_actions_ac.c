@@ -51,6 +51,19 @@ static cw_KTVStruct_t radio_operational_state[] = {
 	{NULL,NULL,0,0}
 };
 
+
+static cw_KTVValRange_t radio_admin_state_valguard[]={
+	{0,0,"reserved"},
+	{1,1,"enabled"},
+	{2,2,"disabled"},
+	{0,0,NULL}
+};
+
+static cw_KTVStruct_t radio_admin_state[] = {
+	{CW_TYPE_BYTE, NULL, 1,-1, radio_admin_state_valguard},
+	{NULL,NULL,0,0}
+};
+
 static struct cw_ElemHandler handlers[] = {
 
 	{ 
@@ -303,10 +316,10 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		2, 2,						/* min/max length */
-		CW_TYPE_BYTE,					/* type */
+		radio_admin_state,					/* type */
 		"admin-state",					/* Key */
-		cw_in_radio_generic,				/* get */
-		cw_out_radio_generic				/* put */
+		cw_in_radio_generic_struct,				/* get */
+		cw_out_radio_generic_struct				/* put */
 	}
 	,
 

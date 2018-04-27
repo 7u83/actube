@@ -303,8 +303,8 @@ static cw_KTVStruct_t cisco_wtp_radio_config73[]={
 	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
 	{CW_TYPE_BSTR16,"bss-id",6,-1},
 	{CW_TYPE_WORD,"beacon-period",2,-1},
-	{CW_TYPE_BSTR16,"country-str1",3,-1},
-	{CW_TYPE_BSTR16,"country-str2",3,-1},
+	{CW_TYPE_STR,"country-str1",3,-1},
+	{CW_TYPE_STR,"country-str2",3,-1},
 	{CW_TYPE_BYTE,"gpr-period",1,-1},
 	{CW_TYPE_DWORD,"reg",4,-1},
 	{CW_TYPE_BYTE,"max-stations",1,-1},
@@ -318,8 +318,8 @@ static cw_KTVStruct_t cisco_wtp_radio_config75[]={
 	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
 	{CW_TYPE_BSTR16,"bss-id",6,-1},
 	{CW_TYPE_WORD,"beacon-period",2,-1},
-	{CW_TYPE_BSTR16,"country-str1",3,-1},
-	{CW_TYPE_BSTR16,"country-str2",3,-1},
+	{CW_TYPE_STR,"country-str1",3,-1},
+	{CW_TYPE_STR,"country-str2",3,-1},
 	{CW_TYPE_BYTE,"gpr-period",1,-1},
 	{CW_TYPE_DWORD,"reg",4,-1},
 	{CW_TYPE_BYTE,"max-stations",1,-1},
@@ -493,6 +493,14 @@ static cw_KTVStruct_t cisco_radio_oper_state[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t cisco_capwap_timers[] = {
+	{CW_TYPE_BYTE, "max-discovery-interval", 1,-1},
+	{CW_TYPE_BYTE, "echo-interval", 1,-1},
+	{NULL,NULL,0,0}
+};
+
+
+
 
 static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
 {
@@ -522,7 +530,21 @@ static cw_KTVStruct_t cisco_hardware_info[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_KTVStruct_t cisco_discovery_protocol[]={
+	{CW_TYPE_WORD, "data",2,-1},
+	{CW_TYPE_BOOL, "enabled",1,-1},
+	{NULL,NULL,0,0}
+};
 
+static cw_KTVStruct_t cisco_rad_extended_config[]={
+	{CW_TYPE_WORD, "beacon-interval",2,-1},
+	{CW_TYPE_WORD, "beacon-range",2,-1},
+	{CW_TYPE_WORD, "multicast-buffer",2,-1},
+	{CW_TYPE_WORD, "multicast-data-range",2,-1},
+	{CW_TYPE_WORD, "rx-sensop-threshold",2,-1},
+	{CW_TYPE_WORD, "c-ccat",2,-1},
+	{NULL,NULL,0,0}
+};
 
 /*
 
@@ -941,12 +963,13 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_out_generic				/* put */
 	},
 
-	{ 
+	{ /* WTP Radio Configuration for AC/WPT with version 7.3 */
+	
 		"WTP Radio Configuration",		/* name */
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		27,27,					/* min/max length */
-		cisco_wtp_radio_config73,			/* type */
+		cisco_wtp_radio_config73,		/* type */
 		"cisco/wtp-radio-config",		/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct		/* put */
@@ -1193,7 +1216,7 @@ static struct cw_ElemHandler handlers73[] = {
 	
 	
 	{ 
-		"Radio Operational State Cisco",	/* name */
+		"Radio Operational State (Draft 7)",	/* name */
 		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		3,3,					/* min/max length */
@@ -1202,18 +1225,6 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct,		/* put */
 		NULL					/* mkkey */
-	}
-	,
-	{ 
-		"Radio Administrative State Cisco",	/* name */
-		CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	/* Element ID */
-		0,0,					/* Vendor / Proto */
-		2,2,					/* min/max length */
-		NULL,					/* type */
-		"radio-admin-state",			/* Key */
-		NULL,					/* get */
-		NULL,					/* put */
-		NULL
 	}
 	,
 
@@ -1228,6 +1239,39 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_out_generic_struct			/* put */
 	},
 
+	{ 
+		"Cisco Discovery Protocol",		/* name */
+		CISCO_LWELEM_DISCOVERY_PROTOCOL,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		3,3,					/* min/max length */
+		cisco_discovery_protocol,		/* type */
+		"cisco/cisco-discovery-protocol",	/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	},
+
+	{ 
+		"RAD Extended Config",			/* name */
+		CISCO_LWELEM_RAD_EXTENDED_CONFIG,	/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		13,13,					/* min/max length */
+		cisco_rad_extended_config,		/* type */
+		"cisco/rad-extended-config",		/* Key */
+		cw_in_radio_generic_struct,			/* get */
+		cw_out_radio_generic_struct			/* put */
+	},
+
+	{
+		"CAPWAP Timers",			/* name */
+		CISCO_ELEM_CAPWAP_TIMERS,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		2, 2,						/* min/max length */
+		cisco_capwap_timers,					/* type */
+		"capwap-timers",					/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	}
+	,
 
 	{0,0,0,0,0,0,0,0}
 
@@ -1324,7 +1368,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
 
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_20,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	1, 0},
 	{0,0,0,00}
 	
 };
@@ -1354,6 +1398,9 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 static int configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};
 static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+	
+	{0,0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	0,0},
+	
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
@@ -1390,13 +1437,14 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_VLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DELETE_WLAN,		0, 0},
 	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
-
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RAD_EXTENDED_CONFIG,	0, 0},
 	
 	{0,0,0,00}
 	
@@ -1523,7 +1571,7 @@ static struct cw_ElemHandler handlers75[] = {
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		28,28,					/* min/max length */
-		cisco_wtp_radio_config75,			/* type */
+		cisco_wtp_radio_config75,		/* type */
 		"cisco/wtp-radio-config",		/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct		/* put */

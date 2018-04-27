@@ -8,6 +8,9 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 	int pos, i,l;
 	cw_KTV_t * result;
 	
+	if (strcmp(pkey,"radio.0/cisco/wtp-radio-config")==0)
+		i = 99;
+	
 	
 	pos=0; i=0;
 	while (stru[i].type != NULL){
@@ -15,7 +18,10 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 		if(stru[i].position!=-1)
 			pos=stru[i].position;
 		
-		sprintf(key,"%s/%s",pkey,stru[i].key);
+		if (stru[i].key!=NULL)
+			sprintf(key,"%s/%s",pkey,stru[i].key);
+		else	
+			sprintf(key,"%s",pkey);
 		
 		switch (stru[i].len){
 			case CW_KTVSTRUCT_L8:
@@ -31,7 +37,7 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 				break;
 			default:
 				l = stru[i].len;
-				if (pos+l > l){
+				if (pos+l > len){
 					l = len-pos;
 				}
 			
