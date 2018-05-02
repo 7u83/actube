@@ -23,6 +23,7 @@
       <File Name="src/ac/socklist.h"/>
       <File Name="src/ac/discovery_cache.c"/>
       <File Name="src/ac/discovery_cache.h"/>
+      <File Name="src/ac/shell.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

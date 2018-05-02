@@ -58,6 +58,7 @@ AC_OBJS = \
 	db.o \
 	ac_global.o \
 	discovery_cache.o\
+	shell.o\
 	${AC_MODULES}
 
 

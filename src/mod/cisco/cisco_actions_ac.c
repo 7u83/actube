@@ -182,7 +182,7 @@ static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_mac_operation[]={
+static cw_KTVStruct_t cisco_mac_operation73[]={
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"rts-threshold",2,-1},
 	{CW_TYPE_BYTE,"short-retry",1,-1},
@@ -192,6 +192,18 @@ static cw_KTVStruct_t cisco_mac_operation[]={
 	{CW_TYPE_DWORD,"rx-msdu-lifetime",4,-1},
 	{NULL,NULL,0,0}
 };
+
+static cw_KTVStruct_t cisco_mac_operation75[]={
+	{CW_TYPE_WORD,"reserved",2,-1},
+	{CW_TYPE_WORD,"rts-threshold",2,-1},
+	{CW_TYPE_BYTE,"short-retry",1,-1},
+	{CW_TYPE_BYTE,"long-retry",1,-1},
+	{CW_TYPE_WORD,"fragmentation-threshold",2,-1},
+	{CW_TYPE_DWORD,"tx-msdu-lifetime",4,-1},
+	{CW_TYPE_DWORD,"rx-msdu-lifetime",4,-1},
+	{NULL,NULL,0,0}
+};
+
 
 static cw_KTVStruct_t cisco_ap_power_injector_config[]={
 	{CW_TYPE_BYTE,"state",1,-1},
@@ -546,6 +558,19 @@ static cw_KTVStruct_t cisco_rad_extended_config[]={
 	{NULL,NULL,0,0}
 };
 
+
+static cw_KTVStruct_t cisco_80211_assoc_limit[]={
+	{CW_TYPE_BOOL, "enable",1,-1},
+	{CW_TYPE_BYTE, "limit",1,-1},
+	{CW_TYPE_WORD, "interval",1,-1},
+	{NULL,NULL,0,0}
+};
+
+static cw_KTVStruct_t cisco_dot11r_wlc_mac_and_ip[]={
+	{CW_TYPE_IPADDRESS, "ip-address",4,-1},
+	{CW_TYPE_BSTR16, ",ac-address",6,-1},
+	{NULL,NULL,0,0}
+};
 /*
 
 static int cisco_data(struct cw_ElemHandler *eh, 
@@ -992,7 +1017,7 @@ static struct cw_ElemHandler handlers73[] = {
 		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		16,16,					/* min/max length */
-		cisco_mac_operation,			/* type */
+		cisco_mac_operation73,			/* type */
 		"cisco/mac-operation",			/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct		/* put */
@@ -1273,6 +1298,41 @@ static struct cw_ElemHandler handlers73[] = {
 	}
 	,
 
+	{
+		"8021.11 Assoc Limit (Cisco)",			/* name */
+		CISCO_ELEM_80211_ASSOC_LIMIT,			/* Element ID */
+		CW_VENDOR_ID_CISCO, 0,						/* Vendor / Proto */
+		4, 4,						/* min/max length */
+		cisco_80211_assoc_limit,			/* type */
+		"cisco-8011-assoc-limit",			/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	}
+	,
+
+	{
+		"CISCO Sig Toggle",				/* name */
+		CISCO_ELEM_SIG_TOGGLE,				/* Element ID */
+		CW_VENDOR_ID_CISCO, 0,				/* Vendor / Proto */
+		1, 1,						/* min/max length */
+		CW_TYPE_BOOL,					/* type */
+		"cisco/sig-toogle",				/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic					/* put */
+	}
+	,
+
+	{
+		"Dot11r WLC Mac And IP (Cisco)",		/* name */
+		CISCO_LWELEM_DOT11R_WLC_MAC_AND_IP,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		4, 4,						/* min/max length */
+		cisco_dot11r_wlc_mac_and_ip,			/* type */
+		"cisco/dot11r-wlc-mac-and-ip",			/* Key */
+		cw_in_generic_struct,				/* get */
+		cw_out_generic_struct				/* put */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -1424,6 +1484,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_STATISTICS_TIMER,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_80211_ASSOC_LIMIT,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_TOGGLE,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
 
@@ -1577,6 +1640,17 @@ static struct cw_ElemHandler handlers75[] = {
 		cw_out_radio_generic_struct		/* put */
 	}
 	,
+	{ 
+		"Mac Operation (Version >= 7.5",	/* name */
+		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		17,17,					/* min/max length */
+		cisco_mac_operation75,			/* type */
+		"cisco/mac-operation",			/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	},
+
 	{0,0,0,0,0,0,0,0}
 };
 

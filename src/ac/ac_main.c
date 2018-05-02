@@ -230,6 +230,7 @@ int main (int argc, char *argv[])
 	FILE * file;
 	mavl_t types_tree, global_cfg;
 	const cw_Type_t **ti;
+	
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
@@ -278,7 +279,10 @@ exit(0);
 	if (!read_config ("ac.conf"))
 		return 1;
 		
-		
+start_shell();
+
+
+
 	/* Show debug options if there are any set */
 	if (cw_dbg_opt_level)
 		cw_log (LOG_INFO, "Debug Options: %08X", cw_dbg_opt_level);
