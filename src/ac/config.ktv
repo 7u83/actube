@@ -69,3 +69,8 @@ psk/ap1:Bstr16:hallo
 
 actube/listen:Bstr16:192.168.0.1
 
+
+wait-dtls:Word:12
+wait-join:Word:3
+
+capwap-timers/change-state-pending-timer: Word: 3

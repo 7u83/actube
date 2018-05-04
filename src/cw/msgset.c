@@ -284,14 +284,16 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		}
 
 		/* Overwrite the found message */
-		if (msgdef->name)
+		if (msgdef->name != NULL)
 			msg->name = msgdef->name;
-		if (msgdef->states)
+		if (msgdef->states != NULL)
 			msg->states = msgdef->states;
 		if (msgdef->postprocess != NULL)
 			msg->postprocess = msgdef->postprocess;
 		if (msgdef->preprocess != NULL)
 			msg->preprocess = msgdef->preprocess;
+		if (msgdef->next_state)
+			msg->next_state=msgdef->next_state;
 			
 		msg->receiver = msgdef->receiver;
 

@@ -152,7 +152,7 @@ static cw_action_in_t actions_in[] = {
 	/* AC Name - Config Status Request */	
 	{
 		/* We have to deal with zero-length strings */
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CW_MSG_CONFIGURATION_STATUS_REQUEST,
 		.elem_id = CAPWAP_ELEM_AC_NAME,
 		.item_id = CW_ITEM_AC_NAME,

@@ -115,7 +115,7 @@ struct conn {
 
 	/** Current CAPWAP state */
 
-	uint8_t capwap_state;
+	uint16_t capwap_transition;
 
 
 	/** The framgent manager used on this connection */

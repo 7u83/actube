@@ -203,7 +203,7 @@ static cw_action_in_t actions_in[] = {
 	 * Message Configuration Status Response - IN
 	 */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.end = cw_in_check_generic_resp
 	}
@@ -212,7 +212,7 @@ static cw_action_in_t actions_in[] = {
 		
 	/* Capwap Timers - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_CAPWAP_TIMERS,
 		.item_id = CW_ITEM_CAPWAP_TIMERS, 
@@ -225,7 +225,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Decryption Error Report - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,
 		.item_id = CW_RADIOITEM_DECRYPTION_ERROR_REPORT_PERIOD, 
@@ -239,7 +239,7 @@ static cw_action_in_t actions_in[] = {
 	
 	/* Idle Timeout - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_IDLE_TIMEOUT,
 		.item_id = CW_ITEM_IDLE_TIMEOUT, 
@@ -253,7 +253,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* WTP Fallback - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_WTP_FALLBACK,
 		.item_id = CW_ITEM_WTP_FALLBACK, 
@@ -269,7 +269,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Result Code - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 
@@ -283,7 +283,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* AC IPv4 List - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.elem_id = CAPWAP_ELEM_AC_IPV4_LIST,
 		.item_id = CW_ITEM_AC_IP_LIST,
@@ -297,7 +297,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Vendor Specific Payload - Cponfig Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.elem_id = CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,
 		.start = cw_in_vendor_specific_payload
@@ -312,14 +312,14 @@ static cw_action_in_t actions_in[] = {
 	 */
 
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE,
 	 	.end =	cw_in_check_cfg_update_req  
 	}
 	,
 
 	{
-		.capwap_state = CW_STATE_CONFIGURE,
+		.capwap_state = CAPWAP_STATE_CONFIGURE,
 		.msg_id = CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE, 
 		.elem_id  = CAPWAP_ELEM_RESULT_CODE,
 		.item_id = CW_ITEM_RESULT_CODE, 

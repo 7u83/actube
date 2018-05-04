@@ -11,7 +11,7 @@
 int image_update()
 {
 	struct conn *conn = get_conn();
-	if (conn->capwap_state != CW_STATE_CONFIGURE) {
+	if (conn->capwap_state != CAPWAP_STATE_CONFIGURE) {
 		cw_log(LOG_ERR, "Current state not image update");
 		return 0;
 	}

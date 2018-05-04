@@ -90,15 +90,15 @@ static void wtpman_run_discovery(void *arg)
 
 	time_t timer = cw_timer_start(10);
 
-	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
+	wtpman->conn->capwap_transition = CAPWAP_STATE_DISCOVERY;
 
 
 	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
+	       && wtpman->conn->capwap_transition == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		rc = cw_read_messages(wtpman->conn);
 		if (cw_result_is_ok(rc)){
-			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
+			wtpman->conn->capwap_transition=CAPWAP_STATE_JOIN;
 			
 			cw_dbg(DBG_INFO,"Discovery has detected mods: %s %s", 
 				wtpman->conn->cmod->name,wtpman->conn->bmod->name);
@@ -131,44 +131,13 @@ int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 */
 
 
-static int wtpman_establish_dtls(void *arg)
+static int wtpman_dtls_setup(void *arg)
 {
 	char cipherstr[512];
-	int dtls_ok;
+
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
-
-	/* setup cipher */
-/*	wtpman->conn->dtls_cipher = conf_sslcipher;*/
-
-	/* setup DTSL certificates */
-/*	dtls_ok = 0;
-	if (conf_sslkeyfilename && conf_sslcertfilename) {
-
-
-		wtpman->conn->dtls_key_file = conf_sslkeyfilename;
-		wtpman->conn->dtls_cert_file = conf_sslcertfilename;
-		wtpman->conn->dtls_key_pass = conf_sslkeypass;
-		wtpman->conn->dtls_verify_peer = conf_dtls_verify_peer;
-		cw_dbg(DBG_DTLS, "Using key file %s", wtpman->conn->dtls_key_file);
-		cw_dbg(DBG_DTLS, "Using cert file %s", wtpman->conn->dtls_cert_file);
-		dtls_ok = 1;
-	}
-*/
-	/* setup DTLS psk */
-/*	if (conf_dtls_psk) {
-		wtpman->conn->dtls_psk = conf_dtls_psk;
-		wtpman->conn->dtls_psk_len = strlen(conf_dtls_psk);
-		dtls_ok = 1;
-	}
-
-	if (!dtls_ok) {
-		cw_log(LOG_ERR,
-		       "Can't establish DTLS session, neither psk nor certs set in config file.");
-		return 0;
-	}
-*/
 	/* try to accept the connection */
 	if (!dtls_accept(wtpman->conn)) {
 		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s",
@@ -182,35 +151,22 @@ static int wtpman_establish_dtls(void *arg)
 	return 1;
 }
 
-static int wtpman_join(void *arg, time_t timer)
+static int wtpman_join(void *arg)
 {
 	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
 	struct conn *conn = wtpman->conn;
-
-/*
-//	wtpman->conn->outgoing = mbag_create();
-//	wtpman->conn->incomming = mbag_create();
-//	conn->config = conn->incomming;
-//      wtpman->conn->local = ac_config;
-
-//	mbag_set_str(conn->local, CW_ITEM_AC_NAME, conf_acname);
-
-*/
-
-	wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
-
-/*
-//	wtpman->conn->actions = &capwap_actions;
-
-//      wtpman->conn->itemstore = mbag_create();
-*/
+	time_t timer, wait_join;
 
 	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr,sock_buf));
-
 	
-	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
+	wait_join = cw_ktv_get_word(conn->global_cfg,"wait-join",CAPWAP_WAIT_JOIN);
+
+	timer = cw_timer_start(wait_join);
+
+
+	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_transition == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno == EAGAIN)
@@ -218,19 +174,20 @@ static int wtpman_join(void *arg, time_t timer)
 				
 			break;
 		}
-cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP","---------end dump --------");
+		cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,
+		"-------------dump------------",
+		"DMP","---------end dump --------");
 	}
 
 	if (rc != 0) {
 		cw_log(LOG_ERR, "Error joining WTP %s", cw_strerror(rc));
 		return 0;
-
 	}
 
 
-	if (wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
+	if (wtpman->conn->capwap_transition != CAPWAP_STATE_JOIN_COMPLETE) {
 		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
-		       sock_addr2str(&wtpman->conn->addr,sock_buf), wtpman->conn->wait_dtls);
+		       sock_addr2str(&wtpman->conn->addr,sock_buf), wait_join);
 
 		return 0;
 	}
@@ -323,15 +280,16 @@ void * wtpman_run_data(void *wtpman_arg)
 }
 
 
+/*#define CW_TRANSITION(prestate,state) (prestate<<16|state)*/
 
-
-static void * wtpman_run(void *arg)
+static void * wtpman_main(void *arg)
 {
 	mavl_t r;
 	int rc ;
 	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct conn *conn;
+	int last_state;
 
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
@@ -339,6 +297,7 @@ static void * wtpman_run(void *arg)
 	conn = wtpman->conn;
 
 	wtpman->conn->remote_cfg = cw_ktv_create(); 
+	
 
 	/* We were invoked with an unencrypted packet, 
 	 * so assume, it is a discovery request */
@@ -352,26 +311,124 @@ static void * wtpman_run(void *arg)
 	/* reject connections to our multi- or broadcast sockets */
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 		cw_dbg(DBG_DTLS,"Reject multi");
-/*		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
-		       CLIENT_IP);
-*/		wtpman_remove(wtpman);
-
-		return NULL;
-	}
-
-
-	timer = cw_timer_start(wtpman->conn->wait_dtls);
-
-
-	/* establish dtls session */
-	if (!wtpman_establish_dtls(wtpman)) {
 		wtpman_remove(wtpman);
 		return NULL;
 	}
+	
+	conn->capwap_transition = CAPWAP_STATE_DTLS_SETUP;
+	/* establish dtls session */
+	if (!wtpman_dtls_setup(wtpman)) {
+		wtpman_remove(wtpman);
+		return NULL;
+	}
+	
+	/*last_state = conn->capwap_state;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
+*/
+	conn->capwap_transition = CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN);
+	rc = 0;
+	
+	while (1){
+	
+		int wait_join;
+		int wait_change_state;
+		
+
+		
+		switch (conn->capwap_transition){
+			case CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN):
+			{
+
+				wait_join = cw_ktv_get_word(conn->global_cfg,"wait-join",CAPWAP_WAIT_JOIN);
+				timer = cw_timer_start(wait_join);
+				break;
+			}
+			case CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_JOIN):
+			{	
+				char wtpname[CAPWAP_MAX_WTP_NAME_LEN];
+				cw_KTV_t * result;
+				result = cw_ktv_get(conn->remote_cfg,"wtp-name",NULL);
+				result->type->to_str(result,wtpname,CAPWAP_MAX_WTP_NAME_LEN);
+				cw_dbg(DBG_INFO, "WTP joined: '%s', IP %s.",
+					wtpname,
+					sock_addr2str(&conn->addr,sock_buf)
+					);
+				break;
+			}
+			case CW_TRANSITION(CAPWAP_STATE_JOIN,CAPWAP_STATE_TIMEOUT):
+			{
+				cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
+				sock_addr2str(&wtpman->conn->addr,sock_buf), wait_join);
+				wtpman_remove(wtpman);
+				return NULL;
+				break;
+			}
+			case CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE):
+			{
+				
+				wait_change_state = cw_ktv_get_word(conn->global_cfg,
+					"capwap-timers/change-state-pending-timer",
+					CAPWAP_TIMER_CHANGE_STATE_PENDING_TIMER);
+					
+			/*	printf("Capwap state configure\n");
+				exit(0);
+			*/
+				break;
+			}
+			case CW_TRANSITION(CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_TIMEOUT):
+			{
+				cw_dbg(DBG_MSG_ERR, "No Change State Event Request %s after %d seconds, WTP died.",
+				sock_addr2str(&wtpman->conn->addr,sock_buf), wait_change_state);
+				wtpman_remove(wtpman);
+				return NULL;
+				break;
+			}
+
+		}
+		
+
+		
+		while (!cw_timer_timeout(timer)) {
+			rc = cw_read_messages(wtpman->conn);
+			if (rc < 0) {
+				if (errno == EAGAIN)
+					continue;
+			}
+			break;
+		}
+		
+		if(rc<0){
+			conn->capwap_transition = 
+				CW_TRANSITION(conn->capwap_transition,CAPWAP_STATE_TIMEOUT);
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
 
 
 	/* dtls is established, goto join state */
-	if (!wtpman_join(wtpman, timer)) {
+
+	conn->capwap_transition = CAPWAP_STATE_JOIN;
+	if (!wtpman_join(wtpman)) {
 		wtpman_remove(wtpman);
 		return NULL;
 	}
@@ -383,7 +440,7 @@ static void * wtpman_run(void *arg)
 			format_bin2hex(conn->session_id,16));
 
 
-
+exit(0);
 
 /*
 //	cw_dbg(DBG_INFO, "Creating data thread");
@@ -397,7 +454,7 @@ static void * wtpman_run(void *arg)
 
 	rc = 0;
 	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_state == CW_STATE_CONFIGURE) {
+	       && wtpman->conn->capwap_transition == CAPWAP_STATE_CONFIGURE) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)
@@ -415,14 +472,14 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 	}
 
 
-	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
+	if (conn->capwap_transition == CW_STATE_IMAGE_DATA) {
 		wtpman_image_data(wtpman);
 		return NULL;
 	}
 
 
 
-	conn->capwap_state = CAPWAP_STATE_RUN;
+	conn->capwap_transition = CAPWAP_STATE_RUN;
 /*
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
@@ -435,7 +492,7 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 	reset_echointerval_timer(wtpman);
 
 	rc = 0;
-	while (wtpman->conn->capwap_state == CAPWAP_STATE_RUN) {
+	while (wtpman->conn->capwap_transition == CAPWAP_STATE_RUN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)
@@ -540,12 +597,12 @@ static void wtpman_run_dtls(void *arg)
 /*//      time_t timer = cw_timer_start(wtpman->conn->wait_dtls);*/
 
 	/* establish dtls session */
-	if (!wtpman_establish_dtls(wtpman)) {
+	if (!wtpman_dtls_setup(wtpman)) {
 		wtpman_remove(wtpman);
 		return;
 	}
 
-	wtpman_run(arg);
+	wtpman_main(arg);
 }
 
 
@@ -667,7 +724,7 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
 	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d",dtlsmode);
 	wtpman->dtlsmode=dtlsmode;
-	pthread_create(&wtpman->thread, NULL, wtpman_run,
+	pthread_create(&wtpman->thread, NULL, wtpman_main,
 		       (void *) wtpman);
 	return;
 }

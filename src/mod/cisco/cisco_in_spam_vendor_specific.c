@@ -20,7 +20,7 @@ int cisco_in_spam_vendor_specific(struct cw_ElemHandler *eh,
                 cw_dbg(DBG_WARN,
                        "Can't handle Vendor Specific LWAPP Payload %s/%d, in msg %d (%s) in %s state.",
                        cw_strvendor(vendor_id), elem_id, params->msgdata->type,
-                       params->msgdata->name, cw_strstate(params->conn->capwap_state));
+                       params->msgdata->name, cw_strstate(params->conn->capwap_transition));
                 return 0;
 
 	}

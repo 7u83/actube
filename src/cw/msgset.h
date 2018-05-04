@@ -66,19 +66,20 @@ struct cw_MsgDef{
 	const char * name;
 	int type;	/**< Message type */
 	int receiver;	/**< Who can receive this message */
-	int * states;	/**< states in wich the message is allowed */
+	uint16_t * states;	/**< states in wich the message is allowed */
 
 	
 	struct cw_ElemDef * elements;
 	int (*preprocess)(struct conn * conn);
 	int (*postprocess)(struct conn * conn);
+	uint8_t next_state;
 };
 
 
 struct cw_MsgData{
 	int type;
 	const char * name;
-	int * states;
+	uint16_t * states;
 	int receiver;
 	mavl_t elements_tree;
 	mlist_t elements_list;
@@ -86,6 +87,7 @@ struct cw_MsgData{
 
 	int (*preprocess)(struct conn * conn);
 	int (*postprocess)(struct conn * conn);
+	uint8_t next_state;
 };
 
 

@@ -378,6 +378,8 @@
 #define CAPWAP_WAIT_DTLS		60
 #define	CAPWAP_WAIT_JOIN		60
 
+#define CAPWAP_TIMER_CHANGE_STATE_PENDING_TIMER		25
+
 #define CAPWAP_IDLE_TIMEOUT		300
 
 
@@ -589,7 +591,9 @@ extern struct cw_StrListElem capwap_strings_board[];
 
 #define cw_strmsg(id) cw_strlist_get_str(capwap_strings_msg,id)
 #define cw_strelem(id) cw_strlist_get_str(capwap_strings_elem,id)
-#define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id)
+
+#define cw_strprestate(id) cw_strlist_get_str(capwap_strings_state,id >> 8)
+#define cw_strstate(id) cw_strlist_get_str(capwap_strings_state,id & 0xff)
 #define cw_strvendor(id) cw_strlist_get_str(capwap_strings_vendor,id)
 
 #define cw_strresult(id) cw_strlist_get_str(capwap_strings_result,id)
@@ -642,13 +646,18 @@ enum capwap_states {
 	CAPWAP_STATE_DISCOVERY,
 	/** Join State */
 	CAPWAP_STATE_JOIN,
+	CAPWAP_STATE_JOIN_COMPLETE,
+	
 	/** Config State */
-	CW_STATE_CONFIGURE,
+	CAPWAP_STATE_CONFIGURE,
+	CAPWAP_STATE_DTLS_SETUP, /**< DTLS Setup */
 	/** Image Data Upload */
 	CW_STATE_IMAGE_DATA,
 	CW_STATE_UPDATE,
 	/** Run State */
-	CAPWAP_STATE_RUN
+	CAPWAP_STATE_RUN,
+	
+	CAPWAP_STATE_TIMEOUT
 };
 
 /**

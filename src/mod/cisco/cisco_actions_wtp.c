@@ -190,7 +190,7 @@ static cw_action_in_t actions_in[] = {
 
 	/* Element Cisco 802.11 Radio Conffig - Config Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE, 
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CW_CISCO_WTP_RADIO_CFG, 
@@ -202,7 +202,7 @@ static cw_action_in_t actions_in[] = {
 		
 	/*  Radio Admin State - Config Status Response */
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.elem_id = CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,
 		.item_id = CW_RADIOITEM_ADMIN_STATE,
@@ -219,7 +219,7 @@ static cw_action_in_t actions_in[] = {
 
 	{
 
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.vendor_id = CW_VENDOR_ID_CISCO,
 		.elem_id = CISCO_ELEM_SPAM_VENDOR_SPECIFIC,
@@ -244,7 +244,7 @@ static cw_action_in_t actions_in[] = {
 	{
 
 		.proto = CW_ACTION_PROTO_LWAPP,
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id = CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.vendor_id = LW_VENDOR_ID_CISCO,
 		.elem_id = CISCO_LWELEM_MWAR_HASH_VALUE,
@@ -424,7 +424,7 @@ static cw_action_in_t actions80211_in[] = {
 
 	/* Radio Operational State - Status Resp */
 	{
-		.capwap_state = CW_STATE_CONFIGURE, 
+		.capwap_state = CAPWAP_STATE_CONFIGURE, 
 		.msg_id= CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,
 		.elem_id = CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,
 		.item_id = CW_RADIOITEM_OPER_STATE,
