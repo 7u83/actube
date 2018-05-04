@@ -19,7 +19,7 @@ ac-name-with-priority/ac2 :Byte: 5
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.1 :IPAddress: 192.168.0.175
 capwap-control-ip-address/address.2 :IPAddress: 192.168.0.173
-capwap-control-ip-address/wtps.0 :Word: 0
+capwap-control-ip-address/wtps.0 :Word: 1
 capwap-control-ip-address/wtps.1 :Word: 1
 capwap-control-ip-address/wtps.2 :Word: 1
 capwap-local-ip-address :IPAddress: 192.168.56.1
@@ -61,7 +61,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1525248241
+cisco/ap-timesync/timestamp :Dword: 1525354079
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 

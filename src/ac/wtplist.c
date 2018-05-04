@@ -103,6 +103,10 @@ void wtplist_remove(struct wtpman * wtpman)
 	return;
 
 }
-	
+
+struct connlist * wtplist_get_connlist(void)
+{
+	return connlist;
+}
 
 

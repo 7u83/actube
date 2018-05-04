@@ -11,13 +11,62 @@
 #include "cw/dbg.h"
 
 
-void execute_cmd(const char *str)
+#include "cw/connlist.h"
+
+
+#include "wtplist.h"
+
+void show_aps(FILE *out){
+	struct connlist * cl;
+	mavliter_t it;
+	
+	
+	
+	wtplist_lock();
+	
+	cl = wtplist_get_connlist();
+	
+	
+	mavliter_init(&it,cl->by_addr);
+	fprintf(out,"IP\t\t\twtp-name\n");
+	mavliter_foreach(&it){
+		cw_KTV_t * result;
+		char addr[SOCK_ADDR_BUFSIZE];
+		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
+		struct conn * conn;
+		conn = mavliter_get_ptr(&it);
+		
+		sock_addr2str_p(&conn->addr,addr);
+		
+		result = cw_ktv_get(conn->remote_cfg,"wtp-name",NULL);
+		if (result==NULL){
+			strcpy(wtp_name,"");
+		}
+		else{
+			result->type->to_str(result,wtp_name,CAPWAP_MAX_WTP_NAME_LEN);
+		}
+		
+		
+		fprintf(out,"%s\t\t%s\n",addr,wtp_name);
+			
+		
+	}
+	
+	
+	wtplist_unlock();
+	
+}
+
+
+void execute_cmd(FILE * out, const char *str)
 {
 	char cmd[1024];
 	char args[1024];
 	
 	sscanf(str,"%s%s",cmd,args);
-	printf("CMD: %s, ARGS: %s\n",cmd,args);
+	printf("CMD: %s, ARGS:\n",cmd);
+	
+	show_aps(out);
 	
 
 
@@ -39,7 +88,7 @@ void shell_loop(FILE *file)
 		fflush(file);
 		
 		fgets(str,sizeof(str),file);
-		execute_cmd(str);
+		execute_cmd(file,str);
 
 	}while (c!=EOF);
 	

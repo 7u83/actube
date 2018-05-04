@@ -14,6 +14,6 @@ extern void wtplist_remove(struct wtpman * wtpman);
 extern void wtplist_lock();
 extern void wtplist_unlock();
 extern struct wtpman * wtplist_get_by_session_id(uint8_t *session_id);
-
+struct connlist * wtplist_get_connlist(void);
 
 #endif
