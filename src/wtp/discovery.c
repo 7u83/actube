@@ -148,7 +148,7 @@ static int run_discovery(struct conn *conn, struct cw_DiscoveryResult * dis)
 	}
 	
 
-	conn->capwap_transition = CAPWAP_STATE_DISCOVERY;
+	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
 
 	/* create and send a discovery request message */
@@ -164,7 +164,7 @@ static int run_discovery(struct conn *conn, struct cw_DiscoveryResult * dis)
 	
 	
 	while (!cw_timer_timeout(timer)
-	       && conn->capwap_transition == CAPWAP_STATE_DISCOVERY) {
+	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		char addr_str[SOCK_ADDR_BUFSIZE];
 

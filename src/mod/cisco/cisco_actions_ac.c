@@ -1333,12 +1333,35 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_out_generic_struct				/* put */
 	}
 	,
+	
+	{
+		"AP DTLS Data CFG",				/* name */
+		CISCO_LWELEM_AP_DTLS_DATA_CFG,			/* Element ID */
+		CW_VENDOR_ID_CISCO, CW_PROTO_LWAPP,		/* Vendor / Proto */
+		3, 3,						/* min/max length */
+		CW_TYPE_BSTR16,					/* type */
+		"cisco/ap-dtls-data-cfg",			/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic					/* put */
+	}
+	,
+	{
+		"Operational State Detail Cause",		/* name */
+		CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,		/* Element ID */
+		CW_VENDOR_ID_CISCO, 0,				/* Vendor / Proto */
+		4, 4,						/* min/max length */
+		CW_TYPE_WORD,					/* type */
+		"cisco/operational-state-detail-cause",		/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic				/* put */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
 
 
-static uint16_t discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
+/*static uint16_t discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};*/
 static struct cw_ElemDef discovery_request_elements[] ={
 /*	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},*/
 	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},
@@ -1348,7 +1371,7 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	
 };
 
-static uint16_t discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
+/*static uint16_t discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};*/
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,			0, 0},
@@ -1378,7 +1401,7 @@ static struct cw_ElemDef join_request_elements[] ={
 	
 };
 
-static uint16_t join_response_states[] = {CAPWAP_STATE_JOIN,0};
+/*static uint16_t join_response_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef join_response_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
@@ -1415,6 +1438,8 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	
 	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		1, 0},
@@ -1426,14 +1451,14 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,			0, 0},
-
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_DTLS_DATA_CFG,			0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	1, 0},
 	{0,0,0,00}
 	
 };
 
-static uint16_t configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
+/*static uint16_t configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0,0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1,0},
 	{0,0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	1,0},
@@ -1455,7 +1480,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 };
 
 
-static uint16_t configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};
+/*static uint16_t configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};*/
 static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	
@@ -1513,21 +1538,47 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	
 };
 
-static uint16_t wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};
+/*static uint16_t wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef wtp_event_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
+
 	{0,0,0,0,0}
 };
 
-static uint16_t wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+/*static uint16_t wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef wtp_event_response_elements[] ={
 /*	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},*/
 
 	{0,0,0,0,0}
 };
 
-static uint16_t wtp_echo_response_states[] = {CAPWAP_STATE_RUN,0};
+
+static struct cw_ElemDef change_state_event_request_elements[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,	0, CW_IGNORE},
+	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	0, CW_IGNORE},
+
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
+
+	{0,0,0,0,0}
+};
+
+/*static uint16_t wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};*/
+static struct cw_ElemDef change_state_event_response_elements[] ={
+/*	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},*/
+
+	{0,0,0,0,0}
+};
+
+
+
+
+
+/*static uint16_t wtp_echo_response_states[] = {CAPWAP_STATE_RUN,0};*/
 static struct cw_ElemDef wtp_echo_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
 	{0,0,0,0,0}
@@ -1539,7 +1590,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
 		CW_ROLE_AC,			/* role */
-		discovery_request_states,	/* states */
+		NULL,				/* states */
 		discovery_request_elements,	/* elements */
 		NULL,				/* preprocess fun */
 		postprocess_discovery		/* postprocess fun */
@@ -1548,7 +1599,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_RESPONSE,	/* type */
 		CW_ROLE_WTP,
-		discovery_response_states,
+		NULL,
 		discovery_response_elements,
 		
 	},
@@ -1565,7 +1616,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,				/* name */
 		CAPWAP_MSG_JOIN_RESPONSE,	/* type */
 		CW_ROLE_WTP,
-		join_response_states,
+		NULL,
 		join_response_elements
 	},
 
@@ -1583,7 +1634,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,						/* name */
 		CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,	/* type */
 		CW_ROLE_WTP,
-		configuration_status_response_states,
+		NULL,
 		configuration_status_response_elements,
 		NULL					/* postprocess */
 	},
@@ -1592,7 +1643,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,						/* name */
 		CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,	/* type */
 		CW_ROLE_WTP,
-		configuration_update_request_states,
+		NULL,
 		configuration_update_request_elements,
 		NULL					/* postprocess */
 	},
@@ -1602,7 +1653,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,					/* name */
 		CAPWAP_MSG_WTP_EVENT_REQUEST,		/* msg type */
 		CW_ROLE_AC,					/* role */
-		wtp_event_request_states,		/* allowed states */
+		NULL,				/* allowed states */
 		wtp_event_request_elements		/* msg elements */
 	},
 
@@ -1610,16 +1661,33 @@ static struct cw_MsgDef messages[] = {
 		NULL,					/* name */
 		CAPWAP_MSG_WTP_EVENT_RESPONSE,		/* msg type */
 		CW_ROLE_WTP,					/* role */
-		wtp_event_response_states,		/* allowed states */
+		NULL,		/* allowed states */
 		wtp_event_response_elements		/* msg elements */
 	},
+
+	{
+		NULL,					/* name */
+		CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,	/* msg type */
+		CW_ROLE_AC,					/* role */
+		NULL,					/* allowed states */
+		change_state_event_request_elements		/* msg elements */
+	},
+
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CHANGE_STATE_EVENT_RESPONSE,		/* msg type */
+		CW_ROLE_WTP,					/* role */
+		NULL,		/* allowed states */
+		change_state_event_response_elements		/* msg elements */
+	},
+
 
 
 	{
 		NULL,					/* name */
 		CAPWAP_MSG_ECHO_RESPONSE,		/* msg type */
 		CW_ROLE_WTP,					/* role */
-		wtp_echo_response_states,		/* allowed states */
+		NULL,		/* allowed states */
 		wtp_echo_response_elements		/* msg elements */
 	},
 
@@ -1641,7 +1709,7 @@ static struct cw_ElemHandler handlers75[] = {
 	}
 	,
 	{ 
-		"Mac Operation (Version >= 7.5",	/* name */
+		"Mac Operation (Version >= 7.5)",	/* name */
 		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		17,17,					/* min/max length */
@@ -1654,15 +1722,35 @@ static struct cw_ElemHandler handlers75[] = {
 	{0,0,0,0,0,0,0,0}
 };
 
+
+
+
+
+
 static struct cw_MsgDef messages75[] = {
 	{0,0,0,0}
 };
+
+
+
+static cw_StateMachineState_t statemachine_states[]={
+	{
+		CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_DATA_CHECK,
+		NULL,0,
+		1, NULL,
+		CAPWAP_STATE_DATA_CHECK,CAPWAP_STATE_RUN
+	}
+	,
+	{0,0,0}
+};
+
 
 
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
         if (mode != CW_MOD_MODE_CAPWAP)
                 return NULL;
         cw_msgset_add(set,messages, handlers73);
+	cw_msgset_add_states(set,statemachine_states);
         return set;
 }
 

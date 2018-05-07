@@ -116,7 +116,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 	}
 
 	/* setup a socket */
-	conn->capwap_transition = CAPWAP_STATE_JOIN;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
 	sockfd = socket(sa->sa_family, SOCK_DGRAM, 0);
 	if (sockfd == -1) {
 		cw_log(LOG_ERR, "Can't create socket: %s\n", strerror(errno));
@@ -154,6 +154,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
 	       sock_addr2str(sa,addrstr));
+
 
 	run_join(conn);
 	return 1;

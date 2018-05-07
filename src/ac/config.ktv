@@ -30,6 +30,7 @@ ac-descriptor/software/version :Bstr16: .x07036500
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
 capwap-control-ip-address/address.0 :IPAddress: 192.168.0.14
+#capwap-control-ip-address/address.0 :IPAddress: 192.168.42.51
 capwap-control-ip-address/wtps.0 :Word: 2
 cisco/mwar-type :Byte: 0
 maximum-message-length :Word: 4096
@@ -50,8 +51,8 @@ capwap-control-ip-address/wtps.0:Word:0
 
 cisco/ssl-keyfile:Str:"../../ssl/certs/cisco-ac.key"
 cisco/ssl-certfile:Str:"../../ssl/certs/cisco-ac.pem"
-cisco/ssl-cipher:Str:NORMAL 
-#+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+cisco/ssl-cipher:Str:NORMAL
+#cisco/ssl-cipher:Str:+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
 cisco/ssl-dhbits:Word:2048
 
 capwap/ssl-cipher:Str:+DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
@@ -71,6 +72,14 @@ actube/listen:Bstr16:192.168.0.1
 
 
 wait-dtls:Word:12
-wait-join:Word:3
+wait-join:Word:7
 
 capwap-timers/change-state-pending-timer: Word: 3
+capwap-timers/data-check-timer: Word: 10
+capwap-timers/echo-interval :Byte: 30
+capwap-timers/max-discovery-interval :Byte: 10
+
+radio.255/admin-state :Str: enabled
+radio.255/operational-state/cause :Str: Normal
+radio.255/operational-state/state :Str: enabled
+

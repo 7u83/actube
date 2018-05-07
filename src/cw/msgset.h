@@ -12,7 +12,7 @@ struct cw_MsgSet {
 	mavl_t handlers_by_id;
 	mavl_t handlers_by_key;
 	mavl_t types_tree;
-	
+	mavl_t state_machine;
 };
 
 struct cw_ElemDef{
@@ -62,24 +62,32 @@ struct cw_ElemHandler {
 
 };
 
+struct cw_State{
+	uint8_t state;
+	uint8_t next;
+};
+typedef struct cw_State cw_State_t;
+
 struct cw_MsgDef{
 	const char * name;
 	int type;	/**< Message type */
 	int receiver;	/**< Who can receive this message */
-	uint16_t * states;	/**< states in wich the message is allowed */
+	cw_State_t * states;	/**< states in wich the message is allowed */
 
 	
 	struct cw_ElemDef * elements;
 	int (*preprocess)(struct conn * conn);
 	int (*postprocess)(struct conn * conn);
-	uint8_t next_state;
+/*	uint8_t next_state;*/
 };
+
+
 
 
 struct cw_MsgData{
 	int type;
 	const char * name;
-	uint16_t * states;
+	cw_State_t * states;
 	int receiver;
 	mavl_t elements_tree;
 	mlist_t elements_list;
@@ -87,18 +95,32 @@ struct cw_MsgData{
 
 	int (*preprocess)(struct conn * conn);
 	int (*postprocess)(struct conn * conn);
-	uint8_t next_state;
+/*	uint8_t next_state;*/
 };
 
 
+struct cw_StateMachineState{
+	uint8_t prevstate;
+	uint8_t state;
+	const char * timer_key;
+	int timer_default;
+	int retval;
+	const char *dbgmsg;
+	uint8_t jump_prevstate;
+	uint8_t jump_state;
 
 
+};
+typedef struct cw_StateMachineState cw_StateMachineState_t;
 
 extern struct cw_MsgSet * cw_msgset_create();
 
-extern void cw_msgset_destroy(struct cw_MsgSet * set);
-extern int cw_msgset_add(struct cw_MsgSet * set,
+void cw_msgset_destroy(struct cw_MsgSet * set);
+int cw_msgset_add(struct cw_MsgSet * set,
 			struct cw_MsgDef messages[], struct cw_ElemHandler handlers[]);
+			
+int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states);
+
 /*mlist_t cw_msgset_get_msg(struct cw_MsgSet * set, int type);*/
 
 struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type);

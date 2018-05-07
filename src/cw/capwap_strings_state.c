@@ -8,6 +8,8 @@ struct cw_StrListElem capwap_strings_state[] = {
 { CAPWAP_STATE_CONFIGURE,"Configure" },
 { CW_STATE_IMAGE_DATA,"Image Data" },
 { CAPWAP_STATE_DTLS_SETUP, "DTLS Setup" },
+{ CAPWAP_STATE_DATA_CHECK, "Data Check" },
+{ CAPWAP_STATE_TIMEOUT, "Timeout"},
 { CW_STR_STOP,"Undefined" },
 
 };

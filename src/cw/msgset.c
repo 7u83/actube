@@ -58,6 +58,18 @@ static int cmp_elemdata(const void *elem1, const void *elem2)
 
 }
 
+
+static int cmp_machinestate(const void *state1, const void *state2)
+{
+	const struct cw_StateMachineState *s1 = state1;
+	const struct cw_StateMachineState *s2 = state2;
+	int rc;
+	rc = s1->state - s2->state;
+	if (rc!=0)
+		return rc;
+	return s1->prevstate-s2->prevstate;
+}
+
 static void msgdata_destroy(struct cw_MsgData *data)
 {
 	if (!data)
@@ -67,6 +79,7 @@ static void msgdata_destroy(struct cw_MsgData *data)
 
 	if (data->elements_tree)
 		mavl_destroy(data->elements_tree);
+	
 	free(data);
 }
 
@@ -89,6 +102,8 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
 		mavl_destroy(set->handlers_by_id);
 	if (set->handlers_by_key)
 		mavl_destroy(set->handlers_by_key);
+	if (set->state_machine)
+		mavl_destroy(set->state_machine);
 	free(set);
 }
 
@@ -105,6 +120,8 @@ struct cw_MsgSet *cw_msgset_create()
 		return NULL;
 
 	memset(set, 0, sizeof(struct cw_MsgSet));
+	
+	
 
 	/* create mavl for all_elems by id */
 	set->handlers_by_id = mavl_create(cmp_cw_elemhandler_by_id, NULL,
@@ -132,6 +149,13 @@ struct cw_MsgSet *cw_msgset_create()
 	
 	set->types_tree = cw_ktv_create_types_tree();
 	if (set->types_tree == NULL){
+		cw_msgset_destroy(set);
+		return NULL;
+	}
+	
+	set->state_machine = mavl_create(cmp_machinestate,NULL,sizeof(cw_StateMachineState_t));
+	if (set->state_machine == NULL)
+	{
 		cw_msgset_destroy(set);
 		return NULL;
 	}
@@ -292,9 +316,9 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->postprocess = msgdef->postprocess;
 		if (msgdef->preprocess != NULL)
 			msg->preprocess = msgdef->preprocess;
-		if (msgdef->next_state)
+/*		if (msgdef->next_state)
 			msg->next_state=msgdef->next_state;
-			
+*/			
 		msg->receiver = msgdef->receiver;
 
 
@@ -317,6 +341,30 @@ int cw_msgset_add(struct cw_MsgSet *set,
 	
 
 	return 0;
+}
+
+int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states)
+{
+	cw_StateMachineState_t * s;
+	int replaced;
+	
+	s=states;
+	while (s->state != 0){
+		const char * repstr;
+		mavl_replace(set->state_machine,s,&replaced);
+
+		if (replaced){
+			repstr = "Replacing";
+		}
+		else{
+			repstr = "Adding";
+		}
+		cw_dbg(DBG_MOD,"%s machine state : [%s->%s]",repstr,
+			cw_strstate(s->prevstate),
+			cw_strstate(s->state));
+		s++;
+	}
+	return 1;
 }
 
 /**

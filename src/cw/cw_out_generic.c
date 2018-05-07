@@ -11,15 +11,16 @@
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
-/*	char detail[128];*/
+
 	struct cw_KTV * elem, search;
 	int start, len, l;
-	/* Get the element to put */
 
+	/* Get the element */
 	search.key=(char*)handler->key;
 	elem = mavl_get(params->conn->local_cfg, &search);
-
-
+/*	if (elem == NULL && params->conn->default_cfg !=NULL)
+		elem = mavl_get(params->conn->default_cfg, &search);
+*/
 	if (elem == NULL) {
 		const char *vendor="";
 		if ( handler->vendor ) {

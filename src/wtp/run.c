@@ -140,7 +140,7 @@ int run(struct conn * conn)
 
 
 
-	conn->capwap_transition = CAPWAP_STATE_RUN;
+	conn->capwap_state = CAPWAP_STATE_RUN;
 
 /*	conn->msg_end=handle_update_req;*/
 
@@ -156,7 +156,7 @@ int run(struct conn * conn)
 		
 
 
-		while (!cw_timer_timeout(timer) && conn->capwap_transition == CAPWAP_STATE_RUN) {
+		while (!cw_timer_timeout(timer) && conn->capwap_state == CAPWAP_STATE_RUN) {
 			mavl_del_all(conn->remote_cfg);
 			rc = cw_read_messages(conn);
 			if (rc < 0 && errno == EAGAIN) {
@@ -196,7 +196,7 @@ int run(struct conn * conn)
 
 
 
-	} while (conn->capwap_transition == CAPWAP_STATE_RUN);
+	} while (conn->capwap_state == CAPWAP_STATE_RUN);
 
 
 /*

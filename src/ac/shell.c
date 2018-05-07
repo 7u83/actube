@@ -16,7 +16,30 @@
 
 #include "wtplist.h"
 
-void show_aps(FILE *out){
+void show_cfg (FILE *out, mavl_t ktv)
+{
+	char value[500];
+	struct cw_KTV * data;
+	mavliter_t it;
+	const struct cw_Type * type;
+	
+	
+	mavliter_init(&it,ktv);
+
+	mavliter_foreach(&it){
+		
+		data = mavliter_get(&it);
+		type = data->type;
+		type->to_str(data,value,0);
+		
+		fprintf(out,"%s :%s: %s\n",data->key,type->get_type_name(data), value);
+	}
+	
+	
+}
+
+void show_aps (FILE *out)
+{
 	struct connlist * cl;
 	mavliter_t it;
 	
@@ -27,75 +50,82 @@ void show_aps(FILE *out){
 	cl = wtplist_get_connlist();
 	
 	
-	mavliter_init(&it,cl->by_addr);
-	fprintf(out,"IP\t\t\twtp-name\n");
-	mavliter_foreach(&it){
+	mavliter_init (&it, cl->by_addr);
+	fprintf (out, "IP\t\t\twtp-name\n");
+	mavliter_foreach (&it) {
 		cw_KTV_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
 		struct conn * conn;
-		conn = mavliter_get_ptr(&it);
+		conn = mavliter_get_ptr (&it);
 		
-		sock_addr2str_p(&conn->addr,addr);
+		sock_addr2str_p (&conn->addr, addr);
 		
-		result = cw_ktv_get(conn->remote_cfg,"wtp-name",NULL);
-		if (result==NULL){
-			strcpy(wtp_name,"");
-		}
-		else{
-			result->type->to_str(result,wtp_name,CAPWAP_MAX_WTP_NAME_LEN);
-		}
+		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
 		
-		
-		fprintf(out,"%s\t\t%s\n",addr,wtp_name);
+		if (result == NULL) {
+			strcpy (wtp_name, "");
 			
+		} else {
+			result->type->to_str (result, wtp_name, CAPWAP_MAX_WTP_NAME_LEN);
+		}
 		
+		
+		fprintf (out, "%s\t\t%s\n", addr, wtp_name);
+		
+		fprintf(out,"================= Local CFG: =================== \n");
+		show_cfg(out,conn->local_cfg);
+		fprintf(out,"================= Remote CFG: ================== \n");
+		show_cfg(out,conn->remote_cfg);
+
+		fprintf(out,"\n");
+
 	}
-	
-	
 	wtplist_unlock();
-	
 }
 
 
-void execute_cmd(FILE * out, const char *str)
+
+
+void execute_cmd (FILE * out, const char *str)
 {
 	char cmd[1024];
 	char args[1024];
 	
-	sscanf(str,"%s%s",cmd,args);
-	printf("CMD: %s, ARGS:\n",cmd);
+	sscanf (str, "%s%s", cmd, args);
+	/*printf("CMD: %s, ARGS:\n",cmd);*/
 	
-	show_aps(out);
-	
-
+	if (strcmp (cmd, "s") == 0) {
+		show_aps (out);
+		return;
+	}
 
 }
 
 
-void shell_loop(FILE *file)
+void shell_loop (FILE *file)
 {
 	int c;
-/*	setvbuf(file,NULL,_IONBF,0);
-	fflush(file);
-*/
-
-	char str[2048];
-
-
-	do {
-		fprintf(file,"actube[%d]:>",fileno(file));
+	/*	setvbuf(file,NULL,_IONBF,0);
 		fflush(file);
+	*/
+	
+	char str[2048];
+	
+	
+	do {
+		fprintf (file, "actube[%d]:>", fileno (file));
+		fflush (file);
 		
-		fgets(str,sizeof(str),file);
-		execute_cmd(file,str);
-
-	}while (c!=EOF);
+		fgets (str, sizeof (str), file);
+		execute_cmd (file, str);
+		
+	} while (c != EOF);
 	
 }
 
 
-void * run_shell(void * arg)
+void * run_shell (void * arg)
 {
 	struct sockaddr_storage server, client;
 	socklen_t client_size;
@@ -106,47 +136,50 @@ void * run_shell(void * arg)
 	int sockfd, clientsock;
 	int yes;
 	
-	rc = sock_strtoaddr(addr,(struct sockaddr*)&server);
-	if (! rc ){
-		cw_log(LOG_ERR,"Can't parse address '%s', %s",addr,strerror(errno));
+	rc = sock_strtoaddr (addr, (struct sockaddr*) &server);
+	
+	if (! rc) {
+		cw_log (LOG_ERR, "Can't parse address '%s', %s", addr, strerror (errno));
 	}
-
-	sockfd = socket(((struct sockaddr*)&server)->sa_family,SOCK_STREAM,0);
+	
+	sockfd = socket ( ( (struct sockaddr*) &server)->sa_family, SOCK_STREAM, 0);
 	
 	yes = 1;
 	/* reuse address */
-	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+	setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof (yes));
 	
-
+	
 	/* bind address */
-	rc =  bind(sockfd,(struct sockaddr*)&server,sizeof(server));
-	if (rc ){
-		cw_log(LOG_ERR,"Can't bind socket address '%s', %s",addr,strerror(errno));
+	rc =  bind (sockfd, (struct sockaddr*) &server, sizeof (server));
+	
+	if (rc) {
+		cw_log (LOG_ERR, "Can't bind socket address '%s', %s", addr, strerror (errno));
 	}
 	
-	rc = listen(sockfd,5);
-	if (rc ){
-		cw_log(LOG_ERR,"Can't listen on address '%s', %s",addr,strerror(errno));
-	}
+	rc = listen (sockfd, 5);
 	
-
-	client_size = sizeof(client);
-	clientsock = accept(sockfd,(struct sockaddr*)&client,&client_size);
-	
-	if (clientsock>0){
-		sock_addr2str_p(&client,sockstr);
-		cw_dbg(DBG_INFO, "Acceptiong session from %s",sockstr);
-		shell_loop(fdopen(clientsock,"a+"));
-		close(clientsock);
+	if (rc) {
+		cw_log (LOG_ERR, "Can't listen on address '%s', %s", addr, strerror (errno));
 	}
 	
 	
+	client_size = sizeof (client);
+	clientsock = accept (sockfd, (struct sockaddr*) &client, &client_size);
 	
-	printf("Accepting %i, %s",rc,strerror(errno));
+	if (clientsock > 0) {
+		sock_addr2str_p (&client, sockstr);
+		cw_dbg (DBG_INFO, "Acceptiong session from %s", sockstr);
+		shell_loop (fdopen (clientsock, "a+"));
+		close (clientsock);
+	}
 	
 	
 	
-
+	printf ("Accepting %i, %s", rc, strerror (errno));
+	
+	
+	
+	
 	return NULL;
 }
 
@@ -154,6 +187,6 @@ void * run_shell(void * arg)
 void start_shell()
 {
 	pthread_t thread;
-	pthread_create(&thread, NULL, run_shell,
-                       NULL);
+	pthread_create (&thread, NULL, run_shell,
+	                NULL);
 }

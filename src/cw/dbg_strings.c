@@ -68,6 +68,7 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	{ DBG_WARN, "warn" },
 	
 	{ DBG_MOD,"mod"},
+	{ DBG_STATE, "state" },
 	{ DBG_ALL, "all"},
 	
 	{ CW_STR_STOP, NULL } 

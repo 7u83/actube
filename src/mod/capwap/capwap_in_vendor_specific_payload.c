@@ -29,7 +29,7 @@ int capwap_in_vendor_specific_payload(struct cw_ElemHandler *handler,
 		cw_dbg(DBG_WARN,
 		       "Can't handle Vendor Specific Payload %s/%d, in msg %d (%s) in %s state.",
 		       cw_strvendor(vendor_id), elem_id, params->msgdata->type,
-		       params->msgdata->name, cw_strstate(params->conn->capwap_transition));
+		       params->msgdata->name, cw_strstate(params->conn->capwap_state));
 		return 0;
 	}
 

@@ -401,7 +401,10 @@ static struct cw_ElemHandler handlers[] = {
 };
 
 
-static uint16_t discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};
+static cw_State_t discovery_request_states[] = {
+	{CAPWAP_STATE_DISCOVERY,CAPWAP_STATE_DISCOVERY},
+	{0,0}
+};
 static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,CAPWAP_ELEM_DISCOVERY_TYPE,		1, 0},
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
@@ -414,7 +417,10 @@ static struct cw_ElemDef discovery_request_elements[] ={
 };
 
 
-static uint16_t discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};
+static cw_State_t discovery_response_states[] = {
+	{CAPWAP_STATE_DISCOVERY,CAPWAP_STATE_DISCOVERY},
+	{0,0}
+};
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
 	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
@@ -425,9 +431,10 @@ static struct cw_ElemDef discovery_response_elements[] ={
 
 };
 
-static uint16_t join_request_states[] = {
-	CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP,CAPWAP_STATE_JOIN),
-	0};
+static cw_State_t join_request_states[] = {
+	{CAPWAP_STATE_JOIN, CAPWAP_STATE_JOIN},
+	{0,0}
+};
 static struct cw_ElemDef join_request_elements[] ={
 	{0,0,CAPWAP_ELEM_LOCATION_DATA,			1, 0},
 	{0,0,CAPWAP_ELEM_WTP_BOARD_DATA,		1, 0},
@@ -446,7 +453,10 @@ static struct cw_ElemDef join_request_elements[] ={
 	{0,0,0,0,0}
 };
 
-static uint16_t join_response_states[] = {CAPWAP_STATE_JOIN,0};
+static cw_State_t join_response_states[] = {
+	{CAPWAP_STATE_JOIN,CAPWAP_STATE_JOIN},
+	{0,0}
+};
 static struct cw_ElemDef join_response_elements[] ={
 	{0,0,CAPWAP_ELEM_RESULT_CODE,			1, 0},
 	{0,0,CAPWAP_ELEM_AC_DESCRIPTOR,			1, 0},
@@ -465,9 +475,10 @@ static struct cw_ElemDef join_response_elements[] ={
 };
 
 
-static uint16_t configuration_status_request_states[] = {
-	CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_JOIN),
-	0};
+static cw_State_t configuration_status_request_states[] = {
+	{CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE},
+	{0,0}
+};
 static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0,0,CAPWAP_ELEM_AC_NAME,			1, 0},
 	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
@@ -479,7 +490,10 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0,0,0,0,0}
 };
 
-static uint16_t configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};
+static cw_State_t configuration_status_response_states[] = {
+	{CAPWAP_STATE_JOIN,CAPWAP_STATE_JOIN},
+	{0,0}
+};
 static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0,0,CAPWAP_ELEM_CAPWAP_TIMERS,				1, 0},
 	{0,0,CAPWAP_ELEM_DECRYPTION_ERROR_REPORT_PERIOD,	1, 0},
@@ -491,7 +505,10 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 };
 
 
-static uint16_t configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};
+static cw_State_t configuration_update_request_states[] = {
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
+	{0,0}
+};
 static struct cw_ElemDef configuration_update_request_elements[] ={
 
 	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
@@ -505,16 +522,21 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 
 
 
-static uint16_t configuration_update_response_states[] = {CAPWAP_STATE_RUN,0};
+static cw_State_t configuration_update_response_states[] = {
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
+	{0,0}
+};
 static struct cw_ElemDef configuration_update_response_elements[] ={
 	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
 
 	{0,0,0,0,0}
 };
 
-static uint16_t change_state_event_request_states[] = {
-		CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE),
-		0};
+static cw_State_t change_state_event_request_states[] = {
+	{CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_DATA_CHECK},
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
+	{0,0}
+};
 static struct cw_ElemDef change_state_event_request_elements[] ={
 
 	{0,0,CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	1,0},
@@ -524,7 +546,10 @@ static struct cw_ElemDef change_state_event_request_elements[] ={
 	{0,0,0,0,0}
 };
 
-static uint16_t change_state_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+static cw_State_t change_state_event_response_states[] = {
+	{CAPWAP_STATE_JOIN,CAPWAP_STATE_JOIN},
+	{0,0}
+};
 static struct cw_ElemDef change_state_event_response_elements[] ={
 	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
 
@@ -532,14 +557,20 @@ static struct cw_ElemDef change_state_event_response_elements[] ={
 };
 
 
-static uint16_t wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};
+static cw_State_t wtp_event_request_states[] = {
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
+	{0,0}
+};
 static struct cw_ElemDef wtp_event_request_elements[] ={
 
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
 
-static uint16_t wtp_event_response_states[] = {CAPWAP_STATE_JOIN,0};
+static cw_State_t wtp_event_response_states[] = {
+	{CAPWAP_STATE_JOIN,0},
+	{0,0}
+};
 static struct cw_ElemDef wtp_event_response_elements[] ={
 	{0,0,CAPWAP_ELEM_RESULT_CODE,				1, 0},
 
@@ -547,13 +578,19 @@ static struct cw_ElemDef wtp_event_response_elements[] ={
 };
 
 
-static uint16_t echo_request_states[] = {CAPWAP_STATE_RUN,0};
+static cw_State_t echo_request_states[] = {
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
+	{0,0}
+};
 static struct cw_ElemDef echo_request_elements[] ={
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
 
-static uint16_t echo_response_states[] = {CAPWAP_STATE_RUN,0};
+static cw_State_t echo_response_states[] = {
+	{CAPWAP_STATE_RUN,0},
+	{0,0}
+};
 static struct cw_ElemDef echo_response_elements[] ={
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
@@ -587,8 +624,6 @@ static struct cw_MsgDef messages[] = {
 		join_request_elements,
 		NULL,
 		postprocess_join_request,
-		CAPWAP_STATE_JOIN,
-		
 	},
 
 	{
@@ -607,7 +642,6 @@ static struct cw_MsgDef messages[] = {
 		configuration_status_request_elements,		/* msg elements */
 		NULL,
 		NULL,
-		CAPWAP_STATE_CONFIGURE
 	},
 	
 	{
@@ -639,10 +673,9 @@ static struct cw_MsgDef messages[] = {
 		CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,		/* msg type */
 		CW_ROLE_AC,					/* role */
 		change_state_event_request_states,		/* allowed states */
-		change_state_event_request_elements		/* msg elements */
+		change_state_event_request_elements,		/* msg elements */
 		NULL,
 		NULL,
-		CAPWAP_STATE_DATA_CHECK
 	},
 
 	{
@@ -698,6 +731,72 @@ static int postprocess_join_request(struct conn *conn)
 }
 
 
+static cw_StateMachineState_t statemachine_states[]={
+	{
+		CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN,	/* transition */
+		"wait-join",CAPWAP_WAIT_JOIN,			/* timer */
+		1						/* retval */
+	}
+	,
+	{
+		CAPWAP_STATE_JOIN,CAPWAP_STATE_TIMEOUT,
+		NULL,0,
+		0, "WTP Join timeout"
+	}
+	,
+	{
+		CAPWAP_STATE_JOIN, CAPWAP_STATE_JOIN,
+		NULL,0,
+		1, "WTP has joined"
+		
+	}
+	,
+	{
+		CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE,
+		"capwap-timers/change-state-pending-timer",CAPWAP_TIMER_CHANGE_STATE_PENDING_TIMER,
+		1, NULL
+	}
+	,
+	{
+		CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_TIMEOUT,
+		NULL,0,
+		0, "WTP change state timeout"
+	}
+	,
+	{
+		CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_DATA_CHECK,
+		"capwap-timers/data-check-timer",CAPWAP_TIMER_DATA_CHECK_TIMER,
+		1, NULL
+	}
+	,
+	{
+		CAPWAP_STATE_DATA_CHECK,CAPWAP_STATE_TIMEOUT,
+		NULL,0,
+		0, "WTP data check timeout"
+	}
+	,
+	
+	{
+		CAPWAP_STATE_DATA_CHECK,CAPWAP_STATE_RUN,
+		"capwap-timers/echo-interval",CAPWAP_ECHO_INTERVAL,
+		1, NULL
+	}
+	,
+	{
+		CAPWAP_STATE_RUN,CAPWAP_STATE_RUN,
+		"capwap-timers/echo-interval",CAPWAP_ECHO_INTERVAL,
+		1, NULL
+	}
+	,
+	{
+		CAPWAP_STATE_RUN,CAPWAP_STATE_TIMEOUT,
+		NULL,0,
+		0, "WTP echo timout"
+	}
+	,
+	{0,0,0}
+};
+
 
 
 struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
@@ -707,6 +806,9 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	cw_dbg(DBG_INFO,"CAPWAP: Register messages");
 	
 	cw_msgset_add(set,messages, handlers);
+	
+	cw_msgset_add_states(set,statemachine_states);
+	
 	mavl_add_ptr(set->types_tree,CW_TYPE_BSTR16);
 	mavl_add_ptr(set->types_tree,CW_TYPE_BYTE);
 	mavl_add_ptr(set->types_tree,CW_TYPE_DWORD);

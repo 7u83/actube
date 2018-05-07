@@ -44,7 +44,7 @@ OBJDIR		:= ../../../obj/mod_cisco/$(ARCH)
 SNAME		:= $(LIBARCHDIR)/libmod_cisco.a
 DNAME		:= $(LIBARCHDIR)/mod_cisco.so
 MODNAME		:= $(LIBDIR)/mod_cisco.so
-SLIBS		:= -lcw -lmod_capwap -lconfuse
+SLIBS		:= -lcw -lconfuse
 
 
 include ../Mod.mak

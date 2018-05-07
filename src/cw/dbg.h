@@ -118,6 +118,8 @@ enum cw_dbg_levels{
 	/** Debug Mods */
 	DBG_MOD,
 	
+	DBG_STATE, /**<Debug State machein */
+	
 	DBG_ALL, 
 	
 	DBG_PKT_DMP_OUT,

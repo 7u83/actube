@@ -90,15 +90,15 @@ static void wtpman_run_discovery(void *arg)
 
 	time_t timer = cw_timer_start(10);
 
-	wtpman->conn->capwap_transition = CAPWAP_STATE_DISCOVERY;
+	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
 
 	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_transition == CAPWAP_STATE_DISCOVERY) {
+	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		rc = cw_read_messages(wtpman->conn);
 		if (cw_result_is_ok(rc)){
-			wtpman->conn->capwap_transition=CAPWAP_STATE_JOIN;
+			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
 			
 			cw_dbg(DBG_INFO,"Discovery has detected mods: %s %s", 
 				wtpman->conn->cmod->name,wtpman->conn->bmod->name);
@@ -166,7 +166,7 @@ static int wtpman_join(void *arg)
 	timer = cw_timer_start(wait_join);
 
 
-	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_transition == CAPWAP_STATE_JOIN) {
+	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno == EAGAIN)
@@ -185,7 +185,7 @@ static int wtpman_join(void *arg)
 	}
 
 
-	if (wtpman->conn->capwap_transition != CAPWAP_STATE_JOIN_COMPLETE) {
+	if (wtpman->conn->capwap_state != CAPWAP_STATE_JOIN_COMPLETE) {
 		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
 		       sock_addr2str(&wtpman->conn->addr,sock_buf), wait_join);
 
@@ -279,6 +279,49 @@ void * wtpman_run_data(void *wtpman_arg)
 
 }
 
+int cw_run_state_machine(struct conn * conn, time_t *timer)
+{
+
+	int timerval;
+	cw_StateMachineState_t search, *result;
+
+	
+	while(1){
+		search.state = conn->capwap_state;
+		search.prevstate = conn->capwap_prevstate;
+		result = mavl_get(conn->msgset->state_machine,&search);
+		
+		cw_dbg(DBG_STATE,"State transition: [%s -> %s]",
+			cw_strstate(conn->capwap_prevstate),
+			cw_strstate(conn->capwap_state)
+			);
+		if (result == NULL){
+			cw_log(LOG_ERR,"State not found");
+			return 0;
+		}
+		if (result->jump_state){
+			conn->capwap_state = result->jump_state;
+			conn->capwap_prevstate = result->jump_prevstate;
+			
+			cw_dbg(DBG_STATE,"Jump to state: [%s->%s]",
+				cw_strstate(conn->capwap_prevstate),
+				cw_strstate(conn->capwap_state));
+			continue;
+		}
+		
+		if (result->dbgmsg){
+			cw_dbg(DBG_STATE,"%s",result->dbgmsg);
+		}
+		
+		if (result->timer_key){
+			timerval = cw_ktv_get_word(conn->local_cfg,result->timer_key,result->timer_default);
+			*timer = cw_timer_start(timerval);
+			cw_dbg(DBG_STATE,"Starting timer: [%s] - %d seconds.",result->timer_key,timerval);
+		}
+		return result->retval;
+	}
+}
+
 
 /*#define CW_TRANSITION(prestate,state) (prestate<<16|state)*/
 
@@ -315,7 +358,7 @@ static void * wtpman_main(void *arg)
 		return NULL;
 	}
 	
-	conn->capwap_transition = CAPWAP_STATE_DTLS_SETUP;
+	conn->capwap_state = CAPWAP_STATE_DTLS_SETUP;
 	/* establish dtls session */
 	if (!wtpman_dtls_setup(wtpman)) {
 		wtpman_remove(wtpman);
@@ -325,7 +368,8 @@ static void * wtpman_main(void *arg)
 	/*last_state = conn->capwap_state;
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 */
-	conn->capwap_transition = CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN);
+	conn->capwap_prevstate = CAPWAP_STATE_DTLS_SETUP;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
 	rc = 0;
 	
 	while (1){
@@ -333,8 +377,16 @@ static void * wtpman_main(void *arg)
 		int wait_join;
 		int wait_change_state;
 		
-
 		
+		
+		if (!cw_run_state_machine(conn, &timer)){
+			cw_dbg(DBG_INFO,"WTP died");
+					wtpman_remove(wtpman);
+				return NULL;		
+		};
+		
+
+	/*	
 		switch (conn->capwap_transition){
 			case CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN):
 			{
@@ -369,10 +421,6 @@ static void * wtpman_main(void *arg)
 				wait_change_state = cw_ktv_get_word(conn->global_cfg,
 					"capwap-timers/change-state-pending-timer",
 					CAPWAP_TIMER_CHANGE_STATE_PENDING_TIMER);
-					
-			/*	printf("Capwap state configure\n");
-				exit(0);
-			*/
 				break;
 			}
 			case CW_TRANSITION(CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_TIMEOUT):
@@ -386,7 +434,7 @@ static void * wtpman_main(void *arg)
 
 		}
 		
-
+*/
 		
 		while (!cw_timer_timeout(timer)) {
 			rc = cw_read_messages(wtpman->conn);
@@ -398,8 +446,8 @@ static void * wtpman_main(void *arg)
 		}
 		
 		if(rc<0){
-			conn->capwap_transition = 
-				CW_TRANSITION(conn->capwap_transition,CAPWAP_STATE_TIMEOUT);
+			conn->capwap_prevstate = conn->capwap_state;
+			conn->capwap_state = CAPWAP_STATE_TIMEOUT;
 		}
 
 	}
@@ -427,7 +475,7 @@ static void * wtpman_main(void *arg)
 
 	/* dtls is established, goto join state */
 
-	conn->capwap_transition = CAPWAP_STATE_JOIN;
+	conn->capwap_state = CAPWAP_STATE_JOIN;
 	if (!wtpman_join(wtpman)) {
 		wtpman_remove(wtpman);
 		return NULL;
@@ -454,7 +502,7 @@ exit(0);
 
 	rc = 0;
 	while (!cw_timer_timeout(timer)
-	       && wtpman->conn->capwap_transition == CAPWAP_STATE_CONFIGURE) {
+	       && wtpman->conn->capwap_state == CAPWAP_STATE_CONFIGURE) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)
@@ -472,14 +520,14 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 	}
 
 
-	if (conn->capwap_transition == CW_STATE_IMAGE_DATA) {
+	if (conn->capwap_state == CW_STATE_IMAGE_DATA) {
 		wtpman_image_data(wtpman);
 		return NULL;
 	}
 
 
 
-	conn->capwap_transition = CAPWAP_STATE_RUN;
+	conn->capwap_state = CAPWAP_STATE_RUN;
 /*
 	// XXX testing ...
 //	DBGX("Cofig to sql", "");
@@ -492,7 +540,7 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 	reset_echointerval_timer(wtpman);
 
 	rc = 0;
-	while (wtpman->conn->capwap_transition == CAPWAP_STATE_RUN) {
+	while (wtpman->conn->capwap_state == CAPWAP_STATE_RUN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno != EAGAIN)

@@ -73,6 +73,7 @@ struct conn {
 	
 	
 	mavl_t remote_cfg;
+/*	mavl_t default_cfg;*/
 	mavl_t local_cfg;
 	mavl_t global_cfg;
 	
@@ -113,9 +114,12 @@ struct conn {
 
 	struct cw_MsgSet * msgset;
 
+
+	uint8_t capwap_prevstate;
+
 	/** Current CAPWAP state */
 
-	uint16_t capwap_transition;
+	uint8_t capwap_state;
 
 
 	/** The framgent manager used on this connection */

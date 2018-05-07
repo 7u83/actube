@@ -340,7 +340,7 @@ struct cw_DescriptorSubelemDef {
 #define CW_IGNORE 5
 
 
-#define CW_TRANSITION(prestate,state) (prestate<<8|state)
+
 
 
 int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys );

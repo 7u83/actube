@@ -86,6 +86,8 @@ static struct cw_StrListElem color_on[] = {
 
 	{DBG_INFO, ANSI_DEFAULT},
 
+	{DBG_STATE, ANSI_BBLACK ANSI_BOLD },
+
 	{DBG_RFC, ANSI_BRED},
 	{DBG_X, "\x1b[31m"},
 	{DBG_WARN, ANSI_CYAN},
@@ -130,6 +132,7 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_DTLS_DETAIL, " DTLS - "},
 	{DBG_WARN, " Warning - "},
 	{DBG_MOD, " Mod - "},
+	{DBG_STATE, " State - "},
 
 	{DBG_X, "XXXXX - "},
 

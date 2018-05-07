@@ -219,7 +219,8 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	struct cw_MsgData search;
 	struct cw_MsgData * message;
 	int result_code;
-	uint16_t *ui;
+	cw_State_t *ui;
+
 	uint8_t *elems_ptr;
 	uint8_t *elem;
 	
@@ -299,7 +300,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			cw_dbg(DBG_MSG_ERR, 
 				"Message type %d [%s] unrecognized, sending response.",
 				search.type, cw_strmsg(search.type),
-				cw_strstate(conn->capwap_transition));
+				cw_strstate(conn->capwap_state));
 				
 			result_code = CAPWAP_RESULT_MSG_UNRECOGNIZED;
 			cw_send_error_response(conn, rawmsg, result_code);
@@ -309,7 +310,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 		cw_dbg(DBG_MSG_ERR, 
 			"Message type %d [%s] unrecognized, discarding.",
 		search.type, cw_strmsg(search.type),
-		cw_strstate(conn->capwap_transition));
+		cw_strstate(conn->capwap_state));
 		errno = EAGAIN;
 		return -1;
 
@@ -321,29 +322,29 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	 * */
 	if (!(message->receiver & conn->role)) {
 		cw_dbg(DBG_MSG_ERR,
-		       "Message type %d (%s) unexpected/illegal in %s->%s State, discarding.",
+		       "Message type %d (%s) unexpected/illegal in %s State, discarding.",
 		       search.type, cw_strmsg(search.type),
-				cw_strprestate(conn->capwap_transition),
-			       cw_strstate(conn->capwap_transition));
+		       cw_strstate(conn->capwap_state));
 		errno = EAGAIN;
 		return -1;
 	}
 
 	/* Check if current state is in state of message */
 	ui = message->states;
-	for (ui=message->states; *ui; ui++){
-		printf("Comparing %d and %d\n", conn->capwap_transition, *ui);
-		if(*ui==conn->capwap_transition)
+
+	for (ui=message->states; ui->state; ui++){
+		printf("Comparing %d and %d\n", conn->capwap_state, ui->state);
+		if(ui->state==conn->capwap_state){
 			break;
+		}
 	}
 	
-	if (!*ui){
+	if (!ui->state){
 		/* Message found, but it was in wrong state */
 		cw_dbg(DBG_MSG_ERR,
-		       "Message type %d (%s) not allowed in %s->%s State, sending response.", 
+		       "Message type %d (%s) not allowed in %s State, sending response.", 
 		       search.type,cw_strmsg(search.type), 
-		       cw_strprestate(conn->capwap_transition),
-		       cw_strstate(conn->capwap_transition));
+		       cw_strstate(conn->capwap_state));
 		result_code = CAPWAP_RESULT_MSG_INVALID_IN_CURRENT_STATE;
 		cw_send_error_response(conn, rawmsg, result_code);
 		errno = EAGAIN;
@@ -417,7 +418,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			continue;
 		}
 
-
 	}
 
 	/* all message elements are processed, do now after processing
@@ -449,10 +449,9 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
 			cw_ktv_set_dword(conn->local_cfg,"result-code",result_code);
-			if (message->next_state){
-				conn->capwap_transition = 
-					CW_TRANSITION(conn->capwap_transition,message->next_state);
-			
+			if (ui->next){
+				conn->capwap_prevstate = conn->capwap_state;
+				conn->capwap_state = ui->next;
 			}
 				
 			/* All is ok, send regular response message */
