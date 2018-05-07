@@ -663,7 +663,7 @@ static struct cw_MsgDef messages[] = {
 	{
 		"Configuration Update Reponse",			/* name */
 		CAPWAP_MSG_CONFIGURATION_UPDATE_RESPONSE,	/* msg type */
-		CW_ROLE_WTP,					/* role */
+		CW_ROLE_AC,					/* role */
 		configuration_update_response_states,		/* allowed states */
 		configuration_update_response_elements		/* msg elements */
 	},

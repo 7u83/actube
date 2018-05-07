@@ -386,6 +386,9 @@ static void * wtpman_main(void *arg)
 		};
 		
 
+
+
+
 	/*	
 		switch (conn->capwap_transition){
 			case CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN):
@@ -435,8 +438,25 @@ static void * wtpman_main(void *arg)
 		}
 		
 */
+
+
+
 		
 		while (!cw_timer_timeout(timer)) {
+			if (conn->update_cfg != NULL){
+				mavl_t tmp;
+				tmp = conn->local_cfg;
+
+				conn->local_cfg=conn->update_cfg;
+								
+				cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
+
+				rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+				conn->update_cfg=NULL;
+				conn->local_cfg=tmp;
+			}
+
+			
 			rc = cw_read_messages(wtpman->conn);
 			if (rc < 0) {
 				if (errno == EAGAIN)

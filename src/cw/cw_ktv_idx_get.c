@@ -70,3 +70,33 @@ int cw_ktv_idx_get(mavl_t ktv, const char *key)
 	
 	return atoi(d+1);
 }
+
+
+
+int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n)
+{
+	char ikey[CW_KTV_MAX_KEY_LEN];
+	cw_KTV_t search, * result;
+	char *d;
+	
+	sprintf(ikey,"%s.%d",key,n);
+		
+	search.key=ikey;
+	/*//result = ktvn(ktv,&search);*/
+	
+	result = mavl_get_first(ktv,&search);
+	
+	if (result == NULL){
+		return -1;
+	}
+	
+	d = strchr(result->key,'.');
+	if (d==NULL){
+		return -1;
+	}
+	
+	if (strncmp(result->key,ikey,d-result->key)!=0)
+		return -1;
+	
+	return atoi(d+1);
+}

@@ -85,18 +85,76 @@ void show_aps (FILE *out)
 }
 
 
+void con (FILE *out)
+{
+	struct connlist * cl;
+	mavliter_t it;
+	
+	
+	
+	wtplist_lock();
+	
+	cl = wtplist_get_connlist();
+	
+	
+	mavliter_init (&it, cl->by_addr);
+	fprintf (out, "IP\t\t\twtp-name\n");
+	mavliter_foreach (&it) {
+		cw_KTV_t * result;
+		char addr[SOCK_ADDR_BUFSIZE];
+		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
+		struct conn * conn;
+		conn = mavliter_get_ptr (&it);
+		
+		sock_addr2str_p (&conn->addr, addr);
+		
+		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
+		
+		if (result == NULL) {
+			strcpy (wtp_name, "");
+			
+		} else {
+			result->type->to_str (result, wtp_name, CAPWAP_MAX_WTP_NAME_LEN);
+		}
+		
+		
+		fprintf (out, "Con!! %s\t\t%s\n", addr, wtp_name);
+		
+		{
+			mavl_t update;
+			update = cw_ktv_create();
+			cw_ktv_set_byte(update,"radio.255/admin-state",1);
+			conn->update_cfg=update;
+		}
+
+
+		fprintf(out,"\n");
+
+	}
+	wtplist_unlock();
+}
 
 
 void execute_cmd (FILE * out, const char *str)
 {
 	char cmd[1024];
 	char args[1024];
+	int n;
+
 	
-	sscanf (str, "%s%s", cmd, args);
+	n = sscanf (str, "%s%s", cmd, args);
+
+	if (n<=0)
+		return;
 	/*printf("CMD: %s, ARGS:\n",cmd);*/
 	
 	if (strcmp (cmd, "s") == 0) {
 		show_aps (out);
+		return;
+	}
+	
+	if (strcmp (cmd, "con")==0){
+		con(out);
 		return;
 	}
 
@@ -116,7 +174,7 @@ void shell_loop (FILE *file)
 	do {
 		fprintf (file, "actube[%d]:>", fileno (file));
 		fflush (file);
-		
+		str[0]=0;
 		fgets (str, sizeof (str), file);
 		execute_cmd (file, str);
 		

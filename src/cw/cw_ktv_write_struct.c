@@ -39,7 +39,7 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 				printf("Type mismatch: %s != %s\n",stru[i].type->name,result->type->name);
 				if (stru[i].type->cast != NULL){
 					if (!stru[i].type->cast(result)){
-						cw_log(LOG_ERR,"Can't cast from %s to %s",result->type->name,stru[i].type->name);
+						cw_log(LOG_ERR,"Can't cast '%s' from %s to %s",key,result->type->name,stru[i].type->name);
 						exit(0);
 					}
 				}
