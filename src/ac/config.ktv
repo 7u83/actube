@@ -79,7 +79,7 @@ capwap-timers/data-check-timer: Word: 10
 capwap-timers/echo-interval :Byte: 30
 capwap-timers/max-discovery-interval :Byte: 10
 
-#radio.255/admin-state :Str: enabled
-#radio.255/operational-state/cause :Str: Normal
-#radio.255/operational-state/state :Str: enabled
+radio.255/admin-state :Str: enabled
+radio.255/operational-state/cause :Str: Normal
+radio.255/operational-state/state :Str: enabled
 

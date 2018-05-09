@@ -296,6 +296,7 @@
       <File Name="src/cw/cw_out_generic_indexed_enum.c"/>
       <File Name="src/cw/cw_ktv_del_sub.c"/>
       <File Name="src/cw/cw_strtransition.c"/>
+      <File Name="src/cw/netconn.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>
