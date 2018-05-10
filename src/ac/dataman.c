@@ -105,14 +105,15 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 
 		if (cw_get_elem_id(elem) == CAPWAP_ELEM_SESSION_ID){
-			uint8_t sessid[16];
+			uint8_t sessid[64];
 			memset(sessid,0,16);
 
 			int sessid_len = cw_get_elem_len(elem);
 
 			printf("Sess id len = %d\n",sessid_len);
 
-			memcpy(sessid,cw_get_elem_data(elem),sessid_len);
+			((uint16_t*)sessid)[0]=sessid_len;
+			memcpy(bstr16_data(sessid),cw_get_elem_data(elem),sessid_len);
 
 			struct wtpman * wtpman = wtplist_get_by_session_id(sessid);
 			if (wtpman){
@@ -123,7 +124,7 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 				uint8_t * dl = cw_init_data_keep_alive_msg(buffer,NULL);
 				uint8_t * d=dl+2;
 
-				int l = cw_put_elem_session_id(d,sessid,sessid_len);
+				int l = cw_put_elem_session_id(d,bstr16_data(sessid),sessid_len);
 				cw_put_word(dl,l);
 
 				int total_len = dl-buffer + l+2;

@@ -78,14 +78,17 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 
 }
 
-struct wtpman * wtplist_get_by_session_id(uint8_t *session_id)
+struct wtpman * wtplist_get_by_session_id(bstr16_t *session_id)
 {
 	struct conn  search;
 	struct conn * conn;
 	
-	memcpy (search.session_id, session_id,16);
+	search.session_id = session_id;
+	/*memcpy (search.session_id, session_id,16);*/
 
 	conn = connlist_get_by_session_id(connlist,&search);
+	if (conn == NULL)
+		return NULL;
 	return conn->data;
 }
 

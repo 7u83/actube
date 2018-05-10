@@ -1745,10 +1745,19 @@ static cw_StateMachineState_t statemachine_states[]={
 };
 
 
-
+static int (*postprocess_join_request_parent)(struct conn * conn);
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
-        if (mode != CW_MOD_MODE_CAPWAP)
+
+	struct cw_MsgData * md;
+        
+	if (mode != CW_MOD_MODE_CAPWAP)
                 return NULL;
+		
+	md = cw_msgset_get_msgdata(set,CAPWAP_MSG_JOIN_REQUEST);
+	if (md != NULL){
+		postprocess_join_request_parent = md->postprocess;
+	}
+	
         cw_msgset_add(set,messages, handlers73);
 	cw_msgset_add_states(set,statemachine_states);
         return set;
@@ -1791,6 +1800,9 @@ static int postprocess_discovery(struct conn *conn)
 
 static int postprocess_join_request(struct conn *conn)
 {
+	if (postprocess_join_request_parent!=NULL){
+		postprocess_join_request_parent(conn);
+	}
 	postprocess_discovery(conn);
 	return 1;
 }

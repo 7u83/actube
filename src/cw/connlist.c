@@ -57,7 +57,13 @@ static int cmp_by_session_id ( const void *d1, const void  *d2 )
 {
 	struct conn * c1 = *( void ** ) d1;
 	struct conn * c2 = *( void ** ) d2;
-	return memcmp ( c1->session_id, c2->session_id, 16 );
+	int len1,len2;
+	len1 = bstr16_len(c1->session_id);
+	len2 = bstr16_len(c2->session_id);
+
+	if (len1 != len2 )
+		return len1-len2;
+	return memcmp ( bstr16_data(c1->session_id), bstr16_data(c2->session_id), len1 );
 }
 
 /**

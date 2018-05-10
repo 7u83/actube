@@ -727,6 +727,14 @@ static struct cw_MsgDef messages[] = {
 
 static int postprocess_join_request(struct conn *conn)
 {
+	cw_KTV_t * result;
+	
+	result = cw_ktv_get(conn->remote_cfg,"session-id",CW_TYPE_BSTR16);
+	if (result != NULL){
+		conn->session_id = result->val.ptr;
+		connlist_add_by_session_id(conn->connlist,conn);
+	}
+
 	return 1;
 }
 

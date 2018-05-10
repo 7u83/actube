@@ -92,7 +92,8 @@ struct conn {
 	mbag_t config_upd;
 */
 
-	uint8_t session_id[16];
+/*	uint8_t session_id[16];*/
+	bstr16_t session_id;
 
 
 	int role;
