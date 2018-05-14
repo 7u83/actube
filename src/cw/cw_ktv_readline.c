@@ -9,7 +9,14 @@ struct parser {
 	char error[256];
 	int quote;
 	FILE *f;
+	int (*getc)(struct parser *);
+	void (*ungetc)(struct parser *)
 };
+
+static int pgetc(struct parser *parser)
+{
+	return fgetc(parser->f);
+}
 
 static int get_char(struct parser *p)
 {

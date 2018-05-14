@@ -58,6 +58,15 @@ static int cmp_by_session_id ( const void *d1, const void  *d2 )
 	struct conn * c1 = *( void ** ) d1;
 	struct conn * c2 = *( void ** ) d2;
 	int len1,len2;
+	
+	if (c1->session_id==NULL && c2->session_id==NULL)
+		return 0;
+	
+	if (c1->session_id==NULL)
+		return -1;
+	if (c2->session_id==NULL)
+		return 1;
+	
 	len1 = bstr16_len(c1->session_id);
 	len2 = bstr16_len(c2->session_id);
 

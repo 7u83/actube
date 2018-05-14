@@ -150,7 +150,7 @@ int run(struct conn * conn)
 		
 		/*mbag_get_word(conn->config,CW_ITEM_CAPWAP_TIMERS,CW_TIMERS)&0xff;*/
 		
-		time_t timer = cw_timer_start(echo_interval);
+		time_t timer = cw_timer_start(echo_interval-1);
 		int rc;
 
 		

@@ -448,6 +448,7 @@ static void * wtpman_main(void *arg)
 				tmp = conn->local_cfg;
 
 				conn->local_cfg=conn->update_cfg;
+				conn->default_cfg = conn->remote_cfg;
 								
 				cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 

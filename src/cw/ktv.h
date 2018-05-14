@@ -136,7 +136,7 @@ typedef struct cw_KTVIndexed cw_KTVIndexed_t;
 
 int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len);
-int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pkey, 
+int cw_ktv_write_struct(mavl_t ktv, mavl_t def, const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * dst);
 
 
@@ -209,9 +209,28 @@ char * cw_ktv_get_str(mavl_t ktv,const char *key, char * def);
 int cw_ktv_idx_get(mavl_t ktv, const char *key);
 cw_KTV_t * cw_ktv_base_exists(mavl_t ktvstore, const char *basekey);
 int cw_ktv_save(mavl_t ktvstore, const char * filename);
-	
+cw_KTV_t * cw_ktv_cast(cw_KTV_t *v,const cw_Type_t * type);
+
 extern const cw_Type_t * cw_ktv_std_types[];
 #define CW_KTV_STD_TYPES cw_ktv_std_types
+
+
+
+struct cw_KTV_Reader {
+	const void * data;
+	int (*getchar)(struct cw_KTV_Reader *);
+	void (*ungetchar)(struct cw_KTV_Reader *, int c);
+	int quote;
+	int line;
+	int pos;
+	int prevpos;
+	int next;
+	int maxlen;
+	char error[256];
+};
+
+void cw_ktv_init_str_reader(struct cw_KTV_Reader *r, const char * str, int len);
+int cw_ktv_parse_string(struct cw_KTV_Reader *r, char *key, char *type, char *val);
 
 /**
  * @}  KTV

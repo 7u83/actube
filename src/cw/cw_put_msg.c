@@ -100,6 +100,11 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		params.msgdata=msg;
 		params.debug_details=details;
 		*details=0;
+
+		if (strcmp(handler->key,"cisco/ap-led-flash-config")==0){
+			printf("flash config\n");
+			/* cisco/ap-led-flash-config/flash-enable */
+		}
 		
 		l = handler->put(handler,&params,dst+len);
 				

@@ -33,7 +33,8 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 		if (e[i].fun_out==NULL)
 			len += result->type->put(result,ob+start+len);
 		else
-			len += cw_ktv_write_struct(params->conn->local_cfg,e[i].type,key,ob+start+len);
+			len += cw_ktv_write_struct(params->conn->local_cfg,
+			NULL,e[i].type,key,ob+start+len);
 			
 /*		thandler.type=e[i].type;
 		thandler.key=key;

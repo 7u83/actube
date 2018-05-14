@@ -43,7 +43,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 		
 		l=0;
 		l+=cw_put_byte(cdst+offset+l,i);
-		l+= cw_ktv_write_struct(params->conn->local_cfg,handler->type,basekey,cdst+offset+l);
+		l+= cw_ktv_write_struct(params->conn->local_cfg,NULL, handler->type,basekey,cdst+offset+l);
 		
 
 		cdst+=params->conn->write_header(handler,cdst,l);

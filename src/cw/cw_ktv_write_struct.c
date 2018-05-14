@@ -2,7 +2,7 @@
 #include "dbg.h"
 #include "log.h"
 
-int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pkey, 
+int cw_ktv_write_struct(mavl_t ktv, mavl_t def, const cw_KTVStruct_t * stru, const char *pkey, 
 	uint8_t * dst)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
@@ -28,6 +28,10 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		result = cw_ktv_get(ktv,key,NULL);
 		
 
+		if (result == NULL && def != NULL){
+			result = cw_ktv_get(def,key,NULL);
+		}
+
 		
 		if (result == NULL){
 			cw_log(LOG_ERR,"Can't put %s, no value found, filling zero.",key);
@@ -35,7 +39,13 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 		}
 		else{
 			result->valguard=stru[i].valguard;
-			if (strcmp(stru[i].type->name,result->type->name)){
+			if (cw_ktv_cast(result,stru[i].type)==NULL){
+				cw_log(LOG_ERR,"Can't cast key '%s' from %s to %s",key,result->type->name,stru[i].type->name);
+			}
+/*			if (strcmp(stru[i].type->name,result->type->name)){
+				
+				
+				
 				printf("Type mismatch: %s != %s\n",stru[i].type->name,result->type->name);
 				if (stru[i].type->cast != NULL){
 					if (!stru[i].type->cast(result)){
@@ -46,7 +56,7 @@ int cw_ktv_write_struct(mavl_t ktv, const cw_KTVStruct_t * stru, const char *pke
 							
 
 			}
-			
+*/		
 			result->type->put(result,dst+pos);
 		}
 		if (stru[i].len!=-1)

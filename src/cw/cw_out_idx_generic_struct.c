@@ -43,7 +43,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 		start = mdst + params->conn->header_len(handler);
 		
 		len += cw_put_byte(start+len,idx);
-		len += cw_ktv_write_struct(params->conn->local_cfg,handler->type,key,start+len);
+		len += cw_ktv_write_struct(params->conn->local_cfg,NULL, handler->type,key,start+len);
 		
 		mdst += params->conn->write_header(handler,mdst,len);
 		

@@ -61,7 +61,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1525727327
+cisco/ap-timesync/timestamp :Dword: 1526318158
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -273,7 +273,7 @@ wtp-descriptor/software/version :Bstr16: .x08007900
 wtp-fallback :Byte: 1
 wtp-frame-tunnel-mode :Byte: 4
 wtp-mac-type :Byte: 1
-wtp-name :Bstr16: Banane
+wtp-name :Bstr16: tube
 wtp-reboot-statistics/ac-initiated-count :Word: 2
 wtp-reboot-statistics/hw-failure-count :Word: 0
 wtp-reboot-statistics/last-failure-type :Byte: 0

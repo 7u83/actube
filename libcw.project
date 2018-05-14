@@ -297,6 +297,8 @@
       <File Name="src/cw/cw_ktv_del_sub.c"/>
       <File Name="src/cw/cw_strtransition.c"/>
       <File Name="src/cw/netconn.c"/>
+      <File Name="src/cw/cw_ktv_parser.c"/>
+      <File Name="src/cw/cw_ktv_cast.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

@@ -16,8 +16,11 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	int start, len, l;
 
 	/* Get the element */
-	search.key=(char*)handler->key;
+/*	search.key=(char*)handler->key;
 	elem = mavl_get(params->conn->local_cfg, &search);
+*/	
+	elem = cw_ktv_get(params->conn->local_cfg,handler->key,NULL);
+	
 /*	if (elem == NULL && params->conn->default_cfg !=NULL)
 		elem = mavl_get(params->conn->default_cfg, &search);
 */
@@ -47,6 +50,12 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	   vendor specific payload */
 	/* start = handler->vendor ? 10 : 4; */
 	start = params->conn->header_len(handler);
+	
+	if (cw_ktv_cast(elem,handler->type)==NULL){
+		cw_log(LOG_ERR,"Can't put element '%s'- can't cast from %s to %s for key: %s", handler->name, 
+			elem->type->name, ((const cw_Type_t*)handler->type)->name, handler->key);
+		return 0;
+	}
 	
 	len = ((const cw_Type_t*)(handler->type))->put(elem,dst+start);
 

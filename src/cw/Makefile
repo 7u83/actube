@@ -112,6 +112,7 @@ CWSRC=\
 
 KTVSRC=\
 	cw_ktv_add.c\
+	cw_ktv_cast.c\
 	cw_ktv_replace.c\
 	cw_ktv_add_from_str.c\
 	cw_ktv_get_byte.c\
@@ -125,6 +126,7 @@ KTVSRC=\
 	cw_ktv_get_dword.c\
 	cw_ktv_get_sysptr.c\
 	cw_ktv_get_str.c\
+	cw_ktv_parser.c\
 	cw_ktv_idx_get.c\
 	cw_ktv_mavlcmp.c\
 	cw_ktv_mavlcmp_type_by_name.c\

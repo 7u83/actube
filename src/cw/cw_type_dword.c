@@ -50,6 +50,22 @@ static const char * get_type_name(cw_KTV_t *data)
 	return CW_TYPE_DWORD->name;
 }
 
+
+
+static int cast(cw_KTV_t * data)
+{
+	if (strcmp(data->type->name,CW_TYPE_BYTE->name)==0)
+		return 1;
+	if (strcmp(data->type->name,CW_TYPE_STR->name)==0){
+		char *src = data->val.ptr;
+		CW_TYPE_DWORD->from_str(data,src);
+		free(src);
+		return 1;
+	}
+	return 0;
+}
+
+
 const struct cw_Type cw_type_dword = {
 	"Dword",		/* name */
 	NULL,			/* del */
@@ -59,6 +75,7 @@ const struct cw_Type cw_type_dword = {
 	from_str,		/* from_str */ 
 	NULL,			/* len */
 	NULL,			/* data */
-	get_type_name		/* get_type_name */
+	get_type_name,		/* get_type_name */
+	cast
 };
 
