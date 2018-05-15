@@ -28,7 +28,7 @@ int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
 	hlen = cw_get_hdr_hlen(rawmsg)*4;
 
 	mtu = conn->mtu;
-
+mtu = 800;
 
 	while (packetlen>mtu){
 		

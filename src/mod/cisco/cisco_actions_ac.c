@@ -290,7 +290,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		}
 		
 		start = params->conn->header_len(eh);
-		len = cw_ktv_write_struct(params->conn->local_cfg,type,key,ob+start);
+		len = cw_ktv_write_struct(params->conn->local_cfg,NULL,type,key,ob+start);
 		ob += params->conn->write_header(eh,ob,len);
 		
 		idx++;
@@ -481,7 +481,9 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 }
 
 static cw_KTVStruct_t cisco_add_lwwlan[]={
+	{CW_TYPE_BSTR16, "misc", 8, 2},
 	{CW_TYPE_STR, "ssid",-1,10},
+	{CW_TYPE_WORD, "misc2", 2, 48 },
 	{NULL,NULL,0,0}
 };
 
@@ -1193,7 +1195,7 @@ static struct cw_ElemHandler handlers73[] = {
 		"Add Cisco WLAN (LWAPP)",		/* name */
 		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
-		7,1117,					/* min/max length */
+		1,1117,					/* min/max length */
 		cisco_add_lwwlan,			/* type */
 		"radio/wlan",				/* Key */
 		cw_in_generic_struct,			/* get */
@@ -1542,7 +1544,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 static struct cw_ElemDef wtp_event_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
-
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
 
 	{0,0,0,0,0}

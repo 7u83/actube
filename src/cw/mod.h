@@ -69,6 +69,7 @@ struct cw_Mod {
 	void *data;
 	
 	int (*setup_cfg)(struct conn *conn);
+
 };
 
 
