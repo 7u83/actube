@@ -1195,7 +1195,7 @@ static struct cw_ElemHandler handlers73[] = {
 		"Add Cisco WLAN (LWAPP)",		/* name */
 		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
-		1,1117,					/* min/max length */
+		7,1117,					/* min/max length */
 		cisco_add_lwwlan,			/* type */
 		"radio/wlan",				/* Key */
 		cw_in_generic_struct,			/* get */
