@@ -1,12 +1,12 @@
 /*
-    This file is part of libcapwap.
+    This file is part of actube.
 
-    libcapwap is free software: you can redistribute it and/or modify
+    actube is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    libcapwap is distributed in the hope that it will be useful,
+    actube is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -476,9 +476,11 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 	
 	radio_id = cw_get_byte(data);
 	wlan_id = cw_get_byte(data+3);
-	sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+	sprintf(dst,"radio.%d/wlan.%d/add-wlan",radio_id,wlan_id);
 	return 1;
 }
+
+
 
 static cw_KTVStruct_t cisco_add_lwwlan[]={
 	{CW_TYPE_BSTR16, "misc", 8, 2},
@@ -522,7 +524,7 @@ static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char 
 	
 	radio_id = cw_get_byte(data);
 	wlan_id = cw_get_byte(data+1);
-	sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+	sprintf(dst,"radio.%d/wlan.%d/add-lw-wlan",radio_id,wlan_id);
 	return 1;
 }
 
@@ -560,6 +562,9 @@ static cw_KTVStruct_t cisco_rad_extended_config[]={
 	{NULL,NULL,0,0}
 };
 
+
+int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
 
 static cw_KTVStruct_t cisco_80211_assoc_limit[]={
 	{CW_TYPE_BOOL, "enable",1,-1},
@@ -1197,9 +1202,9 @@ static struct cw_ElemHandler handlers73[] = {
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		7,1117,					/* min/max length */
 		cisco_add_lwwlan,			/* type */
-		"radio/wlan",				/* Key */
+		"radio/wlan/add-lw-wlan",		/* Key */
 		cw_in_generic_struct,			/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_traverse,			/* put */
 		cisoc_add_lwwlan_mkkey
 	}
 	,

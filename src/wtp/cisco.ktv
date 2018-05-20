@@ -61,7 +61,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1526543483
+cisco/ap-timesync/timestamp :Dword: 1526767373
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -211,6 +211,9 @@ radio.1/decryption-error-report-period :Word: 120
 radio.1/operational-state/cause :Byte: Normal
 radio.1/operational-state/state :Byte: enabled
 radio.1/rate_set :Bstr16: .x8c129824b048606c
+radio.1/wlan.0/add-lw-wlan/misc :Bstr16: .x3e9904fac0000100
+radio.1/wlan.0/add-lw-wlan/misc2 :Word: 4
+radio.1/wlan.0/add-lw-wlan/ssid :Str: TubeSSID
 radio.1/wlan.0/allow-aaa-override :Byte: 0
 radio.1/wlan.0/broadcast-ssid :Bool: true
 radio.1/wlan.0/dtim-period :Byte: 1

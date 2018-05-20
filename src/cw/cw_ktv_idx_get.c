@@ -78,6 +78,7 @@ int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n)
 	char ikey[CW_KTV_MAX_KEY_LEN];
 	cw_KTV_t search, * result;
 	char *d;
+	int i;
 	
 	sprintf(ikey,"%s.%d",key,n);
 		
@@ -90,13 +91,35 @@ int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n)
 		return -1;
 	}
 	
-	d = strchr(result->key,'.');
+	/*d = strchr(result->key,'.');*/
+	d=NULL;
+/*	for (i = strlen(result->key); i>=0; i--){
+		if (result->key[i]=='/')
+			break;
+	}
+*/	for (i = strlen(ikey); i>=0; i--){
+
+		if (ikey[i]=='.'){
+			d = result->key+i;
+			break;
+		}
+	}
+	
+	
 	if (d==NULL){
 		return -1;
 	}
 	
-	if (strncmp(result->key,ikey,d-result->key)!=0)
+	if(result->key[i]!='.'){
+		return -1;
+	}
+	
+/*	if (strncmp(result->key,ikey,d-result->key)!=0)
+		return -1;
+*/
+	if (strncmp(result->key,ikey,i)!=0)
 		return -1;
 	
-	return atoi(d+1);
+
+	return atoi(result->key+i+1);
 }

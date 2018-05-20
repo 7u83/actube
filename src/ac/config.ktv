@@ -83,6 +83,10 @@ radio.255/admin-state :Str: enabled
 radio.255/operational-state/cause :Str: Normal
 radio.255/operational-state/state :Str: enabled
 
+radio.0/wlan.0/add-lw-wlan/misc :Bstr16: .x3e9904fac0000100
+radio.0/wlan.0/add-lw-wlan/misc2 :Word: 4
+radio.0/wlan.0/add-lw-wlan/ssid :Str: TubeSSID
+
 radio.1/admin-state :Byte: reserved
 radio.1/cisco-multi-domain-capability/first-channel :Word: 36
 radio.1/cisco-multi-domain-capability/max-tx-power-level :Word: 65535
