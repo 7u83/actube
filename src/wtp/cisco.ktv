@@ -10,17 +10,17 @@ ac-descriptor/software/vendor :Dword: 4232704
 ac-descriptor/software/version :Bstr16: .x08007900
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
-ac-name :Bstr16: CisAC
+ac-name :Bstr16: X1
 ac-name-with-index.0 :Bstr16: tabbe88
 ac-name-with-index.1 :Bstr16: nudelnudel
 ac-name-with-index.2 :Bstr16: nadelnalde
 ac-name-with-priority/X1 :Byte: 3
 ac-name-with-priority/ac2 :Byte: 5
-capwap-control-ip-address/address.0 :IPAddress: 192.168.0.180
-capwap-control-ip-address/address.1 :IPAddress: 192.168.0.180
+capwap-control-ip-address/address.0 :IPAddress: 192.168.0.14
+capwap-control-ip-address/address.1 :IPAddress: 192.168.0.14
 capwap-control-ip-address/address.2 :IPAddress: 192.168.0.173
-capwap-control-ip-address/wtps.0 :Word: 1
-capwap-control-ip-address/wtps.1 :Word: 1
+capwap-control-ip-address/wtps.0 :Word: 2
+capwap-control-ip-address/wtps.1 :Word: 2
 capwap-control-ip-address/wtps.2 :Word: 1
 capwap-local-ip-address :IPAddress: 192.168.0.14
 capwap-timers/echo-interval :Byte: 30
@@ -61,7 +61,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 1
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1526767373
+cisco/ap-timesync/timestamp :Dword: 1526887622
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -152,7 +152,7 @@ radio.0/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.0/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.0/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
 radio.0/cisco/wtp-radio-config/country-str1 :Str: DE
-radio.0/cisco/wtp-radio-config/country-str2 :Str: DE 
+radio.0/cisco/wtp-radio-config/country-str2 :Str: DE
 radio.0/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.0/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 100
@@ -160,8 +160,11 @@ radio.0/cisco/wtp-radio-config/reg :Dword: 65536
 radio.0/cisco/wtp-radio-config/unknown75 :Byte: 0
 radio.0/decryption-error-report-period :Word: 120
 radio.0/operational-state/cause :Byte: Normal
-radio.0/operational-state/state :Byte: enabled
+radio.0/operational-state/state :Byte: 0
 radio.0/rate_set :Bstr16: .x82848b960c1218243048606c
+radio.0/wlan.0/add-lw-wlan/misc :Bstr16: .x3e9904fac0000100
+radio.0/wlan.0/add-lw-wlan/misc2 :Word: 4
+radio.0/wlan.0/add-lw-wlan/ssid :Str: TubeSSID
 radio.0/wlan.0/allow-aaa-override :Byte: 0
 radio.0/wlan.0/broadcast-ssid :Bool: true
 radio.0/wlan.0/dtim-period :Byte: 1
@@ -201,7 +204,7 @@ radio.1/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.1/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
 radio.1/cisco/wtp-radio-config/country-str1 :Str: DE
-radio.1/cisco/wtp-radio-config/country-str2 :Str: DE 
+radio.1/cisco/wtp-radio-config/country-str2 :Str: DE
 radio.1/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.1/cisco/wtp-radio-config/max-stations :Byte: 200
 radio.1/cisco/wtp-radio-config/occupancy-limit :Word: 100
@@ -209,7 +212,7 @@ radio.1/cisco/wtp-radio-config/reg :Dword: 65536
 radio.1/cisco/wtp-radio-config/unknown75 :Byte: 1
 radio.1/decryption-error-report-period :Word: 120
 radio.1/operational-state/cause :Byte: Normal
-radio.1/operational-state/state :Byte: enabled
+radio.1/operational-state/state :Byte: 0
 radio.1/rate_set :Bstr16: .x8c129824b048606c
 radio.1/wlan.0/add-lw-wlan/misc :Bstr16: .x3e9904fac0000100
 radio.1/wlan.0/add-lw-wlan/misc2 :Word: 4
@@ -242,7 +245,7 @@ radio.3/cisco/rad-extended-config/c-ccat :Word: 1
 radio.3/cisco/rad-extended-config/multicast-buffer :Word: 0
 radio.3/cisco/rad-extended-config/multicast-data-range :Word: 0
 radio.3/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
-radio.255/admin-state :Byte: reserved
+radio.255/admin-state :Byte: enabled
 radio.255/operational-state/cause :Byte: Normal
 radio.255/operational-state/state :Byte: enabled
 radio/0/cisco/regulatory-domain/code0 :Byte: 0

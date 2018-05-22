@@ -528,7 +528,13 @@ static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char 
 	return 1;
 }
 
-
+static int cisco_patch_add_lwwlan(uint8_t * data, void * st)
+{
+	int * stack = st;
+	cw_set_byte(data,stack[1]);
+	cw_set_byte(data+1, stack[2]);
+	return 0;
+}
 
 
 
@@ -1205,7 +1211,8 @@ static struct cw_ElemHandler handlers73[] = {
 		"radio/wlan/add-lw-wlan",		/* Key */
 		cw_in_generic_struct,			/* get */
 		cw_out_traverse,			/* put */
-		cisoc_add_lwwlan_mkkey
+		cisoc_add_lwwlan_mkkey,
+		cisco_patch_add_lwwlan
 	}
 	,
 

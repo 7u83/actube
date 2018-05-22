@@ -50,6 +50,19 @@ static const char * get_type_name(cw_KTV_t *data)
 {
 	return CW_TYPE_WORD->name;
 }
+static int cast(cw_KTV_t * data)
+{
+	if (strcmp(data->type->name,CW_TYPE_WORD->name)==0)
+		return 1;
+	if (strcmp(data->type->name,CW_TYPE_STR->name)==0){
+		char *src = data->val.ptr;
+		CW_TYPE_WORD->from_str(data,src);
+		free(src);
+		return 1;
+	}
+	return 0;
+}
+
 
 const struct cw_Type cw_type_word = {
 	"Word",			/* name */
@@ -60,7 +73,8 @@ const struct cw_Type cw_type_word = {
 	from_str,		/* from_str */ 
 	NULL,
 	NULL,
-	get_type_name
+	get_type_name,
+	cast
 	
 };
 

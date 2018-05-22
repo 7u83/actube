@@ -68,10 +68,10 @@ static void mavl_merge0(mavl_t m, mavl_t t ,struct mavlnode * n)
  * 
  * 
  */ 
-void mavl_merge(mavl_t m, mavl_t t)
+void mavl_merge(mavl_t target, mavl_t source)
 {
-	mavl_merge0(m,t,t->root);		
-	t->root=NULL;
+	mavl_merge0(target,source,source->root);		
+	source->root=NULL;
 }
 
 

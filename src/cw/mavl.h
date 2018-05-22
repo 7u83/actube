@@ -114,7 +114,7 @@ void *mavl_del ( struct mavl *t, const void *data );
 void *mavl_replace ( struct mavl *t, const void *data, int * result );
 void mavl_destroy ( struct mavl *t );
 void mavl_del_all ( struct mavl *t );
-void mavl_merge ( mavl_t m, mavl_t t );
+void mavl_merge ( mavl_t target, mavl_t source );
 void mavlnode_destroy ( struct mavl *t, struct mavlnode *n );
 struct mavlnode *mavlnode_get ( struct mavl *t, void *data );
 struct mavlnode * mavl_get_node_cmp(struct mavl *t ,void *data,

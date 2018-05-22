@@ -44,13 +44,14 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 
 
 int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
-			, uint8_t * dst, int i, const char *current, const char * next)
+			, uint8_t * dst, int i, const char *current, const char * next, 
+			int * stack)
 {
 	char *sl;
 	int l;
 	char key[CW_KTV_MAX_KEY_LEN];
-	char tcurrent[CW_KTV_MAX_KEY_LEN];
-	
+	int len;
+	len = 0;
 	
 	sl = strchr(next,'/');
 	if (sl==NULL){
@@ -58,7 +59,25 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 		sprintf(key,"%s/%s",current,next);
 		result = cw_ktv_base_exists(params->conn->local_cfg,key);
 		if (result != NULL){
+			int offset;
+			int i,l;
+			offset = params->conn->header_len(handler);
 			printf("Yea! We can do it: %s\n",result->key);
+			for (i=0;i<stack[0];i++){
+				printf("I=%i\n",stack[i+1]);
+			}
+			l= cw_ktv_write_struct(params->conn->local_cfg,params->conn->default_cfg, 
+				handler->type,key,dst+offset);
+			
+			printf("Write struct len %i\n",l);
+			
+			l=params->conn->write_header(handler,dst,l);
+			printf("header wr len %d\n",l);
+			if (handler->patch){
+				handler->patch(dst+offset,stack);
+			}
+			
+			return l;
 		}
 		
 		return 0;
@@ -88,28 +107,27 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 			continue;
 		}
 
-		cw_out_traverse0(handler,params,dst,-1,basekey,next+l+1);
+		stack[0]++;
+		stack[stack[0]]=i;
+		len += cw_out_traverse0(handler,params,dst+len,-1,basekey,next+l+1, stack);
+		printf("Len is now %d\n", len);
 	}
 
 
-
+	return len;
 }
 
 int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 
 {
-	int i;
+
 	char current[CW_KTV_MAX_KEY_LEN];
-	i=-1;
-	
+	int stack[10];
+	stack[0]=0;
 
 	current[0]=0;
 	
-	cw_out_traverse0(handler,params,dst,-1,current,handler->key);
-	
-	printf("Hello world\n");
-	exit(0);
-	
+	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);
 }
 

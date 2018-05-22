@@ -58,6 +58,7 @@ struct cw_ElemHandler {
 	int (*put)(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, uint8_t * dst);
 
 	int (*mkkey)(const char *pkey, uint8_t*data, int len, char *dst);
+	int (*patch)(uint8_t *dst, void *data );
 
 
 };

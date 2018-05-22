@@ -445,10 +445,18 @@ static void * wtpman_main(void *arg)
 		while (!cw_timer_timeout(timer)) {
 			if (conn->update_cfg != NULL){
 				mavl_t tmp;
+		
+
 				tmp = conn->local_cfg;
 
-				/*conn->local_cfg=conn->update_cfg;*/
-				conn->default_cfg = conn->remote_cfg;
+				mavl_merge(conn->default_cfg, conn->local_cfg);
+				mavl_merge(conn->default_cfg, conn->remote_cfg);
+
+				conn->local_cfg=conn->update_cfg;
+								
+
+
+
 								
 				cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 
