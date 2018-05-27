@@ -1370,6 +1370,18 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_out_radio_generic				/* put */
 	}
 	,
+	
+	{
+		"MCAST MGID Info",				/* name */
+		CISCO_LWELEM_MCAST_MGID_INFO,			/* Element ID */
+		CW_VENDOR_ID_CISCO, CW_PROTO_LWAPP,		/* Vendor / Proto */
+		4, 334,						/* min/max length */
+		CW_TYPE_BSTR16,					/* type */
+		"cisco/mcast-mgid-info",			/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic					/* put */
+	}
+	,
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -1428,7 +1440,14 @@ static struct cw_ElemDef join_response_elements[] ={
 };
 
 
-/*static uint16_t configuration_status_request_states[] = {CAPWAP_STATE_JOIN,0};*/
+/*static uint16_t configuration_status_request_states[] = {CAPWAP_STATE_JOIN,CAPWAP_STATE_RUN,0};*/
+
+static cw_State_t configuration_status_request_states[] = {
+	{CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE},
+	{CAPWAP_STATE_RUN, CAPWAP_STATE_RUN},
+	{0,0}
+};
+
 static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
@@ -1529,6 +1548,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
 
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MCAST_MGID_INFO,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_LOGHOST_CONFIG,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_TELNET_SSH,		0, 0},
@@ -1639,7 +1659,7 @@ static struct cw_MsgDef messages[] = {
 		NULL,						/* name */
 		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* type */
 		CW_ROLE_AC,
-		NULL,						/* states */
+		configuration_status_request_states,		/* states */
 		configuration_status_request_elements,
 		NULL					/* postprocess */
 	},
