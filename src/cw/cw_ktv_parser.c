@@ -21,7 +21,7 @@ void cw_ktv_init_str_reader(struct cw_KTV_Reader *r, const char * str, int len)
 {
 	memset(r,0,sizeof(struct cw_KTV_Reader));
 	r->data = str;
-	r->getchar=str_getc;
+	r->xgetchar=str_getc;
 	r->ungetchar=str_ungetc;
 	r->maxlen=len;
 }
@@ -47,7 +47,7 @@ struct parser {
 static int get_char(struct cw_KTV_Reader *r)
 {
 	int c;
-	c = r->getchar (r);
+	c = r->xgetchar (r);
 	r->pos++;
 	if (c=='\n'){
 		r->prevpos=r->pos;

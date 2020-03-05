@@ -218,7 +218,7 @@ extern const cw_Type_t * cw_ktv_std_types[];
 
 struct cw_KTV_Reader {
 	const void * data;
-	int (*getchar)(struct cw_KTV_Reader *);
+	int (*xgetchar)(struct cw_KTV_Reader *);
 	void (*ungetchar)(struct cw_KTV_Reader *, int c);
 	int quote;
 	int line;
