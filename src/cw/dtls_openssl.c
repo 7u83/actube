@@ -181,7 +181,7 @@ int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt)
 
 
 	ERR_error_string(e,errstr);
-	cw_log(LOG_ERR,"%s - %s","SSSSS",errstr);
+	cw_log(LOG_ERR,"%s - %s",txt,errstr);
 
 	switch (e){
 		case SSL_ERROR_ZERO_RETURN:
