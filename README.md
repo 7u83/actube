@@ -3,7 +3,7 @@ AC-Tube
 On Github this is a mirror of 
 https://fossil.planix.org/actube/
 
-Open Source CAPWAP WLC
+Open Source CAPWAP WLC + WTP
 
 Current status: early development.
 
