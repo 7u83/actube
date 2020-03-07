@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 KEYSIZE=2048
 #OPENSSL="../src/contrib/openssl-1.0.1i/apps/openssl"

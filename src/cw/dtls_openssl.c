@@ -329,10 +329,10 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 	}
 
 	/* set dtls psk if exists */
-	if (conn->dtls_psk)
+/*	if (conn->dtls_psk)
 		SSL_CTX_set_psk_server_callback( d->ctx, psk_server_cb);
 
-
+*/
 
 	/* setup certificates */
 	rc = dtls_openssl_set_certs(conn,d);
