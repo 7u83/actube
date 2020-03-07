@@ -12,7 +12,7 @@ LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
 OBJDIR		:= ../../obj/wtp/$(ARCH)
 EXENAME		:= ./wtp
 
-LIBS		:= -lcw
+LIBS		:= -lcw -lnettle
 #STATICLIBS	:= $(LIBDIR)/$(ARCH)/libcw.a
 LDFLAGS		+= -L$(LIBARCHDIR)
 
@@ -48,8 +48,8 @@ $(OBJDIR)/%.o:%.c
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 $(EXENAME): $(OBJS)
-	@echo "  $(LD) $(EXENAME)"
-	@$(LD) $(LDFLAGS) -o $(EXENAME) $(OBJS) $(LIBS) $(STATICLIBS)
+	echo "  $(LD) $(EXENAME)"
+	$(LD) $(LDFLAGS) -o $(EXENAME) $(OBJS) $(LIBS) $(STATICLIBS)
 
 
 clean: 
