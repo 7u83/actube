@@ -42,7 +42,8 @@ static BIO_METHOD bio_methods = {
 }
 
 
-int dtls_openssl_connect(struct conn *conn)
+int 
+dtls_openssl_connect(struct conn *conn)
 {
 	struct dtls_openssl_data *d;
 	int rc;
@@ -58,8 +59,8 @@ int dtls_openssl_connect(struct conn *conn)
 		return 0;
 
 /*
-//	if (conn->dtls_psk)
-//		SSL_set_psk_client_callback(d->ssl, psk_client_cb);
+	if (conn->dtls_psk)
+		SSL_set_psk_client_callback(d->ssl, psk_client_cb);
 */
 
 
@@ -68,7 +69,7 @@ int dtls_openssl_connect(struct conn *conn)
 	do {
 		rc = SSL_connect(d->ssl);
 	}while(rc!=1 && errno==EAGAIN && !cw_timer_timeout(timer));
-	
+
 
 	if (rc == 1) {
 		cw_dbg(DBG_DTLS,"SSL connect successfull!");
@@ -77,10 +78,7 @@ int dtls_openssl_connect(struct conn *conn)
 		return 1;
 	}
 
-	rc = dtls_openssl_log_error(0, rc, "DTLS connect");
-
-
-
-
+	rc = dtls_openssl_log_error(d->ssl, rc, "DTLS connect");
 	return 0;
 }
+
