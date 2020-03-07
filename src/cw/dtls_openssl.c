@@ -113,7 +113,7 @@ int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
       if (rsa_512)
         rsa_tmp = rsa_512;
       else { /* generate on the fly, should not happen in this example */
-        rsa_tmp = RSA_generate_key(keylength,RSA_F4,NULL,NULL);
+    /*    rsa_tmp = RSA_generate_key(keylength,RSA_F4,NULL,NULL);*/
         rsa_512 = rsa_tmp; /* Remember for later reuse */
       }
       break;
@@ -293,7 +293,7 @@ return 1;
 static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
 {
 	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = b->ptr;
+	struct conn * conn = BIO_get_data(b); /*->ptr;*/
 	
 	int l = bstr16_len(conn->dtls_psk) < max_psk_len ? bstr16_len(conn->dtls_psk) : max_psk_len;
 	memcpy(psk,conn->dtls_psk,l);
@@ -450,7 +450,9 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	
 	d->bio = BIO_new(bio);
-	d->bio->ptr = conn;
+/*	d->bio->ptr = conn;*/
+	BIO_set_data(d->bio,conn);
+
 	SSL_set_bio(d->ssl, d->bio, d->bio);
 
 	return d;
@@ -542,7 +544,7 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 	char sock_buf2[SOCK_ADDR_BUFSIZE];
 	
 	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = b->ptr;
+	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	cw_rand(conn->dtls_cookie,sizeof(conn->dtls_cookie));
 
@@ -561,7 +563,8 @@ int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int len
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	char sock_buf2[SOCK_ADDR_BUFSIZE];	
 	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = b->ptr;
+	/*struct conn * conn = b->ptr;*/
+	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	cw_dbg(DBG_DTLS,"Verifying DTLS cookie from %s: %s",
 		sock_addr2str(&conn->addr,sock_buf),sock_hwaddr2idstr(conn->dtls_cookie,len,sock_buf2));

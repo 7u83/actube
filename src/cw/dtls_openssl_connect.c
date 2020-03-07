@@ -30,7 +30,8 @@ static BIO_METHOD bio_methods = {
 {
 	int l;
 	BIO *b = SSL_get_rbio(ssl);
-	struct conn *conn = b->ptr;
+	/*struct conn *conn = b->ptr;*/
+	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	snprintf(identity, max_identity_len, "CLient_identity");
 
