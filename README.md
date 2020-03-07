@@ -1,7 +1,7 @@
 AC-Tube
 =======
-
-See: https://fossil.planix.org/actube.fossil
+On Github this is a mirror of 
+https://fossil.planix.org/actube/
 
 Open Source CAPWAP WLC
 
