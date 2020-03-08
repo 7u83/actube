@@ -26,7 +26,7 @@ struct bootcfg{
 bstr_t get_base_rmac()
 {
 
-	static  uint8_t rm[8]={0x00,0x3e,0x99,0x04,0xfa,0xc0};
+	static  uint8_t rm[8]={0x00,0x3e,0x99,0x04,0xfa,0xd0};
 	return bstr_create(rm, 6);
 }
 
@@ -194,11 +194,11 @@ exit(0);
 	cw_discovery_init_results(&dis);
 /*cw_run_discovery(conn, "255.255.255.255","192.168.56.1", &dis);*/
 /*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
-	cw_run_discovery(conn, "192.168.0.161","192.168.0.29", &dis);
+	cw_run_discovery(conn, "192.168.0.162","192.168.0.29", &dis);
 
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
 
-/*
+
 	{
 		mavliter_t i;
 		mavliter_init(&i, dis.prio_ip);
@@ -222,7 +222,7 @@ exit(0);
 			
 		}
 	}
-*/
+
 	mavl_del_all(conn->remote_cfg);
 	join(conn,&dis);
 	clean_cfg(conn->remote_cfg);
