@@ -28,7 +28,7 @@ COMPDEFS+=-DWITH_CW_LOG_DEBUG
 WITH_GNUTLS=1
 
 # Compile in openssl support
-WITH_OPENSSL=0
+WITH_OPENSSL=1
 
 # 
 # 
