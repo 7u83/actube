@@ -100,13 +100,13 @@ cisco/rouge-detection/rest :Bstr16: .x000aff800000
 cisco/rouge-detection/rouge-detection :Bool: false
 cisco/sig-toogle :Bool: true
 cisco/ssl-certfile :Str: ../../ssl/certs/wtp.crt
-cisco/ssl-cipher :Str: NORMAL
+cisco/ssl-cipher :Str: ALL
 cisco/ssl-keyfile :Str: ../../ssl/certs/wtp.key
 cisco/vlan/id :Word: 0
 cisco/vlan/tagging :Bool: false
 cisco/wtp-board-data/card-id :Word: 0
 cisco/wtp-board-data/card-revision :Word: 0
-cisco/wtp-board-data/ethernet-mac-address :Bstr16: .xe47d4f3af8a6
+cisco/wtp-board-data/ethernet-mac-address :Bstr16: .x0800276edf58
 cisco/wtp-board-data/failover-priority :Bstr16: .x01010003
 cisco/wtp-board-data/options/ant-type :Byte: 1
 cisco/wtp-board-data/options/ap-type :Byte: 0
@@ -252,7 +252,7 @@ tube.0/zumsel :Byte: 12
 tube.1/main :Byte: 12
 tube.1/zumsel :Byte: 12
 wtp-board-data/board-id :Bstr16: .x0000
-wtp-board-data/mac-address :Bstr16: .x902b34de9ef1
+wtp-board-data/mac-address :Bstr16: .x0800276edf58
 wtp-board-data/model-no :Bstr16: AIR-LAP1142N-E-K9
 wtp-board-data/serial-no :Bstr16: FCZ1406W232
 wtp-board-data/vendor :Dword: 4232704
