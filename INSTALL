@@ -8,6 +8,7 @@ pkg install gmake
 pkg install gnutls
 pkg install libconfuse
 pkg install sqlite3
+pkg install p11-kit
 
 
 Ubuntu 14.04
