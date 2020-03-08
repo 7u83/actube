@@ -109,6 +109,8 @@ int dtls_gnutls_connect(struct conn *conn)
 
 
 	if (rc < 0) {
+		if (errno)
+			cw_log(LOG_ERR, "DTLS (gnutls bio): %s",strerror(errno));
 		cw_log(LOG_ERR, "DTLS (gnutls) Can't connect to %s: %s",
 		       sock_addr2str(&conn->addr,sock_buf), gnutls_strerror(rc));
 		return 0;
