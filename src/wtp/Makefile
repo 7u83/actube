@@ -6,6 +6,7 @@
 #include ../Macros.mak
 
 
+INCL_DIRS=-I../
 
 LIBDIR		:= ../../lib
 LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
@@ -32,12 +33,15 @@ LIBS+=$(OPENSSL_LIBS)
 
 #SRC=$(wildcard *.c)
 OBJS=\
-	wtp_main.o\
-	discovery.o\ 
+     	wtp_main.o\
+	discovery.o\
 	join.o\
 	configure.o\
 	run.o\
-	changestate.o
+	changestate.o\
+
+
+
 
 #OBJS=$(patsubst %.c,%.o,$(SRC))
 #OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
@@ -46,11 +50,12 @@ ALL=$(EXENAME)
 
 all: $(ALL)
 
+#$(OBJDIR)/%.o:%.c
 
-$(OBJDIR)/%.o:%.c
-	@mkdir -p $(OBJDIR)
+.c.o:
+#	@mkdir -p $(OBJDIR)
 	@echo "  $(CC) "$<
-	@$(CC) -c $(CFLAGS) $< -o $@
+	@$(CC) $(INCL_DIRS) -c $(CFLAGS) $< -o $@
 
 $(EXENAME): $(OBJS)
 	echo "  $(LD) $(EXENAME)"
@@ -58,8 +63,9 @@ $(EXENAME): $(OBJS)
 
 
 clean: 
+	rm -f *.o
 #	rm  $(OBJDIR)/*
-	rm  $(EXENAME)
+	rm -f $(EXENAME)
 
 deps:  
 	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
