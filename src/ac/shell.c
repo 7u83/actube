@@ -32,6 +32,8 @@ void ucfg_cmd(struct shelldata *sd, const char * cmd);
 void set_cmd(struct shelldata *sd, const char * cmd);
 void del_cmd(struct shelldata *sd, const char * cmd);
 void send_cmd(struct shelldata *sd, const char * cmd);
+void show_cfg (FILE *out, mavl_t ktv);
+void show_aps (FILE *out);
 
 struct conn * find_ap(const char *name);
 
@@ -89,6 +91,7 @@ void ucfg_cmd(struct shelldata *sd, const char *cmd)
 
 #include "wtpman.h"
 
+void 
 send_cmd(struct shelldata * sd, const char *cmd)
 {
 	struct conn * conn;
