@@ -29,6 +29,10 @@
 #include "cw/cw_util.h"
 #include "cw/dtls.h"
 
+     #include <sys/param.h>
+     #include <sys/time.h>
+     #include <sys/socket.h>
+     #include <net/if.h>
 
 #include "conf.h"
 #include "ac.h"
