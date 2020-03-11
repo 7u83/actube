@@ -7,6 +7,9 @@
 #OPENSSL_LIBS=../contrib/${OPENSSL_VERSION}/libssl.a ../contrib/${OPENSSL_VERSION}/libcrypto.a -ldl
 #OPENSSL_CFLAGS=../contrib/${OPENSSL_VERSION}/include/
 
+
+ARCH != uname -m
+
 OPENSSL_LIBS=-lssl -lcrypto #-ldl
 OPENSSL_CFLAGS=
 
