@@ -4,6 +4,8 @@
 #-include ../Config.local.mak
 #-include ../WtpConfig.local.mak
 #include ../Macros.mak
+include ../Config.default.mak
+-include ../Config.mak
 
 
 INCL_DIRS=-I../
@@ -15,7 +17,7 @@ EXENAME		:= ./wtp
 
 LIBS		:= -lcw -lnettle
 #STATICLIBS	:= $(LIBDIR)/$(ARCH)/libcw.a
-LDFLAGS		+= -L$(LIBARCHDIR)
+LDFLAGS		+= -L$(LIBARCHDIR) -L/usr/local/lib
 
 #ifeq ($(SSL_LIBRARY),GNUTLS)
 #CFLAGS+=-DWITH_GNUTLS
@@ -58,8 +60,8 @@ all: $(ALL)
 	@$(CC) $(INCL_DIRS) -c $(CFLAGS) $< -o $@
 
 $(EXENAME): $(OBJS)
-	echo "  $(LD) $(EXENAME)"
-	$(LD) $(LDFLAGS) -o $(EXENAME) $(OBJS) $(LIBS) $(STATICLIBS)
+	echo "  $(CC) $(EXENAME)"
+	$(CC) $(LDFLAGS) -o $(EXENAME) $(OBJS) $(LIBS) $(STATICLIBS)
 
 
 clean: 
