@@ -49,10 +49,14 @@ capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
 
-cisco/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
-cisco/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
-cisco/ssl-cipher:Str:NORMAL
-#cisco/ssl-cipher:Str:+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
+#cisco/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
+#cisco/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
+#cisco/ssl-keyfile:Str:"../../ssl/certs/int-ca.key"
+#cisco/ssl-certfile:Str:"../../ssl/certs/int-ca.crt"
+cisco/ssl-keyfile:Str:"../../ssl/intermediate-ca/int-ca.key"
+cisco/ssl-certfile:Str:"../../ssl/intermediate-ca/int-ca.crt"
+cisco/ssl-cipher:Str:DEFAULT:!ECDH
+#cisco/ssl-cipher:Str:+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
 cisco/ssl-dhbits:Word:2048
 
 capwap/ssl-cipher:Str:+DHE-RSA:+RSA:+AES-256-CBC:+AES-128-CBC:+SHA1:+PSK
