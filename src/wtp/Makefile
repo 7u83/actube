@@ -1,11 +1,12 @@
-include ../Defs.mak
-include ../Config.mak
-include ../WtpConfig.mak
--include ../Config.local.mak
--include ../WtpConfig.local.mak
-include ../Macros.mak
+#include ../Defs.mak
+#include ../Config.mak
+#include ../WtpConfig.mak
+#-include ../Config.local.mak
+#-include ../WtpConfig.local.mak
+#include ../Macros.mak
 
 
+INCL_DIRS=-I../
 
 LIBDIR		:= ../../lib
 LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
@@ -16,36 +17,45 @@ LIBS		:= -lcw -lnettle
 #STATICLIBS	:= $(LIBDIR)/$(ARCH)/libcw.a
 LDFLAGS		+= -L$(LIBARCHDIR)
 
-ifeq ($(SSL_LIBRARY),GNUTLS)
-CFLAGS+=-DWITH_GNUTLS
-CFLAGS+=$(GNUTLS_CFLAGS)
-LIBS+=$(GNUTLS_LIBS)
-LDFLAGS+=$(GNUTLS_LDFLAGS)
-endif
+#ifeq ($(SSL_LIBRARY),GNUTLS)
+#CFLAGS+=-DWITH_GNUTLS
+#CFLAGS+=$(GNUTLS_CFLAGS)
+#LIBS+=$(GNUTLS_LIBS)
+#LDFLAGS+=$(GNUTLS_LDFLAGS)
+#endif
 
-ifeq ($(SSL_LIBRARY),OPENSSL)
+#ifeq ($(SSL_LIBRARY),OPENSSL)
 CFLAGS+=-DWITH_OPENSSL
 CFLAGS+=$(OPESSL_CFLAGS)
 LDFLAGS+=$(OPENSSL_LDFLAGS)
 LIBS+=$(OPENSSL_LIBS)
-endif
-
+#endif
 
 #SRC=$(wildcard *.c)
-SRC=wtp_main.c discovery.c join.c configure.c run.c changestate.c
+OBJS=\
+     	wtp_main.o\
+	discovery.o\
+	join.o\
+	configure.o\
+	run.o\
+	changestate.o\
 
-OBJS=$(patsubst %.c,%.o,$(SRC))
-OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
+
+
+
+#OBJS=$(patsubst %.c,%.o,$(SRC))
+#OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
 
 ALL=$(EXENAME)
 
 all: $(ALL)
 
+#$(OBJDIR)/%.o:%.c
 
-$(OBJDIR)/%.o:%.c
-	@mkdir -p $(OBJDIR)
+.c.o:
+#	@mkdir -p $(OBJDIR)
 	@echo "  $(CC) "$<
-	@$(CC) -c $(CFLAGS) $< -o $@
+	@$(CC) $(INCL_DIRS) -c $(CFLAGS) $< -o $@
 
 $(EXENAME): $(OBJS)
 	echo "  $(LD) $(EXENAME)"
@@ -53,8 +63,9 @@ $(EXENAME): $(OBJS)
 
 
 clean: 
-	$(RM) $(OBJDIR)/*
-	$(RM) $(EXENAME)
+	rm -f *.o
+#	rm  $(OBJDIR)/*
+	rm -f $(EXENAME)
 
 deps:  
 	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
