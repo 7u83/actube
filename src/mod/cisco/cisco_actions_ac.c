@@ -96,7 +96,14 @@ static cw_KTVStruct_t cisco_loghost_config[] = {
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_led_state_config[] = {
+
+static cw_KTVStruct_t cisco_ap_led_state_config70[] = {
+	{CW_TYPE_BYTE,		"led-state",		1,	-1},
+	{NULL,NULL,0,0}
+};
+
+
+static cw_KTVStruct_t cisco_ap_led_state_config73[] = {
 	{CW_TYPE_BYTE,		"led-state",		1,	-1},
 	{CW_TYPE_BYTE,		"save-flag",		1,	-1},
 	{NULL,NULL,0,0}
@@ -604,7 +611,7 @@ static int cisco_data(struct cw_ElemHandler *eh,
 }
 */
 
-static struct cw_ElemHandler handlers73[] = {
+static struct cw_ElemHandler handlers70[] = {
 	
 	{ 
 		"AC Name -(zero-length allowed)",	/* name */
@@ -814,11 +821,11 @@ static struct cw_ElemHandler handlers73[] = {
 	}
 	,
 	{ 
-		"AP LED State Config",			/* name */
+		"AP LED State Config (v7.0)",			/* name */
 		CISCO_ELEM_AP_LED_STATE_CONFIG,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		2,2,					/* min/max length */
-		cisco_ap_led_state_config,		/* type */
+		1,1,					/* min/max length */
+		cisco_ap_led_state_config70,		/* type */
 		"cisco/ap-led-state-config",		/* Key */
 		cw_in_generic_struct,			/* get */
 		cw_out_generic_struct			/* put */
@@ -1003,7 +1010,7 @@ static struct cw_ElemHandler handlers73[] = {
 
 	{ /* WTP Radio Configuration for AC/WPT with version 7.3 */
 	
-		"WTP Radio Configuration",		/* name */
+		"WTP Radio Configuration (v7.3)",		/* name */
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		27,27,					/* min/max length */
@@ -1619,7 +1626,7 @@ static struct cw_ElemDef wtp_echo_response_elements[] ={
 };
 
 
-static struct cw_MsgDef messages[] = {
+static struct cw_MsgDef messages70[] = {
 	{
 		NULL,				/* name */
 		CAPWAP_MSG_DISCOVERY_REQUEST,	/* type */
@@ -1749,6 +1756,21 @@ static struct cw_MsgDef messages[] = {
 
 };
 
+static struct cw_ElemHandler handlers73[] = {
+	{ 
+		"AP LED State Config (>= v7.3)",	/* name */
+		CISCO_ELEM_AP_LED_STATE_CONFIG,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1,					/* min/max length */
+		cisco_ap_led_state_config73,		/* type */
+		"cisco/ap-led-state-config",		/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	},
+	{0,0,0,0,0,0,0,0}
+};
+
+
 
 static struct cw_ElemHandler handlers75[] = {
 	{ 
@@ -1778,6 +1800,10 @@ static struct cw_ElemHandler handlers75[] = {
 
 
 
+
+static struct cw_MsgDef messages73[] = {
+	{0,0,0,0}
+};
 
 
 
@@ -1812,7 +1838,7 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 		postprocess_join_request_parent = md->postprocess;
 	}
 	
-        cw_msgset_add(set,messages, handlers73);
+        cw_msgset_add(set,messages70, handlers70);
 	cw_msgset_add_states(set,statemachine_states);
         return set;
 }
@@ -1836,6 +1862,9 @@ static void set_ac_version(struct conn * conn)
 		if(wtpver->type->len(wtpver)==4){
 			uint32_t rv;
 			rv = cw_get_dword(wtpver->type->data(wtpver));
+			if (rv >= 0x07030000){
+				cw_msgset_add(conn->msgset,messages73, handlers73);
+			}
 			if (rv >= 0x07056600){
 				cw_msgset_add(conn->msgset,messages75, handlers75);
 			}
