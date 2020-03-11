@@ -1,3 +1,4 @@
+include ../Config.mak
 
 OBJS = \
 	wtplist.o wtpman.o conf.o ac_main.o \
@@ -20,6 +21,8 @@ LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
 LIBS+=-lc
+LIBS+=$(OPENSSL_LIBS)
+
 
 INCL_DIRS=-I../ -I/usr/local/include -I./
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
