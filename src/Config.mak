@@ -1,8 +1,8 @@
 # 
 # OpenSSL definitions
 #
-# OPENSSL_VERSION=openssl-1.0.1i
-USE_CONTRIB_OPENSSL=0
+OPENSSL_VERSION=openssl-1.0.1i
+USE_CONTRIB_OPENSSL=1
 
 # GnuTLS definitions
 # GNUTLS_VERSION=3.3.9
