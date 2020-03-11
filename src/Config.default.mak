@@ -3,12 +3,12 @@
 #
 
 
-OPENSSL_VERSION=openssl-1.0.1i
-OPENSSL_LIBS=../contrib/${OPENSSL_VERSION}/libssl.a ../contrib/${OPENSSL_VERSION}/libcrypto.a -ldl
-OPENSSL_CFLAGS=../contrib/${OPENSSL_VERSION}/include/
+#OPENSSL_VERSION=openssl-1.0.1i
+#OPENSSL_LIBS=../contrib/${OPENSSL_VERSION}/libssl.a ../contrib/${OPENSSL_VERSION}/libcrypto.a -ldl
+#OPENSSL_CFLAGS=../contrib/${OPENSSL_VERSION}/include/
 
-#OPENSSL_CFLAGS=
-#OPENSSL_LIBS=-lssl -lcrypto #-ldl
+OPENSSL_LIBS=-lssl -lcrypto #-ldl
+OPENSSL_CFLAGS=
 
 
 
