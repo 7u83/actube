@@ -616,6 +616,25 @@ static struct cw_MsgDef messages[] = {
 		discovery_response_elements
 	},
 
+
+	{
+		"Primary Discovery Request",
+		CAPWAP_MSG_PRIMARY_DISCOVERY_REQUEST,
+		CW_ROLE_AC,
+		discovery_request_states,
+		discovery_request_elements
+	},
+	
+	{
+		"Primary Discovery Response",
+		CAPWAP_MSG_PRIMARY_DISCOVERY_RESPONSE,
+		CW_ROLE_WTP,
+		discovery_response_states,
+		discovery_response_elements
+	},
+
+
+
 	{
 		"Join Request",
 		CAPWAP_MSG_JOIN_REQUEST,
