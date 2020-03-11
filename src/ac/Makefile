@@ -11,7 +11,6 @@ OBJS = \
 	discovery_cache.o\
 	shell.o\
 
-ARCH != uname -m
 PRG=actube
 LIBPATH=-L../../lib/$(ARCH)/ -L/usr/local/lib -L/usr/lib 
 
