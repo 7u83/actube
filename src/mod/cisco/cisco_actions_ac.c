@@ -315,6 +315,24 @@ static cw_KTVStruct_t cisco_ap_model[]={
 	{NULL,NULL,0,0}
 };
 
+
+static cw_KTVStruct_t cisco_wtp_radio_config70[]={
+	{CW_TYPE_BYTE,"cfg-type",1,-1},
+	{CW_TYPE_WORD,"occupancy-limit",2,-1},
+	{CW_TYPE_BYTE,"cfg-period",1,-1},
+	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
+	{CW_TYPE_BSTR16,"bss-id",6,-1},
+	{CW_TYPE_WORD,"beacon-period",2,-1},
+	{CW_TYPE_STR,"country-str1",3,-1},
+	{CW_TYPE_STR,"country-str2",3,-1},
+/*	{CW_TYPE_BYTE,"gpr-period",1,-1},*/
+	{CW_TYPE_DWORD,"reg",4,-1},
+/*	{CW_TYPE_BYTE,"max-stations",1,-1},*/
+	{NULL,NULL,0,0}
+};
+
+
+
 static cw_KTVStruct_t cisco_wtp_radio_config73[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
@@ -1008,13 +1026,13 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic				/* put */
 	},
 
-	{ /* WTP Radio Configuration for AC/WPT with version 7.3 */
+	{ /* WTP Radio Configuration for AC/WPT with version 7.0 */
 	
 		"WTP Radio Configuration (v7.3)",		/* name */
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		27,27,					/* min/max length */
-		cisco_wtp_radio_config73,		/* type */
+		25,25,					/* min/max length */
+		cisco_wtp_radio_config70,		/* type */
 		"cisco/wtp-radio-config",		/* Key */
 		cw_in_radio_generic_struct,		/* get */
 		cw_out_radio_generic_struct		/* put */
@@ -1169,19 +1187,6 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic_struct			/* put */
 	}
 	,
-
-	{ 
-		"AP Venue Settings",				/* name */
-		CISCO_ELEM_AP_VENUE_SETTINGS,			/* Element ID */
-		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		5,1024,					/* min/max length */
-		cisco_ap_venue_settings,				/* type */
-		"cisco/ap-venue-settings",			/* Key */
-		cw_in_generic_struct,			/* get */
-		cw_out_generic_struct			/* put */
-	}
-	,
-
 
 
 	{ 
@@ -1767,6 +1772,34 @@ static struct cw_ElemHandler handlers73[] = {
 		cw_in_generic_struct,			/* get */
 		cw_out_generic_struct			/* put */
 	},
+
+	{ /* WTP Radio Configuration for AC/WPT with version 7.3 */
+	
+		"WTP Radio Configuration (v7.3)",		/* name */
+		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		27,27,					/* min/max length */
+		cisco_wtp_radio_config73,		/* type */
+		"cisco/wtp-radio-config",		/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	}
+	,
+
+
+
+	{ 
+		"AP Venue Settings",				/* name */
+		CISCO_ELEM_AP_VENUE_SETTINGS,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,1024,					/* min/max length */
+		cisco_ap_venue_settings,				/* type */
+		"cisco/ap-venue-settings",			/* Key */
+		cw_in_generic_struct,			/* get */
+		cw_out_generic_struct			/* put */
+	}
+	,
+	
 	{0,0,0,0,0,0,0,0}
 };
 
