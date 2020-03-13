@@ -61,10 +61,10 @@ int capwap_out_wtp_board_data(struct cw_ElemHandler * eh,
 	d += val->type->put(val,d);
 	/*cw_ktv_add(cfg,vendor_key,CW_TYPE_DWORD,data,len);*/
 	
-	d+=write_boarddata_subelem(d,cfg,eh->key,CW_SKEY_MODELNO,CW_BOARDDATA_MODELNO);
-	d+=write_boarddata_subelem(d,cfg,eh->key,CW_SKEY_SERIALNO,CW_BOARDDATA_SERIALNO);
+	d+=write_boarddata_subelem(d,cfg,eh->key,"model-no",CW_BOARDDATA_MODELNO);
+	d+=write_boarddata_subelem(d,cfg,eh->key,"serial-no",CW_BOARDDATA_SERIALNO);
 	d+=write_boarddata_subelem(d,cfg,eh->key,"board-id",CW_BOARDDATA_BOARDID);
-	d+=write_boarddata_subelem(d,cfg,eh->key,"board-revision",CW_BOARDDATA_REVISION);
+	d+=write_boarddata_subelem(d,cfg,eh->key,"revision",CW_BOARDDATA_REVISION);
 	d+=write_boarddata_subelem(d,cfg,eh->key,"mac-address",CW_BOARDDATA_MACADDRESS);
 	
 

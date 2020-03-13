@@ -66,7 +66,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 						       CW_ITEM_WTP_BOARD_MODELNO,
 						       msgelem + i, sublen);
 						        */
-				key = "model_no";
+				key = "model-no";
 				break;
 			case CW_BOARDDATA_SERIALNO:
 /*				mbag_set_bstrn(itemstore,
@@ -74,20 +74,20 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 						       msgelem + i, sublen);
 
 */				
-				key = "serial_no";
+				key = "serial-no";
 				break;
 			case CW_BOARDDATA_MACADDRESS:
 /*				mbag_set_bstrn(itemstore,
 						       CW_ITEM_WTP_BOARD_MACADDRESS,
 						       msgelem + i, sublen);
 */
-				key = "mac_address";
+				key = "mac-address";
 				break;
 			case CW_BOARDDATA_BOARDID:
 /*				mbag_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
 						       msgelem + i, sublen);
 */
-				key = "board_id";
+				key = "board-id";
 				break;
 			case CW_BOARDDATA_REVISION:
 /*				mbag_set_bstrn(itemstore,
@@ -95,6 +95,7 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 						       msgelem + i, sublen);
 */
 				key = "revision";
+				break;
 			default:
 				key = NULL;
 				break;
