@@ -111,7 +111,7 @@ int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 	memcpy(cw_get_hdr_rmac(th), rmac, rmac_len + 1);
 	cw_set_hdr_flags(th, CAPWAP_FLAG_HDR_M, 1);
 
-	hlen = 4 + rmac_len / 4;
+	hlen = 2 + rmac_len / 4;
 
 	if (rmac_len % 4 != 0) {
 		hlen++;
