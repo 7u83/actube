@@ -98,8 +98,13 @@
 /* macros to acces transport header values */
 
 #define cw_get_hdr_preamble(th) (th[0])
-#define cw_get_hdr_fragid(th) ((ntohl((((uint32_t*)th)[1]) >> 16) & 0xffff))
-#define cw_get_hdr_fragoffset(th) ((ntohl((((uint32_t*)th)[1]) >> 3) & 0x1fff))
+
+#define cw_get_hdr_fragid(th)\
+	(((ntohl(*(((uint32_t*)(th))+1))) >> 16) & 0xffff)
+
+#define cw_get_hdr_fragoffset(th)\
+	(((ntohl(*(((uint32_t*)(th))+1))) >> 3) & 0x1fff)
+
 #define cw_get_hdr_rid(th) ((ntohl((((uint32_t*)th)[0]) >> 14) & 0x1f))
 #define cw_get_hdr_wbid(th) ((ntohl(((uint32_t*)th)[0]) >> 9) & 0x1f)
 #define cw_get_hdr_hlen(th) ((ntohl(((uint32_t*)th)[0]) >> 19) & 0x1f)
