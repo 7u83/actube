@@ -159,9 +159,6 @@ cw_send_msg( struct conn * conn, uint8_t *msg)
 
 	return conn->write(conn,buf,msglen + hlen);
 	
-
-	printf("packetlen = %d (%d)\n",packetlen,hlen);
-	exit(0);
 }
 
 
@@ -180,12 +177,13 @@ int cw_send_request(struct conn *conn,int msg_id)
 		errno=ENOMSG;
 		return -1;
 	}
-	conn_send_msg(conn, conn->req_buffer);
+/*	conn_send_msg(conn, conn->req_buffer);*/
 
 	
 
 	rc=-1;
 	for (i=0; i<conn->max_retransmit && rc<0; i++){
+		conn_send_msg(conn, conn->req_buffer);
 		if ( i>0 ){
 			cw_log(LOG_WARNING,"Retransmitting request ... %d",i);
 		}
