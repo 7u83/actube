@@ -43,7 +43,7 @@ cisco/ap-led-state-config/save-flag :Byte: 1
 cisco/ap-log-facility :Byte: 0
 cisco/ap-mode-and-type/mode :Byte: 0
 cisco/ap-mode-and-type/type :Byte: 0
-cisco/ap-model/model :Str: AIR-LAP1142N-E-K9
+cisco/ap-model/model :Str: AIR-LAP1131AG-E-K9
 cisco/ap-power-injector-config/selection :Byte: 0
 cisco/ap-power-injector-config/sitch-mac-address :Bstr16: .x000000000000
 cisco/ap-power-injector-config/state :Byte: 17
@@ -53,10 +53,17 @@ cisco/ap-regulatory-domain.0/code0 :Byte: 0
 cisco/ap-regulatory-domain.0/code1 :Byte: 1
 cisco/ap-regulatory-domain.0/set :Bool: true
 cisco/ap-regulatory-domain.0/slot :Byte: 0
+
+cisco/ap-regulatory-domain.1/band-id :Byte: 0
+cisco/ap-regulatory-domain.1/code0 :Byte: 0
+cisco/ap-regulatory-domain.1/code1 :Byte: 1
+cisco/ap-regulatory-domain.1/set :Bool: true
+cisco/ap-regulatory-domain.1/slot :Byte: 0
+
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1583970532
+cisco/ap-timesync/timestamp :Dword: 1585926286
 cisco/ap-timesync/type :Byte: 1
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -79,8 +86,6 @@ cisco/loghost-config/loghost.0 :IPAddress: 7.7.1.3
 cisco/loghost-config/loghost.1 :IPAddress: 0.0.0.0
 cisco/loghost-config/loghost.2 :IPAddress: 0.0.0.0
 cisco/loghost-config/loghost.3 :IPAddress: 0.0.0.0
-cisco/lw-path-mtu/len :Word: 1095
-cisco/lw-path-mtu/max :Word: 1485
 cisco/mcast-mgid-info :Bstr16: .x002100010000000000000000000000000000000101000000
 cisco/mwar-addr/address :IPAddress: 192.168.0.162
 cisco/mwar-addr/mwar-type :Byte: 0
@@ -105,7 +110,7 @@ cisco/wtp-board-data/ethernet-mac-address :Bstr16: .x0800276edf58
 cisco/wtp-board-data/failover-priority :Bstr16: .x01010003
 cisco/wtp-board-data/options/ant-type :Byte: 1
 cisco/wtp-board-data/options/ap-type :Byte: 0
-cisco/wtp-board-data/options/failover-priority :Byte: 3
+cisco/wtp-board-data/options/failover-priority :Byte: 1
 cisco/wtp-board-data/options/flex-connect :Byte: 1
 cisco/wtp-board-data/wtp-model-hi :Dword: 0
 cisco/wtp-board-data/wtp-model-lo :Dword: 0
@@ -142,17 +147,17 @@ radio.0/cisco/rad-extended-config/multicast-data-range :Word: 0
 radio.0/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
 radio.0/cisco/tx-power/current-tx-power :Word: 10
 radio.0/cisco/tx-power/reserved :Byte: 1
-radio.0/cisco/wtp-radio-config/beacon-period :Word: 100
-radio.0/cisco/wtp-radio-config/bss-id :Bstr16: 123456
-radio.0/cisco/wtp-radio-config/cfg-period :Byte: 4
+radio.0/cisco/wtp-radio-config/beacon-period :Word: 0
+radio.0/cisco/wtp-radio-config/bss-id :Bstr16: .x0800276edf58
+radio.0/cisco/wtp-radio-config/cfg-period :Byte: 0
 radio.0/cisco/wtp-radio-config/cfg-type :Byte: 1
-radio.0/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
+radio.0/cisco/wtp-radio-config/cfp-maximum-duration :Word: 0
 radio.0/cisco/wtp-radio-config/country-str1 :Str: DE
 radio.0/cisco/wtp-radio-config/country-str2 :Str: DE
 radio.0/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.0/cisco/wtp-radio-config/max-stations :Byte: 200
-radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 100
-radio.0/cisco/wtp-radio-config/reg :Dword: 65536
+radio.0/cisco/wtp-radio-config/occupancy-limit :Word: 0
+radio.0/cisco/wtp-radio-config/reg :Dword: 256
 radio.0/cisco/wtp-radio-config/unknown75 :Byte: 0
 radio.0/decryption-error-report-period :Word: 120
 radio.0/operational-state/cause :Byte: Normal
@@ -196,15 +201,15 @@ radio.1/cisco/tx-power/current-tx-power :Word: 10
 radio.1/cisco/tx-power/reserved :Byte: 1
 radio.1/cisco/wtp-radio-config/beacon-period :Word: 100
 radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b90
-radio.1/cisco/wtp-radio-config/cfg-period :Byte: 4
+radio.1/cisco/wtp-radio-config/cfg-period :Byte: 0
 radio.1/cisco/wtp-radio-config/cfg-type :Byte: 1
-radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60
+radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 0
 radio.1/cisco/wtp-radio-config/country-str1 :Str: DE
 radio.1/cisco/wtp-radio-config/country-str2 :Str: DE
 radio.1/cisco/wtp-radio-config/gpr-period :Byte: 10
 radio.1/cisco/wtp-radio-config/max-stations :Byte: 200
-radio.1/cisco/wtp-radio-config/occupancy-limit :Word: 100
-radio.1/cisco/wtp-radio-config/reg :Dword: 65536
+radio.1/cisco/wtp-radio-config/occupancy-limit :Word: 0
+radio.1/cisco/wtp-radio-config/reg :Dword: 256
 radio.1/cisco/wtp-radio-config/unknown75 :Byte: 1
 radio.1/decryption-error-report-period :Word: 120
 radio.1/operational-state/cause :Byte: Normal
@@ -214,18 +219,18 @@ radio.1/wlan.0/add-lw-wlan/misc :Bstr16: .x3e9904fac0000100
 radio.1/wlan.0/add-lw-wlan/misc2 :Word: 4
 radio.1/wlan.0/add-lw-wlan/ssid :Str: TubeSSID
 radio.1/wtp-radio-information :Dword: 2
-radio.2/cisco/rad-extended-config/beacon-interval :Word: 48128
-radio.2/cisco/rad-extended-config/beacon-range :Word: 0
-radio.2/cisco/rad-extended-config/c-ccat :Word: 1
-radio.2/cisco/rad-extended-config/multicast-buffer :Word: 0
-radio.2/cisco/rad-extended-config/multicast-data-range :Word: 0
-radio.2/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
-radio.3/cisco/rad-extended-config/beacon-interval :Word: 59392
-radio.3/cisco/rad-extended-config/beacon-range :Word: 0
-radio.3/cisco/rad-extended-config/c-ccat :Word: 1
-radio.3/cisco/rad-extended-config/multicast-buffer :Word: 0
-radio.3/cisco/rad-extended-config/multicast-data-range :Word: 0
-radio.3/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
+#radio.2/cisco/rad-extended-config/beacon-interval :Word: 48128
+#radio.2/cisco/rad-extended-config/beacon-range :Word: 0
+#radio.2/cisco/rad-extended-config/c-ccat :Word: 1
+#radio.2/cisco/rad-extended-config/multicast-buffer :Word: 0
+#radio.2/cisco/rad-extended-config/multicast-data-range :Word: 0
+#radio.2/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
+#radio.3/cisco/rad-extended-config/beacon-interval :Word: 59392
+#radio.3/cisco/rad-extended-config/beacon-range :Word: 0
+#radio.3/cisco/rad-extended-config/c-ccat :Word: 1
+#radio.3/cisco/rad-extended-config/multicast-buffer :Word: 0
+#radio.3/cisco/rad-extended-config/multicast-data-range :Word: 0
+#radio.3/cisco/rad-extended-config/rx-sensop-threshold :Word: 0
 radio.255/admin-state :Byte: reserved
 radio.255/operational-state/cause :Byte: Normal
 radio.255/operational-state/state :Byte: 0
@@ -234,6 +239,14 @@ radio/0/cisco/regulatory-domain/code1 :Byte: 1
 radio/0/cisco/regulatory-domain/set :Bool: true
 radio/0/cisco/regulatory-domain/slot :Byte: 0
 radio/0/wtp-radio-information :Dword: 1
+radio/1/cisco/regulatory-domain/code0 :Byte: 0
+radio/1/cisco/regulatory-domain/code1 :Byte: 1
+radio/1/cisco/regulatory-domain/set :Bool: true
+radio/1/cisco/regulatory-domain/slot :Byte: 0
+radio/1/wtp-radio-information :Dword: 1
+
+
+
 radio/wlan/encryption-policy :Dword: 16777216
 radio/wlan/radio-od :Byte: 1
 radio/wlan/wlan-capability :Word: 17
@@ -245,24 +258,14 @@ tube.0/main :Byte: 12
 tube.0/zumsel :Byte: 12
 tube.1/main :Byte: 12
 tube.1/zumsel :Byte: 12
-
-#wtp-board-data/board-id :Bstr16: .x0000
-#wtp-board-data/mac-address :Bstr16: .x0800276edf58
-#wtp-board-data/model-no :Bstr16: AIR-LAP1142N-E-K9
-#wtp-board-data/serial-no :Bstr16: FCZ1406W232
-#wtp-board-data/vendor :Dword: 4232704
-
-
 wtp-board-data/board-id :Bstr16: .x0000
 wtp-board-data/mac-address :Bstr16: .x0800276edf58
 wtp-board-data/model-no :Bstr16: AIR-LAP1131AG-E-K9  
 wtp-board-data/revision :Bstr16: B0
 wtp-board-data/serial-no :Bstr16: FCZ1441Q0XZ
 wtp-board-data/vendor :Dword: 4232704
-
-
 wtp-descriptor/bootloader/vendor :Dword: 4232704
-wtp-descriptor/bootloader/version :Bstr16: .x0c041200
+wtp-descriptor/bootloader/version :Bstr16: .x0c030800
 wtp-descriptor/hardware/vendor :Dword: 4232704
 wtp-descriptor/hardware/version :Bstr16: .x01000000
 wtp-descriptor/max-radios :Byte: 2
