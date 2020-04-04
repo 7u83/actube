@@ -478,6 +478,29 @@ static cw_KTVStruct_t cisco_add_wlan[]={
 };
 
 
+static cw_KTVStruct_t cisco_add_wlan70[]={
+	{CW_TYPE_BYTE,"radio-id",1,-1},
+	{CW_TYPE_WORD,"wlan-capability",2,-1},
+	{CW_TYPE_BYTE,"wlan-id",1,-1},
+	{CW_TYPE_DWORD,"encryption-policy",4,-1},
+
+	{CW_TYPE_BSTR16,"wep-key",13,9},
+	{CW_TYPE_BYTE,"encryption",1,42},
+	
+	{CW_TYPE_BOOL,"broadcast-ssid",1,332},
+	{CW_TYPE_WORD,"session-timout",2,381},
+/*	{CW_TYPE_BYTE, "dtim-period",1,541},
+	{CW_TYPE_STR, "ssid-a",30,545},
+	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
+	{CW_TYPE_BYTE, "max-stations",1,580},*/
+	
+	{NULL,NULL,0,0}
+};
+
+
+
+
+
 static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
@@ -1206,7 +1229,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_ELEM_ADD_WLAN,			/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		7,1117,					/* min/max length */
-		cisco_add_wlan,				/* type */
+		cisco_add_wlan70,			/* type */
 		"radio/wlan",				/* Key */
 		cw_in_generic_struct,			/* get */
 		cw_out_generic_struct,			/* put */
@@ -1405,6 +1428,7 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_RAD_NAME,		1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	0, 0},
+	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	0, 0},
 	{0,0,0,00}
 	
 };
@@ -1420,20 +1444,19 @@ static struct cw_ElemDef discovery_response_elements[] ={
 
 /*static uint16_t join_request_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef join_request_elements[] ={
-	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	1, 0},
+	{0,0,			CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,1,0},
+	{0,0,			CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS,1,0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_GROUP_NAME,	1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_ADDR,		1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
 
 	
-	{0,0,			CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,1,0},
-	{0,0,			CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS,1,0},
-
+	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	1, 0},
 	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV4_ADDRESS,		0, CW_DELETE},
 	{0,0,CAPWAP_ELEM_CAPWAP_LOCAL_IPV6_ADDRESS,		0, CW_DELETE},
 	{0,0,			CAPWAP_ELEM_ECN_SUPPORT,	0, CW_DELETE},
 
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	0, 0},
 
 	{0,0,0,00}
 	
