@@ -485,10 +485,12 @@ static cw_KTVStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_DWORD,"encryption-policy",4,-1},
 
 	{CW_TYPE_BSTR16,"wep-key",13,9},
-	{CW_TYPE_BYTE,"encryption",1,42},
+	{CW_TYPE_BYTE,"wep-key-index",1,41},
+	{CW_TYPE_BOOL,"wep-encryption",1,42},
 	
 	{CW_TYPE_BOOL,"broadcast-ssid",1,332},
 	{CW_TYPE_WORD,"session-timout",2,381},
+
 /*	{CW_TYPE_BYTE, "dtim-period",1,541},
 	{CW_TYPE_STR, "ssid-a",30,545},
 	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
