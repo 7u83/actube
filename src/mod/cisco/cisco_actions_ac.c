@@ -491,6 +491,9 @@ static cw_KTVStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BOOL,"broadcast-ssid",1,332},
 	{CW_TYPE_WORD,"session-timout",2,381},
 
+	{CW_TYPE_STR,"profile-name",30,441},
+	{CW_TYPE_STR, "ssid",-1,480},
+
 /*	{CW_TYPE_BYTE, "dtim-period",1,541},
 	{CW_TYPE_STR, "ssid-a",30,545},
 	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
