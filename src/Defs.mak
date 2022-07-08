@@ -1,5 +1,5 @@
-ifndef ARCH
-	ARCH = $(shell uname -m)
-endif
+#.ifndef ARCH
+ARCH!=uname -m
+#.endif
 
 

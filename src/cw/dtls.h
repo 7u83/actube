@@ -24,7 +24,7 @@
 
 
 
-#ifdef WITH_GNUTLS
+#if WITH_GNUTLS
 	#include "dtls_gnutls.h"
 	#define dtls_init dtls_gnutls_init
 	#define dtls_accept dtls_gnutls_accept
@@ -34,7 +34,7 @@
 	#define dtls_get_peers_cert dtls_gnutls_get_peers_cert
 #endif
 
-#ifdef WITH_OPENSSL
+#if WITH_OPENSSL
 	#include "dtls_openssl.h"
 	#define dtls_init dtls_openssl_init
 	#define dtls_accept dtls_openssl_accept

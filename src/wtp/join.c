@@ -12,7 +12,6 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/sock.h"
-#include "cw/dtls.h"
 #include "cw/mavl.h"
 
 #include "wtp.h"
