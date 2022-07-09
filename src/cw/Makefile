@@ -1,40 +1,5 @@
 include ../Defs.mak
-include ../CWConfig.mak
--include ../Config.local.mak
-include ../Macros.mak
 
-
-LIBDIR		:= ../../lib
-LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
-OBJDIR		:= ../../obj/cw/$(ARCH)
-
-SNAME		:= $(LIBARCHDIR)/libcw.a
-DNAME		:= $(LIBARCHDIR)/libcw.so
-
-LIBS=
-
-ifeq ($(WITH_OPENSSL),1)
-CFLAGS+=$(OPENSSL_CFLAGS)
-CFLAGS+=-DWITH_OPENSSL
-DTLSSRC += dtls_openssl.c \
-	dtls_openssl_accept.c \
-	dtls_openssl_connect.c \
-	dtls_openssl_get_cipher.c \
-	dtls_openssl_bio.c 
-LIBS+=-lssl
-endif
-
-ifeq ($(WITH_GNUTLS),1)
-CFLAGS+=$(GNUTLS_CFLAGS)
-CFLAGS+=-DWITH_GNUTLS
-DTLSSRC+= dtls_gnutls.c \
-	dtls_gnutls_accept.c \
-	dtls_gnutls_connect.c \
-	dtls_gnutls_bio.c \
-	dtls_gnutls_get_cipher.c \
-	dtls_gnutls_get_peers_cert.c
-LIBS+=-lgnutls
-endif
 
 
 CWSRC=\
@@ -277,58 +242,21 @@ RADIOSRC=\
 
 
 #SRC=$(wildcard *.c)
-SRC = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC)
-
-OBJS=$(patsubst %.c,%.o,$(SRC))
-OBJS:=$(patsubst %.o,$(OBJDIR)/%.o,$(OBJS))
-
-
-all: $(SNAME) $(DNAME)
-
-
-CFLAGS += $(GNUTLS_CFLAGS) \
-	  -DWITH_CW_LOG \
-	  -DWITH_CW_LOG_DEBUG \
-	  -DWITH_DTLS 
-
-
-$(OBJDIR)/%.o:%.c
-	@mkdir -p $(OBJDIR)
-	@echo "  $(CC) "$<
-	@$(CC) -c $(CFLAGS) $< -o $@
-
-$(SNAME) : $(OBJS) 
-	@mkdir -p $(LIBARCHDIR)
-	@echo "  $(AR) $(SNAME)"
-	@$(AR) rcs $(SNAME) $(OBJS) 
-
-$(DNAME) : $(OBJS) 
-	@mkdir -p $(LIBARCHDIR)
-	@echo "  $(LD) $(DNAME)"
-	@$(LD) $(LDFLAGS) -shared -o $(DNAME) $(OBJS) $(LIBS)
-
-
-SRCS = $(OBJS:.o=.c) 
-DEPS := $(OBJS:.o=.d)
-
-
-.PHONY: deps clean clean_libs libs
+SOURCES = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC)
 
 
 
-clean: 
-	$(RM) $(OBJDIR)/*
-	$(RM) $(DNAME)
-	$(RM) $(SNAME)
-	
 
-clean_deps:
-	$(DEPS) 
-	
-deps:  
-	echo "# DO NOT DELETE THIS LINE -- make depend depends on it." > .depend
-	makedepend $(SRC) -f.depend -p$(OBJDIR)/
+LIBDIR          := ../../lib
+LIBARCHDIR      := $(LIBDIR)/$(KERNEL)/$(ARCH)
+OBJDIR          := ../../obj/cw/$(KERNEL)/$(ARCH)
 
+SNAME           := $(LIBARCHDIR)/libcw.a
+DNAME           := $(LIBARCHDIR)/libcw.so
 
--include .depend
+CFLAGS+=-fPIC
+
+all: $(SNAME) $(DNAME) 
+
+include ../lib.mk
 
