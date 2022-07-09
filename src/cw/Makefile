@@ -257,6 +257,9 @@ DNAME           := $(LIBARCHDIR)/libcw.so
 CFLAGS+=-fPIC
 
 all: $(SNAME) $(DNAME) 
+static: $(SNAME)
+dynamic: $(DNAME)
+	
 
 include ../lib.mk
 
