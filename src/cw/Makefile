@@ -241,6 +241,22 @@ RADIOSRC=\
 	cw_read_radio_generic.c\
 
 
+#DTLSSRC += dtls_openssl.c \
+#	dtls_openssl_accept.c \
+#	dtls_openssl_connect.c \
+#	dtls_openssl_get_cipher.c \
+#	dtls_openssl_bio.c 
+#LIBS+=-lssl
+
+DTLSSRC+= dtls_gnutls.c \
+	dtls_gnutls_accept.c \
+	dtls_gnutls_connect.c \
+	dtls_gnutls_bio.c \
+	dtls_gnutls_get_cipher.c \
+	dtls_gnutls_get_peers_cert.c
+LIBS+=-lgnutls
+
+
 #SRC=$(wildcard *.c)
 SOURCES = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC)
 

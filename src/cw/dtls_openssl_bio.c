@@ -37,9 +37,11 @@
 
 BIO_METHOD *dtls_openssl_bio_method()
 {
-	static BIO_METHOD bio_methods;
+	BIO_METHOD * bio_methods;
+	bio_methods = BIO_mth_new(BIO_TYPE_DGRAM,"CW Packet");
 
-	bio_methods.type = BIO_TYPE_DGRAM;
+
+/*	bio_methods.type = BIO_TYPE_DGRAM;
 	bio_methods.name = "CW packet";
 	bio_methods.bwrite = dtls_openssl_bio_write;
 	bio_methods.bread = dtls_openssl_bio_read;
@@ -49,6 +51,7 @@ BIO_METHOD *dtls_openssl_bio_method()
 	bio_methods.create = dtls_openssl_bio_new;
 	bio_methods.destroy = dtls_openssl_bio_free;
 	bio_methods.callback_ctrl = 0;
+*/
 
 	return &bio_methods;
 }

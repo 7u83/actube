@@ -2,18 +2,18 @@ include ../../Defs.mak
 
 
 
-OBJS=\
-	mod_cisco_ac.o \
-	cisco_actions_ac.o \
-	cisco_in_wtp_descriptor.o \
-	cisco_out_wtp_descriptor.o \
-	cisco_in_ac_descriptor.o\
-	cisco_out_ac_descriptor.o\
-	cisco_out_radio_generic.o\
-	cisco_out_ap_timesync.o\
-	cisco_in_spam_vendor_specific.o\
-	cisco_out_lw_path_mtu.o\
-	cisco_out_capwap_local_ip_address.o
+SOURCES=\
+	mod_cisco_ac.c \
+	cisco_actions_ac.c \
+	cisco_in_wtp_descriptor.c \
+	cisco_out_wtp_descriptor.c \
+	cisco_in_ac_descriptor.c\
+	cisco_out_ac_descriptor.c\
+	cisco_out_radio_generic.c\
+	cisco_out_ap_timesync.c\
+	cisco_in_spam_vendor_specific.c\
+	cisco_out_lw_path_mtu.c\
+	cisco_out_capwap_local_ip_address.c
 
 
 #	cisco80211.o \
@@ -39,14 +39,18 @@ OBJS=\
 
 	
 LIBDIR		:= ../../../lib
-LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
-OBJDIR		:= ../../../obj/mod_cisco/$(ARCH)
+LIBARCHDIR	:= $(LIBDIR)/$(KERNEL)/$(ARCH)
+OBJDIR		:= ../../../obj/mod_cisco/$(KERNEL)/$(ARCH)
 SNAME		:= $(LIBARCHDIR)/libmod_cisco.a
 DNAME		:= $(LIBARCHDIR)/mod_cisco.so
-MODNAME		:= $(LIBDIR)/mod_cisco.so
-SLIBS		:= -lcw -lconfuse
 
+CFLAGS+=-fPIC
+CFLAGS+= -I ../../ -I../ -I../../include
 
-include ../Mod.mak
+all: $(SNAME) $(DNAME) 
+static: $(SNAME)
+dynamic: $(DNAME)
+
+include ../../lib.mk
 
 

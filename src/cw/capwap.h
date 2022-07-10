@@ -394,14 +394,12 @@
 //#define CAPWAP_CIPHER "AES128-SHA"
 */
 
-/*
-#ifdef WITH_GNUTLS
-#define CAPWAP_CIPHER	"+RSA:+AES-128-CBC:+SHA1:"
+
+#ifdef USE_OPENSSL
+	#define CAPWAP_CIPHER	"ALL"
+#else
+	#define CAPWAP_CIPHER	"+RSA:+AES-128-CBC:+SHA1:"
 #endif
-#ifdef WITH_OPENSSL
-#define CAPWAP_CIPHER	"ALL"
-#endif
-*/
 
 
 /**

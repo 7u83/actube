@@ -5,9 +5,9 @@ OBJDIR=./o
 LIBDIR		:= ../../lib
 LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
 
-CFLAGS+=-I../ -DWITH_GNUTLS
+CFLAGS+=-I../ 
 LDFLAGS=-L$(LIBARCHDIR) 
-LIBS=-lcw -lnettle -lgnutls -ldl
+LIBS+=-lcw -lnettle -lgnutls -ldl 
 
 SOURCES=\
      	wtp_main.c\
@@ -16,7 +16,5 @@ SOURCES=\
 	configure.c\
 	run.c\
 	changestate.c
-
-
 
 include ../prog.mk

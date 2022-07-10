@@ -1,19 +1,25 @@
 include ../../Defs.mak
 
 
-OBJS=\
-	mod_capwap80211.o \
-	capwap80211_messages.o \
+SOURCES=\
+	mod_capwap80211.c \
+	capwap80211_messages.c \
 
 
 LIBDIR		:= ../../../lib
-LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
-OBJDIR		:= ../../../obj/mod_capwap80211/$(ARCH)
+LIBARCHDIR	:= $(LIBDIR)/$(KERNEL)/$(ARCH)
+OBJDIR		:= ../../../obj/mod_capwap80211/$(KERNEL)/$(ARCH)
 SNAME		:= $(LIBARCHDIR)/libmod_capwap80211.a
 DNAME		:= $(LIBARCHDIR)/mod_capwap80211.so
-MODNAME		:= $(LIBDIR)/mod_capwap80211.so
 SLIBS		:= -lcw
 
-include ../Mod.mak
+CFLAGS+=-fPIC
+CFLAGS+= -I ../../ -I../ -I../../include
+
+all: $(SNAME) $(DNAME) 
+static: $(SNAME)
+dynamic: $(DNAME)
+
+include ../../lib.mk
 
 
