@@ -100,7 +100,7 @@ cisco/rouge-detection/rest :Bstr16: .x000aff800000
 cisco/rouge-detection/rouge-detection :Bool: false
 cisco/sig-toogle :Bool: true
 cisco/ssl-certfile :Str: ../../ssl/certs/wtpc.crt
-cisco/ssl-cipher :Str: ALL
+cisco/ssl-cipher :Str: ALL 
 cisco/ssl-keyfile :Str: ../../ssl/certs/wtpc.key
 cisco/vlan/id :Word: 0
 cisco/vlan/tagging :Bool: false

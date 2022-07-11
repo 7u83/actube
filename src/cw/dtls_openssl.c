@@ -36,7 +36,7 @@
 #include "sock.h"
 
 
-#ifdef WITH_CW_LOG_DEBUG
+
 static const char * ssl_version2str(int version)
 {
 	switch(version){
@@ -67,7 +67,6 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
 /*	cw_dbg(DBG_DTLS_DETAIL,buffer); */
 }
-#endif
 
 
 static void dtls_info_cb (const SSL *ssl, int where, int ret)
@@ -357,11 +356,11 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 	/* setup debugging */
-#ifdef WITH_CW_LOG_DEBUG
+/*#ifdef WITH_CW_LOG_DEBUG*/
 	SSL_CTX_set_msg_callback(d->ctx,dtls_debug_cb);
 	SSL_CTX_set_info_callback (d->ctx, dtls_info_cb);
 	
-#endif
+/*#endif*/
 
 
 
@@ -558,7 +557,7 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 
 }
 
-int dtls_openssl_verify_cookie(SSL *ssl, unsigned char *cookie, unsigned int len)
+int dtls_openssl_verify_cookie(SSL *ssl, const unsigned char *cookie, unsigned int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	char sock_buf2[SOCK_ADDR_BUFSIZE];	

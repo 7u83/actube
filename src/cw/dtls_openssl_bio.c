@@ -37,8 +37,25 @@
 
 BIO_METHOD *dtls_openssl_bio_method()
 {
+	int index = BIO_get_new_index() ;
+	index = BIO_TYPE_DGRAM;
+	cw_dbg(DBG_DTLS_BIO, "Creating new OpenSSL BIO Methods");
+
 	BIO_METHOD * bio_methods;
-	bio_methods = BIO_mth_new(BIO_TYPE_DGRAM,"CW Packet");
+	bio_methods = BIO_meth_new(index,"CW Packet");
+	if (!bio_methods){
+		return NULL;
+	}
+
+	BIO_meth_set_write(bio_methods,dtls_openssl_bio_write);
+	BIO_meth_set_read(bio_methods,dtls_openssl_bio_read);
+	BIO_meth_set_puts(bio_methods,dtls_openssl_bio_puts);
+	BIO_meth_set_ctrl(bio_methods,dtls_openssl_bio_ctrl);
+	BIO_meth_set_create(bio_methods,dtls_openssl_bio_new);
+	BIO_meth_set_destroy(bio_methods,dtls_openssl_bio_free);
+
+
+/*	bio_methods = BIO_mth_new(BIO_TYPE_DGRAM,"CW Packet");*/
 
 
 /*	bio_methods.type = BIO_TYPE_DGRAM;
@@ -53,19 +70,21 @@ BIO_METHOD *dtls_openssl_bio_method()
 	bio_methods.callback_ctrl = 0;
 */
 
-	return &bio_methods;
+	return bio_methods;
 }
 
 int dtls_openssl_bio_write(BIO * b, const char *data, int len)
 {
-	struct conn *conn = b->ptr;
+/*	struct conn *conn = b->ptr;*/
+	struct conn *conn = BIO_get_data(b);
 	return dtls_bio_write(conn, data, len);
 }
 
 
 int dtls_openssl_bio_read(BIO * b, char *out, int maxlen)
 {
-	struct conn *conn = b->ptr;
+	/*struct conn *conn = b->ptr;*/
+	struct conn *conn = BIO_get_data(b);
 	return dtls_bio_read(conn, out, maxlen);
 }
 
@@ -73,11 +92,14 @@ int dtls_openssl_bio_read(BIO * b, char *out, int maxlen)
 
 int dtls_openssl_bio_new(BIO * bi)
 {
-
+	/*
 	bi->init = 1;
 	bi->num = 0;
 	bi->flags = 0;
 	bi->ptr = NULL;
+*/
+	BIO_set_init(bi,1);
+
 	cw_dbg(DBG_DTLS_BIO, "Creating new OpenSSL BIO");
 	return 1;
 }
@@ -101,7 +123,8 @@ int dtls_openssl_bio_free(BIO * bio)
 
 long dtls_openssl_bio_ctrl(BIO * b, int cmd, long num, void *ptr)
 {
-	struct conn *conn = b->ptr;
+	/*struct conn *conn = b->ptr;*/
+	struct conn *conn = BIO_get_data(b);
 
 	long ret = 1;
 	switch (cmd) {

@@ -3,11 +3,11 @@ include ../Defs.mak
 PROG=wtp
 OBJDIR=./o
 LIBDIR		:= ../../lib
-LIBARCHDIR	:= $(LIBDIR)/$(ARCH)
+LIBARCHDIR	:= $(LIBDIR)/$(KERNEL)/$(ARCH)
 
-CFLAGS+=-I../ 
+CFLAGS+=-I../ -DUSE_OPENSSL
 LDFLAGS=-L$(LIBARCHDIR) 
-LIBS+=-lcw -lnettle -lgnutls -ldl 
+LIBS+=-lcw -lnettle -lssl -ldl 
 
 SOURCES=\
      	wtp_main.c\

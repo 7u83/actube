@@ -64,6 +64,9 @@ then
 	createcert $SUBJ
 fi
 
+
+CISCOTIME='2013-12-24 08:15:42'
+
 if [ "$TYPE" = "cisco-ac" ] 
 then
 	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=DEVICE-AC-TUBE/emailAddress=7u83@mail.ru"
@@ -84,12 +87,10 @@ then
                 -keyout certs/${NAME}.key -out certs/${NAME}.crt \
                 -config openssl.cnf \
                 -x509 \
-                -subj "$SUBJ"
+                -subj "$SUBJ" 
 
-	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem
+	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem -days=128
 
-
-#	createcert "$SUBJ"
 
 
 fi

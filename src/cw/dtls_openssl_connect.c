@@ -7,21 +7,6 @@
 #include "cw_util.h"
 #include "timer.h"
 
-/*
-static BIO_METHOD bio_methods = {
-	BIO_TYPE_DGRAM,
-	"cw packet",
-	dtls_openssl_bio_write,
-	dtls_openssl_bio_read,
-	dtls_openssl_bio_puts,
-	NULL, 			// dgram_gets
-	dtls_openssl_bio_ctrl,
-	dtls_openssl_bio_new,
-	dtls_openssl_bio_free,
-	NULL,
-};
-*/
-
  unsigned int psk_client_cb(SSL * ssl,
 				  const char *hint,
 				  char *identity,
@@ -48,11 +33,23 @@ dtls_openssl_connect(struct conn *conn)
 	struct dtls_openssl_data *d;
 	int rc;
 	time_t timer;
+
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call");
+
+	BIO_METHOD * biomethod = dtls_openssl_bio_method();
+	if (!biomethod){
+		cw_dbg(DBG_DTLS_BIO, "ERROR: Creating new OpenSSL BIO");
+		return 0;
+	}
+
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 1");
 	
 	if (!conn->dtls_data)
 		conn->dtls_data =
 		    dtls_openssl_data_create(conn, DTLSv1_client_method(),
-					     dtls_openssl_bio_method());
+					     biomethod);
+
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 2");
 
 	d = (struct dtls_openssl_data *) conn->dtls_data;
 	if (!d)
@@ -63,6 +60,7 @@ dtls_openssl_connect(struct conn *conn)
 		SSL_set_psk_client_callback(d->ssl, psk_client_cb);
 */
 
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 3");
 
 	errno =0;
 	timer = cw_timer_start(10);
@@ -70,6 +68,7 @@ dtls_openssl_connect(struct conn *conn)
 		rc = SSL_connect(d->ssl);
 	}while(rc!=1 && errno==EAGAIN && !cw_timer_timeout(timer));
 
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 4");
 
 	if (rc == 1) {
 		cw_dbg(DBG_DTLS,"SSL connect successfull!");
@@ -77,6 +76,7 @@ dtls_openssl_connect(struct conn *conn)
 		conn->write = dtls_openssl_write;
 		return 1;
 	}
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 5");
 
 	rc = dtls_openssl_log_error(d->ssl, rc, "DTLS connect");
 	return 0;
