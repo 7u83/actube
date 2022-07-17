@@ -10,6 +10,7 @@ cw_KTV_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *ty
 {
 	cw_KTV_t mdata, *mresult;
 	int exists;
+printf("KTV ADD: %s\n",key);
 
 	mdata.key=cw_strdup(key);
 	mdata.valguard=valguard;
@@ -29,8 +30,10 @@ cw_KTV_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *ty
 		return NULL;
 	}
 
+printf("MAVLCOUNT: %d - %s\n",kvtstore->count, mdata.key);
+
 	mavl_del(kvtstore,&mdata);
-	mresult = mavl_add(kvtstore, &mdata, &exists);
+	mresult = mavl_insert(kvtstore, &mdata, &exists);
 	if (exists){
 		cw_log(LOG_ERR, "Element already exists %s", key);
 		/* element already exists */

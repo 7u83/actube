@@ -20,7 +20,7 @@ cw_strheap_t cw_strheap_create()
 const char * cw_strheap_add(cw_strheap_t t, struct cw_StrListElem *s)
 {
 	mavl_del(t,s);
-	return mavl_add(t,s,NULL);
+	return mavl_insert(t,s,NULL);
 }
 
 int cw_strheap_register_strings(cw_strheap_t h, struct cw_StrListElem *s) 

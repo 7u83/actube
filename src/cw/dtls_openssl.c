@@ -48,8 +48,8 @@ static const char * ssl_version2str(int version)
 			return "TLSv1";
 		case DTLS1_VERSION:
 			return "DTLSv1";
-/*		case DTLS1_2_VERSION:
-			return "DTLSv1.2"; */
+		case DTLS1_2_VERSION:
+			return "DTLSv1.2";
 	}
 	return "Version unknown";
 }
@@ -65,7 +65,7 @@ static void dtls_debug_cb(int write_p,int version,int type, const void * buf,siz
 		s += sprintf(s,"SSL msg in: ");
 
 	s+=sprintf(s,"type = %d (0x%02X), %s (%08x), len = %d",type,type,ssl_version2str(version),version,(int)len);
-/*	cw_dbg(DBG_DTLS_DETAIL,buffer); */
+	cw_dbg(DBG_DTLS_DETAIL,buffer); 
 }
 
 
@@ -319,7 +319,17 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 		return NULL;
 	}
 
+	rc = SSL_CTX_get_security_level(d->ctx);
+	printf("Security Level is %d\n");
+
+	SSL_CTX_set_security_level(d->ctx,0);
+	printf("Security Level is %d\n");
+
 	
+
+/*	SSL_CTX_set_min_proto_version	(d->ctx,  DTLS1_VERSION);*/
+	SSL_CTX_set_max_proto_version	(d->ctx,  DTLS1_VERSION);
+
 	rc = SSL_CTX_set_cipher_list(d->ctx, conn->dtls_cipher);
 	if (!rc){
 		dtls_openssl_log_error(0,rc,"DTLS setup cipher error:");
@@ -372,7 +382,6 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 	rc = SSL_CTX_load_verify_locations(d->ctx,"../../ssl/root-ca.pem",NULL);
 
-	
 
 
 /*//	SSL_CTX_set_session_cache_mode(d->ctx, SSL_SESS_CACHE_BOTH);*/
@@ -381,10 +390,10 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SS
 
 
 	SSL_CTX_set_timeout(d->ctx,30);
-/*
-//	rc =SSL_CTX_set_max_proto_version (d->ctx,DTLS1_VERSION);
-//	printf("MAXMAMX = %d\n",rc);
-*/
+
+	rc =SSL_CTX_set_max_proto_version (d->ctx,DTLS1_VERSION);
+	printf("MAXMAMX = %d\n",rc);
+
 
 /*
 //	SSL_CTX_set_verify(d->ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);

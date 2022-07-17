@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "mavl.h"
+#include <mavl.h>
+#include "mavltypes.h"
+
 #include "bstr.h"
 
 

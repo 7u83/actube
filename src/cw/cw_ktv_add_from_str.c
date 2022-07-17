@@ -31,7 +31,7 @@ const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key,
 		return NULL;
 	}
 	
-	mresult = mavl_add(kvtstore, &mdata, &exists);
+	mresult = mavl_insert(kvtstore, &mdata, &exists);
 	if (exists){
 		cw_log(LOG_ERR, "Element already exists %s", key);
 		/* element already exists */

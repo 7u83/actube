@@ -1,4 +1,5 @@
 #include "mavl.h"
+#include "mavltypes.h"
 
 /**
  * Get the element, where AVL Iterator currently is positioned.

@@ -206,7 +206,7 @@ void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn,
 	
 	handler->type->to_str(result,str,30);
 	printf("Read %d-%s: %s %s\n", handler->id, handler->name, handler->key, str);
-	//mavl_add(conn->remote_cfg
+	//mavl_insert(conn->remote_cfg
 }
 */
 
@@ -290,7 +290,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 	/* Search message */
 	
-	message = mavl_find(conn->msgset->msgdata,&search);
+	message = mavl_get(conn->msgset->msgdata,&search);
 		
 	result_code = 0;
 	

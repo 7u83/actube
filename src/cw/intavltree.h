@@ -1,7 +1,7 @@
 #ifndef __INTAVLTREE_H
 #define __INTAVLTREE_H
 
-#include "mavl.h"
+#include <mavl.h>
 
 extern struct mavl * intavltree_create();
 typedef struct mavl * intavltree_t;

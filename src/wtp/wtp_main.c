@@ -13,6 +13,7 @@
 
 #include "cw/dtls.h"
 #include "wtp.h"
+#include "cw/mavltypes.h"
 
 #define MAX_MODS 32
 struct bootcfg{
@@ -127,7 +128,7 @@ int main (int argc, char **argv)
 	/* create a types tree with default types */
 	types_tree = cw_ktv_create_types_tree();
 	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
-		mavl_add_ptr(types_tree,*ti);
+		mavl_insert_ptr(types_tree,*ti);
 	}
 
 	/* read the initial config file */

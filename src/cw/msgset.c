@@ -8,6 +8,7 @@
 
 #include "msgset.h"
 #include "ktv.h"
+#include "mavltypes.h"
 
 static int cmp_cw_elemhandler_by_id(const void *elem1, const void *elem2)
 {
@@ -148,6 +149,9 @@ struct cw_MsgSet *cw_msgset_create()
 	}
 	
 	set->types_tree = cw_ktv_create_types_tree();
+	
+	printf("TYPES TREE %p\n",set->types_tree);
+
 	if (set->types_tree == NULL){
 		cw_msgset_destroy(set);
 		return NULL;
@@ -170,7 +174,7 @@ struct cw_ElemHandler *cw_msgset_get_elemhandler(struct cw_MsgSet *set,
 	search.proto = proto;
 	search.vendor = vendor;
 	search.id = id;
-	return mavl_find(set->handlers_by_id, &search);
+	return mavl_get(set->handlers_by_id, &search);
 }
 
 
@@ -197,7 +201,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 		}
 		
 /*		if (handler->type != NULL){
-			if (mavl_add_ptr( set->types_tree, handler->type ) == NULL){
+			if (mavl_insert_ptr( set->types_tree, handler->type ) == NULL){
 				cw_log(LOG_ERR, "Can't add type from handler: %s", strerror(errno));
 				continue;
 			}
@@ -290,7 +294,10 @@ int cw_msgset_add(struct cw_MsgSet *set,
 
 		/* add the message */
 		search.type = msgdef->type;
-		msg = mavl_add(set->msgdata, &search, &exists);
+
+		printf("Msg type name %s\n",msgdef->name);
+
+		msg = mavl_insert(set->msgdata, &search, &exists);
 		if (msg == NULL) {
 			cw_log(LOG_ERR, "Can't create messae");
 			return 0;
@@ -331,6 +338,10 @@ int cw_msgset_add(struct cw_MsgSet *set,
 	{
 		mavliter_t it;
 		cw_dbg(DBG_MOD,"  Known types:");
+
+		printf("TYPES TREE ITER %p\n",set->types_tree);
+
+
 		mavliter_init(&it,set->types_tree);
 		mavliter_foreach(&it){
 			struct cw_Type * t = mavliter_get_ptr(&it);
@@ -377,5 +388,5 @@ struct cw_MsgData *cw_msgset_get_msgdata(struct cw_MsgSet *set, int type)
 {
 	struct cw_MsgData search;
 	search.type = type;
-	return mavl_find(set->msgdata, &search);
+	return mavl_get(set->msgdata, &search);
 }

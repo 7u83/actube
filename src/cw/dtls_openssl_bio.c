@@ -38,7 +38,7 @@
 BIO_METHOD *dtls_openssl_bio_method()
 {
 	int index = BIO_get_new_index() ;
-	index = BIO_TYPE_DGRAM;
+/*	index = BIO_TYPE_DGRAM;*/
 	cw_dbg(DBG_DTLS_BIO, "Creating new OpenSSL BIO Methods");
 
 	BIO_METHOD * bio_methods;

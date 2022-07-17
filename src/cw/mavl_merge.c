@@ -17,7 +17,7 @@
 */
 
 #include "mavl.h"
-
+#include "mavltypes.h"
 
 /** 
  * @file
@@ -36,8 +36,8 @@ static void mavlnode_move(mavl_t m,mavl_t t, struct mavlnode *n)
 		memcpy(mavlnode_dataptr(mn),mavlnode_dataptr(n),t->data_size);
 	}
 	else{
-		/*mavl_add(m,&n->data);*/
-		mavl_add(m,mavlnode_dataptr(n),NULL);
+		/*mavl_insert(m,&n->data);*/
+		mavl_insert(m,mavlnode_dataptr(n),NULL);
 
 	}
 	free(n);
@@ -50,8 +50,8 @@ static void mavl_merge0(mavl_t m, mavl_t t ,struct mavlnode * n)
 {
 	if (!n)
 		return;
-	mavl_merge0(m,t,n->left);
-	mavl_merge0(m,t,n->right);
+	mavl_merge0(m,t,n->s[0]);
+	mavl_merge0(m,t,n->s[1]);
 	mavlnode_move(m,t,n);
 }
 

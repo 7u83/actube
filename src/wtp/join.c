@@ -12,7 +12,7 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/sock.h"
-#include "cw/mavl.h"
+#include "mavl.h"
 
 #include "wtp.h"
 

@@ -163,7 +163,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 //	if (actions_registered_cb)
 //		actions_registered_cb(capwap_mod, bindings_mod, &(cached_set->actions));
 */
-	mavl_add_ptr(msgset_cache, cached_set);
+	mavl_insert_ptr(msgset_cache, cached_set);
 	return cached_set->msgset;
 }
 
@@ -228,7 +228,7 @@ struct cw_Mod *cw_mod_load(const char *mod_name, mavl_t global_cfg, int role)
 	memset(&search, 0, sizeof(search));
 	search.name = mod_name;
 
-	mod = mavl_find_ptr(mods_loaded, &search);
+	mod = mavl_get_ptr(mods_loaded, &search);
 	if (mod) {
 		cw_dbg(DBG_MOD, "MOD: Module already loaded '%s'", mod_name);
 		return mod;
@@ -267,7 +267,7 @@ struct cw_Mod *cw_mod_load(const char *mod_name, mavl_t global_cfg, int role)
 
 	mod->dll_handle = handle;
 
-	if (!mavl_add_ptr(mods_loaded, mod)) {
+	if (!mavl_insert_ptr(mods_loaded, mod)) {
 		dlclose(handle);
 		cw_log(LOG_ERR, "Can' add module %s", mod_name);
 		goto errX;

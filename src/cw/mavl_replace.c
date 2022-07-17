@@ -3,7 +3,7 @@
 void *mavl_replace(struct mavl *t,const void  *data, int * replaced){
 	
 	int exists;
-	void * add = mavl_add(t,data,&exists);
+	void * add = mavl_insert(t,data,&exists);
 	
 	if (replaced != NULL){
 		*replaced = exists;
@@ -31,7 +31,7 @@ void *mavl_replace(struct mavl *t,const void  *data, int * replaced){
 //		return &node->data;
 		return mavlnode_dataptr(node);
 	}
-	return mavl_add(t,data);
+	return mavl_insert(t,data);
 */
 }
 

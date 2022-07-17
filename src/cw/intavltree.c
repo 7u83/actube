@@ -31,5 +31,5 @@ int * intavltree_add(struct mavl * t, int val)
 	if (!v)
 		return NULL;
 	*v=val;
-	return mavl_add(t,v,NULL);
+	return mavl_insert(t,v,NULL);
 }

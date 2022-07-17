@@ -155,7 +155,7 @@ struct conn * connlist_add ( struct connlist * cl, struct conn * conn )
 			return NULL;
 			
 	conn->connlist = cl;
-	return mavl_add_ptr ( cl->by_addr, conn );
+	return mavl_insert_ptr ( cl->by_addr, conn );
 }
 
 struct conn * connlist_get_by_session_id ( struct connlist *cl, struct conn * conn )
@@ -165,7 +165,7 @@ struct conn * connlist_get_by_session_id ( struct connlist *cl, struct conn * co
 
 struct conn * connlist_add_by_session_id ( struct connlist * cl, struct conn * conn )
 {
-	return mavl_add_ptr ( cl->by_session_id, conn );
+	return mavl_insert_ptr ( cl->by_session_id, conn );
 }
 
 void connlist_remove ( struct connlist *cl, struct conn * conn )

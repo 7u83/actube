@@ -121,32 +121,6 @@ LWSRC=\
 	lw_put_sockaddr.c\
 	lw_readelem_wtp_name.c\
 
-MAVLSRC=\
-	mavl_add.c\
-	mavl_add_ptr.c\
-	mavl_cmpstr.c\
-	mavl_create.c\
-	mavl_del_all.c\
-	mavl_del.c\
-	mavl_destroy.c\
-	mavl_foreach.c\
-	mavl_foreach_lr.c\
-	mavl_freeptr.c\
-	mavl_get.c\
-	mavl_get_ext.c\
-	mavl_get_node.c\
-	mavl_get_node_cmp..c\
-	mavl_get_ptr.c\
-	mavliter_get.c\
-	mavliter_get_ptr.c\
-	mavliter_init.c\
-	mavliter_next.c\
-	mavliter_seek.c\
-	mavliter_seek_set.c\
-	mavl_merge.c\
-	mavl_replace.c\
-	mavl_replace_data.c\
-
 
 MLISTSRC=\
 	mlist_append.c\
@@ -240,6 +214,15 @@ RADIOSRC=\
 	cw_out_radio_generic_struct.c\
 	cw_read_radio_generic.c\
 
+MAVLSRC=\
+	mavl_get_ptr.c\
+	mavl_insert_ptr.c\
+	mavl_replace.c\
+	mavl_merge.c\
+	mavliter_get_ptr.c\
+	mavl_cmpstr.c\
+
+
 
 DTLSSRC += dtls_openssl.c \
 	dtls_openssl_accept.c \
@@ -258,7 +241,8 @@ LIBS+=-lssl
 
 
 #SRC=$(wildcard *.c)
-SOURCES = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC)
+SOURCES = $(CWSRC) $(LWSRC) $(MAVLSRC) $(MLISTSRC) $(SOCKSRC) \
+	  $(LOGSRC) $(DTLSSRC) $(RADIOSRC) $(KTVSRC) $(MISCSRC) 
 
 
 
@@ -270,7 +254,8 @@ OBJDIR          := ../../obj/cw/$(KERNEL)/$(ARCH)
 SNAME           := $(LIBARCHDIR)/libcw.a
 DNAME           := $(LIBARCHDIR)/libcw.so
 
-CFLAGS+=-fPIC -DUSE_OPENSSL
+CFLAGS+=-fPIC -DUSE_OPENSSL -I../contrib/openssl-1.1.1f/include/ -O0 
+CFLAGS+=-g -I/home/tube/v/rsrch/libmavl
 
 all: $(SNAME) $(DNAME) 
 static: $(SNAME)

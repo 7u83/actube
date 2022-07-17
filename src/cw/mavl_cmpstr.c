@@ -1,4 +1,5 @@
 #include "mavl.h"
+#include "mavltypes.h"
 
 int mavl_cmpstr (const void *s1, const void *s2)
 {

@@ -46,7 +46,7 @@ dtls_openssl_connect(struct conn *conn)
 	
 	if (!conn->dtls_data)
 		conn->dtls_data =
-		    dtls_openssl_data_create(conn, DTLSv1_client_method(),
+		    dtls_openssl_data_create(conn, DTLS_client_method(),
 					     biomethod);
 
 	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 2");
@@ -68,7 +68,7 @@ dtls_openssl_connect(struct conn *conn)
 		rc = SSL_connect(d->ssl);
 	}while(rc!=1 && errno==EAGAIN && !cw_timer_timeout(timer));
 
-	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 4");
+	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 4 %d ",rc);
 
 	if (rc == 1) {
 		cw_dbg(DBG_DTLS,"SSL connect successfull!");

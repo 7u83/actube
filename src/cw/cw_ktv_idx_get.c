@@ -24,19 +24,19 @@ void * ktvn(struct mavl *t ,const void *search)
 		
 		if (rc<0){
 			/*lastl = n;*/
-			if (n->left==NULL){
+			if (n->s[0]==NULL){
 				return mavlnode_dataptr(lastb);
 				
 			}
-			n=n->left;
+			n=n->s[0];
 		}
 		else{
 			lastb=n;
-			if(n->right==NULL){
+			if(n->s[1]==NULL){
 				return mavlnode_dataptr(lastb);
 				
 			}
-			n=n->right;
+			n=n->s[1];
 		}
 	}
 	return NULL;
