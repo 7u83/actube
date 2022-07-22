@@ -189,6 +189,7 @@ static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
 	{NULL,NULL,0,0}
 };
 
+
 static cw_KTVStruct_t cisco_mac_operation73[]={
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"rts-threshold",2,-1},
@@ -314,6 +315,18 @@ static cw_KTVStruct_t cisco_ap_model[]={
 	{CW_TYPE_STR,"image",30,30},
 	{NULL,NULL,0,0}
 };
+
+
+
+static cw_KTVStruct_t cisco_direct_sequence_control70[]={
+	{CW_TYPE_BYTE,"cfg-type",1,-1},
+	{CW_TYPE_BYTE,"current-channel",1,-1},
+	{CW_TYPE_BYTE,"current-cca-mode",1,-1},
+	{CW_TYPE_DWORD,"energy-detect-threshold",4,-1},
+	{CW_TYPE_BYTE,"unknown",1,-1},
+	{NULL,NULL,0,0}
+};
+
 
 
 static cw_KTVStruct_t cisco_wtp_radio_config70[]={
@@ -1070,6 +1083,19 @@ static struct cw_ElemHandler handlers70[] = {
 	}
 	,
 
+	{ /* WTP Radio Configuration for AC/WPT with version 7.0 */
+	
+		"Direct Sequence Control (v7.0)",	/* name */
+		CW_CISCO_DIRECT_SEQUENCE_CONTROL,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		9,9,					/* min/max length */
+		cisco_direct_sequence_control70,	/* type */
+		"cisco/direct-sequence-control",	/* Key */
+		cw_in_radio_generic_struct,		/* get */
+		cw_out_radio_generic_struct		/* put */
+	}
+	,
+
 	{ 
 		"MWAR Hash Value",			/* name */
 		CISCO_LWELEM_MWAR_HASH_VALUE,		/* Element ID */
@@ -1511,6 +1537,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		1, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
+
+	{0, CW_VENDOR_ID_CISCO,	CW_CISCO_DIRECT_SEQUENCE_CONTROL,	1, 0},
+
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
@@ -1543,6 +1572,8 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CW_CISCO_DIRECT_SEQUENCE_CONTROL,	1, 0},
+	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
