@@ -65,7 +65,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		msg->preprocess(conn);
 	}
 
-	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assenmbling message of type %d (%s) ***", 
+	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assembling message of type %d (%s) ***", 
 			msg->type, msg->name);
 	
 	dst = msgptr+8;
