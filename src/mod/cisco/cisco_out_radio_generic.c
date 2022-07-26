@@ -17,7 +17,7 @@ int cisco_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandl
 
 	for(i=0;i<radios+0;i++){
 		l = cw_write_radio_element(handler,params,i,dst+len);
-		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
+		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst+len,l);
 		len+=l;
 	}
 	return len;
