@@ -1211,6 +1211,33 @@ static struct cw_ElemHandler handlers70[] = {
 	},
 
 	{ 
+		"Cisco LWAP Elem 9",			/* name */
+
+		CISCO_LWELEM_9,				/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		
+		5,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/lwelem9",			/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic			/* put */
+	},
+
+	{ 
+		"Cisco Elem 24",			/* name */
+		CISCO_ELEM_24,				/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/elem24",				/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic			/* put */
+	},
+
+
+
+
+	{ 
 		"Cisco Elem 19",			/* name */
 		CISCO_ELEM_19,				/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
@@ -1234,6 +1261,18 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_radio_generic			/* put */
 	},
 
+
+
+	{ 
+		"Cisco Elem 81",			/* name */
+		CISCO_ELEM_81,				/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/elem81",				/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic			/* put */
+	},
 
 
 
@@ -1666,6 +1705,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				1, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				1, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				1, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_9,		0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
 	
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	1, 0},
@@ -1750,14 +1792,17 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_TOGGLE,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
 
-/*	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	*/
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	
 /*	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER_LEVELS,		1, 0},	*/
 /*	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CHANNEL_POWER,		1, 0},	*/
 
 
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				1, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				1, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				1, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_9,		0, 0},	
 
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
