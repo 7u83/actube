@@ -221,6 +221,7 @@ MAVLSRC=\
 	mavl_merge.c\
 	mavliter_get_ptr.c\
 	mavl_cmpstr.c\
+	mavl_freeptr.c \
 
 
 
