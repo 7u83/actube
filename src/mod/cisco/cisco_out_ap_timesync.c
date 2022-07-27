@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <time.h>
 
-
+#include "cw/conn.h"
 #include "cw/msgset.h"
 #include "cw/cw.h"
 

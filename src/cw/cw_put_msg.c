@@ -77,7 +77,7 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-	/*	printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);*/
+printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
 		if (handler==NULL){
 			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
 					data->proto,data->vendor,data->id);
@@ -94,7 +94,15 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 			continue;
 		}
 
-		params.conn=conn;
+	/*	params.conn=conn;*/
+		params.local_cfg=conn->local_cfg;
+		params.remote_cfg=conn->remote_cfg;
+		params.default_cfg=conn->default_cfg;
+                params.global_cfg=conn->global_cfg;
+		params.msgset=conn->msgset;
+
+
+
 		params.elemdata = data;
 		params.elem=NULL;
 		params.msgdata=msg;
@@ -107,10 +115,10 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout)
 		}
 		
 		l = handler->put(handler,&params,dst+len);
-				
+
 	/*	if(l>0)
 			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
-		if (strlen(details)){
+	*	if (strlen(details)){
 			cw_dbg(DBG_ELEM_DETAIL,"  %s",params.debug_details);
 		}
 	*/	len += l;

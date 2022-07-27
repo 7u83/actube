@@ -38,7 +38,7 @@ struct dtls_openssl_data{
 	SSL_CTX * ctx;
 	SSL * ssl;
 	BIO * bio;
-	uint8_t buffer[2048];
+	uint8_t buffer[4096];
 	int len;
 	int pos;
 };

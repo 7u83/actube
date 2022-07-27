@@ -147,6 +147,7 @@ extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;
 extern const struct cw_Type cw_type_dword;
 extern const struct cw_Type cw_type_bstr16;
+extern const struct cw_Type cw_type_bwstr;
 extern const struct cw_Type cw_type_str;
 extern const struct cw_Type cw_type_ipaddress;
 extern const struct cw_Type cw_type_sysptr;
@@ -156,6 +157,7 @@ extern const struct cw_Type cw_type_bool;
 #define CW_TYPE_WORD (&cw_type_word)
 #define CW_TYPE_DWORD (&cw_type_dword)
 #define CW_TYPE_BSTR16 (&cw_type_bstr16)
+#define CW_TYPE_BWSTR (&cw_type_bwstr)
 #define CW_TYPE_IPADDRESS (&cw_type_ipaddress)
 #define CW_TYPE_SYSPTR (&cw_type_sysptr)
 #define CW_TYPE_STR (&cw_type_str)

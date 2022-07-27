@@ -16,6 +16,6 @@ int capwap_in_ac_descriptor(struct cw_ElemHandler *eh,
 	};
 
 
-	return cw_read_ac_descriptor(params->conn->remote_cfg,eh,params,data,len,allowed);
+	return cw_read_ac_descriptor(params->remote_cfg,eh,params,data,len,allowed);
 
 }

@@ -1,7 +1,7 @@
 #ifndef CW_MAVL_H
 #define CW_MAVL_H
 
-#include "cw/mavl.h"
+#include "mavl.h"
 
 extern void db_ping();
 extern void db_ping_wtp(const char *wtpid,const char *acid);

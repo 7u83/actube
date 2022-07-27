@@ -31,13 +31,18 @@ struct cw_ElemData{
 };
 
 struct cw_ElemHandlerParams {
-	struct conn * conn;
+/*	struct conn * conn;*/
 	struct cw_MsgData * msgdata;
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
 	cw_KTV_t * elem;
 	char * debug_details;
+	mavl_t remote_cfg;
+	mavl_t local_cfg;
+	mavl_t default_cfg;
+	mavl_t global_cfg;
+	struct cw_MsgSet * msgset;
 };
 
 

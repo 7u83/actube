@@ -63,9 +63,9 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 		int l;
 
 		sprintf(key,"%s/address.%d",eh->key,i);
-		address = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_IPADDRESS);
+		address = cw_ktv_get(params->local_cfg,key,CW_TYPE_IPADDRESS);
 		sprintf(key,"%s/wtps.%d",eh->key,i);
-		wtps = cw_ktv_get_word(params->conn->local_cfg,key,0);
+		wtps = cw_ktv_get_word(params->local_cfg,key,0);
 		i++;
 		if (address==NULL){
 			break;
@@ -93,7 +93,7 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 		l = address->type->put(address,d+4);
 		l+=cw_put_word(dst+4+l,wtps);
 		l+=cw_put_elem_hdr(d,eh->id,l);
-		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,eh,d+4,l-4);
+		cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,d+4,l-4);
 		
 		d+=l;
 	}while(address != NULL);

@@ -19,7 +19,7 @@ int cw_in_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHand
 	idx = cw_get_byte(elem_data);
 	sprintf(key, handler->key, idx);
 
-	cw_ktv_read_struct(params->conn->remote_cfg,handler->type,key,elem_data+1,elem_len-1);
+	cw_ktv_read_struct(params->remote_cfg,handler->type,key,elem_data+1,elem_len-1);
 
 	return CAPWAP_RESULT_SUCCESS;
 }

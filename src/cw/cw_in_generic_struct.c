@@ -27,7 +27,7 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 
-	cw_ktv_read_struct(params->conn->remote_cfg,handler->type,key,elem_data,elem_len);
+	cw_ktv_read_struct(params->remote_cfg,handler->type,key,elem_data,elem_len);
 
 	return CAPWAP_RESULT_SUCCESS;
 }

@@ -2,7 +2,7 @@
 
 #include "cw/sock.h"
 #include "cw/mlist.h"
-#include "cw/mavl.h"
+#include "mavl.h"
 #include "cw/mod.h"
 
 #include "discovery_cache.h"
@@ -125,8 +125,8 @@ void discovery_cache_add(struct cw_DiscoveryCache *cache,
 		cache->ctrhi++;
 	}
 	
-	mavl_add_ptr(cache->byaddr,cur);
-	mavl_add_ptr(cache->byaddrp,cur);
+	mavl_insert_ptr(cache->byaddr,cur);
+	mavl_insert_ptr(cache->byaddrp,cur);
 	
 	cache->qpos++;
 	if (cache->qpos>=cache->len)

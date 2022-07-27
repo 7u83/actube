@@ -58,22 +58,22 @@ int capwap_out_ac_descriptor(struct cw_ElemHandler * eh,
 	uint8_t *d = dst+4;
 	char key[CW_KTV_MAX_KEY_LEN];
 
-	d+=put_ac_status(params->conn->local_cfg,
-				params->conn->global_cfg,
+	d+=put_ac_status(params->local_cfg,
+				params->global_cfg,
 				d, eh->key);
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CAPWAP_SUBELEM_AC_HARDWARE_VERSION, key);
  
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CAPWAP_SUBELEM_AC_SOFTWARE_VERSION, key);
 
 	len = d-dst-4;
 
 	l = len + cw_put_elem_hdr(dst,eh->id,len);
-	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,eh,dst,l);
+	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
 
 	return l;
 

@@ -28,6 +28,7 @@
  * Vendor specific message elements defined in LWAPP by Cisco 
  */
 
+#define CISCO_LWELEM_9				9
 #define CISCO_LWELEM_AP_USERNAME_PASSWORD	18
 #define LW_CISCO_MANAGER_IP_ADDR		19
 #define CISCO_LWELEM_DISCOVERY_PROTOCOL		20

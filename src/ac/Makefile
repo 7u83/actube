@@ -12,21 +12,22 @@ OBJS = \
 	shell.o\
 
 PRG=actube
-LIBPATH=-L../../lib/$(ARCH)/ -L/usr/local/lib -L/usr/lib 
+LIBPATH=-L../../lib/Linux/$(ARCH)/ -L/usr/local/lib -L/usr/lib 
 
-
+LIBS+=-lmavl
 LIBS+=-lcw
 LIBS+=-lrt
 LIBS+=-lpthread
 LIBS+=-lconfuse
 LIBS+=-lsqlite3
 LIBS+=-lc
+LIBS+=-lnettle
 LIBS+=$(OPENSSL_LIBS)
 
 
-INCL_DIRS=-I../ -I/usr/local/include -I./
+INCL_DIRS=-I../ -I/usr/local/include -I./ -I/home/tube/v/rsrch/libmavl/
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
-FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH='"$(ARCH)"'
+FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(ARCH)"'
 
 .c.o:
 	@echo "  $(CC) "$<

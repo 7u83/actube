@@ -32,7 +32,7 @@ int cw_read_ac_descriptor(mavl_t store,
 			struct cw_DescriptorSubelemDef *allowed)
 {
 	
-	cw_ktv_read_struct(params->conn->remote_cfg,acstatus,eh->key,data,len);
+	cw_ktv_read_struct(params->remote_cfg,acstatus,eh->key,data,len);
 
 	if (!allowed)
 		allowed=allowed_default;

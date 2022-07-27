@@ -13,6 +13,7 @@
 #include "wtpman.h"
 #include "discovery_cache.h"
 
+#include "cw/mavltypes.h"
 mavl_t actube_global_cfg;
 
 

@@ -41,7 +41,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
 {
 	int ret;
 	if (conn->dtls_buffer_len == 0) {
-		int len = conn->recv_packet(conn, conn->dtls_buffer, 2048);
+		int len = conn->recv_packet(conn, conn->dtls_buffer, 4096);
 		if (len < 4)
 			return 0;
 		conn->dtls_buffer_len = len - 4;
@@ -77,7 +77,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
  */
 int dtls_bio_write(struct conn *conn, const char *data, int len)
 {
-	uint8_t buffer[2048];
+	uint8_t buffer[4096];
 	int rc;
 	*((uint32_t *) buffer) = htonl(1 << 24);
 	memcpy(buffer + 4, data, len);

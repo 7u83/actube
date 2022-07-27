@@ -24,7 +24,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 		sprintf(key,handler->key,i);
 		search.key=key;
 		/*elem = mavl_get(params->conn->local_cfg, &search);*/
-		elem = mavl_get_first(params->conn->local_cfg,&search);
+		elem = mavl_get_first(params->local_cfg,&search);
 		if(elem != NULL){
 			printf("Elem key: %s\n",elem->key);
 		}
@@ -40,12 +40,12 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 		printf("Here we are '%s'! --> %d\n",key,idx);
 
 		len =0;
-		start = mdst + params->conn->header_len(handler);
+		start = mdst + cw_header_len(handler);
 		
 		len += cw_put_byte(start+len,idx);
-		len += cw_ktv_write_struct(params->conn->local_cfg,NULL, handler->type,key,start+len);
+		len += cw_ktv_write_struct(params->local_cfg,NULL, handler->type,key,start+len);
 		
-		mdst += params->conn->write_header(handler,mdst,len);
+		mdst += cw_write_header(handler,mdst,len);
 		
 	
 		i=idx+1;

@@ -14,19 +14,19 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 	cdst = dst;
 	
 
-	offset = params->conn->header_len(handler);
+	offset = cw_header_len(handler);
 
 	i=-1;
 	while(1){
 		char basekey[CW_KTV_MAX_KEY_LEN];
 		cw_KTV_t * result;
 		
-		i = cw_ktv_idx_get_next(params->conn->local_cfg,"radio",i+1);
+		i = cw_ktv_idx_get_next(params->local_cfg,"radio",i+1);
 		if (i==-1)
 			break;
 		sprintf(basekey,"radio.%d/%s",i,handler->key);
 		
-		result = cw_ktv_base_exists(params->conn->local_cfg,basekey);
+		result = cw_ktv_base_exists(params->local_cfg,basekey);
 		if (result == NULL){
 			continue;
 		}
@@ -34,10 +34,10 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 		
 		l=0;
 		l+=cw_put_byte(cdst+offset+l,i);
-		l+= cw_ktv_write_struct(params->conn->local_cfg,NULL, handler->type,basekey,cdst+offset+l);
+		l+= cw_ktv_write_struct(params->local_cfg,NULL, handler->type,basekey,cdst+offset+l);
 		
 
-		cdst+=params->conn->write_header(handler,cdst,l);
+		cdst+=cw_write_header(handler,cdst,l);
 	}
 	return cdst-dst;
 }
@@ -57,21 +57,21 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 	if (sl==NULL){
 				cw_KTV_t * result;
 		sprintf(key,"%s/%s",current,next);
-		result = cw_ktv_base_exists(params->conn->local_cfg,key);
+		result = cw_ktv_base_exists(params->local_cfg,key);
 		if (result != NULL){
 			int offset;
 			int i,l;
-			offset = params->conn->header_len(handler);
+			offset = cw_header_len(handler);
 			printf("Yea! We can do it: %s\n",result->key);
 			for (i=0;i<stack[0];i++){
 				printf("I=%i\n",stack[i+1]);
 			}
-			l= cw_ktv_write_struct(params->conn->local_cfg,params->conn->default_cfg, 
+			l= cw_ktv_write_struct(params->local_cfg,params->default_cfg, 
 				handler->type,key,dst+offset);
 			
 			printf("Write struct len %i\n",l);
 			
-			l=params->conn->write_header(handler,dst,l);
+			l=cw_write_header(handler,dst,l);
 			printf("header wr len %d\n",l);
 			if (handler->patch){
 				handler->patch(dst+offset,stack);
@@ -91,18 +91,18 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 	
 	
 	printf("Here we are %s\n",key);
-	cw_dbg_ktv_dump(params->conn->local_cfg,DBG_INFO,"start"," ", "end" );
+	cw_dbg_ktv_dump(params->local_cfg,DBG_INFO,"start"," ", "end" );
 	i=-1;
 	while(1){
 		char basekey[CW_KTV_MAX_KEY_LEN];
 		cw_KTV_t * result;
 		
-		i = cw_ktv_idx_get_next(params->conn->local_cfg,key,i+1);
+		i = cw_ktv_idx_get_next(params->local_cfg,key,i+1);
 		if (i==-1)
 			break;
 		sprintf(basekey,"%s.%d",key,i);
 		printf("Our basekey is %s\n",basekey);
-		result = cw_ktv_base_exists(params->conn->local_cfg,basekey);
+		result = cw_ktv_base_exists(params->local_cfg,basekey);
 		if (result == NULL){
 			continue;
 		}

@@ -67,7 +67,8 @@ struct conn * conn_create_noq(int sock, struct sockaddr * addr)
 
 	/* misc settings */
 	conn->last_seqnum_received=-1;
-	conn->mtu=1500;
+	conn->mtu=480;
+	conn->dtls_mtu=500;
 
 
 	conn->cur_packet=0;

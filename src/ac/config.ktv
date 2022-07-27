@@ -29,7 +29,7 @@ ac-descriptor/software/vendor :Dword: 4232704
 ac-descriptor/software/version :Bstr16: .x07036500
 ac-descriptor/station-limit :Word: 1000
 ac-descriptor/stations :Word: 0
-capwap-control-ip-address/address.0 :IPAddress: 192.168.0.29
+capwap-control-ip-address/address.0 :IPAddress: 192.168.0.14
 #capwap-control-ip-address/address.0 :IPAddress: 192.168.42.51
 capwap-control-ip-address/wtps.0 :Word: 2
 cisco/mwar-type :Byte: 0
@@ -37,24 +37,28 @@ maximum-message-length :Word: 4096
 radio/0/wtp-radio-information :Dword: 7
 result-code :Dword: 0
 
+cisco/ap-telnet-ssh/ssh :Bool: true
+cisco/ap-telnet-ssh/telnet :Bool: true
 
 
 ac-name:Bstr16:"X1"
 
 #capwap-control-ip-address/address.0:IPAddress:1192.168.0.14
-capwap-control-ip-address/address.0:IPAddress:192.168.0.29
+capwap-control-ip-address/address.0:IPAddress:192.168.0.14
 #capwap-control-ip-address/address.0:IPAddress:192.168.0.131
 #capwap-control-ip-address/address.1:IPAddress:2a00:c1a0:48c6:4a00:9965:1b6e:aca3:1398
 capwap-control-ip-address/wtps.0:Word:0
 #capwap-control-ip-address/wtps.1:Word:11
 
+#cisco/ssl-keyfile:Str:"../../ssl/certs/ac.key"
+#cisco/ssl-certfile:Str:"../../ssl/certs/ac.crt"
 
 #cisco/ssl-keyfile:Str:"../../ssl/certs/ac-cisco.key"
 #cisco/ssl-certfile:Str:"../../ssl/certs/ac-cisco.pem"
-#cisco/ssl-keyfile:Str:"../../ssl/certs/int-ca.key"
-#cisco/ssl-certfile:Str:"../../ssl/certs/int-ca.crt"
 cisco/ssl-keyfile:Str:"../../ssl/intermediate-ca/int-ca.key"
 cisco/ssl-certfile:Str:"../../ssl/intermediate-ca/int-ca.crt"
+#cisco/ssl-keyfile:Str:"../../ssl/intermediate-ca/cisco-ac-int-ca.key"
+#cisco/ssl-certfile:Str:"../../ssl/intermediate-ca/cisco-ac-int-ca.crt"
 cisco/ssl-cipher:Str:DEFAULT:!ECDH
 #cisco/ssl-cipher:Str:+DHE-RSA:+AES-256-CBC:+AES-128-CBC:+SHA1
 cisco/ssl-dhbits:Word:2048
@@ -107,7 +111,7 @@ radio.1/cisco/multi-domain-capability/max-tx-power-level :Word: 20
 radio.1/cisco/multi-domain-capability/number-of-channels :Word: 4
 radio.1/cisco/multi-domain-capability/reserved :Byte: 1
 radio.1/cisco/wtp-radio-config/beacon-period :Word: 100
-radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x04fe7f499b90
+radio.1/cisco/wtp-radio-config/bss-id :Bstr16: .x05fe7f499b90
 radio.1/cisco/wtp-radio-config/cfg-period :Byte: 4
 radio.1/cisco/wtp-radio-config/cfg-type :Byte: 1
 radio.1/cisco/wtp-radio-config/cfp-maximum-duration :Word: 60

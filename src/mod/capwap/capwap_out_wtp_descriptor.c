@@ -36,7 +36,7 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	d = dst+4;
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
-	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	val = cw_ktv_get(params->local_cfg,key, CW_TYPE_BYTE);
 	if (val != NULL)
 		d+=val->type->put(val,d);
 	else{
@@ -45,7 +45,7 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	}
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
-	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	val = cw_ktv_get(params->local_cfg,key, CW_TYPE_BYTE);
 	if (val != NULL){
 		d+=val->type->put(val,d);
 	}
@@ -54,29 +54,30 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	}
 
 /* 	d+=cw_put_encryption_capabilities_7(d,1); */
-	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);
+/*	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);*/
+	d+=cw_put_encryption_subelems(d,0);
 
 
 /*cw_ktv_dump(params->conn->local_cfg,DBG_INFO,"*** ktv dump ***","","*** end of dump ***");*/
 
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_HARDWARE_VERSION, key);
 				 
 	/* software version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_SOFTWARE_VERSION, key);
 
 	/* bootloader version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_BOOTLOADER);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
 
 	len = d-dst-4;
 	l = len + cw_put_elem_hdr(dst,eh->id,len);
 	
-	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,eh,dst,l);
+	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
 	return l;
 }

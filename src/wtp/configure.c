@@ -38,6 +38,6 @@ int configure(struct conn * conn)
 	cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"Config ***","CFG: ", "End config ***");
 
 //	cw_ktv_set_byte(conn->remote_cfg,"
-exit(0);
+/*exit(0);*/
 	return 1;
 }

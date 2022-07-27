@@ -1,8 +1,9 @@
 include ../Defs.mak
-
+MFDEPS=../Defs.mak ../LocalDefs.mak
 
 
 CWSRC=\
+        cw_write_header.c\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
 	cw_dbg_elem.c\
@@ -63,6 +64,7 @@ CWSRC=\
 	cw_strlist_get_id.c\
 	cw_strlist_get_str.c\
 	cw_type_bstr16.c\
+	cw_type_bwstr.c\
 	cw_type_byte.c\
 	cw_type_bool.c\
 	cw_type_str.c\
@@ -166,7 +168,6 @@ MISCSRC=\
 	bstr_create.c\
 	bstr_create_from_str.c\
 	bstr_replace.c\
-	bstrv_create.c\
 	capwap_inline.c\
 	capwap_strings_board.c\
 	capwap_strings_elem80211.c\
@@ -182,6 +183,7 @@ MISCSRC=\
 	connlist.c\
 	conn_prepare_image_data_request.c\
 	conn_process_packet.c\
+	cw_decode_msg.c \
 	conn_q_add_packet.c\
 	conn_q_get_packet.c\
 	conn_q_wait_packet.c\
@@ -218,11 +220,10 @@ MAVLSRC=\
 	mavl_get_ptr.c\
 	mavl_insert_ptr.c\
 	mavl_replace.c\
-	mavl_merge.c\
 	mavliter_get_ptr.c\
 	mavl_cmpstr.c\
 	mavl_freeptr.c \
-
+	mavl_merge.c\
 
 
 DTLSSRC += dtls_openssl.c \
@@ -256,7 +257,7 @@ SNAME           := $(LIBARCHDIR)/libcw.a
 DNAME           := $(LIBARCHDIR)/libcw.so
 
 CFLAGS+=-fPIC -DUSE_OPENSSL -I../contrib/openssl-1.1.1f/include/ -O0 
-CFLAGS+=-g -I/home/tube/v/rsrch/libmavl
+CFLAGS+=-g 
 
 all: $(SNAME) $(DNAME) 
 static: $(SNAME)

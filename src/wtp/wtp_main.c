@@ -159,7 +159,7 @@ int main (int argc, char **argv)
 /*	conn->mod=mod;*/
 	conn->detected = 1;
 	conn->dtls_verify_peer=0;
-	conn->dtls_mtu = 12000;
+	conn->dtls_mtu = 1200;
 	conn->msgset=msgset;
 	conn->local_cfg = global_cfg;
 	conn->remote_cfg = NULL;
@@ -196,7 +196,6 @@ exit(0);
 /*cw_run_discovery(conn, "255.255.255.255","192.168.56.1", &dis);*/
 /*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
 	cw_run_discovery(conn, "192.168.0.162","192.168.0.14", &dis);
-
 	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
 
 

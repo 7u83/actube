@@ -1,4 +1,5 @@
 
+#include "cw/conn.h"
 #include "cw/log.h"
 #include "cw/ktv.h"
 #include "cw/msgset.h"
@@ -47,7 +48,7 @@ int capwap_out_wtp_board_data(struct cw_ElemHandler * eh,
 	
 	d=dst+4;
 	
-	cfg = params->conn->local_cfg;
+	cfg = params->local_cfg;
 	
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_VENDOR);
 	val = cw_ktv_get(cfg,key,CW_TYPE_DWORD);

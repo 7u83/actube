@@ -13,14 +13,14 @@ int cisco_in_spam_vendor_specific(struct cw_ElemHandler *eh,
 	vendor_id = cw_get_dword(data);
 	elem_id = cw_get_word(data + 4);
 
-	vhandler = cw_msgset_get_elemhandler(params->conn->msgset,CW_PROTO_LWAPP,vendor_id,elem_id);
+	vhandler = cw_msgset_get_elemhandler(params->msgset,CW_PROTO_LWAPP,vendor_id,elem_id);
 	
 	
 	if (!vhandler) {
                 cw_dbg(DBG_WARN,
                        "Can't handle Vendor Specific LWAPP Payload %s/%d, in msg %d (%s) in %s state.",
                        cw_strvendor(vendor_id), elem_id, params->msgdata->type,
-                       params->msgdata->name, cw_strstate(params->conn->capwap_state));
+                       params->msgdata->name, NULL /*cw_strstate(params->conn->capwap_state)*/);
                 return 0;
 
 	}

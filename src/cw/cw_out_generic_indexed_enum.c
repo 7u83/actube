@@ -22,10 +22,10 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 	
 	for(i=0; e[i].name!=NULL; i++) {
 		sprintf(key,"%s/%s",handler->key,e[i].name);
-		result = cw_ktv_base_exists(params->conn->local_cfg,key);
+		result = cw_ktv_base_exists(params->local_cfg,key);
 		if (result==NULL)
 			continue;
-		start = params->conn->header_len(handler);
+		start = cw_header_len(handler);
 		len = 0;
 		if (ie->idxpos==0)
 			len = 1;
@@ -33,7 +33,7 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 		if (e[i].fun_out==NULL)
 			len += result->type->put(result,ob+start+len);
 		else
-			len += cw_ktv_write_struct(params->conn->local_cfg,
+			len += cw_ktv_write_struct(params->local_cfg,
 			NULL,e[i].type,key,ob+start+len);
 			
 /*		thandler.type=e[i].type;
@@ -44,7 +44,7 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 		if (ie->idxpos==len)
 			len++;
 
-		ob += params->conn->write_header(handler,ob,len);
+		ob += cw_write_header(handler,ob,len);
 		
 
 		

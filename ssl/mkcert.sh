@@ -9,7 +9,7 @@ set -x
 NAME=$1
 TYPE=$2
 
-
+DAYS=6000
 
 DIR=./certs
 ROOT_CA_DIR=./root-ca
@@ -65,8 +65,6 @@ then
 fi
 
 
-CISCOTIME='2013-12-24 08:15:42'
-
 if [ "$TYPE" = "cisco-ac" ] 
 then
 	SUBJ="/C=US/ST=California/L=San Jose/O=Cisco Virtual Wireless LAN Controller/CN=DEVICE-AC-TUBE/emailAddress=7u83@mail.ru"
@@ -82,14 +80,14 @@ then
        openssl req -nodes -new -x509 \
                 -sha1 \
                 -extensions v3_ca \
-                -days 3650 \
-                -newkey rsa:2048 \
+                -days ${DAYS} \
+                -newkey rsa:${KEYSIZE} \
                 -keyout certs/${NAME}.key -out certs/${NAME}.crt \
                 -config openssl.cnf \
                 -x509 \
                 -subj "$SUBJ" 
 
-	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem -days=128
+	$OPENSSL x509 -in $DIR/$NAME.crt -out $DIR/$NAME.pem -days=${DAYS}
 
 
 

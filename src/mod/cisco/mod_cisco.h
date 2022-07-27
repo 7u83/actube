@@ -2,6 +2,7 @@
 #define __MOD_CISCO_H
 
 #include <stdint.h>
+#include "cw/conn.h"
 #include "cw/msgset.h"
 
 int cisco_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams * params, uint8_t * data,

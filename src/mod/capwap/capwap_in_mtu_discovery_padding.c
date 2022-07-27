@@ -36,7 +36,7 @@ int capwap_in_mtu_discovery_padding(struct cw_ElemHandler *eh,
 		cw_dbg(DBG_RFC,
 		       "MTU discovery padding msg elem contains %d non-0xFF byte(s) out of %d, See RFC 5415.",
 		       n, len);
-		if (params->conn->strict_capwap)
+		if (0 /*params->conn->strict_capwap*/)
 			return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 	return CAPWAP_RESULT_SUCCESS;

@@ -37,6 +37,8 @@
 #include "conf.h"
 #include "ac.h"
 
+#include "cw/mavltypes.h"
+
 uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len = 0;
 
@@ -393,7 +395,8 @@ int init_bcast_addrs()
 	if (!conf_ipv4)
 		return 1;
 
-	t = mavl_create_str();
+	/*t = mavl_create_ptr(); */
+	t = mavl_create_ptr(mavl_cmpstr,mavl_freeptr);
 	if (t==NULL)
 		return 0;
 

@@ -18,18 +18,18 @@ int cw_out_generic_with_index(struct cw_ElemHandler * eh,
 	do {
 		sprintf(key,"%s.%d",eh->key,idx);
 		search.key=key;
-		result = mavl_get_first(params->conn->local_cfg,&search);
+		result = mavl_get_first(params->local_cfg,&search);
 		if (result==NULL)
 			break;
 		if (strncmp(result->key,key,strlen(key))!=0)
 			break;
 	
-		start = params->conn->header_len(eh);
+		start = cw_header_len(eh);
 		len = cw_put_byte(ob+start,idx);
 		
 		len += result->type->put(result,ob+start+len);
 
-		ob += params->conn->write_header(eh,ob,len);
+		ob += cw_write_header(eh,ob,len);
 		
 		idx++;
 		

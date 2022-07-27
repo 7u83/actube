@@ -157,6 +157,7 @@ int mycmp (void *e1, void *e2)
 	return 0;
 }
 
+/*
 void mavl_walk (struct mavlnode  * node)
 {
 	struct mykv * kv;
@@ -175,6 +176,7 @@ void mavl_walk (struct mavlnode  * node)
 	mavl_walk (node->right);
 	
 }
+*/
 
 /*
 int stcmp (const void * sa1, const void *sa2)
@@ -246,7 +248,7 @@ int main (int argc, char *argv[])
 	/* create types tree with default types */
 	types_tree = cw_ktv_create_types_tree();
 	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
-		mavl_add_ptr(types_tree,*ti);
+		mavl_insert_ptr(types_tree,*ti);
 	}
 	
 	global_cfg = cw_ktv_create();

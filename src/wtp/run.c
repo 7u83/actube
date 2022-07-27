@@ -27,7 +27,7 @@
 #include "cw/dbg.h"
 #include "cfg.h"
 
-int update =0;
+int update =1;
 
 /*
 int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
@@ -167,13 +167,15 @@ int run(struct conn * conn)
 			
 			if ( !cw_result_is_ok(rc))
 				break;
-			clean_cfg(conn->remote_cfg);
+
+			printf("Saving Config\n");
 			mavl_merge(conn->local_cfg,conn->remote_cfg);
 			cw_ktv_save(conn->local_cfg,"cisco.ktv");
+			clean_cfg(conn->remote_cfg);
 			
 
 			/*cw_dbg(DBG_X,"We hav a message processed");*/
-
+			update=1;
 			do_update(conn);
 
 

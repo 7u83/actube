@@ -14,7 +14,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 	
-	result = cw_ktv_add(params->conn->remote_cfg, handler->key, 
+	result = cw_ktv_add(params->remote_cfg, handler->key, 
 				handler->type,NULL, elem_data,elem_len);
 	
 	params->elem=result;

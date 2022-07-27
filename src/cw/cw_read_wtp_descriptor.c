@@ -29,7 +29,7 @@ int cw_read_wtp_descriptor(mavl_t cfg, struct conn *conn,
 	/* Get number of encryption elements */
 	ncrypt = cw_get_byte(data + 2);
 	if (ncrypt == 0) {
-		if (conn->strict_capwap) {
+		if (0 /*conn->strict_capwap*/) {
 			cw_dbg(DBG_ELEM_ERR,
 			       "Bad WTP Descriptor, number of encryption elements is 0.");
 			return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;

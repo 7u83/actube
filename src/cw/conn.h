@@ -203,7 +203,7 @@ struct conn {
 	int dtls_verify_peer;
 	int dtls_mtu;
 
-	uint8_t dtls_buffer[2048];
+	uint8_t dtls_buffer[4096];
 	int dtls_buffer_len;
 	int dtls_buffer_pos;
 

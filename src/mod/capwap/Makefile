@@ -30,6 +30,7 @@ DNAME		:= $(LIBARCHDIR)/mod_capwap.so
 
 CFLAGS+=-fPIC
 CFLAGS+= -I ../../ -I../ -I../../include
+CFLAGS+=$(INC2)
 
 all: $(SNAME) $(DNAME) 
 static: $(SNAME)

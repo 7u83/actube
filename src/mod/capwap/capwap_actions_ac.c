@@ -549,6 +549,7 @@ static struct cw_ElemDef change_state_event_request_elements[] ={
 
 static cw_State_t change_state_event_response_states[] = {
 	{CAPWAP_STATE_JOIN,CAPWAP_STATE_JOIN},
+	{CAPWAP_STATE_RUN,CAPWAP_STATE_RUN},
 	{0,0}
 };
 static struct cw_ElemDef change_state_event_response_elements[] ={

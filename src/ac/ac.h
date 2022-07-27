@@ -1,7 +1,8 @@
 #ifndef __ACTUBE_AC_H
 #define __ACTUBE_AC_H
 
-#include "cw/mavl.h"
+#include "mavl.h"
+#include "cw/mavltypes.h"
 
 extern mavl_t actube_global_cfg;
 

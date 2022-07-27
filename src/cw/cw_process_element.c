@@ -23,7 +23,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	params->elem=NULL;
 	
 	/* try to retrieve a handler for this message element */
-	handler = cw_msgset_get_elemhandler(params->conn->msgset,proto, vendor, elem_id);
+	handler = cw_msgset_get_elemhandler(params->msgset,proto, vendor, elem_id);
 	if (!handler) {
 		
 		cw_dbg(DBG_ELEM_ERR, "Unrecognized message element: %d, ignoring", 
@@ -65,7 +65,9 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 		return -1;
 	}
 
-	cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler,
+	/*cw_dbg_elem(DBG_ELEM_IN, params->conn, params->msgdata->type, handler,
+				data,len);*/
+	cw_dbg_elem(DBG_ELEM_IN, NULL, params->msgdata->type, handler,
 				data,len);
 
 	if (handler->get == NULL){

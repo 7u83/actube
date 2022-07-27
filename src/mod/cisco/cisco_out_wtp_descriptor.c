@@ -16,7 +16,7 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	d = dst+4;
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
-	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	val = cw_ktv_get(params->local_cfg,key, CW_TYPE_BYTE);
 	if (val != NULL)
 		d+=val->type->put(val,d);
 	else{
@@ -25,7 +25,7 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	}
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
-	val = cw_ktv_get(params->conn->local_cfg,key, CW_TYPE_BYTE);
+	val = cw_ktv_get(params->local_cfg,key, CW_TYPE_BYTE);
 	if (val != NULL){
 		d+=val->type->put(val,d);
 	}
@@ -38,17 +38,17 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_HARDWARE_VERSION, key);
 				 
 	/* software version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_SOFTWARE_VERSION, key);
 
 	/* bootloader version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_BOOTLOADER);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->local_cfg,
                                  CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
 
 	len = d-dst-4;

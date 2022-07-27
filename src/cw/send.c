@@ -91,7 +91,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 }
 
 
-#define MAX_MTU 1500
+#define MAX_MTU 9500
 int 
 cw_send_msg( struct conn * conn, uint8_t *msg)
 {
@@ -155,7 +155,7 @@ cw_send_msg( struct conn * conn, uint8_t *msg)
 	cw_set_dword(buf+4, conn->fragid<<16 | fragoffset<<3 );
 
 
-	cw_dbg_pkt(DBG_PKT_OUT,conn,buf,packetlen,(struct sockaddr*)&conn->addr);
+	cw_dbg_pkt(DBG_PKT_OUT,conn,buf,msglen+hlen,(struct sockaddr*)&conn->addr);
 
 	return conn->write(conn,buf,msglen + hlen);
 	

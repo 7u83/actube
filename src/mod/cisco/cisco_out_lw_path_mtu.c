@@ -13,11 +13,11 @@ int cisco_out_lw_path_mtu(struct cw_ElemHandler * eh,
 	int len,max;
 		
 	sprintf(key,"%s/%s",eh->key,"len");
-	len = cw_ktv_get_word(params->conn->local_cfg,key,0);
+	len = cw_ktv_get_word(params->local_cfg,key,0);
 	if (len == 0)
 		return 0;
 	sprintf(key,"%s/%s",eh->key,"max");
-	max = cw_ktv_get_word(params->conn->local_cfg,key,0);
+	max = cw_ktv_get_word(params->local_cfg,key,0);
 	
 	lw_set_word(dst+16,max);
 	lw_set_word(dst+16+2,len);

@@ -229,7 +229,7 @@ int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh,
 	int idx;
 	void * type;
 
-	idx = cw_ktv_idx_get(params->conn->remote_cfg,eh->key);
+	idx = cw_ktv_idx_get(params->remote_cfg,eh->key);
 
 	sprintf(key,"%s.%d",eh->key,idx+1);
 	
@@ -237,7 +237,7 @@ int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh,
 		type = cisco_ap_regulatory_domain4;
 	if(len==5)
 		type = cisco_ap_regulatory_domain5;
-	cw_ktv_read_struct(params->conn->remote_cfg,type,key,data,len);
+	cw_ktv_read_struct(params->remote_cfg,type,key,data,len);
 
 	return 1;
 }
@@ -261,7 +261,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	
 
 	type = NULL;
-	result = cw_ktv_get(params->conn->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16);
+	result = cw_ktv_get(params->local_cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16);
 	if (result!=NULL){
 		if(result->type->len(result)==4){
 			uint32_t rv;
@@ -280,7 +280,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	do {
 		sprintf(key,"%s.%d",eh->key,idx);
 		search.key=key;
-		result = mavl_get_first(params->conn->local_cfg,&search);
+		result = mavl_get_first(params->local_cfg,&search);
 		if (result==NULL)
 			break;
 		if (strncmp(result->key,key,strlen(key))!=0)
@@ -288,7 +288,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		
 		if(type == NULL){
 			sprintf(testkey,"%s/%s",key,"band-id");
-			result = cw_ktv_get(params->conn->local_cfg,key,CW_TYPE_BYTE);
+			result = cw_ktv_get(params->local_cfg,key,CW_TYPE_BYTE);
 			if (result==NULL){
 				type = cisco_ap_regulatory_domain4;
 			}
@@ -297,9 +297,9 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 			}
 		}
 		
-		start = params->conn->header_len(eh);
-		len = cw_ktv_write_struct(params->conn->local_cfg,NULL,type,key,ob+start);
-		ob += params->conn->write_header(eh,ob,len);
+		start = cw_header_len(eh);
+		len = cw_ktv_write_struct(params->local_cfg,NULL,type,key,ob+start);
+		ob += cw_write_header(eh,ob,len);
 		
 		idx++;
 		
@@ -543,7 +543,7 @@ static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh,
 	radio_id=cw_get_byte(data);
 	wlan_id=cw_get_word(data+1);
 	sprintf(key,"radio.%d/wlan.%d",radio_id,wlan_id);
-	cw_ktv_del_sub(params->conn->local_cfg,key);
+	cw_ktv_del_sub(params->local_cfg,key);
 	cw_dbg(DBG_INFO,"Del WLAN rid=%d, id=%d",wlan_id);
 	return 0;
 }
@@ -1261,6 +1261,18 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_radio_generic			/* put */
 	},
 
+	{ 
+		"Cisco Elem 47",			/* name */
+		CISCO_ELEM_47,				/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/elem47",				/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic			/* put */
+	},
+
+
 
 
 	{ 
@@ -1704,7 +1716,8 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				1, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				1, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				1, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				1, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_47,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_9,		0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
@@ -1801,6 +1814,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_47,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_9,		0, 0},	
 
@@ -1827,7 +1841,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RAD_EXTENDED_CONFIG,	0, 0},
 	
-	{0,0,0,00}
+	{0,0,0,0,0}
 	
 };
 
@@ -1850,12 +1864,12 @@ static struct cw_ElemDef wtp_event_response_elements[] ={
 
 
 static struct cw_ElemDef change_state_event_request_elements[] ={
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,	0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,	1, CW_IGNORE},
 	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			1, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	1, CW_IGNORE},
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			1, 0},
 
 	{0,0,0,0,0}
 };
@@ -1981,7 +1995,7 @@ static struct cw_MsgDef messages70[] = {
 	{
 		NULL,					/* name */
 		CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,	/* msg type */
-		CW_ROLE_AC,					/* role */
+		CW_ROLE_AC,				/* role */
 		NULL,					/* allowed states */
 		change_state_event_request_elements		/* msg elements */
 	},

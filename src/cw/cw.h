@@ -547,6 +547,8 @@ int cw_put_msg(struct conn *conn, uint8_t * rawout);
 char *cw_strdup(const char *s);
 int cw_stricmp(char const *a, char const *b);
 
+int cw_write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len);
+int cw_header_len(struct cw_ElemHandler * handler);
 
 /**
  *@}

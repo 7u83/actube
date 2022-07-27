@@ -17,7 +17,7 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 	}
 	
 	search.key = (char*)handler->key;
-	result = mavl_get_first(params->conn->local_cfg,&search);
+	result = mavl_get_first(params->local_cfg,&search);
 	if (result == NULL ){
 		if (params->elemdata->mand)
 			cw_log(LOG_ERR,"Can't put mandatory message element %s, no data available",handler->name);
@@ -30,12 +30,12 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 		return 0;
 	}
 
-	start = params->conn->header_len(handler);
+	start = cw_header_len(handler);
 
-	len = cw_ktv_write_struct(params->conn->local_cfg,
-		params->conn->default_cfg,
+	len = cw_ktv_write_struct(params->local_cfg,
+		params->default_cfg,
 		handler->type,handler->key,dst+start);
 	
-	return params->conn->write_header(handler,dst,len);
+	return cw_write_header(handler,dst,len);
 
 }

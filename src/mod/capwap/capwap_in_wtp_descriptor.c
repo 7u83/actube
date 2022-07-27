@@ -26,7 +26,8 @@ int capwap_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerPar
 			 int len)
 {
 	int rc;
-	rc =cw_read_wtp_descriptor(params->conn->remote_cfg, params->conn, eh, data, len, NULL);
+	/*rc =cw_read_wtp_descriptor(params->remote_cfg, params->conn, eh, data, len, NULL);*/
+	rc =cw_read_wtp_descriptor(params->remote_cfg, NULL, eh, data, len, NULL);
 	return rc;
 }
 

@@ -15,7 +15,7 @@ int cisco_in_ac_descriptor(struct cw_ElemHandler *eh,
 		{0,0, NULL,0, 0}
 	};
 
-	return cw_read_ac_descriptor(params->conn->remote_cfg,eh,params,data,len,allowed);
+	return cw_read_ac_descriptor(params->remote_cfg,eh,params,data,len,allowed);
 
 
 	/*return cw_read_ac_descriptor(conn->config,data,len,allowed);*/

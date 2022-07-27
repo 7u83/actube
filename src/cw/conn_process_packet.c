@@ -333,7 +333,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	ui = message->states;
 
 	for (ui=message->states; ui->state; ui++){
-		printf("Comparing %d and %d\n", conn->capwap_state, ui->state);
+/*		printf("Comparing %d and %d\n", conn->capwap_state, ui->state);*/
 		if(ui->state==conn->capwap_state){
 			break;
 		}
@@ -398,7 +398,15 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	
 
 		
-		params.conn=conn;
+/*		params.conn=conn;*/
+
+                params.local_cfg=conn->local_cfg;
+                params.remote_cfg=conn->remote_cfg;
+                params.default_cfg=conn->default_cfg;
+                params.global_cfg=conn->global_cfg;
+                params.msgset=conn->msgset;
+
+
 		params.from=from;
 		params.msgdata=message;
 		params.mand_found=mand_found;

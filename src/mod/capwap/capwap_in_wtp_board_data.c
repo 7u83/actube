@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cw/conn.h"
 #include "mod_capwap.h"
 
 #include "cw/dbg.h"
@@ -133,7 +134,7 @@ int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerPar
 
 
 	char vendor_key[128];
-	mavl_t cfg = params->conn->remote_cfg;
+	mavl_t cfg = params->remote_cfg;
 
 		
 	sprintf(vendor_key,"%s/%s",eh->key,CW_SKEY_VENDOR);

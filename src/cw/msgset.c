@@ -295,8 +295,6 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		/* add the message */
 		search.type = msgdef->type;
 
-		printf("Msg type name %s\n",msgdef->name);
-
 		msg = mavl_insert(set->msgdata, &search, &exists);
 		if (msg == NULL) {
 			cw_log(LOG_ERR, "Can't create messae");

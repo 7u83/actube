@@ -1,3 +1,4 @@
+
 MF=Mf-$(KERNEL)-$(ARCH).mk
 
 LIBTARGET=$(OBJDIR)/$(PROG)
@@ -14,7 +15,7 @@ $(DNAME): $(MF) $(SOURCES)
 	@mkdir -p $(LIBARCHDIR)
 	@$(MAKE) -f $(MF) $(DNAME)
 
-$(MF): Makefile
+$(MF): Makefile $(MFDEPS)
 	@rm -f $(MF)
 	@echo "CFLAGS=$(CFLAGS)" >> $(MF)
 	@echo "LDFLAGS=$(LDFLAGS)" >> $(MF)

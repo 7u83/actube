@@ -7,6 +7,8 @@ CONFIG=openssl.cnf
 ROOT_CA_DIR=./root-ca
 INT_CA_DIR=./intermediate-ca
 
+DAYS=6000
+
 
 
 if [ ! -e $ROOT_CA_DIR ] 
@@ -42,11 +44,11 @@ mkrootca()
 	# Create a self-signed root CA
 	openssl req -nodes -new -x509 \
 		-sha1 \
+		-days ${DAYS} \
 		-extensions v3_ca \
-		-days 3650 \
-		-newkey rsa:2048 \
+		-newkey rsa:${KEYSIZE} \
 		-keyout $ROOT_CA_DIR/${PREF}root-ca.key -out $ROOT_CA_DIR/${PREF}root-ca.crt \
-		-config openssl.cnf \
+		-config ${CONFIG} \
 		-x509 \
 		-subj "$ROOT_SUBJ"
 
@@ -58,7 +60,7 @@ mkrootca()
 		-subj "$INT_SUBJ"
 
 	# Sign intermediate CA cert using previously created root CA
-	openssl ca -config openssl.cnf -batch -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
+	openssl ca -config ${CONFIG} -batch -keyfile $ROOT_CA_DIR/${PREF}root-ca.key \
 		   -cert $ROOT_CA_DIR/${PREF}root-ca.crt \
 		   -extensions v3_ca -notext -md sha1 -in $INT_CA_DIR/${PREF}int-ca.csr \
 		   -out $INT_CA_DIR/${PREF}int-ca.crt

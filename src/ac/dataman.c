@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "cw/mavl.h"
+#include "mavl.h"
 #include "cw/sock.h"
 #include "cw/timer.h"
 #include "cw/cw.h"
@@ -86,7 +86,7 @@ struct dataman *dataman_list_add(struct dataman *dm)
 {
 
 	cw_dbg(DBG_X,"Adding dataman %p\n",dm);
-	return mavl_add(dataman_list, dm,NULL);
+	return mavl_insert(dataman_list, dm,NULL);
 }
 
 

@@ -201,7 +201,7 @@ int netconn_send_capwap_msg(struct netconn * nc, uint8_t *rawmsg, int msglen)
 
 /*	int mtu = nc->mtu; */
 
-	int mtu = 1400;
+	int mtu = 400;
 
 	while (msglen>mtu){
 		cw_set_hdr_flags(rawmsg,CAPWAP_FLAG_HDR_F,1);
