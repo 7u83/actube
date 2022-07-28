@@ -256,7 +256,7 @@ OBJDIR          := ../../obj/cw/$(KERNEL)/$(ARCH)
 SNAME           := $(LIBARCHDIR)/libcw.a
 DNAME           := $(LIBARCHDIR)/libcw.so
 
-CFLAGS+=-fPIC -DUSE_OPENSSL -I../contrib/openssl-1.1.1f/include/ -O0 
+CFLAGS+=-fPIC -DUSE_OPENSSL -O0 -I../../include
 CFLAGS+=-g 
 
 all: $(SNAME) $(DNAME) 

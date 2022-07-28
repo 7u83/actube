@@ -14,7 +14,8 @@ DNAME		:= $(LIBARCHDIR)/mod_capwap80211.so
 SLIBS		:= -lcw
 
 CFLAGS+=-fPIC
-CFLAGS+= -I ../../ -I../ -I../../include
+CFLAGS+= -I ../../ -I../ -I../../include -I../../../include
+
 
 all: $(SNAME) $(DNAME) 
 static: $(SNAME)
