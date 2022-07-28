@@ -224,11 +224,13 @@ exit(0);
 	}
 
 	mavl_del_all(conn->remote_cfg);
+printf("JOIN\n");	
 	join(conn,&dis);
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
 	mavl_del_all(conn->remote_cfg);
+printf("JOIN CONF\n");	
 	configure(conn);
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);

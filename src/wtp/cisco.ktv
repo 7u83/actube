@@ -61,7 +61,7 @@ cisco/ap-regulatory-domain.1/slot :Byte: 0
 cisco/ap-sub-mode :Byte: 0
 cisco/ap-telnet-ssh/ssh :Bool: false
 cisco/ap-telnet-ssh/telnet :Bool: false
-cisco/ap-timesync/timestamp :Dword: 1469608260
+cisco/ap-timesync/timestamp :Dword: 1469663405
 cisco/ap-timesync/type :Byte: 0
 cisco/ap-username-and-password/802.1x-credentials/option :Word: 2
 cisco/ap-username-and-password/802.1x-credentials/password :Str: 
@@ -196,7 +196,7 @@ radio.0/wlan.0/add-wlan/scan-defer-time :Word: 100
 radio.0/wlan.0/add-wlan/session-timout :Word: 1800
 radio.0/wlan.0/add-wlan/ssid :Str: 
 radio.0/wlan.0/add-wlan/wep-encryption :Bool: false
-radio.0/wlan.0/add-wlan/wep-key :Bstr16: .x5b2a9f4c8b4d28d8f5dbbc0660
+radio.0/wlan.0/add-wlan/wep-key :Bstr16: .x0c1dfebf4fe85062a9104d37b4
 radio.0/wlan.0/add-wlan/wep-key-index :Byte: 1
 radio.0/wlan.0/add-wlan/wlan-capability :Word: 1073
 radio.0/wlan.0/add-wlan/wlan-id :Byte: 1
