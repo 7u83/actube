@@ -13,11 +13,9 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
-	
+
 	result = cw_ktv_add(params->remote_cfg, handler->key, 
 				handler->type,NULL, elem_data,elem_len);
-	
 	params->elem=result;
-	
 	return CAPWAP_RESULT_SUCCESS;
 }

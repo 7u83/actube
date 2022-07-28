@@ -32,7 +32,7 @@ struct cw_ElemData{
 
 struct cw_ElemHandlerParams {
 /*	struct conn * conn;*/
-	struct cw_MsgData * msgdata;
+	struct cw_MsgData * msgdata; 
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;

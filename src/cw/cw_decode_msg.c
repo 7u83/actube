@@ -1,7 +1,7 @@
 #include "cw.h"
 #include "dbg.h"
 #include "log.h"
-
+#include "msgset.h"
 
 int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 		      int vendor, int elem_id, uint8_t * data, int len)
@@ -72,32 +72,53 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 }
 
 
-int cw_decode_elements(uint8_t * elems_ptr, int elems_len)
+int cw_decode_elements(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
 	uint8_t *elem;
+	mavl_t mand_found;
+	mlist_t unrecognized;
 
-	/* iterate through message elements */
+	mand_found = mavl_create_conststr();
+	unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
+
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 		int rc;
 
-
-		struct cw_ElemHandlerParams params;
 		int elem_len, elem_id, max_len;
-		uint8_t *elem_data;
+		uint8_t * elem_data;
 
 
 		elem_len = cw_get_elem_len(elem);
-		elem_data = cw_get_elem_data(elem);
+		elem_data=cw_get_elem_data(elem);
 		elem_id = cw_get_elem_id(elem);
-
-		max_len = elems_len - (elem_data - elems_ptr);
-		if (elem_len > max_len) {
+		
+		max_len=elems_len-(elem_data-elems_ptr);
+		if (elem_len > max_len){
 			cw_dbg(DBG_RFC,
-			       "Messag element claims size of %d bytes, but only %d bytes are left in the payload, truncating.",
-			       elem_len, max_len - 4);
+			"Messag element claims size of %d bytes, but only %d bytes are left in the payload, truncating.",
+			elem_len,max_len-4);
+		}
+	
+		
+
+		params->from=NULL; /*from;*/
+		params->mand_found=mand_found;
+		
+		rc = cw_decode_element(params,0,0,elem_id,elem_data,elem_len); 
+		
+
+		if (cw_result_is_ok(rc))
+			continue;
+		
+		if (rc == CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT){
+			mlist_append(unrecognized,&elem);
+			continue;
+		}
+		
+		if (rc < 0 ){
+			continue;
 		}
 
-
-
 	}
+
 }

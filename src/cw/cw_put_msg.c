@@ -28,7 +28,7 @@
 #include "log.h"
 #include "dbg.h"
 #include "msgset.h"
-
+#include "mavltypes.h"
 
 /**
  * Put a message to a buffer
@@ -131,6 +131,30 @@ printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name
 		/* It's a request, so we have to set seqnum */
 		int s = conn_get_next_seqnum(conn);
 		cw_set_msg_seqnum(msgptr,s);
+	}
+
+
+	{
+	printf ("----------------------------------- redecode -----------------------------\n");
+	uint8_t *elems_ptr;
+
+	int offset = cw_get_hdr_msg_offset(rawout);
+
+	uint8_t *msg_ptr = rawout + offset;
+	int elems_len = cw_get_msg_elems_len(msg_ptr);
+	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
+	mavl_t * cfg = cw_ktv_create();
+
+	struct cw_ElemHandlerParams params;
+
+	params.remote_cfg=cfg;
+	params.msgset=conn->msgset;
+	params.msgdata=msg;
+
+
+	cw_decode_elements( &params, elems_ptr,elems_len);
+
+
 	}
 
 	return CAPWAP_RESULT_SUCCESS;

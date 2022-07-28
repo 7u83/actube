@@ -406,7 +406,6 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
                 params.global_cfg=conn->global_cfg;
                 params.msgset=conn->msgset;
 
-
 		params.from=from;
 		params.msgdata=message;
 		params.mand_found=mand_found;

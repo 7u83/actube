@@ -1,5 +1,6 @@
-include ../Config.default.mak
+#include ../Config.default.mak
 -include ../Config.mak
+include ../Defs.mak
 
 OBJS = \
 	wtplist.o wtpman.o conf.o ac_main.o \
