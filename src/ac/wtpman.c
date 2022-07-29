@@ -451,7 +451,7 @@ static void * wtpman_main(void *arg)
 				tmp = conn->local_cfg;
 
 				mavl_merge(conn->default_cfg, conn->local_cfg);
-				mavl_merge(conn->default_cfg, conn->remote_cfg);
+/*				mavl_merge(conn->default_cfg, conn->remote_cfg);*/
 
 				conn->local_cfg=conn->update_cfg;
 								
@@ -462,6 +462,8 @@ static void * wtpman_main(void *arg)
 				cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 
 				rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+				mavl_merge(conn->remote_cfg,conn->update_cfg);
+
 				conn->update_cfg=NULL;
 				conn->local_cfg=tmp;
 			}
