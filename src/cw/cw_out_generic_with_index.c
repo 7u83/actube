@@ -24,12 +24,12 @@ int cw_out_generic_with_index(struct cw_ElemHandler * eh,
 		if (strncmp(result->key,key,strlen(key))!=0)
 			break;
 	
-		start = cw_header_len(eh);
+		start = params->msgset->header_len(eh);
 		len = cw_put_byte(ob+start,idx);
 		
 		len += result->type->put(result,ob+start+len);
 
-		ob += cw_write_header(eh,ob,len);
+		ob += params->msgset->write_header(eh,ob,len);
 		
 		idx++;
 		

@@ -12,7 +12,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 			, uint8_t * dst)
 {
 
-	struct cw_KTV * elem, search;
+	struct cw_KTV * elem;
 	int start, len, l;
 
 	/* Get the element */
@@ -49,7 +49,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	/* Size for msg elem header depends on 
 	   vendor specific payload */
 	/* start = handler->vendor ? 10 : 4; */
-	start = cw_header_len(handler);
+	start = params->msgset->header_len(handler);
 	
 	if (cw_ktv_cast(elem,handler->type)==NULL){
 		cw_log(LOG_ERR,"Can't put element '%s'- can't cast from %s to %s for key: %s", handler->name, 
@@ -67,7 +67,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
 
 	l = len + cw_put_elem_hdr(dst, handler->id, len); */
-	l = cw_write_header(handler,dst,len);
+	l = params->msgset->write_header(handler,dst,len);
 	
 	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,handler,dst,l);
 /*	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);*/

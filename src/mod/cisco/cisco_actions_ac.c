@@ -297,9 +297,9 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 			}
 		}
 		
-		start = cw_header_len(eh);
+		start = params->msgset->header_len(eh);
 		len = cw_ktv_write_struct(params->local_cfg,NULL,type,key,ob+start);
-		ob += cw_write_header(eh,ob,len);
+		ob += params->msgset->write_header(eh,ob,len);
 		
 		idx++;
 		
@@ -1869,7 +1869,10 @@ static struct cw_ElemDef change_state_event_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			1, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	1, CW_IGNORE},
 
+	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			1, 0},
+
 
 	{0,0,0,0,0}
 };

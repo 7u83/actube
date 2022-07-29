@@ -826,6 +826,19 @@ static cw_StateMachineState_t statemachine_states[]={
 	{0,0,0}
 };
 
+static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
+{
+	if (handler->vendor)
+		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
+
+	return  len + cw_put_elem_hdr(dst, handler->id, len);
+}
+
+static int header_len(struct cw_ElemHandler * handler)
+{
+	return handler->vendor ? 10 : 4;
+}
+
 
 
 struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
@@ -842,6 +855,9 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	mavl_insert_ptr(set->types_tree,CW_TYPE_BYTE);
 	mavl_insert_ptr(set->types_tree,CW_TYPE_DWORD);
 	mavl_insert_ptr(set->types_tree,CW_TYPE_WORD);
+
+	set->write_header = write_header;
+	set->header_len = header_len;
 
 	cw_dbg(DBG_INFO,"CAPWAP: Done register messages");
 	return set;

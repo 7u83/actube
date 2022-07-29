@@ -30,12 +30,12 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 		return 0;
 	}
 
-	start = cw_header_len(handler);
+	start = params->msgset->header_len(handler);
 
 	len = cw_ktv_write_struct(params->local_cfg,
 		params->default_cfg,
 		handler->type,handler->key,dst+start);
 	
-	return cw_write_header(handler,dst,len);
+	return params->msgset->write_header(handler,dst,len);
 
 }

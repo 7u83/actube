@@ -10,6 +10,8 @@ int cw_write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
 	return  len + cw_put_elem_hdr(dst, handler->id, len);
 }
 
+
+
 int cw_header_len(struct cw_ElemHandler * handler)
 {
 	return handler->vendor ? 10 : 4;

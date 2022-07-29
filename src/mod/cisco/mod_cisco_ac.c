@@ -26,6 +26,31 @@ static struct cw_Mod * capwap_mod = NULL;
 static struct cw_Mod * capwap80211_mod = NULL; 
 
 
+static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
+{
+	if (handler->proto == 0){
+		if (handler->vendor)
+			return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
+
+		return  len + cw_put_elem_hdr(dst, handler->id, len);
+	}
+	/* put the lwap elem header */
+	lw_set_dword(dst + 10, handler->vendor);
+	lw_set_word(dst + 14, handler->id);
+	return len + 6 + cw_put_elem_vendor_hdr(dst, handler->vendor, 
+		CISCO_ELEM_SPAM_VENDOR_SPECIFIC, len+6);	
+	
+}
+
+static int header_len(struct cw_ElemHandler * handler)
+{
+	if (handler->proto==0) 
+		return handler->vendor ? 10 : 4;
+	
+	return 16;
+}
+
+
 static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 {
 	cw_dbg(DBG_INFO,"CISCO: Register messages");
@@ -35,6 +60,8 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 			capwap_mod->register_messages(set, CW_MOD_MODE_CAPWAP);
 			capwap80211_mod->register_messages(set, CW_MOD_MODE_BINDINGS);
 			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+			set->write_header = write_header;
+		      	set->header_len = header_len;	
 
 
 		/*	cw_dbg(DBG_MOD,"Cisco: loading cisco message set");*/
@@ -192,31 +219,6 @@ static struct cw_Mod capwap_ac = {
 	.register_messages = register_messages
 };
 */
-
-static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
-{
-	if (handler->proto == 0){
-		if (handler->vendor)
-			return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
-
-		return  len + cw_put_elem_hdr(dst, handler->id, len);
-	}
-	/* put the lwap elem header */
-	lw_set_dword(dst + 10, handler->vendor);
-	lw_set_word(dst + 14, handler->id);
-	return len + 6 + cw_put_elem_vendor_hdr(dst, handler->vendor, 
-		CISCO_ELEM_SPAM_VENDOR_SPECIFIC, len+6);	
-	
-}
-
-static int header_len(struct cw_ElemHandler * handler)
-{
-	if (handler->proto==0) 
-		return handler->vendor ? 10 : 4;
-	
-	return 16;
-}
-
 
 
 int static setup_cfg(struct conn  * conn)

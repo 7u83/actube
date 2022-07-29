@@ -7,13 +7,6 @@
 
 #include "ktv.h"
 
-struct cw_MsgSet {
-	mavl_t msgdata;
-	mavl_t handlers_by_id;
-	mavl_t handlers_by_key;
-	mavl_t types_tree;
-	mavl_t state_machine;
-};
 
 struct cw_ElemDef{
 	int proto;
@@ -67,6 +60,19 @@ struct cw_ElemHandler {
 
 
 };
+
+
+struct cw_MsgSet {
+	mavl_t msgdata;
+	mavl_t handlers_by_id;
+	mavl_t handlers_by_key;
+	mavl_t types_tree;
+	mavl_t state_machine;
+	int (*write_header)(struct cw_ElemHandler * handler, uint8_t * dst, int len);
+	int (*header_len)(struct cw_ElemHandler *handler);
+};
+
+
 
 struct cw_State{
 	uint8_t state;

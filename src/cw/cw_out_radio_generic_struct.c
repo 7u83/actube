@@ -14,7 +14,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 	cdst = dst;
 	
 
-	offset = cw_header_len(handler);
+	offset = params->msgset->header_len(handler);
 
 	i=-1;
 	while(1){
@@ -37,7 +37,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 		l+= cw_ktv_write_struct(params->local_cfg,NULL, handler->type,basekey,cdst+offset+l);
 		
 
-		cdst+=cw_write_header(handler,cdst,l);
+		cdst+=params->msgset->write_header(handler,cdst,l);
 	}
 	return cdst-dst;
 }
@@ -61,7 +61,7 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 		if (result != NULL){
 			int offset;
 			int i,l;
-			offset = cw_header_len(handler);
+			offset = params->msgset->header_len(handler);
 			printf("Yea! We can do it: %s\n",result->key);
 			for (i=0;i<stack[0];i++){
 				printf("I=%i\n",stack[i+1]);
@@ -71,7 +71,7 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 			
 			printf("Write struct len %i\n",l);
 			
-			l=cw_write_header(handler,dst,l);
+			l=params->msgset->write_header(handler,dst,l);
 			printf("header wr len %d\n",l);
 			if (handler->patch){
 				handler->patch(dst+offset,stack);

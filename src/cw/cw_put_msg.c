@@ -154,6 +154,7 @@ printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name
 
 	cw_decode_elements( &params, elems_ptr,elems_len);
 
+	printf ("----------------------------------- end redecode -----------------------------\n");
 
 	}
 

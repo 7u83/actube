@@ -37,15 +37,13 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 
 		sprintf(key,handler->key,idx);
 
-		printf("Here we are '%s'! --> %d\n",key,idx);
-
 		len =0;
-		start = mdst + cw_header_len(handler);
+		start = mdst + params->msgset->header_len(handler);
 		
 		len += cw_put_byte(start+len,idx);
 		len += cw_ktv_write_struct(params->local_cfg,NULL, handler->type,key,start+len);
 		
-		mdst += cw_write_header(handler,mdst,len);
+		mdst += params->msgset->write_header(handler,mdst,len);
 		
 	
 		i=idx+1;
