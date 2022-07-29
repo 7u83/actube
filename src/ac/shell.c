@@ -370,6 +370,7 @@ void shell_loop (FILE *file)
 {
 	struct shelldata sd;
 	int c;
+	c=0;
 	/*	setvbuf(file,NULL,_IONBF,0);
 		fflush(file);
 	*/
@@ -404,7 +405,6 @@ void * run_shell (void * arg)
 	const char * addr = "127.0.0.1:5000";
 	int sockfd, clientsock;
 	int yes;
-while(1){
 	
 
 	rc = sock_strtoaddr (addr, (struct sockaddr*) &server);
@@ -435,16 +435,17 @@ while(1){
 	
 	
 	client_size = sizeof (client);
+while(1){
+	
 	clientsock = accept (sockfd, (struct sockaddr*) &client, &client_size);
 	
 	if (clientsock > 0) {
 		sock_addr2str_p (&client, sockstr);
 		cw_dbg (DBG_INFO, "Acceptiong session from %s", sockstr);
-		printf("New shell lopp\n");
+		cw_dbg (DBG_INFO, "Start shell");
 		shell_loop (fdopen (clientsock, "a+"));
-		printf("end shell lopp\n");
+		cw_dbg (DBG_INFO, "Stop shell");
 		close (clientsock);
-		printf("close clsock\n");
 	}
 	
 	
