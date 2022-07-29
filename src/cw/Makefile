@@ -3,7 +3,6 @@ MFDEPS=../Defs.mak ../LocalDefs.mak
 
 
 CWSRC=\
-        cw_write_header.c\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
 	cw_dbg_elem.c\
