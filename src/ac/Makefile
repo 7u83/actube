@@ -1,5 +1,5 @@
 #include ../Config.default.mak
--include ../Config.mak
+#-include ../Config.mak
 include ../Defs.mak
 
 OBJS = \
@@ -23,10 +23,10 @@ LIBS+=-lconfuse
 LIBS+=-lsqlite3
 LIBS+=-lc
 LIBS+=-lnettle
+LIBS+=-lssl
 LIBS+=$(OPENSSL_LIBS)
 
-
-INCL_DIRS=-I../ -I/usr/local/include -I./ -I/home/tube/v/rsrch/libmavl/
+INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
 FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(ARCH)"'
 
