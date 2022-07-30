@@ -90,7 +90,7 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 /*	conn->send_data_packet = conn_send_data_packet;*/
 
 	conn->last_seqnum_received=-1;
-	conn->mtu=500;
+	conn->mtu=600;
 
 
 	conn->cur_packet=0;
@@ -102,7 +102,7 @@ struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 
 /*	conn->write_data = conn->send_data_packet; */
 
-	conn->dtls_mtu = 500;
+	conn->dtls_mtu = 600;
 
 	return conn;
 }

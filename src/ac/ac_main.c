@@ -225,6 +225,30 @@ void tester1()
 }
 
 
+static void show_cfg (FILE *out, mavl_t ktv)
+{
+	char value[500];
+	struct cw_KTV * data;
+	mavliter_t it;
+	const struct cw_Type * type;
+	
+	
+	mavliter_init(&it,ktv);
+
+	mavliter_foreach(&it){
+		
+		data = mavliter_get(&it);
+		type = data->type;
+		type->to_str(data,value,0);
+		
+		fprintf(out,"%s :%s: %s\n",data->key,type->get_type_name(data), value);
+	}
+	
+	
+}
+
+
+
 int main (int argc, char *argv[])
 {
 	int rc = 0;
@@ -261,6 +285,8 @@ int main (int argc, char *argv[])
 
 	fclose(file);
 
+//show_cfg(stdout,global_cfg);
+//exit(0);
 
 	actube_global_cfg = global_cfg;
 

@@ -18,6 +18,8 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 		key = handler->key;
 	}
 
+printf("CW_IN_GENERIC STRUCT: %s\n",key);	
+
 /*	int (*mkkey)(struct cw_ElemHandler * handler, char *dst, struct cw_ElemHandlerParams * params, 
 		uint8_t*data, int len);
 */

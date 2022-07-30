@@ -8,9 +8,6 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 	int pos, i,l;
 	cw_KTV_t * result;
 	
-	if (strcmp(pkey,"radio.0/cisco/wtp-radio-config")==0)
-		i = 99;
-	
 	
 	pos=0; i=0;
 	while (stru[i].type != NULL){
@@ -47,6 +44,7 @@ int cw_ktv_read_struct(mavl_t ktv,const cw_KTVStruct_t * stru, const char *pkey,
 		
 		stru[i].type->to_str(result,dbstr,100);
 		cw_dbg(DBG_ELEM_DETAIL, "Read (%d): %s: %s",pos,key,dbstr);
+		printf("READ STRUCT (%d): %s: %s\n",pos,key,dbstr);
 		
 		if (stru[i].len==-1)
 			l = result->type->len(result);

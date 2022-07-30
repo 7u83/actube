@@ -114,23 +114,6 @@ static void wtpman_run_discovery(void *arg)
 	return;
 }
 
-/*
-int xprocess_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
-		     struct sockaddr *from)
-{
-	uint8_t *msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
-	uint32_t type = cw_get_msg_type(msgptr);
-	cw_log(LOG_ERR, "Hey: %d", type);
-	if (type == CAPWAP_MSG_DISCOVERY_REQUEST)
-		conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-
-
-	return process_message(conn, rawmsg, rawlen, from);
-}
-
-*/
-
-
 static int wtpman_dtls_setup(void *arg)
 {
 	char cipherstr[512];
@@ -386,62 +369,6 @@ static void * wtpman_main(void *arg)
 				return NULL;		
 		};
 		
-
-
-
-
-	/*	
-		switch (conn->capwap_transition){
-			case CW_TRANSITION(CAPWAP_STATE_DTLS_SETUP, CAPWAP_STATE_JOIN):
-			{
-
-				wait_join = cw_ktv_get_word(conn->global_cfg,"wait-join",CAPWAP_WAIT_JOIN);
-				timer = cw_timer_start(wait_join);
-				break;
-			}
-			case CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_JOIN):
-			{	
-				char wtpname[CAPWAP_MAX_WTP_NAME_LEN];
-				cw_KTV_t * result;
-				result = cw_ktv_get(conn->remote_cfg,"wtp-name",NULL);
-				result->type->to_str(result,wtpname,CAPWAP_MAX_WTP_NAME_LEN);
-				cw_dbg(DBG_INFO, "WTP joined: '%s', IP %s.",
-					wtpname,
-					sock_addr2str(&conn->addr,sock_buf)
-					);
-				break;
-			}
-			case CW_TRANSITION(CAPWAP_STATE_JOIN,CAPWAP_STATE_TIMEOUT):
-			{
-				cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
-				sock_addr2str(&wtpman->conn->addr,sock_buf), wait_join);
-				wtpman_remove(wtpman);
-				return NULL;
-				break;
-			}
-			case CW_TRANSITION(CAPWAP_STATE_JOIN, CAPWAP_STATE_CONFIGURE):
-			{
-				
-				wait_change_state = cw_ktv_get_word(conn->global_cfg,
-					"capwap-timers/change-state-pending-timer",
-					CAPWAP_TIMER_CHANGE_STATE_PENDING_TIMER);
-				break;
-			}
-			case CW_TRANSITION(CAPWAP_STATE_CONFIGURE,CAPWAP_STATE_TIMEOUT):
-			{
-				cw_dbg(DBG_MSG_ERR, "No Change State Event Request %s after %d seconds, WTP died.",
-				sock_addr2str(&wtpman->conn->addr,sock_buf), wait_change_state);
-				wtpman_remove(wtpman);
-				return NULL;
-				break;
-			}
-
-		}
-		
-*/
-
-
-
 		
 		while (!cw_timer_timeout(timer)) {
 			if (conn->update_cfg != NULL){
@@ -580,7 +507,7 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 		}
 
 /*//		cw_dbg(DBG_X, "Time left: %d",
-//*/
+// */
 	       /*cw_timer_timeleft(wtpman->echointerval_timer);*/
 	       
 		if (cw_timer_timeout(wtpman->echointerval_timer)) {

@@ -24,9 +24,15 @@ int cw_ktv_write_struct(mavl_t ktv, mavl_t def, const cw_KTVStruct_t * stru, con
 		else	
 			sprintf(key,"%s",pkey);
 
-
+printf("Get Key: %s\n",key);
 		result = cw_ktv_get(ktv,key,NULL);
-		
+
+		if(result)
+		{
+			char s[129];
+			result->type->to_str(result,s,128);
+			printf("Content: '%s'\n",s);
+		}	
 
 		if (result == NULL && def != NULL){
 			result = cw_ktv_get(def,key,NULL);

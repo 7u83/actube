@@ -52,10 +52,12 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 	char key[CW_KTV_MAX_KEY_LEN];
 	int len;
 	len = 0;
-	
+
+printf("Next: %s\n", next);
+
 	sl = strchr(next,'/');
 	if (sl==NULL){
-				cw_KTV_t * result;
+		cw_KTV_t * result;
 		sprintf(key,"%s/%s",current,next);
 		result = cw_ktv_base_exists(params->local_cfg,key);
 		if (result != NULL){
@@ -84,6 +86,9 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 	}
 	
 	strcpy(key,current);
+
+printf("current is %s\n", current);	
+
 	if (key[0!=0])
 		strcat(key,"/");
 	l = sl - next;
@@ -98,6 +103,7 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 		cw_KTV_t * result;
 		
 		i = cw_ktv_idx_get_next(params->local_cfg,key,i+1);
+		
 		if (i==-1)
 			break;
 		sprintf(basekey,"%s.%d",key,i);
@@ -127,6 +133,8 @@ int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams
 	stack[0]=0;
 
 	current[0]=0;
+
+
 	
 	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);
 }

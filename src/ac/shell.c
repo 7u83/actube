@@ -32,6 +32,7 @@ void ucfg_cmd(struct shelldata *sd, const char * cmd);
 void set_cmd(struct shelldata *sd, const char * cmd);
 void del_cmd(struct shelldata *sd, const char * cmd);
 void send_cmd(struct shelldata *sd, const char * cmd);
+void wlan0_cmd(struct shelldata *sd, const char * cmd);
 void show_cfg (FILE *out, mavl_t ktv);
 void show_aps (FILE *out);
 
@@ -50,6 +51,7 @@ static struct command cmdlist[]={
 	{"select", select_cmd },
 	{"send", send_cmd},
 	{"set", set_cmd },
+	{"wlan0",wlan0_cmd},
 
 	
 	{NULL,NULL}
@@ -104,6 +106,25 @@ send_cmd(struct shelldata * sd, const char *cmd)
 		conn->update_cfg=sd->update_cfg;
 	}
 	wtplist_unlock();
+}
+
+void 
+wlan0_cmd(struct shelldata * sd, const char *cmd)
+{
+	struct conn * conn;
+	wtplist_lock();
+	conn = find_ap(sd->prompt);
+	if (conn==NULL){
+		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
+	}
+	else {
+		FILE *f=fopen("wlan0.ktv","r");
+		cw_ktv_read_file(f,sd->update_cfg,conn->msgset->types_tree);
+		//conn->update_cfg=sd->update_cfg;
+		fclose(f);
+	}
+	wtplist_unlock();
+
 }
 
 void set_cmd(struct shelldata *sd, const char *str)

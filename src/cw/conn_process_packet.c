@@ -515,6 +515,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
 	if ((sd > 0 && sd < 128) || (sd < 0 && sd < -128) || s1 < 0) {
 		/* seqnum is ok, normal message processing */
 		conn->last_seqnum_received = seqnum;
+
 		return process_elements(conn, rawmsg, rawlen, from);
 	}
 

@@ -851,11 +851,6 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	
 	cw_msgset_add_states(set,statemachine_states);
 	
-	mavl_insert_ptr(set->types_tree,CW_TYPE_BSTR16);
-	mavl_insert_ptr(set->types_tree,CW_TYPE_BYTE);
-	mavl_insert_ptr(set->types_tree,CW_TYPE_DWORD);
-	mavl_insert_ptr(set->types_tree,CW_TYPE_WORD);
-
 	set->write_header = write_header;
 	set->header_len = header_len;
 

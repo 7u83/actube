@@ -22,7 +22,7 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 	for(i=0; e[i].name!=NULL; i++) {
 		sprintf(key,"%s/%s",handler->key,e[i].name);
 
-printf("Her is the Key: %s - %s\n",key, );
+//printf("Her is the Key: %s - %s\n",key, );
 
 		result = cw_ktv_base_exists(params->local_cfg,key);
 		if (result==NULL)
