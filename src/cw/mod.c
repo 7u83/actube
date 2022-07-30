@@ -105,7 +105,7 @@ struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
 	struct cw_MsgSet *set;
 
 	if (!msgset_cache) {
-		msgset_cache = mavl_create(cmp, NULL, 1312);
+		msgset_cache = mavl_create(cmp, NULL, sizeof(struct cache_item*));
 		if (!msgset_cache) {
 			cw_log(LOG_ERR, "Can't initialize msgset cache: %s",
 			       strerror(errno));
@@ -213,7 +213,7 @@ struct cw_Mod *cw_mod_load(const char *mod_name, mavl_t global_cfg, int role)
 
 	/* if modlist is not initialized, initialize ... */
 	if (mods_loaded == NULL) {
-		mods_loaded = mavl_create(mod_cmp_mavl, NULL, 1312);
+		mods_loaded = mavl_create(mod_cmp_mavl, NULL, sizeof(struct cw_Mod*));
 		if (mods_loaded == NULL) {
 			cw_log(LOG_ERROR, "Can't init modlist, no memory");
 			return NULL;
@@ -272,8 +272,10 @@ struct cw_Mod *cw_mod_load(const char *mod_name, mavl_t global_cfg, int role)
 		cw_log(LOG_ERR, "Can' add module %s", mod_name);
 		goto errX;
 	}
+
 	cw_dbg(DBG_MOD, "MOD: %s sucessfull loaded, calling init now.", filename);
 	mod->init(mod, global_cfg, role);
+	
       errX:
 	free(filename);
 	return mod;
