@@ -50,17 +50,6 @@
 int ac_run();
 
 
-static void *alive_thread (void *data)
-{
-	/* Ping the database every 5 seconds */
-	while (1) {
-		sleep (5);
-		db_ping();
-	}
-	return NULL;
-}
-
-
 #include <getopt.h>
 
 
@@ -135,70 +124,6 @@ extern void test_sets();
 #include "cw/file.h"
 #include "cw/ktv.h"
 
-
-struct mykv {
-	int key;
-	int value;
-};
-
-int mycmp (void *e1, void *e2)
-{
-	struct mykv * k1 = e1;
-	struct mykv * k2 = e2;
-	
-/*//printf("My CMP: %d and %d\n", k1->key, k2->key);
-*/
-	if (k1->key > k2->key)
-		return 1;
-		
-	if (k1->key < k2->key)
-		return -1;
-		
-	return 0;
-}
-
-/*
-void mavl_walk (struct mavlnode  * node)
-{
-	struct mykv * kv;
-	
-	if (!node) {
-		printf ("\n");
-		return;
-	}
-	
-	kv = mavlnode_dataptr (node);
-	printf ("KV %d\n", kv->key);
-	
-	printf ("go left:");
-	mavl_walk (node->left);
-	printf ("go right:");
-	mavl_walk (node->right);
-	
-}
-*/
-
-/*
-int stcmp (const void * sa1, const void *sa2)
-{
-	const char **s1 = sa1;
-	const char **s2 = sa2;
-	int rc;
-	rc = strcmp (*s1, *s2);
-	
-	printf ("CMP %s, %s = %d\n", *s1, *s2, rc);
-	return rc;
-}
-*/
-/*
-static int ibcmp(const void *v1, const void *v2)
-{
-	int *i1,*i2;
-	i1=v1;i2=v2;
-	
-	return *i1-*i2;
-}
-*/
 
 #include "discovery_cache.h"
 void tester1()
@@ -285,30 +210,18 @@ int main (int argc, char *argv[])
 
 	fclose(file);
 
-//show_cfg(stdout,global_cfg);
-//exit(0);
-
 	actube_global_cfg = global_cfg;
-
-/*	cw_dbg_opt_level=0xffffffff;*/
-	cw_dbg(DBG_INFO,"Hello world");
 
 
 	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
-	
-/*	int idx;
-	idx = cw_ktv_idx_get(global_cfg,"capwap-control-ip-address/address",0,CW_TYPE_IPADDRESS);
-	printf("IDX: %d\n");
-	
-exit(0);
-*/
+
+
 	cw_log_name = "AC-Tube";
 	
 	if (!read_config ("ac.conf"))
 		return 1;
 		
-start_shell();
-
+	start_shell();
 
 
 	/* Show debug options if there are any set */
@@ -343,12 +256,7 @@ start_shell();
 		
 	db_ping();
 	
-	
-	/* Start a database "pinger thread", which inserts
-	   every xx seconds a timestamp into the DB */
-	pthread_t alth;
-	pthread_create (&alth, NULL, alive_thread, NULL);
-	
+
 	/* Init DTLS library */
 	dtls_init();
 		

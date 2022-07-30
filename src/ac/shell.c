@@ -428,6 +428,9 @@ void * run_shell (void * arg)
 	int yes;
 	
 
+	cw_dbg(DBG_INFO,"Staring shelli listening at: %s",addr);
+
+
 	rc = sock_strtoaddr (addr, (struct sockaddr*) &server);
 	
 	if (! rc) {
