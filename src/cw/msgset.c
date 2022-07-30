@@ -339,10 +339,6 @@ int cw_msgset_add(struct cw_MsgSet *set,
 	{
 		mavliter_t it;
 		cw_dbg(DBG_MOD,"  Known types:");
-
-		printf("TYPES TREE ITER %p\n",set->types_tree);
-
-
 		mavliter_init(&it,set->types_tree);
 		mavliter_foreach(&it){
 			struct cw_Type * t = mavliter_get_ptr(&it);
