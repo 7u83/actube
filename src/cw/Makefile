@@ -230,7 +230,7 @@ DTLSSRC += dtls_openssl.c \
 	dtls_openssl_connect.c \
 	dtls_openssl_get_cipher.c \
 	dtls_openssl_bio.c 
-LIBS+=-lssl
+LIBS=
 
 #DTLSSRC+= dtls_gnutls.c \
 #	dtls_gnutls_accept.c \
@@ -262,6 +262,5 @@ all: $(SNAME) $(DNAME)
 static: $(SNAME)
 dynamic: $(DNAME)
 	
-
 include ../lib.mk
 
