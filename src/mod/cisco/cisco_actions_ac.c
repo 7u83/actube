@@ -513,18 +513,17 @@ static cw_KTVStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BOOL,"wep-encryption",1,42},
 
 	{CW_TYPE_BYTE,"qos",1,324},
+	{CW_TYPE_WORD,"scan-defer-period",1,328},
 	{CW_TYPE_WORD,"scan-defer-time",1,330},
 	{CW_TYPE_BOOL,"broadcast-ssid",1,332},
+	{CW_TYPE_BOOL,"aironet-ie",1,333},
+	{CW_TYPE_BYTE,"hreap-local-switch",1,378},
 	{CW_TYPE_WORD,"session-timout",2,381},
 
 	{CW_TYPE_BYTE, "dtim-period",1,440},
 	{CW_TYPE_STR,"profile-name",30,441},
-	{CW_TYPE_STR, "ssid",-1,480},
+	{CW_TYPE_STR, "ssid",33,474},
 
-/*	{CW_TYPE_BYTE, "dtim-period",1,541},
-	{CW_TYPE_STR, "ssid-a",30,545},
-	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
-	{CW_TYPE_BYTE, "max-stations",1,580},*/
 	
 	{NULL,NULL,0,0}
 };
@@ -558,6 +557,25 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 	wlan_id = cw_get_byte(data+3);
 	sprintf(dst,"radio.%d/wlan.%d/add-wlan",radio_id,wlan_id);
 	return 1;
+}
+
+
+static int cisoc_add_wlan_mkkey70(const char *pkey, uint8_t*data, int len, char *dst)
+{
+        int wlan_id,radio_id;
+
+        radio_id = cw_get_byte(data);
+        wlan_id = cw_get_byte(data+4);
+        sprintf(dst,"radio.%d/wlan.%d/add-wlan",radio_id,wlan_id);
+        return 1;
+}
+
+static int cisco_patch_add_wlan70(uint8_t * data, void * st)
+{
+	int * stack = st;
+	cw_set_byte(data,stack[1]);
+	cw_set_byte(data+3, stack[2]);
+	return 0;
 }
 
 
@@ -1427,10 +1445,11 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		7,1117,					/* min/max length */
 		cisco_add_wlan70,			/* type */
-		"radio/wlan",				/* Key */
+		"radio/wlan/add-wlan",			/* Key */
 		cw_in_generic_struct,			/* get */
-		cw_out_generic_struct,			/* put */
-		cisoc_add_wlan_mkkey
+		cw_out_traverse,			/* put */
+		cisoc_add_wlan_mkkey70,
+		cisco_patch_add_wlan70
 	}
 	,
 	
@@ -1819,7 +1838,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_9,		0, 0},	
 
 
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MCAST_MGID_INFO,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_USERNAME_PASSWORD,	0, 0},
