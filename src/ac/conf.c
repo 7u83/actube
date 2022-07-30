@@ -197,48 +197,6 @@ static int init_vendor_id()
 	return 1;
 }
 
-/*
-static int init_version()
-{
-
-	// Init hardware version 
-	if (!conf_hardware_version) {
-		struct utsname u;
-		int rc = uname(&u);
-		if (rc < 0)
-			conf_hardware_version =
-			    (bstr_t) strdup(CONF_DEFAULT_HARDWARE_VERSION);
-		else {
-			char str[265];
-			sprintf(str, "%s / %s %s", u.machine, u.sysname, u.release);
-			conf_hardware_version = (bstr_t) strdup(str);
-		}
-
-	}
-	bstr_replace(&conf_hardware_version,
-		     bstr_create_from_cfgstr((char *) conf_hardware_version));
-
-	// software version 
-	if (!conf_software_version)
-		conf_software_version = (bstr_t) strdup(CONF_DEFAULT_SOFTWARE_VERSION);
-	bstr_replace(&conf_software_version,
-		     bstr_create_from_cfgstr((char *) conf_software_version));
-
-
-	// Cisco hardware version 
-	if (!conf_cisco_hardware_version)
-		conf_cisco_hardware_version =
-		    (bstr_t) strdup(CONF_DEFAULT_CISCO_HARDWARE_VERSION);
-	bstr_replace(&conf_cisco_hardware_version,
-		     bstr_create_from_cfgstr((char *) conf_cisco_hardware_version));
-
-
-
-
-	return 1;
-}
-*/
-
 static int init_control_port()
 {
 	char str[30];
@@ -281,10 +239,8 @@ static int init_listen_addrs()
 
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4)
 			ctr++;
-#ifdef WITH_IPV6
 		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6)
 			ctr++;
-#endif
 	}
 
 	conf_listen_addrs = malloc(sizeof(char *) * ctr);
@@ -537,14 +493,6 @@ static int conf_read_strings(cfg_t * cfg, char *name, char ***dst, int *len)
 }
 
 
-/*
-struct conf_dbg_level_names{
-	const char *name;
-	int level;
-};
-
-*/
-
 
 static int conf_read_dbg_level(cfg_t * cfg)
 {
@@ -571,6 +519,7 @@ char *conf_mods_dir = NULL;
  * Read the module names from config file
  */ 
 static int conf_read_mods(cfg_t *cfg){
+
 	int n, i;
 	n = cfg_size(cfg,CFG_ENTRY_MODS);
 	
@@ -589,24 +538,6 @@ static int conf_read_mods(cfg_t *cfg){
 	}
 	return 1;
 }
-
-/*
-void conf_init_capwap_mode()
-{
-	if (conf_capwap_mode_str == NULL)
-		return;
-
-	if (0 == strcmp(conf_capwap_mode_str, "cipwap")) {
-		conf_capwap_mode = CW_MODE_CIPWAP;
-	}
-
-	if (0 == strcmp(conf_capwap_mode_str, "capwap")) {
-		conf_capwap_mode = CW_MODE_CAPWAP;
-	}
-
-
-}
-*/
 
 
 int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *proto)
@@ -759,7 +690,7 @@ int read_config(const char *filename)
 	cfg_t *cfg;
 
 	conf_mods_dir=cw_strdup("");
-	
+
 	if (!init_control_port())
 		return 0;
 
@@ -800,7 +731,8 @@ int read_config(const char *filename)
 			perror(str);
 		}
 	}
-	
+
+
 	if (!conf_read_mods(cfg)){
 		cfg_free(cfg);
 		return 0;
