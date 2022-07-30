@@ -114,6 +114,7 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
  */
 struct cw_MsgSet *cw_msgset_create()
 {
+        const cw_Type_t **ti;
 
 	/* allocate memory for a message_set */
 	struct cw_MsgSet *set = malloc(sizeof(struct cw_MsgSet));
@@ -149,13 +150,15 @@ struct cw_MsgSet *cw_msgset_create()
 	}
 	
 	set->types_tree = cw_ktv_create_types_tree();
-	
-	printf("TYPES TREE %p\n",set->types_tree);
-
 	if (set->types_tree == NULL){
 		cw_msgset_destroy(set);
 		return NULL;
 	}
+	/* insert default types */
+	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
+                mavl_insert_ptr(set->types_tree,*ti);
+        }
+
 	
 	set->state_machine = mavl_create(cmp_machinestate,NULL,sizeof(cw_StateMachineState_t));
 	if (set->state_machine == NULL)
