@@ -17,7 +17,7 @@
 */
 
 #include "cw.h"
-#include "ktv.h"
+#include "val.h"
 #include "dbg.h"
 #include "keys.h"
 

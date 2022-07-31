@@ -5,7 +5,7 @@
 #include "sock.h"
 #include "mavl.h"
 
-#include "ktv.h"
+#include "val.h"
 
 
 struct cw_ElemDef{
@@ -29,7 +29,7 @@ struct cw_ElemHandlerParams {
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
-	cw_KTV_t * elem;
+	cw_Val_t * elem;
 	char * debug_details;
 	mavl_t remote_cfg;
 	mavl_t local_cfg;

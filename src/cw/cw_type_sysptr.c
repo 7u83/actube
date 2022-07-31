@@ -20,33 +20,33 @@
 
 #include "format.h"
 #include "cw.h"
-#include "ktv.h"
+#include "val.h"
 
 
-static void del ( struct cw_KTV * data )
+static void del ( struct cw_Val * data )
 {
 	return;
 }
 
-static struct cw_KTV *get ( struct cw_KTV * data, const uint8_t * src, int len )
+static struct cw_Val *get ( struct cw_Val * data, const uint8_t * src, int len )
 {
 	data->type = &cw_type_sysptr;
 	data->val.ptr = ((void**)(src))[0];
 	return data;
 }
 
-static int put ( const struct cw_KTV *data, uint8_t * dst )
+static int put ( const struct cw_Val *data, uint8_t * dst )
 {
 	((void**)dst)[0] = data->val.ptr ;
 	return sizeof(void*);
 }
 
-static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
+static int to_str ( const struct cw_Val *data, char *dst, int max_len )
 {
 	return sprintf(dst,"%p",data->val.ptr);
 }
 
-static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
+static struct cw_Val *from_str ( struct cw_Val * data, const char *src )
 {
 	uint8_t * s;
 	s = bstr16_create_from_str(src);
@@ -60,11 +60,11 @@ static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 	
 }
 
-static int len ( struct cw_KTV * data ){
+static int len ( struct cw_Val * data ){
 	return sizeof(void*);
 }
 
-static const char * get_type_name(cw_KTV_t *data)
+static const char * get_type_name(cw_Val_t *data)
 {
 	return CW_TYPE_SYSPTR->name;
 }

@@ -7,7 +7,7 @@ int cw_out_generic_with_index(struct cw_ElemHandler * eh,
 {
 	char key[CW_KTV_MAX_KEY_LEN];
 	int idx;
-	cw_KTV_t * result, search;
+	cw_Val_t * result, search;
 	int len,start;
 	uint8_t * ob;
 

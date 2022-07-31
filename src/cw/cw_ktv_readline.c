@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-#include "ktv.h"
+#include "val.h"
 
 struct parser {
 	int line;

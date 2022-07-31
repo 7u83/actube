@@ -1,6 +1,6 @@
 #include "capwap.h"
 #include "msgset.h"
-#include "ktv.h"
+#include "val.h"
 #include "log.h"
 #include "cw.h"
 
@@ -9,7 +9,7 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 {
 	int start;
 	int len;
-	cw_KTV_t search, *result;
+	cw_Val_t search, *result;
 
 	if (!handler->type){
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);

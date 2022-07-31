@@ -1,10 +1,10 @@
 
 
-#include "ktv.h"
+#include "val.h"
 
 void cw_ktv_del_sub(mavl_t ktvstore, const char *basekey)
 {
-	cw_KTV_t * result, search;
+	cw_Val_t * result, search;
 
 	
 	while (1){

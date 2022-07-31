@@ -6,7 +6,7 @@
 int cisco_out_capwap_local_ip_address(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	cw_KTV_t * ip;
+	cw_Val_t * ip;
 	ip = cw_ktv_get(params->local_cfg,eh->key,CW_TYPE_IPADDRESS);
 	if (ip==NULL){
 		return 0;

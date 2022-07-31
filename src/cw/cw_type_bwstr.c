@@ -20,7 +20,7 @@
 
 #include "format.h"
 #include "cw.h"
-#include "ktv.h"
+#include "val.h"
 
 
 /*typedef uint16_t* bwstr_type;*/
@@ -38,12 +38,12 @@ static uint16_t * bwstr_create(const uint8_t *data, uint16_t len)
 
 
 
-static void del ( struct cw_KTV * data )
+static void del ( struct cw_Val * data )
 {
 	free ( data->val.ptr );
 }
 
-static struct cw_KTV *get ( struct cw_KTV * data, const uint8_t * src, int len )
+static struct cw_Val *get ( struct cw_Val * data, const uint8_t * src, int len )
 {
 	uint16_t * s;
 	s = bwstr_create ( src, len );
@@ -56,7 +56,7 @@ static struct cw_KTV *get ( struct cw_KTV * data, const uint8_t * src, int len )
 	return data;
 }
 
-static int put ( const struct cw_KTV *data, uint8_t * dst )
+static int put ( const struct cw_Val *data, uint8_t * dst )
 {
 	uint16_t len;
 	len = bstr16_len(data->val.ptr);
@@ -64,7 +64,7 @@ static int put ( const struct cw_KTV *data, uint8_t * dst )
 	return lw_put_data ( dst, data->val.ptr+2,len*2 );
 }
 
-static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
+static int to_str ( const struct cw_Val *data, char *dst, int max_len )
 {
 	char *d;
 	uint16_t *s;
@@ -82,7 +82,7 @@ static int to_str ( const struct cw_KTV *data, char *dst, int max_len )
 	return d - dst;
 }
 
-static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
+static struct cw_Val *from_str ( struct cw_Val * data, const char *src )
 {
 	uint8_t * s;
 	s = bstr16_create_from_str(src);
@@ -96,21 +96,21 @@ static struct cw_KTV *from_str ( struct cw_KTV * data, const char *src )
 	
 }
 
-static int len (cw_KTV_t * data ){
+static int len (cw_Val_t * data ){
 	return bstr16_len(data->val.ptr);
 }
 
-static void * data(cw_KTV_t * data)
+static void * data(cw_Val_t * data)
 {
 	return bstr16_data(data->val.ptr);
 }
 
-static const char * get_type_name(cw_KTV_t *data)
+static const char * get_type_name(cw_Val_t *data)
 {
 	return CW_TYPE_BSTR16->name;
 }
 
-static int cast(cw_KTV_t * data)
+static int cast(cw_Val_t * data)
 {
 	if (strcmp(data->type->name,CW_TYPE_BSTR16->name)==0)
 		return 1;

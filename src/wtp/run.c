@@ -122,7 +122,7 @@ static void do_update(struct conn * conn)
 void clean_cfg(mavl_t cfg)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
-	cw_KTV_t search;
+	cw_Val_t search;
 	int i;
 	int max;
 	max = cw_ktv_idx_get(cfg,"radio");

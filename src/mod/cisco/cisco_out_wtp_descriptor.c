@@ -1,6 +1,6 @@
 #include "cw/log.h"
 #include "cw/cw.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/keys.h"
 #include "cw/dbg.h"
 
@@ -11,7 +11,7 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	int len;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 
-	cw_KTV_t * val;
+	cw_Val_t * val;
 	
 	d = dst+4;
 

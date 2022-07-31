@@ -12,7 +12,7 @@
  */
 int cw_detect_nat(struct conn *conn)
 {
-	cw_KTV_t * result;
+	cw_Val_t * result;
 	
 	char local_str[128];
 	char remote_str[128];

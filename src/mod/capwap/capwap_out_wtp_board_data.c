@@ -1,7 +1,7 @@
 
 #include "cw/conn.h"
 #include "cw/log.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/msgset.h"
 #include "cw/keys.h"
 #include "cw/cw.h"
@@ -11,7 +11,7 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 			const char *skey, int type){
 			
 	char key[256];
-	cw_KTV_t * val;
+	cw_Val_t * val;
 	uint8_t *d;
 	
 	d=dst;
@@ -40,7 +40,7 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 int capwap_out_wtp_board_data(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	cw_KTV_t * val;
+	cw_Val_t * val;
 	mavl_t cfg;
 	uint8_t * d;
 	char key[256];

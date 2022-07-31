@@ -1,6 +1,6 @@
 
 #include "capwap.h"
-#include "ktv.h"
+#include "val.h"
 #include "msgset.h"
 #include "log.h"
 #include "cw.h"
@@ -10,7 +10,7 @@ int cw_in_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPa
 		uint8_t * elem_data, int elem_len)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
-	cw_KTV_t * result;
+	cw_Val_t * result;
 	int radio;
 
 	if (!handler->type){

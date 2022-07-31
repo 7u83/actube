@@ -19,7 +19,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 	i=-1;
 	while(1){
 		char basekey[CW_KTV_MAX_KEY_LEN];
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		
 		i = cw_ktv_idx_get_next(params->local_cfg,"radio",i+1);
 		if (i==-1)
@@ -57,7 +57,7 @@ printf("Next: %s\n", next);
 
 	sl = strchr(next,'/');
 	if (sl==NULL){
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		sprintf(key,"%s/%s",current,next);
 		result = cw_ktv_base_exists(params->local_cfg,key);
 		if (result != NULL){
@@ -100,7 +100,7 @@ printf("current is %s\n", current);
 	i=-1;
 	while(1){
 		char basekey[CW_KTV_MAX_KEY_LEN];
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		
 		i = cw_ktv_idx_get_next(params->local_cfg,key,i+1);
 		

@@ -130,7 +130,7 @@ wlan0_cmd(struct shelldata * sd, const char *cmd)
 void set_cmd(struct shelldata *sd, const char *str)
 {
 	struct conn * conn;
-	struct cw_KTV_Reader r;
+	struct cw_Val_Reader r;
 	char key[CW_KTV_MAX_KEY_LEN];
 	char type[CW_KTV_MAX_KEY_LEN];
 	char val[2048];
@@ -155,7 +155,7 @@ void del_cmd(struct shelldata *sd, const char *str)
 void show_cfg (FILE *out, mavl_t ktv)
 {
 	char value[500];
-	struct cw_KTV * data;
+	struct cw_Val * data;
 	mavliter_t it;
 	const struct cw_Type * type;
 	
@@ -186,7 +186,7 @@ void show_aps (FILE *out)
 	mavliter_init (&it, cl->by_addr);
 	fprintf (out, "IP\t\t\twtp-name\n");
 	mavliter_foreach (&it) {
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
 		struct conn * conn;
@@ -222,7 +222,7 @@ struct conn * find_ap(const char *name)
 	
 	mavliter_init (&it, cl->by_addr);
 	mavliter_foreach (&it) {
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
 		struct conn * conn;
 		conn = mavliter_get_ptr (&it);
@@ -263,7 +263,7 @@ void con (FILE *out)
 	mavliter_init (&it, cl->by_addr);
 	fprintf (out, "IP\t\t\twtp-name\n");
 	mavliter_foreach (&it) {
-		cw_KTV_t * result;
+		cw_Val_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
 		struct conn * conn;
@@ -318,7 +318,7 @@ void execute_cmd (struct shelldata * sd, const char *str)
 	char cmd[1024];
 	char args[1024];
 	int n;
-	struct cw_KTV_Reader reader;
+	struct cw_Val_Reader reader;
 	struct command * searchcmd;
 
 	args[0]=0;

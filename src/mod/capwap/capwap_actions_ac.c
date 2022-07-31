@@ -18,7 +18,7 @@
 
 
 #include "cw/cw.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/log.h"
 #include "cw/dbg.h"
 
@@ -32,7 +32,7 @@
 static int postprocess_join_request(struct conn *conn);
 
 
-static cw_KTVStruct_t wtp_reboot_statistics[] = {
+static cw_ValStruct_t wtp_reboot_statistics[] = {
 	{CW_TYPE_WORD, "reboot-count", 2,-1},
 	{CW_TYPE_WORD, "ac-initiated-count", 2,-1},
 	{CW_TYPE_WORD, "link-failure-count", 2,-1},
@@ -44,27 +44,27 @@ static cw_KTVStruct_t wtp_reboot_statistics[] = {
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t capwap_timers[] = {
+static cw_ValStruct_t capwap_timers[] = {
 	{CW_TYPE_BYTE, "max-discovery-interval", 1,-1},
 	{CW_TYPE_BYTE, "echo-interval", 1,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t radio_operational_state[] = {
+static cw_ValStruct_t radio_operational_state[] = {
 	{CW_TYPE_BYTE, "state", 1,-1},
 	{CW_TYPE_BYTE, "cause", 1,-1},
 	{NULL,NULL,0,0}
 };
 
 
-static cw_KTVValRange_t radio_admin_state_valguard[]={
+static cw_ValValRange_t radio_admin_state_valguard[]={
 	{0,0,"reserved"},
 	{1,1,"enabled"},
 	{2,2,"disabled"},
 	{0,0,NULL}
 };
 
-static cw_KTVStruct_t radio_admin_state[] = {
+static cw_ValStruct_t radio_admin_state[] = {
 	{CW_TYPE_BYTE, NULL, 1,-1, radio_admin_state_valguard},
 	{NULL,NULL,0,0}
 };
@@ -748,7 +748,7 @@ static struct cw_MsgDef messages[] = {
 
 static int postprocess_join_request(struct conn *conn)
 {
-	cw_KTV_t * result;
+	cw_Val_t * result;
 	
 	result = cw_ktv_get(conn->remote_cfg,"session-id",CW_TYPE_BSTR16);
 	if (result != NULL){

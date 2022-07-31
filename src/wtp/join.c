@@ -206,7 +206,7 @@ int join(struct conn * conn, struct cw_DiscoveryResult * dis)
 
 	mavliter_foreach(&ii){
 		int rc;
-		cw_KTV_t * val,*ac;
+		cw_Val_t * val,*ac;
 		mavl_t rcfg;
 		char * rk;
 		char ipstr[100];

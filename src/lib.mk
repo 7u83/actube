@@ -31,7 +31,7 @@ $(MF): Makefile $(MFDEPS)
 	@echo "" >> $(MF)
 	@echo "$(DNAME) : \$$(OBJS)" >> $(MF)
 	@echo "	@echo Creating dynamic library: $(DNAME)" >> $(MF) 
-	@echo "	$(V)\$$(LD) \$$(LDFLAGS) -shared -o $(DNAME) \$$(OBJS) $(LIBS)" >> $(MF)
+	@echo "	$(V)\$$(LD) \$$(LDFLAGS) -shared -o $(DNAME) \$$(OBJS)" >> $(MF)
 	@echo "" >> $(MF)
 #	@echo "	\$$(CC) -o $(PROGTARGET) \$$(LDFLAGS) \$$(OBJS) $(LIBS)" >> $(MF) 			
 	@for f in $(SOURCES) ; do \

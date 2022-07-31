@@ -1,7 +1,7 @@
 
 #include "cw.h"
 #include "dbg.h"
-#include "ktv.h"
+#include "val.h"
 
 static struct cw_DescriptorSubelemDef allowed_default[] = {
 	{0,CAPWAP_SUBELEM_AC_HARDWARE_VERSION, "hardware", 1024,1},
@@ -9,7 +9,7 @@ static struct cw_DescriptorSubelemDef allowed_default[] = {
 	{0,0, NULL,0, 0}
 };
 
-cw_KTVStruct_t acstatus [] = {
+cw_ValStruct_t acstatus [] = {
 	/* type	        key	   	len,	pos */ 
 	{CW_TYPE_WORD, "stations", 	2,	-1},
 	{CW_TYPE_WORD, "station-limit", 2,	-1},

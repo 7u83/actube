@@ -18,39 +18,39 @@
 
 #include <stdio.h>
 
-#include "ktv.h"
+#include "val.h"
 #include "cw.h"
 
 
-static struct cw_KTV *get(struct cw_KTV * data, const uint8_t * src, int len)
+static struct cw_Val *get(struct cw_Val * data, const uint8_t * src, int len)
 {
 	data->type = &cw_type_word;
 	data->val.word = cw_get_word(src);
 	return data;
 }
 
-static int put(const cw_KTV_t *data, uint8_t * dst)
+static int put(const cw_Val_t *data, uint8_t * dst)
 {
 	return cw_put_word(dst, data->val.word);
 }
 
-static int to_str(const cw_KTV_t *data, char *dst, int max_len)
+static int to_str(const cw_Val_t *data, char *dst, int max_len)
 {
 	return sprintf(dst, "%d", data->val.word);
 }
 
-static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
+static cw_Val_t *from_str(cw_Val_t * data, const char *src)
 {
 	data->type = &cw_type_word;	
 	data->val.word = atoi(src);
 	return data;
 }
 
-static const char * get_type_name(cw_KTV_t *data)
+static const char * get_type_name(cw_Val_t *data)
 {
 	return CW_TYPE_WORD->name;
 }
-static int cast(cw_KTV_t * data)
+static int cast(cw_Val_t * data)
 {
 	if (strcmp(data->type->name,CW_TYPE_WORD->name)==0)
 		return 1;

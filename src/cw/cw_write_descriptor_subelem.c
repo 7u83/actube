@@ -1,4 +1,4 @@
-#include "ktv.h"
+#include "val.h"
 #include "keys.h"
 #include "log.h"
 #include "cw.h"
@@ -8,7 +8,7 @@ int cw_write_descriptor_subelem (uint8_t *dst, mavl_t ktvstore,
                                  int subelem_id, const char * parent_key )
 {
 	char key[256];
-	cw_KTV_t * vendor, *version ;
+	cw_Val_t * vendor, *version ;
 	uint8_t *d;
 
 

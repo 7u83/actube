@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#include "ktv.h"
+#include "val.h"
 
 
-static int str_getc(struct cw_KTV_Reader * r)
+static int str_getc(struct cw_Val_Reader * r)
 {
 	if (r->next==r->maxlen)
 		return EOF;
@@ -11,15 +11,15 @@ static int str_getc(struct cw_KTV_Reader * r)
 	return *((uint8_t*)(r->data)+r->next++);
 }
 
-static void str_ungetc(struct cw_KTV_Reader * r, int c)
+static void str_ungetc(struct cw_Val_Reader * r, int c)
 {
 	if (r->next>0)
 		r->next--;
 }
 
-void cw_ktv_init_str_reader(struct cw_KTV_Reader *r, const char * str, int len)
+void cw_ktv_init_str_reader(struct cw_Val_Reader *r, const char * str, int len)
 {
-	memset(r,0,sizeof(struct cw_KTV_Reader));
+	memset(r,0,sizeof(struct cw_Val_Reader));
 	r->data = str;
 	r->xgetchar=str_getc;
 	r->ungetchar=str_ungetc;
@@ -28,7 +28,7 @@ void cw_ktv_init_str_reader(struct cw_KTV_Reader *r, const char * str, int len)
 
 #include <ctype.h>
 
-#include "ktv.h"
+#include "val.h"
 /*
 struct parser {
 	int line;
@@ -44,7 +44,7 @@ struct parser {
 
 
 
-static int get_char(struct cw_KTV_Reader *r)
+static int get_char(struct cw_Val_Reader *r)
 {
 	int c;
 	c = r->xgetchar (r);
@@ -58,7 +58,7 @@ static int get_char(struct cw_KTV_Reader *r)
 }
 
 
-static void unget_char(struct cw_KTV_Reader * r,int c){
+static void unget_char(struct cw_Val_Reader * r,int c){
 	r->ungetchar(r,c);
 	if (c=='\n'){
 		r->line--;
@@ -70,7 +70,7 @@ static void unget_char(struct cw_KTV_Reader * r,int c){
 
 
 
-static int get_char_q(struct cw_KTV_Reader *p)
+static int get_char_q(struct cw_Val_Reader *p)
 {
 	int c;
 
@@ -128,7 +128,7 @@ static int get_char_q(struct cw_KTV_Reader *p)
 
 
 
-static int skip_chars (struct cw_KTV_Reader *r, const char * chars)
+static int skip_chars (struct cw_Val_Reader *r, const char * chars)
 {
 	int c;
 	
@@ -140,7 +140,7 @@ static int skip_chars (struct cw_KTV_Reader *r, const char * chars)
 	return c;
 }
 
-static int skip_to_chars (struct cw_KTV_Reader *r, const char *chars)
+static int skip_to_chars (struct cw_Val_Reader *r, const char *chars)
 {
 	int c;
 	
@@ -153,7 +153,7 @@ static int skip_to_chars (struct cw_KTV_Reader *r, const char *chars)
 
 
 
-static int read_key (struct cw_KTV_Reader *r, char *key, int max_len)
+static int read_key (struct cw_Val_Reader *r, char *key, int max_len)
 {
 	int c,n;
 
@@ -186,7 +186,7 @@ static int read_key (struct cw_KTV_Reader *r, char *key, int max_len)
 }
 
 
-static int skip_to_colon(struct cw_KTV_Reader * r)
+static int skip_to_colon(struct cw_Val_Reader * r)
 {
 	int c;
 	c = skip_chars (r, " \t");
@@ -203,7 +203,7 @@ static int skip_to_colon(struct cw_KTV_Reader * r)
 }
 
 
-static int read_type(struct cw_KTV_Reader * r, char *type, int max_len)
+static int read_type(struct cw_Val_Reader * r, char *type, int max_len)
 {
 	int c,n;
 	
@@ -251,7 +251,7 @@ static int read_type(struct cw_KTV_Reader * r, char *type, int max_len)
 }
 
 
-static int read_val(struct cw_KTV_Reader *r, char *val, int max_len){
+static int read_val(struct cw_Val_Reader *r, char *val, int max_len){
 	int c,n,quote;
 	c = skip_to_colon(r);
 	if (c==-1)
@@ -337,12 +337,12 @@ int cw_ktv_parse_line (FILE *f, char * key, char * type, char *val)
  */
 
 
-int cw_ktv_parse_line(struct cw_KTV_Reader * r)
+int cw_ktv_parse_line(struct cw_Val_Reader * r)
 {
 	
 }
 
-int cw_ktv_parse_string(struct cw_KTV_Reader *r, char *key, char *type, char *val)
+int cw_ktv_parse_string(struct cw_Val_Reader *r, char *key, char *type, char *val)
 {
 
 	int n;

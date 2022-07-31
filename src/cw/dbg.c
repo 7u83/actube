@@ -509,7 +509,7 @@ void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel,
 		const char *header, const char *prefix, const char *footer )
 {
 	char value[500];
-	struct cw_KTV * data;
+	struct cw_Val * data;
 	mavliter_t it;
 	const struct cw_Type * type;
 	

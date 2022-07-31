@@ -7,7 +7,7 @@
 #include "cw/capwap.h"
 #include "cw/conn.h"
 #include "cw/sock.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/timer.h"
@@ -40,7 +40,7 @@ int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
 		char acname[CAPWAP_MAX_AC_NAME_LEN + 1];
 		char key[CW_KTV_MAX_KEY_LEN];
 		mavl_t remote_cfg;
-		cw_KTV_t *val, *ipval;
+		cw_Val_t *val, *ipval;
 		int prio, i;
 
 		remote_cfg = mlistelem_get_ptr(e);

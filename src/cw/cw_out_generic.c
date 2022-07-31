@@ -5,14 +5,14 @@
 #include "dbg.h"
 #include "log.h"
 #include "msgset.h"
-#include "ktv.h"
+#include "val.h"
 
 
 int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
 
-	struct cw_KTV * elem;
+	struct cw_Val * elem;
 	int start, len, l;
 
 	/* Get the element */

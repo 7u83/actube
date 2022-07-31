@@ -1,5 +1,5 @@
 
-#include "ktv.h"
+#include "val.h"
 #include "mavl.h"
 
 /**
@@ -7,12 +7,12 @@
  * @param ktv ktv store
  * @param key key to search for
  * @param type type to match
- * @return A pointer to a #cw_KTV_t element, found in the ktv store or
+ * @return A pointer to a #cw_Val_t element, found in the ktv store or
  * NULL if no element with matching key/type is found.
  */
-cw_KTV_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type)
+cw_Val_t * cw_ktv_get(mavl_t ktv, const char *key, const cw_Type_t * type)
 {
-	cw_KTV_t search, *result;
+	cw_Val_t search, *result;
 	/* we can safely cast from const char * to char *, because
 	 * we never will use the search varaiable to store ktv values */
 	search.key=(char*)key;

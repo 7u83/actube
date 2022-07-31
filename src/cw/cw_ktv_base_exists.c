@@ -1,4 +1,4 @@
-#include "ktv.h"
+#include "val.h"
 /**
  * @file 
  * @description Implementation of cw_ktv_base_exisits
@@ -14,9 +14,9 @@
  * otherwise NULL if no element was found. 
  * 
  */
-cw_KTV_t * cw_ktv_base_exists(mavl_t ktvstore, const char *basekey)
+cw_Val_t * cw_ktv_base_exists(mavl_t ktvstore, const char *basekey)
 {
-	cw_KTV_t * result, search;
+	cw_Val_t * result, search;
 	search.key=(char*)basekey;
 	result = mavl_get_first(ktvstore,&search);
 	if (result == NULL)

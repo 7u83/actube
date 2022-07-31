@@ -1,8 +1,8 @@
-#include "ktv.h"
+#include "val.h"
 
 uint16_t cw_ktv_get_word(mavl_t ktv,const char *key, uint16_t def)
 {
-	cw_KTV_t * k;
+	cw_Val_t * k;
 	k = cw_ktv_get(ktv,key,CW_TYPE_WORD);
 	if (k != NULL){
 		return k->val.word;

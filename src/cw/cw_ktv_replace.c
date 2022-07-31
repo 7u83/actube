@@ -1,14 +1,14 @@
-#include "ktv.h"
+#include "val.h"
 #include "cw.h"
 
 #include "log.h"
 #include "dbg.h"
 
-cw_KTV_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
+cw_Val_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
 			const void * valguard,
 			const uint8_t * data, int len)
 {
-	cw_KTV_t mdata, *mresult;
+	cw_Val_t mdata, *mresult;
 	int exists;
 
 	mdata.key=cw_strdup(key);

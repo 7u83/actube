@@ -53,7 +53,7 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 	char key[CW_KTV_MAX_KEY_LEN];
 	int i;
 	int wtps;
-	cw_KTV_t * address;
+	cw_Val_t * address;
 	uint8_t *d;
 
 	d = dst;

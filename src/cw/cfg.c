@@ -5,6 +5,7 @@
 
 #include "cw.h"
 #include "cfg.h"
+#include "val.h"
 
 static int cmp(const void *k1,const void*k2){
 	struct cw_Cfg_entry * e1,*e2;
@@ -60,6 +61,13 @@ char * cw_cfg_get(cw_Cfg_t * cfg, char *key)
 		return NULL;
 	return r->val;
 }
+
+
+uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key)
+{
+
+}
+
 
 void cw_cfg_dump(cw_Cfg_t *cfg)
 {

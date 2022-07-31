@@ -5,11 +5,11 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 {
 	char key[CW_KTV_MAX_KEY_LEN];
 	int i;
-	cw_KTV_t * result;
+	cw_Val_t * result;
 	int len,start;
 	uint8_t * ob;
-	const cw_KTVIndexed_t *ie;
-	cw_KTVEnum_t * e;
+	const cw_ValIndexed_t *ie;
+	cw_ValEnum_t * e;
 	
 	ie = handler->type;
 

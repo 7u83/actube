@@ -1,13 +1,13 @@
 
 #include "capwap.h"
 #include "msgset.h"
-#include "ktv.h"
+#include "val.h"
 #include "log.h"
 
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len)
 {
-	cw_KTV_t * result;
+	cw_Val_t * result;
 
 	if (!handler->type){
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);

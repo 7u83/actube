@@ -6,7 +6,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 			, uint8_t * dst)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
-	struct cw_KTV * elem, search;
+	struct cw_Val * elem, search;
 	int i;
 	int idx, sr;
 	int len;

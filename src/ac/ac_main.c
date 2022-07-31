@@ -123,7 +123,7 @@ extern struct cw_Mod * cw_get_mod_ac (const char *name);
 
 extern void test_sets();
 #include "cw/file.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 
 
 #include "discovery_cache.h"
@@ -154,7 +154,7 @@ void tester1()
 static void show_cfg (FILE *out, mavl_t ktv)
 {
 	char value[500];
-	struct cw_KTV * data;
+	struct cw_Val * data;
 	mavliter_t it;
 	const struct cw_Type * type;
 	
@@ -173,21 +173,7 @@ static void show_cfg (FILE *out, mavl_t ktv)
 	
 }
 
-/*
-	{
-		cw_Cfg_t * cfg;
-		cfg=cw_cfg_create();
 
-		cw_cfg_load("tube.akv",cfg);
-
-//		cw_cfg_set(cfg,"cisco/tube","99");
-//		cw_cfg_set(cfg,"Hello","30");
-	
-		cw_cfg_dump(cfg);
-		mavl_destroy(cfg);
-	}
-*/
-	
 
 int main (int argc, char *argv[])
 {
@@ -197,7 +183,32 @@ int main (int argc, char *argv[])
 	mavl_t types_tree, global_cfg;
 	const cw_Type_t **ti;
 
+/*
+	{
+		cw_Cfg_t * cfg;
+		cfg=cw_cfg_create();
+		char *val;
 
+		cw_cfg_load("tube.akv",cfg);
+
+//		cw_cfg_set(cfg,"cisco/tube","99");
+//		cw_cfg_set(cfg,"Hello","30");
+	
+		cw_cfg_dump(cfg);
+
+		val = cw_cfg_get(cfg,"birth");
+		if (val){
+			printf("Birts: %s\n",val);
+		}
+
+		mavl_destroy(cfg);
+	}
+	cw_Val_t x;
+	CW_TYPE_STR->from_str(&x,"hallo");
+	x.type->del(&x);	
+
+return 0;	
+*/
 
 
 	/* parse arguments */

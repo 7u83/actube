@@ -19,21 +19,21 @@
 #include <stdio.h>
 
 #include "cw.h"
-#include "ktv.h"
+#include "val.h"
 
-static cw_KTV_t *get(cw_KTV_t * data, const uint8_t * src, int len)
+static cw_Val_t *get(cw_Val_t * data, const uint8_t * src, int len)
 {
 	data->type = &cw_type_bool;
 	data->val.boolean = cw_get_byte(src);
 	return data;
 }
 
-static int put(const cw_KTV_t *data, uint8_t * dst)
+static int put(const cw_Val_t *data, uint8_t * dst)
 {
 	return cw_put_byte(dst, data->val.boolean);
 }
 
-static int to_str(const cw_KTV_t *data, char *dst, int max_len)
+static int to_str(const cw_Val_t *data, char *dst, int max_len)
 {
 	/*if (max_len<3){
 		return 0;
@@ -44,7 +44,7 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 		return sprintf(dst, "%s", "false");
 }
 
-static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
+static cw_Val_t *from_str(cw_Val_t * data, const char *src)
 {
 	data->type = &cw_type_bool;
 	if (cw_stricmp(src,"true") == 0){
@@ -69,17 +69,17 @@ static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 	return data;
 }
 
-static int len (cw_KTV_t * data)
+static int len (cw_Val_t * data)
 {
 	return sizeof(int);
 }
 
-static void * data( cw_KTV_t * data)
+static void * data( cw_Val_t * data)
 {
 	return & data->val.boolean;
 }
 
-static const char * get_type_name(cw_KTV_t *data)
+static const char * get_type_name(cw_Val_t *data)
 {
 	return CW_TYPE_BOOL->name;
 }

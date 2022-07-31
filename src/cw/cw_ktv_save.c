@@ -1,5 +1,5 @@
 
-#include "ktv.h"
+#include "val.h"
 
 
 static int write_str(FILE *outfile,const char *str)
@@ -43,7 +43,7 @@ int cw_ktv_save(mavl_t ktvstore, const char * filename){
 	
 	mavliter_init(&it,ktvstore);
 	mavliter_foreach(&it){
-		cw_KTV_t * val;
+		cw_Val_t * val;
 		char buf[4000];
 		val = mavliter_get(&it);
 		val->type->to_str(val,buf,4000);

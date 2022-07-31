@@ -5,7 +5,7 @@
 static int get_psk(struct conn * conn,const char * username, uint8_t **psk, unsigned int *len)
 {
 	char key[CW_KTV_MAX_KEY_LEN];
-	cw_KTV_t * result;
+	cw_Val_t * result;
 	sprintf(key,"%s/%s","psk",username);
 	result = cw_ktv_get(conn->local_cfg,key,CW_TYPE_BSTR16);
 	if (result == NULL){

@@ -19,21 +19,21 @@
 #include <stdio.h>
 
 #include "cw.h"
-#include "ktv.h"
+#include "val.h"
 
-static cw_KTV_t *get(cw_KTV_t * data, const uint8_t * src, int len)
+static cw_Val_t *get(cw_Val_t * data, const uint8_t * src, int len)
 {
 	data->type = &cw_type_byte;
 	data->val.byte = cw_get_byte(src);
 	return data;
 }
 
-static int put(const cw_KTV_t *data, uint8_t * dst)
+static int put(const cw_Val_t *data, uint8_t * dst)
 {
 	return cw_put_byte(dst, data->val.byte);
 }
 
-static const char * get_guardstr(int val, const cw_KTVValRange_t * valrange)
+static const char * get_guardstr(int val, const cw_ValValRange_t * valrange)
 {
 	while(valrange->name!=NULL){
 		if(val>=valrange->min && val<=valrange->max)
@@ -44,7 +44,7 @@ static const char * get_guardstr(int val, const cw_KTVValRange_t * valrange)
 }
 
 
-static int to_str(const cw_KTV_t *data, char *dst, int max_len)
+static int to_str(const cw_Val_t *data, char *dst, int max_len)
 {
 	if (data->valguard!=NULL){
 		const char * name;
@@ -61,7 +61,7 @@ static int to_str(const cw_KTV_t *data, char *dst, int max_len)
 
 }
 
-static int get_guardval(const char *str, const cw_KTVValRange_t * valrange)
+static int get_guardval(const char *str, const cw_ValValRange_t * valrange)
 {
 	while(valrange->name!=NULL){
 		if(strcmp(str,valrange->name)==0)
@@ -72,7 +72,7 @@ static int get_guardval(const char *str, const cw_KTVValRange_t * valrange)
 }
 
 
-static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
+static cw_Val_t *from_str(cw_Val_t * data, const char *src)
 {
 	data->type = &cw_type_byte;
 	if (data->valguard != NULL){
@@ -90,17 +90,17 @@ static cw_KTV_t *from_str(cw_KTV_t * data, const char *src)
 	return data;
 }
 
-static int len (cw_KTV_t * data)
+static int len (cw_Val_t * data)
 {
 	return sizeof(data->val.byte);
 }
 
-static void * data(cw_KTV_t * data)
+static void * data(cw_Val_t * data)
 {
 	return &data->val.byte;
 }
 
-static const char * get_type_name(cw_KTV_t *data)
+static const char * get_type_name(cw_Val_t *data)
 {
 	if (data->valguard != NULL){
 		return CW_TYPE_STR->name;
@@ -108,7 +108,7 @@ static const char * get_type_name(cw_KTV_t *data)
 	return CW_TYPE_BYTE->name;
 }
 
-static int cast(cw_KTV_t * data)
+static int cast(cw_Val_t * data)
 {
 	if (strcmp(data->type->name,CW_TYPE_BYTE->name)==0)
 		return 1;

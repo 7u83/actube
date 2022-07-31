@@ -1,4 +1,4 @@
-#include "ktv.h"
+#include "val.h"
 #include "cw.h"
 
 #include "log.h"
@@ -9,7 +9,7 @@ const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key,
 			const void * valguard,
 			const char * str)
 {
-	cw_KTV_t mdata, *mresult;
+	cw_Val_t mdata, *mresult;
 	int exists;
 
 /*	cw_dbg(DBG_ELEM,"KVStore (%p,%d) add elem (%s): %s", kvstore, kvstore->count,

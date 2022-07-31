@@ -20,7 +20,7 @@
 #include "cw/capwap.h"
 #include "cw/capwap80211.h"
 #include "cw/msgset.h"
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/keys.h"
 #include "cw/proto.h"
 #include "lwapp_cisco.h"
@@ -35,32 +35,32 @@ static int preprocess_join_request();
 static int postprocess_join_request();
 
 
-static cw_KTVStruct_t ap_time_sync[] = {
+static cw_ValStruct_t ap_time_sync[] = {
 	{CW_TYPE_DWORD, "timestamp", 4,-1},
 	{CW_TYPE_BYTE, "type", 1,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t mwar_addr[] = {
+static cw_ValStruct_t mwar_addr[] = {
 	{CW_TYPE_BYTE, "mwar-type", 1,-1},
 	{CW_TYPE_IPADDRESS, "address", 4,-1},
 	{CW_TYPE_WORD, "unknown", 2,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_lw_path_mtu[] = {
+static cw_ValStruct_t cisco_lw_path_mtu[] = {
 	{CW_TYPE_WORD, "max", 2,-1},
 	{CW_TYPE_WORD, "len", 2,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_uptime[] = {
+static cw_ValStruct_t cisco_ap_uptime[] = {
 	{CW_TYPE_DWORD, "current-uptime", 4,-1},
 	{CW_TYPE_DWORD, "last-uptime", 4,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_login[] = {
+static cw_ValStruct_t cisco_login[] = {
 	{CW_TYPE_STR,	"username",		33,	-1	},
 	{CW_TYPE_STR,	"password",		121,	-1	},
 	{CW_TYPE_STR,	"enable-password",	121,	33+121	},
@@ -68,7 +68,7 @@ static cw_KTVStruct_t cisco_login[] = {
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_8021xlogin[] = {
+static cw_ValStruct_t cisco_8021xlogin[] = {
 	{CW_TYPE_STR,	"username",		33,	-1	},
 	{CW_TYPE_STR,	"password",		121,	-1	},
 	{CW_TYPE_WORD,	"option",		2,	275	},
@@ -76,7 +76,7 @@ static cw_KTVStruct_t cisco_8021xlogin[] = {
 };
 
 
-static cw_KTVEnum_t cisco_ap_username_and_password_enum[] ={
+static cw_ValEnum_t cisco_ap_username_and_password_enum[] ={
 	{2,	"802.1x-credentials",	cisco_8021xlogin, cw_in_generic_struct, cw_ktv_write_struct },
 
 	{1,	"login-credentials",	cisco_login, cw_in_generic_struct, cw_ktv_write_struct },
@@ -85,41 +85,41 @@ static cw_KTVEnum_t cisco_ap_username_and_password_enum[] ={
 };
 
 
-static cw_KTVIndexed_t cisco_ap_username_and_password = {
+static cw_ValIndexed_t cisco_ap_username_and_password = {
 	276,cisco_ap_username_and_password_enum
 };
 
 
-static cw_KTVStruct_t cisco_loghost_config[] = {
+static cw_ValStruct_t cisco_loghost_config[] = {
 	{CW_TYPE_IPADDRESS,	"loghost",		4,	-1},
 	{CW_TYPE_STR,		"last-joined-ap",	32,	-1},
 	{NULL,NULL,0,0}
 };
 
 
-static cw_KTVStruct_t cisco_ap_led_state_config70[] = {
+static cw_ValStruct_t cisco_ap_led_state_config70[] = {
 	{CW_TYPE_BYTE,		"led-state",		1,	-1},
 	{NULL,NULL,0,0}
 };
 
 
-static cw_KTVStruct_t cisco_ap_led_state_config73[] = {
+static cw_ValStruct_t cisco_ap_led_state_config73[] = {
 	{CW_TYPE_BYTE,		"led-state",		1,	-1},
 	{CW_TYPE_BYTE,		"save-flag",		1,	-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVEnum_t cisco_ap_telnet_ssh_enum[] ={
+static cw_ValEnum_t cisco_ap_telnet_ssh_enum[] ={
 	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic, NULL },
 	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic, NULL },
 	{0,0,0,0}
 };
 
-static cw_KTVIndexed_t cisco_ap_telnet_ssh = {
+static cw_ValIndexed_t cisco_ap_telnet_ssh = {
 	1,cisco_ap_telnet_ssh_enum
 };
 
-static cw_KTVStruct_t cisco_multi_domain_cabability[]={
+static cw_ValStruct_t cisco_multi_domain_cabability[]={
 	{CW_TYPE_BYTE,		"reserved",		1,	-1},
 	{CW_TYPE_WORD,		"first-channel",	2,	-1},
 	{CW_TYPE_WORD,		"number-of-channels",	2,	-1},
@@ -130,7 +130,7 @@ static cw_KTVStruct_t cisco_multi_domain_cabability[]={
 
 
 
-static cw_KTVStruct_t cisco_wtp_board_data[]={
+static cw_ValStruct_t cisco_wtp_board_data[]={
 	{CW_TYPE_WORD,		"card-id",			2,	-1},
 	{CW_TYPE_WORD,		"card-revision",		2,	-1},
 	{CW_TYPE_DWORD,		"wtp-model-lo",			4,	-1},
@@ -144,7 +144,7 @@ static cw_KTVStruct_t cisco_wtp_board_data[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_wtp_board_data_options[]={
+static cw_ValStruct_t cisco_wtp_board_data_options[]={
 	{CW_TYPE_BYTE,		"ant-type",		1,	-1},
 	{CW_TYPE_BYTE,		"flex-connect",		1,	-1},
 	{CW_TYPE_BYTE,		"ap-type",		1,	-1},
@@ -154,7 +154,7 @@ static cw_KTVStruct_t cisco_wtp_board_data_options[]={
 };
 
 
-static cw_KTVStruct_t cisco_ap_led_flash_config[]={
+static cw_ValStruct_t cisco_ap_led_flash_config[]={
 	{CW_TYPE_BYTE,		"flash-enable",		1,	0},
 	{CW_TYPE_DWORD,		"flash-sec",		4,	4},
 	{CW_TYPE_BYTE,		"save-flag",		4,	8},
@@ -162,7 +162,7 @@ static cw_KTVStruct_t cisco_ap_led_flash_config[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_static_ip_addr[]={
+static cw_ValStruct_t cisco_ap_static_ip_addr[]={
 	{CW_TYPE_IPADDRESS,"address",	4,-1},
 	{CW_TYPE_IPADDRESS,"netmask",	4,-1},
 	{CW_TYPE_IPADDRESS,"gateway",	4,-1},
@@ -172,7 +172,7 @@ static cw_KTVStruct_t cisco_ap_static_ip_addr[]={
 };
 
 
-static cw_KTVStruct_t cisco_ap_regulatory_domain4[]={
+static cw_ValStruct_t cisco_ap_regulatory_domain4[]={
 	{CW_TYPE_BOOL,"set",1,-1},
 	{CW_TYPE_BYTE,"slot",1,-1},
 	{CW_TYPE_BYTE,"code0",1,-1},
@@ -180,7 +180,7 @@ static cw_KTVStruct_t cisco_ap_regulatory_domain4[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
+static cw_ValStruct_t cisco_ap_regulatory_domain5[]={
 	{CW_TYPE_BYTE,"band-id",1,-1},
 	{CW_TYPE_BOOL,"set",1,-1},
 	{CW_TYPE_BYTE,"slot",1,-1},
@@ -190,7 +190,7 @@ static cw_KTVStruct_t cisco_ap_regulatory_domain5[]={
 };
 
 
-static cw_KTVStruct_t cisco_mac_operation73[]={
+static cw_ValStruct_t cisco_mac_operation73[]={
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"rts-threshold",2,-1},
 	{CW_TYPE_BYTE,"short-retry",1,-1},
@@ -201,7 +201,7 @@ static cw_KTVStruct_t cisco_mac_operation73[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_mac_operation75[]={
+static cw_ValStruct_t cisco_mac_operation75[]={
 	{CW_TYPE_WORD,"reserved",2,-1},
 	{CW_TYPE_WORD,"rts-threshold",2,-1},
 	{CW_TYPE_BYTE,"short-retry",1,-1},
@@ -213,7 +213,7 @@ static cw_KTVStruct_t cisco_mac_operation75[]={
 };
 
 
-static cw_KTVStruct_t cisco_ap_power_injector_config[]={
+static cw_ValStruct_t cisco_ap_power_injector_config[]={
 	{CW_TYPE_BYTE,"state",1,-1},
 	{CW_TYPE_BYTE,"selection",1,-1},
 	{CW_TYPE_BSTR16,"sitch-mac-address",6,-1},
@@ -251,7 +251,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	char testkey[CW_KTV_MAX_KEY_LEN];
 	int idx;
 	void * type;
-	cw_KTV_t * result, search;
+	cw_Val_t * result, search;
 	int len,start;
 	uint8_t * ob;
 
@@ -310,7 +310,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	return ob-dst;
 }
 
-static cw_KTVStruct_t cisco_ap_model[]={
+static cw_ValStruct_t cisco_ap_model[]={
 	{CW_TYPE_STR,"model",30,-1},
 	{CW_TYPE_STR,"image",30,30},
 	{NULL,NULL,0,0}
@@ -318,7 +318,7 @@ static cw_KTVStruct_t cisco_ap_model[]={
 
 
 
-static cw_KTVStruct_t cisco_direct_sequence_control70[]={
+static cw_ValStruct_t cisco_direct_sequence_control70[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_BYTE,"current-channel",1,-1},
 	{CW_TYPE_BYTE,"current-cca-mode",1,-1},
@@ -327,7 +327,7 @@ static cw_KTVStruct_t cisco_direct_sequence_control70[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_antenna_payload70[]={
+static cw_ValStruct_t cisco_antenna_payload70[]={
 	{CW_TYPE_BYTE,"diversity-selection",1,-1},
 	{CW_TYPE_BYTE,"antenna-mode",1,-1},
 	{CW_TYPE_BYTE,"number-of-antennas",1,-1},
@@ -340,7 +340,7 @@ static cw_KTVStruct_t cisco_antenna_payload70[]={
 };
 
 
-static cw_KTVStruct_t cisco_wtp_radio_config70[]={
+static cw_ValStruct_t cisco_wtp_radio_config70[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
@@ -357,7 +357,7 @@ static cw_KTVStruct_t cisco_wtp_radio_config70[]={
 
 
 
-static cw_KTVStruct_t cisco_wtp_radio_config73[]={
+static cw_ValStruct_t cisco_wtp_radio_config73[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
@@ -372,7 +372,7 @@ static cw_KTVStruct_t cisco_wtp_radio_config73[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_wtp_radio_config75[]={
+static cw_ValStruct_t cisco_wtp_radio_config75[]={
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
@@ -391,13 +391,13 @@ static cw_KTVStruct_t cisco_wtp_radio_config75[]={
 
 
 
-static cw_KTVStruct_t cisco_tx_power[]={
+static cw_ValStruct_t cisco_tx_power[]={
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"current-tx-power",2,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_qos[]={
+static cw_ValStruct_t cisco_ap_qos[]={
 	{CW_TYPE_BYTE,"tag-packets",1,-1},
 	{CW_TYPE_BYTE,"uranium-queue-depth",1,-1},
 	{CW_TYPE_WORD,"uranium-cwmin",2,-1},
@@ -442,32 +442,32 @@ static cw_KTVStruct_t cisco_ap_qos[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_core_dump[]={
+static cw_ValStruct_t cisco_ap_core_dump[]={
 	{CW_TYPE_IPADDRESS,"tftp-server",4,-1},
 	{CW_TYPE_BOOL,"compression",1,16},
 	{CW_TYPE_STR,"filename",199,17},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_vlan[]={
+static cw_ValStruct_t cisco_vlan[]={
 	{CW_TYPE_BOOL,"tagging",1,-1},
 	{CW_TYPE_WORD,"id",2,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_rouge_and_mss[]={
+static cw_ValStruct_t cisco_rouge_and_mss[]={
 	{CW_TYPE_BOOL,"enable",1,-1},
 	{CW_TYPE_WORD,"tcp-adjust-mss",2,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_rouge_detections[]={
+static cw_ValStruct_t cisco_rouge_detections[]={
 	{CW_TYPE_BOOL,"rouge-detection",1,-1},
 	{CW_TYPE_BSTR16,"rest",6,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_ap_venue_settings[]={
+static cw_ValStruct_t cisco_ap_venue_settings[]={
 	{CW_TYPE_WORD,"group",2,-1},
 	{CW_TYPE_BYTE,"type",1,-1},
 	{CW_TYPE_STR,"language",3,-1},
@@ -476,13 +476,13 @@ static cw_KTVStruct_t cisco_ap_venue_settings[]={
 	
 };
 
-static cw_KTVStruct_t cisco_ap_mode_and_type[]={
+static cw_ValStruct_t cisco_ap_mode_and_type[]={
 	{CW_TYPE_BYTE,"mode",1,-1},
 	{CW_TYPE_BYTE,"type",1,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_add_wlan[]={
+static cw_ValStruct_t cisco_add_wlan[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_WORD,"wlan-capability",2,-1},
 	{CW_TYPE_BYTE,"wlan-id",1,-1},
@@ -502,7 +502,7 @@ static cw_KTVStruct_t cisco_add_wlan[]={
 };
 
 
-static cw_KTVStruct_t cisco_add_wlan70[]={
+static cw_ValStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_WORD,"wlan-capability",2,-1},
 	{CW_TYPE_BYTE,"wlan-id",1,4},
@@ -580,20 +580,20 @@ static int cisco_patch_add_wlan70(uint8_t * data, void * st)
 
 
 
-static cw_KTVStruct_t cisco_add_lwwlan[]={
+static cw_ValStruct_t cisco_add_lwwlan[]={
 	{CW_TYPE_BSTR16, "misc", 8, 2},
 	{CW_TYPE_STR, "ssid",-1,10},
 	{CW_TYPE_WORD, "misc2", 2, 48 },
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVValRange_t oper_val_state[]={
+static cw_ValValRange_t oper_val_state[]={
 	{1,1,"disabled"},
 	{2,2,"enabled"},
 	{0,0,NULL}
 };
 
-static cw_KTVValRange_t oper_val_cause[]={
+static cw_ValValRange_t oper_val_cause[]={
 	{0,0,"Normal"},
 	{1,1,"Radio Failure"},
 	{2,2,"Software Failure"},
@@ -601,13 +601,13 @@ static cw_KTVValRange_t oper_val_cause[]={
 	{0,0,NULL}
 };
 
-static cw_KTVStruct_t cisco_radio_oper_state[]={
+static cw_ValStruct_t cisco_radio_oper_state[]={
 	{CW_TYPE_BYTE, "state", 1, -1, oper_val_state},
 	{CW_TYPE_BYTE, "cause", 1, -1,oper_val_cause},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_capwap_timers[] = {
+static cw_ValStruct_t cisco_capwap_timers[] = {
 	{CW_TYPE_BYTE, "max-discovery-interval", 1,-1},
 	{CW_TYPE_BYTE, "echo-interval", 1,-1},
 	{NULL,NULL,0,0}
@@ -636,7 +636,7 @@ static int cisco_patch_add_lwwlan(uint8_t * data, void * st)
 
 
 
-static cw_KTVStruct_t cisco_ssc_hash[]={
+static cw_ValStruct_t cisco_ssc_hash[]={
 	{CW_TYPE_BOOL,"validate",1,-1},
 	{CW_TYPE_BSTR16,"hash",-1,-1},
 	{NULL,NULL,0,0}
@@ -644,19 +644,19 @@ static cw_KTVStruct_t cisco_ssc_hash[]={
 
 
 
-static cw_KTVStruct_t cisco_hardware_info[]={
+static cw_ValStruct_t cisco_hardware_info[]={
 	{CW_TYPE_STR, "ram-type",20,-1},
 	{CW_TYPE_STR, "cpu",40,40},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_discovery_protocol[]={
+static cw_ValStruct_t cisco_discovery_protocol[]={
 	{CW_TYPE_WORD, "data",2,-1},
 	{CW_TYPE_BOOL, "enabled",1,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_rad_extended_config[]={
+static cw_ValStruct_t cisco_rad_extended_config[]={
 	{CW_TYPE_WORD, "beacon-interval",2,-1},
 	{CW_TYPE_WORD, "beacon-range",2,-1},
 	{CW_TYPE_WORD, "multicast-buffer",2,-1},
@@ -670,14 +670,14 @@ static cw_KTVStruct_t cisco_rad_extended_config[]={
 int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
 
-static cw_KTVStruct_t cisco_80211_assoc_limit[]={
+static cw_ValStruct_t cisco_80211_assoc_limit[]={
 	{CW_TYPE_BOOL, "enable",1,-1},
 	{CW_TYPE_BYTE, "limit",1,-1},
 	{CW_TYPE_WORD, "interval",1,-1},
 	{NULL,NULL,0,0}
 };
 
-static cw_KTVStruct_t cisco_dot11r_wlc_mac_and_ip[]={
+static cw_ValStruct_t cisco_dot11r_wlc_mac_and_ip[]={
 	{CW_TYPE_IPADDRESS, "ip-address",4,-1},
 	{CW_TYPE_BSTR16, ",ac-address",6,-1},
 	{NULL,NULL,0,0}
@@ -2163,7 +2163,7 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 
 static void set_ac_version(struct conn * conn)
 {
-	cw_KTV_t * wtpver;
+	cw_Val_t * wtpver;
 	char verstr[512];
 	wtpver = cw_ktv_get(conn->remote_cfg,"wtp-descriptor/software/version", CW_TYPE_BSTR16);
 	if (wtpver){
@@ -2208,7 +2208,7 @@ static int postprocess_join_request(struct conn *conn)
 
 static int preprocess_join_request(struct conn *conn)
 {
-	cw_KTV_t * ver;
+	cw_Val_t * ver;
 	int use_ac_version;
 	char verstr[512];
 

@@ -3,7 +3,7 @@
 #include "cw.h"
 
 
-static const cw_KTVEnum_t * get_enum(const cw_KTVEnum_t * e, int val){
+static const cw_ValEnum_t * get_enum(const cw_ValEnum_t * e, int val){
 	int i;
 	for (i=0; e[i].type != NULL; i++ ){
 		if (e[i].value==val){
@@ -18,8 +18,8 @@ int cw_in_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemHa
 {
 	int val;
 	int l,f;
-	const cw_KTVEnum_t * e;
-	const cw_KTVIndexed_t * ie;
+	const cw_ValEnum_t * e;
+	const cw_ValIndexed_t * ie;
 	
 	char key[CW_KTV_MAX_KEY_LEN];
 	struct cw_ElemHandler thandler;

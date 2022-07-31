@@ -1,4 +1,4 @@
-#include "ktv.h"
+#include "val.h"
 
 void * ktvn(struct mavl *t ,const void *search)
 {
@@ -8,7 +8,7 @@ void * ktvn(struct mavl *t ,const void *search)
 	n = t->root;
 	while(n){
 		int rc;
-/*		const cw_KTV_t;*//* *c1,*c2;*/
+/*		const cw_Val_t;*//* *c1,*c2;*/
 		/*c1=search;
 		c2=mavlnode_dataptr(n);
 		*/
@@ -46,7 +46,7 @@ void * ktvn(struct mavl *t ,const void *search)
 int cw_ktv_idx_get(mavl_t ktv, const char *key)
 {
 	char ikey[CW_KTV_MAX_KEY_LEN];
-	cw_KTV_t search, * result;
+	cw_Val_t search, * result;
 	char *d;
 	
 	sprintf(ikey,"%s.%d",key,65536);
@@ -76,7 +76,7 @@ int cw_ktv_idx_get(mavl_t ktv, const char *key)
 int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n)
 {
 	char ikey[CW_KTV_MAX_KEY_LEN];
-	cw_KTV_t search, * result;
+	cw_Val_t search, * result;
 	char *d;
 	int i;
 	

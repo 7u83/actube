@@ -5,7 +5,7 @@
 #include <unistd.h>
 \
 
-#include "cw/ktv.h"
+#include "cw/val.h"
 #include "cw/dbg.h"
 #include "cw/log.h"
 #include "cw/msgset.h"
@@ -206,7 +206,7 @@ exit(0);
 		mavliter_foreach(&i) {
 			char ipstr[100];
 			char *rk;
-			cw_KTV_t *val;
+			cw_Val_t *val;
 			mavl_t cfg;
 			
 			val = mavliter_get(&i);
