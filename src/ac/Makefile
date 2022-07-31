@@ -7,7 +7,6 @@ OBJS = \
 	dataman.o \
 	ac_interface.o \
 	socklist.o \
-	ac_global.o \
 	discovery_cache.o\
 	shell.o\
 
