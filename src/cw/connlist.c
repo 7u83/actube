@@ -133,6 +133,9 @@ void connlist_destroy ( struct connlist * cl )
 		
 	if ( cl->by_addr )
 		mavl_destroy ( cl->by_addr );
+	if ( cl->by_session_id)
+		mavl_destroy ( cl->by_session_id );
+
 		
 	pthread_mutex_destroy ( &cl->connlist_mutex );
 	free ( cl );
