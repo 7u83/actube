@@ -1,5 +1,5 @@
 include ../Defs.mak
-MFDEPS=../Defs.mak ../LocalDefs.mak
+MFDEPS=../Defs.mak 
 
 
 CWSRC=\
