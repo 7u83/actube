@@ -31,6 +31,9 @@ void discovery_cache_destroy(struct cw_DiscoveryCache * c)
 	
 	if (c->byaddrp)
 		mavl_destroy(c->byaddrp);
+
+	if (c->queue)
+		free(c->queue);
 	
 	free(c);
 }
