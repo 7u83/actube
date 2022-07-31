@@ -1,12 +1,3 @@
-TARGETS=\
-	src/contrib/jsmn \
-	src/cw
-
-
-#src/cw src/mod src/ac 
-
-
-
 
 all:
 	$(MAKE) -C src/cw
@@ -15,8 +6,6 @@ all:
 	
 
 clean:
-
-	$(MAKE) -C src/contrib/jsmn clean
 	$(MAKE) -C src/cw clean
 	$(MAKE) -C src/mod clean
 	$(MAKE) -C src/ac clean
