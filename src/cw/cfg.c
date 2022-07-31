@@ -368,5 +368,8 @@ int cw_cfg_load(const char *filename,cw_Cfg_t * cfg)
 		return errno;
 	errs = cw_cfg_read_from_file(f,cfg);
 	fclose(f);
-	return errs;
+
+	if (errs)
+		errno = EINVAL;
+	return errno;
 }
