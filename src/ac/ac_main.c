@@ -275,16 +275,6 @@ return 0;
 	
 	
 	
-	/* Initialize the database */
-	if (!db_init())
-		goto errX;
-		
-	/* Start the database */
-	if (!db_start())
-		goto errX;
-		
-	db_ping();
-	
 
 	/* Init DTLS library */
 	dtls_init();

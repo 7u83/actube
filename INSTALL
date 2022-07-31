@@ -1,14 +1,16 @@
 pre-requisites to build actube
 ==============================
 
+
+
+
+
 On FreeBSD 10.2
 ----------------
 
-pkg install gmake
-pkg install gnutls
 pkg install libconfuse
-pkg install sqlite3
-pkg install p11-kit
+pkg install wget
+pkg install libnettle
 
 
 Ubuntu 14.04

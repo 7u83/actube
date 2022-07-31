@@ -115,7 +115,7 @@ extern char *conf_sslkeyfilename;
 extern char *conf_sslkeypass;
 extern char *conf_dtls_psk;
 extern int conf_dtls_verify_peer;
-char *conf_sslcipher;
+extern char *conf_sslcipher;
 
 extern char *conf_image_dir;
 

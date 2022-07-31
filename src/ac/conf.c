@@ -82,7 +82,6 @@ int conf_ac_ips_len;
 char *conf_sslcertfilename = NULL;
 char *conf_sslkeyfilename = NULL;
 char *conf_sslkeypass = NULL;
-char *conf_sslcipher = NULL;
 char *conf_dtls_psk = NULL;
 
 int conf_security = 0;
@@ -676,7 +675,6 @@ int read_config(const char *filename)
 		CFG_SIMPLE_STR("ssl_cert", &conf_sslcertfilename),
 		CFG_SIMPLE_STR("ssl_key", &conf_sslkeyfilename),
 		CFG_SIMPLE_STR("ssl_key_pass", &conf_sslkeypass),
-		CFG_SIMPLE_STR("ssl_cipher", &conf_sslcipher),
 		CFG_SIMPLE_STR("dtls_psk", &conf_dtls_psk),
 
 		CFG_SIMPLE_BOOL("dtls_verify_peer", &conf_dtls_verify_peer),
@@ -757,10 +755,10 @@ int read_config(const char *filename)
 	if (!init_dtls())
 		return 0;
 
-	if (!conf_sslcipher)
+/*	if (!conf_sslcipher)
 		conf_sslcipher = CAPWAP_CIPHER;
 
-	if (!conf_image_dir)
+*/	if (!conf_image_dir)
 		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
 
 
