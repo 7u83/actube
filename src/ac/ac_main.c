@@ -64,7 +64,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	int c;
 	opterr = 1;
 	
-	bootcfg->cfgfilename = "config.ktv";
+	bootcfg->cfgfilename = "config.atv";
 	
 	while ( (c = getopt (argc, argv, "vc:d:p:")) != -1) {
 		
@@ -103,7 +103,21 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 
 
 
+struct cw_DiscoveryCache * discovery_cache;
+mavl_t actube_global_cfg;
 
+int ac_global_init()
+{
+	/* initialize discovery cache */
+	discovery_cache = discovery_cache_create(100);
+	if (discovery_cache==NULL)
+		goto errX;
+
+
+	return 1;
+errX:
+	return 0;
+}
 
 
 
@@ -173,16 +187,6 @@ static void show_cfg (FILE *out, mavl_t ktv)
 	
 }
 
-
-
-int main (int argc, char *argv[])
-{
-	int rc = 0;
-	struct bootcfg bootcfg;
-	FILE * file;
-	mavl_t types_tree, global_cfg;
-	const cw_Type_t **ti;
-
 /*
 	{
 		cw_Cfg_t * cfg;
@@ -211,11 +215,39 @@ return 0;
 */
 
 
+
+int main (int argc, char *argv[])
+{
+	int rc = 0;
+	struct bootcfg bootcfg;
+	FILE * file;
+	mavl_t types_tree, acglobal_cfg;
+	const cw_Type_t **ti;
+
+
+	cw_Cfg_t * global_cfg = NULL;
+
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
 
+	global_cfg=cw_cfg_create();
+	if (!global_cfg){
+		fprintf(stderr,"Can't create global_cfg: %s\n",strerror(errno));
+		goto errX;
+	}
+	
+	rc = cw_cfg_load(bootcfg.cfgfilename,global_cfg);
+	if (rc)
+	{
+		if (rc<0)
+			fprintf(stderr,"Can't load cfg '%s': %s\n",bootcfg.cfgfilename,strerror(errno));
+		goto errX;
+	};
+
+
+
 	/* open config file */
-        file = fopen(bootcfg.cfgfilename,"r");
+        file = fopen("config.ktv","r");
         if (file == NULL){
                 cw_log(LOG_ERR,"Cant open config file '%s': %s", 
 				bootcfg.cfgfilename, strerror(errno));
@@ -229,20 +261,20 @@ return 0;
 		mavl_insert_ptr(types_tree,*ti);
 	}
 	
-	global_cfg = cw_ktv_create();
-	if (global_cfg == NULL){
+	acglobal_cfg = cw_ktv_create();
+	if (acglobal_cfg == NULL){
 		cw_log(LOG_ERR,"Can't create local_cfg: %s",strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
-	cw_ktv_read_file(file,global_cfg,types_tree);
+	cw_ktv_read_file(file,acglobal_cfg,types_tree);
 
 	fclose(file);
 
-	actube_global_cfg = global_cfg;
+	actube_global_cfg = acglobal_cfg;
 
 
-	cw_dbg_ktv_dump(global_cfg,DBG_INFO,NULL,"CFG:",NULL);
+	cw_dbg_ktv_dump(acglobal_cfg,DBG_INFO,NULL,"CFG:",NULL);
 
 
 	cw_log_name = "AC-Tube";
@@ -294,6 +326,10 @@ return 0;
 	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
 	rc = ac_run();
 errX:
+	if (global_cfg)
+		mavl_destroy(global_cfg);
+
+
 	/* XXX There is more cleanup to do */
 	wtplist_destroy();
 	socklist_destroy();
