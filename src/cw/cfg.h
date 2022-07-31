@@ -13,6 +13,13 @@ void cw_cfg_dump(cw_Cfg_t *cfg);
 int cw_cfg_read_from_file(FILE * file, cw_Cfg_t * cfg);
 int cw_cfg_load(const char *filename,cw_Cfg_t * cfg);
 
+struct cw_Cfg_entry{
+	char *key;
+	char *val;
+};
+
+char * cw_cfg_get(cw_Cfg_t * cfg, char *key);
+
 
 #endif
 

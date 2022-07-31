@@ -6,22 +6,17 @@
 #include "cw.h"
 #include "cfg.h"
 
-struct cfg_entry{
-	char *key;
-	char *val;
-};
-
 static int cmp(const void *k1,const void*k2){
-	struct cfg_entry * e1,*e2;
-	e1=(struct cfg_entry *)k1;
-	e2=(struct cfg_entry *)k2;
+	struct cw_Cfg_entry * e1,*e2;
+	e1=(struct cw_Cfg_entry *)k1;
+	e2=(struct cw_Cfg_entry *)k2;
 	return strcmp(e1->key,e2->key);
 }
 
 static void del(void *ptr)
 {
-	struct cfg_entry * e;
-	e=(struct cfg_entry *)ptr;
+	struct cw_Cfg_entry * e;
+	e=(struct cw_Cfg_entry *)ptr;
 	free(e->key);
 	free(e->val);
 }
@@ -29,12 +24,12 @@ static void del(void *ptr)
 
 cw_Cfg_t * cw_cfg_create()
 {
-	return mavl_create(cmp, del, sizeof(struct cfg_entry));
+	return mavl_create(cmp, del, sizeof(struct cw_Cfg_entry));
 }	
 
 int cw_cfg_set(cw_Cfg_t * cfg,const char *key, const char *val)
 {
-	struct cfg_entry e;
+	struct cw_Cfg_entry e;
 	int replaced;
 
 	e.key = cw_strdup(key);
@@ -56,10 +51,20 @@ int cw_cfg_set(cw_Cfg_t * cfg,const char *key, const char *val)
 	return -1;
 }
 
+char * cw_cfg_get(cw_Cfg_t * cfg, char *key)
+{
+	struct cw_Cfg_entry e,*r;
+	e.key = key;
+	r = mavl_get(cfg,&e);
+	if (!r)
+		return NULL;
+	return r->val;
+}
+
 void cw_cfg_dump(cw_Cfg_t *cfg)
 {
 	mavliter_t it;
-	struct cfg_entry *e;
+	struct cw_Cfg_entry *e;
 	mavliter_init(&it,cfg);
 	mavliter_foreach(&it){
 		
