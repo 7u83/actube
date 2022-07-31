@@ -1,4 +1,3 @@
-#include <confuse.h>
 
 #include "cw/cw.h"
 #include "cw/mod.h"
