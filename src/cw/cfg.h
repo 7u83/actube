@@ -3,11 +3,16 @@
 
 #include <mavl.h>
 
+#define CW_CFG_MAX_KEY_LEN 1024
+
 typedef struct mavl cw_Cfg_t;
 
-cw_Cfg_t * cfg_create();
-int cfg_set(cw_Cfg_t *cfg,const char *key, const char *val);
-void cw_Cfg_dump(cw_Cfg_t *cfg);
+cw_Cfg_t * cw_cfg_create();
+int cw_cfg_set(cw_Cfg_t *cfg,const char *key, const char *val);
+void cw_cfg_dump(cw_Cfg_t *cfg);
+int cw_cfg_read_from_file(FILE * file, cw_Cfg_t * cfg);
+int cw_cfg_load(const char *filename,cw_Cfg_t * cfg);
+
 
 #endif
 

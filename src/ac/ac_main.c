@@ -46,6 +46,7 @@
 
 #include "dataman.h"
 
+#include "cw/cfg.h"
 
 int ac_run();
 
@@ -172,7 +173,21 @@ static void show_cfg (FILE *out, mavl_t ktv)
 	
 }
 
+/*
+	{
+		cw_Cfg_t * cfg;
+		cfg=cw_cfg_create();
 
+		cw_cfg_load("tube.akv",cfg);
+
+//		cw_cfg_set(cfg,"cisco/tube","99");
+//		cw_cfg_set(cfg,"Hello","30");
+	
+		cw_cfg_dump(cfg);
+		mavl_destroy(cfg);
+	}
+*/
+	
 
 int main (int argc, char *argv[])
 {
@@ -181,7 +196,9 @@ int main (int argc, char *argv[])
 	FILE * file;
 	mavl_t types_tree, global_cfg;
 	const cw_Type_t **ti;
-	
+
+
+
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
@@ -193,6 +210,7 @@ int main (int argc, char *argv[])
 				bootcfg.cfgfilename, strerror(errno));
                 exit(EXIT_FAILURE);
         }
+
 
 	/* create types tree with default types */
 	types_tree = cw_ktv_create_types_tree();
@@ -229,7 +247,7 @@ int main (int argc, char *argv[])
 		cw_log (LOG_INFO, "Debug Options: %08X", cw_dbg_opt_level);
 		
 	/* XXX Hard coded debug settigns, set it by config in the future */
-	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
+//	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
 	
 	/* Warn, if the "secret" debugging feature for
 	   developers is turned on ;) */
