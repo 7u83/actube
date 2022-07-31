@@ -141,52 +141,6 @@ extern void test_sets();
 
 
 #include "discovery_cache.h"
-void tester1()
-{
-	struct cw_DiscoveryCache * cache;
-	struct sockaddr_storage addr;
-	int rc;
-	const char *c,*b;
-	
-	cache = discovery_cache_create(1);
-	
-	sock_strtoaddr("192.168.0.12:1234",(struct sockaddr*)&addr);
-	discovery_cache_add(cache,(struct sockaddr*)&addr,"Nase","Loeffel");
-
-	sock_strtoaddr("192.168.0.13:1234",(struct sockaddr*)&addr);
-	discovery_cache_add(cache,(struct sockaddr*)&addr,"Nase","Loeffel");
-
-	
-	rc = discovery_cache_get(cache,(struct sockaddr*)&addr,&c,&b);
-	
-	if (rc) {
-		printf("RC: %d, %s %s\n",rc,c,b);
-	}
-}
-
-
-static void show_cfg (FILE *out, mavl_t ktv)
-{
-	char value[500];
-	struct cw_Val * data;
-	mavliter_t it;
-	const struct cw_Type * type;
-	
-	
-	mavliter_init(&it,ktv);
-
-	mavliter_foreach(&it){
-		
-		data = mavliter_get(&it);
-		type = data->type;
-		type->to_str(data,value,0);
-		
-		fprintf(out,"%s :%s: %s\n",data->key,type->get_type_name(data), value);
-	}
-	
-	
-}
-
 /*
 	{
 		cw_Cfg_t * cfg;
@@ -244,69 +198,13 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
-
-
-	/* open config file */
-        file = fopen("config.ktv","r");
-        if (file == NULL){
-                cw_log(LOG_ERR,"Cant open config file '%s': %s", 
-				bootcfg.cfgfilename, strerror(errno));
-                exit(EXIT_FAILURE);
-        }
-
-
-	/* create types tree with default types */
-	types_tree = cw_ktv_create_types_tree();
-	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
-		mavl_insert_ptr(types_tree,*ti);
-	}
-	
-	acglobal_cfg = cw_ktv_create();
-	if (acglobal_cfg == NULL){
-		cw_log(LOG_ERR,"Can't create local_cfg: %s",strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-
-	cw_ktv_read_file(file,acglobal_cfg,types_tree);
-
-	fclose(file);
-
 	actube_global_cfg = acglobal_cfg;
-
-
-	cw_dbg_ktv_dump(acglobal_cfg,DBG_INFO,NULL,"CFG:",NULL);
 
 
 	cw_log_name = "AC-Tube";
 	
-	if (!read_config ("ac.conf"))
-		return 1;
 		
 	start_shell();
-
-
-	/* Show debug options if there are any set */
-	if (cw_dbg_opt_level)
-		cw_log (LOG_INFO, "Debug Options: %08X", cw_dbg_opt_level);
-		
-	/* XXX Hard coded debug settigns, set it by config in the future */
-//	cw_dbg_opt_display = DBG_DISP_ASC_DMP | DBG_DISP_COLORS;
-	
-	/* Warn, if the "secret" debugging feature for
-	   developers is turned on ;) */
-
-/*
-//	DBGX("Attention! %s", "DBG X is ON!");
-
-//	cw_mod_set_mod_path("../../lib/actube");
-	//cw_mod_load("capwap");
-	*/
-
-
-	
-	
-	
-	
 
 	/* Init DTLS library */
 	dtls_init();
@@ -315,29 +213,27 @@ int main (int argc, char *argv[])
 	
 	if (!socklist_init())
 		goto errX;
-		
+	
 	if (!wtplist_init())
 		goto errX;
 		
 	if (!dataman_list_init())
 		goto errX;
 		
-		
 	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
 	rc = ac_run();
+
 errX:
 	if (global_cfg)
 		mavl_destroy(global_cfg);
 
+	if (discovery_cache)
+		discovery_cache_destroy(discovery_cache);
 
-	/* XXX There is more cleanup to do */
 	wtplist_destroy();
 	socklist_destroy();
 	return rc;
 }
-
-
-
 
 
 
