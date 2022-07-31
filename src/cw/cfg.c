@@ -335,13 +335,15 @@ int cw_cfg_read_from_file(FILE * f, cw_Cfg_t * cfg)
 	p.f=f;
 	
 	int rc;
+	int errs=0;
 
 	
 	do {
 
 		rc = cw_cfg_read_line(f,&p,key,val);
 		if (rc==-1){
-			fprintf(stderr,"Error: %s",p.error);
+			fprintf(stderr,"Error: %s\n",p.error);
+			errs++;
 		}
 
 
@@ -354,15 +356,17 @@ int cw_cfg_read_from_file(FILE * f, cw_Cfg_t * cfg)
 
 	}while(rc==0);
 	
-	return 0;
+	return errs;
 }
 
 
 int cw_cfg_load(const char *filename,cw_Cfg_t * cfg)
 {
+	int errs;
 	FILE *f = fopen(filename,"rb");
 	if (!f)
 		return errno;
-	cw_cfg_read_from_file(f,cfg);
-	return 0;
+	errs = cw_cfg_read_from_file(f,cfg);
+	fclose(f);
+	return errs;
 }
