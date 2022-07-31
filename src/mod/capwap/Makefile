@@ -29,7 +29,9 @@ DNAME		:= $(LIBARCHDIR)/mod_capwap.so
 
 
 CFLAGS+=-fPIC
-CFLAGS+= -I ../../ -I../ -I../../include -I../../../include
+CFLAGS+= -I ../../ -I../ -I../../include -I../../../include 
+CFLAGS+= -DUSE_OPENSSL
+
 CFLAGS+=$(INC2)
 
 all: $(SNAME) $(DNAME) 

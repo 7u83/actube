@@ -45,7 +45,8 @@ SNAME		:= $(LIBARCHDIR)/libmod_cisco.a
 DNAME		:= $(LIBARCHDIR)/mod_cisco.so
 
 CFLAGS+=-fPIC
-CFLAGS+= -I ../../ -I../ -I../../include -I../../../include
+CFLAGS+= -I ../../ -I../ -I../../include -I../../../include -I/usr/local/include
+CFLAGS+= -DUSE_OPENSSL
 
 all: $(SNAME) $(DNAME) 
 static: $(SNAME)
