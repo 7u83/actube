@@ -48,7 +48,8 @@
 
 #include "cw/cfg.h"
 
-int ac_run();
+int ac_run(cw_Cfg_t * cfg);
+
 
 
 #include <getopt.h>
@@ -64,7 +65,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	int c;
 	opterr = 1;
 	
-	bootcfg->cfgfilename = "config.atv";
+	bootcfg->cfgfilename = "config.ckv";
 	
 	while ( (c = getopt (argc, argv, "vc:d:p:")) != -1) {
 		
@@ -175,7 +176,7 @@ int main (int argc, char *argv[])
 	int rc = 0;
 	struct bootcfg bootcfg;
 	FILE * file;
-	mavl_t types_tree, acglobal_cfg;
+	mavl_t types_tree;
 	const cw_Type_t **ti;
 
 
@@ -193,12 +194,10 @@ int main (int argc, char *argv[])
 	rc = cw_cfg_load(bootcfg.cfgfilename,global_cfg);
 	if (rc)
 	{
-		if (rc<0)
+		if (rc)
 			fprintf(stderr,"Can't load cfg '%s': %s\n",bootcfg.cfgfilename,strerror(errno));
 		goto errX;
 	};
-
-	actube_global_cfg = acglobal_cfg;
 
 
 	cw_log_name = "AC-Tube";
@@ -219,9 +218,13 @@ int main (int argc, char *argv[])
 		
 	if (!dataman_list_init())
 		goto errX;
+
+	ac_conf_init(global_cfg);
+
+	cw_cfg_dump(global_cfg);
 		
 	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
-	rc = ac_run();
+	rc = ac_run(global_cfg);
 
 errX:
 	if (global_cfg)
@@ -243,15 +246,18 @@ void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, in
 void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
 
-int ac_run()
+int ac_run(cw_Cfg_t * cfg)
 {
 
-	if (!conf_listen_addrs_len) {
+	if (1 /*!conf_listen_addrs_len*/) {
 		cw_log (LOG_ERR, "Fatal error: No listen addresses found.");
-		return 1;
+//		return 1;
 	}
 	
-	
+	extern void cw_cfg_iterate(cw_Cfg_t *);	
+	cw_cfg_iterate(cfg);	
+
+	return 1;
 	
 	/* it is important to create the unicast sockets first,
 	 * because when we create the mcast an bcast sockets next
@@ -260,7 +266,7 @@ int ac_run()
 	
 	int i;
 	
-	for (i = 0; i < conf_listen_addrs_len; i++) {
+/*	for (i = 0; i < conf_listen_addrs_len; i++) {
 		char addr[100];
 		char port[50];
 		int proto;
@@ -269,7 +275,8 @@ int ac_run()
 		
 		socklist_add_unicast (addr, port, proto);
 	}
-	
+*/
+
 	if (socklist_len == 0) {
 		cw_log (LOG_ERR, "Fatal error: Could not setup any listen socket");
 		return 1;
