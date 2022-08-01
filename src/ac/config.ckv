@@ -1,0 +1,14 @@
+#Cfg
+capwap/ssl-cipher: DHE-RSA:RSA:AES-256-CBC:AES-128-CBC:SHA1:PSK
+capwap/ssl-psk-enable: false
+capwap/ssl-psk: 123456
+capwap/ssl-dhbits: 1024
+
+cisco/ssl-keyfile:  "../../ssl/intermediate-ca/int-ca.key"
+cisco/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
+cisco/ssl-cipher: DEFAULT
+cisco/ssl-dhbits: 2048
+
+#actube/listen.hitler : 123456789
+actube/listen.17 : 123456789
+
