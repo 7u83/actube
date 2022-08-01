@@ -31,7 +31,7 @@
 #include "cw/bstr.h"
 #include "cw/mod.h"
 #include "cw/vendors.h"
-
+#include "cw/cfg.h"
 
 extern struct cw_Mod ** conf_mods;
 
@@ -94,8 +94,6 @@ extern bstr_t conf_cisco_software_version;
 
 
 
-extern char **conf_listen_addrs;
-extern int conf_listen_addrs_len;
 
 extern struct sockaddr *conf_ac_ips;
 extern int conf_ac_ips_len;
@@ -141,5 +139,8 @@ extern int conf_parse_listen_addr(const char *addr, char *saddr, char *port, int
 
 #define CFG_ENTRY_MODS "mods"
 
+#define CONF_PREFIX "actube"
+
+void ac_conf_init(cw_Cfg_t *cfg);
 
 #endif

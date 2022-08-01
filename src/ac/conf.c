@@ -36,6 +36,7 @@
 
 #include "conf.h"
 #include "ac.h"
+#include "cw/cfg.h"
 
 #include "cw/mavltypes.h"
 
@@ -60,8 +61,6 @@ long conf_max_wtps = CONF_DEFAULT_MAXWTPS;
 char *conf_logfilename = CONF_DEFAULT_LOGFILENAME;
 struct sockaddr_storage *conf_salist = NULL;
 
-char **conf_listen_addrs;
-int conf_listen_addrs_len = 0;
 
 
 char **conf_mcast_groups = 0;
@@ -215,40 +214,22 @@ static int init_control_port()
 
 #include <ifaddrs.h>
 
-static int init_listen_addrs()
+static int init_listen_addrs(cw_Cfg_t * cfg)
 {
+	char key[CW_CFG_MAX_KEY_LEN];
+
 	struct ifaddrs *ifap, *ifa;
 	int rc;
 	int ctr;
+	const char * a0;
 	
-	if (conf_listen_addrs != 0)
+	a0 = cw_cfg_get(cfg,"actube/listen.0",NULL);
+	if (a0)
 		return 1;
-
-
 
 	rc = getifaddrs(&ifap);
 	if (rc == -1)
 		return 0;
-
-	/* count the addresses */
-	ctr = 0;
-	for (ifa = ifap; ifa != 0; ifa = ifa->ifa_next) {
-		if (!ifa->ifa_addr)
-			continue;
-
-		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4)
-			ctr++;
-		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6)
-			ctr++;
-	}
-
-	conf_listen_addrs = malloc(sizeof(char *) * ctr);
-	if (!conf_listen_addrs) {
-		rc = 0;
-		goto errX;
-	}
-	memset(conf_listen_addrs, 0, sizeof(char *) * ctr);
-
 
 	ctr = 0;
 	/* get the addresses */
@@ -267,12 +248,9 @@ static int init_listen_addrs()
 		if (ifa->ifa_addr->sa_family == AF_INET && conf_ipv4) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
 
-			conf_listen_addrs[ctr] =
-			    (char *) cw_setstr((uint8_t **) & conf_listen_addrs[ctr],
-					       (uint8_t *) str, strlen(str));
-			if (conf_listen_addrs[ctr])
-				ctr++;
 
+			sprintf(key,"actube/listen.%d",ctr++);
+			cw_cfg_set(cfg,key,str);
 		}
 		if (ifa->ifa_addr->sa_family == AF_INET6 && conf_ipv6) {
 			sock_addrtostr(ifa->ifa_addr, str, 100,0);
@@ -281,14 +259,10 @@ static int init_listen_addrs()
 				strcat(str, "%");
 				strcat(str, ifa->ifa_name);
 			}
-			conf_listen_addrs[ctr] =
-			    (char *) cw_setstr((uint8_t **) & conf_listen_addrs[ctr],
-					       (uint8_t *) str, strlen(str));
-			if (conf_listen_addrs[ctr])
-				ctr++;
+			sprintf(key,"actube/listen.%d",ctr++);
+			cw_cfg_set(cfg,key,str);
 		}
 	}
-	conf_listen_addrs_len = ctr;
 	rc = 1;
       errX:
 	freeifaddrs(ifap);
@@ -703,9 +677,6 @@ int read_config(const char *filename)
 	/* read debug options */
 	conf_read_dbg_level(cfg);
 
-	/* read the listen addresses */
-	conf_read_strings(cfg, "listen", &conf_listen_addrs, &conf_listen_addrs_len);
-
 	/* read multi cast groups */
 	conf_read_strings(cfg, "mcast_groups", &conf_mcast_groups,
 			  &conf_mcast_groups_len);
@@ -763,7 +734,6 @@ int read_config(const char *filename)
 
 
 
-	init_listen_addrs();
 	init_mcast_groups();
 	init_bcast_addrs();
 
@@ -773,5 +743,15 @@ int read_config(const char *filename)
 
 void free_config()
 {
+
+}
+
+
+
+
+void ac_conf_init(cw_Cfg_t *cfg)
+{
+	printf("ac conf\n");
+	init_listen_addrs(cfg);
 
 }
