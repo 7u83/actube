@@ -18,7 +18,7 @@ struct cw_Cfg_entry{
 	char *val;
 };
 
-char * cw_cfg_get(cw_Cfg_t * cfg, char *key);
+const char * cw_cfg_get(cw_Cfg_t * cfg, char *key, const char *def);
 
 
 #endif

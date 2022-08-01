@@ -52,13 +52,13 @@ int cw_cfg_set(cw_Cfg_t * cfg,const char *key, const char *val)
 	return -1;
 }
 
-char * cw_cfg_get(cw_Cfg_t * cfg, char *key)
+const char * cw_cfg_get(cw_Cfg_t * cfg, char *key, const char *def)
 {
 	struct cw_Cfg_entry e,*r;
 	e.key = key;
 	r = mavl_get(cfg,&e);
 	if (!r)
-		return NULL;
+		return def;
 	return r->val;
 }
 
@@ -373,3 +373,81 @@ int cw_cfg_load(const char *filename,cw_Cfg_t * cfg)
 		errno = EINVAL;
 	return errno;
 }
+
+
+static int cw_cfg_get_next_idx(cw_Cfg_t * cfg, const char *key, int n)
+{
+	char ikey[CW_CFG_MAX_KEY_LEN];
+	struct cw_Cfg_entry search, * result;
+	char *d;
+	int i;
+	
+	sprintf(ikey,"%s.%d",key,n);
+		
+	search.key=ikey;
+	result = mavl_get_first(cfg,&search);
+
+	printf("KEY: %s\n",search.key);
+	printf("NNNNN: %s\n",result->key);
+
+	
+	if (result==NULL)
+		return -1;
+	
+	d=NULL;
+	for (i = strlen(ikey); i>=0; i--){
+
+		if (ikey[i]=='.'){
+			d = result->key+i;
+			break;
+		}
+	}
+	
+	if (d==NULL){
+		return -1;
+	}
+	
+	if(result->key[i]!='.'){
+		return -1;
+	}
+	
+	if (strncmp(result->key,ikey,i)!=0)
+		return -1;
+	
+	printf("TRANSFER %s\n",result->key+i+1);
+	return atoi(result->key+i+1);
+}
+
+
+void cw_cfg_iterate(cw_Cfg_t * cfg)
+{
+	printf("Iterate\n");
+	struct cw_Cfg_entry *e;
+	struct cw_Cfg_entry search;
+	search.key="actube/listen";
+
+	int i=0;
+	i = cw_cfg_get_next_idx(cfg,"actube/listen",i);
+
+	printf("This i %d\n",i);
+
+	while ( (i = cw_cfg_get_next_idx(cfg,"actube/listen",i))!=-1) {
+
+		printf("Here i %d\n",i);
+		printf("we have key: %s.%d\n","actube/listen",i);
+		printf("Next=%d\n",i);
+		i++;
+	};
+
+
+
+
+
+	e = mavl_get_first(cfg,&search);
+	if (!e){
+		printf("NULL\n");
+		return;
+	}
+	printf("%s : %s\n",e->key,e->val);
+}
+
