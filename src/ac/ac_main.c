@@ -223,7 +223,7 @@ int main (int argc, char *argv[])
 
 	cw_cfg_dump(global_cfg);
 		
-	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", conf_acname, conf_acid);
+	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", cw_cfg_get(global_cfg,"capwap/ac-name",NULL), conf_acid);
 	rc = ac_run(global_cfg);
 
 errX:
@@ -246,41 +246,51 @@ void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, in
 void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
 
+static void pcb(char *dst, struct mavlnode *node)
+{
+        struct cw_Cfg_entry *e = mavlnode_dataptr(node);
+        sprintf(dst, "%s", e->key);
+}
+
+
 int ac_run(cw_Cfg_t * cfg)
 {
+        struct cw_Cfg_iter cfi;
+	const char *s;
+	int i;
 
-	if (1 /*!conf_listen_addrs_len*/) {
-		cw_log (LOG_ERR, "Fatal error: No listen addresses found.");
-//		return 1;
-	}
-	
-	extern void cw_cfg_iterate(cw_Cfg_t *);	
-	cw_cfg_iterate(cfg);	
 
-	return 1;
 	
 	/* it is important to create the unicast sockets first,
 	 * because when we create the mcast an bcast sockets next
 	 * we will look for already created sockets to find a
 	 * good unicast reply socket */
 	
-	int i;
-	
-/*	for (i = 0; i < conf_listen_addrs_len; i++) {
+        cw_cfg_iter_init(cfg, &cfi, "actube/listen");
+        for (i=0; (s = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+
 		char addr[100];
 		char port[50];
 		int proto;
 		
-		conf_parse_listen_addr (conf_listen_addrs[i], addr, port, &proto);
-		
-		socklist_add_unicast (addr, port, proto);
+		conf_parse_listen_addr (s, addr, port, &proto);
+		socklist_add_unicast (addr, port, proto,
+				cw_cfg_get_bool(cfg,"actube/ipv4","true"),
+				cw_cfg_get_bool(cfg,"actube/ipv6","true")
+				);
+        }
+	if (!i) {
+		cw_log (LOG_ERR, "Fatal error: No listen addresses found.");
+		return 1;
 	}
-*/
 
 	if (socklist_len == 0) {
 		cw_log (LOG_ERR, "Fatal error: Could not setup any listen socket");
 		return 1;
 	}
+
+
+
 	
 	/* create multicast sockets */
 	for (i = 0; i < conf_mcast_groups_len; i++) {
@@ -298,13 +308,20 @@ int ac_run(cw_Cfg_t * cfg)
 	}
 	
 	/* broadcast socket ipv4 only */
-	for (i = 0; i < conf_bcast_addrs_len; i++) {
+
+        //mavl_print(cfg,pcb,180);
+
+        cw_cfg_iter_init(cfg, &cfi, "actube/bcast");
+        for (i=0; (s = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+//	for (i = 0; i < conf_bcast_addrs_len; i++) {
 	
 		char addr[50], port[50];
 		int proto;
-		conf_parse_listen_addr (conf_bcast_addrs[i], addr, port, &proto);
+		conf_parse_listen_addr (s, addr, port, &proto);
 		
 		socklist_add_broadcast (addr, port, proto);
+
+
 #ifdef WITH_LWAPP
 		
 //              printf("Adding %d\n",socklist_len);
