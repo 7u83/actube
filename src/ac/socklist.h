@@ -40,7 +40,7 @@ struct socklistelem{
 
 
 extern int socklist_add_multicast(const char * addr, const char * port, int ac_proto);
-extern int socklist_add_unicast(const char *addr, const char * port, int ac_proto);
+extern int socklist_add_unicast(const char *addr, const char * port, int ac_proto, int ipv4, int ipv6);
 extern int socklist_add_broadcast(const char *addr, const char * port,int ac_proto);
 extern int socklist_init();
 extern void socklist_destroy();
