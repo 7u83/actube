@@ -17,7 +17,6 @@ LIBS+=-lmavl
 LIBS+=-lcw
 LIBS+=-lrt
 LIBS+=-lpthread
-LIBS+=-lconfuse
 LIBS+=-lc
 LIBS+=-lnettle
 LIBS+=-lssl
