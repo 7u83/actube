@@ -1,4 +1,12 @@
 #Cfg
+
+#
+# AC Name
+# Deafults to actube + mac address of primary interface
+#
+#capwap/ac-name
+#
+
 capwap/ssl-cipher: DHE-RSA:RSA:AES-256-CBC:AES-128-CBC:SHA1:PSK
 capwap/ssl-psk-enable: false
 capwap/ssl-psk: 123456
@@ -9,6 +17,23 @@ cisco/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
 cisco/ssl-cipher: DEFAULT
 cisco/ssl-dhbits: 2048
 
-#actube/listen.hitler : 123456789
-actube/listen.17 : 123456789
+
+# 
+# Whether or not to use IPv4/IPv6 
+#
+#actube/ipv4: true
+#actube/ipv6: true
+#
+actube/ipv6: false
+
+#
+# List of Mods
+#
+#actube/mod.1: capwap
+#actube/mod.2: capwap80211
+#
+
+actube/mod.0: cisco
+actube/mod.1: capwap
+actube/mod.2: capwap80211
 
