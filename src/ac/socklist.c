@@ -335,7 +335,7 @@ static int socklist_check_size()
 }
 
 
-int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
+int socklist_add_unicast(const char *addr, const char *port, int ac_proto, int ipv4, int ipv6)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct addrinfo hints;
@@ -364,6 +364,14 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 		struct sockaddr broadcast;
 		struct sockaddr *sa;
 		int sockfd;
+
+		if (res->ai_addr->sa_family == AF_INET && !ipv4){
+			continue;
+		}
+		if (res->ai_addr->sa_family == AF_INET6 && !ipv6){
+			continue;
+		}
+
 		
 		ifname[0] = 0;
 		rc = sock_getifinfo(res->ai_addr, ifname, &broadcast, &netmask);
@@ -372,6 +380,7 @@ int socklist_add_unicast(const char *addr, const char *port, int ac_proto)
 			continue;
 		}
 
+		
 		/* Bind the control port */
 		sa = res->ai_addr;
 		sockfd = socket(res->ai_addr->sa_family, SOCK_DGRAM, 0);
