@@ -19,7 +19,6 @@
 #include <string.h>
 #include <sys/utsname.h>
 
-#include <confuse.h>
 
 #include "cw/capwap.h"
 #include "cw/sock.h"
@@ -40,18 +39,15 @@
 
 #include "cw/mavltypes.h"
 
-uint8_t conf_macaddress[12];
+/*uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len = 0;
-
+*/
 
 long conf_strict_capwap = 1;
 long conf_strict_headers = 0;
 /*int conf_capwap_mode = CW_MODE_CAPWAP;*/
 
 
-
-const char *conf_acname = NULL;
-int conf_acname_len = 0;
 
 char *conf_acid = NULL;
 
@@ -65,9 +61,6 @@ struct sockaddr_storage *conf_salist = NULL;
 
 char **conf_mcast_groups = 0;
 int conf_mcast_groups_len = 0;
-
-char **conf_bcast_addrs = 0;
-int conf_bcast_addrs_len;
 
 
 struct sockaddr_storage *conf_bsalist = NULL;
@@ -119,63 +112,50 @@ char *conf_control_port = 0;
 
 int conf_dtls_verify_peer = 1;
 
-static int init_acname()
+static int init_ac_name(cw_Cfg_t * cfg)
 {
-	if (conf_acname == NULL) {
-		char *s = malloc(strlen(CONF_DEFAULT_ACNAME) + strlen(conf_acid) + 1);
-		sprintf(s, "%s%s", CONF_DEFAULT_ACNAME, conf_acid);
-		conf_acname = s;
+	char *s;
+	char *primary_if=NULL;
+	char ac_name[CAPWAP_MAX_AC_NAME_LEN+1];
+	uint8_t macaddress[128];
+	uint8_t macaddress_len;
+	char acid[128];
+	int i;
+
+
+	s= cw_cfg_get(cfg,"capwap/ac-name",NULL);
+	if (s!=NULL)
+		return 1;
+
+//	primary_if = sock_get_primary_if(AF_INET6);
+	if (!primary_if)
+		primary_if = sock_get_primary_if(AF_INET);
+
+	acid[0]=0;
+
+	if (primary_if) {
+		macaddress_len=8;
+		if (!sock_getifhwaddr(primary_if, macaddress, &macaddress_len)) {
+			cw_dbg(DBG_INFO, "Fatal: Unable to detect link layer address for %s\n",
+			       primary_if);
+		}
+		else{
+			s=acid;
+			for (i = 0; i < macaddress_len; i++) {
+				s += sprintf(s, "%02X", macaddress[i]);
+			}
+
+		}
 	}
-	conf_acname_len = strlen(conf_acname);
+
+	sprintf(ac_name,"actube%s",acid);
+	cw_cfg_set(cfg,"capwap/ac-name",ac_name);
 	return 1;
 }
 
 #include "../mod/modload.h"
 
 
-
-
-static int init_acid()
-{
-	int i;
-	char *s;
-	
-	if (conf_acid != NULL)
-		return 1;
-
-
-#ifdef WITH_IPV6
-	conf_primary_if = sock_get_primary_if(AF_INET6);
-	if (!conf_primary_if)
-		conf_primary_if = sock_get_primary_if(AF_INET);
-#else
-	conf_primary_if = get_primary_if(AF_INET);
-#endif
-
-	if (!conf_primary_if) {
-		cw_log(LOG_ERR,
-		       "Fatal: Unable to detect primary interface, needed to set ac_id. Pleas use confiPleas u to set ac_id");
-		return 0;
-	}
-
-	if (!sock_getifhwaddr(conf_primary_if, conf_macaddress, &conf_macaddress_len)) {
-		cw_log(LOG_ERR, "Fatal: Unable to detect link layer address for %s\n",
-		       conf_primary_if);
-		return 0;
-	};
-
-
-
-
-	conf_acid = malloc(2 * conf_macaddress_len + 1);
-	s = conf_acid;
-
-	for (i = 0; i < conf_macaddress_len; i++) {
-		s += sprintf(s, "%02X", conf_macaddress[i]);
-	}
-	return 1;
-
-}
 
 
 static int init_dtls()
@@ -221,11 +201,13 @@ static int init_listen_addrs(cw_Cfg_t * cfg)
 	struct ifaddrs *ifap, *ifa;
 	int rc;
 	int ctr;
-	const char * a0;
-	
-	a0 = cw_cfg_get(cfg,"actube/listen.0",NULL);
-	if (a0)
-		return 1;
+	struct cw_Cfg_iter cfi;
+
+
+
+        cw_cfg_iter_init(cfg, &cfi, "actube/listen");
+	if (cw_cfg_iter_next(&cfi,NULL) != NULL)
+		return 0;
 
 	rc = getifaddrs(&ifap);
 	if (rc == -1)
@@ -310,18 +292,24 @@ static int add_bcast_addr(void *priv, void *addr)
 /*
  * Initialize broadcast addresses (ipv4 only)
  */
-int init_bcast_addrs()
+int init_bcast_addrs(cw_Cfg_t *cfg)
 {
 	int rc;
 	char str[100];
+	char key[100];
 	struct ifaddrs *ifa0, *ifa;
 	mavl_t t;
 	mavliter_t it;
-	
-	if (conf_bcast_addrs)
-		return 1;
+	struct cw_Cfg_iter cfi;
+	int i;
 
-	if (!conf_ipv4)
+//printf("BCAST INIT\n");
+        cw_cfg_iter_init(cfg, &cfi, "actube/bcast");
+	if (cw_cfg_iter_next(&cfi,NULL) != NULL)
+		return 0;
+
+	
+	if (!cw_cfg_get_bool(cfg,"actube/ipv4", "true"))
 		return 1;
 
 	/*t = mavl_create_ptr(); */
@@ -359,22 +347,34 @@ int init_bcast_addrs()
 
 
 		if (ifa->ifa_broadaddr) {
+			char *s,*sr;
 			sock_addrtostr(ifa->ifa_broadaddr, str, 100,1);
 			*strchr(str, ':') = 0;
-			mavl_add_str(t, cw_strdup(str));
+
+
+			s = cw_strdup(str);
+			sr = mavl_add_str(t, s);
+
+
+			printf("BCAST = %p --- %p: %s\n",str,s,str);
 		}
 
 	}
 
-	conf_bcast_addrs = malloc(t->count * sizeof(char *));
+//	conf_bcast_addrs = malloc(t->count * sizeof(char *));
 
+	i=0;
 	mavliter_init(&it,t);
 	mavliter_foreach(&it){
 		char * d;
 		d = mavliter_get_str(&it);
-		conf_bcast_addrs[conf_bcast_addrs_len] = cw_strdup(d);
-		if (conf_bcast_addrs[conf_bcast_addrs_len] != 0)
-			conf_bcast_addrs_len++;
+	//	conf_bcast_addrs[conf_bcast_addrs_len] = cw_strdup(d);
+	//	if (conf_bcast_addrs[conf_bcast_addrs_len] != 0)
+	//		conf_bcast_addrs_len++;
+
+		sprintf(key,"actube/bcast.%d",i++);
+		cw_cfg_set(cfg,key,d);
+
 
 	}
 
@@ -386,7 +386,7 @@ int init_bcast_addrs()
 	return 1;
 }
 
-int init_mcast_groups()
+int init_mcast_groups(cw_Cfg_t * cfg)
 {
 	int ctr;
 	int i;
@@ -440,6 +440,7 @@ int init_mcast_groups()
 
 }
 
+/*
 static int conf_read_strings(cfg_t * cfg, char *name, char ***dst, int *len)
 {
 
@@ -465,8 +466,9 @@ static int conf_read_strings(cfg_t * cfg, char *name, char ***dst, int *len)
 	return 1;
 }
 
+*/
 
-
+/*
 static int conf_read_dbg_level(cfg_t * cfg)
 {
 	const char *name = "dbg";
@@ -484,6 +486,7 @@ static int conf_read_dbg_level(cfg_t * cfg)
 	}
 	return 1;
 }
+*/
 
 struct cw_Mod ** conf_mods; 
 char *conf_mods_dir = NULL;
@@ -491,19 +494,28 @@ char *conf_mods_dir = NULL;
 /*
  * Read the module names from config file
  */ 
-static int conf_read_mods(cfg_t *cfg){
+static int init_mods(cw_Cfg_t *cfg){
 
 	int n, i;
-	n = cfg_size(cfg,CFG_ENTRY_MODS);
-	
-	conf_mods = malloc(sizeof(struct cw_Mod *)*(n+1));
+	const char * modname;
 
-	cw_dbg(DBG_INFO,"Mods directory: %s",conf_mods_dir);
-	cw_mod_set_path(conf_mods_dir);
+	struct cw_Cfg_iter cfi;
+        cw_cfg_iter_init(cfg, &cfi, "actube/mod");
+	if (cw_cfg_iter_next(&cfi,NULL) == NULL){
+		cw_cfg_set(cfg,"actube/mod.0","capwap");
+		cw_cfg_set(cfg,"actube/mod.1","capwap80211");
+	}
 
-	for (i=0; i < n; i++){
-		char *modname = cfg_getnstr(cfg, CFG_ENTRY_MODS, i);
-		struct cw_Mod * mod = cw_mod_load(modname, actube_global_cfg, CW_ROLE_AC);
+//	cw_dbg(DBG_INFO,"Mods directory: %s",conf_mods_dir);
+//	cw_mod_set_path(conf_mods_dir);
+
+        cw_cfg_iter_init(cfg, &cfi, "actube/mod");
+printf("iter mods\n");	
+        for (i=0; (modname = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+
+		printf("init mod name: %s\n",modname);
+
+		struct cw_Mod * mod = cw_mod_load(modname, cfg, CW_ROLE_AC);
 		
 		if (!mod)
 			return 0;
@@ -604,143 +616,6 @@ static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 	fprintf(stderr,"\n");
 }
 
-
-int read_config(const char *filename)
-{
-	int i, n;
-
-	cfg_opt_t opts[] = {
-		CFG_STR_LIST("mods", "{}", CFGF_NONE),
-		CFG_SIMPLE_STR("mods_dir", &conf_mods_dir),
-		
-		CFG_STR_LIST("dbg", "{}", CFGF_NONE),
-		CFG_STR_LIST("listen", "{}", CFGF_NONE),
-		CFG_STR_LIST("mcast_groups", "{}", CFGF_NONE),
-		CFG_STR_LIST("broadcast_listen", "{}", CFGF_NONE),
-		CFG_STR_LIST("ac_ips", "{}", CFGF_NONE),
-		CFG_SIMPLE_STR("control_port", &conf_control_port),
-
-		CFG_SIMPLE_BOOL("strict_capwap", &conf_strict_capwap),
-		CFG_SIMPLE_BOOL("strict_headers", &conf_strict_headers),
-		CFG_SIMPLE_BOOL("use_loopback", &conf_use_loopback),
-/*//		CFG_SIMPLE_STR("capwap_mode", &conf_capwap_mode_str),*/
-
-
-#ifdef WITH_LWAPP
-		CFG_SIMPLE_STR("lw_control_port", &conf_lw_control_port),
-		CFG_SIMPLE_BOOL("lwapp", &conf_lwapp),
-#endif
-
-		CFG_SIMPLE_INT("max_wtps", &conf_max_wtps),
-		CFG_SIMPLE_INT("debug_level", &conf_debug_level),
-
-
-		CFG_SIMPLE_INT("vendor_id", &conf_vendor_id),
-		CFG_SIMPLE_STR("ac_id", &conf_acid),
-		CFG_SIMPLE_STR("ac_name", &conf_acname),
-		CFG_SIMPLE_STR("hardware_version", &conf_hardware_version),
-		CFG_SIMPLE_STR("software_version", &conf_software_version),
-
-		CFG_SIMPLE_STR("cisco_hardware_version", &conf_cisco_hardware_version),
-		CFG_SIMPLE_STR("cisco_software_version", &conf_cisco_software_version),
-
-
-
-		CFG_SIMPLE_STR("ssl_cert", &conf_sslcertfilename),
-		CFG_SIMPLE_STR("ssl_key", &conf_sslkeyfilename),
-		CFG_SIMPLE_STR("ssl_key_pass", &conf_sslkeypass),
-		CFG_SIMPLE_STR("dtls_psk", &conf_dtls_psk),
-
-		CFG_SIMPLE_BOOL("dtls_verify_peer", &conf_dtls_verify_peer),
-		CFG_SIMPLE_BOOL("ipv4", &conf_ipv4),
-		CFG_SIMPLE_BOOL("ipv6", &conf_ipv6),
-		CFG_SIMPLE_STR("db_file", &conf_db_file),
-		CFG_SIMPLE_STR("image_dir", &conf_image_dir),
-
-		CFG_END()
-	};
-	cfg_t *cfg;
-
-	conf_mods_dir=cw_strdup("");
-
-	if (!init_control_port())
-		return 0;
-
-	
-	cfg = cfg_init(opts, CFGF_NONE);
-	cfg_set_error_function(cfg, errfunc);
-
-	if (cfg_parse(cfg, filename))
-		return 0;
-	
-
-	/* read debug options */
-	conf_read_dbg_level(cfg);
-
-	/* read multi cast groups */
-	conf_read_strings(cfg, "mcast_groups", &conf_mcast_groups,
-			  &conf_mcast_groups_len);
-
-	/* read ipv4 broadcast addresses */
-	conf_read_strings(cfg, "broadcast_listen", &conf_bcast_addrs, &conf_bcast_addrs_len);
-
-
-	/* read ac_ips */
-	n = cfg_size(cfg, "ac_ips");
-	if (!(conf_ac_ips = malloc(sizeof(struct sockaddr) * n)))
-		return 0;
-
-	conf_ac_ips_len = n;
-	for (i = 0; i < n; i++) {
-		struct sockaddr sa;
-		char *str = cfg_getnstr(cfg, "ac_ips", i);
-		if (sock_strtoaddr(cfg_getnstr(cfg, "ac_ips", i), &sa))
-			conf_ac_ips[i] = sa;
-		else {
-			perror(str);
-		}
-	}
-
-
-	if (!conf_read_mods(cfg)){
-		cfg_free(cfg);
-		return 0;
-	}
-
-
-	cfg_free(cfg);
-
-	if (!init_acid())
-		return 0;
-
-	if (!init_acname())
-		return 0;
-
-/*	if (!init_version())
-		return 0;
-*/
-
-	if (!init_vendor_id())
-		return 0;
-
-	if (!init_dtls())
-		return 0;
-
-/*	if (!conf_sslcipher)
-		conf_sslcipher = CAPWAP_CIPHER;
-
-*/	if (!conf_image_dir)
-		conf_image_dir = CONF_DEFAULT_IMAGE_DIR;
-
-
-
-	init_mcast_groups();
-	init_bcast_addrs();
-
-
-	return 1;
-}
-
 void free_config()
 {
 
@@ -753,5 +628,7 @@ void ac_conf_init(cw_Cfg_t *cfg)
 {
 	printf("ac conf\n");
 	init_listen_addrs(cfg);
-
+	init_bcast_addrs(cfg);
+	init_ac_name(cfg);
+	init_mods(cfg);
 }
