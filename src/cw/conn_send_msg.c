@@ -18,9 +18,9 @@ int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 
 	/* Zyxel doesn't count msg element length from
 	   behind seqnum */
-	if (conn->capwap_mode == CW_MODE_ZYXEL){
+//	if (conn->capwap_mode == CW_MODE_ZYXEL){
 /*		// XXX val-=3; */
-	}
+//	}
 
 
 	ptr = rawmsg;
