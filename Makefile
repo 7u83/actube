@@ -1,3 +1,4 @@
+.OBJDIR: ./
 
 all:
 	$(MAKE) -C src/cw

@@ -4,8 +4,6 @@
 #include "mavl.h"
 #include "cw/mavltypes.h"
 
-extern mavl_t actube_global_cfg;
-
 
 extern struct ac_status ac_global_status;
 

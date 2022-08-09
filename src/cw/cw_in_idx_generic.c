@@ -19,7 +19,7 @@ int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPara
 	result = cw_ktv_add(params->remote_cfg, key, 
 				handler->type, NULL, elem_data+1,elem_len-1);
 	
-	params->elem=result;
+//	params->elem=result;
 	
 	return CAPWAP_RESULT_SUCCESS;	
 }

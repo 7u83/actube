@@ -8,19 +8,20 @@
 #include "cw/capwap.h"
 #include "cw/fragman.h"
 #include "cw/timer.h"
+#include "cw/cfg.h"
 
 #define WTPMAN_QSIZE 1024
 
-struct wtpman{
+struct wtpman {
 	pthread_t thread;
 
-	struct conn * conn;
+	struct conn *conn;
 
 
 	/* wtp data */
-	uint8_t * wtp_name;
-	uint8_t * wtp_location;
-	uint8_t * session_id;
+	uint8_t *wtp_name;
+	uint8_t *wtp_location;
+	uint8_t *session_id;
 	uint8_t wtp_mactype;
 
 	int socklistindex;
@@ -28,7 +29,7 @@ struct wtpman{
 
 	int dtlsmode;
 
-	cw_timer_t echointerval_timer; 
+	cw_timer_t echointerval_timer;
 
 
 };
@@ -43,13 +44,14 @@ struct wtp{
 //extern void wtpman_run(void *arg);
 */
 
-struct wtpman * wtpman_create();
+struct wtpman *wtpman_create();
 
-struct wtpman * wtpman_create(int socklistindex,struct sockaddr * srcaddr, int dtlsmode);
+struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
+			     int dtlsmode, cw_Cfg_t * global_cfg);
 
-extern void wtpman_addpacket(struct wtpman * wtpman,uint8_t *packet,int len);
-extern void wtpman_destroy(struct wtpman * wtpman);
-extern void wtpman_start(struct wtpman * wtpman,int dtlsmode);
+extern void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len);
+extern void wtpman_destroy(struct wtpman *wtpman);
+extern void wtpman_start(struct wtpman *wtpman, int dtlsmode);
 
 
 

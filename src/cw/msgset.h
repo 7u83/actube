@@ -6,7 +6,7 @@
 #include "mavl.h"
 
 #include "val.h"
-
+#include "cfg.h"
 
 struct cw_ElemDef{
 	int proto;
@@ -29,8 +29,9 @@ struct cw_ElemHandlerParams {
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
-	cw_Val_t * elem;
+//	cw_Val_t * elem;
 	char * debug_details;
+	cw_Cfg_t * cfg;
 	mavl_t remote_cfg;
 	mavl_t local_cfg;
 	mavl_t default_cfg;

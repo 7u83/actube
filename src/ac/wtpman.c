@@ -21,7 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 
 #include "cw/capwap.h"
@@ -63,8 +63,8 @@ static void reset_echointerval_timer(struct wtpman *wtpman)
 }
 
 
-static int msg_start_handler(struct conn *conn, struct cw_action_in *a, uint8_t * data,
-			     int len, struct sockaddr *from)
+static int msg_start_handler(struct conn *conn, struct cw_action_in *a,
+			     uint8_t * data, int len, struct sockaddr *from)
 {
 	struct wtpman *wtpman = conn->data;
 	reset_echointerval_timer(wtpman);
@@ -97,17 +97,20 @@ static void wtpman_run_discovery(void *arg)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		rc = cw_read_messages(wtpman->conn);
-		if (cw_result_is_ok(rc)){
-			wtpman->conn->capwap_state=CAPWAP_STATE_JOIN;
-			
-			cw_dbg(DBG_INFO,"Discovery has detected mods: %s %s", 
-				wtpman->conn->cmod->name,wtpman->conn->bmod->name);
+		if (cw_result_is_ok(rc)) {
+			wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
+
+			cw_dbg(DBG_INFO, "Discovery has detected mods: %s %s",
+			       wtpman->conn->cmod->name,
+			       wtpman->conn->bmod->name);
 
 			wtplist_lock();
-			discovery_cache_add(discovery_cache,(struct sockaddr*)&wtpman->conn->addr,
-				wtpman->conn->cmod,wtpman->conn->bmod);
+			discovery_cache_add(discovery_cache,
+					    (struct sockaddr *) &wtpman->conn->
+					    addr, wtpman->conn->cmod,
+					    wtpman->conn->bmod);
 			wtplist_unlock();
-			
+
 		}
 	}
 
@@ -124,12 +127,13 @@ static int wtpman_dtls_setup(void *arg)
 	/* try to accept the connection */
 	if (!dtls_accept(wtpman->conn)) {
 		cw_dbg(DBG_DTLS, "Error establishing DTLS session with %s",
-		       sock_addr2str_p(&wtpman->conn->addr,sock_buf));
+		       sock_addr2str_p(&wtpman->conn->addr, sock_buf));
 		return 0;
 	}
 
 	cw_dbg(DBG_DTLS, "DTLS session established with %s, %s",
-	       sock_addr2str_p(&wtpman->conn->addr,sock_buf), dtls_get_cipher(wtpman->conn,cipherstr));
+	       sock_addr2str_p(&wtpman->conn->addr, sock_buf),
+	       dtls_get_cipher(wtpman->conn, cipherstr));
 
 
 	return 1;
@@ -143,24 +147,27 @@ static int wtpman_join(void *arg)
 	struct conn *conn = wtpman->conn;
 	time_t timer, wait_join;
 
-	cw_dbg(DBG_INFO, "Join State - %s", sock_addr2str(&conn->addr,sock_buf));
-	
-	wait_join = cw_ktv_get_word(conn->global_cfg,"wait-join",CAPWAP_WAIT_JOIN);
+	cw_dbg(DBG_INFO, "Join State - %s",
+	       sock_addr2str(&conn->addr, sock_buf));
+
+	wait_join =
+	    cw_ktv_get_word(conn->global_cfg, "wait-join", CAPWAP_WAIT_JOIN);
 
 	timer = cw_timer_start(wait_join);
 
 
-	while (!cw_timer_timeout(timer) && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
+	while (!cw_timer_timeout(timer)
+	       && wtpman->conn->capwap_state == CAPWAP_STATE_JOIN) {
 		rc = cw_read_messages(wtpman->conn);
 		if (rc < 0) {
 			if (errno == EAGAIN)
 				continue;
-				
+
 			break;
 		}
-		cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,
-		"-------------dump------------",
-		"DMP","---------end dump --------");
+		cw_dbg_ktv_dump(conn->remote_cfg, DBG_INFO,
+				"-------------dump------------",
+				"DMP", "---------end dump --------");
 	}
 
 	if (rc != 0) {
@@ -170,8 +177,9 @@ static int wtpman_join(void *arg)
 
 
 	if (wtpman->conn->capwap_state != CAPWAP_STATE_JOIN_COMPLETE) {
-		cw_dbg(DBG_MSG_ERR, "No join request from %s after %d seconds, WTP died.",
-		       sock_addr2str(&wtpman->conn->addr,sock_buf), wait_join);
+		cw_dbg(DBG_MSG_ERR,
+		       "No join request from %s after %d seconds, WTP died.",
+		       sock_addr2str(&wtpman->conn->addr, sock_buf), wait_join);
 
 		return 0;
 	}
@@ -241,7 +249,7 @@ static void wtpman_image_data(struct wtpman *wtpman)
 
 
 
-void * wtpman_run_data(void *wtpman_arg)
+void *wtpman_run_data(void *wtpman_arg)
 {
 
 	return NULL;
@@ -263,44 +271,47 @@ void * wtpman_run_data(void *wtpman_arg)
 
 }
 
-int cw_run_state_machine(struct conn * conn, time_t *timer)
+int cw_run_state_machine(struct conn *conn, time_t * timer)
 {
 
 	int timerval;
 	cw_StateMachineState_t search, *result;
 
-	
-	while(1){
+
+	while (1) {
 		search.state = conn->capwap_state;
 		search.prevstate = conn->capwap_prevstate;
-		result = mavl_get(conn->msgset->state_machine,&search);
-		
-		cw_dbg(DBG_STATE,"State transition: [%s -> %s]",
-			cw_strstate(conn->capwap_prevstate),
-			cw_strstate(conn->capwap_state)
-			);
-		if (result == NULL){
-			cw_log(LOG_ERR,"State not found");
+		result = mavl_get(conn->msgset->state_machine, &search);
+
+		cw_dbg(DBG_STATE, "State transition: [%s -> %s]",
+		       cw_strstate(conn->capwap_prevstate),
+		       cw_strstate(conn->capwap_state)
+		    );
+		if (result == NULL) {
+			cw_log(LOG_ERR, "State not found");
 			return 0;
 		}
-		if (result->jump_state){
+		if (result->jump_state) {
 			conn->capwap_state = result->jump_state;
 			conn->capwap_prevstate = result->jump_prevstate;
-			
-			cw_dbg(DBG_STATE,"Jump to state: [%s->%s]",
-				cw_strstate(conn->capwap_prevstate),
-				cw_strstate(conn->capwap_state));
+
+			cw_dbg(DBG_STATE, "Jump to state: [%s->%s]",
+			       cw_strstate(conn->capwap_prevstate),
+			       cw_strstate(conn->capwap_state));
 			continue;
 		}
-		
-		if (result->dbgmsg){
-			cw_dbg(DBG_STATE,"%s",result->dbgmsg);
+
+		if (result->dbgmsg) {
+			cw_dbg(DBG_STATE, "%s", result->dbgmsg);
 		}
-		
-		if (result->timer_key){
-			timerval = cw_ktv_get_word(conn->local_cfg,result->timer_key,result->timer_default);
+
+		if (result->timer_key) {
+			timerval =
+			    cw_ktv_get_word(conn->local_cfg, result->timer_key,
+					    result->timer_default);
 			*timer = cw_timer_start(timerval);
-			cw_dbg(DBG_STATE,"Starting timer: [%s] - %d seconds.",result->timer_key,timerval);
+			cw_dbg(DBG_STATE, "Starting timer: [%s] - %d seconds.",
+			       result->timer_key, timerval);
 		}
 		return result->retval;
 	}
@@ -309,10 +320,10 @@ int cw_run_state_machine(struct conn * conn, time_t *timer)
 
 /*#define CW_TRANSITION(prestate,state) (prestate<<16|state)*/
 
-static void * wtpman_main(void *arg)
+static void *wtpman_main(void *arg)
 {
 	mavl_t r;
-	int rc ;
+	int rc;
 	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct conn *conn;
@@ -323,12 +334,12 @@ static void * wtpman_main(void *arg)
 	wtpman->conn->seqnum = 0;
 	conn = wtpman->conn;
 
-	wtpman->conn->remote_cfg = cw_ktv_create(); 
-	
+	wtpman->conn->remote_cfg = cw_ktv_create();
+
 
 	/* We were invoked with an unencrypted packet, 
 	 * so assume, it is a discovery request */
-	if (!wtpman->dtlsmode){
+	if (!wtpman->dtlsmode) {
 		wtpman_run_discovery(arg);
 		wtpman_remove(wtpman);
 		return NULL;
@@ -337,65 +348,67 @@ static void * wtpman_main(void *arg)
 
 	/* reject connections to our multi- or broadcast sockets */
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
-		cw_dbg(DBG_DTLS,"Reject multi");
+		cw_dbg(DBG_DTLS, "Reject multi");
 		wtpman_remove(wtpman);
 		return NULL;
 	}
-	
+
 	conn->capwap_state = CAPWAP_STATE_DTLS_SETUP;
 	/* establish dtls session */
 	if (!wtpman_dtls_setup(wtpman)) {
 		wtpman_remove(wtpman);
 		return NULL;
 	}
-	
+
 	/*last_state = conn->capwap_state;
-	conn->capwap_state = CAPWAP_STATE_JOIN;
-*/
+	   conn->capwap_state = CAPWAP_STATE_JOIN;
+	 */
 	conn->capwap_prevstate = CAPWAP_STATE_DTLS_SETUP;
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 	rc = 0;
-	
-	while (1){
-	
+
+	while (1) {
+
 		int wait_join;
 		int wait_change_state;
-		
-		
-		
-		if (!cw_run_state_machine(conn, &timer)){
-			cw_dbg(DBG_INFO,"WTP died");
-					wtpman_remove(wtpman);
-				return NULL;		
+
+
+
+		if (!cw_run_state_machine(conn, &timer)) {
+			cw_dbg(DBG_INFO, "WTP died");
+			wtpman_remove(wtpman);
+			return NULL;
 		};
-		
-		
+
+
 		while (!cw_timer_timeout(timer)) {
-			if (conn->update_cfg != NULL){
+			if (conn->update_cfg != NULL) {
 				mavl_t tmp;
-		
+
 
 				tmp = conn->local_cfg;
 
 				mavl_merge(conn->default_cfg, conn->local_cfg);
 /*				mavl_merge(conn->default_cfg, conn->remote_cfg);*/
 
-				conn->local_cfg=conn->update_cfg;
-								
+				conn->local_cfg = conn->update_cfg;
 
 
 
-								
-				cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
 
-				rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
-				mavl_merge(conn->remote_cfg,conn->update_cfg);
 
-				conn->update_cfg=NULL;
-				conn->local_cfg=tmp;
+				cw_dbg(DBG_INFO, "Updating WTP %s",
+				       sock_addr2str(&conn->addr, sock_buf));
+
+				rc = cw_send_request(conn,
+						     CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+				mavl_merge(conn->remote_cfg, conn->update_cfg);
+
+				conn->update_cfg = NULL;
+				conn->local_cfg = tmp;
 			}
 
-			
+
 			rc = cw_read_messages(wtpman->conn);
 			if (rc < 0) {
 				if (errno == EAGAIN)
@@ -403,31 +416,31 @@ static void * wtpman_main(void *arg)
 			}
 			break;
 		}
-		
-		if(rc<0){
+
+		if (rc < 0) {
 			conn->capwap_prevstate = conn->capwap_state;
 			conn->capwap_state = CAPWAP_STATE_TIMEOUT;
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -443,11 +456,11 @@ static void * wtpman_main(void *arg)
 
 
 	cw_dbg(DBG_INFO, "WTP from %s has joined with session id: %s",
-			sock_addr2str_p(&conn->addr,sock_buf),
-			format_bin2hex(conn->session_id,16));
+	       sock_addr2str_p(&conn->addr, sock_buf),
+	       format_bin2hex(conn->session_id, 16));
 
 
-exit(0);
+	exit(0);
 
 /*
 //	cw_dbg(DBG_INFO, "Creating data thread");
@@ -469,7 +482,9 @@ exit(0);
 		}
 	}
 
-cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP","---------end dump --------");
+	cw_dbg_ktv_dump(conn->remote_cfg, DBG_INFO,
+			"-------------dump------------", "DMP",
+			"---------end dump --------");
 
 	if (!cw_result_is_ok(rc)) {
 		cw_dbg(DBG_INFO, "WTP Problem: %s", cw_strrc(rc));
@@ -494,7 +509,7 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 //	radios_to_sql(conn);
 */
 
-	/*conn->msg_end=msg_end_handler;*/
+	/*conn->msg_end=msg_end_handler; */
 	/* The main run loop */
 	reset_echointerval_timer(wtpman);
 
@@ -508,12 +523,12 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 
 /*//		cw_dbg(DBG_X, "Time left: %d",
 // */
-	       /*cw_timer_timeleft(wtpman->echointerval_timer);*/
-	       
+		/*cw_timer_timeleft(wtpman->echointerval_timer); */
+
 		if (cw_timer_timeout(wtpman->echointerval_timer)) {
 
 			cw_dbg(DBG_INFO, "Lost connection to WTP:%s",
-			       sock_addr2str_p(&conn->addr,sock_buf));
+			       sock_addr2str_p(&conn->addr, sock_buf));
 			break;
 		}
 /*
@@ -525,17 +540,20 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 */
 
 
-	
-		r = db_get_update_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
+
+		r = db_get_update_tasks(conn,
+					sock_addr2str(&conn->addr, sock_buf));
 		if (r) {
 
-	/*		
-//			if (!conn->outgoing->count)
-//				continue;
-*/
-			cw_dbg(DBG_INFO, "Updating WTP %s",sock_addr2str(&conn->addr,sock_buf));
+			/*              
+			   //                   if (!conn->outgoing->count)
+			   //                           continue;
+			 */
+			cw_dbg(DBG_INFO, "Updating WTP %s",
+			       sock_addr2str(&conn->addr, sock_buf));
 
-			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+			rc = cw_send_request(conn,
+					     CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 
 /*
 //			mavl_merge(conn->config, conn->outgoing);
@@ -547,15 +565,18 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 */
 		}
 
-		r = db_get_radio_tasks(conn, sock_addr2str(&conn->addr,sock_buf));
+		r = db_get_radio_tasks(conn,
+				       sock_addr2str(&conn->addr, sock_buf));
 		if (r) {
 
 /*
 			//			if (!conn->radios_upd->count)
 //				continue;
 */
-			cw_dbg(DBG_INFO, "Updating Radios for %s",sock_addr2str(&conn->addr,sock_buf));
-			rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+			cw_dbg(DBG_INFO, "Updating Radios for %s",
+			       sock_addr2str(&conn->addr, sock_buf));
+			rc = cw_send_request(conn,
+					     CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
 
 /*
 //			conn_clear_upd(conn,1);
@@ -567,21 +588,21 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"-------------dump------------","DMP",
 //			radios_to_sql(conn);
 */
 			/*
-			rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
-			mavl_merge(conn->config, conn->outgoing);
-			mavl_destroy(conn->outgoing);
-			conn->outgoing = mbag_create();
-			config_to_sql(conn);
-			radios_to_sql(conn);
-			mavl_destroy(r);
-			*/
+			   rc = cw_send_request(conn, CW_MSG_CONFIGURATION_UPDATE_REQUEST);
+			   mavl_merge(conn->config, conn->outgoing);
+			   mavl_destroy(conn->outgoing);
+			   conn->outgoing = mbag_create();
+			   config_to_sql(conn);
+			   radios_to_sql(conn);
+			   mavl_destroy(r);
+			 */
 		}
 
 
 
 	}
 
-	db_ping_wtp(sock_addr2str_p(&conn->addr,sock_buf), "");
+	db_ping_wtp(sock_addr2str_p(&conn->addr, sock_buf), "");
 	wtpman_remove(wtpman);
 	return NULL;
 }
@@ -596,8 +617,9 @@ static void wtpman_run_dtls(void *arg)
 
 	/* reject connections to our multi- or broadcast sockets */
 	if (socklist[wtpman->socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
-		cw_dbg(DBG_DTLS, "Dropping connection from %s to non-unicast socket.",
-		       sock_addr2str_p(&wtpman->conn->addr,sock_buf));
+		cw_dbg(DBG_DTLS,
+		       "Dropping connection from %s to non-unicast socket.",
+		       sock_addr2str_p(&wtpman->conn->addr, sock_buf));
 		wtpman_remove(wtpman);
 		return;
 	}
@@ -623,13 +645,14 @@ void wtpman_destroy(struct wtpman *wtpman)
 
 
 
-struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dtlsmode)
+struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
+			     int dtlsmode, cw_Cfg_t * global_cfg)
 {
 	struct sockaddr dbgaddr;
 	socklen_t dbgaddrl;
 	int sockfd, replyfd;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-	
+
 	struct wtpman *wtpman;
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
@@ -642,8 +665,9 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 		replyfd = socklist_find_reply_socket(srcaddr, port);
 
 		if (replyfd == -1) {
-			cw_log(LOG_ERR, "Can't find reply socket for request from %s",
-			       sock_addr2str(srcaddr,sock_buf));
+			cw_log(LOG_ERR,
+			       "Can't find reply socket for request from %s",
+			       sock_addr2str(srcaddr, sock_buf));
 			free(wtpman);
 			return NULL;
 		}
@@ -651,19 +675,19 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 		replyfd = socklist[socklistindex].sockfd;
 	}
 
-	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd;*/
-	
-	
-	
-	
-	
+	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd; */
+
+
+
+
+
 
 
 	dbgaddrl = sizeof(dbgaddr);
 	getsockname(sockfd, &dbgaddr, &dbgaddrl);
 
 	cw_dbg(DBG_INFO, "Creating wtpman on socket %d, %s:%d", sockfd,
-	       sock_addr2str(&dbgaddr,sock_buf), sock_getport(&dbgaddr));
+	       sock_addr2str(&dbgaddr, sock_buf), sock_getport(&dbgaddr));
 
 
 
@@ -671,7 +695,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 	wtpman->conn->role = CW_ROLE_AC;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
-	sock_copyaddr(&wtpman->conn->data_addr, (struct sockaddr *) &wtpman->conn->addr);
+	sock_copyaddr(&wtpman->conn->data_addr,
+		      (struct sockaddr *) &wtpman->conn->addr);
 
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
@@ -699,21 +724,24 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr, int dt
 
 
 	wtpman->conn->local_cfg = cw_ktv_create();
-	wtpman->conn->global_cfg = actube_global_cfg;
-	wtpman->conn->local_cfg = actube_global_cfg;
+	wtpman->conn->global_cfg = global_cfg;
+	wtpman->conn->local_cfg = global_cfg;
 
 	/* when created caused by a packet in DTLS mode, we try
 	 * to find out the modules to load, for detected connection 
 	 * from discovery request */
-	if (dtlsmode){
+	if (dtlsmode) {
 		int rc;
 		struct cw_Mod *cmod, *bmod;
-		
-		rc = discovery_cache_get(discovery_cache,srcaddr,&cmod,&bmod);
-		if (rc){
-			cw_dbg(DBG_INFO, "Initializing with mod %s %s",cmod->name,bmod->name);
-			wtpman->conn->msgset = cw_mod_get_msg_set(wtpman->conn,cmod,bmod);
-			wtpman->conn->detected=1;
+
+		rc = discovery_cache_get(discovery_cache, srcaddr, &cmod,
+					 &bmod);
+		if (rc) {
+			cw_dbg(DBG_INFO, "Initializing with mod %s %s",
+			       cmod->name, bmod->name);
+			wtpman->conn->msgset =
+			    cw_mod_get_msg_set(wtpman->conn, cmod, bmod);
+			wtpman->conn->detected = 1;
 			cmod->setup_cfg(wtpman->conn);
 		}
 	}
@@ -729,14 +757,8 @@ void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 
 void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 {
-	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d",dtlsmode);
-	wtpman->dtlsmode=dtlsmode;
-	pthread_create(&wtpman->thread, NULL, wtpman_main,
-		       (void *) wtpman);
+	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d", dtlsmode);
+	wtpman->dtlsmode = dtlsmode;
+	pthread_create(&wtpman->thread, NULL, wtpman_main, (void *) wtpman);
 	return;
 }
-
-
-
-
-

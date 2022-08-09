@@ -20,7 +20,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params, int proto, int vendo
 	struct cw_ElemData * elem_data, elem_data_search;
 	int rc;
 	
-	params->elem=NULL;
+//	params->elem=NULL;
 	
 	/* try to retrieve a handler for this message element */
 	handler = cw_msgset_get_elemhandler(params->msgset,proto, vendor, elem_id);

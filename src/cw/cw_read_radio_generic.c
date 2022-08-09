@@ -24,7 +24,7 @@ int cw_in_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPa
 	result = cw_ktv_add(params->remote_cfg, key, 
 				handler->type, NULL, elem_data+1,elem_len-1);
 	
-	params->elem=result;
+//	params->elem=result;
 	
 	return CAPWAP_RESULT_SUCCESS;	
 }

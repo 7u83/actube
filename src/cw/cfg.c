@@ -606,4 +606,10 @@ uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def)
 	return v.val.word;
 }
 
-
+void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val)
+{
+	char a[128];
+	sprintf(a,"%d",val);
+	printf("VVVVVV: %s\n",a);
+	cw_cfg_set(cfg,key,a);
+}

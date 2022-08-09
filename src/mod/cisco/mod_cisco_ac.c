@@ -4,6 +4,7 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 #include "cw/dtls.h"
+#include "cw/cfg.h"
 
 
 /*#include "mod_cisco.h"*/
@@ -228,7 +229,7 @@ int static setup_cfg(struct conn  * conn)
 	conn->header_len=header_len;
 	
 	security = cw_setup_dtls(conn,conn->local_cfg,"cisco",CAPWAP_CIPHER);
-	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
+	cw_cfg_set_int(conn->local_cfg,"ac-descriptor/security",security);
 	
 	if (conn->default_cfg==NULL){
 		conn->default_cfg=cw_ktv_create();

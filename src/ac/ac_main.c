@@ -105,7 +105,6 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 
 
 struct cw_DiscoveryCache * discovery_cache;
-mavl_t actube_global_cfg;
 
 int ac_global_init()
 {
@@ -169,6 +168,7 @@ extern void test_sets();
 return 0;	
 */
 
+static cw_Cfg_t * global_cfg = NULL;
 
 
 int main (int argc, char *argv[])
@@ -180,7 +180,6 @@ int main (int argc, char *argv[])
 	const cw_Type_t **ti;
 
 
-	cw_Cfg_t * global_cfg = NULL;
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
@@ -481,7 +480,7 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 
 	if (!wtpman) {
 	
-		wtpman = wtpman_create (index, addr, preamble & 0xf);
+		wtpman = wtpman_create (index, addr, preamble & 0xf, global_cfg);
 		
 		
 		if (!wtpman) {
