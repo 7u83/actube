@@ -146,6 +146,7 @@ static int init_ac_name(cw_Cfg_t * cfg)
 			}
 
 		}
+		free(primary_if);
 	}
 
 	sprintf(ac_name,"actube%s",acid);
