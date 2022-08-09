@@ -219,7 +219,7 @@ struct cw_Conn {
 	void *data;
 
 	/** Mode */
-	int capwap_mode;
+//	int capwap_mode;
 	
 	/** CAWAP mode for outgoing messages */
 	int capwap_mode_out;

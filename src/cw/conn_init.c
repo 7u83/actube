@@ -55,7 +55,7 @@ void conn_init(struct cw_Conn * conn)
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;
 	conn->wait_join=CAPWAP_WAIT_JOIN;
 	conn->mtu_discovery=1;
-	conn->capwap_mode = 0;
+//	conn->capwap_mode = 0;
 	conn->strict_capwap=1;
 
 
