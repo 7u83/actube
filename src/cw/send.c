@@ -37,7 +37,7 @@
 
 
 
-int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
+int conn_send_data_msg(struct cw_Conn * conn, uint8_t *rawmsg,int len)
 {
 	int packetlen = len;
 	int fragoffset;
@@ -93,7 +93,7 @@ int conn_send_data_msg(struct conn * conn, uint8_t *rawmsg,int len)
 
 #define MAX_MTU 9500
 int 
-cw_send_msg( struct conn * conn, uint8_t *msg)
+cw_send_msg( struct cw_Conn * conn, uint8_t *msg)
 {
 	uint8_t buf[MAX_MTU];
 	int fragoffset,hlen,mtu;
@@ -166,7 +166,7 @@ cw_send_msg( struct conn * conn, uint8_t *msg)
 
 
 
-int cw_send_request(struct conn *conn,int msg_id)
+int cw_send_request(struct cw_Conn *conn,int msg_id)
 {
 	time_t timer;
 	int i;
@@ -218,7 +218,7 @@ int cw_send_request(struct conn *conn,int msg_id)
 
 
 /*// XXX find a better name for this function */
-int cw_send_custom_request_2(struct conn *conn,int msg_id)
+int cw_send_custom_request_2(struct cw_Conn *conn,int msg_id)
 {
 
 

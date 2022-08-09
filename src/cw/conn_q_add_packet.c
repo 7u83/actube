@@ -25,7 +25,7 @@
 #include "sock.h"
 
 
-void conn_q_add_packet(struct conn * conn,uint8_t *packet,int len)
+void conn_q_add_packet(struct cw_Conn * conn,uint8_t *packet,int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	int qwpos = conn->qwpos;

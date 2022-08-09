@@ -3,7 +3,7 @@
 
 #include "conn.h"
 
-int conn_q_wait_packet(struct conn * conn, int seconds)
+int conn_q_wait_packet(struct cw_Conn * conn, int seconds)
 {
 
 	struct timespec timespec;

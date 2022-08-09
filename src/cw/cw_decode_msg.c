@@ -66,9 +66,7 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 		return CAPWAP_RESULT_UNRECOGNIZED_MESSAGE_ELEMENT;
 	}
 
-	printf ("USING HANDLER TO DECODE: %d %s\n",handler->id,handler->name);
 	rc = handler->get(handler, params, data, len);
-
 
 	return rc;
 }
@@ -123,4 +121,7 @@ int cw_decode_elements(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr
 
 	}
 
+	mavl_destroy(mand_found);
+	mlist_destroy(unrecognized);
+	return 0;
 }

@@ -34,7 +34,7 @@ static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
 }
 
 
-static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
+static int detect(struct cw_Conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
 	if (mode != CW_MOD_MODE_CAPWAP)
@@ -44,7 +44,7 @@ static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int ele
 }
 
 
-int static setup_cfg(struct conn  * conn)
+int static setup_cfg(struct cw_Conn  * conn)
 {
 	int security;
 	

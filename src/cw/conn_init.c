@@ -47,9 +47,9 @@ static int header_len(struct cw_ElemHandler * handler)
  * Basic initialization of a conn object 
  * @param conn conn object to initialize
  */ 
-void conn_init(struct conn * conn)
+void conn_init(struct cw_Conn * conn)
 {
-	memset(conn,0,sizeof(struct conn));
+	memset(conn,0,sizeof(struct cw_Conn ));
 	conn->retransmit_interval=CAPWAP_RETRANSMIT_INTERVAL;
 	conn->max_retransmit=CAPWAP_MAX_RETRANSMIT;
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;

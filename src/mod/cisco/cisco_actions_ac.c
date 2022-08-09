@@ -756,10 +756,13 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_CISCO_BOARD_DATA_OPTIONS,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		4,4,				/* min/max length */
-		cisco_wtp_board_data_options,	/* type */
+		CW_TYPE_STRUCT,			/* type */
 		"cisco/wtp-board-data/options",	/* Key */
-		cw_in_generic_struct,		/* handler */
-		cw_out_generic_struct		/* put */
+		cw_in_generic,			/* handler */
+		cw_out_generic,			/* put */
+		NULL,
+		NULL,
+		cisco_wtp_board_data_options,	/* struct datae */
 	}
 	,
 	{
@@ -2141,7 +2144,7 @@ static cw_StateMachineState_t statemachine_states[]={
 };
 
 
-static int (*postprocess_join_request_parent)(struct conn * conn);
+static int (*postprocess_join_request_parent)(struct cw_Conn * conn);
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 
 	struct cw_MsgData * md;
@@ -2161,7 +2164,7 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 
 
 
-static void set_ac_version(struct conn * conn)
+static void set_ac_version(struct cw_Conn * conn)
 {
 	cw_Val_t * wtpver;
 	char verstr[512];
@@ -2188,7 +2191,7 @@ static void set_ac_version(struct conn * conn)
 	}
 }
 
-static int postprocess_discovery(struct conn *conn)
+static int postprocess_discovery(struct cw_Conn *conn)
 {
 	if (conn->role == CW_ROLE_AC ){
 		set_ac_version(conn);
@@ -2197,7 +2200,7 @@ static int postprocess_discovery(struct conn *conn)
 	return 1;
 }
 
-static int postprocess_join_request(struct conn *conn)
+static int postprocess_join_request(struct cw_Conn *conn)
 {
 	if (postprocess_join_request_parent!=NULL){
 		postprocess_join_request_parent(conn);
@@ -2206,7 +2209,7 @@ static int postprocess_join_request(struct conn *conn)
 	return 1;
 }
 
-static int preprocess_join_request(struct conn *conn)
+static int preprocess_join_request(struct cw_Conn *conn)
 {
 	cw_Val_t * ver;
 	int use_ac_version;

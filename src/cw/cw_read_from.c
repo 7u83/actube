@@ -2,7 +2,7 @@
 #include "log.h"
 
 
-int cw_read_from(struct conn *conn, struct sockaddr_storage *from)
+int cw_read_from(struct cw_Conn *conn, struct sockaddr_storage *from)
 {
 	int n;
 	uint8_t buf[2024];

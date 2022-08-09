@@ -24,7 +24,7 @@
 #include "dtls_openssl.h"
 #include "log.h"
 
-int dtls_openssl_accept(struct conn *conn)
+int dtls_openssl_accept(struct cw_Conn *conn)
 {
 	struct dtls_openssl_data *d;
 	char sock_buf[SOCK_ADDR_BUFSIZE];

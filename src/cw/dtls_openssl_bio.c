@@ -75,16 +75,16 @@ BIO_METHOD *dtls_openssl_bio_method()
 
 int dtls_openssl_bio_write(BIO * b, const char *data, int len)
 {
-/*	struct conn *conn = b->ptr;*/
-	struct conn *conn = BIO_get_data(b);
+/*	struct cw_Conn *conn = b->ptr;*/
+	struct cw_Conn *conn = BIO_get_data(b);
 	return dtls_bio_write(conn, data, len);
 }
 
 
 int dtls_openssl_bio_read(BIO * b, char *out, int maxlen)
 {
-	/*struct conn *conn = b->ptr;*/
-	struct conn *conn = BIO_get_data(b);
+	/*struct cw_Conn *conn = b->ptr;*/
+	struct cw_Conn *conn = BIO_get_data(b);
 	return dtls_bio_read(conn, out, maxlen);
 }
 
@@ -123,8 +123,8 @@ int dtls_openssl_bio_free(BIO * bio)
 
 long dtls_openssl_bio_ctrl(BIO * b, int cmd, long num, void *ptr)
 {
-	/*struct conn *conn = b->ptr;*/
-	struct conn *conn = BIO_get_data(b);
+	/*struct cw_Conn *conn = b->ptr;*/
+	struct cw_Conn *conn = BIO_get_data(b);
 
 	long ret = 1;
 	switch (cmd) {

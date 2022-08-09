@@ -21,7 +21,7 @@
 #include "log.h"
 
 
-int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int cw_in_wtp_reboot_statistics(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len, struct sockaddr *from)
 {
 	/*

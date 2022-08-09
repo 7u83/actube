@@ -29,7 +29,7 @@
 
 #include "cw/mavltypes.h"
 
-static int postprocess_join_request(struct conn *conn);
+static int postprocess_join_request(struct cw_Conn *conn);
 
 
 static cw_ValStruct_t wtp_reboot_statistics[] = {
@@ -772,7 +772,7 @@ static struct cw_MsgDef messages[] = {
 };
 
 
-static int postprocess_join_request(struct conn *conn)
+static int postprocess_join_request(struct cw_Conn *conn)
 {
 	cw_Val_t * result;
 	

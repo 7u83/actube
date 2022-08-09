@@ -72,9 +72,10 @@ CWSRC=\
 	cw_type_word.c\
 	cw_type_sysptr.c\
 	cw_write_descriptor_subelem.c\
-	cw_read_from.c \
 	cw_write_radio_element.c\
 	cw_detect_nat.c\
+
+#cw_read_from.c \
 
 KTVSRC=\
 	cw_ktv_add.c\
@@ -202,9 +203,9 @@ MISCSRC=\
 	md5sum.c\
 	mod.c\
 	msgset.c\
-	netconn.c\
 	send.c\
 	strheap.c\
+	netconn.c\
 
 DTLSSRC+=\
 	dtls_bio.c\

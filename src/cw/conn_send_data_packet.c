@@ -29,7 +29,7 @@
 #include "dbg.h"
 
 
-int conn_send_data_packet(struct conn * conn, const uint8_t * buffer, int len)
+int conn_send_data_packet(struct cw_Conn * conn, const uint8_t * buffer, int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	int n;

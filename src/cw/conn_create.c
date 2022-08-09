@@ -45,10 +45,10 @@
  * for asynchronous operation. 
  * To create a conn object without queue functionallity use  #conn_create_noq.
  */
-struct conn * conn_create(int sock, struct sockaddr * addr, int qsize)
+struct cw_Conn * conn_create(int sock, struct sockaddr * addr, int qsize)
 {
-	struct conn * conn; 
-	conn = malloc(sizeof (struct conn));
+	struct cw_Conn * conn; 
+	conn = malloc(sizeof (struct cw_Conn ));
 	if (!conn)
 		return NULL;
 

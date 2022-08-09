@@ -39,24 +39,24 @@
 
 static int cmp_by_addr_p ( const void * d1, const void *d2 )
 {
-	struct conn * c1 = * ( void ** ) d1 ;
-	struct conn * c2 = * ( void ** ) d2 ;
+	struct cw_Conn * c1 = * ( void ** ) d1 ;
+	struct cw_Conn * c2 = * ( void ** ) d2 ;
 	return sock_cmpaddr ( ( struct sockaddr* ) &c1->addr, ( struct sockaddr* ) &c2->addr, 1 );
 }
 
 
 static int cmp_by_addr ( const void * d1, const void *d2 )
 {
-	struct conn * c1 = * ( void ** ) d1 ;
-	struct conn * c2 = * ( void ** ) d2 ;
+	struct cw_Conn * c1 = * ( void ** ) d1 ;
+	struct cw_Conn * c2 = * ( void ** ) d2 ;
 	return sock_cmpaddr ( ( struct sockaddr* ) &c1->addr, ( struct sockaddr* ) &c2->addr, 0 );
 }
 
 
 static int cmp_by_session_id ( const void *d1, const void  *d2 )
 {
-	struct conn * c1 = *( void ** ) d1;
-	struct conn * c2 = *( void ** ) d2;
+	struct cw_Conn * c1 = *( void ** ) d1;
+	struct cw_Conn * c2 = *( void ** ) d2;
 	int len1,len2;
 	
 	if (c1->session_id==NULL && c2->session_id==NULL)
@@ -143,15 +143,15 @@ void connlist_destroy ( struct connlist * cl )
 }
 
 
-struct conn * connlist_get ( struct connlist * cl, const struct sockaddr * addr )
+struct cw_Conn * connlist_get ( struct connlist * cl, const struct sockaddr * addr )
 {
-	struct conn search;
+	struct cw_Conn search;
 	sock_copyaddr ( &search.addr, addr );
 	return mavl_get_ptr ( cl->by_addr, &search );
 }
 
 
-struct conn * connlist_add ( struct connlist * cl, struct conn * conn )
+struct cw_Conn * connlist_add ( struct connlist * cl, struct cw_Conn * conn )
 {
 	if ( cl->len != 0 )
 		if ( cl->by_addr->count >= cl->len )
@@ -161,17 +161,17 @@ struct conn * connlist_add ( struct connlist * cl, struct conn * conn )
 	return mavl_insert_ptr ( cl->by_addr, conn );
 }
 
-struct conn * connlist_get_by_session_id ( struct connlist *cl, struct conn * conn )
+struct cw_Conn * connlist_get_by_session_id ( struct connlist *cl, struct cw_Conn * conn )
 {
 	return mavl_get_ptr ( cl->by_session_id, conn );
 }
 
-struct conn * connlist_add_by_session_id ( struct connlist * cl, struct conn * conn )
+struct cw_Conn * connlist_add_by_session_id ( struct connlist * cl, struct cw_Conn * conn )
 {
 	return mavl_insert_ptr ( cl->by_session_id, conn );
 }
 
-void connlist_remove ( struct connlist *cl, struct conn * conn )
+void connlist_remove ( struct connlist *cl, struct cw_Conn * conn )
 {
 	void * md;
 	md = conn;

@@ -217,7 +217,7 @@ void dtls_openssl_data_destroy(struct dtls_openssl_data * d){
 	free(d);
 }
 
-int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
+int dtls_openssl_set_certs(struct cw_Conn * conn, struct dtls_openssl_data *d)
 {
 	int rc;
 	if (conn->dtls_key_file && conn->dtls_cert_file){
@@ -255,7 +255,7 @@ int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d)
 int generate_session_id(const SSL *ssl, unsigned char * id, unsigned int *id_len)
 {
 /*	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = b->ptr;
+	struct cw_Conn * conn = b->ptr;
 */
 	const char * sessid = "9123456789";
 /*	printf ("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMaking session id\n");*/
@@ -292,7 +292,7 @@ return 1;
 static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
 {
 	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = BIO_get_data(b); /*->ptr;*/
+	struct cw_Conn * conn = BIO_get_data(b); /*->ptr;*/
 	
 	int l = bstr16_len(conn->dtls_psk) < max_psk_len ? bstr16_len(conn->dtls_psk) : max_psk_len;
 	memcpy(psk,conn->dtls_psk,l);
@@ -304,7 +304,7 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 
 
 
-struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
+struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
 	int rc;
 	struct dtls_openssl_data * d = malloc(sizeof(struct dtls_openssl_data));
@@ -507,7 +507,7 @@ out_err:
 /*//#include <socket.h>*/
 #include <netinet/in.h>
 
-int dtls_openssl_shutdown(struct conn *conn)
+int dtls_openssl_shutdown(struct cw_Conn *conn)
 {
 	struct dtls_openssl_data * d ;
 	
@@ -552,7 +552,7 @@ int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *
 	char sock_buf2[SOCK_ADDR_BUFSIZE];
 	
 	BIO * b = SSL_get_rbio(ssl);
-	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
+	struct cw_Conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	cw_rand(conn->dtls_cookie,sizeof(conn->dtls_cookie));
 
@@ -571,8 +571,8 @@ int dtls_openssl_verify_cookie(SSL *ssl, const unsigned char *cookie, unsigned i
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	char sock_buf2[SOCK_ADDR_BUFSIZE];	
 	BIO * b = SSL_get_rbio(ssl);
-	/*struct conn * conn = b->ptr;*/
-	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
+	/*struct cw_Conn * conn = b->ptr;*/
+	struct cw_Conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	cw_dbg(DBG_DTLS,"Verifying DTLS cookie from %s: %s",
 		sock_addr2str(&conn->addr,sock_buf),sock_hwaddr2idstr(conn->dtls_cookie,len,sock_buf2));
@@ -588,7 +588,7 @@ int dtls_openssl_verify_cookie(SSL *ssl, const unsigned char *cookie, unsigned i
 }
 
 
-int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len)
+int dtls_openssl_read(struct cw_Conn * conn, uint8_t *buffer, int len)
 {
 	struct dtls_openssl_data * d = conn->dtls_data;
 	int rc = SSL_read(d->ssl,buffer,len);
@@ -599,7 +599,7 @@ int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len)
 	return rc;
 }
 
-int dtls_openssl_write(struct conn * conn, const uint8_t *buffer, int len)
+int dtls_openssl_write(struct cw_Conn * conn, const uint8_t *buffer, int len)
 {
 	struct dtls_openssl_data * d = conn->dtls_data;
 	int rc = SSL_write(d->ssl,buffer,len);

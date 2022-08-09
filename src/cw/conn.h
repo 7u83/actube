@@ -56,7 +56,7 @@ struct cw_action_in;
 /**
  * Connection Object
  */ 
-struct conn {
+struct cw_Conn {
 	int sock;
 	struct sockaddr_storage addr;
 
@@ -106,7 +106,7 @@ struct conn {
 
 
 	/** Counter for mandatory message elements */
-	struct avltree *mand;
+/*	struct avltree *mand;*/
 
 
 	/** Actionsdefs - this defines the possible actions for
@@ -154,19 +154,19 @@ struct conn {
 
 	/* receive and send methods */
 
-	int (*recv_packet) (struct conn *, uint8_t *, int);
-	int (*recv_packet_peek) (struct conn *, uint8_t *, int);
-	int (*send_packet) (struct conn *, const uint8_t *, int);
+	int (*recv_packet) (struct cw_Conn*, uint8_t *, int);
+	int (*recv_packet_peek) (struct cw_Conn*, uint8_t *, int);
+	int (*send_packet) (struct cw_Conn*, const uint8_t *, int);
 /*
-//	int (*recv_data_packet) (struct conn *, uint8_t *,int);
-//	int (*send_data_packet) (struct conn *, const uint8_t *, int);
+//	int (*recv_data_packet) (struct cw_Conn*, uint8_t *,int);
+//	int (*send_data_packet) (struct cw_Conn*, const uint8_t *, int);
 */	
 
-	int (*readfrom) (struct conn *, uint8_t *, int, struct sockaddr_storage *);
-	int (*read) (struct conn *, uint8_t *, int);
-	int (*write) (struct conn *, const uint8_t *, int);
+	int (*readfrom) (struct cw_Conn*, uint8_t *, int, struct sockaddr_storage *);
+	int (*read) (struct cw_Conn*, uint8_t *, int);
+	int (*write) (struct cw_Conn*, const uint8_t *, int);
 /*
-//	int (*write_data) (struct conn *, const uint8_t *, int);
+//	int (*write_data) (struct cw_Conn*, const uint8_t *, int);
 */
 	/* optional packet queue */
 	uint8_t **q;
@@ -179,14 +179,14 @@ struct conn {
 	int cur_packet_pos;
 
 	/* dtls stuff */
-	int (*dtls_start) (struct conn *);
-	int (*dtls_accept) (struct conn *);
+	int (*dtls_start) (struct cw_Conn*);
+	int (*dtls_accept) (struct cw_Conn*);
 
 	bstr16_t dtls_psk;
 	int dtls_psk_enable;
 
 	int dtls_dhbits;
-	int (*dtls_get_psk)(struct conn *,const char *user,uint8_t**psk, int *len);
+	int (*dtls_get_psk)(struct cw_Conn*,const char *user,uint8_t**psk, int *len);
 
 	struct cw_Mod *cmod, *bmod;
 
@@ -229,8 +229,8 @@ struct conn {
 	int strict_hdr;
 
 
-	int (*process_packet)(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
-	int (*process_message)(struct conn *conn, uint8_t * rawmsg, int rawlen,
+	int (*process_packet)(struct cw_Conn*conn, uint8_t * packet, int len,struct sockaddr *from);
+	int (*process_message)(struct cw_Conn*conn, uint8_t * rawmsg, int rawlen,
 			   struct sockaddr *from);
 
 	
@@ -238,16 +238,17 @@ struct conn {
 	void  * mods;
 
 
-	int (*msg_start)(struct conn *conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
-	int (*msg_end)(struct conn *conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
+	int (*msg_start)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
+	int (*msg_end)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 
-	int (*elem_end)(struct conn *conn,struct cw_action_in *a,int afrc,uint8_t*elem,int len,struct sockaddr *from);
+	int (*elem_end)(struct cw_Conn*conn,struct cw_action_in *a,int afrc,uint8_t*elem,int len,struct sockaddr *from);
 
 /*
-//	void (*actions_registered)(struct conn *conn);
+//	void (*actions_registered)(struct cw_Conn*conn);
 */
 
 };
+typedef struct cw_Conn cw_Conn_t;
 
 
 
@@ -255,76 +256,76 @@ struct conn {
 
 
 
-struct conn *conn_create(int sock, struct sockaddr *addr, int qsize);
-struct conn *conn_create_noq(int sock, struct sockaddr *addr);
+struct cw_Conn*conn_create(int sock, struct sockaddr *addr, int qsize);
+struct cw_Conn*conn_create_noq(int sock, struct sockaddr *addr);
 
 
-extern int conn_send_cwmsg(struct conn *conn, struct cwmsg *cwmsg);
+extern int conn_send_cwmsg(struct cw_Conn*conn, struct cwmsg *cwmsg);
 
 /*
-//extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+//extern int conn_process_packet(struct cw_Conn*conn, uint8_t * packet, int len,
 //				int (*cb) (void *, uint8_t *,int len), void *cbarg);
 */
 
-extern int conn_process_packet(struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
-extern int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+extern int conn_process_packet(struct cw_Conn*conn, uint8_t * packet, int len,struct sockaddr *from);
+extern int process_message(struct cw_Conn*conn, uint8_t * rawmsg, int rawlen,
 			   struct sockaddr *from);
 
-extern uint8_t *conn_get_message(struct conn *conn);
+extern uint8_t *conn_get_message(struct cw_Conn*conn);
 
-extern int conn_send_packet(struct conn *conn, const uint8_t * buffer, int len);
-extern int conn_send_data_packet(struct conn * conn, const uint8_t * buffer, int len);
+extern int conn_send_packet(struct cw_Conn*conn, const uint8_t * buffer, int len);
+extern int conn_send_data_packet(struct cw_Conn* conn, const uint8_t * buffer, int len);
 
-extern void conn_destroy(struct conn *conn);
+extern void conn_destroy(struct cw_Conn*conn);
 
-uint8_t *conn_q_get_packet(struct conn *conn);
-extern int conn_q_recv_packet(struct conn *conn, uint8_t * buffer, int len);
-extern int conn_q_recv_packet_peek(struct conn *conn, uint8_t * buffer, int len);
+uint8_t *conn_q_get_packet(struct cw_Conn*conn);
+extern int conn_q_recv_packet(struct cw_Conn*conn, uint8_t * buffer, int len);
+extern int conn_q_recv_packet_peek(struct cw_Conn*conn, uint8_t * buffer, int len);
 
-extern int conn_recv_packet(struct conn *conn, uint8_t * buf, int len);
-extern int conn_recv_packet_peek(struct conn *conn, uint8_t * buf, int len);
+extern int conn_recv_packet(struct cw_Conn*conn, uint8_t * buf, int len);
+extern int conn_recv_packet_peek(struct cw_Conn*conn, uint8_t * buf, int len);
 
-extern int conn_send_response(struct conn *conn, struct cwmsg *cwmsg, int seqnum);
-extern struct cwrmsg *conn_get_response(struct conn *conn);
+extern int conn_send_response(struct cw_Conn*conn, struct cwmsg *cwmsg, int seqnum);
+extern struct cwrmsg *conn_get_response(struct cw_Conn*conn);
 
 
 #define conn_get_next_seqnum(conn) (conn->seqnum=((conn->seqnum+1)&0xff))
 #define conn_get_last_seqnum(conn) (conn->seqnum&0xff)
 
 
-void conn_q_add_packet(struct conn *conn, uint8_t * packet, int len);
+void conn_q_add_packet(struct cw_Conn*conn, uint8_t * packet, int len);
 
 struct image_identifier;
 struct cwimage_data;
 
-extern void conn_prepare_request(struct conn *conn, int type);
-extern int conn_prepare_image_data_request(struct conn *conn, struct cwimage_data *,
+extern void conn_prepare_request(struct cw_Conn*conn, int type);
+extern int conn_prepare_image_data_request(struct cw_Conn*conn, struct cwimage_data *,
 					   struct image_identifier *id);
 /*
-//extern void conn_detect_capwap(struct conn *conn, struct wtpinfo *wtpinfo);
+//extern void conn_detect_capwap(struct cw_Conn*conn, struct wtpinfo *wtpinfo);
 */
 
-struct cwrmsg *conn_send_request(struct conn *conn);
-struct cwrmsg *conn_wait_for_message(struct conn *conn, time_t timer);
+struct cwrmsg *conn_send_request(struct cw_Conn*conn);
+struct cwrmsg *conn_wait_for_message(struct cw_Conn*conn, time_t timer);
 
-struct cwrmsg *conn_wait_for_request(struct conn *conn, int *msglist, time_t timer);
+struct cwrmsg *conn_wait_for_request(struct cw_Conn*conn, int *msglist, time_t timer);
 
-int conn_q_wait_packet(struct conn * conn, int seconds);
+int conn_q_wait_packet(struct cw_Conn* conn, int seconds);
 
 #define conn_is_error(conn) (conn->dtls_error)
 
-void conn_init(struct conn *conn);
+void conn_init(struct cw_Conn*conn);
 
-extern int cw_read_messages(struct conn *conn);
+extern int cw_read_messages(struct cw_Conn*conn);
 
-extern int conn_recvfrom_packet(struct conn *conn, uint8_t * buf, int len,
+extern int conn_recvfrom_packet(struct cw_Conn*conn, uint8_t * buf, int len,
 			 struct sockaddr_storage *from);
 
-int conn_send_msg(struct conn * conn, uint8_t *rawmsg);
-int cw_read_from(struct conn * conn, struct sockaddr_storage * from);
+int conn_send_msg(struct cw_Conn* conn, uint8_t *rawmsg);
+int cw_read_from(struct cw_Conn* conn, struct sockaddr_storage * from);
 
-int conn_send_msg(struct conn *conn, uint8_t * rawmsg);
+int conn_send_msg(struct cw_Conn *conn, uint8_t * rawmsg);
 
-void conn_clear_upd(struct conn *conn, int merge);
+void conn_clear_upd(struct cw_Conn*conn, int merge);
 
 #endif	/* __CONN_H */

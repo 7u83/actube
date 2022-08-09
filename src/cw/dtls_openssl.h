@@ -48,20 +48,20 @@ extern int dtls_openssl_init();
 #define CAPWAP_CIPHER	"ALL"
 
 
-struct dtls_openssl_data * dtls_openssl_data_create(struct conn * conn, const SSL_METHOD * method, BIO_METHOD * bio);
+struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const SSL_METHOD * method, BIO_METHOD * bio);
 extern int dtls_openssl_psk_key2bn(const char *psk_key, unsigned char *psk, unsigned int max_psk_len);
 extern int dtls_openssl_generate_cookie(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
 extern int dtls_openssl_verify_cookie(SSL *ssl, const unsigned char *cookie, unsigned int cookie_len);
 
-extern int dtls_openssl_read(struct conn * conn, uint8_t *buffer, int len);
-extern int dtls_openssl_write(struct conn * conn, const uint8_t *buffer, int len);
-extern int dtls_openssl_connect(struct conn * conn);
-extern const char * dtls_openssl_get_cipher(struct conn * conn, char *dst);
+extern int dtls_openssl_read(struct cw_Conn * conn, uint8_t *buffer, int len);
+extern int dtls_openssl_write(struct cw_Conn * conn, const uint8_t *buffer, int len);
+extern int dtls_openssl_connect(struct cw_Conn * conn);
+extern const char * dtls_openssl_get_cipher(struct cw_Conn * conn, char *dst);
 
 extern int dtls_openssl_log_error(SSL * ssl, int rc, const char *txt);
 
-extern int dtls_openssl_accept(struct conn * conn);
-extern int dtls_openssl_set_certs(struct conn * conn, struct dtls_openssl_data *d);
+extern int dtls_openssl_accept(struct cw_Conn * conn);
+extern int dtls_openssl_set_certs(struct cw_Conn * conn, struct dtls_openssl_data *d);
 
 
 
@@ -77,7 +77,7 @@ extern int dtls_openssl_log_error_queue(const char *txt);
 
 extern BIO_METHOD * dtls_openssl_bio_method();
 
-extern int dtls_openssl_shutdown(struct conn *conn);
+extern int dtls_openssl_shutdown(struct cw_Conn *conn);
 
 /**
  * @}

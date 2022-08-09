@@ -19,7 +19,7 @@
 
 #include "dtls_openssl.h"
 
-const char * dtls_openssl_get_cipher(struct conn * conn, char *dst)
+const char * dtls_openssl_get_cipher(struct cw_Conn * conn, char *dst)
 {
 	struct dtls_openssl_data * d;
 	const SSL_CIPHER * c;

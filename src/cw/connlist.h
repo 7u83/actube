@@ -7,7 +7,7 @@
 #include "pthread.h"
 
 struct connlist {
-/*	struct conn ** connlist; */
+/*	struct cw_Conn ** connlist; */
 
 	struct mavl *by_addr;
 	struct mavl *by_session_id;
@@ -22,12 +22,12 @@ struct connlist *connlist_create(int len, int cmpports);
 void connlist_lock(struct connlist *cl);
 void connlist_unlock(struct connlist *cl);
 void conlist_destroy(struct connlist *cl);
-struct conn *connlist_get(struct connlist *cl, const struct sockaddr *addr);
-struct conn *connlist_add(struct connlist *cl, struct conn *conn);
-void connlist_remove(struct connlist *cl, struct conn *conn);
+struct cw_Conn *connlist_get(struct connlist *cl, const struct sockaddr *addr);
+struct cw_Conn *connlist_add(struct connlist *cl, struct cw_Conn *conn);
+void connlist_remove(struct connlist *cl, struct cw_Conn *conn);
 void connlist_destroy(struct connlist *cl);
 
-struct conn * connlist_get_by_session_id(struct connlist *cl,  struct conn * conn);
-struct conn * connlist_add_by_session_id(struct connlist * cl, struct conn * conn);
+struct cw_Conn * connlist_get_by_session_id(struct connlist *cl,  struct cw_Conn * conn);
+struct cw_Conn * connlist_add_by_session_id(struct connlist * cl, struct cw_Conn * conn);
 
 #endif

@@ -211,7 +211,7 @@ static void cw_dbg_vlog_line(struct cw_LogWriter * writer,
 /**
  * Put a list of missing mandatory message elements to debug output
  */
-void cw_dbg_missing_mand(int level, struct conn *conn, int ** ml, int n,
+void cw_dbg_missing_mand(int level, struct cw_Conn *conn, int ** ml, int n,
 			 int  * a)
 {
 	/*
@@ -246,7 +246,7 @@ void cw_dbg_missing_mand(int level, struct conn *conn, int ** ml, int n,
 /**
  * Display a packet on for debugger
  */
-void cw_dbg_pkt(int level, struct conn *conn, uint8_t * packet, int len,
+void cw_dbg_pkt(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
 
@@ -308,7 +308,7 @@ void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ..
 }
 
 
-void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
+void cw_dbg_msg(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
 
@@ -383,7 +383,7 @@ void cw_dbg(int level, const char *format, ...){
 
 
 
-void cw_dbg_elem(int level, struct conn *conn, int msg, 
+void cw_dbg_elem(int level, struct cw_Conn *conn, int msg, 
 	struct cw_ElemHandler * handler, const uint8_t * msgbuf, int len)
 {
 	char vendorname[256];

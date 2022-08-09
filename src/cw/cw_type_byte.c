@@ -35,6 +35,9 @@ static int put(const cw_Val_t *data, uint8_t * dst)
 
 static const char * get_guardstr(int val, const cw_ValValRange_t * valrange)
 {
+	if (valrange==NULL)
+		return NULL;
+
 	while(valrange->name!=NULL){
 		if(val>=valrange->min && val<=valrange->max)
 			return valrange->name;
@@ -121,6 +124,26 @@ static int cast(cw_Val_t * data)
 	return 0;
 }
 
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, void *param)
+{
+	uint8_t	val;
+	cw_ValValRange_t * valrange = (cw_ValValRange_t *) param;
+	const char *str;
+	
+      	val = cw_get_byte(src);
+	str = get_guardstr(val, valrange);
+	if (str != NULL)
+		cw_cfg_set(cfg,key,str);
+	else
+		cw_cfg_set_int(cfg,key,val);
+
+	return 1;
+}
+
+static 	int bwrite(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, void * param)
+{
+	return 0;
+}
 
 const struct cw_Type cw_type_byte = {
 	"Byte",			/* name */
@@ -132,5 +155,8 @@ const struct cw_Type cw_type_byte = {
 	len,			/* len */
 	data,			/* data */
 	get_type_name,		/* get_type_name */
-	cast
+	cast,
+	bread,
+	bwrite
+
 };

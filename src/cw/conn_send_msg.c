@@ -3,9 +3,9 @@
 #include "dbg.h"
 
 #define CW_MODE_ZYXEL 7
-extern cw_send_msg(struct conn * conn,uint8_t * msg);
+extern cw_send_msg(struct cw_Conn * conn,uint8_t * msg);
 
-int conn_send_msg(struct conn * conn, uint8_t *rawmsg)
+int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 {
 	uint8_t * ptr; 
 	int packetlen;

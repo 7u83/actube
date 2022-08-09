@@ -22,18 +22,18 @@
 #include "keys.h"
 
 
-int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key, 
+int cw_read_descriptor_subelems(mavl_t cfg, const char *parent_key,
 				uint8_t * data, int len,
 				struct cw_DescriptorSubelemDef *elems)
 {
 	uint32_t vendor_id;
-	int sublen,subtype;
+	int sublen, subtype;
 	int errors = 0;
 	int success = 0;
 	int sub = 0;
 	while (sub < len) {
 		int i;
-		
+
 		if (len - sub < 8) {
 			return 0;
 		}
@@ -41,25 +41,24 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 		sublen = cw_get_word(data + sub + 6);
 		subtype = cw_get_word(data + sub + 4);
 
-		
 		/* search sub-element */
 		for (i = 0; elems[i].maxlen; i++) {
-			
-			if (elems[i].type == subtype /* && elems[i].vendor_id==vendor_id*/)
+			if (elems[i].type == subtype)
 				break;
 		}
-		
-		
+
 		if (!elems[i].maxlen) {
-			cw_dbg_version_subelem(DBG_ELEM_ERR, "Can't handle sub-elem, vendor or type unknown",
-				subtype, vendor_id, data+sub+8, sublen);
+/*			cw_dbg_version_subelem(DBG_ELEM_ERR,
+					       "Can't handle sub-elem, vendor or type unknown",
+					       subtype, vendor_id,
+					       data + sub + 8, sublen);*/
 			errors++;
 		} else {
 			int l = sublen;
 
 			char dbgstr[1048];
 			char key[1024];
-			
+
 			if (elems[i].maxlen < sublen) {
 				cw_dbg(DBG_ELEM_ERR,
 				       "SubType %d Too long (truncating), len = %d,max. len=%d",
@@ -69,15 +68,24 @@ int cw_read_descriptor_subelems(mavl_t cfg, const char * parent_key,
 
 
 			/* vendor */
-			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_SKEY_VENDOR);
-			cw_ktv_add(cfg,key,CW_TYPE_DWORD,NULL,data + sub,4);
-	
+			sprintf(key, "%s/%s/%s", parent_key, elems[i].key,
+				CW_SKEY_VENDOR);
+			cw_cfg_set_int(cfg, key, vendor_id);
+
+
 			/* version */
-			sprintf(key,"%s/%s/%s",parent_key,elems[i].key,CW_SKEY_VERSION);
-			cw_ktv_add(cfg,key,CW_TYPE_BSTR16,NULL,data+sub+8,l);
-	
+			sprintf(key, "%s/%s/%s", parent_key, elems[i].key,
+				CW_SKEY_VERSION);
+
+			CW_TYPE_BSTR16->read(cfg,key,data+sub+8,l,NULL);
+
+
 			sprintf(dbgstr, "%s", key);
-			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype, vendor_id, data+sub+8,l);
+
+
+
+/*			cw_dbg_version_subelem(DBG_SUBELEM, dbgstr, subtype,
+					       vendor_id, data + sub + 8, l);*/
 			success++;
 		}
 

@@ -71,7 +71,7 @@ void wtplist_destroy()
 struct wtpman * wtplist_get(const struct sockaddr * addr)
 {
 
-	struct conn * conn = connlist_get(connlist,addr);
+	struct cw_Conn * conn = connlist_get(connlist,addr);
 	if (!conn)
 		return 0;
 	return conn->data;
@@ -80,8 +80,8 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 
 struct wtpman * wtplist_get_by_session_id(bstr16_t *session_id)
 {
-	struct conn  search;
-	struct conn * conn;
+	struct cw_Conn  search;
+	struct cw_Conn * conn;
 	
 	search.session_id = session_id;
 	/*memcpy (search.session_id, session_id,16);*/

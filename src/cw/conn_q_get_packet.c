@@ -19,7 +19,7 @@
 #include <time.h>
 #include "conn.h"
 
-uint8_t * conn_q_get_packet(struct conn * conn)
+uint8_t * conn_q_get_packet(struct cw_Conn * conn)
 {
 	int qrpos;
 	struct timespec timespec;

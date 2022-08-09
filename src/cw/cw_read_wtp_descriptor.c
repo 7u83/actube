@@ -16,7 +16,7 @@ static struct cw_DescriptorSubelemDef allowed_default[] = {
 };
 
 
-int cw_read_wtp_descriptor(mavl_t cfg, struct conn *conn,
+int cw_read_wtp_descriptor(mavl_t cfg, struct cw_Conn *conn,
 			   struct cw_ElemHandler *eh, uint8_t * data, int len,
 			   struct cw_DescriptorSubelemDef *allowed)
 {

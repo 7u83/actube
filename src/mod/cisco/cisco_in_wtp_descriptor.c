@@ -35,7 +35,7 @@ int cisco_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerPara
 	};
 
 
-	return cw_read_wtp_descriptor_7(params->remote_cfg, NULL /*params->conn*/, eh, data, len, allowed);
+	return cw_read_wtp_descriptor_7(params->cfg, NULL /*params->conn*/, eh, data, len, allowed);
 }
 
 

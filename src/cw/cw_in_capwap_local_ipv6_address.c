@@ -9,7 +9,7 @@
 
 
 
-int cw_in_capwap_local_ipv6_address(struct conn *conn, struct cw_action_in *a,
+int cw_in_capwap_local_ipv6_address(struct cw_Conn *conn, struct cw_action_in *a,
 				 uint8_t * data, int len,struct sockaddr *from)
 {
 	struct sockaddr_in6 addr;

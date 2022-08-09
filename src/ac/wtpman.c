@@ -63,7 +63,7 @@ static void reset_echointerval_timer(struct wtpman *wtpman)
 }
 
 
-static int msg_start_handler(struct conn *conn, struct cw_action_in *a,
+static int msg_start_handler(struct cw_Conn *conn, struct cw_action_in *a,
 			     uint8_t * data, int len, struct sockaddr *from)
 {
 	struct wtpman *wtpman = conn->data;
@@ -144,7 +144,7 @@ static int wtpman_join(void *arg)
 	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct wtpman *wtpman = (struct wtpman *) arg;
-	struct conn *conn = wtpman->conn;
+	struct cw_Conn *conn = wtpman->conn;
 	time_t timer, wait_join;
 
 	cw_dbg(DBG_INFO, "Join State - %s",
@@ -193,7 +193,7 @@ static int wtpman_join(void *arg)
 static void wtpman_image_data(struct wtpman *wtpman)
 {
 /*	char sock_buf[SOCK_ADDR_BUFSIZE];
-	struct conn *conn = wtpman->conn;
+	struct cw_Conn *conn = wtpman->conn;
 
 	// Image upload 
 	const char *filename = mbag_get_str(conn->outgoing, CW_ITEM_IMAGE_FILENAME, NULL);
@@ -255,7 +255,7 @@ void *wtpman_run_data(void *wtpman_arg)
 	return NULL;
 /*
 	struct wtpman *wtpman = (struct wtpman *) wtpman_arg;
-	struct conn *conn = wtpman->conn;
+	struct cw_Conn *conn = wtpman->conn;
 
 
 	uint8_t data[1001];
@@ -271,7 +271,7 @@ void *wtpman_run_data(void *wtpman_arg)
 
 }
 
-int cw_run_state_machine(struct conn *conn, time_t * timer)
+int cw_run_state_machine(struct cw_Conn *conn, time_t * timer)
 {
 
 	int timerval;
@@ -326,7 +326,7 @@ static void *wtpman_main(void *arg)
 	int rc;
 	time_t timer;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-	struct conn *conn;
+	struct cw_Conn *conn;
 	int last_state;
 
 	struct wtpman *wtpman = (struct wtpman *) arg;

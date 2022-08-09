@@ -104,6 +104,32 @@ static int cast(cw_Val_t * data)
 	return 0;
 }
 
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, void *param)
+{
+	char *d, *dst;
+	dst = malloc(len*2+3);
+	if (dst==NULL)
+		return 0;
+	d=dst;
+
+	if ( format_is_utf8 ( src, len) ) {
+		d += sprintf ( d, "%.*s", len, src );
+		               
+	} else {
+		d += sprintf ( d, ".x" );
+		d += format_hex ( d, src,len);
+	}
+	
+	cw_cfg_set(cfg,key,dst);
+	free(dst);
+	return  d - dst;
+}
+
+static 	int bwrite(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, void * param)
+{
+	return 0;
+}
+
 
 const struct cw_Type cw_type_bstr16 = {
 	"Bstr16",	/* name */
@@ -115,7 +141,10 @@ const struct cw_Type cw_type_bstr16 = {
 	len,		/* len */
 	data,		/* data */
 	get_type_name,	/* get_type_name */
-	cast		/* cast */
+	cast,		/* cast */
+	bread,
+	bwrite
+
 };
 
 

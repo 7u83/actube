@@ -168,7 +168,7 @@ static int init(struct cw_Mod *mod, mavl_t global_cfg, int role)
 	return rc;
 }
 
-static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
+static int detect(struct cw_Conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
 
@@ -221,7 +221,7 @@ static struct cw_Mod capwap_ac = {
 */
 
 
-int static setup_cfg(struct conn  * conn)
+int static setup_cfg(struct cw_Conn  * conn)
 {
 	int security;
 	

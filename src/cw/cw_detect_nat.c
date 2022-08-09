@@ -10,7 +10,7 @@
  * @retval 1 NAT detected
  * @retval 0 no NAT was detected
  */
-int cw_detect_nat(struct conn *conn)
+int cw_detect_nat(struct cw_Conn *conn)
 {
 	cw_Val_t * result;
 	

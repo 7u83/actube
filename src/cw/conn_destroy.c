@@ -28,7 +28,7 @@
  * Destroy a conn object
  * @param object to destroy
  */
-void conn_destroy(struct conn * conn)
+void conn_destroy(struct cw_Conn * conn)
 {
 	if (conn->fragman)
 		fragman_destroy(conn->fragman);

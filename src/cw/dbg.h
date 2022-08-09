@@ -115,6 +115,8 @@ enum cw_dbg_levels{
 	
 	DBG_CFG_DMP,
 
+	DBG_CFG_SET,
+
 	/** Debug Mods */
 	DBG_MOD,
 	
@@ -147,14 +149,14 @@ void cw_dbg_set_level (int level, int on);
 int cw_dbg_set_level_from_str(const char *level);
 
 /*
-void cw_dbg_elem_(struct conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
+void cw_dbg_elem_(struct cw_Conn * conn, int msg, int msgelem, const uint8_t * msgbuf, int len);
 */
 /*
-void cw_dbg_missing_mand(int level,struct conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
+void cw_dbg_missing_mand(int level,struct cw_Conn *conn,cw_action_in_t ** ml,int n,cw_action_in_t *a);
 */
 
-void cw_dbg_packet(struct conn *conn, uint8_t * packet, int len);
-void cw_dbg_pkt(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+void cw_dbg_packet(struct cw_Conn *conn, uint8_t * packet, int len);
+void cw_dbg_pkt(int level,struct cw_Conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 void cw_dbg(int level, const char *format, ...);
 void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ...);
 
@@ -199,16 +201,16 @@ void cw_dbg_dmp_(int level, const uint8_t * data, int len, const char *format, .
 
 
 
-void cw_dbg_elem(int level, struct conn *conn, int msg, 
+void cw_dbg_elem(int level, struct cw_Conn *conn, int msg, 
 		struct cw_ElemHandler * handler, const uint8_t * msgbuf, int len);
 
 
 void cw_dbg_pkt_nc(int level,struct netconn *nc, uint8_t * packet, int len,struct sockaddr *from);
 
-void cw_dbg_msg(int level,struct conn *conn, uint8_t * packet, int len,struct sockaddr *from);
+void cw_dbg_msg(int level,struct cw_Conn *conn, uint8_t * packet, int len,struct sockaddr *from);
 char * cw_dbg_mkdmp(const uint8_t * data, int len);
-void cw_dbg_version_subelem(int level, const char *context, int subtype, 
-		uint32_t vendor_id, const uint8_t * vstr, int len);
+//void cw_dbg_version_subelem(int level, const char *context, int subtype, 
+//		uint32_t vendor_id, const uint8_t * vstr, int len);
 void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
 		const char *header, const char *prefix, const char *footer );
 

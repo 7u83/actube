@@ -36,7 +36,7 @@
  * alread initilaized in buffer 
  * Message alements are taken fom actiondef in #conn->action
  */
-int cw_put_msg(struct conn *conn, uint8_t * rawout)
+int cw_put_msg(struct cw_Conn *conn, uint8_t * rawout)
 {
 	char details[1024];
 	uint8_t *msgptr,*dst;
@@ -174,7 +174,7 @@ printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name
  */
  
  
-int cw_put_custom_msg(struct conn *conn, uint8_t * rawout, /*mavl_conststr_t elems*/ int t)
+int cw_put_custom_msg(struct cw_Conn *conn, uint8_t * rawout, /*mavl_conststr_t elems*/ int t)
 {
 	
 	/*

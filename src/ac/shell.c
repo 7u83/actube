@@ -36,7 +36,7 @@ void wlan0_cmd(struct shelldata *sd, const char * cmd);
 void show_cfg (FILE *out, mavl_t ktv);
 void show_aps (FILE *out);
 
-struct conn * find_ap(const char *name);
+struct cw_Conn * find_ap(const char *name);
 
 struct command{
 	char * cmd;
@@ -72,7 +72,7 @@ void list_cmd(struct shelldata *sd, const char *cmd)
 
 void cfg_cmd(struct shelldata *sd, const char *cmd)
 {
-	struct conn * conn;
+	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
 	if (conn==NULL){
@@ -86,7 +86,7 @@ void cfg_cmd(struct shelldata *sd, const char *cmd)
 
 void ucfg_cmd(struct shelldata *sd, const char *cmd)
 {
-	struct conn * conn;
+	struct cw_Conn * conn;
 	show_cfg(sd->out,sd->update_cfg);
 
 }
@@ -96,7 +96,7 @@ void ucfg_cmd(struct shelldata *sd, const char *cmd)
 void 
 send_cmd(struct shelldata * sd, const char *cmd)
 {
-	struct conn * conn;
+	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
 	if (conn==NULL){
@@ -111,7 +111,7 @@ send_cmd(struct shelldata * sd, const char *cmd)
 void 
 wlan0_cmd(struct shelldata * sd, const char *cmd)
 {
-	struct conn * conn;
+	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
 	if (conn==NULL){
@@ -129,7 +129,7 @@ wlan0_cmd(struct shelldata * sd, const char *cmd)
 
 void set_cmd(struct shelldata *sd, const char *str)
 {
-	struct conn * conn;
+	struct cw_Conn * conn;
 	struct cw_Val_Reader r;
 	char key[CW_KTV_MAX_KEY_LEN];
 	char type[CW_KTV_MAX_KEY_LEN];
@@ -189,7 +189,7 @@ void show_aps (FILE *out)
 		cw_Val_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
-		struct conn * conn;
+		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
 		sock_addr2str_p (&conn->addr, addr);
@@ -211,7 +211,7 @@ void show_aps (FILE *out)
 
 
 
-struct conn * find_ap(const char *name)
+struct cw_Conn * find_ap(const char *name)
 {
 	struct connlist * cl;
 	mavliter_t it;
@@ -224,7 +224,7 @@ struct conn * find_ap(const char *name)
 	mavliter_foreach (&it) {
 		cw_Val_t * result;
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
-		struct conn * conn;
+		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
 		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
@@ -266,7 +266,7 @@ void con (FILE *out)
 		cw_Val_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
 		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
-		struct conn * conn;
+		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
 		sock_addr2str_p (&conn->addr, addr);

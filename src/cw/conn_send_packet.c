@@ -27,7 +27,7 @@
 
 
 
-int conn_send_packet(struct conn * conn, const uint8_t * buffer, int len)
+int conn_send_packet(struct cw_Conn * conn, const uint8_t * buffer, int len)
 {
 	int n;
 	while((n=sendto( conn->sock, buffer, len, 0, 

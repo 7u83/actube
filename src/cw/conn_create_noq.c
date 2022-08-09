@@ -36,10 +36,10 @@
  * @retval 1 Success
  * @retval 0 failure, conslt errno for more details
  */
-struct conn * conn_create_noq(int sock, struct sockaddr * addr)
+struct cw_Conn * conn_create_noq(int sock, struct sockaddr * addr)
 {
-	struct conn * conn; 
-	conn = malloc(sizeof (struct conn));
+	struct cw_Conn * conn; 
+	conn = malloc(sizeof (struct cw_Conn ));
 	if (!conn)
 		return NULL;
 

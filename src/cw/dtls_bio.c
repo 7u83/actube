@@ -37,7 +37,7 @@
  * @param maxlen maximum number of bytes to read
  * @return the number of bytes read
  */
-int dtls_bio_read(struct conn *conn, char *out, int maxlen)
+int dtls_bio_read(struct cw_Conn *conn, char *out, int maxlen)
 {
 	int ret;
 	if (conn->dtls_buffer_len == 0) {
@@ -75,7 +75,7 @@ int dtls_bio_read(struct conn *conn, char *out, int maxlen)
  * @param len number of bytes to write
  * @return the number of bytes written
  */
-int dtls_bio_write(struct conn *conn, const char *data, int len)
+int dtls_bio_write(struct cw_Conn *conn, const char *data, int len)
 {
 	uint8_t buffer[4096];
 	int rc;

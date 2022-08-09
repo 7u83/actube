@@ -327,7 +327,7 @@ int cw_put_elem_result_code(uint8_t * dst, uint32_t code);
 
 
 
-/*extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct conn *conn);*/
+/*extern int cw_put_ac_status(uint8_t * dst, struct cw_ac_status *s, struct cw_Conn *conn);*/
 
 
 struct cw_DescriptorSubelemDef {
@@ -356,12 +356,12 @@ extern int cw_read_descriptor_subelems(mavl_t store, const char * key, uint8_t *
 				       struct cw_DescriptorSubelemDef *elems);
 
 /*
-int cw_read_wtp_descriptor(mavl_t mbag, struct conn *conn,
+int cw_read_wtp_descriptor(mavl_t mbag, struct cw_Conn *conn,
 				  struct cw_ElemHandler *eh, uint8_t * data, int len,
 				  struct cw_DescriptorSubelemDef *allowed);
 */
 
-int cw_read_wtp_descriptor(mavl_t mbag, struct conn *conn,
+int cw_read_wtp_descriptor(mavl_t mbag, struct cw_Conn *conn,
 			   struct cw_ElemHandler *eh, uint8_t * data, int len,
 			   struct cw_DescriptorSubelemDef *allowed);
 
@@ -372,7 +372,7 @@ int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandle
 			 uint8_t * dst);
 			
 
-extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct conn *conn,
+extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct cw_Conn *conn,
 				    struct cw_ElemHandler *eh, uint8_t * data, int len,
 				    struct cw_DescriptorSubelemDef *allowed);
 
@@ -384,7 +384,7 @@ int cw_read_ac_descriptor(mavl_t store,
 			struct cw_DescriptorSubelemDef *allowed);
 
 
-int cw_setup_dtls(struct conn * conn, mavl_t cfg, const char *prefix, char  * default_cipher);
+int cw_setup_dtls(struct cw_Conn * conn, mavl_t cfg, const char *prefix, char  * default_cipher);
 
 
 
@@ -444,11 +444,11 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
 
-extern int cw_in_wtp_reboot_statistics(struct conn *conn, struct cw_action_in *a,
+extern int cw_in_wtp_reboot_statistics(struct cw_Conn *conn, struct cw_action_in *a,
 				       uint8_t * data, int len, struct sockaddr *from);
 
 
-extern int cw_in_wtp_board_data(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+extern int cw_in_wtp_board_data(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * data,
 				int len, struct sockaddr *from);
 
 /*					 
@@ -457,24 +457,24 @@ int cw_in_vendor_specific_payload(struct cw_ElemHandler *handler,
 				  uint8_t * data, int len);
 */
 
-extern int cw_in_capwap_control_ip_address(struct conn *conn, struct cw_action_in *a,
+extern int cw_in_capwap_control_ip_address(struct cw_Conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,
 					   struct sockaddr *from);
 
-extern int cw_in_capwap_local_ipv4_address(struct conn *conn, struct cw_action_in *a,
+extern int cw_in_capwap_local_ipv4_address(struct cw_Conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,
 					   struct sockaddr *from);
 
-extern int cw_in_capwap_local_ipv6_address(struct conn *conn, struct cw_action_in *a,
+extern int cw_in_capwap_local_ipv6_address(struct cw_Conn *conn, struct cw_action_in *a,
 					   uint8_t * data, int len,
 					   struct sockaddr *from);
 
-extern int cw_in_radio_operational_state(struct conn *conn, struct cw_action_in *a,
+extern int cw_in_radio_operational_state(struct cw_Conn *conn, struct cw_action_in *a,
 					 uint8_t * data, int len, struct sockaddr *from);
 
 
 /*	
-int cw_process_element(struct conn * conn, 
+int cw_process_element(struct cw_Conn * conn, 
 		struct cw_MsgData * msgdata, int proto, int vendor,
 		uint8_t  * elem, int max_len);
 */
@@ -502,7 +502,7 @@ int cw_process_element(struct cw_ElemHandlerParams *params,
 #define cw_out_capwap_local_ip_address_7 cw_out_wtp_ip_address
 
 
-void cw_init_request(struct conn *conn, int msg_id);
+void cw_init_request(struct cw_Conn *conn, int msg_id);
 
 
 /**
@@ -527,16 +527,16 @@ int cw_put_elem_radio_administrative_state(uint8_t * dst, int rid, int state);
 int cw_put_local_ip_address(uint8_t *dst, int id, int ipv_id, int ipv6_id, 
 				uint8_t *src, int len);
 
-int cw_detect_nat(struct conn *conn);
+int cw_detect_nat(struct cw_Conn *conn);
 
 uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 
-/*int cw_out_radio_generic(struct conn *conn, struct cw_action_out *a, uint8_t * dst);*/
+/*int cw_out_radio_generic(struct cw_Conn *conn, struct cw_action_out *a, uint8_t * dst);*/
 
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
 int cw_result_is_ok( int rc );
-int cw_put_msg(struct conn *conn, uint8_t * rawout);
+int cw_put_msg(struct cw_Conn *conn, uint8_t * rawout);
 
 /**
  * @}

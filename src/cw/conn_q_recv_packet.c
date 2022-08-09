@@ -22,7 +22,7 @@
 
 #include "conn.h"
 
-static int conn_q_recv_packet_(struct conn * conn, uint8_t * buffer,int len,int peek)
+static int conn_q_recv_packet_(struct cw_Conn * conn, uint8_t * buffer,int len,int peek)
 {
 	if ( !conn->cur_packet)
 	{
@@ -58,12 +58,12 @@ static int conn_q_recv_packet_(struct conn * conn, uint8_t * buffer,int len,int 
 	return conn->cur_packet_len;	
 }
 
-int conn_q_recv_packet(struct conn * conn, uint8_t * buffer,int len)
+int conn_q_recv_packet(struct cw_Conn * conn, uint8_t * buffer,int len)
 {
 	return conn_q_recv_packet_(conn,buffer,len,0);
 }
 
-int conn_q_recv_packet_peek(struct conn * conn, uint8_t * buffer,int len)
+int conn_q_recv_packet_peek(struct cw_Conn * conn, uint8_t * buffer,int len)
 {
 	return conn_q_recv_packet_(conn,buffer,len,1);
 }

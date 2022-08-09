@@ -15,7 +15,7 @@
 struct wtpman {
 	pthread_t thread;
 
-	struct conn *conn;
+	struct cw_Conn *conn;
 
 
 	/* wtp data */

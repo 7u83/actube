@@ -15,8 +15,8 @@
 {
 	int l;
 	BIO *b = SSL_get_rbio(ssl);
-	/*struct conn *conn = b->ptr;*/
-	struct conn * conn = BIO_get_data(b); /*b->ptr;*/
+	/*struct cw_Conn *conn = b->ptr;*/
+	struct cw_Conn * conn = BIO_get_data(b); /*b->ptr;*/
 
 	snprintf(identity, max_identity_len, "CLient_identity");
 
@@ -28,7 +28,7 @@
 
 
 int 
-dtls_openssl_connect(struct conn *conn)
+dtls_openssl_connect(struct cw_Conn *conn)
 {
 	struct dtls_openssl_data *d;
 	int rc;

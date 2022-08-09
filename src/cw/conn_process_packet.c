@@ -42,7 +42,7 @@
 /**
  * Init response message header
  */
-void cw_init_response(struct conn *conn, uint8_t * req)
+void cw_init_response(struct cw_Conn *conn, uint8_t * req)
 {
 	uint8_t *buffer;
 	int shbytes, dhbytes;
@@ -69,7 +69,7 @@ void cw_init_response(struct conn *conn, uint8_t * req)
 	cw_set_msg_flags(dmsgptr, 0);
 }
 
-void cw_init_request(struct conn *conn, int msg_id)
+void cw_init_request(struct cw_Conn *conn, int msg_id)
 {
 	uint8_t *buffer = conn->req_buffer;
 	uint8_t *msgptr;
@@ -97,7 +97,7 @@ void cw_init_request(struct conn *conn, int msg_id)
 	cw_set_msg_elems_len(msgptr, 0);
 }
 
-void cw_init_data_msg(struct conn *conn)
+void cw_init_data_msg(struct cw_Conn *conn)
 {
 	uint8_t *buffer = conn->req_buffer;
 	cw_set_dword(buffer + 0, 0);
@@ -114,7 +114,7 @@ void cw_init_data_msg(struct conn *conn)
 /**
  * send a response 
  */
-int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
+int cw_send_response(struct cw_Conn *conn, uint8_t * rawmsg, int len)
 {
 	int rc;
 	cw_init_response(conn, rawmsg);
@@ -135,7 +135,7 @@ int cw_send_response(struct conn *conn, uint8_t * rawmsg, int len)
  * @param result_code result code to send
  * @return 1
  */
-int cw_send_error_response(struct conn *conn, uint8_t * rawmsg,
+int cw_send_error_response(struct cw_Conn *conn, uint8_t * rawmsg,
 			   uint32_t result_code)
 {
 	uint8_t *out, *dst;
@@ -156,7 +156,7 @@ int cw_send_error_response(struct conn *conn, uint8_t * rawmsg,
 }
 
 
-static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg,
+static struct cw_MsgSet *load_msg_set(struct cw_Conn *conn, uint8_t * rawmsg,
 				      int len, int elems_len,
 				      struct sockaddr *from)
 {
@@ -188,7 +188,7 @@ static struct cw_MsgSet *load_msg_set(struct conn *conn, uint8_t * rawmsg,
 }
 
 /*
-int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int cw_in_check_generic(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * data,
 			 int len,struct sockaddr *from)
 {
 //	if (cw_is_request(a->msg_id)){
@@ -201,7 +201,7 @@ int cw_in_check_generic(struct conn *conn, struct cw_action_in *a, uint8_t * dat
 */
 
 /*
-void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn, 
+void cw_read_elem(struct cw_ElemHandler * handler, struct cw_Conn * conn, 
 		uint8_t * elem_data, int elem_len, struct sockaddr * from){
 	mavldata_t data, *result;
 	char str[30];
@@ -215,7 +215,7 @@ void cw_read_elem(struct cw_ElemHandler * handler, struct conn * conn,
 */
 
 
-static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
+static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
 {
 	mavl_t mand_found;
@@ -387,7 +387,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 	       message->type, message->name);
 
 
-
+	params.cfg = cw_cfg_create();
 	cw_decode_elements(&params,elems_ptr, elems_len);
 
 	exit(0);
@@ -452,7 +452,7 @@ static int process_elements(struct conn *conn, uint8_t * rawmsg, int len,
 
 
 
-int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
+int process_message(struct cw_Conn *conn, uint8_t * rawmsg, int rawlen,
 		    struct sockaddr *from)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
@@ -526,7 +526,7 @@ int process_message(struct conn *conn, uint8_t * rawmsg, int rawlen,
  * @param packet pointer to packet data
  * @param len lenght of packet data
  */
-int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
+int conn_process_packet2(struct cw_Conn *conn, uint8_t * packet, int len,
 			 struct sockaddr *from)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
@@ -622,7 +622,7 @@ int conn_process_packet2(struct conn *conn, uint8_t * packet, int len,
 	return conn->process_message(conn, packet, len, from);
 }
 
-int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
+int conn_process_packet(struct cw_Conn *conn, uint8_t * packet, int len,
 			struct sockaddr *from)
 {
 
@@ -633,7 +633,7 @@ int conn_process_packet(struct conn *conn, uint8_t * packet, int len,
 }
 
 
-int conn_process_data_packet(struct conn *conn, uint8_t * packet, int len,
+int conn_process_data_packet(struct cw_Conn *conn, uint8_t * packet, int len,
 			     struct sockaddr *from)
 {
 
@@ -658,7 +658,7 @@ int conn_process_data_packet(struct conn *conn, uint8_t * packet, int len,
 /**
  * Used as main message loop
  */
-int cw_read_messages(struct conn *conn)
+int cw_read_messages(struct cw_Conn *conn)
 {
 	uint8_t buf[2024];
 	int len = 2024;
