@@ -35,10 +35,6 @@ int cw_format_version(char *s, const uint8_t * version, int len)
 		}
 		rs += sprintf(s + rs, ")");
 	}
-/*
-	vendor = bstrv_get_vendor_id(ver);
-	rs += sprintf(s + rs, ", Vendor Id: %d, %s", vendor, cw_strvendor(vendor));
-*/
 	return rs;
 }
 
