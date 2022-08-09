@@ -133,6 +133,9 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_WARN, " Warning - "},
 	{DBG_MOD, " Mod - "},
 	{DBG_STATE, " State - "},
+	{DBG_CFG_SET, "    Cfg Set - "},
+
+
 
 	{DBG_X, "XXXXX - "},
 
@@ -359,96 +362,6 @@ void cw_dbg_msg(int level, struct conn *conn, uint8_t * packet, int len,
 	
 
 }
-
-/*
-
-static int cw_format_vendor(char *dst, uint32_t vendor_id, int elem_id,
-			    const uint8_t * elem_data)
-{
-	uint32_t lw_elem_id;
-	switch (vendor_id) {
-		case CW_VENDOR_ID_CISCO:
-		{
-			if (elem_id != CW_CISCO_SPAM_VENDOR_SPECIFIC) {
-				return sprintf(dst, "%d - %s", elem_id,
-					       cw_cisco_id_to_str(elem_id));
-			}
-
-
-			// dive into LWAPP vendor specific decoding 
-			lw_elem_id = lw_get_word(elem_data + 4 + 6);
-			return sprintf(dst, "%d/LWAPP Vendor: %d - %s",
-				       elem_id,
-				       lw_elem_id, lw_cisco_id_to_str(lw_elem_id));
-
-
-
-			break;
-		}
-		default:
-		{
-			return sprintf(dst, "%d", elem_id);
-
-		}
-
-
-
-	}
-
-	return 0;
-}
-*/
-
-
-
-void cw_dbg_version_subelem(int level, const char *context, int subtype, 
-		uint32_t vendor_id, const uint8_t * vstr, int len)
-{
-	char v[2048];
-	int n;
-	
-	if (!cw_dbg_is_level(level))
-		return;
-	if (!vstr)
-		return;
-	n = cw_format_version(v, vstr, len);
-
-	sprintf(v + n, ", Vendor Id: %d, %s", vendor_id, cw_strvendor(vendor_id));
-
-	cw_dbg(level, "%s: SubType %d, %s", context, subtype, v);
-}
-
-/*
-void cw_dbgv(struct cw_LogWriter *writer, int level, const char * format, va_list args)
-{
-	char fbuf[1024];
-
-	if (writer->colored ){
-		sprintf(fbuf, "DBG:%s%s %s%s%s",
-			get_dbg_color_on(level),
-			get_dbg_prefix(level),
-			get_dbg_color_ontext(level), format, get_dbg_color_off(level)
-		);
-	}
-	else{
-		sprintf(fbuf, "DBG:%s %s",
-			get_dbg_prefix(level), format);
-	}
-
-	writer->write(LOG_DEBUG,fbuf,args,&cw_log_console_writer);
-
-
-}
-*/
-
-/*
-void cw_dbgv1(struct cw_LogWriter *writer, int level, const char * format, ...){
-	va_list args;
-	va_start(args, format);
-	cw_dbgv(writer,level,format,args);
-	va_end(args);	
-}
-*/
 
 
 void cw_dbg(int level, const char *format, ...){
