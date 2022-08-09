@@ -6,6 +6,7 @@
 #include "cw.h"
 #include "cfg.h"
 #include "val.h"
+#include "dbg.h"
 
 static const char *nextc(const char *s)
 {
@@ -84,6 +85,8 @@ cw_Cfg_t *cw_cfg_create()
 
 int cw_cfg_set(cw_Cfg_t * cfg, const char *key, const char *val)
 {
+	cw_dbg(DBG_CFG_SET, "%s: %s",key,val);
+
 	struct cw_Cfg_entry e;
 	int replaced;
 
@@ -428,59 +431,6 @@ int cw_cfg_load(const char *filename, cw_Cfg_t * cfg)
 }
 
 
-static int cw_cfg_get_next_idx(cw_Cfg_t * cfg, const char *key, int n)
-{
-	char ikey[CW_CFG_MAX_KEY_LEN];
-	struct cw_Cfg_entry search, *result;
-	const char *d;
-	int i;
-
-	sprintf(ikey, "%s.%d", key, n);
-
-	search.key = ikey;
-	result = mavl_get_first(cfg, &search);
-
-	printf("KEY: %s\n", search.key);
-	printf("NNNNN: %s\n", result->key);
-
-
-	if (result == NULL)
-		return -1;
-
-	d = NULL;
-	for (i = strlen(ikey); i >= 0; i--) {
-
-		if (ikey[i] == '.') {
-			d = result->key + i;
-			break;
-		}
-	}
-
-	if (d == NULL) {
-		return -1;
-	}
-
-	if (result->key[i] != '.') {
-		return -1;
-	}
-
-	if (strncmp(result->key, ikey, i) != 0)
-		return -1;
-
-	printf("TRANSFER %s\n", result->key + i + 1);
-	return atoi(result->key + i + 1);
-}
-
-
-
-
-static void pcb(char *dst, struct mavlnode *node)
-{
-	struct cw_Cfg_entry *e = mavlnode_dataptr(node);
-	sprintf(dst, "%s", e->key);
-}
-
-
 void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base)
 {
 	struct cw_Cfg_entry search;
@@ -532,63 +482,6 @@ const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key)
 	return e->val;
 }
 
-void cw_cfg_iterate(cw_Cfg_t * cfg, const char *key)
-{
-	printf("Iterate\n");
-	struct cw_Cfg_entry *e;
-	struct cw_Cfg_entry search;
-	search.key = key;
-	struct mavliter it;
-	struct mavlnode *first;
-
-	mavl_print(cfg,pcb,180);
-
-	printf("SEEK TO %s\n", search.key);
-
-	struct cw_Cfg_iter cfi;
-	cw_cfg_iter_init(cfg, &cfi, key);
-	const char *kee;
-
-	while ((kee = cw_cfg_iter_next(&cfi, NULL)) != NULL) {
-		printf("KEY===%s\n", kee);
-	}
-
-
-
-	return;
-
-
-	mavliter_init(&it, cfg);
-	mavliter_seek(&it, &search, 0);
-	struct cw_Cfg_entry *en;
-	return;
-
-	int i = 0;
-	i = cw_cfg_get_next_idx(cfg, "actube/listen", i);
-
-	printf("This i %d\n", i);
-
-	while ((i = cw_cfg_get_next_idx(cfg, "actube/listen", i)) != -1) {
-
-		printf("Here i %d\n", i);
-		printf("we have key: %s.%d\n", "actube/listen", i);
-		printf("Next=%d\n", i);
-		i++;
-	};
-
-
-
-
-
-	e = mavl_get_first(cfg, &search);
-	if (!e) {
-		printf("NULL\n");
-		return;
-	}
-	printf("%s : %s\n", e->key, e->val);
-}
-
-
 
 int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def)
 {
@@ -610,6 +503,5 @@ void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val)
 {
 	char a[128];
 	sprintf(a,"%d",val);
-	printf("VVVVVV: %s\n",a);
 	cw_cfg_set(cfg,key,a);
 }
