@@ -187,7 +187,6 @@ MISCSRC=\
 	cw_decode_msg.c \
 	conn_q_add_packet.c\
 	conn_q_get_packet.c\
-	conn_q_wait_packet.c\
 	conn_q_recv_packet.c\
 	conn_recv_packet.c\
 	conn_send_data_packet.c\
@@ -206,6 +205,8 @@ MISCSRC=\
 	send.c\
 	strheap.c\
 	netconn.c\
+
+#	conn_q_wait_packet.c\
 
 DTLSSRC+=\
 	dtls_bio.c\
