@@ -16,7 +16,6 @@ CWSRC=\
 	cw_in_ac_name_with_priority.c\
 	cw_in_capwap_local_ipv4_address.c\
 	cw_in_capwap_local_ipv6_address.c\
-	cw_in_check_cfg_update_req.c\
 	cw_in_check_disc_req.c\
 	cw_in_check_img_data_req_ac.c\
 	cw_in_check_img_data_req_wtp.c\
