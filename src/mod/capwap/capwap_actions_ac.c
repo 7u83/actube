@@ -64,6 +64,25 @@ static cw_ValValRange_t radio_admin_state_valguard[]={
 	{0,0,NULL}
 };
 
+static cw_ValValRange_t discovery_types[]={
+	{0,0,"0 - Unknown"},
+	{1,1,"1 - Static Configuration"},
+	{2,2,"2 - DHCP"},
+	{3,3,"3 - DNS"},
+	{4,4,"4 - AC Referral"},
+	{0,0,NULL}
+};
+
+static cw_ValValRange_t mac_types[]={
+	{0,0,"0 - Local MAC"},
+	{1,1,"1 - Split MAC"},
+	{2,2,"2 - Both"},
+	{0,0,NULL}
+};
+
+
+
+
 static cw_ValStruct_t radio_admin_state[] = {
 	{CW_TYPE_BYTE, NULL, 1,-1, radio_admin_state_valguard},
 	{NULL,NULL,0,0}
@@ -77,9 +96,13 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		CW_KEY_DISCOVERY_TYPE,			/* Key */
+		"discovery-type",			/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		discovery_types,
+
 	}
 	,
 	{ 
@@ -88,9 +111,12 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		CW_KEY_WTP_MAC_TYPE,			/* Key */
+		"wtp-mac-type",				/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		mac_types
 	}
 	,
 	{ 
