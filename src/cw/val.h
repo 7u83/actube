@@ -8,6 +8,7 @@
 #include "mavltypes.h"
 
 #include "bstr.h"
+#include "cfg.h"
 
 
 /**
@@ -53,7 +54,7 @@ typedef struct cw_Val cw_Val_t;
 /**
  * @class cw_Type
  * @author 7u83
- * @file ktv.h
+ * @file val.h
  * @brief Representation of a cw_Type objetc
  */
 struct cw_Type {
@@ -90,6 +91,9 @@ struct cw_Type {
 	const char * (*get_type_name)(cw_Val_t*);
 	
 	int (*cast)(cw_Val_t *);
+
+	int (*read)(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void * param);
+	int (*write)(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, const void * param);
 	
 };
 typedef struct cw_Type cw_Type_t;
@@ -117,8 +121,12 @@ typedef struct cw_ValStruct cw_ValStruct_t;
 
 
 
-#define CW_KTVSTRUCT_L16	-2
-#define CW_KTVSTRUCT_L8		-3
+#define CW_STRUCT_LEN_WORD	-2
+#define CW_STRUCT_LEN_BYTE	-3
+
+
+#define CW_KTVSTRUCT_L8	-2
+#define CW_KTVSTRUCT_L16	-3
 
 struct cw_ValEnum{
 	int value;
@@ -152,6 +160,7 @@ extern const struct cw_Type cw_type_str;
 extern const struct cw_Type cw_type_ipaddress;
 extern const struct cw_Type cw_type_sysptr;
 extern const struct cw_Type cw_type_bool;
+extern const struct cw_Type cw_type_struct;
 
 #define CW_TYPE_BYTE (&cw_type_byte)
 #define CW_TYPE_WORD (&cw_type_word)
@@ -162,6 +171,8 @@ extern const struct cw_Type cw_type_bool;
 #define CW_TYPE_SYSPTR (&cw_type_sysptr)
 #define CW_TYPE_STR (&cw_type_str)
 #define CW_TYPE_BOOL (&cw_type_bool)
+#define CW_TYPE_STRUCT (&cw_type_struct)
+
 /*
 void cw_kvstore_mavl_delete(const void *data);
  */

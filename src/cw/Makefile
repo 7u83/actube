@@ -68,6 +68,7 @@ CWSRC=\
 	cw_type_bool.c\
 	cw_type_str.c\
 	cw_type_dword.c\
+	cw_type_struct.c\
 	cw_type_ipaddress.c\
 	cw_type_word.c\
 	cw_type_sysptr.c\
