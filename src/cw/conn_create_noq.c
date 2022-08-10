@@ -43,7 +43,7 @@ struct cw_Conn * conn_create_noq(int sock, struct sockaddr * addr)
 	if (!conn)
 		return NULL;
 
-	conn_init(conn);
+	cw_conn_init(conn);
 
 
 	conn->sock=sock;

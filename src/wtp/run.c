@@ -30,7 +30,7 @@
 int update =1;
 
 /*
-int handle_update_req(struct conn *conn, struct cw_action_in *a, uint8_t * data,
+int handle_update_req(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * data,
 		      int len, struct sockaddr *from)
 {
 	if (a->msg_id == CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST){
@@ -58,7 +58,7 @@ cw_dbg(DBG_X,"Saving configuration ...");
 
 
 /*
-static void update_radio(struct conn * conn, int rid, mbag_t radio_upd, mbag_t radio,mbag_t iresult )
+static void update_radio(struct cw_Conn * conn, int rid, mbag_t radio_upd, mbag_t radio,mbag_t iresult )
 {
 
 	printf("Updating radio with rid %d\n",rid);
@@ -67,7 +67,7 @@ static void update_radio(struct conn * conn, int rid, mbag_t radio_upd, mbag_t r
 
 
 /*
-static void update_radios(struct conn * conn, mbag_t result)
+static void update_radios(struct cw_Conn * conn, mbag_t result)
 {
 	MAVLITER_DEFINE (it,conn->radios_upd);
 	mavliter_foreach(&it){
@@ -87,7 +87,7 @@ static void update_radios(struct conn * conn, mbag_t result)
 }
 */
 
-static void do_update(struct conn * conn)
+static void do_update(struct cw_Conn * conn)
 {
 	int rc;
 
@@ -138,7 +138,7 @@ void clean_cfg(mavl_t cfg)
 }
 
 
-int run(struct conn * conn)
+int run(struct cw_Conn * conn)
 {
 
 
@@ -224,7 +224,7 @@ cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:",
 /*
 static int echo_interval_timer;
 
-struct cwrmsg * get_response(struct conn * conn, int type,int seqnum)
+struct cwrmsg * get_response(struct cw_Conn * conn, int type,int seqnum)
 {
 	struct cwrmsg * cwrmsg; 
 	int i;
@@ -246,7 +246,7 @@ struct cwrmsg * get_response(struct conn * conn, int type,int seqnum)
 
 
 /*
-struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
+struct cwrmsg * send_request(struct cw_Conn * conn,struct cwmsg *cwmsg)
 {
 	int i;
 	for (i=0; i<conf_max_retransmit; i++){
@@ -272,10 +272,10 @@ struct cwrmsg * send_request(struct conn * conn,struct cwmsg *cwmsg)
 
 */
 
-/*//extern struct conn * get_conn();*/
+/*//extern struct cw_Conn * get_conn();*/
 
 /*
-int run(struct conn * conn)
+int run(struct cw_Conn * conn)
 {
 
 	conn = get_conn();

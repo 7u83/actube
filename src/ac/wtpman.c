@@ -62,7 +62,7 @@ static void reset_echointerval_timer(struct wtpman *wtpman)
 
 }
 
-
+/*
 static int msg_start_handler(struct cw_Conn *conn, struct cw_action_in *a,
 			     uint8_t * data, int len, struct sockaddr *from)
 {
@@ -71,7 +71,7 @@ static int msg_start_handler(struct cw_Conn *conn, struct cw_action_in *a,
 	return 0;
 }
 
-
+*/
 
 
 static void wtpman_remove(struct wtpman *wtpman)
@@ -91,7 +91,6 @@ static void wtpman_run_discovery(void *arg)
 	time_t timer = cw_timer_start(10);
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
-
 
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
@@ -328,7 +327,6 @@ static void *wtpman_main(void *arg)
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct cw_Conn *conn;
 	int last_state;
-
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
 	wtpman->conn->seqnum = 0;
@@ -337,9 +335,9 @@ static void *wtpman_main(void *arg)
 	wtpman->conn->remote_cfg = cw_ktv_create();
 
 
-	/* We were invoked with an unencrypted packet, 
-	 * so assume, it is a discovery request */
 	if (!wtpman->dtlsmode) {
+		/* We were invoked with an unencrypted packet, 
+		 * so assume, it is a discovery request */
 		wtpman_run_discovery(arg);
 		wtpman_remove(wtpman);
 		return NULL;
@@ -691,7 +689,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 
 
-	wtpman->conn = conn_create(sockfd, srcaddr, 100);
+	wtpman->conn = cw_conn_create(sockfd, srcaddr, 5);
 	wtpman->conn->role = CW_ROLE_AC;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;

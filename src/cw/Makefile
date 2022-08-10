@@ -74,8 +74,7 @@ CWSRC=\
 	cw_write_descriptor_subelem.c\
 	cw_write_radio_element.c\
 	cw_detect_nat.c\
-
-#cw_read_from.c \
+	cw_read_from.c \
 
 KTVSRC=\
 	cw_ktv_add.c\
@@ -177,10 +176,8 @@ MISCSRC=\
 	capwap_strings_result.c\
 	capwap_strings_state.c\
 	capwap_strings_vendor.c\
-	conn_create.c\
 	conn_create_noq.c\
 	conn_destroy.c\
-	conn_init.c\
 	connlist.c\
 	conn_prepare_image_data_request.c\
 	conn_process_packet.c\
@@ -192,7 +189,6 @@ MISCSRC=\
 	conn_send_data_packet.c\
 	conn_send_msg.c\
 	conn_send_packet.c\
-	conn_send_request.c\
 	dot11.c\
 	dot11_inline.c\
 	format.c\
@@ -205,8 +201,12 @@ MISCSRC=\
 	send.c\
 	strheap.c\
 	netconn.c\
+	conn.c
 
 #	conn_q_wait_packet.c\
+#	conn_init.c\
+#	conn_create.c\
+#	conn_send_request.c\
 
 DTLSSRC+=\
 	dtls_bio.c\
@@ -266,4 +266,7 @@ static: $(SNAME)
 dynamic: $(DNAME)
 	
 include ../lib.mk
+
+depend:
+	mkdep -c ${CFLAGS} ${SOURCES}
 

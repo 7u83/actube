@@ -128,7 +128,7 @@ errX:
 }
 
 
-static int run_discovery(struct conn *conn, struct cw_DiscoveryResult * dis)
+static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
 {
 	time_t timer;
 	struct sockaddr_storage from;
@@ -200,7 +200,7 @@ static int run_discovery(struct conn *conn, struct cw_DiscoveryResult * dis)
 /**
  * Run discovery for on address (eg broadcast 255.255.255.255)
  */
-int cw_run_discovery(struct conn *conn, const char *addr, const char *bindaddr, 
+int cw_run_discovery(struct cw_Conn *conn, const char *addr, const char *bindaddr, 
 		struct cw_DiscoveryResult * dis)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];

@@ -86,7 +86,7 @@ int main (int argc, char **argv)
 	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset;
-	struct conn * conn;
+	struct cw_Conn * conn;
 	FILE * file;
 	mavl_t global_cfg, types_tree;
 	const cw_Type_t ** ti;

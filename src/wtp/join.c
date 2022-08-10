@@ -32,7 +32,7 @@ void acinfo_log_(int level,const struct ac_info *acinfo,const char * xstr)
 
 
 
-int join_state(struct conn * conn)
+int join_state(struct cw_Conn * conn)
 {
 	struct wtpinfo * wtpinfo = get_wtpinfo();
 
@@ -98,7 +98,7 @@ acinfo.result_code=99;
 
 
 
-int run_join_d(struct conn * conn, struct sockaddr *sa)
+int run_join_d(struct cw_Conn * conn, struct sockaddr *sa)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
 	int sockfd;
@@ -164,7 +164,7 @@ int run_join_d(struct conn * conn, struct sockaddr *sa)
 
 
 
-int run_join(struct conn *conn)
+int run_join(struct cw_Conn *conn)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
 /*	
@@ -199,7 +199,7 @@ int run_join(struct conn *conn)
 	return 1;
 }
 
-int join(struct conn * conn, struct cw_DiscoveryResult * dis)
+int join(struct cw_Conn * conn, struct cw_DiscoveryResult * dis)
 {
 	mavliter_t ii;
 	mavliter_init(&ii,dis->prio_ip);

@@ -256,8 +256,8 @@ typedef struct cw_Conn cw_Conn_t;
 
 
 
-struct cw_Conn*conn_create(int sock, struct sockaddr *addr, int qsize);
-struct cw_Conn*conn_create_noq(int sock, struct sockaddr *addr);
+struct cw_Conn* cw_conn_create(int sock, struct sockaddr *addr, int qsize);
+struct cw_Conn* conn_create_noq(int sock, struct sockaddr *addr);
 
 
 extern int conn_send_cwmsg(struct cw_Conn*conn, struct cwmsg *cwmsg);
@@ -310,11 +310,11 @@ struct cwrmsg *conn_wait_for_message(struct cw_Conn*conn, time_t timer);
 
 struct cwrmsg *conn_wait_for_request(struct cw_Conn*conn, int *msglist, time_t timer);
 
-int conn_q_wait_packet(struct cw_Conn* conn, int seconds);
+//int conn_q_wait_packet(struct cw_Conn* conn, int seconds);
 
 #define conn_is_error(conn) (conn->dtls_error)
 
-void conn_init(struct cw_Conn*conn);
+void cw_conn_init(struct cw_Conn*conn);
 
 extern int cw_read_messages(struct cw_Conn*conn);
 

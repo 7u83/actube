@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "cw/bstr.h"
 
-extern struct conn * get_conn();
+extern struct cw_Conn * get_conn();
 extern bstr_t get_base_rmac();
 uint8_t get_ecn_support();
 
