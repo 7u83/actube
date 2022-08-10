@@ -153,7 +153,7 @@ static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
 
 	/* create and send a discovery request message */
 	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
-	cw_put_msg(conn, conn->req_buffer);
+	cw_assemble_message(conn, conn->req_buffer);
 	conn_send_msg(conn, conn->req_buffer);
 
 

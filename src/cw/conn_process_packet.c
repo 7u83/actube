@@ -118,7 +118,7 @@ int cw_send_response(struct cw_Conn *conn, uint8_t * rawmsg, int len)
 {
 	int rc;
 	cw_init_response(conn, rawmsg);
-	rc = cw_put_msg(conn, conn->resp_buffer);
+	rc = cw_assemble_message(conn, conn->resp_buffer);
 	if (!cw_result_is_ok(rc))
 		return 0;
 	conn_send_msg(conn, conn->resp_buffer);
@@ -390,15 +390,14 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	params.cfg = cw_cfg_create();
 	cw_decode_elements(&params,elems_ptr, elems_len);
 
-	exit(0);
-
 	/* all message elements are processed, do now after processing
 	   by calling the "end" function for the message */
 
 	cw_check_missing_mand(message, mand_found);
 
-	cw_dbg(DBG_MSG_PARSING, " *** Done parsing message of type %d (%s) ***",
+	cw_dbg(DBG_MSG_PARSING, " *** End parsing message of type %d (%s) ***",
 	       message->type, message->name);
+
 
 	mavl_destroy(mand_found);
 
@@ -441,7 +440,6 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		 */
 	}
 
-	/*stravltree_destroy(conn->mand); */
 
 	return result_code;
 

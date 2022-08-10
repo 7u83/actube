@@ -173,7 +173,7 @@ int cw_send_request(struct cw_Conn *conn,int msg_id)
 	int rc;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	cw_init_request(conn, msg_id);
-	if ( cw_put_msg(conn, conn->req_buffer) == -1 ){
+	if ( cw_assemble_message(conn, conn->req_buffer) == -1 ){
 		errno=ENOMSG;
 		return -1;
 	}

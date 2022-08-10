@@ -536,7 +536,7 @@ uint8_t *cw_init_data_keep_alive_msg(uint8_t * buffer,uint8_t *rmac);
 int cw_put_elem_session_id(uint8_t *dst, uint8_t *session_id, int len);
 
 int cw_result_is_ok( int rc );
-int cw_put_msg(struct cw_Conn *conn, uint8_t * rawout);
+int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout);
 
 /**
  * @}

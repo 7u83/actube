@@ -500,7 +500,8 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 		wtpman_start (wtpman, preamble & 0xf);
 	}
 	
-	
+	printf("Got Packet with len: %d\n",len);
+
 	wtpman_addpacket (wtpman, buffer, len);
 	wtplist_unlock();
 }

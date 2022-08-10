@@ -45,7 +45,6 @@ CWSRC=\
 	cw_put_elem_radio_operational_state.c\
 	cw_put_image_data.c\
 	cw_put_local_ip_address.c\
-	cw_put_msg.c\
 	cw_radio_set_admin_state.c\
 	cw_rand.c\
 	cw_randint.c\
@@ -207,6 +206,7 @@ MISCSRC=\
 #	conn_init.c\
 #	conn_create.c\
 #	conn_send_request.c\
+#	cw_put_msg.c\
 
 DTLSSRC+=\
 	dtls_bio.c\

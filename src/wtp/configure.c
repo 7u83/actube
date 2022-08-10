@@ -10,7 +10,7 @@
 #include "cfg.h"
 
 
-int configure(struct conn * conn)
+int configure(struct cw_Conn * conn)
 {
 	char sockbuff[SOCK_ADDR_BUFSIZE];
 	
