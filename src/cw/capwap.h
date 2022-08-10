@@ -641,14 +641,10 @@ struct cw_ac_status {
  */
 enum capwap_states {
 	CW_STATE_NONE = 0,
-	/** Discovery State */
-	CAPWAP_STATE_DISCOVERY,
-	/** Join State */
-	CAPWAP_STATE_JOIN,
-	CAPWAP_STATE_JOIN_COMPLETE,
-	
-	/** Config State */
-	CAPWAP_STATE_CONFIGURE,
+	CAPWAP_STATE_DISCOVERY,		/**< Discovery State */
+	CAPWAP_STATE_JOIN,		/**< Join State */
+	CAPWAP_STATE_JOIN_COMPLETE,	
+	CAPWAP_STATE_CONFIGURE,	 	/**< Config State */
 	CAPWAP_STATE_DTLS_SETUP, /**< DTLS Setup */
 	/** Image Data Upload */
 	CW_STATE_IMAGE_DATA,

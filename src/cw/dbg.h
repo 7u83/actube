@@ -120,7 +120,7 @@ enum cw_dbg_levels{
 	/** Debug Mods */
 	DBG_MOD,
 	
-	DBG_STATE, /**<Debug State machein */
+	DBG_STATE, /**<Debug State machine */
 	
 	DBG_ALL, 
 	

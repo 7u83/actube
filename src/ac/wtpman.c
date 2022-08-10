@@ -86,6 +86,10 @@ static void wtpman_remove(struct wtpman *wtpman)
 
 static void wtpman_run_discovery(void *arg)
 {
+	cw_dbg(DBG_STATE,"Run discovery");
+	exit(0);
+
+
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
 	time_t timer = cw_timer_start(10);
@@ -270,6 +274,8 @@ void *wtpman_run_data(void *wtpman_arg)
 
 }
 
+
+
 int cw_run_state_machine(struct cw_Conn *conn, time_t * timer)
 {
 
@@ -280,7 +286,7 @@ int cw_run_state_machine(struct cw_Conn *conn, time_t * timer)
 	while (1) {
 		search.state = conn->capwap_state;
 		search.prevstate = conn->capwap_prevstate;
-		result = mavl_get(conn->msgset->state_machine, &search);
+		result = mavl_get(conn->msgset->statemachine_states, &search);
 
 		cw_dbg(DBG_STATE, "State transition: [%s -> %s]",
 		       cw_strstate(conn->capwap_prevstate),
@@ -655,7 +661,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
 		return 0;
-	memset(wtpman, 0, sizeof(struct wtpman));
+
+
 
 	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 
@@ -676,11 +683,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd; */
 
 
-
-
-
-
-
 	dbgaddrl = sizeof(dbgaddr);
 	getsockname(sockfd, &dbgaddr, &dbgaddrl);
 
@@ -688,26 +690,25 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	       sock_addr2str(&dbgaddr, sock_buf), sock_getport(&dbgaddr));
 
 
+	memset(wtpman, 0, sizeof(struct wtpman));
+
+	wtpman->global_cfg = global_cfg;
 
 	wtpman->conn = cw_conn_create(sockfd, srcaddr, 5);
-	wtpman->conn->role = CW_ROLE_AC;
-
-	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
-	sock_copyaddr(&wtpman->conn->data_addr,
-		      (struct sockaddr *) &wtpman->conn->addr);
-
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
 
 
+	wtpman->conn->role = CW_ROLE_AC;
+
+	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
+	sock_copyaddr(&wtpman->conn->data_addr,
+		      (struct sockaddr *) &wtpman->conn->addr);
 
 
-
-
-
-	wtpman->conn->mods = conf_mods;
+//	wtpman->conn->mods = conf_mods;
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;

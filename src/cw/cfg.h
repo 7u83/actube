@@ -32,6 +32,7 @@ void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base)
 int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def);
 uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def);
 void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val);
+uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, const char * def);
 
 
 #endif

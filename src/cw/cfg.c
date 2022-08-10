@@ -491,6 +491,17 @@ int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def)
 	return v.val.boolean;
 }
 
+
+uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, const char * def)
+{
+	struct cw_Val v;
+	const char *s = cw_cfg_get(cfg,key,def);
+	CW_TYPE_BYTE->from_str(&v,s);
+	return v.val.word;
+}
+
+
+
 uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def)
 {
 	struct cw_Val v;

@@ -93,6 +93,7 @@ printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name
 			continue;
 		}
 
+cw_dbg(DBG_X,"Hello!");
 
 		if (handler->put == NULL){
 			if (data->mand){
@@ -122,8 +123,11 @@ printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name
 			 cisco/ap-led-flash-config/flash-enable 
 		}*/
 
-		
+cw_dbg(DBG_X,"Calling Handler put for %s",handler->name);
+
 		l = handler->put(handler,&params,dst+len);
+
+cw_dbg(DBG_X,"L = %d",l);
 
 	/*	if(l>0)
 			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);

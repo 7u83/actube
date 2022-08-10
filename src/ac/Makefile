@@ -9,6 +9,8 @@ OBJS = \
 	socklist.o \
 	discovery_cache.o\
 	shell.o\
+	statemachine.o\
+
 
 PRG=actube
 LIBPATH=-L../../lib/$(KERNEL)/$(ARCH)/ -L/usr/local/lib -L/usr/lib 

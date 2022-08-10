@@ -55,7 +55,7 @@ uint32_t cw_dbg_opt_level = 0;
 
 
 
-static struct cw_StrListElem color_on[] = {
+static struct cw_StrListElem theme0[] = {
 	{DBG_PKT_IN, ANSI_YELLOW},
 	{DBG_PKT_OUT, ANSI_YELLOW ANSI_ITALIC},
 	
@@ -86,7 +86,7 @@ static struct cw_StrListElem color_on[] = {
 
 	{DBG_INFO, ANSI_DEFAULT},
 
-	{DBG_STATE, ANSI_BBLACK ANSI_BOLD },
+	{DBG_STATE, ANSI_GREEN ANSI_BOLD},
 
 	{DBG_RFC, ANSI_BRED},
 	{DBG_X, "\x1b[31m"},
@@ -97,6 +97,9 @@ static struct cw_StrListElem color_on[] = {
 	
 	{CW_STR_STOP, ""}
 };
+
+static struct cw_StrListElem * color_on = theme0;
+
 
 struct cw_StrListElem color_ontext[] = {
 
@@ -132,7 +135,7 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_DTLS_DETAIL, " DTLS - "},
 	{DBG_WARN, " Warning - "},
 	{DBG_MOD, " Mod - "},
-	{DBG_STATE, " State Machine - "},
+	{DBG_STATE, " STATEMACHINE - "},
 	{DBG_CFG_SET, "    Cfg Set - "},
 
 

@@ -103,8 +103,8 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
 		mavl_destroy(set->handlers_by_id);
 	if (set->handlers_by_key)
 		mavl_destroy(set->handlers_by_key);
-	if (set->state_machine)
-		mavl_destroy(set->state_machine);
+	if (set->statemachine_states)
+		mavl_destroy(set->statemachine_states);
 	free(set);
 }
 
@@ -160,8 +160,8 @@ struct cw_MsgSet *cw_msgset_create()
         }
 
 	
-	set->state_machine = mavl_create(cmp_machinestate,NULL,sizeof(cw_StateMachineState_t));
-	if (set->state_machine == NULL)
+	set->statemachine_states = mavl_create(cmp_machinestate,NULL,sizeof(cw_StateMachineState_t));
+	if (set->statemachine_states == NULL)
 	{
 		cw_msgset_destroy(set);
 		return NULL;
@@ -359,7 +359,7 @@ int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states
 	s=states;
 	while (s->state != 0){
 		const char * repstr;
-		mavl_replace(set->state_machine,s,&replaced);
+		mavl_replace(set->statemachine_states,s,&replaced);
 
 		if (replaced){
 			repstr = "Replacing";

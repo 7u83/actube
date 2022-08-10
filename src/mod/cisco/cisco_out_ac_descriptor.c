@@ -9,23 +9,23 @@
 #include "cw/cw.h"
 #include "cw/val.h"
 #include "cw/keys.h"
+#include "cw/cfg.h"
 
 
-
-static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char * parent_key){
+static int put_ac_status(cw_Cfg_t * cfg, cw_Cfg_t * default_cfg, uint8_t *dst, const char * parent_key){
 
 	uint8_t *d = dst;
 	uint8_t security;
 	
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	
 
-	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/stations",0));
-	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/station-limit",0));
-	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/active-wtps",0));
-	d += cw_put_word(d,cw_ktv_get_word(local,"ac-descriptor/max-wtps",0));
+	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/stations","0"));
+	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/station-limit","0"));
+	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/active-wtps","0"));
+	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/max-wtps","0"));
 	
-	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/security",0));
+	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/security",0));
 /*	
 	security = 0;
 	if (cw_ktv_get(local,"dtls-cert-file",CW_TYPE_BSTR16))
@@ -40,14 +40,14 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 	d += cw_put_byte(dst,security);
 */	
 	sprintf(key,"%s/%s",parent_key,"ac-descriptor/r-mac-field");
-	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/r-mac-field",0));
+	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/r-mac-field",0));
 		/*d += cw_put_byte(d,3);*/
 	
 	d += cw_put_byte(d,0);
 
 
 	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
-	d += cw_put_byte(d,cw_ktv_get_byte(local,"ac-descriptor/dtls-policy",0));
+	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/dtls-policy",0));
 
 	return d - dst;
 }
@@ -58,10 +58,12 @@ int cisco_out_ac_descriptor(struct cw_ElemHandler * eh,
 {
 	int len,l;
 	uint8_t *d = dst+4;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 
-	d+=put_ac_status(params->local_cfg,
-				params->global_cfg,
+cw_dbg(DBG_X,"Putting AC TATUS WIITH KEY: %s",eh->key);
+
+	d+=put_ac_status(params->cfg,
+				params->default_cfg,
 				d, eh->key);
 
 	/* it is important to send software version first, 

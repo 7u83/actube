@@ -31,6 +31,12 @@ struct wtpman {
 
 	cw_timer_t echointerval_timer;
 
+	cw_Cfg_t * global_cfg; /**< contains the cfg of AC, 
+				 visible to all wtpman threads.  
+				 The global cfg was initally read
+				 from a .ckv file on startup.
+				 */
+
 
 };
 

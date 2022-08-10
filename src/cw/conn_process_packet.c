@@ -660,6 +660,7 @@ int cw_read_messages(struct cw_Conn *conn)
 {
 	uint8_t buf[2024];
 	int len = 2024;
+cw_dbg(DBG_X,"Conn cw_read_messages from dsco request");
 
 	int n = conn->read(conn, buf, len);
 	if (n < 0)

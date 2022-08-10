@@ -50,7 +50,7 @@
 
 int ac_run(cw_Cfg_t * cfg);
 
-
+#include "statemachine.h"
 
 #include <getopt.h>
 
@@ -183,6 +183,11 @@ int main (int argc, char *argv[])
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
+
+
+	cw_statemachine_run(NULL);
+	exit(0);
+
 
 	global_cfg=cw_cfg_create();
 	if (!global_cfg){
