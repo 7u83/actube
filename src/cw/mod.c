@@ -33,28 +33,6 @@
 #include "cw.h"
 #include "msgset.h"
 
-/*
-static void (*actions_registered_cb) (struct cw_Mod * capwap, struct cw_Mod * bindings,
-				      struct cw_actiondef * actions) = NULL;
-*/
-
-
-
-/*
-void mod_set_actions_registered_cb(void (*fun)
-				    (struct cw_Mod *, struct cw_Mod *,
-				     struct cw_actiondef *))
-{
-	actions_registered_cb = fun;
-}
-*/
-
-struct cache_item {
-	const char *capwap;
-	const char *bindings;
-	struct cw_MsgSet *msgset;
-};
-static struct mavl *msgset_cache = NULL;
 
 /*
 static int mod_null_register_actions(struct cw_actiondef *def, int mode)
@@ -77,94 +55,32 @@ struct cw_Mod mod_null = {
 
 
 
-static int cmp(const void *p1, const void *p2)
-{
-	struct cache_item *c1 = ((struct cache_item **) p1)[0];
-	struct cache_item *c2 = ((struct cache_item **) p2)[0];
 
-	int r;
-	r = strcmp(c1->capwap, c2->capwap);
-	if (r != 0)
-		return r;
-
-	return strcmp(c1->bindings, c2->bindings);
-}
-
-struct cw_actiondef *mod_cache_get(const char *capwap, const char *bindings)
-{
-	return NULL;
-}
-
-
-struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn,
+struct cw_MsgSet *cw_mod_get_msg_set(struct cw_Conn *conn,
 				     struct cw_Mod *capwap_mod,
 				     struct cw_Mod *bindings_mod)
 {
-	struct cache_item search;
-	struct cache_item *cached_set;
 	struct cw_MsgSet *set;
 
-	if (!msgset_cache) {
-		msgset_cache = mavl_create(cmp, NULL, sizeof(struct cache_item*));
-		if (!msgset_cache) {
-			cw_log(LOG_ERR, "Can't initialize msgset cache: %s",
-			       strerror(errno));
-			return NULL;
-		}
-	}
-
-
-	search.capwap = capwap_mod->name;
-	search.bindings = bindings_mod->name;
-
-	cached_set = mavl_get_ptr(msgset_cache, &search);
-	if (cached_set) {
-		cw_dbg(DBG_INFO, "Using cached message set for %s,%s", capwap_mod->name,
-		       bindings_mod->name);
-		return cached_set->msgset;
-	}
-
-
-	cached_set = malloc(sizeof(struct cache_item));
-	if (!cached_set) {
-		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",
-		       strerror(errno));
-		return NULL;
-	}
-	memset(cached_set, 0, sizeof(struct cache_item));
-
+	
 	set = cw_msgset_create();
 	if (!set) {
-		free(cached_set);
-		cw_log(LOG_ERR, "Can't allocate memory for mod cache item %s",
+		cw_log(LOG_ERR, "Can't allocate memory for mod  %s",
 		       strerror(errno));
 		return NULL;
 	}
-	cached_set->msgset = set;
-
-
 
 	cw_dbg(DBG_INFO, "Loading message set for %s,%s", capwap_mod->name,
 	       bindings_mod->name);
 
-
-	cached_set->capwap = capwap_mod->name;
-	cached_set->bindings = bindings_mod->name;
 	
 	if (capwap_mod != MOD_NULL) {
-
-		capwap_mod->register_messages(cached_set->msgset, CW_MOD_MODE_CAPWAP);
+		capwap_mod->register_messages(set, CW_MOD_MODE_CAPWAP);
 	}
 	if (bindings_mod != MOD_NULL) {
-
-		bindings_mod->register_messages(cached_set->msgset, CW_MOD_MODE_BINDINGS);
+		bindings_mod->register_messages(set, CW_MOD_MODE_BINDINGS);
 	}
-/*
-//	if (actions_registered_cb)
-//		actions_registered_cb(capwap_mod, bindings_mod, &(cached_set->actions));
-*/
-	mavl_insert_ptr(msgset_cache, cached_set);
-	return cached_set->msgset;
+	return set;
 }
 
 
@@ -301,7 +217,7 @@ struct cw_Mod *cw_mod_add_to_list(struct cw_Mod *mod)
 	return mlistelem_dataptr(elem);
 }
 
-struct cw_Mod *cw_mod_detect(struct conn *conn,
+struct cw_Mod *cw_mod_detect(struct cw_Conn *conn,
 			     uint8_t * rawmsg, int len,
 			     int elems_len, struct sockaddr *from, int mode)
 {
