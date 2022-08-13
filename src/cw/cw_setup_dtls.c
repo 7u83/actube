@@ -1,5 +1,6 @@
 #include "cw.h"
 #include "cfg.h"
+#include "dbg.h"
 
 
 
@@ -47,7 +48,6 @@ int cw_setup_dtls(struct cw_Conn *conn, mavl_t cfg, const char *prefix,
 	sprintf(key, "%s/%s", prefix, "ssl-cipher");
 	conn->dtls_cipher = cw_cfg_get(cfg, key, default_cipher);
 
-
 	sprintf(key, "%s/%s", prefix, "ssl-psk");
 	conn->dtls_psk = cw_cfg_get(cfg, key, NULL);
 
@@ -61,9 +61,9 @@ int cw_setup_dtls(struct cw_Conn *conn, mavl_t cfg, const char *prefix,
 
 
 	sprintf(key, "%s/%s", prefix, "ssl-certfile");
-	ssl_cert = cw_cfg_get(conn->local_cfg, key, NULL);
+	ssl_cert = cw_cfg_get(cfg, key, NULL);
 	sprintf(key, "%s/%s", prefix, "ssl-keyfile");
-	ssl_key = cw_cfg_get(conn->local_cfg, key, NULL);
+	ssl_key = cw_cfg_get(cfg, key, NULL);
 
 	if (ssl_cert != NULL && ssl_key != NULL) {
 		conn->dtls_cert_file = ssl_cert;
@@ -74,9 +74,8 @@ int cw_setup_dtls(struct cw_Conn *conn, mavl_t cfg, const char *prefix,
 	}
 
 	sprintf(key, "%s/%s", prefix, "ssl-dhbits");
-	conn->dtls_dhbits = cw_cfg_get_word(cfg, key, "1024");
+	conn->dtls_dhbits = cw_cfg_get_word(cfg, key, 1024);
 
 	conn->dtls_get_psk = get_psk;
-
 	return security;
 }

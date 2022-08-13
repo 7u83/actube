@@ -24,7 +24,8 @@ struct cw_ElemData{
 };
 
 struct cw_ElemHandlerParams {
-/*	struct conn * conn;*/
+	struct cw_Conn * conn;  /**< a connection the message belongs to*/
+	struct cw_MsgSet * msgset;
 	struct cw_MsgData * msgdata; 
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
@@ -32,11 +33,7 @@ struct cw_ElemHandlerParams {
 //	cw_Val_t * elem;
 	char * debug_details;
 	cw_Cfg_t * cfg;
-	mavl_t remote_cfg;
-	mavl_t local_cfg;
-	mavl_t default_cfg;
-	mavl_t global_cfg;
-	struct cw_MsgSet * msgset;
+	cw_Cfg_t * default_cfg;
 };
 
 
@@ -90,7 +87,9 @@ struct cw_MsgDef{
 	
 	struct cw_ElemDef * elements;
 	int (*preprocess)(struct conn * conn);
-	int (*postprocess)(struct conn * conn);
+//	int (*postprocess)(struct conn * conn);
+	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
+
 /*	uint8_t next_state;*/
 };
 
@@ -107,7 +106,8 @@ struct cw_MsgData{
 	mlist_t mand_keys;  /**< Keys of mandatory elements */
 
 	int (*preprocess)(struct conn * conn);
-	int (*postprocess)(struct conn * conn);
+	//int (*postprocess)(struct conn * conn);
+	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 /*	uint8_t next_state;*/
 };
 
@@ -139,6 +139,14 @@ int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states
 struct cw_MsgData * cw_msgset_get_msgdata(struct cw_MsgSet *set,int type);
 struct cw_ElemHandler * cw_msgset_get_elemhandler(struct cw_MsgSet * set,
 		int proto, int vendor, int id);
+
+
+#define CW_MSGSET_POSTPROCESS	1
+#define CW_MSGSET_PREPROCESS	2
+
+typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
+cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
+	cw_MsgCallbackFun fun);
 
 
 #endif

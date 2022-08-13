@@ -12,20 +12,19 @@
 #include "cw/cfg.h"
 
 
-static int put_ac_status(cw_Cfg_t * cfg, cw_Cfg_t * default_cfg, uint8_t *dst, const char * parent_key){
+static int put_ac_status(cw_Cfg_t * cfg1, cw_Cfg_t * cfg2, uint8_t *dst, const char * parent_key){
 
 	uint8_t *d = dst;
 	uint8_t security;
 	
 	char key[CW_CFG_MAX_KEY_LEN];
 	
-
-	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/stations","0"));
-	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/station-limit","0"));
-	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/active-wtps","0"));
-	d += cw_put_word(d,cw_cfg_get_word(cfg,"ac-descriptor/max-wtps","0"));
+	d += cw_put_word(d,cw_dget(cw_cfg_get_word,cfg1,cfg2,"ac-descriptor/stations",0));
+	d += cw_put_word(d,cw_dget(cw_cfg_get_word,cfg1,cfg2,"ac-descriptor/station-limit",0));
+	d += cw_put_word(d,cw_dget(cw_cfg_get_word,cfg1,cfg2,"ac-descriptor/active-wtps",0));
+	d += cw_put_word(d,cw_dget(cw_cfg_get_word,cfg1,cfg2,"ac-descriptor/max-wtps",0));
 	
-	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/security",0));
+	d += cw_put_byte(d,cw_dget(cw_cfg_get_byte,cfg1,cfg2,"ac-descriptor/security",0));
 /*	
 	security = 0;
 	if (cw_ktv_get(local,"dtls-cert-file",CW_TYPE_BSTR16))
@@ -40,14 +39,14 @@ static int put_ac_status(cw_Cfg_t * cfg, cw_Cfg_t * default_cfg, uint8_t *dst, c
 	d += cw_put_byte(dst,security);
 */	
 	sprintf(key,"%s/%s",parent_key,"ac-descriptor/r-mac-field");
-	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/r-mac-field",0));
+	d += cw_put_byte(d,cw_dget(cw_cfg_get_byte,cfg1,cfg2,"ac-descriptor/r-mac-field",0));
 		/*d += cw_put_byte(d,3);*/
 	
 	d += cw_put_byte(d,0);
 
 
 	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
-	d += cw_put_byte(d,cw_cfg_get_byte(cfg,"ac-descriptor/dtls-policy",0));
+	d += cw_put_byte(d,cw_dget(cw_cfg_get_byte,cfg1,cfg2,"ac-descriptor/dtls-policy",0));
 
 	return d - dst;
 }
@@ -60,20 +59,18 @@ int cisco_out_ac_descriptor(struct cw_ElemHandler * eh,
 	uint8_t *d = dst+4;
 	char key[CW_CFG_MAX_KEY_LEN];
 
-cw_dbg(DBG_X,"Putting AC TATUS WIITH KEY: %s",eh->key);
-
-	d+=put_ac_status(params->cfg,
-				params->default_cfg,
+	d+=put_ac_status(params->conn->local_cfg,
+				params->conn->global_cfg,
 				d, eh->key);
 
 	/* it is important to send software version first, 
 	 * because APs don't check the type */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
                                  1, key);
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
                                  0, key);
  
 

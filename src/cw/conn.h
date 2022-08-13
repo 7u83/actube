@@ -235,6 +235,8 @@ struct cw_Conn {
 
 	
 	int detected;
+	void (*setup_complete)(struct cw_Conn *conn);
+
 //	void  * mods;
 
 

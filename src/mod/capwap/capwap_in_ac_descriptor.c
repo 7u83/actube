@@ -9,6 +9,8 @@ int capwap_in_ac_descriptor(struct cw_ElemHandler *eh,
 			struct cw_ElemHandlerParams *params, 
 			uint8_t * data, int len)
 {
+	stop();
+
 	static struct cw_DescriptorSubelemDef allowed[] = {
 		{0,CAPWAP_SUBELEM_AC_HARDWARE_VERSION, "hardware", 1024,1},
 		{0,CAPWAP_SUBELEM_AC_SOFTWARE_VERSION, "software", 1024,1},
@@ -16,6 +18,6 @@ int capwap_in_ac_descriptor(struct cw_ElemHandler *eh,
 	};
 
 
-	return cw_read_ac_descriptor(params->remote_cfg,eh,params,data,len,allowed);
+	return cw_read_ac_descriptor(params->cfg,eh,params,data,len,allowed);
 
 }

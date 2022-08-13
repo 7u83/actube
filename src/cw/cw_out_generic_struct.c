@@ -4,9 +4,15 @@
 #include "log.h"
 #include "cw.h"
 
+#include "dbg.h"
+
+
 int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
+	stop();
+
+
 	int start;
 	int len;
 	cw_Val_t search, *result;
@@ -17,7 +23,7 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 	}
 	
 	search.key = (char*)handler->key;
-	result = mavl_get_first(params->local_cfg,&search);
+	result = mavl_get_first(params->cfg,&search);
 	if (result == NULL ){
 		if (params->elemdata->mand)
 			cw_log(LOG_ERR,"Can't put mandatory message element %s, no data available",handler->name);
@@ -32,7 +38,7 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 
 	start = params->msgset->header_len(handler);
 
-	len = cw_ktv_write_struct(params->local_cfg,
+	len = cw_ktv_write_struct(params->cfg,
 		params->default_cfg,
 		handler->type,handler->key,dst+start);
 	

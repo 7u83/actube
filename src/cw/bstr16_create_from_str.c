@@ -2,7 +2,7 @@
 #include "format.h"
 
 
-uint8_t * bstr16_create_from_str(const char *s)
+bstr16_t bstr16_create_from_str(const char *s)
 {
 	uint8_t * mem;
 	int msize;

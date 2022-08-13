@@ -1,6 +1,8 @@
 
 #include "cw/cw.h"
 #include "cw/dbg.h"
+#include "cw/cfg.h"
+
 #include "mod_capwap.h"
 
 /*
@@ -50,10 +52,12 @@ static int put_ip(uint8_t *dst void *priv, cw_acip_t * acip void *data)
 int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+
+	char key[CW_CFG_MAX_KEY_LEN];
 	int i;
 	int wtps;
-	cw_Val_t * address;
+	cw_Val_t address;
+	const char *as;
 	uint8_t *d;
 
 	d = dst;
@@ -63,17 +67,22 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 		int l;
 
 		sprintf(key,"%s/address.%d",eh->key,i);
-		address = cw_ktv_get(params->local_cfg,key,CW_TYPE_IPADDRESS);
+		as = cw_cfg_get(params->conn->global_cfg,key,NULL);
+
+
 		sprintf(key,"%s/wtps.%d",eh->key,i);
-		wtps = cw_ktv_get_word(params->local_cfg,key,0);
+		wtps = cw_cfg_get_word(params->conn->global_cfg,key,0);
 		i++;
-		if (address==NULL){
+		if (as==NULL){
 			break;
 		}
 		
 /*		msg = d;*/
-		
-		l = address->type->len(address);
+		address.type=CW_TYPE_IPADDRESS;
+		address.type->from_str(&address,as);
+
+
+		l = address.type->len(&address);
 
 		switch(eh->id){
 			case CAPWAP_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS:
@@ -90,13 +99,15 @@ int capwap_out_capwap_control_ip_address(struct cw_ElemHandler * eh,
 				continue;
 		}
 		
-		l = address->type->put(address,d+4);
+		l = address.type->put(&address,d+4);
 		l+=cw_put_word(dst+4+l,wtps);
 		l+=cw_put_elem_hdr(d,eh->id,l);
-		cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,d+4,l-4);
+//		cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,d+4,l-4);
 		
 		d+=l;
-	}while(address != NULL);
+
+		address.type->del(&address);
+	}while(as != NULL);
 
 
 	return d-dst;

@@ -104,7 +104,7 @@ static int cast(cw_Val_t * data)
 	return 0;
 }
 
-static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, void *param)
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
 {
 	char *d, *dst;
 	dst = malloc(len*2+3);
@@ -125,9 +125,52 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, v
 	return  d - dst;
 }
 
-static 	int bwrite(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, void * param)
+
+
+static int xput(uint8_t * dst,const char *s)
 {
-	return 0;
+	int msize;
+	int l;
+	l = strlen(s);
+	if (s[0]!='.'){
+		memcpy(dst,(uint8_t*)s,l);
+		return l;
+	}
+
+	if (l<=2){
+		memcpy(dst,(uint8_t*)s,l);
+		return l;
+	}
+
+	if (s[1]=='.'){
+		memcpy(dst,(uint8_t*)s+1,l-1);
+		return l-1;
+	}
+
+	if (s[1]!='x'){
+		memcpy(dst,(uint8_t*)s,l);
+		return l;
+	}
+
+	/* the string starts with ".x" - read hexbytes */
+	l-=2;
+	msize=l/2;
+	if(l&1)
+		msize++;
+	cw_format_scan_hex_bytes(dst,s+2,l);
+	return msize;		
+}
+
+
+
+static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
+{
+	const char *s;
+
+	s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return -1;
+	return xput(dst,s);
 }
 
 

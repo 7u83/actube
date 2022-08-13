@@ -5,7 +5,7 @@
 #include "cw/msgset.h"
 #include "cw/keys.h"
 #include "cw/cw.h"
-
+#include "cw/dbg.h"
 
 static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * parent_key, 
 			const char *skey, int type){
@@ -40,6 +40,8 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 int capwap_out_wtp_board_data(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
+	stop();
+
 	cw_Val_t * val;
 	mavl_t cfg;
 	uint8_t * d;
@@ -48,7 +50,7 @@ int capwap_out_wtp_board_data(struct cw_ElemHandler * eh,
 	
 	d=dst+4;
 	
-	cfg = params->local_cfg;
+	cfg = params->cfg;
 	
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_VENDOR);
 	val = cw_ktv_get(cfg,key,CW_TYPE_DWORD);

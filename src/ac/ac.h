@@ -19,6 +19,7 @@ enum {
 	AC_PROTO_UNKNOWN
 };
 
+void start_shell();
 
 
 #endif

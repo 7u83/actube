@@ -1,6 +1,8 @@
 
 
 #include "cw.h"
+#include "cfg.h"
+
 
 
 static const cw_ValEnum_t * get_enum(const cw_ValEnum_t * e, int val){
@@ -21,7 +23,7 @@ int cw_in_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemHa
 	const cw_ValEnum_t * e;
 	const cw_ValIndexed_t * ie;
 	
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	struct cw_ElemHandler thandler;
 	
 	ie = handler->type;
@@ -46,8 +48,11 @@ int cw_in_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemHa
 	}
 	
 	memset(&thandler,0,sizeof(thandler));
-	thandler.type=e->type;
+	
 	thandler.key=key;
+
+	thandler.type=e->type;
+	thandler.param=e->param;
 	return e->fun_in(&thandler,params,elem_data+f,elem_len-l);
 
 }

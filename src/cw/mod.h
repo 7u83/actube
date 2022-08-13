@@ -52,7 +52,7 @@ struct cw_Mod {
 	 * @param conn current connection
 	 * @return 0 if notdetected 
 	**/
-	int (*detect) (struct conn * conn, const uint8_t * rawmsg, int rawlen,
+	int (*detect) (struct cw_Conn * conn, const uint8_t * rawmsg, int rawlen,
 		int elems_len, struct sockaddr * from, int mode);
 
 
@@ -68,7 +68,7 @@ struct cw_Mod {
 	/** used for private data */
 	void *data;
 	
-	int (*setup_cfg)(struct conn *conn);
+	int (*setup_cfg)(struct cw_Conn *conn);
 
 };
 
@@ -79,7 +79,7 @@ extern struct cw_Mod mod_null;
 #define MOD_NULL (&mod_null)
 
 /*
-struct cw_actiondef * mod_cache_add(struct conn *conn,struct cw_Mod *c, struct cw_Mod *b);
+struct cw_actiondef * mod_cache_add(struct cw_Conn *conn,struct cw_Mod *c, struct cw_Mod *b);
 */
 
 #define mod_init_config(mod,cfg) (mod->init_config ? mod->init_config(cfg):1)
@@ -95,11 +95,11 @@ extern int mod_caching;
 
 struct cw_Mod * cw_mod_load(const char * mod_name, mavl_t global_cfg, int role);
 struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod );
-struct cw_Mod * cw_mod_detect(struct conn *conn, 
+struct cw_Mod * cw_mod_detect(struct cw_Conn *conn, 
 			uint8_t * rawmsg, int len,
 			int elems_len, struct sockaddr *from, 
 			int mode);
-struct cw_MsgSet *cw_mod_get_msg_set(struct conn *conn, 
+struct cw_MsgSet *cw_mod_get_msg_set(struct cw_Conn *conn, 
 			struct cw_Mod * capwap_mod, struct cw_Mod *bindings_mod);
 
 void cw_mod_set_path(const char * path);

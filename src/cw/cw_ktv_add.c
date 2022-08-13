@@ -10,7 +10,6 @@ cw_Val_t * cw_ktv_add(mavl_t kvtstore, const char *key, const struct cw_Type *ty
 {
 	cw_Val_t mdata, *mresult;
 	int exists;
-
 	mdata.key=cw_strdup(key);
 	mdata.valguard=valguard;
 	

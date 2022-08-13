@@ -5,9 +5,14 @@
 #include "log.h"
 #include "cw.h"
 
+#include "dbg.h"
+
 int cw_in_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len)
 {
+
+	stop();
+
 	char key[CW_KTV_MAX_KEY_LEN];
 	int radio;
 	
@@ -19,7 +24,7 @@ int cw_in_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHa
 	radio = cw_get_byte(elem_data);
 	sprintf(key,"radio.%d/%s",radio,handler->key);
 
-	cw_ktv_read_struct(params->remote_cfg,handler->type,key,elem_data+1,elem_len-1);
+	cw_ktv_read_struct(params->cfg,handler->type,key,elem_data+1,elem_len-1);
 
 	/*params->elem=result;*/
 	

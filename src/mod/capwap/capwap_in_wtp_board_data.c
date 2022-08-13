@@ -56,45 +56,25 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 			return;
 		}
 
-		cw_dbg(DBG_SUBELEM, "WTP board data sub-element, type=%d, len=%d",
-		       subtype, sublen);
+/*		cw_dbg(DBG_SUBELEM, "WTP board data sub-element, type=%d, len=%d",
+		       subtype, sublen);*/
 
 		switch (subtype) {
 
 			
 			case CW_BOARDDATA_MODELNO:
-/*				mbag_set_bstrn(itemstore,
-						       CW_ITEM_WTP_BOARD_MODELNO,
-						       msgelem + i, sublen);
-						        */
 				key = "model-no";
 				break;
 			case CW_BOARDDATA_SERIALNO:
-/*				mbag_set_bstrn(itemstore,
-						       CW_ITEM_WTP_BOARD_SERIALNO,
-						       msgelem + i, sublen);
-
-*/				
 				key = "serial-no";
 				break;
 			case CW_BOARDDATA_MACADDRESS:
-/*				mbag_set_bstrn(itemstore,
-						       CW_ITEM_WTP_BOARD_MACADDRESS,
-						       msgelem + i, sublen);
-*/
 				key = "mac-address";
 				break;
 			case CW_BOARDDATA_BOARDID:
-/*				mbag_set_bstrn(itemstore, CW_ITEM_WTP_BOARD_ID,
-						       msgelem + i, sublen);
-*/
 				key = "board-id";
 				break;
 			case CW_BOARDDATA_REVISION:
-/*				mbag_set_bstrn(itemstore,
-						       CW_ITEM_WTP_BOARD_REVISION,
-						       msgelem + i, sublen);
-*/
 				key = "revision";
 				break;
 			default:
@@ -102,9 +82,9 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 				break;
 		}
 		if (key != NULL){
-			char add_key[256];
+			char add_key[CW_CFG_MAX_KEY_LEN];
 			sprintf(add_key,"wtp-board-data/%s",key);
-			cw_ktv_add(cfg,add_key,CW_TYPE_BSTR16,NULL,msgelem+i,sublen);
+			cw_cfg_set_val(cfg,add_key,CW_TYPE_BSTR16,NULL,msgelem+i,sublen);
 			
 		}
 		
@@ -122,32 +102,12 @@ static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
 int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
+	char vendor_key[CW_CFG_MAX_KEY_LEN];
 
-/*
-	if (len < 4) {
-		cw_dbg(DBG_ELEM_ERR,
-		       "Discarding WTP_BOARD_DATA msgelem, wrong size, type=%d, len=%d",
-		       a->elem_id, len);
-		return 0;
-	}
-*/
+	sprintf(vendor_key,"%s/%s",eh->key,"vendor");
+	cw_cfg_set_val(params->cfg,vendor_key,CW_TYPE_DWORD,NULL,data,len);
 
-
-	char vendor_key[128];
-	mavl_t cfg = params->remote_cfg;
-
-		
-	sprintf(vendor_key,"%s/%s",eh->key,CW_SKEY_VENDOR);
-	
-	cw_ktv_add(cfg,vendor_key,CW_TYPE_DWORD,NULL,data,len);
-
-/*
-	mbag_t itemstore = conn->incomming;
-	mbag_set_dword(itemstore, CW_ITEM_WTP_BOARD_VENDOR, cw_get_dword(data));
-*/
-
-	readsubelems_wtp_board_data(cfg, data + 4, len - 4);
-
+	readsubelems_wtp_board_data(params->cfg, data + 4, len - 4);
 	return 1;
 }
 

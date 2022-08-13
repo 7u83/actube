@@ -19,15 +19,18 @@
 
 #include "cw/sock.h"
 #include "cw/cw.h"
+#include "cw/dbg.h"
 
 #include "mod_capwap.h"
 
 int capwap_in_wtp_descriptor(struct cw_ElemHandler *eh, struct cw_ElemHandlerParams *params, uint8_t * data,
 			 int len)
 {
+	stop();
+
 	int rc;
 	/*rc =cw_read_wtp_descriptor(params->remote_cfg, params->conn, eh, data, len, NULL);*/
-	rc =cw_read_wtp_descriptor(params->remote_cfg, NULL, eh, data, len, NULL);
+	rc =cw_read_wtp_descriptor(params->cfg, NULL, eh, data, len, NULL);
 	return rc;
 }
 

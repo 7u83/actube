@@ -140,7 +140,7 @@ static inline int bstr16_ncpy(uint8_t *dst,uint8_t*src,uint16_t len)
 
 
 bstr16_t bstr16_create(const uint8_t *data, uint16_t len);
-uint8_t * bstr16_create_from_str(const char *s);
+bstr16_t bstr16_create_from_str(const char *s);
 extern uint8_t * bstr16_create_from_cfgstr(const char * s);
 
 #define bstr16_replace bstr_replace

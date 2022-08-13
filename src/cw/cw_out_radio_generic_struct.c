@@ -7,6 +7,8 @@ int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n);
 int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
+	stop();
+
 	int i,l, offset;
 
 	uint8_t * cdst;
@@ -21,12 +23,12 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 		char basekey[CW_KTV_MAX_KEY_LEN];
 		cw_Val_t * result;
 		
-		i = cw_ktv_idx_get_next(params->local_cfg,"radio",i+1);
+		i = cw_ktv_idx_get_next(params->cfg,"radio",i+1);
 		if (i==-1)
 			break;
 		sprintf(basekey,"radio.%d/%s",i,handler->key);
 		
-		result = cw_ktv_base_exists(params->local_cfg,basekey);
+		result = cw_ktv_base_exists(params->cfg,basekey);
 		if (result == NULL){
 			continue;
 		}
@@ -34,7 +36,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 		
 		l=0;
 		l+=cw_put_byte(cdst+offset+l,i);
-		l+= cw_ktv_write_struct(params->local_cfg,NULL, handler->type,basekey,cdst+offset+l);
+		l+= cw_ktv_write_struct(params->cfg,NULL, handler->type,basekey,cdst+offset+l);
 		
 
 		cdst+=params->msgset->write_header(handler,cdst,l);
@@ -59,7 +61,7 @@ printf("Next: %s\n", next);
 	if (sl==NULL){
 		cw_Val_t * result;
 		sprintf(key,"%s/%s",current,next);
-		result = cw_ktv_base_exists(params->local_cfg,key);
+		result = cw_ktv_base_exists(params->cfg,key);
 		if (result != NULL){
 			int offset;
 			int i,l;
@@ -68,7 +70,7 @@ printf("Next: %s\n", next);
 			for (i=0;i<stack[0];i++){
 				printf("I=%i\n",stack[i+1]);
 			}
-			l= cw_ktv_write_struct(params->local_cfg,params->default_cfg, 
+			l= cw_ktv_write_struct(params->cfg,params->default_cfg, 
 				handler->type,key,dst+offset);
 			
 			printf("Write struct len %i\n",l);
@@ -96,19 +98,19 @@ printf("current is %s\n", current);
 	
 	
 	printf("Here we are %s\n",key);
-	cw_dbg_ktv_dump(params->local_cfg,DBG_INFO,"start"," ", "end" );
+	cw_dbg_ktv_dump(params->cfg,DBG_INFO,"start"," ", "end" );
 	i=-1;
 	while(1){
 		char basekey[CW_KTV_MAX_KEY_LEN];
 		cw_Val_t * result;
 		
-		i = cw_ktv_idx_get_next(params->local_cfg,key,i+1);
+		i = cw_ktv_idx_get_next(params->cfg,key,i+1);
 		
 		if (i==-1)
 			break;
 		sprintf(basekey,"%s.%d",key,i);
 		printf("Our basekey is %s\n",basekey);
-		result = cw_ktv_base_exists(params->local_cfg,basekey);
+		result = cw_ktv_base_exists(params->cfg,basekey);
 		if (result == NULL){
 			continue;
 		}

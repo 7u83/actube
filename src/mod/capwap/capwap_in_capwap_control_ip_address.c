@@ -23,24 +23,28 @@
 #include "cw/conn.h"
 #include "mod_capwap.h"
 
+#include "cw/dbg.h"
 
 int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	return 0;
+	stop();
+
+	char key[CW_CFG_MAX_KEY_LEN];
 	int idx;
 	
 	sprintf(key,"%s/address",eh->key);
-	idx = cw_ktv_idx_get(params->remote_cfg,key);
+	idx = cw_cfg_get_next_index(params->cfg,key);
 	
 /*	printf("SKEY is %s , idx: %d\n",key,idx);*/
 
-	sprintf(key,"%s/address.%d",eh->key,idx+1);
-	cw_ktv_add(params->remote_cfg,key,CW_TYPE_IPADDRESS,NULL,data,len-2);
+	sprintf(key,"%s/address.%d",eh->key,idx);
+	cw_ktv_add(params->cfg,key,CW_TYPE_IPADDRESS,NULL,data,len-2);
 	
-	sprintf(key,"%s/wtps.%d",eh->key,idx+1);
-	cw_ktv_add(params->remote_cfg,key,CW_TYPE_WORD,NULL,data+len-2,2);
+	sprintf(key,"%s/wtps.%d",eh->key,idx);
+	cw_ktv_add(params->cfg,key,CW_TYPE_WORD,NULL,data+len-2,2);
 	
 /*	if (handler-id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
 		struct sockaddr_in addr;

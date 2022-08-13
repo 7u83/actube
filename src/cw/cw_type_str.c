@@ -90,6 +90,21 @@ static const char * get_type_name(cw_Val_t *data)
 	return CW_TYPE_STR->name;
 }
 
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
+{
+	cw_Val_t val;
+	int l;
+	char str[2048];
+	memset(&val,0,sizeof(cw_Val_t));
+	val.valguard = param;
+	get(&val,src,len);
+	to_str(&val,str,2048);
+	cw_cfg_set(cfg,key,str);
+	l = val.type->len(&val);
+	del(&val);
+	return l;
+}
+
 
 
 const struct cw_Type cw_type_str = {
@@ -101,5 +116,9 @@ const struct cw_Type cw_type_str = {
 	from_str,	/* from_str */
 	len,		/* len */
 	NULL,		/* data */
-	get_type_name	/* get_type_name */
+	get_type_name,	/* get_type_name */
+	NULL,
+	bread,
+
+
 };

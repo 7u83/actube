@@ -63,6 +63,40 @@ static int cast(cw_Val_t * data)
 	return 0;
 }
 
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
+{
+	uint16_t val;
+	//cw_ValValRange_t * valrange = (cw_ValValRange_t *) param;
+	//const char *str;
+	
+      	val = cw_get_word(src);
+/*	str = get_guardstr(val, valrange);
+	if (str != NULL)
+		cw_cfg_set(cfg,key,str);
+	else*/
+	cw_cfg_set_int(cfg,key,val);
+
+	return 2;
+}
+
+static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
+{
+
+	cw_Val_t val;
+	int l;
+	const char *s;
+	memset(&val,0,sizeof(cw_Val_t));
+	val.valguard=param;
+	s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return -1;
+	from_str(&val,s);
+	l = put(&val,dst);
+	if(val.type->del)
+		val.type->del(&val);
+	return l;
+}
+
 
 const struct cw_Type cw_type_word = {
 	"Word",			/* name */
@@ -74,7 +108,9 @@ const struct cw_Type cw_type_word = {
 	NULL,
 	NULL,
 	get_type_name,
-	cast
+	cast,
+	bread,
+	bwrite,
 	
 };
 

@@ -392,7 +392,6 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const
 	SSL_CTX_set_timeout(d->ctx,30);
 
 	rc =SSL_CTX_set_max_proto_version (d->ctx,DTLS1_VERSION);
-	printf("MAXMAMX = %d\n",rc);
 
 
 /*

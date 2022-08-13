@@ -79,7 +79,7 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, c
 
 
 const struct cw_Type cw_type_struct = {
-	"Byte",			/* name */
+	"Struct",		/* name */
 	NULL,			/* del */
 	NULL,			/* put */
 	NULL,			/* get */

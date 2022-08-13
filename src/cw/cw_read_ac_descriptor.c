@@ -31,8 +31,9 @@ int cw_read_ac_descriptor(mavl_t store,
 			   uint8_t *data, int len, 
 			struct cw_DescriptorSubelemDef *allowed)
 {
-	
-	cw_ktv_read_struct(params->remote_cfg,acstatus,eh->key,data,len);
+
+	CW_TYPE_STRUCT->read(params->cfg,eh->key,data,len,acstatus);
+//	cw_ktv_read_struct(params->remote_cfg,acstatus,eh->key,data,len);
 
 	if (!allowed)
 		allowed=allowed_default;

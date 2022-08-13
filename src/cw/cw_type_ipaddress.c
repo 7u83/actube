@@ -111,6 +111,24 @@ static const char * get_type_name(cw_Val_t *data)
 	return CW_TYPE_IPADDRESS->name;
 }
 
+
+
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
+{
+	char str[128];
+	int rc;
+	cw_Val_t val;
+	memset(&val,0,sizeof(cw_Val_t));
+	get(&val,src,len);
+	to_str(&val,str,128);
+	cw_cfg_set(cfg,key,str);
+	rc = val.type->len(&val);
+	del(&val);	
+	return rc;
+}
+
+
+
 const struct cw_Type cw_type_ipaddress = {
 	"IPAddress",		/* name */
 	del,			/* del */
@@ -120,7 +138,10 @@ const struct cw_Type cw_type_ipaddress = {
 	from_str,		/* from_str */
 	len,			/* len */
 	data,			/* data */
-	get_type_name
+	get_type_name,
+	NULL,
+	bread,
+	
 };
 
 

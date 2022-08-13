@@ -8,7 +8,6 @@
 #include "mavltypes.h"
 
 #include "bstr.h"
-#include "cfg.h"
 
 
 /**
@@ -23,6 +22,8 @@
  */
 
 #define CW_KTV_MAX_KEY_LEN 1024
+
+typedef struct mavl cw_Cfg_t;
 
 /**
  * @struct cw_Val
@@ -93,7 +94,7 @@ struct cw_Type {
 	int (*cast)(cw_Val_t *);
 
 	int (*read)(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void * param);
-	int (*write)(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, const void * param);
+	int (*write)(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param);
 	
 };
 typedef struct cw_Type cw_Type_t;
@@ -134,6 +135,7 @@ struct cw_ValEnum{
 	const void * type;
 	int (*fun_in)();
 	int (*fun_out)();
+	void *param;
 };
 typedef struct cw_ValEnum cw_ValEnum_t;
 

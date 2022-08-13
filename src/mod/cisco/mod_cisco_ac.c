@@ -60,9 +60,9 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 			capwap_mod->register_messages(set, CW_MOD_MODE_CAPWAP);
 			capwap80211_mod->register_messages(set, CW_MOD_MODE_BINDINGS);
 			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+
 			set->write_header = write_header;
 		      	set->header_len = header_len;	
-
 
 		/*	cw_dbg(DBG_MOD,"Cisco: loading cisco message set");*/
 			
@@ -228,11 +228,11 @@ int static setup_cfg(struct cw_Conn  * conn)
 	conn->write_header=write_header;
 	conn->header_len=header_len;
 	
-	security = cw_setup_dtls(conn,conn->local_cfg,"cisco",CAPWAP_CIPHER);
+	security = cw_setup_dtls(conn,conn->global_cfg,"cisco",CAPWAP_CIPHER);
 	cw_cfg_set_int(conn->local_cfg,"ac-descriptor/security",security);
 	
 	if (conn->default_cfg==NULL){
-		conn->default_cfg=cw_ktv_create();
+		conn->default_cfg=cw_cfg_create();
 	}
 	
 

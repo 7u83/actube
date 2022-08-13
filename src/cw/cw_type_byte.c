@@ -124,7 +124,7 @@ static int cast(cw_Val_t * data)
 	return 0;
 }
 
-static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, void *param)
+static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
 {
 	uint8_t	val;
 	cw_ValValRange_t * valrange = (cw_ValValRange_t *) param;
@@ -140,9 +140,22 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, v
 	return 1;
 }
 
-static 	int bwrite(cw_Cfg_t *cfg, const char *key, const uint8_t *dst, void * param)
+static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
 {
-	return 0;
+
+	cw_Val_t val;
+	int l;
+	const char *s;
+	memset(&val,0,sizeof(cw_Val_t));
+	val.valguard=param;
+	s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return -1;
+	from_str(&val,s);
+	l = put(&val,dst);
+	if(val.type->del)
+		val.type->del(&val);
+	return l;
 }
 
 const struct cw_Type cw_type_byte = {

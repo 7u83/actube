@@ -45,34 +45,6 @@
 
 #include "actube.h"
 
-static void reset_echointerval_timer(struct wtpman *wtpman)
-{
-/*	char sock_buf[SOCK_ADDR_BUFSIZE];*/
-/*	uint16_t ct = mbag_get_word(wtpman->conn->local, CW_ITEM_CAPWAP_TIMERS,
-				    CW_MAX_DISCOVERY_INTERVAL << 8 |
-				    CAPWAP_ECHO_INTERVAL);
-*/
-	/* start echinterval timer and put 2 seconds for "safety" on it */
-
-/*
-//	wtpman->echointerval_timer = cw_timer_start(2+ (ct & 0xff));
-//	db_ping_wtp(sock_addr2str_p(&wtpman->conn->addr,sock_buf), conf_acname);
-//	cw_dbg(DBG_X, "Starting capwap timer: %d", wtpman->echointerval_timer);
-*/
-
-}
-
-/*
-static int msg_start_handler(struct cw_Conn *conn, struct cw_action_in *a,
-			     uint8_t * data, int len, struct sockaddr *from)
-{
-	struct wtpman *wtpman = conn->data;
-	reset_echointerval_timer(wtpman);
-	return 0;
-}
-
-*/
-
 
 static void wtpman_remove(struct wtpman *wtpman)
 {
@@ -86,9 +58,6 @@ static void wtpman_remove(struct wtpman *wtpman)
 
 static void wtpman_run_discovery(void *arg)
 {
-	cw_dbg(DBG_STATE,"Run discovery");
-	exit(0);
-
 
 	struct wtpman *wtpman = (struct wtpman *) arg;
 
@@ -100,6 +69,7 @@ static void wtpman_run_discovery(void *arg)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		rc = cw_read_messages(wtpman->conn);
+
 		if (cw_result_is_ok(rc)) {
 			wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
 
@@ -141,7 +111,7 @@ static int wtpman_dtls_setup(void *arg)
 
 	return 1;
 }
-
+/*
 static int wtpman_join(void *arg)
 {
 	int rc;
@@ -192,6 +162,9 @@ static int wtpman_join(void *arg)
 
 
 }
+*/
+
+
 
 static void wtpman_image_data(struct wtpman *wtpman)
 {
@@ -312,7 +285,7 @@ int cw_run_state_machine(struct cw_Conn *conn, time_t * timer)
 
 		if (result->timer_key) {
 			timerval =
-			    cw_ktv_get_word(conn->local_cfg, result->timer_key,
+			    cw_cfg_get_word(conn->local_cfg, result->timer_key,
 					    result->timer_default);
 			*timer = cw_timer_start(timerval);
 			cw_dbg(DBG_STATE, "Starting timer: [%s] - %d seconds.",
@@ -338,7 +311,7 @@ static void *wtpman_main(void *arg)
 	wtpman->conn->seqnum = 0;
 	conn = wtpman->conn;
 
-	wtpman->conn->remote_cfg = cw_ktv_create();
+	wtpman->conn->remote_cfg = cw_cfg_create();
 
 
 	if (!wtpman->dtlsmode) {
@@ -647,6 +620,41 @@ void wtpman_destroy(struct wtpman *wtpman)
 	free(wtpman);
 }
 
+static void discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
+	cw_dbg(DBG_X,"Discovery->Callback");
+	wtpman->pdiscovery(params,elems_ptr,elems_len);
+}
+
+static void join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
+	cw_dbg(DBG_X,"JOIN->Callback");
+	wtpman->pjoin(params,elems_ptr,elems_len);
+}
+
+static void update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
+	cw_dbg(DBG_X,"UPDATE->Callback");
+	if ( wtpman->pupdate )
+		wtpman->pupdate(params,elems_ptr,elems_len);
+}
+
+
+
+
+static setup_complete(struct cw_Conn *conn)
+{
+	struct wtpman * wtpman = (struct wtpman *)conn->data;
+	wtpman->pdiscovery = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_DISCOVERY_REQUEST,discovery_cb);
+	wtpman->pjoin = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_JOIN_REQUEST,join_cb);
+	wtpman->pupdate = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,update_cb);
+	cw_dbg(DBG_X,"SETUP COMPLETE");
+
+}
+
 
 
 struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
@@ -661,8 +669,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
 		return 0;
-
-
 
 	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 
@@ -699,9 +705,11 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
-
+	wtpman->conn->global_cfg = global_cfg;
+	wtpman->conn->local_cfg = cw_cfg_create();
 
 	wtpman->conn->role = CW_ROLE_AC;
+	wtpman->conn->data=wtpman;
 
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr,
@@ -712,6 +720,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 	wtpman->conn->strict_capwap = conf_strict_capwap;
 	wtpman->conn->strict_hdr = conf_strict_headers;
+
+	wtpman->conn->setup_complete = setup_complete;
 /*
 //	wtpman->conn->radios = mbag_i_create();
 //	wtpman->conn->radios_upd = mbag_i_create();
@@ -722,9 +732,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 */
 
 
-	wtpman->conn->local_cfg = cw_ktv_create();
-	wtpman->conn->global_cfg = global_cfg;
-	wtpman->conn->local_cfg = global_cfg;
 
 	/* when created caused by a packet in DTLS mode, we try
 	 * to find out the modules to load, for detected connection 
@@ -742,8 +749,14 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 			    cw_mod_get_msg_set(wtpman->conn, cmod, bmod);
 			wtpman->conn->detected = 1;
 			cmod->setup_cfg(wtpman->conn);
+	               if (wtpman->conn->setup_complete)
+        	                wtpman->conn->setup_complete(wtpman->conn);
+
+
 		}
 	}
+
+	cw_dbg(DBG_X,"WTPMAN_CREATED: %p",wtpman);
 
 	return wtpman;
 }
@@ -751,6 +764,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
+	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
 	conn_q_add_packet(wtpman->conn, packet, len);
 }
 

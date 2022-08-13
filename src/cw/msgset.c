@@ -387,3 +387,21 @@ struct cw_MsgData *cw_msgset_get_msgdata(struct cw_MsgSet *set, int type)
 	search.type = type;
 	return mavl_get(set->msgdata, &search);
 }
+
+typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
+cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
+	cw_MsgCallbackFun fun)
+
+{
+        struct cw_MsgData * md;
+	cw_MsgCallbackFun old_callback;
+        md = cw_msgset_get_msgdata(set,msg_id);
+        if (md != NULL){
+                old_callback = md->postprocess;
+		md->postprocess=fun;
+        }
+	return old_callback;
+}
+
+
+

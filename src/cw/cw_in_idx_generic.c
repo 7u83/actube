@@ -1,9 +1,12 @@
 #include "cw.h"
 #include "log.h"
+#include "dbg.h"
 
 int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len)
 {
+	stop();
+/*
 	char key[CW_KTV_MAX_KEY_LEN];
 	cw_Val_t * result;
 	int idx;
@@ -16,10 +19,10 @@ int cw_in_idx_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerPara
 	idx=cw_get_byte(elem_data);
 	sprintf(key,handler->key,idx);
 	
-	result = cw_ktv_add(params->remote_cfg, key, 
+	result = cw_ktv_add(params->cfg, key, 
 				handler->type, NULL, elem_data+1,elem_len-1);
 	
 //	params->elem=result;
-	
+*/	
 	return CAPWAP_RESULT_SUCCESS;	
 }

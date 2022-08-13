@@ -3,10 +3,13 @@
 
 #include <mavl.h>
 
-#include "cw.h"
-#include "cfg.h"
 #include "val.h"
+#include "cfg.h"
+
+
 #include "dbg.h"
+#include "log.h"
+#include "cw.h"
 
 static const char *nextc(const char *s)
 {
@@ -117,6 +120,30 @@ const char *cw_cfg_get(cw_Cfg_t * cfg, const char *key, const char *def)
 	if (!r)
 		return def;
 	return r->val;
+}
+
+const char *cw_cfg_get2(cw_Cfg_t *cfg1, cw_Cfg_t *cfg2, const char *key, const char *def)
+{
+	return cw_cfg_get(cfg1, key, cw_cfg_get(cfg2,key,def));
+}
+
+
+
+bstr16_t cw_cfg_get_bstr16(cw_Cfg_t * cfg, const char * key, const char *def)
+{
+	const char *s;
+
+	s = cw_cfg_get(cfg,key,def);
+	if(s==NULL)
+		return NULL;
+
+	return bstr16_create_from_str(s);
+}
+
+int cw_cfg_set_bstr16(cw_Cfg_t * cfg, const char * key, bstr16_t str)
+{
+	CW_TYPE_BSTR16->read(cfg,key,bstr16_data(str),bstr16_len(str),NULL);
+	return 0;
 }
 
 
@@ -492,27 +519,95 @@ int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def)
 }
 
 
-uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, const char * def)
+uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def)
 {
 	struct cw_Val v;
-	const char *s = cw_cfg_get(cfg,key,def);
+	memset(&v,0,sizeof(struct cw_Val));
+	const char *s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return def;
 	CW_TYPE_BYTE->from_str(&v,s);
 	return v.val.word;
 }
 
 
 
-uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def)
+uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def)
 {
 	struct cw_Val v;
-	const char *s = cw_cfg_get(cfg,key,def);
+	const char *s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return def;
 	CW_TYPE_WORD->from_str(&v,s);
 	return v.val.word;
 }
+
+/*
+int cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def)
+{
+	const char *s;
+	s=cw_cfg_get(cfg,key,def);
+	if (s==NULL)
+		return 0;
+
+}
+*/
 
 void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val)
 {
 	char a[128];
 	sprintf(a,"%d",val);
 	cw_cfg_set(cfg,key,a);
+}
+
+
+
+int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
+{
+	char ikey[CW_CFG_MAX_KEY_LEN];
+	struct cw_Cfg_entry search, * result;
+	char *d;
+	
+	sprintf(ikey,"%s.%d",key,65536);
+		
+	search.key=ikey;
+	/*//result = ktvn(ktv,&search);*/
+	
+	result = mavl_get_last(cfg,&search);
+	if (result == NULL){
+		return 0;
+	}
+	
+	d = strchr(result->key,'.');
+	if (d==NULL){
+		return 0;
+	}
+	
+	if (strncmp(result->key,ikey,d-result->key)!=0)
+		return 0;
+	
+	return atoi(d+1)+1;
+}
+
+int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, const void * valguard, const uint8_t * data, int len)
+{
+	cw_Val_t mdata, *mresult;
+	char str[2048];
+	memset(&mdata,0,sizeof(cw_Val_t));
+	mdata.type=type;
+	mdata.valguard=valguard;
+cw_dbg(DBG_X,"SETVAL FOR TYPE: %s",type->name);	
+	mresult = type->get(&mdata,data,len);
+	if (!mresult){
+		cw_log(LOG_ERR, "Can't create cfg element for key %s of type %s: %s",
+				key,type->name, strerror(errno));
+		free(mdata.key);
+		return 0;
+	}
+	type->to_str(&mdata,str,2048);
+	cw_cfg_set(cfg,key,str);
+
+	if (type->del)	
+		type->del(&mdata);
+	return 1;
 }

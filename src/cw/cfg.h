@@ -2,6 +2,8 @@
 #define _CFG_H
 
 #include <mavl.h>
+#include "val.h"
+#include "bstr.h"
 
 #define CW_CFG_MAX_KEY_LEN 1024
 
@@ -30,9 +32,21 @@ const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key);
 void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base);
 
 int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def);
-uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def);
+uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def);
 void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val);
-uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, const char * def);
+uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def);
+bstr16_t cw_cfg_get_bstr16(cw_Cfg_t * cfg, const char * key, const char *def);
+int cw_cfg_set_bstr16(cw_Cfg_t * cfg, const char * key, bstr16_t str);
+int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key);
+
+
+int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *t, const void * valguard, const uint8_t * data, int len);
+
+#define cw_cfg_get_word2(cfg1,cfg2,key,def) \
+	cw_cfg_get_word(cfg1,key,cw_cfg_get_word(cfg2,key,def))
+
+#define cw_dget(fun,cfg1,cfg2,key,def)\
+	fun(cfg1,key,fun(cfg2,key,def))
 
 
 #endif

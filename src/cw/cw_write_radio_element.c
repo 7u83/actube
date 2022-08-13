@@ -4,6 +4,9 @@
 int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, int idx 
 			, uint8_t * dst)
 {
+	return 0;
+	stop();
+
 	char key[CW_KTV_MAX_KEY_LEN];
 	cw_Val_t *elem, search;
 	int len;
@@ -15,7 +18,7 @@ int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandle
 	printf("Looking for readio key: %s\n",key);
 	
 	search.key=key;
-	elem = mavl_get(params->local_cfg, &search);
+	elem = mavl_get(params->cfg, &search);
 	
 	if (elem==NULL){
 		printf("Nothing found\n");

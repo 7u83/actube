@@ -54,7 +54,7 @@ int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
 	struct mlistelem * elem;
 	int len,l;
 
-	cw_dbg(DBG_INFO, "Number of elements in ktv: %d",conn->local_cfg->count);
+	//cw_dbg(DBG_INFO, "Number of elements in ktv: %d",conn->local_cfg->count);
 /*	cw_dbg_ktv_dump(conn->local_cfg,DBG_CFG_DMP,"Local CFG","LOCAL:","End Local CFG");*/
 
 	/* rawout is already initialized, so we can get 
@@ -86,14 +86,13 @@ int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
 		
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-printf("Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
+//		cw_dbg(DBG_X,"Elem: %d %d %d %s\n", data->proto, data->vendor, data->id, handler->name);
 		if (handler==NULL){
 			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
 					data->proto,data->vendor,data->id);
 			continue;
 		}
 
-cw_dbg(DBG_X,"Hello!");
 
 		if (handler->put == NULL){
 			if (data->mand){
@@ -104,11 +103,10 @@ cw_dbg(DBG_X,"Hello!");
 			continue;
 		}
 
-	/*	params.conn=conn;*/
-		params.local_cfg=conn->local_cfg;
-		params.remote_cfg=conn->remote_cfg;
+		params.conn=conn;
+		params.cfg=conn->remote_cfg;
 		params.default_cfg=conn->default_cfg;
-                params.global_cfg=conn->global_cfg;
+
 		params.msgset=conn->msgset;
 
 
@@ -123,11 +121,9 @@ cw_dbg(DBG_X,"Hello!");
 			 cisco/ap-led-flash-config/flash-enable 
 		}*/
 
-cw_dbg(DBG_X,"Calling Handler put for %s",handler->name);
 
 		l = handler->put(handler,&params,dst+len);
 
-cw_dbg(DBG_X,"L = %d",l);
 
 	/*	if(l>0)
 			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
@@ -156,11 +152,12 @@ cw_dbg(DBG_X,"L = %d",l);
 	uint8_t *msg_ptr = rawout + offset;
 	int elems_len = cw_get_msg_elems_len(msg_ptr);
 	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
-	mavl_t * cfg = cw_ktv_create();
+	mavl_t * cfg = cw_cfg_create();
 
 	struct cw_ElemHandlerParams params;
 
-	params.remote_cfg=cfg;
+	params.cfg=cfg;
+	params.default_cfg=NULL;
 	params.msgset=conn->msgset;
 	params.msgdata=msg;
 

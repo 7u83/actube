@@ -12,19 +12,18 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 			, uint8_t * dst)
 {
 
-	struct cw_Val * elem;
 	int start, len, l;
 
-	/* Get the element */
-/*	search.key=(char*)handler->key;
-	elem = mavl_get(params->conn->local_cfg, &search);
-*/	
-	elem = cw_ktv_get(params->local_cfg,handler->key,NULL);
-	
-/*	if (elem == NULL && params->conn->default_cfg !=NULL)
-		elem = mavl_get(params->conn->default_cfg, &search);
-*/
-	if (elem == NULL) {
+//	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//	cw_cfg_dump(params->cfg);
+//	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!! ENDDUMP");
+
+	start = params->msgset->header_len(handler);
+	len = ((const cw_Type_t*)(handler->type))->
+		write(params->cfg,handler->key,dst+start,handler->param);
+
+
+	if (len == -1) {
 		const char *vendor="";
 		if ( handler->vendor ) {
 			vendor=cw_strvendor(handler->vendor);
@@ -46,31 +45,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 		return 0;
 	} 
 
-	/* Size for msg elem header depends on 
-	   vendor specific payload */
-	/* start = handler->vendor ? 10 : 4; */
-	start = params->msgset->header_len(handler);
-	
-	if (cw_ktv_cast(elem,handler->type)==NULL){
-		cw_log(LOG_ERR,"Can't put element '%s'- can't cast from %s to %s for key: %s", handler->name, 
-			elem->type->name, ((const cw_Type_t*)handler->type)->name, handler->key);
-		return 0;
-	}
-	
-	len = ((const cw_Type_t*)(handler->type))->put(elem,dst+start);
-
-/*	((const cw_Type_t*)(handler->type))->to_str(elem,detail,120);
-	sprintf(params->debug_details, "  Value = %s", detail);
-	params->elem = elem;*/
-
-/*	if (handler->vendor)
-		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
-
-	l = len + cw_put_elem_hdr(dst, handler->id, len); */
 	l = params->msgset->write_header(handler,dst,len);
-	
-	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,handler,dst,l);
-/*	cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);*/
 
 	return l;
 }

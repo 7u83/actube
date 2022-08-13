@@ -274,7 +274,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	}
 
 
-	/* Detect the connecting AC type */
+	/* Detect the connecting WTP type */
 	if (!conn->detected) {
 
 		struct cw_MsgSet *set =
@@ -289,6 +289,10 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		conn->cmod->setup_cfg(conn);
 		conn->msgset = set;
 		conn->detected = 1;
+
+		if (conn->setup_complete)
+			conn->setup_complete(conn);
+
 	}
 
 	/** debug the received message */
@@ -365,16 +369,6 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 
-	params.local_cfg = conn->local_cfg;
-	params.remote_cfg = conn->remote_cfg;
-	params.default_cfg = conn->default_cfg;
-	params.global_cfg = conn->global_cfg;
-	params.msgset = conn->msgset;
-
-	params.from = from;
-	params.msgdata = message;
-	params.mand_found = mand_found;
-
 
 
 	mand_found = mavl_create_conststr();
@@ -386,8 +380,14 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	cw_dbg(DBG_MSG_PARSING, "*** Parsing message of type %d - (%s) ***",
 	       message->type, message->name);
 
+	params.cfg = cw_cfg_create(); //conn->remote_cfg;
+	params.default_cfg = NULL;
+	params.from = from;
+	params.msgdata = message;
+	params.mand_found = mand_found;
+	params.msgset=conn->msgset;
+	params.conn = conn;
 
-	params.cfg = cw_cfg_create();
 	cw_decode_elements(&params,elems_ptr, elems_len);
 
 	/* all message elements are processed, do now after processing
@@ -407,7 +407,8 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 
 	if (message->postprocess) {
-		message->postprocess(conn);
+//		message->postprocess(conn);
+		message->postprocess(&params,elems_ptr, elems_len);
 	}
 
 
@@ -660,7 +661,6 @@ int cw_read_messages(struct cw_Conn *conn)
 {
 	uint8_t buf[2024];
 	int len = 2024;
-cw_dbg(DBG_X,"Conn cw_read_messages from dsco request");
 
 	int n = conn->read(conn, buf, len);
 	if (n < 0)

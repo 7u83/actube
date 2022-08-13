@@ -1,10 +1,12 @@
 
 #include "cw.h"
+#include "dbg.h"
 
 int cw_out_generic_with_index(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 
 {
+	stop();
 	char key[CW_KTV_MAX_KEY_LEN];
 	int idx;
 	cw_Val_t * result, search;
@@ -18,7 +20,7 @@ int cw_out_generic_with_index(struct cw_ElemHandler * eh,
 	do {
 		sprintf(key,"%s.%d",eh->key,idx);
 		search.key=key;
-		result = mavl_get_first(params->local_cfg,&search);
+		result = mavl_get_first(params->cfg,&search);
 		if (result==NULL)
 			break;
 		if (strncmp(result->key,key,strlen(key))!=0)

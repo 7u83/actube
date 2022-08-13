@@ -175,18 +175,26 @@ int main (int argc, char *argv[])
 {
 	int rc = 0;
 	struct bootcfg bootcfg;
-	FILE * file;
-	mavl_t types_tree;
-	const cw_Type_t **ti;
 
+
+
+/*
+	cw_Cfg_t * tcfg = cw_cfg_create();
+	cw_cfg_set(tcfg,"tube.0","hallo");
+	cw_cfg_set(tcfg,"tube.1","welt");
+	cw_cfg_set(tcfg,"tube.2","der guten laune");
+	cw_cfg_dump(tcfg);
+
+	printf("Next Index: %d\n",cw_cfg_get_next_index(tcfg,"kinder"));
+
+
+	exit(0);
+*/
 
 
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
 
-
-	cw_statemachine_run(NULL);
-	exit(0);
 
 
 	global_cfg=cw_cfg_create();
@@ -249,12 +257,6 @@ void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, in
 
 void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len);
 
-
-static void pcb(char *dst, struct mavlnode *node)
-{
-        struct cw_Cfg_entry *e = mavlnode_dataptr(node);
-        sprintf(dst, "%s", e->key);
-}
 
 
 int ac_run(cw_Cfg_t * cfg)
@@ -441,7 +443,7 @@ void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	
 	dataman_list_unlock();
 	
-	dataman_add_packet (dm, buffer, len);
+	//dataman_add_packet (dm, buffer, len);
 	
 	return;
 	
@@ -505,7 +507,7 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 		wtpman_start (wtpman, preamble & 0xf);
 	}
 	
-	printf("Got Packet with len: %d\n",len);
+	//printf("Got Packet with len: %d\n",len);
 
 	wtpman_addpacket (wtpman, buffer, len);
 	wtplist_unlock();

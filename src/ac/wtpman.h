@@ -9,6 +9,7 @@
 #include "cw/fragman.h"
 #include "cw/timer.h"
 #include "cw/cfg.h"
+#include "cw/capwap.h"
 
 #define WTPMAN_QSIZE 1024
 
@@ -36,6 +37,12 @@ struct wtpman {
 				 The global cfg was initally read
 				 from a .ckv file on startup.
 				 */
+
+
+	cw_MsgCallbackFun pdiscovery;
+	cw_MsgCallbackFun pjoin;
+	cw_MsgCallbackFun pupdate;
+
 
 
 };

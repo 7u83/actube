@@ -29,7 +29,7 @@
 
 #include "cw/mavltypes.h"
 
-static int postprocess_join_request(struct cw_Conn *conn);
+static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 
 
 static cw_ValStruct_t wtp_reboot_statistics[] = {
@@ -335,10 +335,14 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_WTP_REBOOT_STATISTICS,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		15,15,					/* min/max length */
-		wtp_reboot_statistics,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"wtp-reboot-statistics",		/* Key */
-		cw_in_generic_struct,			/* handler */
-		cw_out_generic_struct			/* put */
+		cw_in_generic,				/* handler */
+		cw_out_generic_struct,			/* put */
+		NULL,
+		NULL,
+		wtp_reboot_statistics
+
 	}
 	,
 
@@ -347,10 +351,14 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		2, 2,						/* min/max length */
-		radio_admin_state,					/* type */
+		CW_TYPE_STRUCT,					/* type */
 		"admin-state",					/* Key */
-		cw_in_radio_generic_struct,				/* get */
-		cw_out_radio_generic_struct				/* put */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic_struct,				/* put */
+		NULL,
+		NULL,
+		radio_admin_state,					/* type */
+
 	}
 	,
 
@@ -772,14 +780,13 @@ static struct cw_MsgDef messages[] = {
 };
 
 
-static int postprocess_join_request(struct cw_Conn *conn)
+static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	cw_Val_t * result;
-	
-	result = cw_ktv_get(conn->remote_cfg,"session-id",CW_TYPE_BSTR16);
+	bstr16_t result;
+	result = cw_cfg_get_bstr16(params->cfg,"session-id",NULL);
 	if (result != NULL){
-		conn->session_id = result->val.ptr;
-		connlist_add_by_session_id(conn->connlist,conn);
+		params->conn->session_id = result;
+		connlist_add_by_session_id(params->conn->connlist,params->conn);
 	}
 
 	return 1;
