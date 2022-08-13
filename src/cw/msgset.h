@@ -82,7 +82,7 @@ struct cw_MsgDef{
 	const char * name;
 	int type;	/**< Message type */
 	int receiver;	/**< Who can receive this message */
-	cw_State_t * states;	/**< states in wich the message is allowed */
+	cw_State_t * states;	/**< states in wich the message is allowed */ 
 
 	
 	struct cw_ElemDef * elements;
@@ -103,7 +103,7 @@ struct cw_MsgData{
 	int receiver;
 	mavl_t elements_tree;
 	mlist_t elements_list;
-	mlist_t mand_keys;  /**< Keys of mandatory elements */
+	mlist_t mand_keys;  	/**< Keys of mandatory elements */
 
 	int (*preprocess)(struct cw_Conn * conn);
 	//int (*postprocess)(struct conn * conn);
