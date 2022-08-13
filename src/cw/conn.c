@@ -163,7 +163,7 @@ int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
 
 struct msg_callback{
 	int type; /**< message type */
-	int (*fun)();
+	cw_MsgCallbackFun fun;
 };
 
 int msg_callback_cmp(const void *v1,const void *v2)
@@ -192,6 +192,26 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->process_message=process_message;
 
 	conn->msg_callbacks = mavl_create(msg_callback_cmp,NULL,sizeof(struct msg_callback));
+}
+
+int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun)
+{
+	struct msg_callback cb;
+	int exists;
+
+	cb.type = type;
+	cb.fun = fun;
+	mavl_insert(conn->msg_callbacks,&cb,&exists);
+}
+
+cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type)
+{
+	struct msg_callback cb,*result;
+	cb.type=type;
+	result = mavl_get(conn->msg_callbacks,&cb);
+	if (result == NULL)
+		return NULL;
+	return result->fun;
 }
 
 /**

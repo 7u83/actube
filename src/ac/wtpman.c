@@ -622,9 +622,7 @@ void wtpman_destroy(struct wtpman *wtpman)
 
 static void discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
 	cw_dbg(DBG_X,"Discovery->Callback");
-	wtpman->pdiscovery(params,elems_ptr,elems_len);
 }
 
 static void join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
@@ -648,7 +646,6 @@ static void update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr,
 static setup_complete(struct cw_Conn *conn)
 {
 	struct wtpman * wtpman = (struct wtpman *)conn->data;
-	wtpman->pdiscovery = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_DISCOVERY_REQUEST,discovery_cb);
 	wtpman->pjoin = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_JOIN_REQUEST,join_cb);
 	wtpman->pupdate = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,update_cb);
 	cw_dbg(DBG_X,"SETUP COMPLETE");
@@ -715,6 +712,9 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	sock_copyaddr(&wtpman->conn->data_addr,
 		      (struct sockaddr *) &wtpman->conn->addr);
 
+	cw_conn_set_msg_cb(wtpman->conn,
+			CAPWAP_MSG_DISCOVERY_REQUEST,
+			discovery_cb);
 
 //	wtpman->conn->mods = conf_mods;
 

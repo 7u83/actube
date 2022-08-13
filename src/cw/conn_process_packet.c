@@ -405,6 +405,11 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		" *** Remote CFG dump ***", "CFG:", " *** End of remote CFG dump");
 */
 
+	cw_MsgCallbackFun cb_fun = cw_conn_get_msg_cb(conn,message->type);
+	if (cb_fun != NULL){
+		cb_fun(&params,elems_ptr, elems_len);
+	}
+
 
 	if (message->postprocess) {
 //		message->postprocess(conn);

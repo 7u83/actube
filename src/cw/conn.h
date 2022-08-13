@@ -313,4 +313,9 @@ int conn_send_msg(struct cw_Conn *conn, uint8_t * rawmsg);
 
 void conn_clear_upd(struct cw_Conn*conn, int merge);
 
+
+int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun);
+cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type);
+
+
 #endif	/* __CONN_H */
