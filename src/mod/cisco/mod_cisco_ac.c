@@ -225,8 +225,8 @@ int static setup_cfg(struct cw_Conn  * conn)
 {
 	int security;
 	
-	conn->write_header=write_header;
-	conn->header_len=header_len;
+//	conn->write_header=write_header;
+//	conn->header_len=header_len;
 	
 	security = cw_setup_dtls(conn,conn->global_cfg,"cisco",CAPWAP_CIPHER);
 	cw_cfg_set_int(conn->local_cfg,"ac-descriptor/security",security);
