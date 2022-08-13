@@ -30,7 +30,7 @@
 #include <sys/socket.h>
 
 #include "fragman.h"
-#include "cwmsg.h"
+//#include "cwmsg.h"
 
 
 
@@ -78,21 +78,6 @@ struct cw_Conn {
 	mavl_t local_cfg;
 	mavl_t global_cfg;
 	
-	int (*write_header)(struct cw_ElemHandler * handler, uint8_t * dst, int len);
-	int (*header_len)(struct cw_ElemHandler *handler);
-
-/*	mbag_t outgoing;
-	mbag_t incomming;
-	mbag_t remote;
-	mbag_t local;
-
-	mbag_t radios;
-	mbag_t radios_upd;
-	mbag_t config;
-	mbag_t config_upd;
-*/
-
-/*	uint8_t session_id[16];*/
 	bstr16_t session_id;
 
 
@@ -114,7 +99,6 @@ struct cw_Conn {
 	    of the protocoll */
 
 
-	struct cw_MsgSet * msgset;
 
 
 	uint8_t capwap_prevstate;
@@ -136,8 +120,8 @@ struct cw_Conn {
 	int last_message_id_received;
 
 
-	struct cwmsg req_msg;
-	struct cwmsg resp_msg;
+//	struct cwmsg req_msg;
+//	struct cwmsg resp_msg;
 
 	/** Buffer for outgoing request messages */
 	uint8_t req_buffer[CONN_MAX_MSG_LENGTH];
@@ -235,19 +219,15 @@ struct cw_Conn {
 
 	
 	int detected;
+	struct cw_MsgSet * msgset;
 	void (*setup_complete)(struct cw_Conn *conn);
 
-//	void  * mods;
-
-
+/*
 	int (*msg_start)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*msg_end)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);
 
 	int (*elem_end)(struct cw_Conn*conn,struct cw_action_in *a,int afrc,uint8_t*elem,int len,struct sockaddr *from);
-
-/*
-//	void (*actions_registered)(struct cw_Conn*conn);
-*/
+	*/
 
 };
 typedef struct cw_Conn cw_Conn_t;
@@ -262,7 +242,7 @@ struct cw_Conn* cw_conn_create(int sock, struct sockaddr *addr, int qsize);
 struct cw_Conn* conn_create_noq(int sock, struct sockaddr *addr);
 
 
-extern int conn_send_cwmsg(struct cw_Conn*conn, struct cwmsg *cwmsg);
+//extern int conn_send_cwmsg(struct cw_Conn*conn, struct cwmsg *cwmsg);
 
 /*
 //extern int conn_process_packet(struct cw_Conn*conn, uint8_t * packet, int len,
@@ -287,7 +267,7 @@ extern int conn_q_recv_packet_peek(struct cw_Conn*conn, uint8_t * buffer, int le
 extern int conn_recv_packet(struct cw_Conn*conn, uint8_t * buf, int len);
 extern int conn_recv_packet_peek(struct cw_Conn*conn, uint8_t * buf, int len);
 
-extern int conn_send_response(struct cw_Conn*conn, struct cwmsg *cwmsg, int seqnum);
+//extern int conn_send_response(struct cw_Conn*conn, struct cwmsg *cwmsg, int seqnum);
 extern struct cwrmsg *conn_get_response(struct cw_Conn*conn);
 
 

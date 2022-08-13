@@ -502,9 +502,9 @@ int process_message(struct cw_Conn *conn, uint8_t * rawmsg, int rawlen,
 
 
 	if (cw_get_hdr_msg_type(conn->resp_buffer) - 1 != type) {
-		cw_dbg(DBG_MSG_ERR,
+/*		cw_dbg(DBG_MSG_ERR,
 		       "No cached response for retransmission, request seqnum=%d,in cache=%d",
-		       s2, conn->resp_msg.type);
+		       s2, conn->resp_msg.type);*/
 		errno = EAGAIN;
 		return -1;
 	}

@@ -86,7 +86,7 @@ struct cw_MsgDef{
 
 	
 	struct cw_ElemDef * elements;
-	int (*preprocess)(struct conn * conn);
+	int (*preprocess)(struct cw_Conn * conn);
 //	int (*postprocess)(struct conn * conn);
 	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 
@@ -105,7 +105,7 @@ struct cw_MsgData{
 	mlist_t elements_list;
 	mlist_t mand_keys;  /**< Keys of mandatory elements */
 
-	int (*preprocess)(struct conn * conn);
+	int (*preprocess)(struct cw_Conn * conn);
 	//int (*postprocess)(struct conn * conn);
 	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 /*	uint8_t next_state;*/

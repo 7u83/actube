@@ -25,20 +25,6 @@
 
 
 
-
-static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
-{
-	if (handler->vendor)
-		return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
-
-	return  len + cw_put_elem_hdr(dst, handler->id, len);
-}
-
-static int header_len(struct cw_ElemHandler * handler)
-{
-	return handler->vendor ? 10 : 4;
-}
-
 /**
  * Put a message to a buffer
  * This functions assumes, that a message header is
@@ -190,13 +176,9 @@ void cw_conn_init(struct cw_Conn * conn)
 //	conn->capwap_mode = 0;
 	conn->strict_capwap=1;
 
-
-
 	conn->process_packet=conn_process_packet;
 	conn->process_message=process_message;
 
-	conn->write_header = write_header;
-	conn->header_len = header_len;
 
 
 }
