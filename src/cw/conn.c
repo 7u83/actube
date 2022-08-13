@@ -161,6 +161,19 @@ int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
 
 
 
+struct msg_callback{
+	int type; /**< message type */
+	int (*fun)();
+};
+
+int msg_callback_cmp(const void *v1,const void *v2)
+{
+	struct msg_callback *t1,*t2;
+	t1=(struct msg_callback*)v1;
+	t2=(struct msg_callback*)v2;
+	return t1->type - t2->type;
+}
+
 /**
  * Basic initialization of a conn object 
  * @param conn conn object to initialize
@@ -173,14 +186,12 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->wait_dtls=CAPWAP_WAIT_DTLS;
 	conn->wait_join=CAPWAP_WAIT_JOIN;
 	conn->mtu_discovery=1;
-//	conn->capwap_mode = 0;
 	conn->strict_capwap=1;
 
 	conn->process_packet=conn_process_packet;
 	conn->process_message=process_message;
 
-
-
+	conn->msg_callbacks = mavl_create(msg_callback_cmp,NULL,sizeof(struct msg_callback));
 }
 
 /**
@@ -248,9 +259,10 @@ struct cw_Conn * cw_conn_create(int sock, struct sockaddr * addr, int qsize)
 	conn->write = conn->send_packet;
 	conn->read = conn->recv_packet;
 
-/*	conn->write_data = conn->send_data_packet; */
-
 	conn->dtls_mtu = 600;
+
+
+
 
 	return conn;
 }

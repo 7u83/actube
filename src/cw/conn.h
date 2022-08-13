@@ -222,6 +222,9 @@ struct cw_Conn {
 	struct cw_MsgSet * msgset;
 	void (*setup_complete)(struct cw_Conn *conn);
 
+	struct mavl * msg_callbacks;
+
+
 /*
 	int (*msg_start)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*data,int len,struct sockaddr *from);
 	int (*msg_end)(struct cw_Conn*conn,struct cw_action_in *a,uint8_t*elem,int len,struct sockaddr *from);

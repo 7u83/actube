@@ -35,6 +35,9 @@ void conn_destroy(struct cw_Conn * conn)
 	if (conn->q)
 		free (conn->q);
 
+	if (conn->msg_callbacks)
+		mavl_destroy(conn->msg_callbacks);
+
 	free(conn);
 }
 
