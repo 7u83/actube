@@ -20,7 +20,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 
 	start = params->msgset->header_len(handler);
 	len = ((const cw_Type_t*)(handler->type))->
-		write(params->cfg,handler->key,dst+start,handler->param);
+		write(params->cfg_list,handler->key,dst+start,handler->param);
 
 
 	if (len == -1) {
