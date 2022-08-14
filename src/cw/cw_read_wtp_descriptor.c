@@ -38,7 +38,7 @@ int cw_read_wtp_descriptor(mavl_t cfg, struct cw_Conn *conn,
 		       "Non standard conform WTP Descriptor, number of encryptoin elements is 0.");
 	}
 
-	sprintf(key,"%s/%s",eh->key, CW_SKEY_MAX_RADIOS);
+	sprintf(key,"%s/%s",eh->key, "max-radios");
 	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data,1);
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_RADIOS_IN_USE);

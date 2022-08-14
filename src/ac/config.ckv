@@ -6,6 +6,7 @@
 #
 #capwap/ac-name
 #
+capwap/ac-name: actube
 
 capwap/ssl-cipher: DHE-RSA:RSA:AES-256-CBC:AES-128-CBC:SHA1:PSK
 capwap/ssl-psk-enable: false

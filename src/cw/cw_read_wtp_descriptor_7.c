@@ -29,7 +29,7 @@ int cw_read_wtp_descriptor_7(mavl_t cfg, struct cw_Conn *conn,
 	int pos;
 	char key[64];
 
-	sprintf(key,"%s/%s",eh->key, CW_SKEY_MAX_RADIOS);
+	sprintf(key,"%s/%s",eh->key, "max-radios");
 	cw_cfg_set_int(cfg,key,cw_get_byte(data));
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_RADIOS_IN_USE);

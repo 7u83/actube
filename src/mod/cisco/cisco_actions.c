@@ -2360,7 +2360,7 @@ static int preprocess_join_request(struct cw_Conn *conn)
 		return 0;
 
 	stop();
-		
+/*		
 	use_ac_version = cw_ktv_get_bool(conn->local_cfg,"cisco/wtp-use-ac-version",0);
 
 	if (use_ac_version){
@@ -2385,5 +2385,6 @@ static int preprocess_join_request(struct cw_Conn *conn)
 			cw_msgset_add(conn->msgset,messages75, handlers75);
 		}
 	}
+*/	
 	return 1;
 }

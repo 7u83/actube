@@ -29,8 +29,6 @@ int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh,
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
-	return 0;
-	stop();
 
 	char key[CW_CFG_MAX_KEY_LEN];
 	int idx;
@@ -40,11 +38,14 @@ int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh,
 	
 /*	printf("SKEY is %s , idx: %d\n",key,idx);*/
 
-	sprintf(key,"%s/address.%d",eh->key,idx);
-	cw_ktv_add(params->cfg,key,CW_TYPE_IPADDRESS,NULL,data,len-2);
+	sprintf(key,"%s.%d/address",eh->key,idx);
+	CW_TYPE_IPADDRESS->read(params->cfg,key,data,len-2,eh->param);
+
+//	cw_ktv_add(params->cfg,key,CW_TYPE_IPADDRESS,NULL,data,len-2);
 	
-	sprintf(key,"%s/wtps.%d",eh->key,idx);
-	cw_ktv_add(params->cfg,key,CW_TYPE_WORD,NULL,data+len-2,2);
+	sprintf(key,"%s.%d/wtps",eh->key,idx);
+	CW_TYPE_WORD->read(params->cfg,key,data+len-2,2,eh->param);
+//	cw_ktv_add(params->cfg,key,CW_TYPE_WORD,NULL,data+len-2,2);
 	
 /*	if (handler-id == CW_ELEM_CAPWAP_CONTROL_IPV4_ADDRESS) {
 		struct sockaddr_in addr;

@@ -625,6 +625,9 @@ int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, 
 	return 1;
 }
 
+//int cw_cfg_put(cw_Cfg_t *cfg, const char *key, const struct cw_Type *type,const void
+
+
 
 void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 {

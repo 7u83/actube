@@ -8,32 +8,41 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
 
-	stop();
 
 	char key[CW_CFG_MAX_KEY_LEN];
 	int len;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 
-	cw_Val_t * val;
+	int rc;
 	
 	d = dst+4;
 
-	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
-	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
-	if (val != NULL)
-		d+=val->type->put(val,d);
-	else{
-		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
+	sprintf(key,"%s/%s",eh->key,"max-radios");
+	rc = cw_generic_write_l(params->cfg_list, CW_TYPE_BYTE,key,
+			d, eh->param);
+
+//	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
+	if (rc==-1){
+		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", key);
 		d+=cw_put_byte(d,0);
 	}
+	else {
+		d+=rc;
+	}
+
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
-	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
-	if (val != NULL){
-		d+=val->type->put(val,d);
+	rc = cw_generic_write_l(params->cfg_list, CW_TYPE_BYTE,key,
+			d, eh->param);
+
+
+//	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
+	if (rc != -1){
+		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", key);
+		d+=cw_put_byte(d,0);
 	}
 	else{
-		d+=cw_put_byte(d,0);	/*radios in use*/
+		d+=rc;	/*radios in use*/
 	}
 
 	d+=cw_put_encryption_capabilities_7(d,1);

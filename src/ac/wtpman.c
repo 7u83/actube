@@ -364,7 +364,7 @@ static void *wtpman_main(void *arg)
 
 				tmp = conn->local_cfg;
 
-				mavl_merge(conn->default_cfg, conn->local_cfg);
+/*				mavl_merge(conn->default_cfg, conn->local_cfg);*/
 /*				mavl_merge(conn->default_cfg, conn->remote_cfg);*/
 
 				conn->local_cfg = conn->update_cfg;

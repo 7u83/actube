@@ -15,130 +15,40 @@
 #include "cw/rand.h"
 
 #include "wtp.h"
+#include "cw/cfg.h"
+
+#include "cw/discovery.h"
 
 
 
 
-
-int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
+static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	mlistelem_t *e;
-	/*mavl_t iplist;*/
-	int en;
+	struct cw_DiscoveryResults *results = (struct cw_DiscoveryResults *)params->conn->data;
+//	cw_Cfg_t * cfg = cw_cfg_create();
+//	cw_cfg_copy(params->cfg,cfg);
 
-	/*iplist = cw_ktv_create();
-	if (iplist == NULL){
-		cw_log_errno("cw_select_ac: Can't allocate memory for aciplist");
-		return NULL;
-	}
-	*/
+	cw_discovery_results_add(results,params->cfg,params->conn->global_cfg);
+	printf("Have Discovery %d\n",results->nr);
 
-	en = 0;
-
-	/* for each discovery response */
-	mlist_foreach(e, dis->results) {
-		char acname[CAPWAP_MAX_AC_NAME_LEN + 1];
-		char key[CW_CFG_MAX_KEY_LEN];
-		mavl_t remote_cfg;
-		cw_Val_t *val, *ipval;
-		int prio, i;
-
-		remote_cfg = mlistelem_get_ptr(e);
-
-		/* get ac name */
-		val = cw_ktv_get(remote_cfg, "ac-name", CW_TYPE_BSTR16);
-		if (val == NULL) {
-			/* this should not happen, because AC Name is a
-			 * amndatory message element */
-			prio = 255;
-		} else {
-			/* Get priority for AC from 
-			 * ac-name-with-priority list */
-			val->type->to_str(val, acname, CAPWAP_MAX_AC_NAME_LEN);
-			sprintf(key, "ac-name-with-priority/%s", acname);
-			prio = cw_ktv_get_byte(local_cfg, key, 255);
-		}
-
-		/* for each control ip address the AC has sent */
-		i = 0;
-		do {
-			sprintf(key, "%s.%d", "capwap-control-ip-address/wtps", i);
-			val = cw_ktv_get(remote_cfg, key, CW_TYPE_WORD);
-			if (val == NULL)
-				break;
-
-			sprintf(key, "%s.%d", "capwap-control-ip-address/address", i);
-			ipval = cw_ktv_get(remote_cfg, key, CW_TYPE_IPADDRESS);
-
-			sprintf(key, "%04d%05d%04d", prio, val->val.word, en);
-
-			cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, NULL, (uint8_t *) (&ipval), 
-				   sizeof(ipval));
-			cw_ktv_add(dis->prio_ac, key, CW_TYPE_SYSPTR, NULL, (uint8_t *)(&remote_cfg),
-				sizeof(remote_cfg));
-			i++;
-			en++;
-		} while (1);
-
-	}
-
-
-
-	return 1;
-}
-
-
-void cw_discovery_free_results(struct cw_DiscoveryResult * dis)
-{
-	if (dis->prio_ac != NULL)
-		mavl_destroy(dis->prio_ac);
-	if (dis->prio_ip != NULL)
-		mavl_destroy(dis->prio_ip);
-	if (dis->results != NULL)
-		mlist_destroy(dis->results);
-}
-
-
-static void result_del(void * data)
-{
-	
-	mavl_t todelete = *((void**)data);
-	mavl_destroy(todelete);
-	
-	
-	/*mavl_t*/
-}
-
-int cw_discovery_init_results(struct cw_DiscoveryResult *dis)
-{
-	
-	dis->results = mlist_create(NULL, result_del, sizeof(void *));
-	if (dis->results==NULL)
-		goto errX;
-	dis->prio_ac=cw_ktv_create();
-	if (dis->prio_ac==NULL)
-		goto errX;
-	dis->prio_ip=cw_ktv_create();
-	if (dis->prio_ac==NULL)
-		goto errX;
-	return 1;
-errX:
-	cw_discovery_free_results(dis);
+//	cw_cfg_dump(params->cfg);
+//	mlist_append_ptr(dis->results, cfg);
 	return 0;
 }
 
-
-static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
+static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 {
 	time_t timer;
 	struct sockaddr_storage from;
 	int delay, min, max;
 
+	struct cw_DiscoveryResults * results;
+	results = cw_discovery_results_create();
+
 	
-	
-	min = cw_ktv_get_byte(conn->local_cfg,"capwap-timers/min-discovery-interval",
+	min = cw_cfg_get_byte(conn->local_cfg,"capwap-timers/min-discovery-interval",
 					CAPWAP_MIN_DISCOVERY_INTERVAL);
-	max = cw_ktv_get_byte(conn->local_cfg,"capwap-timers/max-discovery-interval",
+	max = cw_cfg_get_byte(conn->local_cfg,"capwap-timers/max-discovery-interval",
 					CAPWAP_MAX_DISCOVERY_INTERVAL);
 
 	delay = cw_randint(min,max);
@@ -150,29 +60,37 @@ static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
 
 	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
-
+	conn->remote_cfg=cw_cfg_create();
 	/* create and send a discovery request message */
 	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
 	cw_assemble_message(conn, conn->req_buffer);
+
+
 	conn_send_msg(conn, conn->req_buffer);
+	cw_cfg_destroy(conn->remote_cfg);
+	conn->remote_cfg=NULL;
 
 
-	timer = cw_timer_start(cw_ktv_get_byte(conn->local_cfg, "discovery-interval",
+
+
+	timer = cw_timer_start(cw_cfg_get_byte(conn->local_cfg, "discovery-interval",
 					       CAPWAP_DISCOVERY_INTERVAL))-1;
 
 	/*discovery_results = mlist_create(NULL, NULL, sizeof(void *));*/
-	
+
+	conn->data = results;
+	cw_conn_set_msg_cb(conn,CAPWAP_MSG_DISCOVERY_RESPONSE,discovery_cb);
+
 	
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
-		char addr_str[SOCK_ADDR_BUFSIZE];
-
-		conn->remote_cfg = cw_ktv_create();
-		if (conn->remote_cfg == NULL) {
-			cw_log_errno("Can't allocate memory for remote_cfg");
-			break;
-		}
+		cw_dbg(DBG_X,"READ NOW");
+//		conn->remote_cfg = cw_ktv_create();
+//		if (conn->remote_cfg == NULL) {
+//			cw_log_errno("Can't allocate memory for remote_cfg");
+//			break;
+//		}
 
 		rc = cw_read_from(conn, &from);
 		if (rc < 0) {
@@ -182,16 +100,28 @@ static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
 			cw_log(LOG_ERROR, "Error reading messages: %s", strerror(errno));
 			break;
 		}
-		cw_dbg(DBG_INFO, "Received Discovery Response from %s",
-		       sock_addr2str(&from, addr_str));
-		mlist_append_ptr(dis->results, conn->remote_cfg);
+//		cw_dbg(DBG_INFO, "Received Discovery Response from %s",
+//		       sock_addr2str(&from, addr_str));
+//		mlist_append_ptr(dis->results, conn->remote_cfg);
+
+//		cw_cfg_dump(conn->remote_cfg);
 	}
 
-	cw_select_ac(conn->local_cfg, dis);
 
+	//cw_select_ac(conn->local_cfg, dis);
 
+	mavliter_t it;
+        mavliter_init(&it,results->list);
+        mavliter_foreach(&it){
+		const char * acname;
+		struct cw_DiscoveryResults_elem *e = mavliter_get(&it);
+		acname = cw_cfg_get(e->cfg,"capwap/ac-name","<unknown>");
+		printf("E: %s: %s - prio: %d, ctr: %d\n",acname,e->ip,e->prio,e->ctr);
 
-	return 1;
+	}
+
+	
+	return results;
 }
 
 
@@ -200,15 +130,14 @@ static int run_discovery(struct cw_Conn *conn, struct cw_DiscoveryResult * dis)
 /**
  * Run discovery for on address (eg broadcast 255.255.255.255)
  */
-int cw_run_discovery(struct cw_Conn *conn, const char *addr, const char *bindaddr, 
-		struct cw_DiscoveryResult * dis)
+struct cw_DiscoveryResults * cw_run_discovery(struct cw_Conn *conn, const char *addr, const char *bindaddr )
 {
+	struct cw_DiscoveryResults * results;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	struct sockaddr_storage dstaddr;
 	char caddr[256], control_port[64];
 
 	int rc;
-	/*struct cw_DiscoveryResult dis;*/
 	
 	
 	/*dis.results = mlist_create(NULL, NULL, sizeof(void *));*/
@@ -302,7 +231,7 @@ int cw_run_discovery(struct cw_Conn *conn, const char *addr, const char *bindadd
 		cw_dbg(DBG_INFO, "Discovery to %s",
 		       sock_addr2str_p(&conn->addr, sock_buf));
 
-		run_discovery(conn, dis);
+		results = run_discovery(conn);
 
 		conn->readfrom = NULL;
 		close(sockfd);
@@ -312,5 +241,5 @@ int cw_run_discovery(struct cw_Conn *conn, const char *addr, const char *bindadd
 
 	freeaddrinfo(res0);
 
-	return 0;
+	return results;
 }

@@ -202,7 +202,9 @@ MISCSRC=\
 	strheap.c\
 	netconn.c\
 	conn.c \
-	val.c
+	val.c \
+	discovery.c\
+
 
 #	conn_q_wait_packet.c\
 #	conn_init.c\

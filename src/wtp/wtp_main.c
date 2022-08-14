@@ -88,12 +88,11 @@ int main (int argc, char **argv)
 	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset=NULL;
-	struct cw_Conn * conn;
+	struct cw_Conn * conn=NULL;
 	FILE * file;
 	cw_Cfg_t * global_cfg =NULL;
 	const cw_Type_t ** ti;
 	int i;
-	struct cw_DiscoveryResult dis;
 	int rc;	
 	
 	
@@ -130,21 +129,13 @@ int main (int argc, char **argv)
 		goto errX;
 	}
 
-//	cw_ktv_read_file(file,global_cfg,types_tree);
-
-	
-//	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
-	
-	exit(0);
-
-	/*clean_cfg(global_cfg);*/
-	
 
 	/* create a connection object */
 	conn = conn_create_noq(-1, NULL);
 	if (conn==NULL){
 		cw_log(LOG_ERR, "Connot create conn: %s", strerror(errno));
-		exit(EXIT_FAILURE);
+		rc = EXIT_FAILURE;
+		goto errX;
 	}
 
 
@@ -153,44 +144,52 @@ int main (int argc, char **argv)
 	conn->dtls_verify_peer=0;
 	conn->dtls_mtu = 1200;
 	conn->msgset=msgset;
-	conn->local_cfg = global_cfg;
-	conn->remote_cfg = NULL;
+	conn->global_cfg = global_cfg;
+	conn->local_cfg = cw_cfg_create();
+	//conn->remote_cfg = cw_cfg_create();
+	
 	conn->role = CW_ROLE_WTP;
 	conn->wbid=1;
 
 	for (i=0;i<bootcfg.nmods; i++){	
 		mod = cw_mod_load(bootcfg.modnames[i], global_cfg, CW_ROLE_WTP);
 		if (mod == NULL){
-			exit (EXIT_FAILURE);
+			rc = EXIT_FAILURE;
+			goto errX;
 		}
+
+		
 		/* Build a message set from our loaded modules */
 		mod->register_messages(msgset, CW_MOD_MODE_CAPWAP);
 		mod->register_messages(msgset, CW_MOD_MODE_BINDINGS);
 		if (mod->setup_cfg)
 			mod->setup_cfg(conn);
 	}
-/*
-{
-int idx;
-cw_dbg_ktv_dump(conn->local_cfg,DBG_INFO,"head","BREP: ","bot");
-idx = cw_ktv_idx_get(conn->local_cfg,"tube",0,NULL);
-printf("IDX: %d\n",idx);
 
-exit(0);
-}
- */
+
+	
 	dtls_init();
 
 	conn->base_rmac = get_base_rmac();
 
 
-	cw_discovery_init_results(&dis);
 /*cw_run_discovery(conn, "255.255.255.255","192.168.56.1", &dis);*/
 /*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
-	cw_run_discovery(conn, "192.168.0.162","192.168.0.14", &dis);
-	cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
 
+	struct cw_DiscoveryResulsts * results;
+//	cw_run_discovery(conn, "192.168.0.162","192.168.0.14", &dis);
+	//cw_run_discovery(conn, "255.255.255.255","192.168.0.14", &dis);
+//	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
+	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 
+	cw_discovery_results_destroy(results);
+	rc = 0;
+	printf("Goto errx 0");
+	goto errX;
+
+	//cw_dbg_ktv_dump(dis.prio_ip, DBG_INFO, "=== IP list ===", "IP", "=== END IP List ===");
+
+/*
 	{
 		mavliter_t i;
 		mavliter_init(&i, dis.prio_ip);
@@ -214,10 +213,10 @@ exit(0);
 			
 		}
 	}
-
+*/
 	mavl_del_all(conn->remote_cfg);
 printf("JOIN\n");	
-	join(conn,&dis);
+//	join(conn,&dis);
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
@@ -233,7 +232,7 @@ printf("JOIN CONF\n");
 	
 	run(conn);
 	
-	cw_discovery_free_results(&dis);
+//	cw_discovery_free_results(&dis);
 
 	return (EXIT_SUCCESS);
 errX:
@@ -242,6 +241,8 @@ errX:
 
 	if (global_cfg != NULL)
 		cw_cfg_destroy(global_cfg);
+	if (conn)
+		conn_destroy(conn);
 
 
 	return rc;

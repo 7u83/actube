@@ -883,7 +883,7 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 		return NULL;
 	
 	cw_dbg(DBG_INFO,"CAPWAP: Register messages");
-	
+
 	cw_msgset_add(set,messages, handlers);
 	
 	cw_msgset_add_states(set,statemachine_states);

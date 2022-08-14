@@ -73,7 +73,7 @@ struct cw_Conn {
 	
 	
 	mavl_t remote_cfg;
-	mavl_t default_cfg;
+//	mavl_t default_cfg;
 	mavl_t update_cfg;
 	mavl_t local_cfg;
 	mavl_t global_cfg;

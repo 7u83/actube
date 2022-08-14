@@ -155,6 +155,7 @@ int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
 
 
 	cw_decode_elements( &params, elems_ptr,elems_len);
+	cw_cfg_destroy(cfg);
 
 	printf ("----------------------------------- end redecode -----------------------------\n");
 
@@ -459,20 +460,6 @@ int cw_in_check_generic(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * 
 }
 */
 
-/*
-void cw_read_elem(struct cw_ElemHandler * handler, struct cw_Conn * conn, 
-		uint8_t * elem_data, int elem_len, struct sockaddr * from){
-	mavldata_t data, *result;
-	char str[30];
-		
-	result = handler->type->get(&data,elem_data,elem_len);
-	
-	handler->type->to_str(result,str,30);
-	printf("Read %d-%s: %s %s\n", handler->id, handler->name, handler->key, str);
-	//mavl_insert(conn->remote_cfg
-}
-*/
-
 
 static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
@@ -638,7 +625,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	cw_dbg(DBG_MSG_PARSING, "*** Parsing message of type %d - (%s) ***",
 	       message->type, message->name);
 
-	params.cfg = cw_cfg_create(); //conn->remote_cfg;
+	params.cfg = cw_cfg_create(); 
 	params.cfg_list[0]=params.cfg;
 	params.cfg_list[1]=conn->local_cfg;
 	params.cfg_list[2]=conn->global_cfg;
@@ -705,7 +692,10 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		 * Put further actions here, if needed.
 		 */
 	}
+
+	mlist_destroy(unrecognized);
 	cw_cfg_destroy(params.cfg);
+	conn->remote_cfg=NULL;
 
 	return result_code;
 
@@ -954,6 +944,15 @@ void conn_destroy(struct cw_Conn * conn)
 
 	if (conn->msg_callbacks)
 		mavl_destroy(conn->msg_callbacks);
+
+	if (conn->base_rmac)
+		free(conn->base_rmac);
+
+	if (conn->remote_cfg)
+		cw_cfg_destroy(conn->remote_cfg);
+
+	if (conn->local_cfg)
+		cw_cfg_destroy(conn->local_cfg);
 
 	free(conn);
 }

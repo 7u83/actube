@@ -199,8 +199,11 @@ int run_join(struct cw_Conn *conn)
 	return 1;
 }
 
-int join(struct cw_Conn * conn, struct cw_DiscoveryResult * dis)
+int join(struct cw_Conn * conn, struct cw_DiscoveryResults * dis)
 {
+
+	stop();
+/*
 	mavliter_t ii;
 	mavliter_init(&ii,dis->prio_ip);
 
@@ -239,6 +242,6 @@ int join(struct cw_Conn * conn, struct cw_DiscoveryResult * dis)
 		if (rc)
 			return 1;
 
-	}
+	}*/
 	return 0;
 }
