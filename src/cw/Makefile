@@ -76,6 +76,7 @@ CWSRC=\
 #	cw_in_check_join_resp.c\
 #	cw_in_generic.c\
 #	cw_out_generic.c\
+#	
 
 KTVSRC=\
 	cw_ktv_add.c\
@@ -102,12 +103,12 @@ KTVSRC=\
 	cw_ktv_read_struct.c\
 	cw_ktv_write_struct.c\
 	cw_ktv_std_types.c\
-	cw_ktv_base_exists.c\
 	cw_ktv_save.c\
-	cw_ktv_del_sub.c\
 	cfg.c\
 
 #	cw_ktv_parser.c\
+#	cw_ktv_del_sub.c\
+#	cw_ktv_base_exists.c\
 
 LWSRC=\
 	lw_addelem.c\
