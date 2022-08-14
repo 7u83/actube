@@ -36,7 +36,7 @@ static int get_psk(struct cw_Conn *conn, const char *username, uint8_t ** psk,
  * @param default_cipher
  * @return 
  */
-int cw_setup_dtls(struct cw_Conn *conn, mavl_t cfg, const char *prefix,
+int cw_setup_dtls(struct cw_Conn *conn, cw_Cfg_t * cfg, const char *prefix,
 		  char *default_cipher)
 {
 	char key[CW_CFG_MAX_KEY_LEN];

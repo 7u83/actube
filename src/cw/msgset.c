@@ -71,23 +71,19 @@ static int cmp_machinestate(const void *state1, const void *state2)
 	return s1->prevstate-s2->prevstate;
 }
 
-static void msgdata_destroy(struct cw_MsgData *data)
+
+static void del_mavl_msgdata(void * d)
 {
-	if (!data)
-		return;
+	struct cw_MsgData *data	= (struct cw_MsgData *) d;
 	if (data->elements_list)
 		mlist_destroy(data->elements_list);
 
 	if (data->elements_tree)
 		mavl_destroy(data->elements_tree);
+
+	if (data->mand_keys)
+		mlist_destroy(data->mand_keys);
 	
-	free(data);
-}
-
-
-static void del_mavl_msdgdata(void *d)
-{
-	msgdata_destroy(d);
 }
 
 
@@ -146,7 +142,7 @@ struct cw_MsgSet *cw_msgset_create()
 	}
 
 	/* create mavl for messages */
-	set->msgdata = mavl_create(cmp_msgdata, del_mavl_msdgdata,
+	set->msgdata = mavl_create(cmp_msgdata, del_mavl_msgdata,
 				   sizeof(struct cw_MsgData));
 	if (set->msgdata == NULL) {
 		cw_msgset_destroy(set);
@@ -286,7 +282,6 @@ int cw_msgset_add(struct cw_MsgSet *set,
 
 	struct cw_ElemHandler *handler;
 	struct cw_MsgDef *msgdef;
-
 	/* Create mavl for all handlers */
 	for (handler = handlers; handler->id; handler++) {
 		cw_dbg(DBG_MOD, "Adding handler for element %d - %s - with key: %s",
@@ -299,8 +294,8 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		struct cw_MsgData search;
 		struct cw_MsgData *msg;
 		int exists;
-
 		/* add the message */
+		memset(&search,0,sizeof(struct cw_MsgData));
 		search.type = msgdef->type;
 
 		msg = mavl_insert(set->msgdata, &search, &exists);
@@ -310,7 +305,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		}
 
 		/* Look if message already exists */
-		if (!exists) {
+		if (!exists ) {
 			/* message is fresh createt, initialize data */
 			msg->elements_tree = mavl_create(cmp_elemdata, NULL,
 							 sizeof(struct cw_ElemData));
@@ -319,7 +314,6 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			msg->postprocess=NULL;
 			msg->preprocess=NULL;
 		}
-
 		/* Overwrite the found message */
 		if (msgdef->name != NULL)
 			msg->name = msgdef->name;
