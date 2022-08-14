@@ -150,7 +150,8 @@ void del_cmd(struct shelldata *sd, const char *str)
 {
 	char key[CW_CFG_MAX_KEY_LEN];
 	sscanf(str,"%s",key);
-	cw_ktv_del_sub(sd->update_cfg,key);
+	stop();
+//	cw_ktv_del_sub(sd->update_cfg,key);
 }
 
 
