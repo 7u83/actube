@@ -7,7 +7,7 @@
 static int get_psk(struct cw_Conn *conn, const char *username, uint8_t ** psk,
 		   unsigned int *len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t *result;
 	sprintf(key, "%s/%s", "psk", username);
 	result = cw_ktv_get(conn->local_cfg, key, CW_TYPE_BSTR16);
@@ -39,8 +39,8 @@ static int get_psk(struct cw_Conn *conn, const char *username, uint8_t ** psk,
 int cw_setup_dtls(struct cw_Conn *conn, mavl_t cfg, const char *prefix,
 		  char *default_cipher)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
-	char *ssl_cert, *ssl_key;
+	char key[CW_CFG_MAX_KEY_LEN];
+	const char *ssl_cert, *ssl_key;
 	uint8_t security;
 
 	security = 0;

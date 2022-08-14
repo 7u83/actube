@@ -1,6 +1,7 @@
 #include <ctype.h>
 
 #include "val.h"
+#include "cfg.h"
 
 struct parser {
 	int line;
@@ -10,13 +11,14 @@ struct parser {
 	int quote;
 	FILE *f;
 	int (*getc)(struct parser *);
-	void (*ungetc)(struct parser *)
+	void (*ungetc)(struct parser *);
 };
 
+/*
 static int pgetc(struct parser *parser)
 {
 	return fgetc(parser->f);
-}
+}*/
 
 static int get_char(struct parser *p)
 {
@@ -290,13 +292,13 @@ int cw_ktv_read_line (FILE *f, char * key, char * type, char *val)
 	p.quote=0;
 	p.f=f;
 		
-	n = read_key (&p,key,CW_KTV_MAX_KEY_LEN);
-	n = read_type (&p,type,CW_KTV_MAX_KEY_LEN);
+	n = read_key (&p,key,CW_CFG_MAX_KEY_LEN);
+	n = read_type (&p,type,CW_CFG_MAX_KEY_LEN);
 	if (n==-1){
 		return -1;
 	}
 
-	n = read_val (&p,val,CW_KTV_MAX_KEY_LEN);
+	n = read_val (&p,val,CW_CFG_MAX_KEY_LEN);
 	if (n==-1){
 		return -1;
 	}

@@ -68,6 +68,8 @@ static int cast(cw_Val_t * data)
 
 static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
 {
+
+
 	uint32_t val;
 	//cw_ValValRange_t * valrange = (cw_ValValRange_t *) param;
 	//const char *str;
@@ -83,10 +85,11 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, c
 }
 
 
-static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
+static 	int bwrite(cw_Cfg_t **cfgs, const char *key, uint8_t *dst, const void * param)
 {
+	return cw_generic_write_l(cfgs,CW_TYPE_DWORD,key,dst,param);
 
-	cw_Val_t val;
+/*	cw_Val_t val;
 	int l;
 	const char *s;
 	memset(&val,0,sizeof(cw_Val_t));
@@ -98,7 +101,7 @@ static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * pa
 	l = put(&val,dst);
 	if(val.type->del)
 		val.type->del(&val);
-	return l;
+	return l;*/
 }
 
 

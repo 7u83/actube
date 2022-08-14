@@ -1,13 +1,14 @@
 #include "cw.h"
+#include "dbg.h"
 
 
 int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params, int idx 
 			, uint8_t * dst)
 {
-	return 0;
 	stop();
+	return 0;
 
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t *elem, search;
 	int len;
 	uint8_t * d;

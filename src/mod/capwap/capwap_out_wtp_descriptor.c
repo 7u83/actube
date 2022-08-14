@@ -29,7 +29,7 @@ static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int len,l;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 

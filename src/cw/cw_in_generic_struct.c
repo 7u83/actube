@@ -11,7 +11,7 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	cw_dbg(DBG_X,"STRUCT KEY: %s",handler->key);
 	stop();
 	const char * key;
-	char tmpkey[CW_KTV_MAX_KEY_LEN];
+	char tmpkey[CW_CFG_MAX_KEY_LEN];
 
 	
 	if (handler->mkkey != NULL){

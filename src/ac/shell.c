@@ -131,10 +131,13 @@ void set_cmd(struct shelldata *sd, const char *str)
 {
 	struct cw_Conn * conn;
 	struct cw_Val_Reader r;
-	char key[CW_KTV_MAX_KEY_LEN];
-	char type[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
+	char type[CW_CFG_MAX_KEY_LEN];
 	char val[2048];
-	cw_ktv_init_str_reader(&r,str,strlen(str));
+
+	stop();
+
+//	cw_ktv_init_str_reader(&r,str,strlen(str));
 	
 	cw_ktv_parse_string(&r,key,type,val);
 	/*cw_ktv_parse_string(key,type,val, 2048);*/
@@ -145,7 +148,7 @@ void set_cmd(struct shelldata *sd, const char *str)
 
 void del_cmd(struct shelldata *sd, const char *str)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	sscanf(str,"%s",key);
 	cw_ktv_del_sub(sd->update_cfg,key);
 }
@@ -342,7 +345,7 @@ void execute_cmd (struct shelldata * sd, const char *str)
 	return;
 	
 	
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	char type[128];
 	char val[2048];
 

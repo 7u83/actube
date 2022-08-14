@@ -13,7 +13,7 @@ int cw_in_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHa
 
 	stop();
 
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int radio;
 	
 	if (!handler->type){

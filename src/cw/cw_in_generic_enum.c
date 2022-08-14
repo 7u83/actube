@@ -17,7 +17,7 @@ int cw_in_generic_enum(struct cw_ElemHandler * handler, struct cw_ElemHandlerPar
 {
 	int val;
 	const cw_ValEnum_t * e;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	struct cw_ElemHandler thandler;
 	
 	val = cw_get_byte(elem_data+1);

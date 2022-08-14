@@ -38,12 +38,9 @@ struct wtpman {
 				 from a .ckv file on startup.
 				 */
 
+	cw_Cfg_t * wtp_cfg;
 
-	cw_MsgCallbackFun pdiscovery;
-	cw_MsgCallbackFun pjoin;
-	cw_MsgCallbackFun pupdate;
-
-
+	
 
 };
 

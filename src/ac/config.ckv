@@ -54,3 +54,15 @@ ac-descriptor/stations: 0
 
 capwap-control-ip-address/address.0: 192.168.0.14
 
+
+
+#
+# CAPWAP Timers
+#
+capwap-timers/change-state-pending-timer: Word: 3
+capwap-timers/data-check-timer: Word: 10
+capwap-timers/echo-interval :Byte: 30
+capwap-timers/max-discovery-interval :Byte: 10
+
+
+

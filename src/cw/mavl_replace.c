@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "mavl.h"
 
 void *mavl_replace(struct mavl *t,const void  *data, int * replaced){

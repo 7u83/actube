@@ -10,7 +10,7 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 
 	stop();
 
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int len;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 

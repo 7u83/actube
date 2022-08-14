@@ -1,10 +1,11 @@
 #include "val.h"
 #include "dbg.h"
+#include "cfg.h"
 
 int cw_ktv_read_struct(mavl_t ktv,const cw_ValStruct_t * stru, const char *pkey, 
 	uint8_t * data, int len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int pos, i,l;
 	cw_Val_t * result;
 	

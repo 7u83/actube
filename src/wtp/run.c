@@ -121,7 +121,7 @@ static void do_update(struct cw_Conn * conn)
 
 void clean_cfg(mavl_t cfg)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t search;
 	int i;
 	int max;

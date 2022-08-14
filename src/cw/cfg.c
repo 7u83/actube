@@ -122,6 +122,20 @@ const char *cw_cfg_get(cw_Cfg_t * cfg, const char *key, const char *def)
 	return r->val;
 }
 
+const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def)
+{
+	int i;
+	struct cw_Cfg_entry e, *r;
+	for(i=0; cfg[i]!=NULL; i++){
+		e.key = key;
+		r = mavl_get(cfg[i], &e);
+		if (r!=NULL)
+			return r->val;
+	}
+	return def;
+}
+
+
 const char *cw_cfg_get2(cw_Cfg_t *cfg1, cw_Cfg_t *cfg2, const char *key, const char *def)
 {
 	return cw_cfg_get(cfg1, key, cw_cfg_get(cfg2,key,def));
@@ -527,7 +541,7 @@ uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def)
 	if (s==NULL)
 		return def;
 	CW_TYPE_BYTE->from_str(&v,s);
-	return v.val.word;
+	return v.val.byte;
 }
 
 
@@ -596,7 +610,6 @@ int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, 
 	memset(&mdata,0,sizeof(cw_Val_t));
 	mdata.type=type;
 	mdata.valguard=valguard;
-cw_dbg(DBG_X,"SETVAL FOR TYPE: %s",type->name);	
 	mresult = type->get(&mdata,data,len);
 	if (!mresult){
 		cw_log(LOG_ERR, "Can't create cfg element for key %s of type %s: %s",
@@ -610,4 +623,70 @@ cw_dbg(DBG_X,"SETVAL FOR TYPE: %s",type->name);
 	if (type->del)	
 		type->del(&mdata);
 	return 1;
+}
+
+
+void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
+{
+	mavliter_t it;
+	mavliter_init(&it, src);
+	mavliter_foreach(&it) {
+		int exists;
+		struct cw_Cfg_entry * old_elem,*e, new_elem;
+
+		e = mavliter_get(&it);
+		new_elem.key = cw_strdup(e->key);
+		new_elem.val = cw_strdup(e->val);
+
+		old_elem = mavl_insert(dst,&new_elem,&exists);
+		if (!exists){
+			cw_dbg(DBG_X, "New: %s: %s",new_elem.key,new_elem.val);
+			continue;
+		}
+		if (strcmp(new_elem.val,old_elem->val)==0){
+			free((void*)new_elem.key);
+			free((void*)new_elem.val);
+			continue;
+		}
+
+		cw_dbg(DBG_X, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
+		if(dst->del){
+			dst->del(old_elem);
+		}
+		memcpy(old_elem,&new_elem,dst->data_size);
+	}
+
+}
+
+
+void cw_cfg_destroy(cw_Cfg_t *cfg)
+{
+	mavl_destroy(cfg);
+}
+
+
+void cw_cfg_clear(cw_Cfg_t *cfg)
+{
+	mavl_del_all(cfg);
+}
+
+
+int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key)
+{
+        struct cw_Cfg_entry e, *result;
+
+        e.key=key;
+        result = mavl_get_first(cfg,&e);
+        if (result == NULL)
+                return 0;
+
+	if (strlen(result->key)<strlen(key))
+		return 0;		
+	if (result->key[strlen(key)]!='/' && result->key[strlen(key)]!='.')
+		return 0;
+	if (strncmp(result->key,key,strlen(key))==0)
+		return 1;
+
+	return 0;
+
 }

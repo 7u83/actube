@@ -8,7 +8,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 
 	stop();
 
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	struct cw_Val * elem, search;
 	int i;
 	int idx, sr;

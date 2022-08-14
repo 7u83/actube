@@ -1,10 +1,10 @@
 
 #include "val.h"
-
+#include "cfg.h"
 
 int cw_ktv_read_file(FILE * file, mavl_t ktv, mavl_t types)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	char type[256];
 	char val[2048];
 	

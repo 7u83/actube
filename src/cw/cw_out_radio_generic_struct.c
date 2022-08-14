@@ -7,6 +7,7 @@ int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n);
 int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
+	cw_dbg(DBG_X,"KEY: %s",handler->key);
 	stop();
 
 	int i,l, offset;
@@ -20,7 +21,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 
 	i=-1;
 	while(1){
-		char basekey[CW_KTV_MAX_KEY_LEN];
+		char basekey[CW_CFG_MAX_KEY_LEN];
 		cw_Val_t * result;
 		
 		i = cw_ktv_idx_get_next(params->cfg,"radio",i+1);
@@ -51,7 +52,7 @@ int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParam
 {
 	char *sl;
 	int l;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int len;
 	len = 0;
 
@@ -70,7 +71,7 @@ printf("Next: %s\n", next);
 			for (i=0;i<stack[0];i++){
 				printf("I=%i\n",stack[i+1]);
 			}
-			l= cw_ktv_write_struct(params->cfg,params->default_cfg, 
+			l= cw_ktv_write_struct(params->cfg,params->cfg, 
 				handler->type,key,dst+offset);
 			
 			printf("Write struct len %i\n",l);
@@ -101,7 +102,7 @@ printf("current is %s\n", current);
 	cw_dbg_ktv_dump(params->cfg,DBG_INFO,"start"," ", "end" );
 	i=-1;
 	while(1){
-		char basekey[CW_KTV_MAX_KEY_LEN];
+		char basekey[CW_CFG_MAX_KEY_LEN];
 		cw_Val_t * result;
 		
 		i = cw_ktv_idx_get_next(params->cfg,key,i+1);
@@ -130,7 +131,7 @@ int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams
 
 {
 
-	char current[CW_KTV_MAX_KEY_LEN];
+	char current[CW_CFG_MAX_KEY_LEN];
 	int stack[10];
 	stack[0]=0;
 

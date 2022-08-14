@@ -178,20 +178,6 @@ int main (int argc, char *argv[])
 
 
 
-/*
-	cw_Cfg_t * tcfg = cw_cfg_create();
-	cw_cfg_set(tcfg,"tube.0","hallo");
-	cw_cfg_set(tcfg,"tube.1","welt");
-	cw_cfg_set(tcfg,"tube.2","der guten laune");
-	cw_cfg_dump(tcfg);
-
-	printf("Next Index: %d\n",cw_cfg_get_next_index(tcfg,"kinder"));
-
-
-	exit(0);
-*/
-
-
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
 
@@ -213,6 +199,39 @@ int main (int argc, char *argv[])
 
 
 	cw_log_name = "AC-Tube";
+
+/*
+
+	{
+	int rc;
+	cw_Cfg_t * cfg = global_cfg;
+	struct cw_Cfg_entry e, *result;
+
+	e.key="hi";
+
+	rc = cw_cfg_base_exists(cfg,"ac-descriptor");
+        if (!rc ){
+		printf("No!\n");
+                return 0;
+        }
+
+	printf("RESULT: %d\n",rc);
+
+	cw_cfg_set(tcfg,"tube.0","hallo");
+	cw_cfg_set(tcfg,"tube.1","welt");
+	cw_cfg_set(tcfg,"tube.2","der guten laune");
+	cw_cfg_dump(tcfg);
+
+	printf("Next Index: %d\n",cw_cfg_get_next_index(tcfg,"kinder"));
+
+
+	exit(0);
+	}
+
+*/
+
+
+	
 	
 		
 	start_shell();

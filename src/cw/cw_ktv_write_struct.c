@@ -1,11 +1,12 @@
 #include "val.h"
 #include "dbg.h"
 #include "log.h"
+#include "cfg.h"
 
 int cw_ktv_write_struct(mavl_t ktv, mavl_t def, const cw_ValStruct_t * stru, const char *pkey, 
 	uint8_t * dst)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int pos, i;
 	cw_Val_t * result;
 	

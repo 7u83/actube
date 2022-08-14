@@ -354,7 +354,7 @@ static struct cw_ElemHandler handlers[] = {
 		CW_TYPE_STRUCT,					/* type */
 		"admin-state",					/* Key */
 		cw_in_radio_generic,				/* get */
-		cw_out_radio_generic_struct,				/* put */
+		cw_out_radio_generic,				/* put */
 		NULL,
 		NULL,
 		radio_admin_state,					/* type */
@@ -365,12 +365,16 @@ static struct cw_ElemHandler handlers[] = {
 	{
 		"CAPWAP Timers",			/* name */
 		CAPWAP_ELEM_CAPWAP_TIMERS,		/* Element ID */
-		0, 0,						/* Vendor / Proto */
-		2, 2,						/* min/max length */
-		capwap_timers,					/* type */
-		"capwap-timers",					/* Key */
-		cw_in_generic_struct,				/* get */
-		cw_out_generic_struct				/* put */
+		0, 0,					/* Vendor / Proto */
+		2, 2,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"capwap-timers",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		capwap_timers,
+
 	}
 	,
 	{

@@ -6,10 +6,10 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 			, uint8_t * dst)
 {
 	cw_dbg(DBG_X,"Fix: cw_out_generic_indexed_enum");
-	exit(1);
+	stop();
 
 
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int i;
 	cw_Val_t * result;
 	int len,start;

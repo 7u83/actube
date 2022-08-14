@@ -21,7 +21,7 @@
  * @{
  */
 
-#define CW_KTV_MAX_KEY_LEN 1024
+//#define CW_KTV_MAX_KEY_LEN 1024
 
 typedef struct mavl cw_Cfg_t;
 
@@ -94,7 +94,7 @@ struct cw_Type {
 	int (*cast)(cw_Val_t *);
 
 	int (*read)(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void * param);
-	int (*write)(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param);
+	int (*write)(cw_Cfg_t ** cfg, const char *key, uint8_t *dst, const void * param);
 	
 };
 typedef struct cw_Type cw_Type_t;
@@ -248,6 +248,7 @@ struct cw_Val_Reader {
 
 void cw_ktv_init_str_reader(struct cw_Val_Reader *r, const char * str, int len);
 int cw_ktv_parse_string(struct cw_Val_Reader *r, char *key, char *type, char *val);
+int cw_generic_write_l(cw_Cfg_t **cfg, const struct cw_Type*type, const char *key, uint8_t *dst, const void * param);
 
 /**
  * @}  KTV

@@ -163,11 +163,11 @@ static int xput(uint8_t * dst,const char *s)
 
 
 
-static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
+static 	int bwrite(cw_Cfg_t **cfg, const char *key, uint8_t *dst, const void * param)
 {
 	const char *s;
 
-	s = cw_cfg_get(cfg,key,NULL);
+	s = cw_cfg_get_l(cfg,key,NULL);
 	if (s==NULL)
 		return -1;
 	return xput(dst,s);

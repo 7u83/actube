@@ -1,11 +1,13 @@
 #include "cw.h"
 #include "val.h"
+#include "dbg.h"
+#include "log.h"
 
 
 static int read_struct(cw_Cfg_t * cfg,const cw_ValStruct_t * stru, const char *pkey, 
 	const uint8_t * data, int len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int pos, i,l;
 	
 	
@@ -43,10 +45,7 @@ static int read_struct(cw_Cfg_t * cfg,const cw_ValStruct_t * stru, const char *p
 
 		l=stru[i].type->read(cfg,key,data+pos,l,stru[i].valguard);
 
-//		result = cw_ktv_add(ktv,key,stru[i].type,stru[i].valguard,data+pos,l);
 		
-//		stru[i].type->to_str(result,dbstr,100);
-//		cw_dbg(DBG_ELEM_DETAIL, "Read (%d): %s: %s",pos,key,dbstr);
 //		printf("READ STRUCT (%d): %s: %s\n",pos,key,dbstr);
 		
 		if (stru[i].len==-1){
@@ -75,6 +74,113 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, c
 }
 
 
+static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const char *pkey, 
+	uint8_t * dst)
+{
+	char key[CW_CFG_MAX_KEY_LEN];
+	int pos, i;
+	const char * result;
+	int wrlen;
+
+	cw_Val_t val;
+	memset(&val,0,sizeof(cw_Val_t));
+	
+	pos=0; i=0;
+	for(i=0; stru[i].type != NULL;i++){
+	
+		if (stru[i].position!=-1){
+			pos=stru[i].position;
+		}
+		if (stru[i].len!=-1)
+			memset(dst+pos,0,stru[i].len);
+		
+		
+		if (stru[i].key!=NULL)
+			sprintf(key,"%s/%s",pkey,stru[i].key);
+		else	
+			sprintf(key,"%s",pkey);
+
+		result = cw_cfg_get_l(cfgs,key,NULL);
+		if(result) {
+//			char s[2048];
+//			result->type->to_str(result,s,2048);
+//			printf("Content: '%s'\n",s);
+		}	
+
+		
+		if (result == NULL){
+			cw_log(LOG_ERR,"Can't put %s, no value found, filling wth zeros.",key);
+			memset(dst+pos,0,stru[i].len);
+		}
+		else{
+			struct cw_Type * type;
+			type = (struct cw_Type *)stru[i].type;
+			wrlen = type->write(cfgs,stru[i].key,dst+pos,stru[i].valguard);
+
+
+/*			result->valguard=stru[i].valguard;
+			if (cw_ktv_cast(result,stru[i].type)==NULL){
+				cw_log(LOG_ERR,"Can't cast key '%s' from %s to %s",key,result->type->name,stru[i].type->name);
+			}
+		
+			result->type->put(result,dst+pos);*/
+		}
+		if (stru[i].len!=-1)
+			pos+=stru[i].len;
+		else	
+			pos+=wrlen; //result->type->len(result);
+
+	}
+
+	return pos;
+}
+
+
+
+
+static 	int bwrite(cw_Cfg_t **cfgs, const char *key, uint8_t *dst, const void * param)
+{
+	return write_struct(cfgs,param,key,dst);
+
+	cw_dbg(DBG_X,"Key: %s",key);
+	stop();
+
+/*
+	int start;
+	int len;
+	cw_Val_t search;
+	const char *result;
+
+	if (!handler->type){
+		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);
+		return 0;
+	}
+	
+	search.key = (char*)handler->key;
+	result = mavl_get_first(params->cfg,&search);
+	if (result == NULL ){
+		if (params->elemdata->mand)
+			cw_log(LOG_ERR,"Can't put mandatory message element %s, no data available",handler->name);
+		return 0;
+	}
+	
+	if (strncmp(result->key,handler->key, strlen(handler->key))!=0){
+		if (params->elemdata->mand)
+			cw_log(LOG_ERR,"Can't put mandatory message element %s, no data available",handler->name);
+		return 0;
+	}
+
+	start = params->msgset->header_len(handler);
+
+	len = cw_ktv_write_struct(params->cfg,
+		params->cfg,
+		handler->type,handler->key,dst+start);
+	
+	return params->msgset->write_header(handler,dst,len);
+*/
+	
+}
+
 
 
 
@@ -90,6 +196,6 @@ const struct cw_Type cw_type_struct = {
 	NULL,			/* get_type_name */
 	NULL,
 	bread,
-	NULL
+	bwrite
 
 };

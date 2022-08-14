@@ -38,7 +38,7 @@ int cw_select_ac(mavl_t local_cfg, struct cw_DiscoveryResult * dis)
 	/* for each discovery response */
 	mlist_foreach(e, dis->results) {
 		char acname[CAPWAP_MAX_AC_NAME_LEN + 1];
-		char key[CW_KTV_MAX_KEY_LEN];
+		char key[CW_CFG_MAX_KEY_LEN];
 		mavl_t remote_cfg;
 		cw_Val_t *val, *ipval;
 		int prio, i;

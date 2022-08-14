@@ -1,4 +1,5 @@
 #include "val.h"
+#include "cfg.h"
 
 void * ktvn(struct mavl *t ,const void *search)
 {
@@ -45,7 +46,7 @@ void * ktvn(struct mavl *t ,const void *search)
 
 int cw_ktv_idx_get(mavl_t ktv, const char *key)
 {
-	char ikey[CW_KTV_MAX_KEY_LEN];
+	char ikey[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t search, * result;
 	char *d;
 	
@@ -75,7 +76,7 @@ int cw_ktv_idx_get(mavl_t ktv, const char *key)
 
 int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n)
 {
-	char ikey[CW_KTV_MAX_KEY_LEN];
+	char ikey[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t search, * result;
 	char *d;
 	int i;

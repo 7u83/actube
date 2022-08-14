@@ -18,7 +18,7 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 
 	uint8_t *d = dst;
 	
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	
 
 	d += cw_put_word(d,cw_ktv_get_word(global,"ac-descriptor/stations",0));
@@ -56,12 +56,13 @@ static int put_ac_status(mavl_t global, mavl_t local, uint8_t *dst, const char *
 int capwap_out_ac_descriptor(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	int len,l;
+	stop();
+/*	int len,l;
 	uint8_t *d = dst+4;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 
 	d+=put_ac_status(params->cfg,
-				params->default_cfg,
+				params->global_cfg,
 				d, eh->key);
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
@@ -76,7 +77,7 @@ int capwap_out_ac_descriptor(struct cw_ElemHandler * eh,
 
 	l = len + cw_put_elem_hdr(dst,eh->id,len);
 	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
-
 	return l;
-
+*/
+	return 0;
 }

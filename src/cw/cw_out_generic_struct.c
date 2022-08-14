@@ -10,6 +10,7 @@
 int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
+	cw_dbg(DBG_X,"Key: %s",handler->key);
 	stop();
 
 
@@ -39,7 +40,7 @@ int cw_out_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandler
 	start = params->msgset->header_len(handler);
 
 	len = cw_ktv_write_struct(params->cfg,
-		params->default_cfg,
+		params->cfg,
 		handler->type,handler->key,dst+start);
 	
 	return params->msgset->write_header(handler,dst,len);

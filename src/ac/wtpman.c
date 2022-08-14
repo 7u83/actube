@@ -37,7 +37,6 @@
 
 #include "ac.h"
 #include "conf.h"
-#include "db.h"
 #include "socklist.h"
 #include "wtpman.h"
 #include "wtplist.h"
@@ -617,27 +616,49 @@ void wtpman_destroy(struct wtpman *wtpman)
 {
 	if (wtpman->conn)
 		conn_destroy(wtpman->conn);
+	
+	if (wtpman->wtp_cfg)
+		cw_cfg_destroy(wtpman->wtp_cfg);
+
 	free(wtpman);
 }
 
-static void discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+
+static void copy(struct cw_ElemHandlerParams * params)
 {
-	cw_dbg(DBG_X,"Discovery->Callback");
+	struct wtpman * wtpman;
+	wtpman = (struct wtpman*)params->conn->data;
+
+	cw_dbg(DBG_X,"-------------  Here is the config we ve got from WTP ---------------- ");
+	cw_cfg_dump(params->cfg);
+	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
+	cw_dbg(DBG_X,"Now copying:");
+	cw_cfg_copy(params->cfg,wtpman->wtp_cfg);
+	cw_dbg(DBG_X,"Copying done.");
 }
 
-static void join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
-	cw_dbg(DBG_X,"JOIN->Callback");
-	wtpman->pjoin(params,elems_ptr,elems_len);
+	cw_dbg(DBG_X,"DISCOVERY Callback");
+	copy(params);
+	cw_cfg_clear(params->cfg);
+	return 0;
 }
 
-static void update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	struct wtpman * wtpman = (struct wtpman *)params->conn->data;
-	cw_dbg(DBG_X,"UPDATE->Callback");
-	if ( wtpman->pupdate )
-		wtpman->pupdate(params,elems_ptr,elems_len);
+	cw_dbg(DBG_X,"JOIN Callback");
+	copy(params);
+	cw_cfg_clear(params->cfg);
+	return 0;
+}
+
+static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	cw_dbg(DBG_X,"UPDATE Callback");
+	copy(params);
+	cw_cfg_clear(params->cfg);
+	return 0;
 }
 
 
@@ -646,8 +667,8 @@ static void update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr,
 static setup_complete(struct cw_Conn *conn)
 {
 	struct wtpman * wtpman = (struct wtpman *)conn->data;
-	wtpman->pjoin = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_JOIN_REQUEST,join_cb);
-	wtpman->pupdate = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,update_cb);
+//	wtpman->pjoin = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_JOIN_REQUEST,join_cb);
+//	wtpman->pupdate = cw_msgset_set_postprocess(conn->msgset,CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,update_cb);
 	cw_dbg(DBG_X,"SETUP COMPLETE");
 
 }
@@ -704,6 +725,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	}
 	wtpman->conn->global_cfg = global_cfg;
 	wtpman->conn->local_cfg = cw_cfg_create();
+	wtpman->wtp_cfg = cw_cfg_create();
+
 
 	wtpman->conn->role = CW_ROLE_AC;
 	wtpman->conn->data=wtpman;
@@ -715,6 +738,17 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	cw_conn_set_msg_cb(wtpman->conn,
 			CAPWAP_MSG_DISCOVERY_REQUEST,
 			discovery_cb);
+
+	cw_conn_set_msg_cb(wtpman->conn,
+			CAPWAP_MSG_JOIN_REQUEST,
+			join_cb);
+
+	cw_conn_set_msg_cb(wtpman->conn,
+			CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
+			update_cb);
+
+
+
 
 //	wtpman->conn->mods = conf_mods;
 
@@ -764,7 +798,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
+//	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
 	conn_q_add_packet(wtpman->conn, packet, len);
 }
 

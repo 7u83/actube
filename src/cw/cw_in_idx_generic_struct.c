@@ -10,12 +10,12 @@
 int cw_in_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int idx;
 
 
 	cw_dbg(DBG_X,"Fix cw_in_idx_generic_struct");
-	exit(1);
+	stop();
 	
 	if (!handler->type){
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);

@@ -174,12 +174,12 @@ struct cw_Conn {
 
 	struct cw_Mod *cmod, *bmod;
 
-	char *dtls_cert_file;
-	char *dtls_key_file;
-	char *dtls_key_pass;
+	const char *dtls_cert_file;
+	const char *dtls_key_file;
+	const char *dtls_key_pass;
 
 	void *dtls_data;
-	char *dtls_cipher;
+	const char *dtls_cipher;
 	int dtls_error;
 
 	uint8_t dtls_cookie[8];
@@ -316,6 +316,11 @@ void conn_clear_upd(struct cw_Conn*conn, int merge);
 
 int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun);
 cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type);
+
+int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
+		      int vendor, int elem_id, uint8_t * data, int len);
+
+int cw_decode_elements(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 
 
 #endif	/* __CONN_H */

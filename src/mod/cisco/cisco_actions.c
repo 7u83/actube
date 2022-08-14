@@ -218,7 +218,7 @@ static cw_ValStruct_t cisco_mac_operation75[]={
 static cw_ValStruct_t cisco_ap_power_injector_config[]={
 	{CW_TYPE_BYTE,"state",1,-1},
 	{CW_TYPE_BYTE,"selection",1,-1},
-	{CW_TYPE_BSTR16,"sitch-mac-address",6,-1},
+	{CW_TYPE_BSTR16,"switch-mac-address",6,-1},
 	{NULL,NULL,0,0}
 };
 
@@ -250,8 +250,8 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 
 {
-	char key[CW_KTV_MAX_KEY_LEN];
-	char testkey[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
+	char testkey[CW_CFG_MAX_KEY_LEN];
 	int idx;
 	void * type;
 	cw_Val_t * result, search;
@@ -336,7 +336,6 @@ static cw_ValStruct_t cisco_direct_sequence_control70[]={
 };
 
 static cw_ValStruct_t cisco_antenna_payload70[]={
-	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_BYTE,"diversity-selection",1,-1},
 	{CW_TYPE_BYTE,"antenna-mode",1,-1},
 	{CW_TYPE_BYTE,"number-of-antennas",1,-1},
@@ -402,6 +401,7 @@ static cw_ValStruct_t cisco_wtp_radio_config75[]={
 
 
 static cw_ValStruct_t cisco_tx_power[]={
+	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"current-tx-power",2,-1},
 	{NULL,NULL,0,0}
@@ -558,7 +558,7 @@ static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh,
 	stop();
 
 	int wlan_id, radio_id;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	
 	radio_id=cw_get_byte(data);
 	wlan_id=cw_get_word(data+1);
@@ -633,7 +633,7 @@ static cw_ValValRange_t oper_val_cause[]={
 
 static cw_ValStruct_t cisco_radio_oper_state[]={
 	{CW_TYPE_BYTE, "state", 1, -1, oper_val_state},
-	{CW_TYPE_BYTE, "cause", 1, -1,oper_val_cause},
+	{CW_TYPE_BYTE, "cause", 1, -1, oper_val_cause},
 	{NULL,NULL,0,0}
 };
 
@@ -720,7 +720,7 @@ static int cisco_data(struct cw_ElemHandler *eh,
 			uint8_t * data,	 int len)
 {
 	int wlan_id, radio_id;
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	
 	radio_id=cw_get_byte(data);
 	wlan_id=cw_get_word(data+1);
@@ -1206,10 +1206,14 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_CISCO_DIRECT_SEQUENCE_CONTROL,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		9,9,					/* min/max length */
-		cisco_direct_sequence_control70,	/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/direct-sequence-control",	/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,					/* mkkey */
+		NULL,
+		cisco_direct_sequence_control70,	/* param */
+
 	}
 	,
 
@@ -1221,9 +1225,9 @@ static struct cw_ElemHandler handlers70[] = {
 		9,9,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/antenna-payload",		/* Key */
-		cw_in_generic,				/* get */
-		cw_out_radio_generic_struct,		/* put */
-		cw_mkradiokey,
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,					/* mkkey */
 		NULL,
 		cisco_antenna_payload70,
 
@@ -1622,11 +1626,14 @@ static struct cw_ElemHandler handlers70[] = {
 		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		3,3,					/* min/max length */
-		cisco_radio_oper_state,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"operational-state",			/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct,		/* put */
-		NULL					/* mkkey */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,					/* mkkey */
+		NULL,
+		cisco_radio_oper_state			/* paam */
+
 	}
 	,
 
@@ -1669,7 +1676,7 @@ static struct cw_ElemHandler handlers70[] = {
 	},
 
 	{
-		"CAPWAP Timers",			/* name */
+		"CAPWAP Timers (Cisco)",		/* name */
 		CISCO_ELEM_CAPWAP_TIMERS,		/* Element ID */
 		0, 0,					/* Vendor / Proto */
 		2, 2,					/* min/max length */

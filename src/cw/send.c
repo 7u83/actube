@@ -97,7 +97,7 @@ cw_send_msg( struct cw_Conn * conn, uint8_t *msg)
 {
 	uint8_t buf[MAX_MTU];
 	int fragoffset,hlen,mtu;
-	int packetlen, msglen;
+	int msglen;
 
 	mtu = conn->mtu;
 
@@ -121,7 +121,7 @@ cw_send_msg( struct cw_Conn * conn, uint8_t *msg)
 
 	hlen = cw_get_hdr_hlen(buf)*4;
 
-	packetlen = hlen + cw_get_msg_elems_len(msg) + 8;
+	//packetlen = hlen + cw_get_msg_elems_len(msg) + 8;
 
 	msglen = cw_get_msg_elems_len(msg) + 8;
 

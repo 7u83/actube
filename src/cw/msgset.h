@@ -33,7 +33,7 @@ struct cw_ElemHandlerParams {
 //	cw_Val_t * elem;
 	char * debug_details;
 	cw_Cfg_t * cfg;
-	cw_Cfg_t * default_cfg;
+	cw_Cfg_t * cfg_list[10];
 };
 
 
@@ -87,7 +87,6 @@ struct cw_MsgDef{
 	
 	struct cw_ElemDef * elements;
 	int (*preprocess)(struct cw_Conn * conn);
-//	int (*postprocess)(struct conn * conn);
 	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 
 /*	uint8_t next_state;*/
@@ -106,7 +105,6 @@ struct cw_MsgData{
 	mlist_t mand_keys;  	/**< Keys of mandatory elements */
 
 	int (*preprocess)(struct cw_Conn * conn);
-	//int (*postprocess)(struct conn * conn);
 	int (*postprocess)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 /*	uint8_t next_state;*/
 };

@@ -3,6 +3,7 @@ MFDEPS=../Defs.mak
 
 
 CWSRC=\
+	cw.c\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
 	cw_dbg_elem.c\
@@ -16,12 +17,6 @@ CWSRC=\
 	cw_in_ac_name_with_priority.c\
 	cw_in_capwap_local_ipv4_address.c\
 	cw_in_capwap_local_ipv6_address.c\
-	cw_in_check_disc_req.c\
-	cw_in_check_img_data_req_ac.c\
-	cw_in_check_img_data_req_wtp.c\
-	cw_in_check_join_req.c\
-	cw_in_check_join_resp.c\
-	cw_in_generic.c\
 	cw_in_generic_with_index.c\
 	cw_in_generic_struct.c\
 	cw_in_radio_generic_struct.c\
@@ -37,7 +32,6 @@ CWSRC=\
 	cw_in_wtp_reboot_statistics.c\
 	cw_is_printable.c\
 	cw_load_file.c\
-	cw_out_generic.c\
 	cw_out_generic_with_index.c\
 	cw_out_radio_administrative_states.c\
 	cw_process_element.c\
@@ -75,6 +69,14 @@ CWSRC=\
 	cw_detect_nat.c\
 	cw_read_from.c \
 
+#	cw_in_check_disc_req.c\
+#	cw_in_check_img_data_req_ac.c\
+#	cw_in_check_img_data_req_wtp.c\
+#	cw_in_check_join_req.c\
+#	cw_in_check_join_resp.c\
+#	cw_in_generic.c\
+#	cw_out_generic.c\
+
 KTVSRC=\
 	cw_ktv_add.c\
 	cw_ktv_cast.c\
@@ -103,9 +105,9 @@ KTVSRC=\
 	cw_ktv_base_exists.c\
 	cw_ktv_save.c\
 	cw_ktv_del_sub.c\
-	cw_ktv_parser.c\
 	cfg.c\
 
+#	cw_ktv_parser.c\
 
 LWSRC=\
 	lw_addelem.c\
@@ -179,7 +181,6 @@ MISCSRC=\
 	conn_destroy.c\
 	connlist.c\
 	conn_prepare_image_data_request.c\
-	conn_process_packet.c\
 	cw_decode_msg.c \
 	conn_q_add_packet.c\
 	conn_q_get_packet.c\
@@ -200,13 +201,15 @@ MISCSRC=\
 	send.c\
 	strheap.c\
 	netconn.c\
-	conn.c
+	conn.c \
+	val.c
 
 #	conn_q_wait_packet.c\
 #	conn_init.c\
 #	conn_create.c\
 #	conn_send_request.c\
 #	cw_put_msg.c\
+#	conn_process_packet.c\
 
 DTLSSRC+=\
 	dtls_bio.c\
@@ -216,7 +219,7 @@ DTLSSRC+=\
 RADIOSRC=\
 	cw_out_radio_generic.c\
 	cw_out_radio_generic_struct.c\
-	cw_read_radio_generic.c\
+	cw_in_radio_generic.c\
 
 MAVLSRC=\
 	mavl_get_ptr.c\

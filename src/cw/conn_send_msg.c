@@ -3,7 +3,7 @@
 #include "dbg.h"
 
 #define CW_MODE_ZYXEL 7
-extern cw_send_msg(struct cw_Conn * conn,uint8_t * msg);
+extern int cw_send_msg(struct cw_Conn * conn,uint8_t * msg);
 
 int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 {
@@ -34,7 +34,7 @@ mtu = 9440;
 	mtu = mtu >> 3;
 	mtu = mtu << 3;
 	
-	printf("packetlenX = %d (%d)\n",packetlen,hlen);
+//	printf("packetlenX = %d (%d)\n",packetlen,hlen);
 	 int offset = cw_get_hdr_msg_offset(rawmsg);
 	return cw_send_msg(conn,rawmsg+offset);
 

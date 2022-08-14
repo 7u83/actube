@@ -79,22 +79,23 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, c
 	return 2;
 }
 
-static 	int bwrite(cw_Cfg_t *cfg, const char *key, uint8_t *dst, const void * param)
+static 	int bwrite(cw_Cfg_t **cfgs, const char *key, uint8_t *dst, const void * param)
 {
+	return cw_generic_write_l(cfgs,CW_TYPE_WORD,key,dst,param);
 
-	cw_Val_t val;
+/*	cw_Val_t val;
 	int l;
 	const char *s;
 	memset(&val,0,sizeof(cw_Val_t));
 	val.valguard=param;
-	s = cw_cfg_get(cfg,key,NULL);
+	s = cw_cfg_get_l(cfg,key,NULL);
 	if (s==NULL)
 		return -1;
 	from_str(&val,s);
 	l = put(&val,dst);
 	if(val.type->del)
 		val.type->del(&val);
-	return l;
+	return l;*/
 }
 
 

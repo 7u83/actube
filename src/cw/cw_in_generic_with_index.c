@@ -5,7 +5,7 @@ int cw_in_generic_with_index(struct cw_ElemHandler *eh,
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
-	char key[CW_KTV_MAX_KEY_LEN];
+	char key[CW_CFG_MAX_KEY_LEN];
 	int idx;
 
 cw_dbg(DBG_X,"Fix cw_in_generic_with_index");

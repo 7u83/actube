@@ -1,33 +1,36 @@
 
 #include "cw.h"
 #include "dbg.h"
+#include "cfg.h"
 
 int cw_ktv_idx_get_next(mavl_t ktv, const char *key, int n);
 
 int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
-	stop();
+	char key[CW_CFG_MAX_KEY_LEN];
+	struct cw_Type * type;
 
-	int len,i,l;
+	int len,i,l,start;
 	int radios;
 	len =0;
 	
-/*	int idx=0;*/
-	
-/*	while(1){
-		char key[CW_KTV_MAX_KEY_LEN];
-		sprintf(key,"radio.%d",idx);
-		idx = cw_ktv_idx_get_next(params->conn->local_cfg,key,idx);
-		idx++;
-	}
-*/	
-	radios = cw_ktv_get_byte(params->cfg,"wtp-descriptor/max-radios",0);
-
+	radios = cw_cfg_get_byte(params->cfg,"wtp-descriptor/max-radios",0);
 	for(i=0;i<radios;i++){
-		l = cw_write_radio_element(handler,params,i,dst+len);
-		cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,handler,dst,l);
+		l=0;
+
+		type = (struct cw_Type*)handler->type;
+		start = params->msgset->header_len(handler)+len;
+
+		sprintf(key,"radio.%d/%s",i,handler->key);
+		cw_dbg(DBG_X,"KEY: %s",key);
+
+		l += cw_put_byte(dst+start+l,i);
+		l += type->write(params->cfg_list, key,dst+start+l,handler->param);
+	
+		l = params->msgset->write_header(handler,dst+len,l);
 		len+=l;
+
 	}
 	return len;
 }
