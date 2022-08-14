@@ -218,9 +218,10 @@ DTLSSRC+=\
 
 
 RADIOSRC=\
-	cw_out_radio_generic.c\
 	cw_out_radio_generic_struct.c\
-	cw_in_radio_generic.c\
+	
+#	cw_in_radio_generic.c\
+#	cw_out_radio_generic.c\
 
 MAVLSRC=\
 	mavl_get_ptr.c\
