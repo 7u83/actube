@@ -10,7 +10,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 {
 	cw_Type_t * type;
 	type = (cw_Type_t*)handler->type;
-	char mkey[CW_KTV_MAX_KEY_LEN];
+	char mkey[CW_CFG_MAX_KEY_LEN];
 	const char *key;
 
 
