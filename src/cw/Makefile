@@ -179,7 +179,6 @@ MISCSRC=\
 	capwap_strings_state.c\
 	capwap_strings_vendor.c\
 	conn_create_noq.c\
-	conn_destroy.c\
 	connlist.c\
 	conn_prepare_image_data_request.c\
 	cw_decode_msg.c \
@@ -211,6 +210,7 @@ MISCSRC=\
 #	conn_send_request.c\
 #	cw_put_msg.c\
 #	conn_process_packet.c\
+#	conn_destroy.c\
 
 DTLSSRC+=\
 	dtls_bio.c\

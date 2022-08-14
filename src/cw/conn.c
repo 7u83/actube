@@ -938,3 +938,24 @@ int cw_read_messages(struct cw_Conn *conn)
 	errno = EAGAIN;
 	return -1;
 }
+
+
+
+/**
+ * Destroy a conn object
+ * @param object to destroy
+ */
+void conn_destroy(struct cw_Conn * conn)
+{
+	if (conn->fragman)
+		fragman_destroy(conn->fragman);
+	if (conn->q)
+		free (conn->q);
+
+	if (conn->msg_callbacks)
+		mavl_destroy(conn->msg_callbacks);
+
+	free(conn);
+}
+
+
