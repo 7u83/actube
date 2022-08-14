@@ -64,7 +64,7 @@ struct cw_MsgSet {
 	mavl_t msgdata;
 	mavl_t handlers_by_id;
 	mavl_t handlers_by_key;
-	mavl_t types_tree;
+//	mavl_t types_tree;
 	mavl_t statemachine_states;
 	int (*write_header)(struct cw_ElemHandler * handler, uint8_t * dst, int len);
 	int (*header_len)(struct cw_ElemHandler *handler);

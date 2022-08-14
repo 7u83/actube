@@ -105,6 +105,10 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
 		mavl_destroy(set->handlers_by_key);
 	if (set->statemachine_states)
 		mavl_destroy(set->statemachine_states);
+
+/*	if (set->types_tree)
+		mavl_destroy(set->types_tree);*/
+
 	free(set);
 }
 
@@ -114,7 +118,7 @@ void cw_msgset_destroy(struct cw_MsgSet *set)
  */
 struct cw_MsgSet *cw_msgset_create()
 {
-        const cw_Type_t **ti;
+        //const cw_Type_t **ti;
 
 	/* allocate memory for a message_set */
 	struct cw_MsgSet *set = malloc(sizeof(struct cw_MsgSet));
@@ -149,15 +153,16 @@ struct cw_MsgSet *cw_msgset_create()
 		return NULL;
 	}
 	
-	set->types_tree = cw_ktv_create_types_tree();
+/*	set->types_tree = cw_ktv_create_types_tree();
 	if (set->types_tree == NULL){
 		cw_msgset_destroy(set);
 		return NULL;
 	}
-	/* insert default types */
+	/ * insert default types * /
 	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
                 mavl_insert_ptr(set->types_tree,*ti);
         }
+	*/
 
 	
 	set->statemachine_states = mavl_create(cmp_machinestate,NULL,sizeof(cw_StateMachineState_t));
@@ -336,7 +341,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		update_msgdata(set, msg, msgdef);
 	}
 	
-	{
+/*	{
 		mavliter_t it;
 		cw_dbg(DBG_MOD,"  Known types:");
 		mavliter_init(&it,set->types_tree);
@@ -345,7 +350,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 			cw_dbg(DBG_MOD, "   Type: %s", t->name);
 		}
 	}
-	
+*/	
 	
 
 	return 0;

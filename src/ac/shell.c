@@ -111,6 +111,8 @@ send_cmd(struct shelldata * sd, const char *cmd)
 void 
 wlan0_cmd(struct shelldata * sd, const char *cmd)
 {
+	stop();
+
 	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
@@ -119,7 +121,7 @@ wlan0_cmd(struct shelldata * sd, const char *cmd)
 	}
 	else {
 		FILE *f=fopen("wlan0.ktv","r");
-		cw_ktv_read_file(f,sd->update_cfg,conn->msgset->types_tree);
+//		cw_ktv_read_file(f,sd->update_cfg,conn->msgset->types_tree);
 		//conn->update_cfg=sd->update_cfg;
 		fclose(f);
 	}

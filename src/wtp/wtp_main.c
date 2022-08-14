@@ -14,6 +14,8 @@
 #include "cw/dtls.h"
 #include "wtp.h"
 #include "cw/mavltypes.h"
+#include "cw/cfg.h"
+	
 
 #define MAX_MODS 32
 struct bootcfg{
@@ -85,17 +87,14 @@ int main (int argc, char **argv)
 {
 	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
-	struct cw_MsgSet * msgset;
+	struct cw_MsgSet * msgset=NULL;
 	struct cw_Conn * conn;
 	FILE * file;
-	mavl_t global_cfg, types_tree;
+	cw_Cfg_t * global_cfg =NULL;
 	const cw_Type_t ** ti;
 	int i;
 	struct cw_DiscoveryResult dis;
-	
-	
-	
-	
+	int rc;	
 	
 	
 	bootcfg.nmods=0;
@@ -118,33 +117,26 @@ int main (int argc, char **argv)
 	}
 
 	/* create an empty global config */
-	global_cfg=cw_ktv_create();
+	global_cfg=cw_cfg_create();
 	if (msgset==NULL){
 		cw_log(LOG_ERR, "Error creating global_cfg: %s", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-	
-
-	/* create a types tree with default types */
-	types_tree = cw_ktv_create_types_tree();
-	for (ti=CW_KTV_STD_TYPES;*ti;ti++){
-		mavl_insert_ptr(types_tree,*ti);
+		goto errX;
 	}
 
 	/* read the initial config file */
-	file = fopen(bootcfg.cfgfilename,"r");
-
-	if (file == NULL){
+	rc = cw_cfg_load(bootcfg.cfgfilename,global_cfg);	
+	if (rc){
 		cw_log(LOG_ERR,"Can't open file '%s':%s",bootcfg.cfgfilename, strerror(errno));
-		exit(EXIT_FAILURE);
+		goto errX;
 	}
 
-	cw_ktv_read_file(file,global_cfg,types_tree);
+//	cw_ktv_read_file(file,global_cfg,types_tree);
 
 	
-	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
+//	cw_dbg_ktv_dump(global_cfg,DBG_CFG_DMP,"----- global cfg start -----","","----- global cfg end -----");
 	
-	
+	exit(0);
+
 	/*clean_cfg(global_cfg);*/
 	
 
@@ -244,5 +236,14 @@ printf("JOIN CONF\n");
 	cw_discovery_free_results(&dis);
 
 	return (EXIT_SUCCESS);
+errX:
+	if (msgset)
+		cw_msgset_destroy(msgset);
+
+	if (global_cfg != NULL)
+		cw_cfg_destroy(global_cfg);
+
+
+	return rc;
 
 }
