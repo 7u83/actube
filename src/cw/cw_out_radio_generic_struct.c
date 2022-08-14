@@ -9,7 +9,7 @@ int cw_out_radio_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemH
 {
 	cw_dbg(DBG_X,"KEY: %s",handler->key);
 	stop();
-
+/*
 	int i,l, offset;
 
 	uint8_t * cdst;
@@ -124,6 +124,8 @@ printf("current is %s\n", current);
 
 
 	return len;
+	*/
+	return 0;
 }
 
 int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
@@ -137,8 +139,9 @@ int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams
 
 	current[0]=0;
 
-
+	stop();
+	return 0;
 	
-	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);
+//	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);
 }
 
