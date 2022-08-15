@@ -207,11 +207,14 @@ void dtls_openssl_data_destroy(struct dtls_openssl_data * d){
 	if (!d)
 		return;
 
+	if (d->ctx)
+		SSL_CTX_free(d->ctx);
+
 	if (d->ssl)
 		SSL_free(d->ssl);
 
-	if (d->ctx)
-		SSL_CTX_free(d->ctx);
+	if (d->biomethod)
+		BIO_meth_free(d->biomethod);
 
 
 	free(d);

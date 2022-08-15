@@ -98,7 +98,7 @@ acinfo.result_code=99;
 
 
 
-int run_join_d(struct cw_Conn * conn, struct sockaddr *sa)
+static int run_join_d(struct cw_Conn * conn, struct sockaddr *sa,cw_Cfg_t * cfg)
 {
 	char addrstr[SOCK_ADDR_BUFSIZE];
 	int sockfd;
@@ -107,8 +107,8 @@ int run_join_d(struct cw_Conn * conn, struct sockaddr *sa)
 	int rc;
 
 	/* Check if we support the same auth methods as the AC */
-	lsec = cw_ktv_get_byte(conn->local_cfg,"ac-descriptor/security",0);
-	rsec = cw_ktv_get_byte(conn->remote_cfg,"ac-descriptor/security",0);
+	lsec = cw_cfg_get_byte(conn->global_cfg,"ac-descriptor/security",255);
+	rsec = cw_cfg_get_byte(cfg,"ac-descriptor/security",0);
 	if ((lsec & rsec) == 0){
 		cw_log(LOG_ERR, "Can't establish DTLS with AC, my sec: %d, remote sec %d",lsec,rsec);
 		return 0;
@@ -154,8 +154,9 @@ int run_join_d(struct cw_Conn * conn, struct sockaddr *sa)
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
 	       sock_addr2str(sa,addrstr));
 
-
+	conn->remote_cfg=cfg;
 	run_join(conn);
+	conn->remote_cfg=NULL;
 	return 1;
 }
 
@@ -199,8 +200,26 @@ int run_join(struct cw_Conn *conn)
 	return 1;
 }
 
-int join(struct cw_Conn * conn, struct cw_DiscoveryResults * dis)
+int join(struct cw_Conn * conn, struct cw_DiscoveryResults * results)
 {
+	int rc;
+	mavliter_t it;
+        mavliter_init(&it,results->list);
+        mavliter_foreach(&it){
+		struct sockaddr_storage sockaddr;
+		const char * acname;
+		struct cw_DiscoveryResults_elem *e = mavliter_get(&it);
+		acname = cw_cfg_get(e->cfg,"capwap/ac-name","<unknown>");
+		cw_dbg(DBG_INFO, "Going to join CAPWAP controller '%s' at %s.",acname,e->ip);
+
+		sock_strtoaddr(e->ip,(struct sockaddr*)(&sockaddr));
+		sock_setport((struct sockaddr*)&sockaddr,5246);
+		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr),e->cfg);
+		if (rc)
+			return 1;
+
+
+	}
 
 	stop();
 /*

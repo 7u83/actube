@@ -49,11 +49,14 @@ dtls_openssl_connect(struct cw_Conn *conn)
 		    dtls_openssl_data_create(conn, DTLS_client_method(),
 					     biomethod);
 
+
 	cw_dbg(DBG_DTLS_BIO, "DTLS Connect call 2");
 
 	d = (struct dtls_openssl_data *) conn->dtls_data;
 	if (!d)
 		return 0;
+
+	d->biomethod = biomethod;
 
 /*
 	if (conn->dtls_psk)

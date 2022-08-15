@@ -31,6 +31,7 @@
 	#define dtls_connect dtls_openssl_connect
 	#define dtls_shutdown dtls_openssl_shutdown
 	#define dtls_get_cipher dtls_openssl_get_cipher
+	#define dtls_data_destroy dtls_openssl_data_destroy
 #else
 	#include "dtls_gnutls.h"
 	#define dtls_init dtls_gnutls_init

@@ -7,20 +7,19 @@
 #include "cw/cw.h"
 #include "cw/dbg.h"
 
-static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * parent_key, 
-			const char *skey, int type){
+static int write_boarddata_subelem(uint8_t * dst, cw_Cfg_t ** cfg, const char * parent_key, 
+			const char *skey, int type, void *param){
 			
-	char key[256];
-	cw_Val_t * val;
-	uint8_t *d;
-	
-	d=dst;
+	char key[CW_CFG_MAX_KEY_LEN];
+	int len;
 	
 	sprintf(key,"%s/%s",parent_key,skey);
 	
-	val = cw_ktv_get(ktv,key,CW_TYPE_BSTR16);
+	//val = cw_ktv_get(ktv,key,CW_TYPE_BSTR16);
+	len = cw_generic_write_l(cfg, CW_TYPE_BSTR16,key,
+			dst+4, param);
 	
-	if (val == NULL) {
+	if (len==-1) {
 		cw_log(LOG_ERR,
 		       "Creating WTP Board Data sub-element %d. Key not '%s' found",type,key);
 		return 0;
@@ -28,11 +27,9 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 
 	
 	
-	d += cw_put_word(d, type);
-	d += cw_put_word(d, val->type->len(val));
-	d += val->type->put(val,d);
-	
-	return d-dst;
+	cw_set_word(dst, (uint16_t)type);
+	cw_set_word(dst+2,(uint16_t)len);
+	return len+4;
 }
 
 
@@ -40,35 +37,31 @@ static int write_boarddata_subelem(uint8_t * dst, mavl_t ktv, const char * paren
 int capwap_out_wtp_board_data(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	stop();
-
-	cw_Val_t * val;
-	mavl_t cfg;
+	int rc;
 	uint8_t * d;
 	char key[256];
 	int l;
 	
 	d=dst+4;
 	
-	cfg = params->cfg;
-	
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_VENDOR);
-	val = cw_ktv_get(cfg,key,CW_TYPE_DWORD);
+	rc = cw_generic_write_l(params->cfg_list, CW_TYPE_DWORD,key,
+			d, eh->param);
+
 	
-	if (val ==NULL) {
+	if (rc==-1) {
 		cw_log(LOG_ERR,
 		       "Creating WTP Board Data element. Key '%s' not found.", key);
 		return 0;
 	}
 
-	d += val->type->put(val,d);
-	/*cw_ktv_add(cfg,vendor_key,CW_TYPE_DWORD,data,len);*/
+	d += rc;
 	
-	d+=write_boarddata_subelem(d,cfg,eh->key,"model-no",CW_BOARDDATA_MODELNO);
-	d+=write_boarddata_subelem(d,cfg,eh->key,"serial-no",CW_BOARDDATA_SERIALNO);
-	d+=write_boarddata_subelem(d,cfg,eh->key,"board-id",CW_BOARDDATA_BOARDID);
-	d+=write_boarddata_subelem(d,cfg,eh->key,"revision",CW_BOARDDATA_REVISION);
-	d+=write_boarddata_subelem(d,cfg,eh->key,"mac-address",CW_BOARDDATA_MACADDRESS);
+	d+=write_boarddata_subelem(d,params->cfg_list,eh->key,"model-no",CW_BOARDDATA_MODELNO,eh->param);
+	d+=write_boarddata_subelem(d,params->cfg_list,eh->key,"serial-no",CW_BOARDDATA_SERIALNO,eh->param);
+	d+=write_boarddata_subelem(d,params->cfg_list,eh->key,"board-id",CW_BOARDDATA_BOARDID,eh->param);
+	d+=write_boarddata_subelem(d,params->cfg_list,eh->key,"revision",CW_BOARDDATA_REVISION,eh->param);
+	d+=write_boarddata_subelem(d,params->cfg_list,eh->key,"mac-address",CW_BOARDDATA_MACADDRESS,eh->param);
 	
 
 	l = d - dst-4;

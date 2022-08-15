@@ -8,8 +8,6 @@
 
 static int cw_put_encryption_subelems(uint8_t *dst,int capwap_mode)
 {
-	stop();
-
 	int n=2;
 	int i;
 	
@@ -33,27 +31,21 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	int len,l;
 /*	// XXX Dummy WTP Descriptor Header */
 	uint8_t *d; 
-	cw_Val_t * val;
+	int val;
 	
 	d = dst+4;
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
-	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
-	if (val != NULL)
-		d+=val->type->put(val,d);
-	else{
-		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
+	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
+	d+=cw_put_byte(d,val);
+	if (val<=0){
+		cw_dbg(DBG_WARN,"Cannot value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
 		d+=cw_put_byte(d,0);
 	}
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
-	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
-	if (val != NULL){
-		d+=val->type->put(val,d);
-	}
-	else{
-		d+=cw_put_byte(d,0);	/*radios in use*/
-	}
+	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
+		d+=cw_put_byte(d,val);	/*radios in use*/
 
 /* 	d+=cw_put_encryption_capabilities_7(d,1); */
 /*	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);*/
@@ -80,6 +72,6 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	len = d-dst-4;
 	l = len + cw_put_elem_hdr(dst,eh->id,len);
 	
-	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
+//	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
 	return l;
 }

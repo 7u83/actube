@@ -866,7 +866,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/mwar-addr",			/* Key */
 		cw_in_generic,			/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,			/* put */
 		NULL,
 		NULL,
 		mwar_addr
@@ -2352,16 +2352,27 @@ static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_
 
 static int preprocess_join_request(struct cw_Conn *conn)
 {
-	cw_Val_t * ver;
+	bstr16_t ver;
 	int use_ac_version;
 	char verstr[512];
 
 	if (conn->role != CW_ROLE_WTP)
 		return 0;
 
-	stop();
+	use_ac_version = cw_cfg_get_bool(conn->global_cfg,"cisco/wtp-use-ac-version",0);
+	if (use_ac_version){
+		ver = cw_cfg_get_bstr16(conn->remote_cfg,"ac-descriptor/software/version",NULL );
+		cw_cfg_set_bstr16(conn->local_cfg,"wtp-descriptor/software/version",ver);
+			
+		cw_format_version(verstr,bstr16_data(ver),bstr16_len(ver));
+		cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
+		free(ver);
+
+	}
+
+//	stop();
+
 /*		
-	use_ac_version = cw_ktv_get_bool(conn->local_cfg,"cisco/wtp-use-ac-version",0);
 
 	if (use_ac_version){
 		ver = cw_ktv_get(conn->remote_cfg,"ac-descriptor/software/version", CW_TYPE_BSTR16);

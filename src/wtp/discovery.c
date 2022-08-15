@@ -110,7 +110,7 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 
 	//cw_select_ac(conn->local_cfg, dis);
 
-	mavliter_t it;
+/*	mavliter_t it;
         mavliter_init(&it,results->list);
         mavliter_foreach(&it){
 		const char * acname;
@@ -119,7 +119,7 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 		printf("E: %s: %s - prio: %d, ctr: %d\n",acname,e->ip,e->prio,e->ctr);
 
 	}
-
+*/
 	
 	return results;
 }

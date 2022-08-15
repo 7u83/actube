@@ -38,6 +38,7 @@ struct dtls_openssl_data{
 	SSL_CTX * ctx;
 	SSL * ssl;
 	BIO * bio;
+	BIO_METHOD * biomethod;
 	uint8_t buffer[4096];
 	int len;
 	int pos;
@@ -78,6 +79,7 @@ extern int dtls_openssl_log_error_queue(const char *txt);
 extern BIO_METHOD * dtls_openssl_bio_method();
 
 extern int dtls_openssl_shutdown(struct cw_Conn *conn);
+extern void dtls_openssl_data_destroy(struct dtls_openssl_data * d);
 
 /**
  * @}

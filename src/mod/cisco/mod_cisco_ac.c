@@ -240,7 +240,6 @@ int static setup_cfg(struct cw_Conn  * conn)
 	}
 	
 
-
 	return 0;
 }
 

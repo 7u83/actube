@@ -544,6 +544,17 @@ uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def)
 	return v.val.byte;
 }
 
+uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def)
+{
+	struct cw_Val v;
+	memset(&v,0,sizeof(struct cw_Val));
+	const char *s = cw_cfg_get_l(cfgs,key,NULL);
+	if (s==NULL)
+		return def;
+	CW_TYPE_BYTE->from_str(&v,s);
+	return v.val.byte;
+}
+
 
 
 uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def)

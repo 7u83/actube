@@ -22,7 +22,7 @@
 #include "msgset.h"
 #include "mavltypes.h"
 
-
+#include "dtls.h"
 
 
 /**
@@ -937,6 +937,7 @@ int cw_read_messages(struct cw_Conn *conn)
  */
 void conn_destroy(struct cw_Conn * conn)
 {
+	dtls_shutdown(conn);
 	if (conn->fragman)
 		fragman_destroy(conn->fragman);
 	if (conn->q)
@@ -953,6 +954,8 @@ void conn_destroy(struct cw_Conn * conn)
 
 	if (conn->local_cfg)
 		cw_cfg_destroy(conn->local_cfg);
+
+
 
 	free(conn);
 }

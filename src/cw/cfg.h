@@ -43,6 +43,7 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst);
 void cw_cfg_destroy(cw_Cfg_t *cfg);
 void cw_cfg_clear(cw_Cfg_t *cfg);
 int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key);
+uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def);
 
 
 
