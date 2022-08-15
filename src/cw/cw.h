@@ -550,6 +550,9 @@ int cw_stricmp(char const *a, char const *b);
 int cw_write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len);
 int cw_header_len(struct cw_ElemHandler * handler);
 
+int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout);
+
+
 /**
  *@}
  */

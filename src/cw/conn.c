@@ -378,7 +378,7 @@ int cw_send_response(struct cw_Conn *conn, uint8_t * rawmsg, int len)
 {
 	int rc;
 	cw_init_response(conn, rawmsg);
-	rc = cw_assemble_message(conn, conn->resp_buffer);
+	rc = cw_compose_message(conn, conn->resp_buffer);
 	if (!cw_result_is_ok(rc))
 		return 0;
 	conn_send_msg(conn, conn->resp_buffer);

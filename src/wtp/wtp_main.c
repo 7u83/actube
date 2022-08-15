@@ -186,16 +186,13 @@ int main (int argc, char **argv)
 	join(conn,results);
 
 	cw_discovery_results_destroy(results);
+
+	
+printf("JOIN CONF\n");	
 	rc = 0;
 	printf("Goto errx 0");
 	goto errX;
 
-
-//	clean_cfg(conn->remote_cfg);
-//	mavl_merge(conn->local_cfg,conn->remote_cfg);
-	
-	mavl_del_all(conn->remote_cfg);
-printf("JOIN CONF\n");	
 	configure(conn);
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);

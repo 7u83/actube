@@ -181,7 +181,6 @@ MISCSRC=\
 	conn_create_noq.c\
 	connlist.c\
 	conn_prepare_image_data_request.c\
-	cw_decode_msg.c \
 	conn_q_add_packet.c\
 	conn_q_get_packet.c\
 	conn_q_recv_packet.c\
@@ -204,6 +203,8 @@ MISCSRC=\
 	conn.c \
 	val.c \
 	discovery.c\
+	message.c\
+
 
 
 #	conn_q_wait_packet.c\
