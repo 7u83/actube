@@ -40,6 +40,8 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 {
 
 	int start, len, l;
+	
+//	cw_dbg(DBG_X,"cw_out_generic (%s)%s",((struct cw_Type*)handler->type)->name,handler->key);
 
 //	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 //	cw_cfg_dump(params->cfg);
@@ -48,7 +50,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	start = params->msgset->header_len(handler);
 	len = ((const cw_Type_t*)(handler->type))->
 		write(params->cfg_list,handler->key,dst+start,handler->param);
-
+//	cw_dbg(DBG_X, "Type result is %d",len);
 
 	if (len == -1) {
 		const char *vendor="";
@@ -69,6 +71,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 			       , cw_strmsg(a->msg_id),a->item_id);
 */
 		}
+
 		return 0;
 	} 
 
@@ -114,19 +117,21 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	int radios;
 	len =0;
 	
-	radios = cw_cfg_get_byte(params->cfg,"wtp-descriptor/max-radios",0);
+	radios = cw_cfg_get_byte_l(params->cfg_list,"wtp-descriptor/max-radios",0);
 	for(i=0;i<radios;i++){
-		l=0;
 
 		type = (struct cw_Type*)handler->type;
 		start = params->msgset->header_len(handler)+len;
 
 		sprintf(key,"radio.%d/%s",i,handler->key);
-		cw_dbg(DBG_X,"KEY: %s",key);
+//		cw_dbg(DBG_X,"KEY: %s",key);
 
-		l += cw_put_byte(dst+start+l,i);
-		l += type->write(params->cfg_list, key,dst+start+l,handler->param);
-	
+		l = type->write(params->cfg_list, key,dst+start+1,handler->param);
+		if (l==-1)
+			continue;
+
+		l += cw_put_byte(dst+start,i);
+
 		l = params->msgset->write_header(handler,dst+len,l);
 		len+=l;
 

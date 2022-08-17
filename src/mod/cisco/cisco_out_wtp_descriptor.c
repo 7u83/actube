@@ -20,23 +20,33 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	rc = cw_generic_write_l(params->cfg_list, CW_TYPE_BYTE,key,
 			d, eh->param);
 
+	const char * 
+		xxx = cw_cfg_get_l(params->cfg_list, key, NULL);
+	cw_dbg(DBG_X,"What??? %s: %s",key,xxx);
+
 //	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
 	if (rc==-1){
 		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", key);
 		d+=cw_put_byte(d,0);
 	}
 	else {
+		int yyy = cw_get_byte(d);
+	 	cw_dbg(DBG_X,"Verify: %d",yyy);
 		d+=rc;
 	}
 
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
+
+		xxx = cw_cfg_get_l(params->cfg_list, key, NULL);
+	cw_dbg(DBG_X,"What??? %s: %s",key,xxx);
+	
 	rc = cw_generic_write_l(params->cfg_list, CW_TYPE_BYTE,key,
 			d, eh->param);
 
 
 //	val = cw_ktv_get(params->cfg,key, CW_TYPE_BYTE);
-	if (rc != -1){
+	if (rc == -1){
 		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", key);
 		d+=cw_put_byte(d,0);
 	}
@@ -46,20 +56,20 @@ int cisco_out_wtp_descriptor(struct cw_ElemHandler * eh,
 
 	d+=cw_put_encryption_capabilities_7(d,1);
 
-
+cw_dbg(DBG_X,"befor subelem ^p",params->cfg_list);
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_HARDWARE_VERSION, key);
 				 
 	/* software version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_SOFTWARE_VERSION, key);
 
 	/* bootloader version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_BOOTLOADER);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
 
 	len = d-dst-4;

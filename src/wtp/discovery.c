@@ -29,7 +29,6 @@ static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_pt
 //	cw_cfg_copy(params->cfg,cfg);
 
 	cw_discovery_results_add(results,params->cfg,params->conn->global_cfg);
-	printf("Have Discovery %d\n",results->nr);
 
 //	cw_cfg_dump(params->cfg);
 //	mlist_append_ptr(dis->results, cfg);
@@ -46,9 +45,9 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 	results = cw_discovery_results_create();
 
 	
-	min = cw_cfg_get_byte(conn->local_cfg,"capwap-timers/min-discovery-interval",
+	min = cw_cfg_get_byte(conn->global_cfg,"capwap-timers/min-discovery-interval",
 					CAPWAP_MIN_DISCOVERY_INTERVAL);
-	max = cw_cfg_get_byte(conn->local_cfg,"capwap-timers/max-discovery-interval",
+	max = cw_cfg_get_byte(conn->global_cfg,"capwap-timers/max-discovery-interval",
 					CAPWAP_MAX_DISCOVERY_INTERVAL);
 
 	delay = cw_randint(min,max);
@@ -60,15 +59,12 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 
 	conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
-	conn->remote_cfg=cw_cfg_create();
 	/* create and send a discovery request message */
 	cw_init_request(conn, CAPWAP_MSG_DISCOVERY_REQUEST);
-	cw_assemble_message(conn, conn->req_buffer);
+	cw_compose_message(conn, conn->req_buffer);
 
 
 	conn_send_msg(conn, conn->req_buffer);
-	cw_cfg_destroy(conn->remote_cfg);
-	conn->remote_cfg=NULL;
 
 
 
@@ -85,7 +81,6 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
-		cw_dbg(DBG_X,"READ NOW");
 //		conn->remote_cfg = cw_ktv_create();
 //		if (conn->remote_cfg == NULL) {
 //			cw_log_errno("Can't allocate memory for remote_cfg");

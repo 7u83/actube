@@ -310,7 +310,7 @@ static void *wtpman_main(void *arg)
 	wtpman->conn->seqnum = 0;
 	conn = wtpman->conn;
 
-	wtpman->conn->remote_cfg = cw_cfg_create();
+//	wtpman->conn->remote_cfg = cw_cfg_create();
 
 
 	if (!wtpman->dtlsmode) {
@@ -358,32 +358,6 @@ static void *wtpman_main(void *arg)
 
 
 		while (!cw_timer_timeout(timer)) {
-			if (conn->update_cfg != NULL) {
-				mavl_t tmp;
-
-
-				tmp = conn->local_cfg;
-
-/*				mavl_merge(conn->default_cfg, conn->local_cfg);*/
-/*				mavl_merge(conn->default_cfg, conn->remote_cfg);*/
-
-				conn->local_cfg = conn->update_cfg;
-
-
-
-
-
-				cw_dbg(DBG_INFO, "Updating WTP %s",
-				       sock_addr2str(&conn->addr, sock_buf));
-
-				rc = cw_send_request(conn,
-						     CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
-				mavl_merge(conn->remote_cfg, conn->update_cfg);
-
-				conn->update_cfg = NULL;
-				conn->local_cfg = tmp;
-			}
-
 
 			rc = cw_read_messages(wtpman->conn);
 			if (rc < 0) {
@@ -627,13 +601,16 @@ void wtpman_destroy(struct wtpman *wtpman)
 static void copy(struct cw_ElemHandlerParams * params)
 {
 	struct wtpman * wtpman;
+	struct cw_Conn * conn;
 	wtpman = (struct wtpman*)params->conn->data;
+	conn = (struct cw_Conn*)params->conn;
+
 
 	cw_dbg(DBG_X,"-------------  Here is the config we ve got from WTP ---------------- ");
 	cw_cfg_dump(params->cfg);
 	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
 	cw_dbg(DBG_X,"Now copying:");
-	cw_cfg_copy(params->cfg,wtpman->wtp_cfg);
+	cw_cfg_copy(params->cfg,conn->local_cfg);
 	cw_dbg(DBG_X,"Copying done.");
 }
 
@@ -647,17 +624,32 @@ static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_pt
 
 static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
+	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	char filename[200];
+
 	cw_dbg(DBG_X,"JOIN Callback");
 	copy(params);
+	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
+	sprintf(filename,"wtp-join-%s.ckv",wtpname);
+	cw_cfg_save(filename,params->cfg);
 	cw_cfg_clear(params->cfg);
 	return 0;
 }
 
 static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
+	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	char filename[200];
+
+
+	
 	cw_dbg(DBG_X,"UPDATE Callback");
 	copy(params);
-	cw_cfg_clear(params->cfg);
+
+	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
+	sprintf(filename,"wtp-status-%s.ckv",wtpname);
+	cw_cfg_save(filename,params->cfg);
+	
 	return 0;
 }
 

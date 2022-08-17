@@ -338,7 +338,7 @@ static struct cw_ElemHandler handlers[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"wtp-reboot-statistics",		/* Key */
 		cw_in_generic,				/* handler */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		wtp_reboot_statistics

@@ -39,10 +39,12 @@ int cw_read_wtp_descriptor(mavl_t cfg, struct cw_Conn *conn,
 	}
 
 	sprintf(key,"%s/%s",eh->key, "max-radios");
-	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data,1);
+//	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data,1);
+	CW_TYPE_BYTE->read(cfg,key,data,1,eh->param);
 
 	sprintf(key,"%s/%s",eh->key, CW_SKEY_RADIOS_IN_USE);
-	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data+1,1);
+//	cw_ktv_add(cfg,key,CW_TYPE_BYTE,NULL,data+1,1);
+	CW_TYPE_BYTE->read(cfg,key,data,1,eh->param);
 
 
 

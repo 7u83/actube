@@ -104,12 +104,6 @@ void cw_discovery_results_add(struct cw_DiscoveryResults *dis,
 
 		mavl_insert(dis->list,&e,NULL);
 
-		/*              cw_ktv_add(dis->prio_ip, key, CW_TYPE_SYSPTR, NULL, (uint8_t *) (&ipval),
-		   sizeof(ipval));
-		   cw_ktv_add(dis->prio_ac, key, CW_TYPE_SYSPTR, NULL, (uint8_t *)(&remote_cfg),
-		   sizeof(remote_cfg)); */
-
-//		cw_dbg(DBG_X, "KEY: %s: %s", key, ipval);
 		
 	} while (i < 255);
 	dis->nr++;

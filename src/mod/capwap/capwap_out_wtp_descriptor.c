@@ -45,7 +45,8 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
 	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
-		d+=cw_put_byte(d,val);	/*radios in use*/
+cw_dbg("WTP-DESCRIPTOR: radios in use: %d",val);	
+	d+=cw_put_byte(d,val);	/*radios in use*/
 
 /* 	d+=cw_put_encryption_capabilities_7(d,1); */
 /*	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);*/
@@ -56,17 +57,17 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_HARDWARE_VERSION, key);
 				 
 	/* software version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_SOFTWARE_VERSION, key);
 
 	/* bootloader version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_BOOTLOADER);
-	d+=cw_write_descriptor_subelem (d, params->cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  CW_SUBELEM_WTP_BOOTLOADER_VERSION, key);
 
 	len = d-dst-4;

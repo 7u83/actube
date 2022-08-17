@@ -127,6 +127,7 @@ const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def)
 	int i;
 	struct cw_Cfg_entry e, *r;
 	for(i=0; cfg[i]!=NULL; i++){
+//		cw_dbg(DBG_X,"GET_L IN: %p",cfg[i]);
 		e.key = key;
 		r = mavl_get(cfg[i], &e);
 		if (r!=NULL)
@@ -456,7 +457,6 @@ int cw_cfg_read_from_file(FILE * f, cw_Cfg_t * cfg)
 	return errs;
 }
 
-
 int cw_cfg_load(const char *filename, cw_Cfg_t * cfg)
 {
 	int errs;
@@ -469,6 +469,42 @@ int cw_cfg_load(const char *filename, cw_Cfg_t * cfg)
 	if (errs)
 		errno = EINVAL;
 	return errno;
+}
+
+int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg)
+{
+	mavliter_t it;
+	struct cw_Cfg_entry *e;
+	mavliter_init(&it, cfg);
+	mavliter_foreach(&it) {
+		int n;
+		e = mavliter_get(&it);
+		n=strlen(e->val);
+		if (n>0) 
+			n-=1;
+
+//printf("Write %s: \"%s\"   - %d %d (%02x)\n",e->key,e->val,n,isspace(e->val[n]),e->val[n]);
+		if(isspace(e->val[0]) || isspace(e->val[n]))
+			fprintf(f,"%s: \"%s\"\n", e->key, e->val);
+		else
+			fprintf(f,"%s: %s\n", e->key, e->val);
+
+		//cw_dbg(dbglevel,"%s%s :%s: %s",prefix,data->key,type->get_type_name(data), value);
+	}
+	return 0;
+}
+
+
+int cw_cfg_save(const char *filename, cw_Cfg_t *cfg)
+{
+	int rc;
+	FILE *f = fopen(filename, "wb");
+	if (!f)
+		return errno;
+	rc = cw_cfg_write_to_file(f, cfg);
+	fclose(f);
+
+	return rc;
 }
 
 
@@ -524,10 +560,12 @@ const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key)
 }
 
 
-int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, const char *def)
+int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, int def)
 {
 	struct cw_Val v;
-	const char *s = cw_cfg_get(cfg,key,def);
+	const char *s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return def;
 	CW_TYPE_BOOL->from_str(&v,s);
 	return v.val.boolean;
 }
@@ -688,19 +726,48 @@ void cw_cfg_clear(cw_Cfg_t *cfg)
 int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key)
 {
         struct cw_Cfg_entry e, *result;
-
+//cw_dbg(DBG_X,"LOOX FOR: %s",key);
         e.key=key;
         result = mavl_get_first(cfg,&e);
         if (result == NULL)
                 return 0;
+//cw_dbg(DBG_X,"BASEXXX: %s",result->key);
 
 	if (strlen(result->key)<strlen(key))
 		return 0;		
+//cw_dbg(DBG_X,"BASEXXX1: %d",strlen(key));
 	if (result->key[strlen(key)]!='/' && result->key[strlen(key)]!='.')
 		return 0;
+//cw_dbg(DBG_X,"BASEXXX2: ");
 	if (strncmp(result->key,key,strlen(key))==0)
 		return 1;
+cw_dbg(DBG_X,"BASEXXX3: ");
 
 	return 0;
+}
 
+int cw_cfg_base_exists_l(cw_Cfg_t ** cfgs, const char *key)
+{
+	int i;
+	for(i=0; cfgs[i]; i++){
+		if (cw_cfg_base_exists(cfgs[i],key))
+			return 1;
+	}
+	cw_dbg(DBG_X,"NOX EXISIS: %s in %d",key,i);
+	return 0;
+}
+
+
+
+cw_Val_t * cw_cfg_get_val_l(cw_Cfg_t ** cfgs, const char *key, const struct cw_Type *type)
+{
+	const char *s;
+	cw_Val_t * val;
+	s = cw_cfg_get_l(cfgs,key,NULL);
+	val = malloc(sizeof(cw_Val_t));
+	if (val==NULL)
+		return NULL;
+	val->type=type;
+	val->type->from_str(val,s);
+	return val;
 }

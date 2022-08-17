@@ -105,6 +105,10 @@ static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, c
 	return l;
 }
 
+static 	int bwrite(cw_Cfg_t ** cfgs, const char *key, uint8_t *dst, const void * param)
+{
+	return cw_generic_write_l(cfgs,CW_TYPE_STR,key,dst,param);
+}
 
 
 const struct cw_Type cw_type_str = {
@@ -119,6 +123,8 @@ const struct cw_Type cw_type_str = {
 	get_type_name,	/* get_type_name */
 	NULL,
 	bread,
+	bwrite,
+
 
 
 };

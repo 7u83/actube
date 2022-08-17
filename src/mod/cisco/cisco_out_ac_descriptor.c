@@ -66,11 +66,11 @@ int cisco_out_ac_descriptor(struct cw_ElemHandler * eh,
 	/* it is important to send software version first, 
 	 * because APs don't check the type */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_SOFTWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  1, key);
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
-	d+=cw_write_descriptor_subelem (d, params->conn->local_cfg,
+	d+=cw_write_descriptor_subelem (d, params->cfg_list,
                                  0, key);
  
 

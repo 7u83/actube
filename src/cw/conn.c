@@ -25,148 +25,6 @@
 #include "dtls.h"
 
 
-/**
- * Put a message to a buffer
- * This functions assumes, that a message header is
- * alread initilaized in buffer 
- * Message alements are taken fom actiondef in #conn->action
- */
-int cw_assemble_message(struct cw_Conn *conn, uint8_t * rawout)
-{
-	char details[1024];
-	uint8_t *msgptr,*dst;
-	int type;
-	struct cw_MsgData * msg;
-	struct mlistelem * elem;
-	int len,l;
-
-	/* rawout is already initialized, so we can get 
-	 * msg type from buffer */
-	msgptr = rawout + cw_get_hdr_msg_offset(rawout);
-	type = cw_get_msg_type(msgptr);
-
-	/* look for message data */
-	msg = cw_msgset_get_msgdata(conn->msgset,type);
-	if (msg == NULL){
-		cw_log(LOG_ERR,"Error: Can't create message of type %d (%s) - no definition found.",
-			type, cw_strmsg(type));
-		return CAPWAP_RESULT_MSG_UNRECOGNIZED;
-	}
-
-	if (msg->preprocess){
-		msg->preprocess(conn);
-	}
-
-	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assembling message of type %d (%s) ***", 
-			msg->type, msg->name);
-	
-	dst = msgptr+8;
-	len =0;
-	mlist_foreach(elem,msg->elements_list){
-		struct cw_ElemData * data;
-		struct cw_ElemHandler * handler;
-		struct cw_ElemHandlerParams params;
-		
-		data =  mlistelem_dataptr(elem);
-		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-		cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
-		if (handler==NULL){
-			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
-					data->proto,data->vendor,data->id);
-			continue;
-		}
-
-
-		if (handler->put == NULL){
-			if (data->mand){
-				cw_log(LOG_ERR,"Error: Can't add mandatory message element %d - %s, no put method defined",
-					handler->id, handler->name);
-				
-			}
-			continue;
-		}
-
-		params.conn=conn;
-		params.cfg=conn->remote_cfg;
-		params.cfg_list[0]=params.cfg;
-		params.cfg_list[1]=conn->local_cfg;
-		params.cfg_list[2]=conn->global_cfg;
-		params.cfg_list[3]=NULL;
-
-
-		params.msgset=conn->msgset;
-
-
-
-		params.elemdata = data;
-		params.msgdata=msg;
-		params.debug_details=details;
-		*details=0;
-
-/*		if (strcmp(handler->key,"cisco/ap-led-flash-config")==0){
-			printf("flash config\n");
-			 cisco/ap-led-flash-config/flash-enable 
-		}*/
-		
-		if (!data->mand){
-			if (!cw_cfg_base_exists(params.cfg,handler->key)){
-				cw_dbg(DBG_X,"nothing todo");
-				continue;
-			}
-		
-		}
-		l = handler->put(handler,&params,dst+len);
-
-
-	/*	if(l>0)
-			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
-	*	if (strlen(details)){
-			cw_dbg(DBG_ELEM_DETAIL,"  %s",params.debug_details);
-		}
-	*/	len += l;
-	}
-
-	cw_set_msg_elems_len(msgptr, len);
-	cw_dbg(DBG_MSG_ASSEMBLY,"*** Done assenmbling message of type %d (%s) ***", 
-			msg->type, msg->name);
-	if (type & 1) {
-		/* It's a request, so we have to set seqnum */
-		int s = conn_get_next_seqnum(conn);
-		cw_set_msg_seqnum(msgptr,s);
-	}
-
-
-	{
-	printf ("----------------------------------- redecode -----------------------------\n");
-	uint8_t *elems_ptr;
-
-	int offset = cw_get_hdr_msg_offset(rawout);
-
-	uint8_t *msg_ptr = rawout + offset;
-	int elems_len = cw_get_msg_elems_len(msg_ptr);
-	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
-	cw_Cfg_t * cfg = cw_cfg_create();
-
-	struct cw_ElemHandlerParams params;
-
-	params.cfg=cfg;
-	params.msgset=conn->msgset;
-	params.msgdata=msg;
-
-
-	cw_decode_elements( &params, elems_ptr,elems_len);
-	cw_cfg_destroy(cfg);
-
-	printf ("----------------------------------- end redecode -----------------------------\n");
-
-	}
-
-	return CAPWAP_RESULT_SUCCESS;
-
-
-}
-
-
 
 struct msg_callback{
 	int type; /**< message type */
@@ -199,6 +57,11 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->process_message=process_message;
 
 	conn->msg_callbacks = mavl_create(msg_callback_cmp,NULL,sizeof(struct msg_callback));
+
+	conn->update_cfg = cw_cfg_create();
+	cw_dbg(DBG_X,"Update CFG ist %p",conn->update_cfg);
+	conn->remote_cfg = cw_cfg_create();
+	conn->local_cfg = cw_cfg_create();
 }
 
 int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun)
@@ -464,8 +327,6 @@ int cw_in_check_generic(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * 
 static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 			    struct sockaddr *from)
 {
-	mavl_t mand_found;
-	mlist_t unrecognized;
 	struct cw_MsgData search;
 	struct cw_MsgData *message;
 	int result_code;
@@ -615,15 +476,13 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 
 
-
-	mand_found = mavl_create_conststr();
-	unrecognized = mlist_create(NULL, NULL, sizeof(uint8_t *));
-	
-
-
-
 	cw_dbg(DBG_MSG_PARSING, "*** Parsing message of type %d - (%s) ***",
 	       message->type, message->name);
+
+	memset(&params,0,sizeof(struct cw_ElemHandlerParams));
+	
+	params.mand_found = mavl_create_conststr();
+	params.unrecognized = mlist_create(NULL, NULL, sizeof(uint8_t *));
 
 	params.cfg = cw_cfg_create(); 
 	params.cfg_list[0]=params.cfg;
@@ -633,7 +492,6 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 	params.from = from;
 	params.msgdata = message;
-	params.mand_found = mand_found;
 	params.msgset=conn->msgset;
 	params.conn = conn;
 
@@ -642,13 +500,14 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	/* all message elements are processed, do now after processing
 	   by calling the "end" function for the message */
 
-	cw_check_missing_mand(message, mand_found);
+	if (params.mand_found)
+		cw_check_missing_mand(message, params.mand_found,conn->msgset->handlers_by_key);
 
 	cw_dbg(DBG_MSG_PARSING, "*** End parsing message of type %d (%s) ***",
 	       message->type, message->name);
 
-
-	mavl_destroy(mand_found);
+	if (params.mand_found)
+		mavl_destroy(params.mand_found);
 
 	if (message->postprocess) {
 		message->postprocess(&params,elems_ptr, elems_len);
@@ -662,7 +521,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		cw_cfg_clear(params.cfg);
 	}
 
-	conn->remote_cfg=params.cfg;
+//	conn->remote_cfg=params.cfg;
 
 	/* if we've got a request message, we always have to send a response message */
 	if (message->type & 1) {
@@ -693,9 +552,10 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		 */
 	}
 
-	mlist_destroy(unrecognized);
+	if (params.unrecognized)
+		mlist_destroy(params.unrecognized);
 	cw_cfg_destroy(params.cfg);
-	conn->remote_cfg=NULL;
+//	conn->remote_cfg=NULL;
 
 	return result_code;
 
@@ -955,8 +815,8 @@ void conn_destroy(struct cw_Conn * conn)
 	if (conn->local_cfg)
 		cw_cfg_destroy(conn->local_cfg);
 
-
-
+	if (conn->update_cfg)
+		cw_cfg_destroy(conn->update_cfg);
 	free(conn);
 }
 

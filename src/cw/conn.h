@@ -38,7 +38,6 @@
 
 /*#include "mbag.h"*/
 
-#include "intavltree.h"
 #include "bstr.h"
 #include "msgset.h"
 
@@ -70,13 +69,23 @@ struct cw_Conn {
 
 
 	int recv_timeout;
+
+
+	cw_Cfg_t * global_cfg;	/**< This should set the global cfg of the program
+				     which is using this conn object.
+				     Teh global_cfg has to be treated read-only. */
+
+	cw_Cfg_t * local_cfg;	/**< local_cfg contains overrides for global_cfg 
+				     wich are related to this conn object. */
 	
-	
-	mavl_t remote_cfg;
-//	mavl_t default_cfg;
+	mavl_t remote_cfg;	/**< contains the configuration we now from the 
+				     device this conn object ist connected to.
+				     Typically this is what we have got from discovery
+				     response or join response in WTP mode. 
+				     And in AC mode this contains date receive from 
+				     configuration status request.  */
+
 	mavl_t update_cfg;
-	mavl_t local_cfg;
-	mavl_t global_cfg;
 	
 	bstr16_t session_id;
 
@@ -89,9 +98,6 @@ struct cw_Conn {
 	/** Wireless Binding ID of this connection */
 	uint8_t wbid;
 
-
-	/** Counter for mandatory message elements */
-/*	struct avltree *mand;*/
 
 
 	/** Actionsdefs - this defines the possible actions for
@@ -119,10 +125,6 @@ struct cw_Conn {
 	int last_seqnum_received;
 	int last_message_id_received;
 
-
-//	struct cwmsg req_msg;
-//	struct cwmsg resp_msg;
-
 	/** Buffer for outgoing request messages */
 	uint8_t req_buffer[CONN_MAX_MSG_LENGTH];
 
@@ -141,17 +143,10 @@ struct cw_Conn {
 	int (*recv_packet) (struct cw_Conn*, uint8_t *, int);
 	int (*recv_packet_peek) (struct cw_Conn*, uint8_t *, int);
 	int (*send_packet) (struct cw_Conn*, const uint8_t *, int);
-/*
-//	int (*recv_data_packet) (struct cw_Conn*, uint8_t *,int);
-//	int (*send_data_packet) (struct cw_Conn*, const uint8_t *, int);
-*/	
-
 	int (*readfrom) (struct cw_Conn*, uint8_t *, int, struct sockaddr_storage *);
 	int (*read) (struct cw_Conn*, uint8_t *, int);
 	int (*write) (struct cw_Conn*, const uint8_t *, int);
-/*
-//	int (*write_data) (struct cw_Conn*, const uint8_t *, int);
-*/
+
 	/* optional packet queue */
 	uint8_t **q;
 	int qsize;

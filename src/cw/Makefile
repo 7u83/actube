@@ -34,7 +34,6 @@ CWSRC=\
 	cw_load_file.c\
 	cw_out_generic_with_index.c\
 	cw_out_radio_administrative_states.c\
-	cw_process_element.c\
 	cw_put_elem_radio_administrative_state.c\
 	cw_put_elem_radio_operational_state.c\
 	cw_put_image_data.c\
@@ -77,6 +76,7 @@ CWSRC=\
 #	cw_in_generic.c\
 #	cw_out_generic.c\
 #	
+#	cw_process_element.c\
 
 KTVSRC=\
 	cw_ktv_add.c\
@@ -193,7 +193,6 @@ MISCSRC=\
 	format.c\
 	format_is_utf8.c\
 	fragman.c\
-	intavltree.c\
 	md5sum.c\
 	mod.c\
 	msgset.c\
@@ -206,6 +205,7 @@ MISCSRC=\
 	message.c\
 
 
+#	intavltree.c\
 
 #	conn_q_wait_packet.c\
 #	conn_init.c\

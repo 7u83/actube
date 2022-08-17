@@ -115,7 +115,7 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 		else{
 			struct cw_Type * type;
 			type = (struct cw_Type *)stru[i].type;
-			wrlen = type->write(cfgs,stru[i].key,dst+pos,stru[i].valguard);
+			wrlen = type->write(cfgs,key,dst+pos,stru[i].valguard);
 
 
 /*			result->valguard=stru[i].valguard;
@@ -142,7 +142,6 @@ static 	int bwrite(cw_Cfg_t **cfgs, const char *key, uint8_t *dst, const void * 
 {
 	return write_struct(cfgs,param,key,dst);
 
-	cw_dbg(DBG_X,"Key: %s",key);
 	stop();
 
 /*

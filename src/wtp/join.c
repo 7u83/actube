@@ -154,10 +154,10 @@ static int run_join_d(struct cw_Conn * conn, struct sockaddr *sa,cw_Cfg_t * cfg)
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
 	       sock_addr2str(sa,addrstr));
 
-	conn->remote_cfg=cfg;
-	run_join(conn);
-	conn->remote_cfg=NULL;
-	return 1;
+//	conn->remote_cfg=cfg;
+	rc = run_join(conn);
+//	conn->remote_cfg=NULL;
+	return rc;
 }
 
 
@@ -214,53 +214,16 @@ int join(struct cw_Conn * conn, struct cw_DiscoveryResults * results)
 
 		sock_strtoaddr(e->ip,(struct sockaddr*)(&sockaddr));
 		sock_setport((struct sockaddr*)&sockaddr,5246);
+
+		cw_cfg_clear(conn->remote_cfg);
+		cw_cfg_copy(e->cfg,conn->remote_cfg);
 		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr),e->cfg);
 		if (rc)
 			return 1;
 
 
+
 	}
 
-	stop();
-/*
-	mavliter_t ii;
-	mavliter_init(&ii,dis->prio_ip);
-
-	mavliter_foreach(&ii){
-		int rc;
-		cw_Val_t * val,*ac;
-		mavl_t rcfg;
-		char * rk;
-		char ipstr[100];
-		char ac_name[CAPWAP_MAX_AC_NAME_LEN];
-		struct sockaddr_storage sockaddr;
-		
-		val = mavliter_get(&ii);
-		rk = val->key;
-		val = val->val.ptr;
-		val->type->to_str(val, ipstr, 100);
-		
-		rcfg = cw_ktv_get_sysptr(dis->prio_ac,rk,NULL);
-		
-		ac=cw_ktv_get(rcfg,"ac-name",CW_TYPE_BSTR16);
-		if (ac != NULL){
-			ac->type->to_str(ac,ac_name,sizeof(ac_name));
-		}
-		else{
-			strcpy(ac_name,"");
-		}
-		
-		
-		cw_dbg(DBG_INFO, "Going to join CAPWAP controller '%s' at %s.",ac_name,ipstr);
-		
-		conn->remote_cfg=rcfg;
-
-		sock_strtoaddr(ipstr,(struct sockaddr*)(&sockaddr));
-		sock_setport((struct sockaddr*)&sockaddr,5246);
-		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr));
-		if (rc)
-			return 1;
-
-	}*/
 	return 0;
 }

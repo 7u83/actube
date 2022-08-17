@@ -4,6 +4,7 @@
 #include "cw/mlist.h"
 #include "mavl.h"
 #include "cw/mod.h"
+#include "cw/dbg.h"
 
 #include "discovery_cache.h"
 struct cw_DiscoveryCacheElem{
@@ -108,15 +109,25 @@ errX:
 void discovery_cache_add(struct cw_DiscoveryCache *cache, 
 	struct sockaddr * addr, struct cw_Mod  * mod_capwap, struct cw_Mod * mod_bindings)
 {
+
+	{
+		cw_dbg(DBG_X,"//////////////////////////   ADDD CAHCE ///////////////////////");
+		char str[128];
+	sock_addrtostr(addr,str,128,1);
+	printf("Add addr: %s\n",str);
+	}
+
 	struct cw_DiscoveryCacheElem * cur = cache->queue+cache->qpos;
 	if (cur->cmod!=NULL){
 		/* delete here */
+
+		cw_dbg(DBG_X,"DOIN MAVL DEL ----- ///////////");
+
 		void * ptr = &cur;
 		mavl_del(cache->byaddr,ptr);
-		mavl_del(cache->byaddr,ptr);
-
+		mavl_del(cache->byaddrp,ptr);
 	}
-	
+
 	cur->cmod=mod_capwap;
 	cur->bmod=mod_bindings;
 	sock_copyaddr(&cur->addr,addr);
@@ -144,9 +155,24 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 	sock_copyaddr(&search.addr,addr);
 	search.ctrhi=search.ctrlo=0;
 	
+	{
+	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- GET ENTER");
+	char str[128];
+	sock_addrtostr(addr,str,128,1);
+	printf("Add addr: %s\n",str);
+	}
+
 	search_ptr = &search;
 	result = mavl_get(cache->byaddrp ,&search_ptr);
 	if (result != NULL){
+		{
+		cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- FOUND 1 with Port");
+		char str[128];
+		sock_addrtostr(addr,str,128,1);
+		printf("Add addr: %s\n",str);
+		}
+
+
 		elem = *result;
 		if (elem != NULL){
 			mavl_del(cache->byaddr,result);
@@ -166,14 +192,37 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 	result = mavl_get_first(cache->byaddr, &search_ptr);
 	if (result == NULL)
 		return 0;
+	{
+	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- DOUND BY ADDR");
+	char str[128];
+	sock_addrtostr(addr,str,128,1);
+	printf("Add addr: %s\n",str);
+	}
+
 
 	elem = *result;
 	if (elem != NULL){
+		cw_dbg(DBG_X,"elem != NULL");
+		
+	{
+	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- DOUND BY ADDR");
+	char str[128];
+	sock_addrtostr(&elem->addr,str,128,1);
+	printf("ELEM addr: %s\n",str);
+	}
+
+
+		
+
+
 		if (sock_cmpaddr((struct sockaddr*)&elem->addr,addr,0)!=0)
 			return 0;
 			
-		mavl_del(cache->byaddr,result);
-		mavl_del(cache->byaddrp,result);
+		cw_dbg(DBG_X,"DOIN MAVL DEL HERO ----- ///////////");
+		mavl_del(cache->byaddr,&elem);
+		cw_dbg(DBG_X,"DOIN MAVL DEL HERXXXXXXO ----- ///////////");
+		mavl_del(cache->byaddrp,&elem);
+		cw_dbg(DBG_X,"DOIN MAVL DEL HERO 0000 ----- ///////////");
 		
 		*modcapwap=elem->cmod;
 		*modbindings=elem->bmod;

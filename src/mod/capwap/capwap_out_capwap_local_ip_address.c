@@ -11,7 +11,7 @@ int capwap_out_capwap_local_ip_address(struct cw_ElemHandler * eh,
 	memset(&ip,0,sizeof(cw_Val_t));
 	ip.type=CW_TYPE_IPADDRESS;
 
-	ipstr = cw_cfg_get(params->cfg,eh->key,NULL);
+	ipstr = cw_cfg_get_l(params->cfg_list,eh->key,NULL);
 	if (ipstr==NULL){
 		return 0;
 	}

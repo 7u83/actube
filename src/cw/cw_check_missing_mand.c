@@ -3,7 +3,7 @@
 #include "dbg.h"
 #include "log.h"
 
-int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys )
+int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys, mavl_t handlers_by_key )
 {
 	mlistelem_t * elem;
 	char *mandkey, *result;
@@ -26,7 +26,22 @@ int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys )
 	}
 	
 	mlist_foreach(elem,missing){
-		cw_dbg(DBG_RFC,"     Missing mandatory message element: %s", mlistelem_get_str(elem));
+		const char * str;
+		struct cw_ElemHandler search, *result;
+
+		str = mlistelem_get_str(elem);
+
+		search.key = str;
+		result = mavl_get(handlers_by_key,&search);
+		if (result == NULL){
+			cw_log(LOG_ERR,"Can't find handler for for key %s",str);
+		} 
+		else {
+			cw_dbg(DBG_RFC,"Missing mandatory message element: %s: %d - %s", 
+					str,result->id, result->name);
+		}
+
+
 	}
 
 	count = missing->count;

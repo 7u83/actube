@@ -145,7 +145,6 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 1200;
 	conn->msgset=msgset;
 	conn->global_cfg = global_cfg;
-	conn->local_cfg = cw_cfg_create();
 	//conn->remote_cfg = cw_cfg_create();
 	
 	conn->role = CW_ROLE_WTP;
@@ -183,17 +182,19 @@ int main (int argc, char **argv)
 	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 
 //	mavl_del_all(conn->remote_cfg);
-	join(conn,results);
-
-	cw_discovery_results_destroy(results);
-
-	
-printf("JOIN CONF\n");	
-	rc = 0;
-	printf("Goto errx 0");
-	goto errX;
+	if (!join(conn,results)){
+		cw_discovery_results_destroy(results); 
+		goto errX;
+	}
 
 	configure(conn);
+
+	cw_discovery_results_destroy(results); 
+	rc = 0;
+	printf("Goto errx 0\n");
+	goto errX;
+
+	
 	clean_cfg(conn->remote_cfg);
 	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	

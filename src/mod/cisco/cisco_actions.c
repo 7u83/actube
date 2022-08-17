@@ -110,8 +110,8 @@ static cw_ValStruct_t cisco_ap_led_state_config73[] = {
 };
 
 static cw_ValEnum_t cisco_ap_telnet_ssh_enum[] ={
-	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic, NULL },
-	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic, NULL },
+	{0,	"telnet",	CW_TYPE_BOOL, cw_in_generic, cw_out_generic },
+	{1,	"ssh",		CW_TYPE_BOOL, cw_in_generic, cw_out_generic },
 	{0,0,0,0}
 };
 
@@ -119,8 +119,7 @@ static cw_ValIndexed_t cisco_ap_telnet_ssh = {
 	1,cisco_ap_telnet_ssh_enum
 };
 
-static cw_ValStruct_t cisco_multi_domain_cabability[]={
-	{CW_TYPE_BYTE,		"radio-id",		1,	-1},
+static cw_ValStruct_t cisco_multi_domain_capability[]={
 	{CW_TYPE_BYTE,		"reserved",		1,	-1},
 	{CW_TYPE_WORD,		"first-channel",	2,	-1},
 	{CW_TYPE_WORD,		"number-of-channels",	2,	-1},
@@ -192,7 +191,6 @@ static cw_ValStruct_t cisco_ap_regulatory_domain5[]={
 
 
 static cw_ValStruct_t cisco_mac_operation70[]={
-	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"rts-threshold",2,-1},
 	{CW_TYPE_BYTE,"short-retry",1,-1},
@@ -254,24 +252,23 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	char testkey[CW_CFG_MAX_KEY_LEN];
 	int idx;
 	void * type;
-	cw_Val_t * result, search;
+	cw_Val_t * result;
 	int len,start;
 	uint8_t * ob;
 
 
-	stop();
 
 	idx = 0;
 	ob = dst;
 	
-	stop();
 
 	type = NULL;
-	result = cw_ktv_get(params->cfg,"ac-descriptor/software/version",CW_TYPE_BSTR16);
+	result = cw_cfg_get_val_l(params->cfg_list,"wtp-descriptor/software/version",CW_TYPE_BSTR16);
 	if (result!=NULL){
 		if(result->type->len(result)==4){
 			uint32_t rv;
 			rv = cw_get_dword(result->type->data(result));
+cw_dbg(DBG_X,"Version is %08X",rv);			
 			if (rv >= 0x07056600){
 				type = cisco_ap_regulatory_domain5;
 			}
@@ -281,32 +278,33 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		}
 		
 	}
+	else {
+		stop();
+	}
 
+	cw_val_destroy(result);
 
 	do {
 		sprintf(key,"%s.%d",eh->key,idx);
-		search.key=key;
-		result = mavl_get_first(params->cfg,&search);
-		if (result==NULL)
+		if (!cw_cfg_base_exists_l(params->cfg_list,key))
 			break;
-		if (strncmp(result->key,key,strlen(key))!=0)
-			break;
-		
+	
 		if(type == NULL){
 			sprintf(testkey,"%s/%s",key,"band-id");
 			stop();
-			result = cw_ktv_get(params->cfg,key,CW_TYPE_BYTE);
+			result = cw_ktv_get_val_l(params->cfg_list,key,CW_TYPE_BYTE);
 			if (result==NULL){
 				type = cisco_ap_regulatory_domain4;
 			}
 			else{
 				type = cisco_ap_regulatory_domain5;
+				cw_val_destroy(result);
 			}
 		}
 		
 		start = params->msgset->header_len(eh);
-		stop();
-		len = cw_ktv_write_struct(params->cfg,NULL,type,key,ob+start);
+		len = CW_TYPE_STRUCT->write(params->cfg_list,key,ob+start,type);
+//		len = cw_ktv_write_struct(params->cfg,NULL,type,key,ob+start);
 		ob += params->msgset->write_header(eh,ob,len);
 		
 		idx++;
@@ -349,7 +347,6 @@ static cw_ValStruct_t cisco_antenna_payload70[]={
 
 
 static cw_ValStruct_t cisco_wtp_radio_config70[]={
-	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_BYTE,"cfg-type",1,-1},
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
@@ -401,7 +398,6 @@ static cw_ValStruct_t cisco_wtp_radio_config75[]={
 
 
 static cw_ValStruct_t cisco_tx_power[]={
-	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_BYTE,"reserved",1,-1},
 	{CW_TYPE_WORD,"current-tx-power",2,-1},
 	{NULL,NULL,0,0}
@@ -578,6 +574,7 @@ static int cw_mkradiokey(const char *pkey, uint8_t*data, int len, char *dst)
 	return 1;
 }
 
+/*
 static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
 {
 	int wlan_id,radio_id;
@@ -587,7 +584,7 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 	sprintf(dst,"radio.%d/wlan.%d/add-wlan",radio_id,wlan_id);
 	return 1;
 }
-
+*/
 
 static int cisoc_add_wlan_mkkey70(const char *pkey, uint8_t*data, int len, char *dst)
 {
@@ -831,7 +828,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_DWORD,					/* type */
 		"wtp-radio-information",			/* Key */
 		cw_in_radio_generic,				/* get */
-		cisco_out_radio_generic				/* put */
+		cw_out_radio_generic				/* put */
 	}
 	,
 	{ 
@@ -958,7 +955,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/loghost-config",			/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		cisco_loghost_config,			/* type */
@@ -1009,11 +1006,11 @@ static struct cw_ElemHandler handlers70[] = {
 		8,8,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/multi-domain-capability",	/* Key */
-		cw_in_generic,				/* get */
-		NULL,					/* put */
-		cw_mkradiokey,
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,			/* put */
 		NULL,
-		cisco_multi_domain_cabability,
+		NULL,
+		cisco_multi_domain_capability,
 			
 	}
 	,
@@ -1080,7 +1077,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/ap-mode-and-type",		/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		cisco_ap_mode_and_type,
@@ -1166,7 +1163,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/ap-model",			/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		cisco_ap_model,
@@ -1191,9 +1188,9 @@ static struct cw_ElemHandler handlers70[] = {
 		25,25,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/wtp-radio-config",		/* Key */
-		cw_in_generic,				/* get */
-		cw_out_generic,				/* put */
-		cw_mkradiokey,
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
 		NULL,
 		cisco_wtp_radio_config70,
 
@@ -1253,9 +1250,9 @@ static struct cw_ElemHandler handlers70[] = {
 		16,16,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/mac-operation",			/* Key */
-		cw_in_generic,				/* get */
-		cw_out_radio_generic_struct,		/* put */
-		cw_mkradiokey,
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
 		NULL,
 		cisco_mac_operation70,		
 
@@ -1269,9 +1266,9 @@ static struct cw_ElemHandler handlers70[] = {
 		4,4,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/tx-power",			/* Key */
-		cw_in_generic,				/* get */
-		cw_out_radio_generic_struct,		/* put */
-		cw_mkradiokey,
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
 		NULL,
 		cisco_tx_power,
 
@@ -1284,9 +1281,9 @@ static struct cw_ElemHandler handlers70[] = {
 		5,150,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"cisco/tx-power-levels",		/* Key */
-		cw_in_generic,				/* get */
+		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic,			/* put */
-		cw_mkradiokey,
+		NULL,
 		NULL,
 
 
@@ -1656,7 +1653,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/cisco-discovery-protocol",	/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic_struct,			/* put */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		cisco_discovery_protocol,
@@ -2362,11 +2359,15 @@ static int preprocess_join_request(struct cw_Conn *conn)
 	use_ac_version = cw_cfg_get_bool(conn->global_cfg,"cisco/wtp-use-ac-version",0);
 	if (use_ac_version){
 		ver = cw_cfg_get_bstr16(conn->remote_cfg,"ac-descriptor/software/version",NULL );
-		cw_cfg_set_bstr16(conn->local_cfg,"wtp-descriptor/software/version",ver);
-			
-		cw_format_version(verstr,bstr16_data(ver),bstr16_len(ver));
-		cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
-		free(ver);
+		if (ver != NULL){
+			cw_cfg_set_bstr16(conn->local_cfg,"wtp-descriptor/software/version",ver);
+			cw_format_version(verstr,bstr16_data(ver),bstr16_len(ver));
+			cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
+			free(ver);
+		}
+		else{
+			cw_dbg(DBG_X,"No version defined");
+		}
 
 	}
 

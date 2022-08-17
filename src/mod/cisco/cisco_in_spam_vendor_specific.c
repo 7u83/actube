@@ -25,5 +25,5 @@ int cisco_in_spam_vendor_specific(struct cw_ElemHandler *eh,
 
 	}
 
-	return cw_process_element(params,CW_PROTO_LWAPP,vendor_id,elem_id,data+6,len-6);
+	return cw_decode_element(params,CW_PROTO_LWAPP,vendor_id,elem_id,data+6,len-6);
 }

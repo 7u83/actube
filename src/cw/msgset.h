@@ -30,6 +30,7 @@ struct cw_ElemHandlerParams {
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
 	mavl_t mand_found;
+	mlist_t unrecognized;
 //	cw_Val_t * elem;
 	char * debug_details;
 	cw_Cfg_t * cfg;

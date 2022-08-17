@@ -21,6 +21,7 @@
 #include "format.h"
 #include "cw.h"
 #include "val.h"
+#include "dbg.h"
 
 
 static void del ( struct cw_Val * data )
