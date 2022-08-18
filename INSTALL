@@ -20,8 +20,6 @@ apt-get install build-essential clang
 apt-get install nettle-dev
 apt-get install libgnutls28-dev
 apt-get install libssl-dev
-apt-get install libconfuse-dev
-apt-get install libsqlite3-dev
 
 
 
