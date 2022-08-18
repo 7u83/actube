@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="1.1.0a"
+VERSION="1.2.0"
 
 wget -O libmavl-${VERSION}.tgz ftp://ftp.planix.org/pub/planix/libmavl-${VERSION}.tgz
 tar xzvf libmavl-${VERSION}.tgz
