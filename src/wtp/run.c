@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <string.h>
 
+#include "cw/cw.h"
 #include "cw/capwap.h"
 #include "cw/conn.h"
 #include "cw/radioinfo.h"
@@ -149,7 +150,7 @@ int run(struct cw_Conn * conn)
 
 	do {
 
-		int echo_interval = cw_ktv_get_byte(conn->local_cfg,"capwap-timers/echo-interval",CAPWAP_ECHO_INTERVAL);
+		int echo_interval = cw_cfg_get_byte(conn->global_cfg,"capwap-timers/echo-interval",CAPWAP_ECHO_INTERVAL);
 		
 		/*mbag_get_word(conn->config,CW_ITEM_CAPWAP_TIMERS,CW_TIMERS)&0xff;*/
 		
@@ -173,12 +174,12 @@ printf("---------------------- cwrsult is not ok\n");
 			}
 
 printf("lalalala\n");			
-cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:", "DUMP done -------");
+//cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:", "DUMP done -------");
 
-			printf("Saving Config\n");
-			mavl_merge(conn->local_cfg,conn->remote_cfg);
-			cw_ktv_save(conn->local_cfg,"cisco.ktv");
-			clean_cfg(conn->remote_cfg);
+//			printf("Saving Config\n");
+//			mavl_merge(conn->local_cfg,conn->remote_cfg);
+//			cw_ktv_save(conn->local_cfg,"cisco.ktv");
+//			clean_cfg(conn->remote_cfg);
 			
 			cw_dbg(DBG_X,"We hav a message processed");
 			update=1;

@@ -1552,19 +1552,19 @@ static struct cw_ElemHandler handlers70[] = {
 	}
 	,
 
-	{ 
-		"Add Cisco WLAN",			/* name */
-		CISCO_ELEM_ADD_WLAN,			/* Element ID */
-		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		7,1117,					/* min/max length */
-		cisco_add_wlan70,			/* type */
-		"radio/wlan/add-wlan",			/* Key */
-		cw_in_generic_struct,			/* get */
-		cw_out_traverse,			/* put */
-		cisoc_add_wlan_mkkey70,
-		cisco_patch_add_wlan70
-	}
-	,
+//	{ 
+//		"Add Cisco WLAN",			/* name */
+///		CISCO_ELEM_ADD_WLAN,			/* Element ID */
+///		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+///		7,1117,					/* min/max length */
+//		cisco_add_wlan70,			/* type */
+//		"radio/wlan/add-wlan",			/* Key */
+///		cw_in_generic_struct,			/* get */
+//		cw_out_traverse,			/* put */
+//		cisoc_add_wlan_mkkey70,
+//		cisco_patch_add_wlan70
+//	}
+//	,
 	
 	{ 
 		"Add Cisco WLAN (LWAPP)",		/* name */
@@ -1639,10 +1639,14 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_LWELEM_HARDWARE_INFO,		/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		17,417,					/* min/max length */
-		cisco_hardware_info,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/hardware-info",			/* Key */
-		cw_in_generic_struct,			/* get */
-		cw_out_generic_struct			/* put */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		cisco_hardware_info,
+
 	},
 
 	{ 
@@ -1692,10 +1696,13 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_ELEM_80211_ASSOC_LIMIT,			/* Element ID */
 		CW_VENDOR_ID_CISCO, 0,						/* Vendor / Proto */
 		4, 4,						/* min/max length */
-		cisco_80211_assoc_limit,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco-8011-assoc-limit",			/* Key */
-		cw_in_generic_struct,				/* get */
-		cw_out_generic_struct				/* put */
+		cw_in_generic,					/* get */
+		cw_out_generic,					/* put */
+		NULL,
+		NULL,
+		cisco_80211_assoc_limit
 	}
 	,
 

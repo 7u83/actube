@@ -190,19 +190,19 @@ int main (int argc, char **argv)
 	configure(conn);
 
 	cw_discovery_results_destroy(results); 
-	rc = 0;
-	printf("Goto errx 0\n");
-	goto errX;
-
 	
-	clean_cfg(conn->remote_cfg);
-	mavl_merge(conn->local_cfg,conn->remote_cfg);
+//	clean_cfg(conn->remote_cfg);
+//	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
 	
 	changestate(conn);
 	
 	
 	run(conn);
+	rc = 0;
+	printf("Goto errx 0\n");
+	goto errX;
+
 	
 //	cw_discovery_free_results(&dis);
 

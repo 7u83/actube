@@ -1,6 +1,7 @@
 #include "cw/capwap.h"
 
 #include "cw/conn.h"
+#include "cw/dbg.h"
 
 
 #include "wtp_interface.h"
@@ -16,6 +17,7 @@ int changestate(struct conn * conn)
 
 /*//	mbag_set_dword(conn->outgoing,CW_ITEM_RESULT_CODE,0);*/
 
+	cw_dbg(DBG_X,"CHANGE STATE");
 	
 	/* Change State ... */
 	int rc = cw_send_request(conn,CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST);
