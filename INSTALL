@@ -8,7 +8,6 @@ pre-requisites to build actube
 On FreeBSD 10.2
 ----------------
 
-pkg install libconfuse
 pkg install wget
 pkg install libnettle
 
@@ -18,7 +17,6 @@ Ubuntu 14.04
 
 apt-get install build-essential clang
 apt-get install nettle-dev
-apt-get install libgnutls28-dev
 apt-get install libssl-dev
 
 
@@ -29,10 +27,7 @@ pre-requisites to build wtp
 Ubuntu 14.04
 ------------
 
-apt-get install cmake
 apt-get install libnl-genl-3-dev
-cd src/contrib
-sudo ./install_libuci.sh
 
 
 

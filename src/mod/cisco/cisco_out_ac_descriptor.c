@@ -15,7 +15,7 @@
 static int put_ac_status(cw_Cfg_t * cfg1, cw_Cfg_t * cfg2, uint8_t *dst, const char * parent_key){
 
 	uint8_t *d = dst;
-	uint8_t security;
+//	uint8_t security;
 	
 	char key[CW_CFG_MAX_KEY_LEN];
 	
