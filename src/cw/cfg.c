@@ -495,12 +495,18 @@ int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg)
 }
 
 
-int cw_cfg_save(const char *filename, cw_Cfg_t *cfg)
+int cw_cfg_save(const char *filename, cw_Cfg_t *cfg, const char *format, ...)
 {
 	int rc;
 	FILE *f = fopen(filename, "wb");
 	if (!f)
 		return errno;
+	if (format !=NULL){
+		va_list args;
+		va_start(args,format);
+		vfprintf(f,format,args);
+		va_end(args);
+	}
 	rc = cw_cfg_write_to_file(f, cfg);
 	fclose(f);
 
@@ -519,7 +525,7 @@ void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base)
 }
 
 
-const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key)
+struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey)
 {
 	struct cw_Cfg_entry *e;
 	int bl, kl;
@@ -541,7 +547,7 @@ const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key)
 			return NULL;
 		else {
 			mavliter_next(&(cfi->it));
-			return e->val;
+			return e;
 		}
 
 	}
@@ -556,7 +562,7 @@ const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key)
 		return NULL;
 
 	mavliter_next(&(cfi->it));
-	return e->val;
+	return e;
 }
 
 
@@ -686,22 +692,45 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 		int exists;
 		struct cw_Cfg_entry * old_elem,*e, new_elem;
 
+
 		e = mavliter_get(&it);
 		new_elem.key = cw_strdup(e->key);
 		new_elem.val = cw_strdup(e->val);
 
+/*		if (1){
+			const char *ov;
+			ov = cw_cfg_get(dst,e->key,NULL);
+			cw_dbg(DBG_X, "   REAL OV HERE: %s",ov);
+		}
+*/
+
+
 		old_elem = mavl_insert(dst,&new_elem,&exists);
+
+/*		cw_dbg(DBG_X, "CPY: %s: %s -> %s [%d]",new_elem.key,new_elem.val,old_elem->val,exists);
+		if (exists){
+			const char *ov;
+			ov = cw_cfg_get(dst,e->key,NULL);
+			cw_dbg(DBG_X, "   OV HERE: %s",ov);
+		}
+*/
+		
 		if (!exists){
-			cw_dbg(DBG_X, "New: %s: %s",new_elem.key,new_elem.val);
+
+
+			cw_dbg(DBG_CFG_SET, "New: %s: %s",new_elem.key,new_elem.val);
 			continue;
 		}
+
+
+
 		if (strcmp(new_elem.val,old_elem->val)==0){
 			free((void*)new_elem.key);
 			free((void*)new_elem.val);
 			continue;
 		}
 
-		cw_dbg(DBG_X, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
+		cw_dbg(DBG_CFG_SET, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
 		if(dst->del){
 			dst->del(old_elem);
 		}
@@ -753,7 +782,7 @@ int cw_cfg_base_exists_l(cw_Cfg_t ** cfgs, const char *key)
 		if (cw_cfg_base_exists(cfgs[i],key))
 			return 1;
 	}
-	cw_dbg(DBG_X,"NOX EXISIS: %s in %d",key,i);
+//	cw_dbg(DBG_X,"NOX EXISIS: %s in %d",key,i);
 	return 0;
 }
 

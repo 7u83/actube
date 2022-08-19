@@ -58,9 +58,9 @@ static cw_ValStruct_t radio_operational_state[] = {
 
 
 static cw_ValValRange_t radio_admin_state_valguard[]={
-	{0,0,"reserved"},
-	{1,1,"enabled"},
-	{2,2,"disabled"},
+	{0,0,"0 - reserved"},
+	{1,1,"1 - enabled"},
+	{2,2,"2 - disabled"},
 	{0,0,NULL}
 };
 

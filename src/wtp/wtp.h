@@ -21,4 +21,16 @@ int join(struct cw_Conn * conn, struct cw_DiscoveryResults * dis);
 
 struct cw_Conn * get_conn();
 
+
+#define MAX_MODS 32
+struct bootcfg{
+	const char * modnames[MAX_MODS];
+	int nmods;
+	const char * modpath;
+	const char * cfgfilename;
+};
+
+extern struct bootcfg bootcfg;
+
+
 #endif

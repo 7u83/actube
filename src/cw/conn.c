@@ -59,7 +59,6 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->msg_callbacks = mavl_create(msg_callback_cmp,NULL,sizeof(struct msg_callback));
 
 	conn->update_cfg = cw_cfg_create();
-	cw_dbg(DBG_X,"Update CFG ist %p",conn->update_cfg);
 	conn->remote_cfg = cw_cfg_create();
 	conn->local_cfg = cw_cfg_create();
 }

@@ -282,6 +282,7 @@ int ac_run(cw_Cfg_t * cfg)
 {
         struct cw_Cfg_iter cfi;
 	const char *s;
+	struct cw_Cfg_entry *e;
 	int i;
 
 
@@ -292,11 +293,12 @@ int ac_run(cw_Cfg_t * cfg)
 	 * good unicast reply socket */
 	
         cw_cfg_iter_init(cfg, &cfi, "actube/listen");
-        for (i=0; (s = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+        for (i=0; (e = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
 
 		char addr[100];
 		char port[50];
 		int proto;
+		s=e->val;
 		
 		conf_parse_listen_addr (s, addr, port, &proto);
 		socklist_add_unicast (addr, port, proto,
@@ -337,11 +339,12 @@ int ac_run(cw_Cfg_t * cfg)
         //mavl_print(cfg,pcb,180);
 
         cw_cfg_iter_init(cfg, &cfi, "actube/bcast");
-        for (i=0; (s = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+        for (i=0; (e = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
 //	for (i = 0; i < conf_bcast_addrs_len; i++) {
 	
 		char addr[50], port[50];
 		int proto;
+		s=e->val;
 		conf_parse_listen_addr (s, addr, port, &proto);
 		
 		socklist_add_broadcast (addr, port, proto);

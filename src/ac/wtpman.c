@@ -631,7 +631,7 @@ static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, in
 	copy(params);
 	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
 	sprintf(filename,"wtp-join-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg);
+	cw_cfg_save(filename,params->cfg,NULL);
 	cw_cfg_clear(params->cfg);
 	return 0;
 }
@@ -648,8 +648,8 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 
 	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
 	sprintf(filename,"wtp-status-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg);
-	
+	cw_cfg_save(filename,params->cfg,NULL);
+stop();	
 	return 0;
 }
 

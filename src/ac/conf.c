@@ -498,6 +498,7 @@ char *conf_mods_dir = NULL;
 static int init_mods(cw_Cfg_t *cfg){
 
 	int n, i;
+	struct cw_Cfg_entry *e;
 	const char * modname;
 
 	struct cw_Cfg_iter cfi;
@@ -511,11 +512,8 @@ static int init_mods(cw_Cfg_t *cfg){
 //	cw_mod_set_path(conf_mods_dir);
 
         cw_cfg_iter_init(cfg, &cfi, "actube/mod");
-printf("iter mods\n");	
-        for (i=0; (modname = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
-
-		printf("init mod name: %s\n",modname);
-
+        for (i=0; (e = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++) {
+		modname = e->val;
 		struct cw_Mod * mod = cw_mod_load(modname, cfg, CW_ROLE_AC);
 		
 		if (!mod)

@@ -28,7 +28,7 @@ struct cw_Cfg_iter{
 
 const char * cw_cfg_get(cw_Cfg_t * cfg, const char *key, const char *def);
 
-const char *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key);
+struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *key);
 void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base);
 
 int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, int def);
@@ -46,7 +46,7 @@ int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key);
 uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def);
 cw_Val_t * cw_cfg_get_val_l(cw_Cfg_t ** cfgs, const char *key, const struct cw_Type *type);
 int cw_cfg_base_exists_l(cw_Cfg_t ** cfgs, const char *key);
-int cw_cfg_save(const char *filename, cw_Cfg_t *cfg);
+int cw_cfg_save(const char *filename, cw_Cfg_t *cfg, const char *format, ...);
 
 
 

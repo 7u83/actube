@@ -96,7 +96,7 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 	
 	dst = msgptr+8;
 	len =0;
-cw_dbg(DBG_X,"setting with update CFG");
+//cw_dbg(DBG_X,"setting with update CFG");
 	params.conn=conn;
 	params.cfg_list[0]=conn->update_cfg;
 	params.cfg_list[1]=conn->local_cfg;

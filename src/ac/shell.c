@@ -33,7 +33,7 @@ void set_cmd(struct shelldata *sd, const char * cmd);
 void del_cmd(struct shelldata *sd, const char * cmd);
 void send_cmd(struct shelldata *sd, const char * cmd);
 void wlan0_cmd(struct shelldata *sd, const char * cmd);
-void show_cfg (FILE *out, mavl_t ktv);
+//void show_cfg (FILE *out, mavl_t ktv);
 void show_aps (FILE *out);
 
 struct cw_Conn * find_ap(const char *name);
@@ -79,7 +79,8 @@ void cfg_cmd(struct shelldata *sd, const char *cmd)
 		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
 	}
 	else {
-		show_cfg(sd->out,conn->remote_cfg);
+		stop();
+//		show_cfg(sd->out,conn->remote_cfg);
 	}
 	wtplist_unlock();
 }
@@ -87,7 +88,8 @@ void cfg_cmd(struct shelldata *sd, const char *cmd)
 void ucfg_cmd(struct shelldata *sd, const char *cmd)
 {
 	struct cw_Conn * conn;
-	show_cfg(sd->out,sd->update_cfg);
+	stop();
+//	show_cfg(sd->out,sd->update_cfg);
 
 }
 
@@ -157,7 +159,7 @@ void del_cmd(struct shelldata *sd, const char *str)
 }
 
 
-
+/*
 void show_cfg (FILE *out, mavl_t ktv)
 {
 	char value[500];
@@ -179,10 +181,12 @@ void show_cfg (FILE *out, mavl_t ktv)
 	
 	
 }
+*/
 
 void show_aps (FILE *out)
 {
-	struct connlist * cl;
+	stop();
+/*	struct connlist * cl;
 	mavliter_t it;
 	wtplist_lock();
 	
@@ -199,8 +203,9 @@ void show_aps (FILE *out)
 		conn = mavliter_get_ptr (&it);
 		
 		sock_addr2str_p (&conn->addr, addr);
-		
-		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
+
+		stop();		
+//		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
 		
 		if (result == NULL) {
 			strcpy (wtp_name, "");
@@ -213,16 +218,18 @@ void show_aps (FILE *out)
 		fprintf (out, "%s\t\t%s\n", addr, wtp_name);
 	}
 	wtplist_unlock();
+	*/
 }
 
 
 
 struct cw_Conn * find_ap(const char *name)
 {
+stop();
+/*	
 	struct connlist * cl;
 	mavliter_t it;
 
-	/*wtplist_lock();*/
 	cl = wtplist_get_connlist();
 	
 	
@@ -250,12 +257,16 @@ struct cw_Conn * find_ap(const char *name)
 
 	}
 	return NULL;
+	*/
 	/*wtplist_unlock();*/
 }
 
 
 void con (FILE *out)
 {
+	stop();
+
+/*	
 	struct connlist * cl;
 	mavliter_t it;
 	
@@ -290,10 +301,12 @@ void con (FILE *out)
 		fprintf (out, "Con!! %s\t\t%s\n", addr, wtp_name);
 		
 		{
+			stop();
+
 			mavl_t update;
-			update = cw_ktv_create();
-			cw_ktv_set_byte(update,"radio.255/admin-state",1);
-			conn->update_cfg=update;
+//			update = cw_ktv_create();
+//			cw_ktv_set_byte(update,"radio.255/admin-state",1);
+//			conn->update_cfg=update;
 		}
 
 
@@ -301,6 +314,7 @@ void con (FILE *out)
 
 	}
 	wtplist_unlock();
+	*/
 }
 
 
@@ -355,8 +369,10 @@ void execute_cmd (struct shelldata * sd, const char *str)
 	key[0]=0;
 	type[0]=0;
 	val[0]=0;
-	cw_ktv_init_str_reader(&reader,str, strlen(str));
-	n = cw_ktv_parse_string(&reader, key,type,val);
+
+	stop();
+//	cw_ktv_init_str_reader(&reader,str, strlen(str));
+//	n = cw_ktv_parse_string(&reader, key,type,val);
 	
 	if (n==-1){
 		int i;
@@ -403,7 +419,8 @@ void shell_loop (FILE *file)
 	*/
 	
 	char str[2048];
-	sd.update_cfg = cw_ktv_create();
+	stop();
+//	sd.update_cfg = cw_ktv_create();
 	
 	
 	

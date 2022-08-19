@@ -217,6 +217,33 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 		ed.vendor = elemdef->vendor;
 		ed.mand = elemdef->mand;
 
+		/* add/delete/replace message elemeent to/from/in the elements list */
+		switch ( elemdef->op & 0xff){
+			case CW_IGNORE:
+				break;
+				continue;
+			case CW_DELETE:
+				cw_dbg(DBG_MOD, "  deleting message element %d %d %d - %s",
+				       elemdef->proto,
+				       elemdef->vendor, elemdef->id, handler->name);
+				
+				mlist_delete(msgdata->elements_list, &ed);
+				mavl_del(msgdata->elements_tree,&ed);
+				continue;
+				break;
+			case CW_APPEND:
+				mlist_append(msgdata->elements_list, &ed);
+				break;
+			default:
+			case CW_REPLACE:
+				if (mlist_replace(msgdata->elements_list, &ed)==NULL){
+					mlist_append(msgdata->elements_list, &ed);
+				}
+				break;
+		}
+
+
+
 		/* add message element to the elements tree */
 		result = mavl_replace(msgdata->elements_tree, &ed, &replaced);
 
@@ -230,23 +257,6 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
 		
-		/* add/delete/replace message elemeent to/from/in the elements list */
-		switch ( elemdef->op & 0xff){
-			case CW_IGNORE:
-				break;
-			case CW_DELETE:
-				mlist_delete(msgdata->elements_list, &ed);
-				break;
-			case CW_APPEND:
-				mlist_append(msgdata->elements_list, &ed);
-				break;
-			default:
-			case CW_REPLACE:
-				if (mlist_replace(msgdata->elements_list, &ed)==NULL){
-					mlist_append(msgdata->elements_list, &ed);
-				}
-				break;
-		}
 	}
 
 

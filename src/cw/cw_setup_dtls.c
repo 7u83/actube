@@ -10,7 +10,8 @@ static int get_psk(struct cw_Conn *conn, const char *username, uint8_t ** psk,
 	char key[CW_CFG_MAX_KEY_LEN];
 	cw_Val_t *result;
 	sprintf(key, "%s/%s", "psk", username);
-	result = cw_ktv_get(conn->local_cfg, key, CW_TYPE_BSTR16);
+	stop();
+//	result = cw_ktv_get(conn->local_cfg, key, CW_TYPE_BSTR16);
 	if (result == NULL) {
 		if (conn->dtls_psk != NULL) {
 			*psk = bstr16_data(conn->dtls_psk);

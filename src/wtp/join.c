@@ -154,10 +154,7 @@ static int run_join_d(struct cw_Conn * conn, struct sockaddr *sa,cw_Cfg_t * cfg)
 	cw_dbg(DBG_DTLS, "DTLS Connection successful established with %s",
 	       sock_addr2str(sa,addrstr));
 
-//	conn->remote_cfg=cfg;
-	rc = run_join(conn);
-//	conn->remote_cfg=NULL;
-	return rc;
+	return run_join(conn);
 }
 
 
@@ -220,8 +217,6 @@ int join(struct cw_Conn * conn, struct cw_DiscoveryResults * results)
 		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr),e->cfg);
 		if (rc)
 			return 1;
-
-
 
 	}
 

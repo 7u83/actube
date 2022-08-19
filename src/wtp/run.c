@@ -18,7 +18,7 @@
 
 
 #include "cw/timer.h"
-
+#include "wtp.h"
 
 
 #include "cw/capwap.h"
@@ -30,32 +30,20 @@
 
 int update =1;
 
-/*
-int handle_update_req(struct cw_Conn *conn, struct cw_action_in *a, uint8_t * data,
-		      int len, struct sockaddr *from)
+
+
+static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	if (a->msg_id == CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST){
-		update =1;
-
-	}
-
+	cw_dbg(DBG_X," **** Configuration Update Request Received ***");
+//	cw_cfg_dump(params->conn->global_cfg);
+	cw_cfg_copy(params->cfg, params->conn->global_cfg);
+	cw_cfg_save(bootcfg.cfgfilename, params->conn->global_cfg,
+			"#\n# This file is igenerated  by WAT\n# If you edit this, your cahnges might be overwritten\n#\n");  
+	cw_dbg(DBG_X," **** Configuration Update Request Received Saved ***");
 	return 0;
-
-	MAVLITER_DEFINE(it, conn->incomming);
-
-	mavliter_foreach(&it) {
-		mbag_item_t *item = mavliter_get(&it);
-
-
-	}
-cw_dbg(DBG_X,"Saving configuration ...");	
-		cfg_to_json();
-
-	return 0;
-
 }
 
-*/
+
 
 
 /*
@@ -88,65 +76,14 @@ static void update_radios(struct cw_Conn * conn, mbag_t result)
 }
 */
 
-static void do_update(struct cw_Conn * conn)
-{
-	int rc;
-
-	cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:", "DUMP done -------");
-
-
-
-
-
-//	if (!update)
-//		return;
-//	update=0;
-
-/*	mbag_t result = mbag_create();
-	update_radios(conn,result);
-*/	cw_dbg(DBG_INFO, "Saving configuration ...");
-/*	cfg_to_json();*/
-	/* Change State ... */
-
-
-/*	
-	rc = cw_send_request(conn,CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST);
-	if ( !cw_result_is_ok(rc) ) {
-		cw_strresult(rc);
-		return ;
-	}
-*/
-
-
-}
-
-void clean_cfg(mavl_t cfg)
-{
-	char key[CW_CFG_MAX_KEY_LEN];
-	cw_Val_t search;
-	int i;
-	int max;
-	max = cw_ktv_idx_get(cfg,"radio");
-	for (i=0;i<max+1;i++){
-		sprintf(key,"radio.%d/wtp-radio-information",i);
-		search.key = key;
-		mavl_del(cfg,&search);
-	}
-	
-	
-
-	
-}
-
 
 int run(struct cw_Conn * conn)
 {
 
 
+	cw_conn_set_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,update_cb);
 
 	conn->capwap_state = CAPWAP_STATE_RUN;
-
-/*	conn->msg_end=handle_update_req;*/
 
 	do {
 
@@ -166,14 +103,14 @@ int run(struct cw_Conn * conn)
 			if (rc < 0 && errno == EAGAIN) {
 				continue;
 			}
-printf("--------------------------------------------------------------------------------------\n");
+//printf("--------------------------------------------------------------------------------------\n");
 			
 			if ( !cw_result_is_ok(rc)) {
-printf("---------------------- cwrsult is not ok\n");				
+//printf("---------------------- cwrsult is not ok\n");				
 				break;
 			}
 
-printf("lalalala\n");			
+//printf("lalalala\n");			
 //cw_dbg_ktv_dump(conn->remote_cfg,DBG_INFO,"KTV DUMP ----------------","Remote:", "DUMP done -------");
 
 //			printf("Saving Config\n");
@@ -181,9 +118,7 @@ printf("lalalala\n");
 //			cw_ktv_save(conn->local_cfg,"cisco.ktv");
 //			clean_cfg(conn->remote_cfg);
 			
-			cw_dbg(DBG_X,"We hav a message processed");
-			update=1;
-			do_update(conn);
+//			cw_dbg(DBG_X,"We hav a message processed");
 		}
 
 		if (rc<0 && errno == EAGAIN){
@@ -217,133 +152,3 @@ printf("lalalala\n");
 
 
 
-
-
-
-
-
-/*
-static int echo_interval_timer;
-
-struct cwrmsg * get_response(struct cw_Conn * conn, int type,int seqnum)
-{
-	struct cwrmsg * cwrmsg; 
-	int i;
-	for(i=0; i<conf_retransmit_interval; i++){
-		cwrmsg = conn_get_message(conn);
-		if ( cwrmsg==0){
-			//printf("null message \n");
-			continue;
-		}
-
-		if (cwrmsg->type==type && cwrmsg->seqnum==seqnum)
-			return cwrmsg;
-		printf("another message was detected %i %i\n",cwrmsg->type,cwrmsg->seqnum);
-	}		
-	return 0;
-	
-}
-*/
-
-
-/*
-struct cwrmsg * send_request(struct cw_Conn * conn,struct cwmsg *cwmsg)
-{
-	int i;
-	for (i=0; i<conf_max_retransmit; i++){
-
-#ifdef WITH_CW_LOG_DEBUG
-		if (i>0){
-//			cw_log_debug1("Retransmitting request, type=%i,seqnum=%i",cwmsg->type,cwmsg->seqnum);
-		}
-#endif
-
-		int rc = conn_send_cwmsg(conn,cwmsg);
-		if (rc<0){
-		//	cw_log_debug1("Error sending request, type=%i, seqnum %i, %s",cwmsg->type,cwmsg->seqnum,strerror(errno));
-			return 0;
-		}
-		struct cwrmsg * r = get_response(conn,cwmsg->type+1,cwmsg->seqnum);
-		if (r)
-			return r;
-
-	}
-	return 0;
-}
-
-*/
-
-/*//extern struct cw_Conn * get_conn();*/
-
-/*
-int run(struct cw_Conn * conn)
-{
-
-	conn = get_conn();
-	printf("Running with conn %p\n");
-
-	struct radioinfo radioinfo;
-	memset(&radioinfo,0,sizeof(radioinfo));
-
-
-	struct cwrmsg * cwrmsg;
-
-	echo_interval_timer=time(NULL);
-	while (1){	
-		if (time(NULL)-echo_interval_timer >= conf_echo_interval)
-		{
-	//		struct cwmsg cwmsg;
-	//		uint8_t buffer[CWMSG_MAX_SIZE];
-
-		//	cwsend_echo_request(conn,&radioinfo);
-
-//			cw_log_debug1("Sending echo request");
-			struct cwmsg *cwmsg=&conn->req_msg;
-			uint8_t * buffer = conn->req_buffer;
-
-
-	struct wtpinfo * wtpinfo = get_wtpinfo();
-	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
-
-			cwmsg_init_echo_request(cwmsg,buffer,conn,rip);
-
-printf("Echo ->>>>>>>>>>>>>>>>>>>>> Seqnum %d\n",conn->req_msg.seqnum);
-
-
-printf("Conn target is %s",sock_addr2str(&conn->addr));
-printf("Calling conn send req\n");
-printf("conn max retrans: %d\n",conn->max_retransmit);
-			struct cwrmsg * rc = conn_send_request(conn);
-printf("Back from conn send req\n");
-
-//			printf("conn->seqnum %i\n",conn->seqnum);
-//			struct cwrmsg * rc = get_response(conn,CWMSG_ECHO_RESPONSE,conn->seqnum);		
-			if (rc==0){
-
-printf("Error !\n");
-
-//				dtls_shutdown(conn);	
-		//		cw_log_debug1("Connection lost, no echo response");
-//				return 0;
-			}
-			echo_interval_timer=time(NULL);
-		}
-
-		time_t rt = cw_timer_start(5);	
-		cwrmsg = conn_wait_for_request(conn,0,rt);
-	struct wtpinfo * wtpinfo = get_wtpinfo();
-	struct radioinfo *rip = &(wtpinfo->radioinfo[0]);
-
-		if(cwrmsg){
-			cw_readmsg_configuration_update_request(cwrmsg->msgelems,cwrmsg->msgelems_len);
-			cw_send_configuration_update_response(conn,cwrmsg->seqnum,rip);
-		}
-
-		sleep(1);
-
-	}
-	exit(0);
-}
-
-
-*/

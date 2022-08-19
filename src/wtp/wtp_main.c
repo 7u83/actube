@@ -17,14 +17,6 @@
 #include "cw/cfg.h"
 	
 
-#define MAX_MODS 32
-struct bootcfg{
-	const char * modnames[MAX_MODS];
-	int nmods;
-	const char * modpath;
-	const char * cfgfilename;
-};
-
 
 bstr_t get_base_rmac()
 {
@@ -40,7 +32,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	int c;
 	opterr = 1;
 	
-	bootcfg->cfgfilename = "config.ktv";
+	bootcfg->cfgfilename = "config.ckv";
 	
 	while ( (c = getopt (argc, argv, "p:d:vc:m:h")) != -1) {
 		
@@ -83,9 +75,12 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 
 #include "cw/rand.h"
 
+
+struct bootcfg bootcfg;
+
+
 int main (int argc, char **argv)
 {
-	struct bootcfg bootcfg;
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset=NULL;
 	struct cw_Conn * conn=NULL;
@@ -145,7 +140,6 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 1200;
 	conn->msgset=msgset;
 	conn->global_cfg = global_cfg;
-	//conn->remote_cfg = cw_cfg_create();
 	
 	conn->role = CW_ROLE_WTP;
 	conn->wbid=1;
@@ -181,7 +175,6 @@ int main (int argc, char **argv)
 //	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
 	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 
-//	mavl_del_all(conn->remote_cfg);
 	if (!join(conn,results)){
 		cw_discovery_results_destroy(results); 
 		goto errX;
@@ -191,8 +184,6 @@ int main (int argc, char **argv)
 
 	cw_discovery_results_destroy(results); 
 	
-//	clean_cfg(conn->remote_cfg);
-//	mavl_merge(conn->local_cfg,conn->remote_cfg);
 	
 	
 	changestate(conn);
