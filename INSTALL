@@ -2,9 +2,6 @@ pre-requisites to build actube
 ==============================
 
 
-
-
-
 On FreeBSD 10.2
 ----------------
 
@@ -18,6 +15,7 @@ Ubuntu 14.04
 apt-get install build-essential clang
 apt-get install nettle-dev
 apt-get install libssl-dev
+apt install bmake
 
 
 
