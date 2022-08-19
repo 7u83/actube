@@ -55,7 +55,7 @@ static int put_ac_status(cw_Cfg_t * cfg1, cw_Cfg_t * cfg2, uint8_t *dst, const c
 int cisco_out_ac_descriptor(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 {
-	int len,l;
+	int len;
 	uint8_t *d = dst+4;
 	char key[CW_CFG_MAX_KEY_LEN];
 
@@ -77,9 +77,9 @@ int cisco_out_ac_descriptor(struct cw_ElemHandler * eh,
 
 	len = d-dst-4;
 
-	l = len + cw_put_elem_hdr(dst,eh->id,len);
-	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
+	return  len + cw_put_elem_hdr(dst,eh->id,len);
+//	cw_dbg_elem(DBG_ELEM_OUT,NULL,params->msgdata->type,eh,dst,l);
 
-	return l;
+//	return l;
 
 }

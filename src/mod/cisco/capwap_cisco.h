@@ -50,6 +50,7 @@
 #define CW_CISCO_SUPPORTED_RATES		LW_ELEM_80211_RATE_SET			/* 16 */
 
 #define CISCO_ELEM_15				15					/* 15 */
+#define CISCO_ELEM_16				16					/* 16 */
 #define CISCO_ELEM_19				19					/* 19 */
 #define CISCO_ELEM_22				22					/* 22 */
 #define CISCO_ELEM_24				24					/* 24 */

@@ -20,8 +20,8 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 		handler = cw_msgset_get_elemhandler(params->msgset,data->proto,data->vendor,data->id);
 		params->elemdata = data;
 
-		cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 		if (handler==NULL){
+			cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
 					data->proto,data->vendor,data->id);
 			continue;
@@ -29,6 +29,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 		if (handler->put == NULL){
 			if (data->mand){
+				cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 				cw_log(LOG_ERR,"Error: Can't add mandatory message element %d - %s, no put method defined",
 					handler->id, handler->name);
 				
@@ -38,23 +39,20 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 		if (!data->mand){
 			if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
-//				cw_dbg(DBG_X,"nothing todo");
+				cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s - (skip)", 
+						data->proto, data->vendor, data->id, handler->name);
+
 				continue;
 			}
 		}
 
 
 		l = handler->put(handler,params,dst+len);
+		cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s - (%d bytes)", 
+				data->proto, data->vendor, data->id, handler->name,l);
 
-
-	/*	if(l>0)
-			cw_dbg_elem(DBG_ELEM_OUT,conn,type,handler,dst+len,l);
-	*	if (strlen(details)){
-			cw_dbg(DBG_ELEM_DETAIL,"  %s",params.debug_details);
-		}
-	*/	len += l;
+		len += l;
 	}
-
 
 	return len;
 }
