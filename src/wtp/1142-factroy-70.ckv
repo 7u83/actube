@@ -187,3 +187,15 @@ wtp-reboot-statistics/other-failure-count: 15
 wtp-reboot-statistics/reboot-count: 0
 wtp-reboot-statistics/sw-failure-count: 0
 wtp-reboot-statistics/unknown-failure-count: 0
+
+#
+# Local
+#
+wtp-name: Soft-WTP
+cisco/ssl-certfile: ../../ssl/certs/wtpc.crt
+cisco/ssl-cipher: SHA1
+cisco/ssl-keyfile: ../../ssl/certs/wtpc.key
+cisco/wtp-use-ac-version: true
+wtp-board-data/mac-address: .x0800276edf58
+
+
