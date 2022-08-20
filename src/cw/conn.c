@@ -474,9 +474,10 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 
-
-	cw_dbg(DBG_MSG_PARSING, "*** Parsing message of type %d - (%s) ***",
-	       message->type, message->name);
+/*	if (cw_dbg_is_level(DBG_ELEM_IN)){
+		cw_dbg(DBG_MSG_PARSING, "Parsing message of type %d - (%s)",
+		       message->type, message->name);
+	}*/
 
 	memset(&params,0,sizeof(struct cw_ElemHandlerParams));
 	
@@ -493,6 +494,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	params.msgdata = message;
 	params.msgset=conn->msgset;
 	params.conn = conn;
+	params.dbg_level = DBG_ELEM_IN;
 
 	cw_decode_elements(&params,elems_ptr, elems_len);
 
@@ -502,8 +504,8 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	if (params.mand_found)
 		cw_check_missing_mand(message, params.mand_found,conn->msgset->handlers_by_key);
 
-	cw_dbg(DBG_MSG_PARSING, "*** End parsing message of type %d (%s) ***",
-	       message->type, message->name);
+//	cw_dbg(DBG_MSG_PARSING, "*** End parsing message of type %d (%s) ***",
+//	       message->type, message->name);
 
 	if (params.mand_found)
 		mavl_destroy(params.mand_found);

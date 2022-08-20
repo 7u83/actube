@@ -166,7 +166,13 @@ static struct cw_ElemHandler handlers[] = {
 		NULL,					/* type */
 		"vendor_specific_payload",		/* Key */
 		capwap_in_vendor_specific_payload,	/* get */
-		NULL					/* put */
+		NULL,					/* put */
+		NULL,					/* mkkey*/
+		NULL,					/* patch*/
+		NULL,					/* param */
+		1					/* flags */
+
+
 	}
 	,
 	{ 

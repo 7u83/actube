@@ -79,7 +79,7 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_PKT_ERR, ANSI_RED},
 	{DBG_ELEM_ERR, ANSI_RED},
 	
-	{DBG_SUBELEM, ANSI_BBLACK},
+//	{DBG_SUBELEM, ANSI_BBLACK},
 	{DBG_DTLS, ANSI_MAGENTA ANSI_BOLD},
 	{DBG_DTLS_DETAIL, ANSI_MAGENTA},
 	{DBG_DTLS_BIO, ANSI_BMAGENTA},
@@ -94,7 +94,7 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_MOD, ANSI_WHITE},
 	{DBG_CFG_DMP, ANSI_BCYAN }, 
 	
-	
+
 	{CW_STR_STOP, ""}
 };
 
@@ -117,22 +117,22 @@ static struct cw_StrListElem color_off[] = {
 */
 
 static struct cw_StrListElem prefix[] = {
-	{DBG_INFO, " Info -"},
-	{DBG_PKT_IN, " Pkt IN -"},
-	{DBG_PKT_OUT, " Pkt Out -"},
-	{DBG_MSG_IN, " Msg IN -"},
-	{DBG_MSG_OUT, " Msg Out -"},
+	{DBG_INFO, 	"Info -"},
+	{DBG_PKT_IN, 	"Pkt IN -"},
+	{DBG_PKT_OUT, 	"Pkt Out -"},
+	{DBG_MSG_IN, 	"Msg In  - "},
+	{DBG_MSG_OUT,	"Msg Out - "},
 
-	{DBG_ELEM_IN, " Msg Element -"},
-	{DBG_ELEM_OUT, " Msg Element -"},
+	{DBG_MSG_PARSING, "" },
+	{DBG_ELEM_IN, 	"  Msg Element -"},
+	{DBG_ELEM_OUT,	"  Msg Element -"},
 	
-	{DBG_MSG_ERR, " Msg Error -"},
-	{DBG_PKT_ERR, " Pkt Error -"},
-	{DBG_ELEM_ERR, " Elem Error -"},
-	{DBG_RFC, " RFC -"},
-	{DBG_SUBELEM, " Sub-Element - "},
-	{DBG_DTLS, " DTLS - "},
-	{DBG_DTLS_DETAIL, " DTLS - "},
+	{DBG_MSG_ERR, 	"  Msg Error -"},
+	{DBG_PKT_ERR, 	"  Pkt Error -"},
+	{DBG_ELEM_ERR, 	"  Elem Error -"},
+	{DBG_RFC, 	" RFC -"},
+	{DBG_DTLS, 	"DTLS - "},
+	{DBG_DTLS_DETAIL, "DTLS - "},
 	{DBG_WARN, " Warning - "},
 	{DBG_MOD, " Mod - "},
 	{DBG_STATE, " STATEMACHINE - "},
@@ -141,6 +141,7 @@ static struct cw_StrListElem prefix[] = {
 
 
 	{DBG_X, "XXXXX - "},
+
 
 	{CW_STR_STOP, ""}
 };
@@ -183,10 +184,13 @@ const char *get_dbg_color_ontext(int level)
 
 int cw_dbg_is_level(int level)
 {
-	if (level >= DBG_ALL ){
+	if (level > 1 && (level &1))
 		return 1;
-	}
-	return (cw_dbg_opt_level & (1<<level));
+
+/*	if (level >= DBG_ALL ){
+		return 1;
+	}*/
+	return (cw_dbg_opt_level & (level));
 }
 
 
@@ -197,11 +201,11 @@ static void cw_dbg_vlog_line(struct cw_LogWriter * writer,
 	char fbuf[512];
 
 	if ( writer->colored){
-		sprintf(fbuf,"DBG: %s%s %s%s%s",
+		sprintf(fbuf,"DBG: %s%s%s%s%s",
 			prefix_color,prefix,textcolor,format,DBG_CLR_OFF);
 	}
 	else{
-		sprintf(fbuf,"DBG: %s %s",
+		sprintf(fbuf,"DBG: %s%s",
 			prefix,format);
 				
 	}
@@ -418,38 +422,6 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 	return;
 
 }
-
-
-
-void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
-		const char *header, const char *prefix, const char *footer )
-{
-	char value[500];
-	struct cw_Val * data;
-	mavliter_t it;
-	const struct cw_Type * type;
-	
-	if (header != NULL)
-		cw_dbg (dbglevel, header);
-	
-	mavliter_init(&it,ktv);
-
-	mavliter_foreach(&it){
-		
-		data = mavliter_get(&it);
-		type = data->type;
-		type->to_str(data,value,0);
-		
-		cw_dbg(dbglevel,"%s%s :%s: %s",prefix,data->key,type->get_type_name(data), value);
-	}
-	
-	if (footer != NULL)
-		cw_dbg (dbglevel, footer);
-
-}
-
-
-
 
 
 

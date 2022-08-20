@@ -51,10 +51,10 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	{ DBG_ELEM_OUT, "elem_out"},
 	{ DBG_ELEM_DMP, "elem_dmp"},
 
-	{ DBG_SUBELEM,	"subelem"},
-	{ DBG_SUBELEM_DMP, "subelem_dmp" },
+//	{ DBG_SUBELEM,	"subelem"},
+//	{ DBG_SUBELEM_DMP, "subelem_dmp" },
 	
-	{ DBG_ELEM_DETAIL, "elem_detail"},
+//	{ DBG_ELEM_DETAIL, "elem_detail"},
 
 	{ DBG_ELEM_ERR, "elem_err" },
 	
@@ -72,7 +72,13 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	
 	{ DBG_MOD,"mod"},
 	{ DBG_STATE, "state" },
+
+
+	{ (DBG_MSG_IN | DBG_MSG_OUT), "msg" },
+	{ (DBG_MSG_IN | DBG_MSG_OUT | DBG_ELEM_IN | DBG_ELEM_OUT ), "std" },
+
 	{ DBG_ALL, "all"},
+
 	
 	{ CW_STR_STOP, NULL } 
 };

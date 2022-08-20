@@ -33,6 +33,7 @@ struct cw_ElemHandlerParams {
 	mlist_t unrecognized;
 //	cw_Val_t * elem;
 	char * debug_details;
+	uint32_t dbg_level;
 	cw_Cfg_t * cfg;
 	cw_Cfg_t * cfg_list[10];
 };
@@ -57,7 +58,7 @@ struct cw_ElemHandler {
 	int (*mkkey)(const char *pkey, uint8_t*data, int len, char *dst);
 	int (*patch)(uint8_t *dst, void *data );
 	void * param;
-
+	uint8_t flags;
 };
 
 

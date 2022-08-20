@@ -159,8 +159,8 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 
 
 	{
-	printf ("----------------------------------- redecode -----------------------------\n");
-	uint8_t *elems_ptr;
+//	printf ("----------------------------------- redecode -----------------------------\n");
+/*	uint8_t *elems_ptr;
 
 	int offset = cw_get_hdr_msg_offset(rawout);
 
@@ -176,7 +176,7 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 	params.msgset=conn->msgset;
 	params.msgdata=msg;
 	params.mand_found = mavl_create_conststr();
-
+	params.dbg_level = DBG_ELEM_OUT;
 
 	cw_decode_elements( &params, elems_ptr,elems_len);
 	cw_cfg_destroy(cfg);
@@ -184,8 +184,8 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 		cw_check_missing_mand(msg, params.mand_found,conn->msgset->handlers_by_key);
 		mavl_destroy(params.mand_found);
 	}
-
-	printf ("----------------------------------- end redecode -----------------------------\n");
+*/
+//	printf ("----------------------------------- end redecode -----------------------------\n");
 
 	}
 
@@ -249,8 +249,9 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 		return -1;
 	}
 
-	cw_dbg_elem(DBG_ELEM_IN, NULL, params->msgdata->type, handler,
-		    data, len);
+	if (!handler->flags)
+		cw_dbg_elem(params->dbg_level, NULL, params->msgdata->type, handler,
+			    data, len);
 
 	if (handler->get == NULL) {
 		cw_log(LOG_ERR, "No get method defined for %d %s", handler->id,

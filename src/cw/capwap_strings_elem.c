@@ -32,7 +32,7 @@ struct cw_StrListElem capwap_strings_elem[] = {
 	{CAPWAP_ELEM_ECN_SUPPORT, "ECN Support"},
 	{CAPWAP_ELEM_IDLE_TIMEOUT, "Idle Timeout"},
 	{CW_ELEM_IMAGE_DATA, "Image Data"},
-	{CW_ELEM_IMAGE_IDENTIFIER, "Image Identifier"},
+	{CAPWAP_ELEM_IMAGE_IDENTIFIER, "Image Identifier"},
 	{CW_ELEM_IMAGE_INFORMATION, "Image Information"},
 	{CW_ELEM_INITIATE_DOWNLOAD, "Initiate Download"},
 	{CAPWAP_ELEM_LOCATION_DATA, "Location Data"},

@@ -2,21 +2,13 @@
 # This file is igenerated  by WAT
 # If you edit this, your cahnges might be overwritten
 #
-ac-name-with-index.0: 
-ac-name-with-index.1: 
-ac-name-with-index.2: 
 capwap-local-ip-address: 192.168.0.13
 capwap-timers/echo-interval: 30
 capwap-timers/max-discovery-interval: 10
 capwap/ac-name: 
-capwap/image-identifier/identifier: .x0600c704
-capwap/image-identifier/vendor-id: 4232704
 cisco-8011-assoc-limit/enable: false
 cisco-8011-assoc-limit/interval: 500
 cisco-8011-assoc-limit/limit: 25
-cisco/ac-ip-addr-with-index.0: 0.0.0.0
-cisco/ac-ip-addr-with-index.1: 0.0.0.0
-cisco/ac-ip-addr-with-index.2: 0.0.0.0
 cisco/ap-backup-software-version: .x00000000
 cisco/ap-dtls-data-cfg/cabable: true
 cisco/ap-dtls-data-cfg/enabled: false
@@ -47,18 +39,15 @@ cisco/ap-static-ip-addr/gateway: 192.168.0.1
 cisco/ap-static-ip-addr/netmask: 255.255.255.0
 cisco/ap-static-ip-addr/unknown: 0.0.0.0
 cisco/ap-sub-mode: 0
-cisco/ap-telnet-ssh/ssh: true
-cisco/ap-telnet-ssh/telnet: true
+cisco/ap-telnet-ssh/ssh: false
+cisco/ap-telnet-ssh/telnet: false
 cisco/ap-uptime/current-uptime: 84
 cisco/ap-uptime/last-uptime: 1
-cisco/ap-username-and-password/802.1x-credentials/option: 2
-cisco/ap-username-and-password/802.1x-credentials/password: 
-cisco/ap-username-and-password/802.1x-credentials/username: 
 cisco/ap-username-and-password/login-credentials/enable-password: $1$qve.$obrsuC2vFk5/TepRMiMxa.
 cisco/ap-username-and-password/login-credentials/option: 1025
 cisco/ap-username-and-password/login-credentials/password: $1$MX4t$F19wCuY8yN5jBD7g2Qutr/
 cisco/ap-username-and-password/login-credentials/username: admin
-cisco/cisco-discovery-protocol/data: 0
+cisco/cisco-discovery-protocol/data: 513
 cisco/cisco-discovery-protocol/enabled: false
 cisco/elem132: .x0100000000
 cisco/loghost-config/last-joined-ap: None
@@ -72,8 +61,8 @@ cisco/mwar-addr/address: 192.168.0.14
 cisco/mwar-addr/mwar-type: 0
 cisco/mwar-addr/unknown: 0
 cisco/reset-button-state: true
-cisco/rouge-and-mss/enable: true
-cisco/rouge-and-mss/tcp-adjust-mss: 1363
+cisco/rouge-and-mss/enable: false
+cisco/rouge-and-mss/tcp-adjust-mss: 0
 cisco/rouge-detection/rest: .x0000000a
 cisco/rouge-detection/rouge-detection: true
 cisco/sig-toogle: true
@@ -86,7 +75,7 @@ cisco/wtp-board-data/card-revision: 0
 cisco/wtp-board-data/ethernet-mac-address: .xc47d4f3af8a6
 cisco/wtp-board-data/options/ant-type: 1
 cisco/wtp-board-data/options/ap-type: 1
-cisco/wtp-board-data/options/failover-priority: 1
+cisco/wtp-board-data/options/failover-priority: 0
 cisco/wtp-board-data/options/flex-connect: 1
 cisco/wtp-board-data/wtp-model-hi: 0
 cisco/wtp-board-data/wtp-model-lo: 0
@@ -127,7 +116,6 @@ radio.0/cisco/lwelem27: .x00000000000000000000000000000000000000000000000000
 radio.0/cisco/lwelem28: .x0303020202000000000000000000000000000000000000000000313f01
 radio.0/cisco/lwelem29: .x00010000000000000200001400
 radio.0/cisco/lwelem48: .x01055a0101a6c405b06432b03232
-radio.0/cisco/lwelem55: .x000000000000000000000000
 radio.0/cisco/lwelem9: .x0100000000000000000000000000000000
 radio.0/cisco/mac-operation/fragmentation-threshold: 2346
 radio.0/cisco/mac-operation/long-retry: 4
@@ -169,7 +157,7 @@ radio.0/wlan.1/add-wlan/scan-defer-time: 100
 radio.0/wlan.1/add-wlan/session-timout: 1800
 radio.0/wlan.1/add-wlan/ssid: tubeC
 radio.0/wlan.1/add-wlan/wep-encryption: false
-radio.0/wlan.1/add-wlan/wep-key: .x038c4ffcda555c6a10126ffb70
+radio.0/wlan.1/add-wlan/wep-key: .x68f4ae11b1b5b53d3cba571b50
 radio.0/wlan.1/add-wlan/wep-key-index: 1
 radio.0/wlan.1/add-wlan/wlan-capability: 1073
 radio.0/wlan.1/add-wlan/wlan-id: 1
@@ -186,7 +174,7 @@ radio.0/wlan.13/add-wlan/scan-defer-time: 100
 radio.0/wlan.13/add-wlan/session-timout: 1800
 radio.0/wlan.13/add-wlan/ssid: SuperSSID
 radio.0/wlan.13/add-wlan/wep-encryption: false
-radio.0/wlan.13/add-wlan/wep-key: .x038c4ffcda555c6a10126ffb70
+radio.0/wlan.13/add-wlan/wep-key: .x68f4ae11b1b5b53d3cba571b50
 radio.0/wlan.13/add-wlan/wep-key-index: 1
 radio.0/wlan.13/add-wlan/wlan-capability: 1057
 radio.0/wlan.13/add-wlan/wlan-id: 13
@@ -204,7 +192,7 @@ radio.1/cisco/antenna-payload/unknown: 3
 radio.1/cisco/channel-power: .x0808102408221c16100a04fefe2808221c16100a04fefe2c08221c16100a04fefe3008221c16100a04fefe3408221c16100a04fefe3808221c16100a04fefe3c08221c16100a04fefe4008221c16100a04fefe6408221c16100a04fefe6808221c16100a04fefe6c08221c16100a04fefe7008221c16100a04fefe7408221c16100a04fefe8408221c16100a04fefe8808221c16100a04fefe8c08221c16100a04fefe
 radio.1/cisco/elem145: .x01
 radio.1/cisco/elem15/cfg-type: 1 - global
-radio.1/cisco/elem15/channel: 140
+radio.1/cisco/elem15/channel: 116
 radio.1/cisco/elem15/rest: .x07ffffffce010001
 radio.1/cisco/elem153: .x00
 radio.1/cisco/elem156: .x020100
@@ -235,7 +223,7 @@ radio.1/cisco/multi-domain-capability/number-of-channels: 4
 radio.1/cisco/multi-domain-capability/reserved: 1
 radio.1/cisco/tx-power-levels: .x070011000e000b000800050002ffff0000
 radio.1/cisco/tx-power/cfg-type: 1 - global
-radio.1/cisco/tx-power/current-tx-power: 6
+radio.1/cisco/tx-power/current-tx-power: 1
 radio.1/cisco/wtp-radio-config/beacon-period: 100
 radio.1/cisco/wtp-radio-config/bss-id: .x04fe7f499b90
 radio.1/cisco/wtp-radio-config/cfg-period: 4
@@ -262,7 +250,7 @@ radio.1/wlan.1/add-wlan/scan-defer-time: 100
 radio.1/wlan.1/add-wlan/session-timout: 1800
 radio.1/wlan.1/add-wlan/ssid: tubeC
 radio.1/wlan.1/add-wlan/wep-encryption: false
-radio.1/wlan.1/add-wlan/wep-key: .xd3f088160e08fa1438ce106965
+radio.1/wlan.1/add-wlan/wep-key: .x47067708e07287af779e30c94a
 radio.1/wlan.1/add-wlan/wep-key-index: 1
 radio.1/wlan.1/add-wlan/wlan-capability: 17
 radio.1/wlan.1/add-wlan/wlan-id: 1
@@ -279,7 +267,7 @@ radio.1/wlan.13/add-wlan/scan-defer-time: 100
 radio.1/wlan.13/add-wlan/session-timout: 1800
 radio.1/wlan.13/add-wlan/ssid: SuperSSID
 radio.1/wlan.13/add-wlan/wep-encryption: false
-radio.1/wlan.13/add-wlan/wep-key: .xd3f088160e08fa1438ce106965
+radio.1/wlan.13/add-wlan/wep-key: .x47067708e07287af779e30c94a
 radio.1/wlan.13/add-wlan/wep-key-index: 1
 radio.1/wlan.13/add-wlan/wlan-capability: 1
 radio.1/wlan.13/add-wlan/wlan-id: 13
@@ -289,7 +277,7 @@ radio.255/admin-state: 1 - enabled
 radio.255/operational-state/cause: Normal
 radio.255/operational-state/state: enabled
 session-id: .x4a230869
-statistics-timer: 2502
+statistics-timer: 180
 wtp-board-data/board-id: .x0000
 wtp-board-data/mac-address: .x0800276edf58
 wtp-board-data/model-no: "AIR-LAP1142N-E-K9   "

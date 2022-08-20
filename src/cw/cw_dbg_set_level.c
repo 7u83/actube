@@ -18,9 +18,9 @@ void cw_dbg_set_level (int level, int on)
 			break;
 		default:
 			if (on)
-				cw_dbg_opt_level |= (1 << (level));
+				cw_dbg_opt_level |= (level);
 			else 
-				cw_dbg_opt_level &= (0xffffffff) ^ (1 << (level));
+				cw_dbg_opt_level &= (0xffffffff) ^ (level);
 	}
 }
 

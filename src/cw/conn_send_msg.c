@@ -14,6 +14,41 @@ int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 	packetlen = cw_get_hdr_msg_total_len(rawmsg);
 
 	cw_dbg_msg(DBG_MSG_OUT, conn,rawmsg, packetlen,(struct sockaddr*)&conn->addr);
+	{
+	int type;
+	uint8_t *msgptr;
+	msgptr = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+	struct cw_MsgData * msg;
+	type = cw_get_msg_type(msgptr);
+	msg = cw_msgset_get_msgdata(conn->msgset,type);
+	uint8_t *elems_ptr;
+
+	int offset = cw_get_hdr_msg_offset(rawmsg);
+
+	uint8_t *msg_ptr = rawmsg + offset;
+	int elems_len = cw_get_msg_elems_len(msg_ptr);
+	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
+	cw_Cfg_t * cfg = cw_cfg_create();
+
+	struct cw_ElemHandlerParams params;
+	memset(&params,0,sizeof(struct cw_ElemHandlerParams));
+	
+	params.cfg=cfg;
+	params.msgset=conn->msgset;
+	params.msgdata=msg;
+	params.mand_found = mavl_create_conststr();
+	params.dbg_level = DBG_ELEM_OUT;
+
+	cw_decode_elements( &params, elems_ptr,elems_len);
+	cw_cfg_destroy(cfg);
+	if (params.mand_found){
+		cw_check_missing_mand(msg, params.mand_found,conn->msgset->handlers_by_key);
+		mavl_destroy(params.mand_found);
+	}
+
+	}
+
+
 
 
 	/* Zyxel doesn't count msg element length from

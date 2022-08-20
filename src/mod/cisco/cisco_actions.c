@@ -947,7 +947,11 @@ static struct cw_ElemHandler handlers70[] = {
 		NULL,					/* type */
 		"cisco_spam_vendor_specific",		/* Key */
 		cisco_in_spam_vendor_specific,		/* get */
-		NULL		/* put */
+		NULL,					/* put */
+		NULL,
+		NULL,
+		NULL,					/* param */
+		1
 	}
 	,
 	{ 
