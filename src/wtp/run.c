@@ -33,12 +33,12 @@ int update =1;
 
 static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
-	cw_dbg(DBG_X," **** Configuration Update Request Received ***");
+//	cw_dbg(DBG_X," **** Configuration Update Request Received ***");
 //	cw_cfg_dump(params->conn->global_cfg);
-	cw_cfg_copy(params->cfg, params->conn->global_cfg);
+	cw_cfg_copy(params->cfg, params->conn->global_cfg,DBG_CFG_UPDATES,"GlobalCfg");
 	cw_cfg_save(bootcfg.cfgfilename, params->conn->global_cfg,
 			"#\n# This file is igenerated  by WAT\n# If you edit this, your cahnges might be overwritten\n#\n");  
-	cw_dbg(DBG_X," **** Configuration Update Request Received Saved ***");
+//	cw_dbg(DBG_X," **** Configuration Update Request Received Saved ***");
 	return 0;
 }
 

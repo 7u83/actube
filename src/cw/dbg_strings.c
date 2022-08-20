@@ -39,12 +39,13 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	{ DBG_PKT_IN,		"pkt_in"  },
 	{ DBG_PKT_OUT,		"pkt_out" },
 	{ DBG_PKT_ERR,		"pkt_err" },
-//	{ DBG_PKT_IN_DMP,	"pkt_in_dmp" },
-//	{ DBG_PKT_IN_DMP,	"pkt_out_dmp" },
+	{ DBG_PKT_DMP_IN,	"pkt_dmp_in" },
+	{ DBG_PKT_DMP_OUT,	"pkt_dmp_out" },
 
 	{ DBG_MSG_IN,		"msg_in"  },
 	{ DBG_MSG_OUT,		"msg_out" },
-//	{ DBG_MSG_DMP,		"msg_dmp" },
+	{ DBG_MSG_DMP_IN,	"msg_dmp_in"  },
+	{ DBG_MSG_DMP_OUT,	"msg_dmp_out" },
 	
 	{ DBG_MSG_ERR,	"msg_err"},
 
@@ -54,32 +55,32 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	{ DBG_ELEM_OUT, "elem_out"},
 	{ DBG_ELEM_DMP, "elem_dmp"},
 
-//	{ DBG_SUBELEM,	"subelem"},
-//	{ DBG_SUBELEM_DMP, "subelem_dmp" },
-	
-//	{ DBG_ELEM_DETAIL, "elem_detail"},
-
 	{ DBG_ELEM_ERR, "elem_err" },
+	{ DBG_ELEM_DETAIL_IN, "elem_detail_in" },
+	{ DBG_ELEM_DETAIL_OUT, "elem_detail_out" },
 	
 	{ DBG_DTLS, "dtls" },
 	{ DBG_DTLS_BIO, "dtls_bio" },
 	{ DBG_DTLS_BIO_DMP, "dtls_bio_dmp"},
 	{ DBG_DTLS_DETAIL, "dtls_detail"},
 
-	{ DBG_CFG_SET, "cfg_set" },
+	{ DBG_CFG_UPDATES, "cfg_updates" },
 
 	
-	{DBG_CFG_DMP, "cfg_dmp" },
+//	{DBG_CFG_DMP, "cfg_dmp" },
 	
 	{ DBG_WARN, "warn" },
-	
+		
 	{ DBG_MOD,"mod"},
 	{ DBG_STATE, "state" },
-
+	{ DBG_MSG_COMPOSE, "msg_compose" },
 
 	{ (DBG_MSG_IN | DBG_MSG_OUT), "msg" },
 	{ (DBG_PKT_IN | DBG_PKT_OUT), "pkt" },
-	{ (DBG_MSG_IN | DBG_MSG_OUT | DBG_ELEM_IN | DBG_ELEM_OUT ), "std" },
+	{ (DBG_ELEM_IN | DBG_ELEM_OUT), "elem" },
+	{ (DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_detail" },
+	{ (DBG_ELEM_IN | DBG_ELEM_OUT | DBG_ELEM_DMP | DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_all" },
+	{ (DBG_MSG_IN | DBG_MSG_OUT | DBG_ELEM_IN | DBG_ELEM_OUT | DBG_STATE), "std" },
 
 	{ DBG_ALL, "all"},
 

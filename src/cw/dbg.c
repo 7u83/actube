@@ -63,14 +63,13 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_PKT_DMP_OUT, ANSI_BYELLOW ANSI_ITALIC},
 	
 	{DBG_MSG_IN, ANSI_BLUE ANSI_BOLD},
-	{DBG_MSG_PARSING, ANSI_BLUE },
 	
 	{DBG_MSG_OUT, ANSI_BLUE ANSI_BOLD ANSI_ITALIC},
-	{DBG_MSG_ASSEMBLY, ANSI_BLUE ANSI_ITALIC},
+	{DBG_MSG_COMPOSE, ANSI_BLUE ANSI_ITALIC},
 	
 	
-	{DBG_MSG_IN_DMP, ANSI_BBLUE },
-	{DBG_MSG_OUT_DMP, ANSI_BBLUE ANSI_ITALIC},
+	{DBG_MSG_DMP_IN, ANSI_BBLUE },
+	{DBG_MSG_DMP_OUT, ANSI_BBLUE ANSI_ITALIC},
 	
 	{DBG_ELEM_IN, ANSI_DEFAULT},
 	{DBG_ELEM_OUT, ANSI_DEFAULT ANSI_ITALIC},
@@ -92,8 +91,8 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_X, "\x1b[31m"},
 	{DBG_WARN, ANSI_CYAN},
 	{DBG_MOD, ANSI_WHITE},
-	{DBG_CFG_DMP, ANSI_BCYAN }, 
-	
+//	{DBG_CFG_DMP, ANSI_BCYAN }, 
+	{DBG_CFG_UPDATES,ANSI_BRED},	
 
 	{CW_STR_STOP, ""}
 };
@@ -118,26 +117,25 @@ static struct cw_StrListElem color_off[] = {
 */
 
 static struct cw_StrListElem prefix[] = {
-	{DBG_INFO, 	"Info -"},
-	{DBG_PKT_IN, 	"Pkt In  -"},
-	{DBG_PKT_OUT, 	"Pkt Out -"},
-	{DBG_MSG_IN, 	"Msg In  - "},
-	{DBG_MSG_OUT,	"Msg Out - "},
+	{DBG_INFO, 		"Info -"},
+	{DBG_PKT_IN, 		"Pkt In  -"},
+	{DBG_PKT_OUT, 		"Pkt Out -"},
+	{DBG_MSG_IN, 		"Msg In  - "},
+	{DBG_MSG_OUT,		"Msg Out - "},
 
-	{DBG_MSG_PARSING, "" },
-	{DBG_ELEM_IN, 	"  Msg Element -"},
-	{DBG_ELEM_OUT,	"  Msg Element -"},
+	{DBG_ELEM_IN, 		"  Msg Element -"},
+	{DBG_ELEM_OUT,		"  Msg Element -"},
 	
-	{DBG_MSG_ERR, 	"  Msg Error -"},
-	{DBG_PKT_ERR, 	"  Pkt Error -"},
-	{DBG_ELEM_ERR, 	"  Elem Error -"},
-	{DBG_RFC, 	"  RFC -"},
-	{DBG_DTLS, 	"DTLS - "},
-	{DBG_DTLS_DETAIL, "DTLS - "},
-	{DBG_WARN, 	"  Warning - "},
-	{DBG_MOD, " Mod - "},
-	{DBG_STATE, " STATEMACHINE - "},
-	{DBG_CFG_SET, "    Cfg Set - "},
+	{DBG_MSG_ERR, 		"  Msg Error -"},
+	{DBG_PKT_ERR, 		"  Pkt Error -"},
+	{DBG_ELEM_ERR, 		"  Elem Error -"},
+	{DBG_RFC, 		"  RFC -"},
+	{DBG_DTLS, 		"DTLS - "},
+	{DBG_DTLS_DETAIL,	 "DTLS - "},
+	{DBG_WARN,	 	"  Warning - "},
+	{DBG_MOD, 		"Mod - "},
+	{DBG_STATE, 		"STATEMACHINE - "},
+	{DBG_CFG_UPDATES,	"Cfg - "},
 
 
 
@@ -357,16 +355,16 @@ void cw_dbg_msg(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 	cw_dbg(level, "%s", buf);
 	
 	
-	if (cw_dbg_is_level(DBG_MSG_DMP)){
+//	if (cw_dbg_is_level(DBG_MSG_DMP)){
 		int dlevel;
 		if(level==DBG_MSG_IN){
-			dlevel = DBG_MSG_IN_DMP;
+			dlevel = DBG_MSG_DMP_IN;
 		}
 		else{
-			dlevel = DBG_MSG_OUT_DMP;
+			dlevel = DBG_MSG_DMP_OUT;
 		}
 		cw_dbg_dmp(dlevel,packet,len,"");
-	}
+//	}
 	
 
 }
@@ -415,7 +413,6 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 			handler->name,len);
 	
 	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
-		int dlevel;
 		if (level == DBG_ELEM_OUT)
 			cw_dbg_dmp(DBG_ELEM_DMP_OUT,msgbuf,len,"");
 		else 

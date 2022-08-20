@@ -101,6 +101,8 @@ int main (int argc, char **argv)
 		bootcfg.modnames[1]="capwap80211";
 		bootcfg.nmods=2;
 	}
+
+	cw_dbg_set_level(DBG_X,0);
 	
 
 	/* create an empty message set */

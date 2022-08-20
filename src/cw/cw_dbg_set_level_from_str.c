@@ -9,6 +9,7 @@ int cw_dbg_set_level_from_str(const char *level)
 	switch(*level){
 		case '-':
 		case '!':
+		case '~':
 			on =0;
 			slevel=level+1;
 			break;

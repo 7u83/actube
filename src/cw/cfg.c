@@ -87,7 +87,7 @@ cw_Cfg_t *cw_cfg_create()
 	cfg = malloc(sizeof(cw_Cfg_t));
 	if (cfg == NULL)
 		return NULL;
-
+	memset(cfg,0,sizeof(cw_Cfg_t));
 	cfg->cfg = mavl_create(cmp, del, sizeof(struct cw_Cfg_entry));
 	if (cfg->cfg==NULL){
 		cw_cfg_destroy(cfg);
@@ -98,7 +98,7 @@ cw_Cfg_t *cw_cfg_create()
 
 int cw_cfg_set(cw_Cfg_t * cfg, const char *key, const char *val)
 {
-	cw_dbg(DBG_CFG_SET, "%s: %s",key,val);
+	cw_dbg(cfg->dbg_level, "%s%s: %s",cfg->dbg_prefix,key,val);
 
 	struct cw_Cfg_entry e;
 	int replaced;
@@ -694,7 +694,7 @@ int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, 
 
 
 
-void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
+void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst,int dbg_level,const char *dbg_prefix)
 {
 	mavliter_t it;
 	mavliter_init(&it, src->cfg);
@@ -726,9 +726,7 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 */
 		
 		if (!exists){
-
-
-			cw_dbg(DBG_CFG_SET, "New: %s: %s",new_elem.key,new_elem.val);
+			cw_dbg(dbg_level, "%s: [undef] -> %s",new_elem.key,new_elem.val);
 			continue;
 		}
 
@@ -740,7 +738,8 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 			continue;
 		}
 
-		cw_dbg(DBG_CFG_SET, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
+		cw_dbg(dbg_level, "%s: %s -> %s",new_elem.key,old_elem->val,new_elem.val);
+//		cw_dbg(DBG_X, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
 		if(dst->cfg->del){
 			dst->cfg->del(old_elem);
 		}

@@ -51,89 +51,94 @@ enum cw_dbg_levels{
 	DBG_PKT_IN 	= (1<<0), 
 	DBG_PKT_OUT 	= (1<<1),	
 
+	/** Hex-dump incomming/outgoing CAPWAP packets */
+	DBG_PKT_DMP_IN	= (1<<3),
+	DBG_PKT_DMP_OUT = (1<<4),
+
 	/** Incomming CAPWAP packets with errors, wich would
 	    usually silently discarded */ 
-	DBG_PKT_ERR	= (1<<2),
-
-	/** Dump content of packets */
-//	DBG_PKT_DMP	= (1<<3),
+	DBG_PKT_ERR	= (1<<5),
+	
 
 	/** Display incomming/outgoing CAPWAP/LWAPP messages */
-	DBG_MSG_IN	= (1<<4),
-	DBG_MSG_OUT	= (1<<5),
+	DBG_MSG_IN	= (1<<6),
+	DBG_MSG_OUT	= (1<<7),
 
 	/** Show hex-dump of messages */
-	DBG_MSG_DMP	= (1<<6),
-	
+	DBG_MSG_DMP_IN	= (1<<8),
+	DBG_MSG_DMP_OUT	= (1<<9),
+
 	/** Message errors */
-	DBG_MSG_ERR	= (1<<7),
+	DBG_MSG_ERR	= (1<<10),
 
 	/** Show message elements in incomming/outgoing messages */
-	DBG_ELEM_IN	= (1<<8),
-	DBG_ELEM_OUT	= (1<<9),
+	DBG_ELEM_IN	= (1<<11),
+	DBG_ELEM_OUT	= (1<<12),
 
 	/** Show message element details  */
-	DBG_ELEM_DETAIL = (1<<10),
+	DBG_ELEM_DETAIL_IN = (1<<13),
+	DBG_ELEM_DETAIL_OUT = (1<<14),
 
 	/** Error in msg elements */
-	DBG_ELEM_ERR	= (1<<11),
+	DBG_ELEM_ERR	= (1<<15),
 
 	/** hex dump elements */	
-	DBG_ELEM_DMP	= (1<<12),
+	DBG_ELEM_DMP	= (1<<16),
 
 	/** General infos, like CAPWAP state */
-	DBG_INFO	= (1<<13),	
+	DBG_INFO	= (1<<17),	
 
 	/** Misc. warnings */
-	DBG_WARN	= (1<<14),
+	DBG_WARN	= (1<<18),
 
 	/** RFC related */
-	DBG_RFC		= (1<<15),
+	DBG_RFC		= (1<<19),
 
 	/** DTLS related messages */
-	DBG_DTLS	= (1<<16),
+	DBG_DTLS	= (1<<20),
 
 	/** DTLS BIOs in/out */
-	DBG_DTLS_BIO	= (1<<17),
+	DBG_DTLS_BIO	= (1<<21),
 
 	/** Dump DTLS BIO i/o */
-	DBG_DTLS_BIO_DMP = (1<<18),
+	DBG_DTLS_BIO_DMP = (1<<22),
 
 	/** Show DTLS Details */
-	DBG_DTLS_DETAIL	= (1<<19),
+	DBG_DTLS_DETAIL	= (1<<23),
 	
-	DBG_CFG_DMP	= (1<<20),
+//	DBG_CFG_DMP	= (1<<20),
 
-	DBG_CFG_SET	= (1<<21),
+//	DBG_CFG_SET	= (1<<21),
 
 	/** Debug Mods */
-	DBG_MOD		= (1<<22),
+	DBG_MOD		= (1<<24),
 	
        	/**Debug State machine */
-	DBG_STATE	= (1<<23),
+	DBG_STATE	= (1<<25),
 	
 	
-	DBG_PKT_DMP_OUT = (1<<24),
-	DBG_PKT_DMP_IN	= (1<<25),
-	
-	
-	DBG_MSG_ASSEMBLY = (1<<26),
+	DBG_MSG_COMPOSE	= (1<<26),
 
-	DBG_MSG_IN_DMP	= (1<<27),
-	DBG_MSG_OUT_DMP = (1<<29),
+	DBG_CFG_UPDATES	= (1<<27),
 	
+
 	DBG_X		= (1<<30),
 	DBG_ALL 	= (0xffffffff),
 
-
-	DBG_MSG_PARSING	= 3,
-	DBG_MSG_COMPOSING = 5,
 
 	DBG_ELEM_DMP_IN	= 7,
 	DBG_ELEM_DMP_OUT = 9,
 
 
 };
+
+#define DBG_MSG (DBG_MSG_IN | DBG_MSG_OUT)
+#define DBG_PKT (DBG_PKT_IN | DBG_PKT_OUT)
+#define DBG_ELEM (DBG_ELEM_IN | DBG_ELEM_OUT)
+
+
+
+
 
 
 #define DBG_LN __FILE__,__LINE__

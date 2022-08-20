@@ -21,7 +21,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 		params->elemdata = data;
 
 		if (handler==NULL){
-			cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
+			cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
 					data->proto,data->vendor,data->id);
 			continue;
@@ -29,7 +29,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 		if (handler->put == NULL){
 			if (data->mand){
-				cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
+				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 				cw_log(LOG_ERR,"Error: Can't add mandatory message element %d - %s, no put method defined",
 					handler->id, handler->name);
 				
@@ -39,7 +39,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 		if (!data->mand){
 			if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
-				cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s - (skip)", 
+				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s - (skip)", 
 						data->proto, data->vendor, data->id, handler->name);
 
 				continue;
@@ -48,7 +48,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 
 		l = handler->put(handler,params,dst+len);
-		cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s - (%d bytes)", 
+		cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s - (%d bytes)", 
 				data->proto, data->vendor, data->id, handler->name,l);
 
 		len += l;
@@ -89,7 +89,7 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 		msg->preprocess(conn);
 	}
 
-	cw_dbg(DBG_MSG_ASSEMBLY,"*** Assembling message of type %d (%s) ***", 
+	cw_dbg(DBG_MSG_COMPOSE,"Composing message of type %d (%s) ***", 
 			msg->type, msg->name);
 	
 	dst = msgptr+8;
@@ -112,7 +112,7 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 		
 		data =  mlistelem_dataptr(elem);
 		handler = cw_msgset_get_elemhandler(conn->msgset,data->proto,data->vendor,data->id);
-		cw_dbg(DBG_MSG_ASSEMBLY,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
+		cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s", data->proto, data->vendor, data->id, handler->name);
 		if (handler==NULL){
 			cw_log(LOG_ERR,"Can't put message element %d %d %d, no handler defined.",
 					data->proto,data->vendor,data->id);
@@ -149,8 +149,8 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 //	}
 
 	cw_set_msg_elems_len(msgptr, len);
-	cw_dbg(DBG_MSG_ASSEMBLY,"*** Done assenmbling message of type %d (%s) ***", 
-			msg->type, msg->name);
+	//cw_dbg(DBG_MSG_COMPOSE,"*** Done assenmbling message of type %d (%s) ***", 
+//			msg->type, msg->name);
 	if (type & 1) {
 		/* It's a request, so we have to set seqnum */
 		int s = conn_get_next_seqnum(conn);

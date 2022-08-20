@@ -2,6 +2,9 @@
 # This file is igenerated  by WAT
 # If you edit this, your cahnges might be overwritten
 #
+ac-name-with-index.0: 
+ac-name-with-index.1: 
+ac-name-with-index.2: 
 capwap-local-ip-address: 192.168.0.13
 capwap-timers/echo-interval: 30
 capwap-timers/max-discovery-interval: 10
@@ -9,7 +12,13 @@ capwap/ac-name:
 cisco-8011-assoc-limit/enable: false
 cisco-8011-assoc-limit/interval: 500
 cisco-8011-assoc-limit/limit: 25
+cisco/ac-ip-addr-with-index.0: 0.0.0.0
+cisco/ac-ip-addr-with-index.1: 0.0.0.0
+cisco/ac-ip-addr-with-index.2: 0.0.0.0
 cisco/ap-backup-software-version: .x00000000
+cisco/ap-core-dump/compression: false
+cisco/ap-core-dump/filename: 
+cisco/ap-core-dump/tftp-server: 0.0.0.0
 cisco/ap-dtls-data-cfg/cabable: true
 cisco/ap-dtls-data-cfg/enabled: false
 cisco/ap-ethernet-port-type: .x000000
@@ -22,7 +31,7 @@ cisco/ap-mode-and-type/type: 15
 cisco/ap-model/image: 12.4(23c)JA2
 cisco/ap-model/model: "AIR-LAP1142N-E-K9   "
 cisco/ap-power-injector-config/selection: 0
-cisco/ap-power-injector-config/state: 17
+cisco/ap-power-injector-config/state: 34
 cisco/ap-power-injector-config/switch-mac-address: .x000000000000
 cisco/ap-pre-std-switch-config: 0
 cisco/ap-regulatory-domain.0/code0: 0
@@ -33,8 +42,10 @@ cisco/ap-regulatory-domain.1/code0: 0
 cisco/ap-regulatory-domain.1/code1: 1
 cisco/ap-regulatory-domain.1/set: true
 cisco/ap-regulatory-domain.1/slot: 1
+cisco/ap-static-domain/enable: true
+cisco/ap-static-domain/name: planix.org
 cisco/ap-static-ip-addr/address: 192.168.0.13
-cisco/ap-static-ip-addr/enabled: false
+cisco/ap-static-ip-addr/enabled: true
 cisco/ap-static-ip-addr/gateway: 192.168.0.1
 cisco/ap-static-ip-addr/netmask: 255.255.255.0
 cisco/ap-static-ip-addr/unknown: 0.0.0.0
@@ -75,7 +86,7 @@ cisco/wtp-board-data/card-revision: 0
 cisco/wtp-board-data/ethernet-mac-address: .xc47d4f3af8a6
 cisco/wtp-board-data/options/ant-type: 1
 cisco/wtp-board-data/options/ap-type: 1
-cisco/wtp-board-data/options/failover-priority: 0
+cisco/wtp-board-data/options/failover-priority: 1
 cisco/wtp-board-data/options/flex-connect: 1
 cisco/wtp-board-data/wtp-model-hi: 0
 cisco/wtp-board-data/wtp-model-lo: 0
@@ -105,7 +116,7 @@ radio.0/cisco/elem146: .x690f
 radio.0/cisco/elem153: .x00
 radio.0/cisco/elem156: .x020100
 radio.0/cisco/elem16: .x02040b0c
-radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
+radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
 radio.0/cisco/elem22: .x0d00b400320102030405060708090a0b0c0d
 radio.0/cisco/elem24: .x003c000c
 radio.0/cisco/elem47: .x0100000000000000000000000000000000
@@ -116,6 +127,7 @@ radio.0/cisco/lwelem27: .x00000000000000000000000000000000000000000000000000
 radio.0/cisco/lwelem28: .x0303020202000000000000000000000000000000000000000000313f01
 radio.0/cisco/lwelem29: .x00010000000000000200001400
 radio.0/cisco/lwelem48: .x01055a0101a6c405b06432b03232
+radio.0/cisco/lwelem55: .x000000000000000000000000
 radio.0/cisco/lwelem9: .x0100000000000000000000000000000000
 radio.0/cisco/mac-operation/fragmentation-threshold: 2346
 radio.0/cisco/mac-operation/long-retry: 4
@@ -157,7 +169,7 @@ radio.0/wlan.1/add-wlan/scan-defer-time: 100
 radio.0/wlan.1/add-wlan/session-timout: 1800
 radio.0/wlan.1/add-wlan/ssid: tubeC
 radio.0/wlan.1/add-wlan/wep-encryption: false
-radio.0/wlan.1/add-wlan/wep-key: .x6ecd3e2d4ada67bc959ff28170
+radio.0/wlan.1/add-wlan/wep-key: .xc214aef5bd4c4e1ff2574303a4
 radio.0/wlan.1/add-wlan/wep-key-index: 1
 radio.0/wlan.1/add-wlan/wlan-capability: 1073
 radio.0/wlan.1/add-wlan/wlan-id: 1
@@ -174,7 +186,7 @@ radio.0/wlan.13/add-wlan/scan-defer-time: 100
 radio.0/wlan.13/add-wlan/session-timout: 1800
 radio.0/wlan.13/add-wlan/ssid: SuperSSID
 radio.0/wlan.13/add-wlan/wep-encryption: false
-radio.0/wlan.13/add-wlan/wep-key: .x6ecd3e2d4ada67bc959ff28170
+radio.0/wlan.13/add-wlan/wep-key: .xc214aef5bd4c4e1ff2574303a4
 radio.0/wlan.13/add-wlan/wep-key-index: 1
 radio.0/wlan.13/add-wlan/wlan-capability: 1057
 radio.0/wlan.13/add-wlan/wlan-id: 13
@@ -192,12 +204,12 @@ radio.1/cisco/antenna-payload/unknown: 3
 radio.1/cisco/channel-power: .x0808102408221c16100a04fefe2808221c16100a04fefe2c08221c16100a04fefe3008221c16100a04fefe3408221c16100a04fefe3808221c16100a04fefe3c08221c16100a04fefe4008221c16100a04fefe6408221c16100a04fefe6808221c16100a04fefe6c08221c16100a04fefe7008221c16100a04fefe7408221c16100a04fefe8408221c16100a04fefe8808221c16100a04fefe8c08221c16100a04fefe
 radio.1/cisco/elem145: .x01
 radio.1/cisco/elem15/cfg-type: 1 - global
-radio.1/cisco/elem15/channel: 36
-radio.1/cisco/elem15/rest: .x07ffffffce000000
+radio.1/cisco/elem15/channel: 124
+radio.1/cisco/elem15/rest: .x07ffffffce010001
 radio.1/cisco/elem153: .x00
 radio.1/cisco/elem156: .x020100
 radio.1/cisco/elem16: .x0c121824
-radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
+radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
 radio.1/cisco/elem22: .x1000b4003224282c3034383c4064686c707484888c
 radio.1/cisco/elem24: .x003c000c
 radio.1/cisco/elem47: .x0100000000000000000000000000000000
@@ -250,7 +262,7 @@ radio.1/wlan.1/add-wlan/scan-defer-time: 100
 radio.1/wlan.1/add-wlan/session-timout: 1800
 radio.1/wlan.1/add-wlan/ssid: tubeC
 radio.1/wlan.1/add-wlan/wep-encryption: false
-radio.1/wlan.1/add-wlan/wep-key: .x150728c73ce900b86693fc5e57
+radio.1/wlan.1/add-wlan/wep-key: .xc97bf74c5a6b5d327384ac9065
 radio.1/wlan.1/add-wlan/wep-key-index: 1
 radio.1/wlan.1/add-wlan/wlan-capability: 17
 radio.1/wlan.1/add-wlan/wlan-id: 1
@@ -267,7 +279,7 @@ radio.1/wlan.13/add-wlan/scan-defer-time: 100
 radio.1/wlan.13/add-wlan/session-timout: 1800
 radio.1/wlan.13/add-wlan/ssid: SuperSSID
 radio.1/wlan.13/add-wlan/wep-encryption: false
-radio.1/wlan.13/add-wlan/wep-key: .x150728c73ce900b86693fc5e57
+radio.1/wlan.13/add-wlan/wep-key: .xc97bf74c5a6b5d327384ac9065
 radio.1/wlan.13/add-wlan/wep-key-index: 1
 radio.1/wlan.13/add-wlan/wlan-capability: 1
 radio.1/wlan.13/add-wlan/wlan-id: 13

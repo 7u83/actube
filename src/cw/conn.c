@@ -484,7 +484,10 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	params.mand_found = mavl_create_conststr();
 	params.unrecognized = mlist_create(NULL, NULL, sizeof(uint8_t *));
 
-	params.cfg = cw_cfg_create(); 
+	params.cfg = cw_cfg_create();
+	params.cfg->dbg_level = DBG_ELEM_DETAIL_IN;
+	params.cfg->dbg_prefix = "    ";
+
 	params.cfg_list[0]=params.cfg;
 	params.cfg_list[1]=conn->local_cfg;
 	params.cfg_list[2]=conn->global_cfg;

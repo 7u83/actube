@@ -213,7 +213,7 @@ int join(struct cw_Conn * conn, struct cw_DiscoveryResults * results)
 		sock_setport((struct sockaddr*)&sockaddr,5246);
 
 		cw_cfg_clear(conn->remote_cfg);
-		cw_cfg_copy(e->cfg,conn->remote_cfg);
+		cw_cfg_copy(e->cfg,conn->remote_cfg,0,"");
 		rc = run_join_d(conn,(struct sockaddr*)(&sockaddr),e->cfg);
 		if (rc)
 			return 1;

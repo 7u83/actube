@@ -11,6 +11,7 @@ struct cw_Cfg {
 	struct mavl * cfg;
 	const char *name;
 	int dbg_level;
+	const char *dbg_prefix;
 };
 
 typedef struct cw_Cfg cw_Cfg_t;
@@ -45,7 +46,7 @@ bstr16_t cw_cfg_get_bstr16(cw_Cfg_t * cfg, const char * key, const char *def);
 int cw_cfg_set_bstr16(cw_Cfg_t * cfg, const char * key, bstr16_t str);
 int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key);
 const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def);
-void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst);
+void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst,int dbg_level,const char *dbg_prefix);
 void cw_cfg_destroy(cw_Cfg_t *cfg);
 void cw_cfg_clear(cw_Cfg_t *cfg);
 int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key);

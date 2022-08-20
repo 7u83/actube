@@ -13,7 +13,7 @@
 static int config_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
 	cw_dbg(DBG_X,"*** Configurations Status Response received ****");
-	cw_cfg_copy(params->cfg, params->conn->global_cfg);
+	cw_cfg_copy(params->cfg, params->conn->global_cfg,DBG_CFG_UPDATES,"GlbalCfg");
 	cw_cfg_save(bootcfg.cfgfilename, params->conn->global_cfg,
 			"#\n# This file is igenerated  by WAT\n# If you edit this, your cahnges might be overwritten\n#\n");  
 	cw_dbg(DBG_X,"*** Cnofig Saved ***");
@@ -31,7 +31,7 @@ int configure(struct cw_Conn * conn)
 	cw_conn_set_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,config_cb);
 	
 	int rc;
-	cw_cfg_copy(conn->global_cfg,conn->update_cfg);
+	cw_cfg_copy(conn->global_cfg,conn->update_cfg,0,"");
 	rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST);
 	cw_cfg_clear(conn->update_cfg);
 

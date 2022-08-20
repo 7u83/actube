@@ -29,6 +29,8 @@ int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 	int elems_len = cw_get_msg_elems_len(msg_ptr);
 	elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
 	cw_Cfg_t * cfg = cw_cfg_create();
+	cfg->dbg_level = DBG_ELEM_DETAIL_OUT;
+	cfg->dbg_prefix = "    ";
 
 	struct cw_ElemHandlerParams params;
 	memset(&params,0,sizeof(struct cw_ElemHandlerParams));

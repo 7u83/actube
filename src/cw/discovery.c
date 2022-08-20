@@ -98,7 +98,7 @@ void cw_discovery_results_add(struct cw_DiscoveryResults *dis,
 		if (e.cfg == NULL)
 			continue;
 
-		cw_cfg_copy(ac_cfg,e.cfg);
+		cw_cfg_copy(ac_cfg,e.cfg,0,"");
 		
 		strcpy(e.ip,ipval);
 
