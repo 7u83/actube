@@ -7,7 +7,7 @@
 #include "wtp_interface.h"
  
 
-int changestate(struct conn * conn)
+int changestate(struct cw_Conn * conn)
 {
 
 

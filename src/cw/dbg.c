@@ -104,7 +104,8 @@ static struct cw_StrListElem * color_on = theme0;
 struct cw_StrListElem color_ontext[] = {
 
 /*	{DBG_ELEM_DMP, "\x1b[37m"},*/
-	{DBG_ELEM_DMP, ANSI_BBLACK ANSI_ITALIC},
+	{DBG_ELEM_DMP_OUT, ANSI_BBLACK ANSI_ITALIC},
+	{DBG_ELEM_DMP_IN,  ANSI_BBLACK},
 
 	{CW_STR_STOP, ""}
 };
@@ -118,7 +119,7 @@ static struct cw_StrListElem color_off[] = {
 
 static struct cw_StrListElem prefix[] = {
 	{DBG_INFO, 	"Info -"},
-	{DBG_PKT_IN, 	"Pkt IN -"},
+	{DBG_PKT_IN, 	"Pkt In  -"},
 	{DBG_PKT_OUT, 	"Pkt Out -"},
 	{DBG_MSG_IN, 	"Msg In  - "},
 	{DBG_MSG_OUT,	"Msg Out - "},
@@ -130,10 +131,10 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_MSG_ERR, 	"  Msg Error -"},
 	{DBG_PKT_ERR, 	"  Pkt Error -"},
 	{DBG_ELEM_ERR, 	"  Elem Error -"},
-	{DBG_RFC, 	" RFC -"},
+	{DBG_RFC, 	"  RFC -"},
 	{DBG_DTLS, 	"DTLS - "},
 	{DBG_DTLS_DETAIL, "DTLS - "},
-	{DBG_WARN, " Warning - "},
+	{DBG_WARN, 	"  Warning - "},
 	{DBG_MOD, " Mod - "},
 	{DBG_STATE, " STATEMACHINE - "},
 	{DBG_CFG_SET, "    Cfg Set - "},
@@ -272,7 +273,7 @@ void cw_dbg_pkt(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 
 	cw_dbg(level, "%s", buf);
 		
-	if (cw_dbg_is_level(DBG_PKT_DMP)) {
+//	if (cw_dbg_is_level(DBG_PKT_DMP)) {
 		int dlevel;
 		if (level == DBG_PKT_IN){
 			dlevel=DBG_PKT_DMP_IN;
@@ -281,7 +282,7 @@ void cw_dbg_pkt(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 			dlevel=DBG_PKT_DMP_OUT;
 		}
 		cw_dbg_dmp(dlevel,packet,len,"");
-	} 
+//	} 
 
 }
 
@@ -414,9 +415,12 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 			handler->name,len);
 	
 	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
-		/*dmp = cw_format_dump(msgbuf,len,NULL);*/
-		
-		cw_dbg_dmp(DBG_ELEM_DMP,msgbuf,len,"");
+		int dlevel;
+		if (level == DBG_ELEM_OUT)
+			cw_dbg_dmp(DBG_ELEM_DMP_OUT,msgbuf,len,"");
+		else 
+			cw_dbg_dmp(DBG_ELEM_DMP_IN,msgbuf,len,"");
+
 	}
 
 	return;

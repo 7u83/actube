@@ -35,18 +35,21 @@
  * Debug strings
  */
 struct cw_StrListElem cw_dbg_strings[] = {
-	{ DBG_INFO,	"info",  },
-	{ DBG_PKT_IN,	"pkt_in"  },
-	{ DBG_PKT_OUT,	"pkt_out" },
-	{ DBG_PKT_ERR,	"pkt_err" },
-	{ DBG_PKT_DMP,	"pkt_dmp" },
-	{ DBG_MSG_IN,	"msg_in"  },
-	{ DBG_MSG_OUT,	"msg_out" },
-	{ DBG_MSG_DMP,	"msg_dmp" },
+	{ DBG_INFO,		"info",  },
+	{ DBG_PKT_IN,		"pkt_in"  },
+	{ DBG_PKT_OUT,		"pkt_out" },
+	{ DBG_PKT_ERR,		"pkt_err" },
+//	{ DBG_PKT_IN_DMP,	"pkt_in_dmp" },
+//	{ DBG_PKT_IN_DMP,	"pkt_out_dmp" },
+
+	{ DBG_MSG_IN,		"msg_in"  },
+	{ DBG_MSG_OUT,		"msg_out" },
+//	{ DBG_MSG_DMP,		"msg_dmp" },
 	
 	{ DBG_MSG_ERR,	"msg_err"},
 
 	{ DBG_RFC,	"rfc", 	 },
+
 	{ DBG_ELEM_IN,  "elem_in"},
 	{ DBG_ELEM_OUT, "elem_out"},
 	{ DBG_ELEM_DMP, "elem_dmp"},
@@ -75,6 +78,7 @@ struct cw_StrListElem cw_dbg_strings[] = {
 
 
 	{ (DBG_MSG_IN | DBG_MSG_OUT), "msg" },
+	{ (DBG_PKT_IN | DBG_PKT_OUT), "pkt" },
 	{ (DBG_MSG_IN | DBG_MSG_OUT | DBG_ELEM_IN | DBG_ELEM_OUT ), "std" },
 
 	{ DBG_ALL, "all"},

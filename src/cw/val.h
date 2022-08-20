@@ -23,7 +23,7 @@
 
 //#define CW_KTV_MAX_KEY_LEN 1024
 
-typedef struct mavl cw_Cfg_t;
+typedef struct cw_Cfg cw_Cfg_t;
 
 /**
  * @struct cw_Val

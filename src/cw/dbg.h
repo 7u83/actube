@@ -56,7 +56,7 @@ enum cw_dbg_levels{
 	DBG_PKT_ERR	= (1<<2),
 
 	/** Dump content of packets */
-	DBG_PKT_DMP	= (1<<3),
+//	DBG_PKT_DMP	= (1<<3),
 
 	/** Display incomming/outgoing CAPWAP/LWAPP messages */
 	DBG_MSG_IN	= (1<<4),
@@ -122,12 +122,16 @@ enum cw_dbg_levels{
 	DBG_MSG_IN_DMP	= (1<<27),
 	DBG_MSG_OUT_DMP = (1<<29),
 	
-	DBG_X		= (1<<29),
+	DBG_X		= (1<<30),
 	DBG_ALL 	= (0xffffffff),
 
 
 	DBG_MSG_PARSING	= 3,
 	DBG_MSG_COMPOSING = 5,
+
+	DBG_ELEM_DMP_IN	= 7,
+	DBG_ELEM_DMP_OUT = 9,
+
 
 };
 

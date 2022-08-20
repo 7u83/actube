@@ -7,7 +7,13 @@
 
 #define CW_CFG_MAX_KEY_LEN 1024
 
-typedef struct mavl cw_Cfg_t;
+struct cw_Cfg {
+	struct mavl * cfg;
+	const char *name;
+	int dbg_level;
+};
+
+typedef struct cw_Cfg cw_Cfg_t;
 
 cw_Cfg_t * cw_cfg_create();
 int cw_cfg_set(cw_Cfg_t *cfg,const char *key, const char *val);

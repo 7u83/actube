@@ -78,14 +78,14 @@ struct cw_Conn {
 	cw_Cfg_t * local_cfg;	/**< local_cfg contains overrides for global_cfg 
 				     wich are related to this conn object. */
 	
-	mavl_t remote_cfg;	/**< contains the configuration we now from the 
+	cw_Cfg_t * remote_cfg;	/**< contains the configuration we now from the 
 				     device this conn object ist connected to.
 				     Typically this is what we have got from discovery
 				     response or join response in WTP mode. 
 				     And in AC mode this contains date receive from 
 				     configuration status request.  */
 
-	mavl_t update_cfg;
+	cw_Cfg_t * update_cfg;
 	
 	bstr16_t session_id;
 

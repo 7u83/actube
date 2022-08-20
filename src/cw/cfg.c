@@ -83,7 +83,17 @@ static void del(void *ptr)
 
 cw_Cfg_t *cw_cfg_create()
 {
-	return mavl_create(cmp, del, sizeof(struct cw_Cfg_entry));
+	cw_Cfg_t * cfg;
+	cfg = malloc(sizeof(cw_Cfg_t));
+	if (cfg == NULL)
+		return NULL;
+
+	cfg->cfg = mavl_create(cmp, del, sizeof(struct cw_Cfg_entry));
+	if (cfg->cfg==NULL){
+		cw_cfg_destroy(cfg);
+		return NULL;
+	}
+	return cfg;
 }
 
 int cw_cfg_set(cw_Cfg_t * cfg, const char *key, const char *val)
@@ -101,7 +111,7 @@ int cw_cfg_set(cw_Cfg_t * cfg, const char *key, const char *val)
 		free((void *) e.key);
 		return 0;
 	}
-	void *rc = mavl_replace(cfg, &e, &replaced);
+	void *rc = mavl_replace(cfg->cfg, &e, &replaced);
 	if (!rc) {
 		del(&e);
 		return 0;
@@ -116,7 +126,7 @@ const char *cw_cfg_get(cw_Cfg_t * cfg, const char *key, const char *def)
 {
 	struct cw_Cfg_entry e, *r;
 	e.key = key;
-	r = mavl_get(cfg, &e);
+	r = mavl_get(cfg->cfg, &e);
 	if (!r)
 		return def;
 	return r->val;
@@ -129,7 +139,7 @@ const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def)
 	for(i=0; cfg[i]!=NULL; i++){
 //		cw_dbg(DBG_X,"GET_L IN: %p",cfg[i]);
 		e.key = key;
-		r = mavl_get(cfg[i], &e);
+		r = mavl_get(cfg[i]->cfg, &e);
 		if (r!=NULL)
 			return r->val;
 	}
@@ -167,7 +177,7 @@ void cw_cfg_dump(cw_Cfg_t * cfg)
 {
 	mavliter_t it;
 	struct cw_Cfg_entry *e;
-	mavliter_init(&it, cfg);
+	mavliter_init(&it, cfg->cfg);
 	mavliter_foreach(&it) {
 
 		e = mavliter_get(&it);
@@ -475,7 +485,7 @@ int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg)
 {
 	mavliter_t it;
 	struct cw_Cfg_entry *e;
-	mavliter_init(&it, cfg);
+	mavliter_init(&it, cfg->cfg);
 	mavliter_foreach(&it) {
 		int n;
 		e = mavliter_get(&it);
@@ -519,7 +529,7 @@ void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base)
 	struct cw_Cfg_entry search;
 	search.key = base;
 
-	mavliter_init(&(cfi->it), cfg);
+	mavliter_init(&(cfi->it), cfg->cfg);
 	mavliter_seek(&(cfi->it), &search, 0);
 	cfi->base = base;
 }
@@ -642,7 +652,7 @@ int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
 	search.key=ikey;
 	/*//result = ktvn(ktv,&search);*/
 	
-	result = mavl_get_last(cfg,&search);
+	result = mavl_get_last(cfg->cfg,&search);
 	if (result == NULL){
 		return 0;
 	}
@@ -687,7 +697,7 @@ int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, 
 void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 {
 	mavliter_t it;
-	mavliter_init(&it, src);
+	mavliter_init(&it, src->cfg);
 	mavliter_foreach(&it) {
 		int exists;
 		struct cw_Cfg_entry * old_elem,*e, new_elem;
@@ -705,7 +715,7 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 */
 
 
-		old_elem = mavl_insert(dst,&new_elem,&exists);
+		old_elem = mavl_insert(dst->cfg,&new_elem,&exists);
 
 /*		cw_dbg(DBG_X, "CPY: %s: %s -> %s [%d]",new_elem.key,new_elem.val,old_elem->val,exists);
 		if (exists){
@@ -731,10 +741,10 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 		}
 
 		cw_dbg(DBG_CFG_SET, "Replace: %s: %s (old: %s)",new_elem.key, new_elem.val, old_elem->val);
-		if(dst->del){
-			dst->del(old_elem);
+		if(dst->cfg->del){
+			dst->cfg->del(old_elem);
 		}
-		memcpy(old_elem,&new_elem,dst->data_size);
+		memcpy(old_elem,&new_elem,dst->cfg->data_size);
 	}
 
 }
@@ -742,13 +752,15 @@ void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst)
 
 void cw_cfg_destroy(cw_Cfg_t *cfg)
 {
-	mavl_destroy(cfg);
+	if (cfg->cfg)
+		mavl_destroy(cfg->cfg);
+	free(cfg);
 }
 
 
 void cw_cfg_clear(cw_Cfg_t *cfg)
 {
-	mavl_del_all(cfg);
+	mavl_del_all(cfg->cfg);
 }
 
 
@@ -757,7 +769,7 @@ int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key)
         struct cw_Cfg_entry e, *result;
 //cw_dbg(DBG_X,"LOOX FOR: %s",key);
         e.key=key;
-        result = mavl_get_first(cfg,&e);
+        result = mavl_get_first(cfg->cfg,&e);
         if (result == NULL)
                 return 0;
 //cw_dbg(DBG_X,"BASEXXX: %s",result->key);

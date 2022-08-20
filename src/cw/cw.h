@@ -385,7 +385,7 @@ int cw_read_ac_descriptor(mavl_t store,
 			struct cw_DescriptorSubelemDef *allowed);
 
 
-int cw_setup_dtls(struct cw_Conn * conn, mavl_t cfg, const char *prefix, char  * default_cipher);
+int cw_setup_dtls(struct cw_Conn * conn, cw_Cfg_t * cfg, const char *prefix, char  * default_cipher);
 
 
 

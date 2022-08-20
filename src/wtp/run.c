@@ -26,7 +26,6 @@
 #include "wtp_interface.h"
 
 #include "cw/dbg.h"
-#include "cfg.h"
 
 int update =1;
 
@@ -98,7 +97,7 @@ int run(struct cw_Conn * conn)
 
 
 		while (!cw_timer_timeout(timer) && conn->capwap_state == CAPWAP_STATE_RUN) {
-			mavl_del_all(conn->remote_cfg);
+			cw_cfg_clear(conn->remote_cfg);
 			rc = cw_read_messages(conn);
 			if (rc < 0 && errno == EAGAIN) {
 				continue;

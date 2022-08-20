@@ -9,7 +9,7 @@ int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandle
 {
 
 	char key[CW_CFG_MAX_KEY_LEN];
-	cw_Val_t *elem, search;
+//	cw_Val_t *elem;
 	int len;
 	uint8_t * d;
 	
