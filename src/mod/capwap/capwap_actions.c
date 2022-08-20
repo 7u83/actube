@@ -56,6 +56,12 @@ static cw_ValStruct_t radio_operational_state[] = {
 	{NULL,NULL,0,0}
 };
 
+static cw_ValStruct_t image_identifier_stru[] = {
+	{CW_TYPE_DWORD, "vendor-id", 4,-1},
+	{CW_TYPE_BSTR16, "identifier", -1,-1},
+	{NULL,NULL,0,0}
+};
+
 
 static cw_ValValRange_t radio_admin_state_valguard[]={
 	{0,0,"0 - reserved"},
@@ -435,6 +441,21 @@ static struct cw_ElemHandler handlers[] = {
 		cw_out_generic_with_index		/* put */
 	}
 	,
+
+	{ 
+		"Image Identifier",			/* name */
+		CAPWAP_ELEM_IMAGE_IDENTIFIER,		/* Element ID */
+		0,0,					/* Vendor / Proto */
+		5,1028,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"capwap/image-identifier",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		image_identifier_stru			/* param */
+	}
+	,		
 	{0,0,0,0,0,0,0,0}
 
 };
@@ -552,8 +573,8 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 
 	{0,0,CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
 	{0,0,CAPWAP_ELEM_STATISTICS_TIMER,		0, 0},
+	{0,0,CAPWAP_ELEM_IMAGE_IDENTIFIER,		0, 0},
 
-	
 	{0,0,CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD,	0, CW_IGNORE},
 	{0,0,0,0,0}
 };
