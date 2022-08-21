@@ -15,37 +15,20 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <sys/utsname.h>
-
-
-#include "cw/capwap.h"
-#include "cw/sock.h"
-
-#include "cw/log.h"
-#include "cw/dbg.h"
 #include "cw/cw_util.h"
-#include "cw/dtls.h"
-
-     #include <sys/param.h>
-     #include <sys/time.h>
-     #include <sys/socket.h>
-     #include <net/if.h>
-
+#include "cw/dbg.h"
+#include "cw/cw.h"
+#include "cw/cfg.h"
 #include "conf.h"
 #include "ac.h"
-#include "cw/cfg.h"
 
-#include "cw/mavltypes.h"
 
-/*uint8_t conf_macaddress[12];
+uint8_t conf_macaddress[12];
 uint8_t conf_macaddress_len = 0;
-*/
+
 
 long conf_strict_capwap = 1;
 long conf_strict_headers = 0;
-/*int conf_capwap_mode = CW_MODE_CAPWAP;*/
 
 
 
@@ -53,28 +36,23 @@ char *conf_acid = NULL;
 
 char *conf_primary_if = NULL;
 
-long conf_max_wtps = CONF_DEFAULT_MAXWTPS;
-char *conf_logfilename = CONF_DEFAULT_LOGFILENAME;
-struct sockaddr_storage *conf_salist = NULL;
-
-
 
 char **conf_mcast_groups = 0;
 int conf_mcast_groups_len = 0;
 
 
-struct sockaddr_storage *conf_bsalist = NULL;
+//struct sockaddr_storage *conf_bsalist = NULL;
 
-int conf_salist_len = 0;
-int conf_bsalist_len = 0;
+//int conf_salist_len = 0;
+//int conf_bsalist_len = 0;
 
-struct sockaddr *conf_ac_ips;
-int conf_ac_ips_len;
+//struct sockaddr *conf_ac_ips;
+//int conf_ac_ips_len;
 
-char *conf_sslcertfilename = NULL;
-char *conf_sslkeyfilename = NULL;
-char *conf_sslkeypass = NULL;
-char *conf_dtls_psk = NULL;
+//char *conf_sslcertfilename = NULL;
+//char *conf_sslkeyfilename = NULL;
+//char *conf_sslkeypass = NULL;
+//char *conf_dtls_psk = NULL;
 
 int conf_security = 0;
 long conf_vendor_id = CONF_DEFAULT_VENDOR_ID;
@@ -123,11 +101,10 @@ static int init_ac_name(cw_Cfg_t * cfg)
 	int i;
 
 
-	s= cw_cfg_get(cfg,"capwap/ac-name",NULL);
+	s= (char*)cw_cfg_get(cfg,"capwap/ac-name",NULL);
 	if (s!=NULL)
 		return 1;
 
-//	primary_if = sock_get_primary_if(AF_INET6);
 	if (!primary_if)
 		primary_if = sock_get_primary_if(AF_INET);
 
@@ -157,41 +134,6 @@ static int init_ac_name(cw_Cfg_t * cfg)
 #include "../mod/modload.h"
 
 
-
-
-static int init_dtls()
-{
-	if (conf_dtls_psk != NULL) {
-/*
-		//              conf_security=CW_SECURITY_FLAGS_S;
-*/
-	}
-
-	return 1;
-}
-
-
-static int init_vendor_id()
-{
-	return 1;
-}
-
-static int init_control_port()
-{
-	char str[30];
-	sprintf(str, "%d", CONF_DEFAULT_CONTROL_PORT);
-	conf_control_port =
-	    (char *) cw_setstr((uint8_t **) & conf_control_port, (uint8_t *) str,
-			       strlen(str));
-
-
-#ifdef WITH_LWAPP
-	sprintf(str, "%d", CONF_DEFAULT_LW_CONTROL_PORT);
-	conf_lw_control_port = strdup(str);
-#endif
-
-	return 1;
-}
 
 #include <ifaddrs.h>
 
@@ -247,7 +189,7 @@ static int init_listen_addrs(cw_Cfg_t * cfg)
 		}
 	}
 	rc = 1;
-      errX:
+      /*errX:*/
 	freeifaddrs(ifap);
 	return rc;
 }
@@ -304,13 +246,12 @@ int init_bcast_addrs(cw_Cfg_t *cfg)
 	struct cw_Cfg_iter cfi;
 	int i;
 
-//printf("BCAST INIT\n");
         cw_cfg_iter_init(cfg, &cfi, "actube/bcast");
 	if (cw_cfg_iter_next(&cfi,NULL) != NULL)
 		return 0;
 
 	
-	if (!cw_cfg_get_bool(cfg,"actube/ipv4", "true"))
+	if (!cw_cfg_get_bool(cfg,"actube/ipv4", 1))
 		return 1;
 
 	/*t = mavl_create_ptr(); */
@@ -497,7 +438,7 @@ char *conf_mods_dir = NULL;
  */ 
 static int init_mods(cw_Cfg_t *cfg){
 
-	int n, i;
+	int  i;
 	struct cw_Cfg_entry *e;
 	const char * modname;
 
@@ -603,23 +544,6 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 	port[l - (b - addrstr) - 2] = 0;
 	return 0;
 }
-
-static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
-
-	if (cfg && cfg->filename && cfg->line)
-		fprintf(stderr, "ERROR in %s:%d: ", 
-			cfg->filename, cfg->line);
-	else if (cfg && cfg->filename)
-		fprintf(stderr, "ERROR in %s:", cfg->filename);
-	vfprintf(stderr, fmt, ap);
-	fprintf(stderr,"\n");
-}
-
-void free_config()
-{
-
-}
-
 
 
 
