@@ -30,7 +30,7 @@
 #include "cw/keys.h"
 
 
-static void readsubelems_wtp_board_data(mavl_t cfg, uint8_t * msgelem,
+static void readsubelems_wtp_board_data(cw_Cfg_t * cfg, uint8_t * msgelem,
 					int len)
 {
 	int i = 0;

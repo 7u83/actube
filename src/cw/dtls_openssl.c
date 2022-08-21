@@ -224,7 +224,7 @@ int dtls_openssl_set_certs(struct cw_Conn * conn, struct dtls_openssl_data *d)
 {
 	int rc;
 	if (conn->dtls_key_file && conn->dtls_cert_file){
-		SSL_CTX_set_default_passwd_cb_userdata(d->ctx, conn->dtls_key_pass);
+		SSL_CTX_set_default_passwd_cb_userdata(d->ctx, (char*)conn->dtls_key_pass);
 		SSL_CTX_set_default_passwd_cb(d->ctx, pem_passwd_cb);
 
 
@@ -291,18 +291,18 @@ return 1;
 
 
 
-
+/*
 static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char * psk, unsigned int max_psk_len)
 {
 	BIO * b = SSL_get_rbio(ssl);
-	struct cw_Conn * conn = BIO_get_data(b); /*->ptr;*/
-	
+	struct cw_Conn * conn = BIO_get_data(b); //->ptr;
+
 	int l = bstr16_len(conn->dtls_psk) < max_psk_len ? bstr16_len(conn->dtls_psk) : max_psk_len;
 	memcpy(psk,conn->dtls_psk,l);
 	return l;
 }
 
-
+*/
 
 
 
@@ -323,10 +323,8 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const
 	}
 
 	rc = SSL_CTX_get_security_level(d->ctx);
-	printf("Security Level is %d\n");
 
 	SSL_CTX_set_security_level(d->ctx,0);
-	printf("Security Level is %d\n");
 
 	
 

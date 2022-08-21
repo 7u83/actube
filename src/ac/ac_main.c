@@ -33,7 +33,6 @@
 
 #include "socklist.h"
 
-#include "db.h"
 
 
 #include "cw/capwap_crypto.h"
@@ -78,12 +77,18 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				exit(EXIT_SUCCESS);
 				break;
 			case 'd':{
-				int b = cw_strlist_get_id(cw_dbg_strings, optarg);
+                                if (!cw_dbg_set_level_from_str(optarg)){
+                                        fprintf(stderr,"Invalid debug option: %s\n",optarg);
+                                        exit(EXIT_FAILURE);
+                                }
+
+					 
+/*				int b = cw_strlist_get_id(cw_dbg_strings, optarg);
 				if (b==-1){
 					fprintf(stderr,"Invalid debug option: %s\n",optarg);
 					exit(EXIT_FAILURE);
 				}
-				cw_dbg_set_level(b, 1);
+				cw_dbg_set_level(b, 1);*/
 				break;
 			}
 
@@ -259,7 +264,7 @@ int main (int argc, char *argv[])
 
 errX:
 	if (global_cfg)
-		mavl_destroy(global_cfg);
+		cw_cfg_destroy(global_cfg);
 
 	if (discovery_cache)
 		discovery_cache_destroy(discovery_cache);
@@ -302,8 +307,8 @@ int ac_run(cw_Cfg_t * cfg)
 		
 		conf_parse_listen_addr (s, addr, port, &proto);
 		socklist_add_unicast (addr, port, proto,
-				cw_cfg_get_bool(cfg,"actube/ipv4","true"),
-				cw_cfg_get_bool(cfg,"actube/ipv6","true")
+				cw_cfg_get_bool(cfg,"actube/ipv4",1),
+				cw_cfg_get_bool(cfg,"actube/ipv6",1)
 				);
         }
 	if (!i) {

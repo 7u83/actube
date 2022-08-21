@@ -29,7 +29,7 @@
 
 #include "sock.h"
 #include "conn.h"
-
+#include "cfg.h"
 
 enum {
 	CW_MOD_MODE_CAPWAP,
@@ -44,7 +44,7 @@ struct cw_Mod {
 	const char *name;
 
 	/** Initializion method */
-	int (*init) (struct cw_Mod *mod, mavl_t global_cfg, int role);
+	int (*init) (struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role);
 
 	/** Detect capwap 
 	 * This function is called after receiving and disassembling a complete 
@@ -93,7 +93,7 @@ extern int mod_caching;
 #define mod_set_caching(var) (mod_caching=var)
 #define mod_get_caching() (mod_caching)
 
-struct cw_Mod * cw_mod_load(const char * mod_name, mavl_t global_cfg, int role);
+struct cw_Mod * cw_mod_load(const char * mod_name, cw_Cfg_t * global_cfg, int role);
 struct cw_Mod * cw_mod_add_to_list(struct cw_Mod * mod );
 struct cw_Mod * cw_mod_detect(struct cw_Conn *conn, 
 			uint8_t * rawmsg, int len,

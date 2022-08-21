@@ -32,7 +32,7 @@ int dtls_openssl_accept(struct cw_Conn *conn)
 	
 	if (!conn->dtls_data)
 		conn->dtls_data =
-		    dtls_openssl_data_create(conn, DTLSv1_server_method(),
+		    dtls_openssl_data_create(conn, DTLS_server_method(),
 					     dtls_openssl_bio_method());
 
 	d = (struct dtls_openssl_data *) conn->dtls_data;

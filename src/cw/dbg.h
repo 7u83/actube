@@ -120,10 +120,12 @@ enum cw_dbg_levels{
 	DBG_MSG_COMPOSE	= (1<<26),
 
 	DBG_CFG_UPDATES	= (1<<27),
+
+	DBG_ELEM_VNDR	= (1<<28),
 	
 
 	DBG_X		= (1<<30),
-	DBG_ALL 	= (0xffffffff),
+	DBG_ALL 	= (0x7fffffff),
 
 
 	DBG_ELEM_DMP_IN	= 7,

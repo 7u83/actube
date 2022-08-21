@@ -9,6 +9,9 @@ int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys, mavl_t handle
 	char *mandkey, *result;
 	mlist_t missing;
 	int count;
+
+	if (msgdata==NULL)
+		return 0;
 	
 	missing = mlist_create_conststr();
 	if (missing==NULL){

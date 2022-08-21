@@ -11,6 +11,8 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 	struct mlistelem * elem;
 
 	len =0;
+	params->len=len;
+
 	mlist_foreach(elem,elements_list){
 		int l;
 		struct cw_ElemData * data;
@@ -52,6 +54,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 				data->proto, data->vendor, data->id, handler->name,l);
 
 		len += l;
+		params->len=len;
 	}
 
 	return len;
@@ -96,6 +99,7 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 	len =0;
 //cw_dbg(DBG_X,"setting with update CFG");
 	params.conn=conn;
+	params.rawmsg = rawout;
 	params.cfg_list[0]=conn->update_cfg;
 	params.cfg_list[1]=conn->local_cfg;
 	params.cfg_list[2]=conn->global_cfg;
@@ -220,7 +224,10 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 	elem_data_search.id = elem_id;
 	elem_data_search.proto = proto;
 	elem_data_search.vendor = vendor;
-	elem_data = mavl_get(params->msgdata->elements_tree, &elem_data_search);
+	if (params->msgdata)
+		elem_data = mavl_get(params->msgdata->elements_tree, &elem_data_search);
+	else
+		elem_data = NULL;
 	if (!elem_data) {
 		cw_dbg(DBG_ELEM_ERR, "Element %d - %s, not allowed here",
 		       elem_id, handler->name);
@@ -249,7 +256,7 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 		return -1;
 	}
 
-	if (!handler->flags)
+	if (!handler->flags || cw_dbg_is_level(DBG_ELEM_VNDR))
 		cw_dbg_elem(params->dbg_level, NULL, params->msgdata->type, handler,
 			    data, len);
 
@@ -273,7 +280,6 @@ int cw_decode_elements(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr
 
 	//mand_found = mavl_create_conststr();
 	//unrecognized = mlist_create(NULL,NULL,sizeof(uint8_t*));
-
 	cw_foreach_elem(elem, elems_ptr, elems_len) {
 		int rc;
 

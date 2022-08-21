@@ -20,7 +20,7 @@ static struct cw_DescriptorSubelemDef allowed_default[] = {
 /**
  * Read WTP Descriptor in Cisco-Style (Draft 7)
  */
-int cw_read_wtp_descriptor_7(mavl_t cfg, struct cw_Conn *conn,
+int cw_read_wtp_descriptor_7(cw_Cfg_t * cfg, struct cw_Conn *conn,
 			     struct cw_ElemHandler *eh, uint8_t * data, int len,
 			     struct cw_DescriptorSubelemDef *allowed)
 {

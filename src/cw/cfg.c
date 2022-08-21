@@ -621,6 +621,19 @@ uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def)
 	return v.val.word;
 }
 
+uint16_t cw_cfg_get_word_l(cw_Cfg_t ** cfg, char *key, uint16_t def)
+{
+	struct cw_Val v;
+	const char *s = cw_cfg_get_l(cfg,key,NULL);
+	if (s==NULL)
+		return def;
+	CW_TYPE_WORD->from_str(&v,s);
+	return v.val.word;
+}
+
+
+
+
 /*
 int cw_cfg_get_word(cw_Cfg_t * cfg, char *key, const char * def)
 {

@@ -42,7 +42,6 @@ void conn_q_add_packet(struct cw_Conn * conn,uint8_t *packet,int len)
 	conn->q[qwpos]=malloc(len+4);
 	if (conn->q[qwpos]==NULL)
 		return;
-	
 	*((uint32_t*)(conn->q[qwpos]))=len;
 	memcpy(conn->q[qwpos]+4,packet,len);	
 	conn->qwpos=qwpos+1;

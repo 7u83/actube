@@ -25,7 +25,7 @@ cw_ValStruct_t acstatus [] = {
 
 
 
-int cw_read_ac_descriptor(mavl_t store,
+int cw_read_ac_descriptor(cw_Cfg_t * store,
 			   struct cw_ElemHandler *eh,
 			   struct cw_ElemHandlerParams * params,
 			   uint8_t *data, int len, 

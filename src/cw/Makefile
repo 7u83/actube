@@ -18,7 +18,6 @@ CWSRC=\
 	cw_in_capwap_local_ipv4_address.c\
 	cw_in_capwap_local_ipv6_address.c\
 	cw_in_generic_with_index.c\
-	cw_in_generic_struct.c\
 	cw_in_radio_generic_struct.c\
 	cw_in_idx_generic.c\
 	cw_in_idx_generic_struct.c\
@@ -67,6 +66,7 @@ CWSRC=\
 	cw_write_radio_element.c\
 	cw_detect_nat.c\
 	cw_read_from.c \
+	cw_in_generic_struct.c\
 
 #	cw_in_check_disc_req.c\
 #	cw_in_check_img_data_req_ac.c\
@@ -210,6 +210,7 @@ MISCSRC=\
 	val.c \
 	discovery.c\
 	message.c\
+	cw_out_radio_generic_struct.c\
 
 
 #	intavltree.c\
@@ -228,7 +229,6 @@ DTLSSRC+=\
 
 
 RADIOSRC=\
-	cw_out_radio_generic_struct.c\
 	
 #	cw_in_radio_generic.c\
 #	cw_out_radio_generic.c\

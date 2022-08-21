@@ -146,12 +146,6 @@ struct cw_ValIndexed{
 };
 typedef struct cw_ValIndexed cw_ValIndexed_t;
 
-int cw_ktv_read_struct(mavl_t ktv,const cw_ValStruct_t * stru, const char *pkey, 
-	uint8_t * data, int len);
-int cw_ktv_write_struct(mavl_t ktv, mavl_t def, const cw_ValStruct_t * stru, const char *pkey, 
-	uint8_t * dst);
-
-
 
 extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;
@@ -178,24 +172,7 @@ extern const struct cw_Type cw_type_struct;
 /*
 void cw_kvstore_mavl_delete(const void *data);
  */
-cw_Val_t *cw_ktv_add(mavl_t kvstore, const char *key, const struct cw_Type *type, 
-			const void * valguard, 
-			   const uint8_t * data, int len);
 
-void cw_ktv_del_sub(mavl_t ktvstore, const char *basekey);
-
-cw_Val_t * cw_ktv_replace(mavl_t kvtstore, const char *key, const struct cw_Type *type,
-			const void * valguard,
-			const uint8_t * data, int len);
-
-const char * cw_ktv_add_from_str(mavl_t kvtstore, const char *key, const struct cw_Type *type, 
-			const void * valguard,
-			const char * str);
-
-int cw_ktv_mavlcmp(const void *v1, const void *v2);
-int cw_ktv_mavlcmp_type_by_name(const void *v1,const void *v2);
-
-void cw_ktv_mavldel(void *data);
 
 /**
  * Create a KTV store 

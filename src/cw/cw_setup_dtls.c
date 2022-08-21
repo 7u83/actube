@@ -50,10 +50,10 @@ int cw_setup_dtls(struct cw_Conn *conn, cw_Cfg_t * cfg, const char *prefix,
 	conn->dtls_cipher = cw_cfg_get(cfg, key, default_cipher);
 
 	sprintf(key, "%s/%s", prefix, "ssl-psk");
-	conn->dtls_psk = cw_cfg_get(cfg, key, NULL);
+	conn->dtls_psk = (bstr16_t)cw_cfg_get(cfg, key, NULL);
 
 	sprintf(key, "%s/%s", prefix, "ssl-psk-enable");
-	conn->dtls_psk_enable = cw_cfg_get_bool(cfg, key, "flase");
+	conn->dtls_psk_enable = cw_cfg_get_bool(cfg, key, 0);
 
 	if (conn->dtls_psk_enable) {
 		security |= CAPWAP_FLAG_AC_SECURITY_S;

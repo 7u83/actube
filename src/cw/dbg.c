@@ -92,7 +92,7 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_WARN, ANSI_CYAN},
 	{DBG_MOD, ANSI_WHITE},
 //	{DBG_CFG_DMP, ANSI_BCYAN }, 
-	{DBG_CFG_UPDATES,ANSI_BRED},	
+	{DBG_CFG_UPDATES,ANSI_GREEN},	
 
 	{CW_STR_STOP, ""}
 };

@@ -114,7 +114,6 @@ void discovery_cache_add(struct cw_DiscoveryCache *cache,
 		cw_dbg(DBG_X,"//////////////////////////   ADDD CAHCE ///////////////////////");
 		char str[128];
 	sock_addrtostr(addr,str,128,1);
-	printf("Add addr: %s\n",str);
 	}
 
 	struct cw_DiscoveryCacheElem * cur = cache->queue+cache->qpos;
@@ -159,7 +158,6 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- GET ENTER");
 	char str[128];
 	sock_addrtostr(addr,str,128,1);
-	printf("Add addr: %s\n",str);
 	}
 
 	search_ptr = &search;
@@ -169,7 +167,6 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 		cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- FOUND 1 with Port");
 		char str[128];
 		sock_addrtostr(addr,str,128,1);
-		printf("Add addr: %s\n",str);
 		}
 
 
@@ -196,7 +193,6 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- DOUND BY ADDR");
 	char str[128];
 	sock_addrtostr(addr,str,128,1);
-	printf("Add addr: %s\n",str);
 	}
 
 

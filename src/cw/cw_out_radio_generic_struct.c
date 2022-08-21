@@ -133,11 +133,11 @@ int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams
 
 {
 
-	char current[CW_CFG_MAX_KEY_LEN];
-	int stack[10];
-	stack[0]=0;
+	//char current[CW_CFG_MAX_KEY_LEN];
+	//int stack[10];
+	//stack[0]=0;
 
-	current[0]=0;
+	//current[0]=0;
 
 	stop();
 	return 0;

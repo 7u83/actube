@@ -14,21 +14,26 @@ int cisco_out_lw_path_mtu(struct cw_ElemHandler * eh,
 
 	char key[CW_CFG_MAX_KEY_LEN];
 	int len,max;
-		
+
+	int hl = params->msgset->header_len(eh);
+	int cl = dst-params->rawmsg;
+	int wl = 1400-cl-hl;
+
+printf("HL:%d CL:%d WL: %d\n",hl,cl,wl);
+
 	sprintf(key,"%s/%s",eh->key,"len");
-	len = cw_cfg_get_word(params->cfg,key,0);
+	len = cw_cfg_get_word_l(params->cfg_list,key,0);
 	if (len == 0)
 		return 0;
 	sprintf(key,"%s/%s",eh->key,"max");
-	max = cw_cfg_get_word(params->cfg,key,0);
+	max = cw_cfg_get_word_l(params->cfg_list,key,0);
 	
-	lw_set_word(dst+16,max);
-	lw_set_word(dst+16+2,len);
-	memset(dst+16+4,0,len-4);
-	
-	/* put the lwap elem header */
-	lw_set_dword(dst + 10, eh->vendor);
-	lw_set_word(dst + 14, eh->id);
+	lw_set_word(dst+hl,max);
+	lw_set_word(dst+hl+2,wl);
+	memset(dst+hl+4,0,wl-4);
 
-	return len + 6 + cw_put_elem_vendor_hdr(dst, eh->vendor, CISCO_ELEM_SPAM_VENDOR_SPECIFIC, len+6);
+	len = wl;	
+	
+	return params->msgset->write_header(eh,dst,len);
+	
 }

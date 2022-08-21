@@ -24,18 +24,20 @@ struct cw_ElemData{
 };
 
 struct cw_ElemHandlerParams {
-	struct cw_Conn * conn;  /**< a connection the message belongs to*/
-	struct cw_MsgSet * msgset;
+	struct cw_Conn * conn;  	/**< a connection the message belongs to*/
+	uint8_t * rawmsg;
+	struct cw_MsgSet * msgset;	/**< msgset to use */
 	struct cw_MsgData * msgdata; 
 	struct cw_ElemData * elemdata;
 	struct sockaddr *from;
-	mavl_t mand_found;
-	mlist_t unrecognized;
-//	cw_Val_t * elem;
+	mavl_t mand_found;		/**< used to ad the keys of mand. msg elements
+					     found while parsing */
+	mlist_t unrecognized;		/**< to catch ids of unreconized mss elements */
 	char * debug_details;
 	uint32_t dbg_level;
 	cw_Cfg_t * cfg;
 	cw_Cfg_t * cfg_list[10];
+	int len;
 };
 
 

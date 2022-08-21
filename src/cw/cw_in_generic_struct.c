@@ -10,7 +10,7 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 {
 	cw_dbg(DBG_X,"STRUCT KEY: %s",handler->key);
 	stop();
-	const char * key;
+/*	const char * key;
 	char tmpkey[CW_CFG_MAX_KEY_LEN];
 
 	
@@ -22,11 +22,8 @@ int cw_in_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 		key = handler->key;
 	}
 
-printf("CW_IN_GENERIC STRUCT: %s\n",key);	
+//printf("CW_IN_GENERIC STRUCT: %s\n",key);	
 
-/*	int (*mkkey)(struct cw_ElemHandler * handler, char *dst, struct cw_ElemHandlerParams * params, 
-		uint8_t*data, int len);
-*/
 
 	if (!handler->type){
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);
@@ -34,6 +31,6 @@ printf("CW_IN_GENERIC STRUCT: %s\n",key);
 	}
 
 	cw_ktv_read_struct(params->cfg,handler->type,key,elem_data,elem_len);
-
+*/
 	return CAPWAP_RESULT_SUCCESS;
 }

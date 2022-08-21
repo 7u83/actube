@@ -353,7 +353,7 @@ int cw_check_missing_mand(struct cw_MsgData *msgdata, mavl_t keys, mavl_t handle
 
 
 
-extern int cw_read_descriptor_subelems(mavl_t store, const char * key, uint8_t * data, int len,
+extern int cw_read_descriptor_subelems(cw_Cfg_t * store, const char * key, uint8_t * data, int len,
 				       struct cw_DescriptorSubelemDef *elems);
 
 /*
@@ -362,7 +362,7 @@ int cw_read_wtp_descriptor(mavl_t mbag, struct cw_Conn *conn,
 				  struct cw_DescriptorSubelemDef *allowed);
 */
 
-int cw_read_wtp_descriptor(mavl_t mbag, struct cw_Conn *conn,
+int cw_read_wtp_descriptor(cw_Cfg_t * mbag, struct cw_Conn *conn,
 			   struct cw_ElemHandler *eh, uint8_t * data, int len,
 			   struct cw_DescriptorSubelemDef *allowed);
 
@@ -373,12 +373,12 @@ int cw_write_radio_element(struct cw_ElemHandler * handler, struct cw_ElemHandle
 			 uint8_t * dst);
 			
 
-extern int cw_read_wtp_descriptor_7(mavl_t mbag, struct cw_Conn *conn,
+extern int cw_read_wtp_descriptor_7(cw_Cfg_t * cfg, struct cw_Conn *conn,
 				    struct cw_ElemHandler *eh, uint8_t * data, int len,
 				    struct cw_DescriptorSubelemDef *allowed);
 
 
-int cw_read_ac_descriptor(mavl_t store,
+int cw_read_ac_descriptor(cw_Cfg_t * store,
 			   struct cw_ElemHandler *eh,
 			   struct cw_ElemHandlerParams * params,
 			   uint8_t *data, int len, 

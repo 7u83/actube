@@ -97,7 +97,7 @@ static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 }
 */
 
-static int init(struct cw_Mod *mod, mavl_t global_cfg, int role)
+static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
 {
 /*	uint8_t * str;*/
 	static char * hardware_version; /*strdup(".x01000001");*/

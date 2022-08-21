@@ -29,6 +29,7 @@
 
 int conn_recv_packet_(struct cw_Conn *conn, uint8_t * buf, int len, int flags)
 {
+	printf("conn_recv\n");
 	int n;
 	while ((n = recv(conn->sock, (char *) buf, len, flags)) < 0) {
 		if (errno != EINTR) {

@@ -139,7 +139,7 @@ struct cw_Conn * cw_conn_create(int sock, struct sockaddr * addr, int qsize)
 /*	conn->send_data_packet = conn_send_data_packet;*/
 
 	conn->last_seqnum_received=-1;
-	conn->mtu=600;
+	conn->mtu=1480;
 
 
 	conn->cur_packet=0;
@@ -149,7 +149,7 @@ struct cw_Conn * cw_conn_create(int sock, struct sockaddr * addr, int qsize)
 	conn->write = conn->send_packet;
 	conn->read = conn->recv_packet;
 
-	conn->dtls_mtu = 600;
+	conn->dtls_mtu = 1480;
 
 
 
@@ -349,7 +349,8 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 	/* pre-check message */
 	if (payloadlen - 8 != elems_len) {
-
+//printf ("The elems_len is %d\n",elems_len);
+//printf ("The len = %d\n",len);
 		if (conn->strict_hdr) {
 			cw_dbg(DBG_MSG_ERR,
 			       "Discarding message from %s, msgelems len=%d, payload len=%d, (Strict CAPWAP) ",
@@ -365,7 +366,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 			       "Packet from from %s has %d bytes of extra data, ignoring.",
 			       sock_addr2str(&conn->addr, sock_buf),
 			       payloadlen - 8 - elems_len);
-			elems_len = len - 8;
+			//elems_len = len - 8;
 		}
 
 		if (elems_len > payloadlen - 8) {

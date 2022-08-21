@@ -22,7 +22,7 @@
 #include "keys.h"
 
 
-int cw_read_descriptor_subelems(mavl_t cfg, const char *parent_key,
+int cw_read_descriptor_subelems(cw_Cfg_t *cfg, const char *parent_key,
 				uint8_t * data, int len,
 				struct cw_DescriptorSubelemDef *elems)
 {

@@ -64,10 +64,12 @@ static void wtpman_run_discovery(void *arg)
 
 	wtpman->conn->capwap_state = CAPWAP_STATE_DISCOVERY;
 
+
 	while (!cw_timer_timeout(timer)
 	       && wtpman->conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
 		rc = cw_read_messages(wtpman->conn);
+
 
 		if (cw_result_is_ok(rc)) {
 			wtpman->conn->capwap_state = CAPWAP_STATE_JOIN;
@@ -85,7 +87,6 @@ static void wtpman_run_discovery(void *arg)
 
 		}
 	}
-
 	return;
 }
 
@@ -606,12 +607,14 @@ static void copy(struct cw_ElemHandlerParams * params)
 	conn = (struct cw_Conn*)params->conn;
 
 
-	cw_dbg(DBG_X,"-------------  Here is the config we ve got from WTP ---------------- ");
-	cw_cfg_dump(params->cfg);
-	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
-	cw_dbg(DBG_X,"Now copying:");
-	cw_cfg_copy(params->cfg,conn->local_cfg,0,"");
-	cw_dbg(DBG_X,"Copying done.");
+//	cw_dbg(DBG_X,"-------------  Here is the config we ve got from WTP ---------------- ");
+//	cw_cfg_dump(params->cfg);
+//	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
+//	cw_dbg(DBG_X,"Now copying:");
+//	cw_cfg_copy(params->cfg,conn->local_cfg,0,"");
+        cw_cfg_copy(params->cfg, params->conn->local_cfg,DBG_CFG_UPDATES,"GlobalCfg");
+
+//	cw_dbg(DBG_X,"Copying done.");
 }
 
 static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
@@ -649,7 +652,24 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
 	sprintf(filename,"wtp-status-%s.ckv",wtpname);
 	cw_cfg_save(filename,params->cfg,NULL);
-stop();	
+//stop();	
+	return 0;
+}
+
+static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	char filename[200];
+
+
+	
+	cw_dbg(DBG_X,"WTP EVENT Callback");
+	copy(params);
+
+	const char * wtpname = cw_cfg_get(conn->local_cfg,"wtp-name","default");
+	sprintf(filename,"wtp-status-%s.ckv",wtpname);
+	cw_cfg_save(filename,params->cfg,NULL);
+//stop();	
 	return 0;
 }
 
@@ -738,6 +758,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	cw_conn_set_msg_cb(wtpman->conn,
 			CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
 			update_cb);
+
+	cw_conn_set_msg_cb(wtpman->conn,
+			CAPWAP_MSG_WTP_EVENT_REQUEST,
+			event_cb);
 
 
 

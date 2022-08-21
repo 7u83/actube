@@ -119,7 +119,7 @@ void cw_mod_set_path(const char *path)
  * @param mod_name Name of the module
  * @return a pointer to the module interface
  */
-struct cw_Mod *cw_mod_load(const char *mod_name, mavl_t global_cfg, int role)
+struct cw_Mod *cw_mod_load(const char *mod_name, cw_Cfg_t * global_cfg, int role)
 {
 	struct cw_Mod search;
 	struct cw_Mod *mod;

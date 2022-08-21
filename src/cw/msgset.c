@@ -384,6 +384,9 @@ int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states
 	return 1;
 }
 
+
+
+
 /**
  * @brief Find message data to a specific message
  * @param set message set
@@ -392,9 +395,14 @@ int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states
  */
 struct cw_MsgData *cw_msgset_get_msgdata(struct cw_MsgSet *set, int type)
 {
-	struct cw_MsgData search;
+
+	struct cw_MsgData search, *result;
 	search.type = type;
-	return mavl_get(set->msgdata, &search);
+	result = mavl_get(set->msgdata, &search);
+	if (result != NULL)
+		return result;
+
+	return NULL;
 }
 
 typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
