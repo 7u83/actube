@@ -175,7 +175,8 @@ int main (int argc, char **argv)
 //	cw_run_discovery(conn, "192.168.0.162","192.168.0.14", &dis);
 	//cw_run_discovery(conn, "255.255.255.255","192.168.0.14", &dis);
 //	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
-	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.119");
 
 	if (!join(conn,results)){
 		cw_discovery_results_destroy(results); 
