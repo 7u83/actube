@@ -39,13 +39,12 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
 	d+=cw_put_byte(d,val);
 	if (val<=0){
-		cw_dbg(DBG_WARN,"Cannot value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
+		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
 		d+=cw_put_byte(d,0);
 	}
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
 	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
-cw_dbg("WTP-DESCRIPTOR: radios in use: %d",val);	
 	d+=cw_put_byte(d,val);	/*radios in use*/
 
 /* 	d+=cw_put_encryption_capabilities_7(d,1); */

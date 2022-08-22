@@ -1,6 +1,7 @@
 #include "cw.h"
 #include "log.h"
 #include "dbg.h"
+#include "keys.h"
 
 int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params,
 		uint8_t * elem_data, int elem_len)
@@ -154,5 +155,45 @@ int cw_header_len(struct cw_ElemHandler * handler)
 {
 	return handler->vendor ? 10 : 4;
 }
+
+
+
+
+int cw_put_ac_status(cw_Cfg_t ** cfg_list, uint8_t *dst, const char * parent_key){
+	stop();
+
+	uint8_t *d = dst;
+	
+	char key[CW_CFG_MAX_KEY_LEN];
+	
+	/* put statiosn */
+	sprintf(key,"%s/%s",parent_key,"stations");
+	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
+
+	/* put station limit */
+	sprintf(key,"%s/%s",parent_key,"station-limit");
+	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
+
+	/* Put number of active WTPS */
+	sprintf(key,"%s/%s",parent_key,"active-wtps");
+	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
+
+	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,"ac-descriptor/max-wtps",0));
+	
+	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,"ac-descriptor/security",0));
+
+	sprintf(key,"%s/%s",parent_key,CW_SKEY_RMAC_FIELD);
+	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,key,0));
+	
+	/* reserved field, must be zero - RFC5415 */
+	d += cw_put_byte(d,0); 
+
+
+	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
+	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,key,0));
+
+	return d - dst;
+}
+
 
 

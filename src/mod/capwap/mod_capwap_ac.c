@@ -47,10 +47,11 @@ static int detect(struct cw_Conn *conn, const uint8_t * rawmsg, int rawlen, int 
 int static setup_cfg(struct cw_Conn  * conn)
 {
 	int security;
-	
 	security = cw_setup_dtls(conn,conn->local_cfg,"capwap",CAPWAP_CIPHER);
+
+
 	printf ("ROLE: %d\n",conn->role);
-	stop();
+//	stop();
 //	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
 
 	return 0;
