@@ -1,31 +1,34 @@
 pre-requisites to build actube
 ==============================
 
+Compile 
+=======
 
-On FreeBSD 10.2
+FreeBSD 
 ----------------
 
 pkg install wget
-pkg install libnettle
+pkg install nettle
+cd src/contrib
+sh install_libmavl
+cd ..
+make
 
 
-Ubuntu 14.04
-------------
+
+Ubuntu
+------
 
 apt-get install build-essential clang
 apt-get install nettle-dev
 apt-get install libssl-dev
 apt install bmake
+cd src/contrib
+sh install_libmavl
+cd ..
+bmake
 
 
-
-pre-requisites to build wtp
-===========================
-
-Ubuntu 14.04
-------------
-
-apt-get install libnl-genl-3-dev
 
 
 
