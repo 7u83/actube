@@ -6,7 +6,7 @@ LIBDIR		:= ../../lib
 LIBARCHDIR	:= $(LIBDIR)/$(KERNEL)/$(ARCH)
 
 CFLAGS+=-I../ -DUSE_OPENSSL -I../../include
-LDFLAGS+=-L$(LIBARCHDIR) 
+LDFLAGS+=-L$(LIBARCHDIR) -L/usr/local/lib
 LIBS+=-lcw -lnettle -lssl -lcrypto -ldl -lpthread -lmavl
 
 SOURCES=\
