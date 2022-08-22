@@ -50,7 +50,6 @@ int static setup_cfg(struct cw_Conn  * conn)
 	security = cw_setup_dtls(conn,conn->local_cfg,"capwap",CAPWAP_CIPHER);
 
 
-	printf ("ROLE: %d\n",conn->role);
 //	stop();
 //	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
 

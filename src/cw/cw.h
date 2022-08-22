@@ -552,6 +552,9 @@ int cw_write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len);
 int cw_header_len(struct cw_ElemHandler * handler);
 
 int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout);
+int cw_put_ac_status(uint8_t *dst, cw_Cfg_t ** cfg_list, const char * parent_key);
+int cw_put_descriptor_subelem (uint8_t *dst, cw_Cfg_t ** cfg_list,
+                                 int subelem_id, const char * parent_key );
 
 
 /**

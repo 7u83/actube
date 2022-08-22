@@ -158,9 +158,14 @@ int cw_header_len(struct cw_ElemHandler * handler)
 
 
 
-
-int cw_put_ac_status(cw_Cfg_t ** cfg_list, uint8_t *dst, const char * parent_key){
-	stop();
+/**
+ * Put the "status part" of an an AC Descriptor to memory
+ * @param cfg_list Cfg list to read status from
+ * @param dst Where to put the status to
+ * @param parent_key prefix to each key
+ */
+int 
+cw_put_ac_status(uint8_t *dst, cw_Cfg_t ** cfg_list, const char * parent_key){
 
 	uint8_t *d = dst;
 	
@@ -174,26 +179,92 @@ int cw_put_ac_status(cw_Cfg_t ** cfg_list, uint8_t *dst, const char * parent_key
 	sprintf(key,"%s/%s",parent_key,"station-limit");
 	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
 
-	/* Put number of active WTPS */
+	/* Put number of active WTPs */
 	sprintf(key,"%s/%s",parent_key,"active-wtps");
 	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
 
-	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,"ac-descriptor/max-wtps",0));
-	
-	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,"ac-descriptor/security",0));
+	/* Put max WTPs */
+	sprintf(key,"%s/%s",parent_key,"max-wtps");
+	d += cw_put_word(d,cw_cfg_get_word_l(cfg_list,key,0));
 
-	sprintf(key,"%s/%s",parent_key,CW_SKEY_RMAC_FIELD);
+	/* Put security flags */	
+	sprintf(key,"%s/%s",parent_key,"security");
+	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,key,0));
+
+	/* Put rmac-filed */
+	sprintf(key,"%s/%s",parent_key,"rmac-field");
 	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,key,0));
 	
 	/* reserved field, must be zero - RFC5415 */
 	d += cw_put_byte(d,0); 
 
-
-	sprintf(key,"%s/%s",parent_key,CW_SKEY_DTLS_POLICY);
+	sprintf(key,"%s/%s",parent_key,"dtls-policy");
 	d += cw_put_byte(d,cw_cfg_get_byte_l(cfg_list,key,0));
 
 	return d - dst;
 }
 
+/** 
+ * Put a descripter sub element like harware vendor/version etc.
+ * Used when putting AC Descriptors or WTP Descriptors
+ * @param dst Where to write to
+ * @param cfg_list list of cfgs
+ * @subelem_id Id of subelement
+ * @parent_key parent key
+ */
+int 
+cw_put_descriptor_subelem (uint8_t *dst, cw_Cfg_t ** cfg_list,
+                                 int subelem_id, const char * parent_key )
+{
+	char key[256];
+	uint32_t vendor;
+	//bstr16_t version;
+	const char *vendor_s;
+
+	uint8_t *d;
 
 
+	/*        d += cw_put_dword(d, bstrv_get_vendor_id(v));
+	d += cw_put_dword(d, (subelem_id << 16) | bstrv_len(v));
+	d += cw_put_data(d, bstrv_data(v), bstrv_len(v));
+	*/
+	sprintf (key, "%s/%s", parent_key, CW_SKEY_VENDOR);
+	vendor_s = cw_cfg_get_l (cfg_list, key, NULL);
+	
+	if (vendor_s == NULL) {
+		cw_log (LOG_ERR, "Can't put subelem %s, no value of type Dword found.", key);
+		return 0;
+	}
+
+	vendor = atoi(vendor_s);	
+
+
+
+	sprintf (key, "%s/%s", parent_key, CW_SKEY_VERSION);
+	cw_Val_t * val = cw_cfg_get_val_l(cfg_list, key, CW_TYPE_BSTR16);
+
+	//version = cw_cfg_get_bstr16 (cfg, key, NULL);
+
+
+	if (val == NULL) {
+		cw_log (LOG_ERR, "Can't put subelem %s, no value of type Bstr16 found.", key);
+		return 0;
+	}
+	
+	d = dst;
+	
+	/* put vendor */
+	d += cw_put_dword(d, vendor); //->type->put (vendor, d);
+	
+	/* put version */
+	
+	d += cw_put_dword (d, (subelem_id << 16) | val->type->len(val));
+//	d += cw_put_bstr16(d, version);
+	d += val->type->put(val,d);
+
+	cw_val_destroy(val);
+
+//	free(version);
+	
+	return d-dst;
+}
