@@ -44,7 +44,7 @@ $(PRG): $(OBJS)
 	$(CC) $(OBJS) -o $(PRG) $(LIBPATH) $(LDFLAGS) $(LIBS) 
 
 $(ACTPRG): $(ACTOBJS)
-	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LDFLAGS) -ledit -lcw -lcrypto -lssl -lmavl -lnettle
+	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LDFLAGS) $(LIBS) -ledit 
 
 
 
