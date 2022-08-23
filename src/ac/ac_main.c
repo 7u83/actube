@@ -211,7 +211,6 @@ int main (int argc, char *argv[])
 	parse_args (argc, argv, &bootcfg);
 
 
-
 	global_cfg=cw_cfg_create();
 	if (!global_cfg){
 		fprintf(stderr,"Can't create global_cfg: %s\n",strerror(errno));
@@ -226,6 +225,7 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
+test_shell();
 
 	cw_log_name = "AC-Tube";
 

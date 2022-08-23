@@ -4,19 +4,31 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <sys/un.h>
 
-void sock_addrinit(struct sockaddr *addr,int type)
+#include "sock.h"
+
+void sock_addrinit(struct sockaddr_storage *addr,int type)
 {
+	int len;
 	switch (type){
 		case AF_INET:
-			memset(addr,0,sizeof(struct sockaddr_in));
-			addr->sa_family=type;
-#ifdef HAVE_SIN_LEN
-			addr_sa_len=sizeof(struct sockaddr_in);
-#endif
-			return;
-
+			len=sizeof(struct sockaddr_in);
+			break;
+		case AF_INET6:
+			len=sizeof(struct sockaddr_in6);
+			break;
+		case AF_UNIX:
+			len = sizeof(struct sockaddr_un);
+			break;
+		default:
+			len=0;
 	}
 	
+	memset(addr,0,len);
+	addr->ss_family=type;
+#ifdef HAVE_SS_LEN
+	addr->ss_len=len;
+#endif	
 
 }

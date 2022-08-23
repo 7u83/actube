@@ -18,6 +18,7 @@ enum {
 };
 
 int start_shell(cw_Cfg_t *global_cfg);
+int test_shell();
 
 
 #endif

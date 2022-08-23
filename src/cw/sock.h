@@ -35,8 +35,9 @@
 
 
 #ifdef __FreeBSD__
-#define HAVE_SIN_LEN
-#define HAVE_SIN6_LEN
+#define HAVE_SIN_LEN 1
+#define HAVE_SIN6_LEN 1
+#define HAVE_SS_LEN 1
 #endif
 
 
@@ -68,7 +69,7 @@ extern int sock_getport(struct sockaddr *addr);
 extern int sock_setport(struct sockaddr *addr, int port);
 extern int sock_getbroadcastaddr(const struct sockaddr *addr,
 				 struct sockaddr *broadcastaddr);
-extern void sock_addrinit(struct sockaddr *addr, int type);
+extern void sock_addrinit(struct sockaddr_storage *addr, int type);
 extern int sock_set_dontfrag(int sock, int val);
 
 

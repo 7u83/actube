@@ -6,8 +6,10 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <arpa/telnet.h>
+#include <sys/wait.h>
 
+#include <arpa/telnet.h>
+#include <histedit.h>
 
 
 #include "cw/sock.h"
@@ -24,15 +26,26 @@
 
 
 struct shelldata{
+
+	FILE *in;
 	FILE *out;
+	FILE *eout;
+
 	char prompt[1024];
-	mavl_t update_cfg;
+	cw_Cfg_t * update_cfg;
 	char *history[2000];
 	char line[4096];
 	int pos;
 	char esc[8];
 	int escpos;
 	int quit;
+
+	History *hist;
+	HistEvent ev;
+	Tokenizer *tok;
+	EditLine *el;
+
+	FILE * file;
 };
 
 struct sockdata{
@@ -112,7 +125,7 @@ void cfg_cmd(struct shelldata *sd, const char *cmd)
 
 void ucfg_cmd(struct shelldata *sd, const char *cmd)
 {
-	struct cw_Conn * conn;
+//	struct cw_Conn * conn;
 	stop();
 //	show_cfg(sd->out,sd->update_cfg);
 
@@ -158,21 +171,21 @@ wlan0_cmd(struct shelldata * sd, const char *cmd)
 
 void set_cmd(struct shelldata *sd, const char *str)
 {
-	struct cw_Conn * conn;
+/*	struct cw_Conn * conn;
 	struct cw_Val_Reader r;
 	char key[CW_CFG_MAX_KEY_LEN];
 	char type[CW_CFG_MAX_KEY_LEN];
 	char val[2048];
-
+*/
 	stop();
 
 //	cw_ktv_init_str_reader(&r,str,strlen(str));
 	
-	cw_ktv_parse_string(&r,key,type,val);
+//	cw_ktv_parse_string(&r,key,type,val);
 	/*cw_ktv_parse_string(key,type,val, 2048);*/
 	
-	fprintf(sd->out,"%s :%s: %s\n",key,type,val);
-	cw_ktv_add(sd->update_cfg,key,CW_TYPE_STR,NULL,val,strlen(val));
+//	fprintf(sd->out,"%s :%s: %s\n",key,type,val);
+//	cw_ktv_add(sd->update_cfg,key,CW_TYPE_STR,NULL,val,strlen(val));
 }
 
 void del_cmd(struct shelldata *sd, const char *str)
@@ -472,6 +485,20 @@ static int cmpansi(char * str,char * ansistr)
 }
 
 
+
+static char *
+prompt(EditLine *el )
+{
+	static char a[] = "\1\033[7m\1Edit$\1\033[0m\1 ";
+	static char b[] = "Edit> ";
+
+	return b;
+//	return (continuation ? b : a);
+}
+
+
+
+
 static void get_line_char_mode(FILE * file, struct shelldata *sd)
 {
 	int c;
@@ -570,13 +597,13 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 		if (strcmp(es->result,"left")==0){
 			if (sd->pos>0){
 				sd->pos--;
-				fprintf(file,es->str);
+				fprintf(file,"%s",es->str);
 			}
 		}
 		if (strcmp(es->result,"right")==0){
 			if (sd->line[sd->pos]!=0){
 				sd->pos++;
-				fprintf(file,es->str);
+				fprintf(file,"%s",es->str);
 			}
 		}
 
@@ -590,6 +617,118 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 }
 
 
+void init_edline(struct shelldata *sd)
+{
+	sd->hist = history_init();			/* Init the builtin history	*/
+	history(sd->hist, &sd->ev, H_SETSIZE, 100);		 /* Remember 100 events		*/
+
+	sd->tok  = tok_init(NULL);			/* Initialize the tokenizer	*/
+	sd->el = el_init("actube", sd->in, sd->out, sd->eout);
+
+	el_set(sd->el, EL_EDITOR, "emacs");	/* Default editor is vi		*/
+	el_set(sd->el, EL_HIST, history, sd->hist);
+//	el_set(sd->el, EL_UNBUFFERED, 1);
+
+
+
+}
+
+void get_edline(struct shelldata * sd)
+{
+	int num;
+	int ncontinuation;
+	int continuation=0;
+	const char *buf;
+
+	while ((buf = el_gets(sd->el, &num)) != NULL && num != 0)  {
+		int ac, cc, co;
+		const char **av;
+		const LineInfo *li;
+		li = el_line(sd->el);
+/*		if (gotsig) {
+			(void) fprintf(stderr, "Got signal %d.\n", (int)gotsig);
+			gotsig = 0;
+			el_reset(el);
+		}
+*/
+		if (!continuation && num == 1)
+			continue;
+
+		ac = cc = co = 0;
+		ncontinuation = tok_line(sd->tok, li, &ac, &av, &cc, &co);
+		if (ncontinuation < 0) {
+			(void) fprintf(stderr, "Internal error\n");
+			continuation = 0;
+			continue;
+		}
+				/* Simpler */
+		history(sd->hist, &sd->ev, continuation ? H_APPEND : H_ENTER, buf);
+
+		continuation = ncontinuation;
+		ncontinuation = 0;
+		if (continuation)
+			continue;
+
+/*		if (strcmp(av[0], "history") == 0) {
+			int rv;
+
+			switch (ac) {
+			case 1:
+				for (rv = history(hist, &ev, H_LAST); rv != -1;
+				    rv = history(hist, &ev, H_PREV))
+					(void) fprintf(stdout, "%4d %s",
+					    ev.num, ev.str);
+				break;
+
+			case 2:
+				if (strcmp(av[1], "clear") == 0)
+					 history(hist, &ev, H_CLEAR);
+				else
+					 goto badhist;
+				break;
+
+			case 3:
+				if (strcmp(av[1], "load") == 0)
+					 history(hist, &ev, H_LOAD, av[2]);
+				else if (strcmp(av[1], "save") == 0)
+					 history(hist, &ev, H_SAVE, av[2]);
+				break;
+
+			badhist:
+			default:
+				(void) fprintf(stderr,
+				    "Bad history arguments\n");
+				break;
+			}
+		} else */
+	if (el_parse(sd->el, ac, av) == -1) {
+			switch (fork()) {
+			case 0:
+//				printf("AV: %s\n",av[0]);
+//				execvp(av[0], (char *const *)__UNCONST(av));
+//				perror(av[0]);
+//				stop();				
+//				_exit(1);
+				/*NOTREACHED*/
+				break;
+
+			case -1:
+				perror("fork");
+				break;
+
+			default:
+				if (wait(&num) == -1)
+					perror("wait");
+				(void) fprintf(stderr, "Exit %x\n", num);
+				break;
+			}
+		}
+
+		tok_reset(sd->tok);
+	}
+
+
+}
 
 void shell_loop (FILE *file)
 {
@@ -601,16 +740,26 @@ void shell_loop (FILE *file)
 	*/
 	
 	char str[2048];
-//	sd.update_cfg = cw_ktv_create();
 	
-	
-	sd.out = file;
+	sd.file = file;	
+	sd.out = stdout;
+	sd.eout = stderr;
+	sd.in=stdin;
+
 	sprintf(sd.prompt,"%s","*");
 	sd.quit=0;
-	
+
+/*	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_ECHO );
+	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_SGA );
+	fprintf (file,"%c%c%c",IAC,DONT,TELOPT_LINEMODE );
+	fflush(file);
+*/
+	init_edline(&sd);
+
 	do {
 		int c;
-		get_line_char_mode(file,&sd);
+		get_edline(&sd);
+//		get_line_char_mode(file,&sd);
 		printf("THE CMD FROM LINE '%s'\n",sd.line);
 
 		str[0]=0;
@@ -622,9 +771,9 @@ void shell_loop (FILE *file)
 
 	//	printf("My String: %s\n",str);
 
-		execute_cmd (&sd, sd.line);
-		if (sd.quit)
-			break;
+//		execute_cmd (&sd, sd.line);
+//		if (sd.quit)
+//			break;
 
 	} while (c != EOF);
 	
@@ -690,14 +839,13 @@ int create_tcp_fd(const char *name)
 	}
 	
 	sockfd = socket ( ( (struct sockaddr*) &server)->sa_family, SOCK_STREAM, 0);
-	
 	yes = 1;
 	/* reuse address */
 	setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof (yes));
 	
 	
 	/* bind address */
-	rc =  bind (sockfd, (struct sockaddr*) &server, sizeof (server));
+	rc =  bind (sockfd, (struct sockaddr*) &server, sizeof (struct sockaddr));
 	
 	if (rc) {
 		cw_log (LOG_ERR, "Can't bind socket address '%s', %s", addr, strerror (errno));
@@ -716,8 +864,7 @@ static int create_unix_fd(const char *name)
 	unlink(name);
 	fd = socket(PF_UNIX, SOCK_STREAM, 0);
 
-	memset(&addr, 0, sizeof(addr));
-	addr.sun_family = AF_UNIX;
+	sock_addrinit((struct sockaddr_storage*)&addr,AF_UNIX);
 	strncpy(addr.sun_path, name, sizeof(addr.sun_path)-1);
 	rc = bind(fd, (struct sockaddr*)&addr, sizeof(addr));
 	if (rc) {
@@ -729,6 +876,11 @@ static int create_unix_fd(const char *name)
 	return fd;
 }
 
+test_shell()
+{
+	shell_loop(NULL);
+	return 0;
+}
 
 int start_shell(cw_Cfg_t *global_cfg)
 {
@@ -792,7 +944,7 @@ errX:
 	if (sockdata->fd!=-1)
 		close(sockdata->fd);
 	if (sockdata->name)
-		free(sockdata->name);
+		free((void*)sockdata->name);
 
 	free(sockdata);
 	return 0;
