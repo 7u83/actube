@@ -1,9 +1,7 @@
 #ifndef __ACTUBE_AC_H
 #define __ACTUBE_AC_H
 
-#include "mavl.h"
-#include "cw/mavltypes.h"
-
+#include "cw/cfg.h"
 
 extern struct ac_status ac_global_status;
 
@@ -19,7 +17,7 @@ enum {
 	AC_PROTO_UNKNOWN
 };
 
-void start_shell();
+int start_shell(cw_Cfg_t *global_cfg);
 
 
 #endif

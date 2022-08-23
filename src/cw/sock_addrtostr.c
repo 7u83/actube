@@ -31,6 +31,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
@@ -88,7 +89,7 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
 		}
 			break;
 
-#endif				/* AF_LINLK */
+#endif	/* AF_LINLK */
 
 #ifdef AF_PACKET
 		case AF_PACKET:
@@ -103,11 +104,17 @@ char *sock_addrtostr(const struct sockaddr *sa, char *s, size_t maxlen, int addp
 			sprintf(sp, "%02X", sl->sll_addr[i]);
 		}
 			break;
-#endif				/* AF_PACKET */
+#endif	/* AF_PACKET */
+		case AF_UNIX:
+		{
+			struct sockaddr_un *addr = (struct sockaddr_un *) sa;
+			snprintf(s, maxlen, "%s", addr->sun_path);
+		}
+			break;
 
 
 		default:
-			strncpy(s, "Unknown AF", maxlen);
+			snprintf(s,maxlen, "Unknown AF: %d", sa->sa_family);
 			return NULL;
 	}
 	return s;

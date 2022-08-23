@@ -25,4 +25,8 @@
 #define ANSI_ITALIC	"\x1b[3m"
 #define ANSI_BOLD	"\x1b[1m"
 
+
+#define ANSI_HOME	"[H"
+
+
 #endif /* __ANSI_COLORS_H */

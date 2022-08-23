@@ -40,6 +40,11 @@ actube/ipv6: false
 actube/mod.1: capwap
 actube/mod.2: capwap80211
 
+#actube/shell/listen: unix:/tmp/actube
+actube/shell/listen: tcp:127.0.0.1:5000
+actube/shell/enable: true
+actube/shell/term: ansi
+
 
 ac-descriptor/dtls-policy:  1
 ac-descriptor/hardware/vendor: 4232704

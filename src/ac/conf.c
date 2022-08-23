@@ -298,7 +298,7 @@ int init_bcast_addrs(cw_Cfg_t *cfg)
 			sr = mavl_add_str(t, s);
 
 
-			printf("BCAST = %p --- %p: %s\n",str,s,str);
+//			printf("BCAST = %p --- %p: %s\n",str,s,str);
 		}
 
 	}
@@ -549,7 +549,6 @@ int conf_parse_listen_addr(const char *addrstr, char *saddr, char *port, int *pr
 
 void ac_conf_init(cw_Cfg_t *cfg)
 {
-	printf("ac conf\n");
 	init_listen_addrs(cfg);
 	init_bcast_addrs(cfg);
 	init_ac_name(cfg);

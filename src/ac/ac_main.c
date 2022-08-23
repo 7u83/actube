@@ -52,8 +52,34 @@ int ac_run(cw_Cfg_t * cfg);
 #include "statemachine.h"
 
 #include <getopt.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
+/*
+void tshell_run(int fd)
+{
+	int rc;
+	printf("listening\n");
+	rc = listen(fd,5);
+	printf("listen returned %d\n",rc);
+	clientsock = accept (sockfd, (struct sockaddr*) &client, &client_size);
+	
 
+}
+
+void tshell()
+{
+	printf("tshell start\n");
+	struct sockaddr_un addr;
+
+	int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+	memset(&addr, 0, sizeof(addr));
+	addr.sun_family = AF_UNIX;
+	strncpy(addr.sun_path, "./tsocket", sizeof(addr.sun_path)-1);
+	bind(fd, (struct sockaddr*)&addr, sizeof(addr));
+	while(1);
+}
+*/
 
 struct bootcfg {
 	const char * cfgfilename;
@@ -181,8 +207,6 @@ int main (int argc, char *argv[])
 	int rc = 0;
 	struct bootcfg bootcfg;
 
-
-
 	/* parse arguments */
 	parse_args (argc, argv, &bootcfg);
 
@@ -234,12 +258,8 @@ int main (int argc, char *argv[])
 	}
 
 */
-
-
-	
 	
 		
-	start_shell();
 
 	/* Init DTLS library */
 	dtls_init();
@@ -255,9 +275,15 @@ int main (int argc, char *argv[])
 	if (!dataman_list_init())
 		goto errX;
 
+
+
 	ac_conf_init(global_cfg);
 
-	cw_cfg_dump(global_cfg);
+	if (!start_shell(global_cfg))
+		goto errX;
+
+
+//	cw_cfg_dump(global_cfg);
 		
 	cw_log (LOG_INFO, "Starting AC-Tube, Name=%s, ID=%s", cw_cfg_get(global_cfg,"capwap/ac-name",NULL), conf_acid);
 	rc = ac_run(global_cfg);
