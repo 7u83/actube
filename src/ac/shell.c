@@ -32,6 +32,7 @@ struct shelldata{
 	int pos;
 	char esc[8];
 	int escpos;
+	int quit;
 };
 
 struct sockdata{
@@ -48,6 +49,7 @@ void set_cmd(struct shelldata *sd, const char * cmd);
 void del_cmd(struct shelldata *sd, const char * cmd);
 void send_cmd(struct shelldata *sd, const char * cmd);
 void wlan0_cmd(struct shelldata *sd, const char * cmd);
+void exit_cmd(struct shelldata *sd, const char * cmd);
 //void show_cfg (FILE *out, mavl_t ktv);
 void show_aps (FILE *out);
 
@@ -59,6 +61,7 @@ struct command{
 };
 
 static struct command cmdlist[]={
+	{"exit",exit_cmd},
 	{"cfg", cfg_cmd },
 	{"del", del_cmd },
 	{"ucfg", ucfg_cmd},
@@ -84,6 +87,13 @@ void list_cmd(struct shelldata *sd, const char *cmd)
 {
 	show_aps(sd->out);
 }
+
+void exit_cmd(struct shelldata *sd, const char *cmd)
+{
+	sd->quit=1;
+}
+
+
 
 void cfg_cmd(struct shelldata *sd, const char *cmd)
 {
@@ -371,7 +381,7 @@ void execute_cmd (struct shelldata * sd, const char *str)
 		}
 	}
 	else{
-		fprintf(sd->out,"Unknown command: '%s'\n",cmd);
+		fprintf(sd->out,"Unknown command: '%s'\n\r",cmd);
 	}
 
 	return;
@@ -478,10 +488,10 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 	/* Put telnet into char mode */
 	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_ECHO );
 	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_SGA );
-//	fprintf (file,"%c%c%c",IAC,DONT,TELOPT_LINEMODE );
+	fprintf (file,"%c%c%c",IAC,DONT,TELOPT_LINEMODE );
 
 
-	fprintf (file, "\n\ractube[%s]:>", sd->prompt);
+	fprintf (file, "actube[%s]:>", sd->prompt);
 	fflush (file);
 
 	while ( (c=fgetc(file))!= EOF){
@@ -525,7 +535,10 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 		if (!es){
 			if (c=='\r'){
 				printf("CMD: %s\n",sd->line);
-				fprintf (file, "\n\ractube[%s]:>", sd->prompt);
+				fprintf (file, "\n\r");
+				fflush(file);
+				//fprintf (file, "\n\ractube[%s]:>", sd->prompt);
+				return;
 				sd->pos=0;
 				sd->line[0]=0;
 				continue;
@@ -548,7 +561,7 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 			sd->line[sd->pos++]=c;
 			sd->line[sd->pos]=0;
 			printf("putout: %c %02X\n",c,c);
-			fprintf(file,"%c",c);
+			fprintf(file,"\x1b[1@%c",c);
 			continue;
 		}
 
@@ -593,22 +606,25 @@ void shell_loop (FILE *file)
 	
 	sd.out = file;
 	sprintf(sd.prompt,"%s","*");
+	sd.quit=0;
 	
 	do {
 		int c;
 		get_line_char_mode(file,&sd);
-
+		printf("THE CMD FROM LINE '%s'\n",sd.line);
 
 		str[0]=0;
 //		c=fgetc(file);
 		
-		printf("%c\n",c);
+		//printf("%c\n",c);
 
-		fgets (str, sizeof (str), file);
+	//	fgets (str, sizeof (str), file);
 
-		printf("My String: %s\n",str);
+	//	printf("My String: %s\n",str);
 
-		execute_cmd (&sd, str);
+		execute_cmd (&sd, sd.line);
+		if (sd.quit)
+			break;
 
 	} while (c != EOF);
 	
