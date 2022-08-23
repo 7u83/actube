@@ -186,6 +186,20 @@ void cw_cfg_dump(cw_Cfg_t * cfg)
 	}
 }
 
+void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg)
+{
+	mavliter_t it;
+	struct cw_Cfg_entry *e;
+	mavliter_init(&it, cfg->cfg);
+	mavliter_foreach(&it) {
+
+		e = mavliter_get(&it);
+		fprintf(f,"%s: '%s'\n", e->key, e->val);
+	}
+}
+
+
+
 
 struct parser {
 	int line;

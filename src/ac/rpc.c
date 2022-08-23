@@ -25,14 +25,14 @@
 #include "ac.h"
 
 
-struct shelldata{
+struct rpcdata{
 
 	FILE *in;
 	FILE *out;
-	FILE *eout;
 
 	char prompt[1024];
 	cw_Cfg_t * update_cfg;
+	cw_Cfg_t * global_cfg;
 	char *history[2000];
 	char line[4096];
 	int pos;
@@ -45,7 +45,6 @@ struct shelldata{
 	Tokenizer *tok;
 	EditLine *el;
 
-	FILE * file;
 };
 
 struct sockdata{
@@ -54,27 +53,32 @@ struct sockdata{
 	cw_Cfg_t * global_cfg;
 };
 
-void select_cmd(struct shelldata *sd, const char *cmd);
-void list_cmd(struct shelldata *sd, const char * cmd);
-void cfg_cmd(struct shelldata *sd, const char * cmd);
-void ucfg_cmd(struct shelldata *sd, const char * cmd);
-void set_cmd(struct shelldata *sd, const char * cmd);
-void del_cmd(struct shelldata *sd, const char * cmd);
-void send_cmd(struct shelldata *sd, const char * cmd);
-void wlan0_cmd(struct shelldata *sd, const char * cmd);
-void exit_cmd(struct shelldata *sd, const char * cmd);
+int select_cmd(struct rpcdata *sd, const char *cmd);
+int list_cmd(struct rpcdata *sd, const char * cmd);
+int cfg_cmd(struct rpcdata *sd, const char * cmd);
+int ucfg_cmd(struct rpcdata *sd, const char * cmd);
+int set_cmd(struct rpcdata *sd, const char * cmd);
+int del_cmd(struct rpcdata *sd, const char * cmd);
+int send_cmd(struct rpcdata *sd, const char * cmd);
+int wlan0_cmd(struct rpcdata *sd, const char * cmd);
+int exit_cmd(struct rpcdata *sd, const char * cmd);
+int prompt_cmd(struct rpcdata *sd, const char * cmd);
+int global_cfg_cmd(struct rpcdata *sd, const char * cmd);
+
 //void show_cfg (FILE *out, mavl_t ktv);
-void show_aps (FILE *out);
+int show_aps (FILE *out);
 
 struct cw_Conn * find_ap(const char *name);
 
 struct command{
 	char * cmd;
-	void (*fun)();
+	int (*fun)(struct rpcdata *sd, const char *cmd);
+	
 };
 
 static struct command cmdlist[]={
 	{"exit",exit_cmd},
+	{"bumm",exit_cmd},
 	{"cfg", cfg_cmd },
 	{"del", del_cmd },
 	{"ucfg", ucfg_cmd},
@@ -83,32 +87,63 @@ static struct command cmdlist[]={
 	{"send", send_cmd},
 	{"set", set_cmd },
 	{"wlan0",wlan0_cmd},
+	{"global_cfg", global_cfg_cmd},
+
+	{"@prompt",prompt_cmd},
 
 	
 	{NULL,NULL}
 };
 
 
-void select_cmd(struct shelldata *sd, const char *cmd)
+static void finish_cmd(FILE *f)
+{
+	fprintf(f,"\n");
+	fflush(f);
+}
+
+int prompt_cmd(struct rpcdata *sd, const char *cmd)
+{
+	fprintf(sd->out,"actube[%s]:>\n","*");
+	finish_cmd(sd->out);
+	return 0;
+}
+
+
+int global_cfg_cmd(struct rpcdata *sd, const char *cmd)
+{
+	cw_cfg_fdump(sd->out,sd->global_cfg);
+	finish_cmd(sd->out);
+	return 0;
+}
+
+
+int select_cmd(struct rpcdata *sd, const char *cmd)
 {
 	char ap [CAPWAP_MAX_WTP_NAME_LEN];
 	sscanf(cmd,"%s",ap);
 	strcpy(sd->prompt,ap);
 }
 
-void list_cmd(struct shelldata *sd, const char *cmd)
+int list_cmd(struct rpcdata *sd, const char *cmd)
 {
 	show_aps(sd->out);
+	return 0;
 }
 
-void exit_cmd(struct shelldata *sd, const char *cmd)
+int exit_cmd(struct rpcdata *sd, const char *cmd)
 {
-	sd->quit=1;
+		//fprintf(sd->out,"Unknown command: '%s'\n\r\n\r",cmd);
+
+	printf("Exitcmd %s\n",cmd);
+	fprintf(sd->out,"END: %s\n\r",cmd);
+	fflush(sd->out);
+	return 1;
 }
 
 
 
-void cfg_cmd(struct shelldata *sd, const char *cmd)
+int cfg_cmd(struct rpcdata *sd, const char *cmd)
 {
 	struct cw_Conn * conn;
 	wtplist_lock();
@@ -121,21 +156,23 @@ void cfg_cmd(struct shelldata *sd, const char *cmd)
 //		show_cfg(sd->out,conn->remote_cfg);
 	}
 	wtplist_unlock();
+	return 0;
 }
 
-void ucfg_cmd(struct shelldata *sd, const char *cmd)
+int ucfg_cmd(struct rpcdata *sd, const char *cmd)
 {
 //	struct cw_Conn * conn;
 	stop();
 //	show_cfg(sd->out,sd->update_cfg);
-
+	return 0;
 }
 
 #include "wtpman.h"
 
-void 
-send_cmd(struct shelldata * sd, const char *cmd)
+int
+send_cmd(struct rpcdata * sd, const char *cmd)
 {
+
 	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
@@ -146,10 +183,11 @@ send_cmd(struct shelldata * sd, const char *cmd)
 		conn->update_cfg=sd->update_cfg;
 	}
 	wtplist_unlock();
+	return 0;
 }
 
-void 
-wlan0_cmd(struct shelldata * sd, const char *cmd)
+int
+wlan0_cmd(struct rpcdata * sd, const char *cmd)
 {
 	stop();
 
@@ -166,10 +204,10 @@ wlan0_cmd(struct shelldata * sd, const char *cmd)
 		fclose(f);
 	}
 	wtplist_unlock();
-
+	return 0;
 }
 
-void set_cmd(struct shelldata *sd, const char *str)
+int set_cmd(struct rpcdata *sd, const char *str)
 {
 /*	struct cw_Conn * conn;
 	struct cw_Val_Reader r;
@@ -186,14 +224,17 @@ void set_cmd(struct shelldata *sd, const char *str)
 	
 //	fprintf(sd->out,"%s :%s: %s\n",key,type,val);
 //	cw_ktv_add(sd->update_cfg,key,CW_TYPE_STR,NULL,val,strlen(val));
+	return 0;
 }
 
-void del_cmd(struct shelldata *sd, const char *str)
+int del_cmd(struct rpcdata *sd, const char *str)
 {
 	char key[CW_CFG_MAX_KEY_LEN];
 	sscanf(str,"%s",key);
 	stop();
 //	cw_ktv_del_sub(sd->update_cfg,key);
+//
+	return 0;
 }
 
 
@@ -221,7 +262,7 @@ void show_cfg (FILE *out, mavl_t ktv)
 }
 */
 
-void show_aps (FILE *out)
+int  show_aps (FILE *out)
 {
 	stop();
 /*	struct connlist * cl;
@@ -257,6 +298,7 @@ void show_aps (FILE *out)
 	}
 	wtplist_unlock();
 	*/
+	return 0;
 }
 
 
@@ -371,7 +413,7 @@ struct command * find_cmd(const char *cmd)
 }
 
 
-void execute_cmd (struct shelldata * sd, const char *str)
+int execute_cmd (struct rpcdata * sd, const char *str)
 {
 	char cmd[1024];
 	char args[1024];
@@ -383,21 +425,21 @@ void execute_cmd (struct shelldata * sd, const char *str)
 	
 	n = sscanf (str, "%s", cmd);
 	if (n<=0)
-		return;
+		return 0;
 	
 	searchcmd = find_cmd(cmd);
-	
 	if (searchcmd!=NULL){
 		if (searchcmd->fun != NULL){
-			fprintf(sd->out,"%s %s\n", searchcmd->cmd,str+strlen(cmd));
-			searchcmd->fun(sd, str+strlen(cmd));
+			return searchcmd->fun(sd, str+strlen(cmd));
 		}
 	}
 	else{
-		fprintf(sd->out,"Unknown command: '%s'\n\r",cmd);
+		printf("unknow command\n");
+		fprintf(sd->out,"Unknown command: '%s'\n",cmd);
+		finish_cmd(sd->out);
 	}
 
-	return;
+	return 0;
 	
 	
 	char key[CW_CFG_MAX_KEY_LEN];
@@ -425,25 +467,26 @@ void execute_cmd (struct shelldata * sd, const char *str)
 	else{
 		fprintf(sd->out,"%s :%s: %s\n", key,type,val);
 	}
-	return;
+	return 0;
 	
 	
 	n = sscanf (str, "%s%s", cmd, args);
 
 	if (n<=0)
-		return;
+		return 0;
 	/*printf("CMD: %s, ARGS:\n",cmd);*/
 	
 	if (strcmp (cmd, "s") == 0) {
 		show_aps (sd->out);
-		return;
+		return 0;
 	}
 	
 	if (strcmp (cmd, "con")==0){
 		con(sd->out);
-		return;
+		return 0;
 	}
-
+	
+	return 0;
 }
 
 struct esc_strings {
@@ -486,20 +529,9 @@ static int cmpansi(char * str,char * ansistr)
 
 
 
-static char *
-prompt(EditLine *el )
-{
-	static char a[] = "\1\033[7m\1Edit$\1\033[0m\1 ";
-	static char b[] = "Edit> ";
-
-	return b;
-//	return (continuation ? b : a);
-}
 
 
-
-
-static void get_line_char_mode(FILE * file, struct shelldata *sd)
+static void get_line_char_mode(FILE * file, struct rpcdata *sd)
 {
 	int c;
 	struct esc_strings * es;
@@ -617,170 +649,40 @@ static void get_line_char_mode(FILE * file, struct shelldata *sd)
 }
 
 
-void init_edline(struct shelldata *sd)
+void rpc_loop (FILE *file, cw_Cfg_t *global_cfg)
 {
-	sd->hist = history_init();			/* Init the builtin history	*/
-	history(sd->hist, &sd->ev, H_SETSIZE, 100);		 /* Remember 100 events		*/
-
-	sd->tok  = tok_init(NULL);			/* Initialize the tokenizer	*/
-	sd->el = el_init("actube", sd->in, sd->out, sd->eout);
-
-	el_set(sd->el, EL_EDITOR, "emacs");	/* Default editor is vi		*/
-	el_set(sd->el, EL_HIST, history, sd->hist);
-//	el_set(sd->el, EL_UNBUFFERED, 1);
-
-
-
-}
-
-void get_edline(struct shelldata * sd)
-{
-	int num;
-	int ncontinuation;
-	int continuation=0;
-	const char *buf;
-
-	while ((buf = el_gets(sd->el, &num)) != NULL && num != 0)  {
-		int ac, cc, co;
-		const char **av;
-		const LineInfo *li;
-		li = el_line(sd->el);
-/*		if (gotsig) {
-			(void) fprintf(stderr, "Got signal %d.\n", (int)gotsig);
-			gotsig = 0;
-			el_reset(el);
-		}
-*/
-		if (!continuation && num == 1)
-			continue;
-
-		ac = cc = co = 0;
-		ncontinuation = tok_line(sd->tok, li, &ac, &av, &cc, &co);
-		if (ncontinuation < 0) {
-			(void) fprintf(stderr, "Internal error\n");
-			continuation = 0;
-			continue;
-		}
-				/* Simpler */
-		history(sd->hist, &sd->ev, continuation ? H_APPEND : H_ENTER, buf);
-
-		continuation = ncontinuation;
-		ncontinuation = 0;
-		if (continuation)
-			continue;
-
-/*		if (strcmp(av[0], "history") == 0) {
-			int rv;
-
-			switch (ac) {
-			case 1:
-				for (rv = history(hist, &ev, H_LAST); rv != -1;
-				    rv = history(hist, &ev, H_PREV))
-					(void) fprintf(stdout, "%4d %s",
-					    ev.num, ev.str);
-				break;
-
-			case 2:
-				if (strcmp(av[1], "clear") == 0)
-					 history(hist, &ev, H_CLEAR);
-				else
-					 goto badhist;
-				break;
-
-			case 3:
-				if (strcmp(av[1], "load") == 0)
-					 history(hist, &ev, H_LOAD, av[2]);
-				else if (strcmp(av[1], "save") == 0)
-					 history(hist, &ev, H_SAVE, av[2]);
-				break;
-
-			badhist:
-			default:
-				(void) fprintf(stderr,
-				    "Bad history arguments\n");
-				break;
-			}
-		} else */
-	if (el_parse(sd->el, ac, av) == -1) {
-			switch (fork()) {
-			case 0:
-//				printf("AV: %s\n",av[0]);
-//				execvp(av[0], (char *const *)__UNCONST(av));
-//				perror(av[0]);
-//				stop();				
-//				_exit(1);
-				/*NOTREACHED*/
-				break;
-
-			case -1:
-				perror("fork");
-				break;
-
-			default:
-				if (wait(&num) == -1)
-					perror("wait");
-				(void) fprintf(stderr, "Exit %x\n", num);
-				break;
-			}
-		}
-
-		tok_reset(sd->tok);
-	}
-
-
-}
-
-void shell_loop (FILE *file)
-{
-	struct shelldata sd;
+	struct rpcdata sd;
 	int c;
 	c=0;
-	/*	setvbuf(file,NULL,_IONBF,0);
-		fflush(file);
-	*/
-	
+
 	char str[2048];
 	
-	sd.file = file;	
-	sd.out = stdout;
-	sd.eout = stderr;
-	sd.in=stdin;
+	sd.in = file;
+	sd.out = file;	
+	sd.global_cfg=global_cfg;
+
 
 	sprintf(sd.prompt,"%s","*");
 	sd.quit=0;
 
-/*	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_ECHO );
-	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_SGA );
-	fprintf (file,"%c%c%c",IAC,DONT,TELOPT_LINEMODE );
-	fflush(file);
-*/
-	init_edline(&sd);
-
 	do {
 		int c;
-		get_edline(&sd);
-//		get_line_char_mode(file,&sd);
-		printf("THE CMD FROM LINE '%s'\n",sd.line);
 
 		str[0]=0;
-//		c=fgetc(file);
 		
-		//printf("%c\n",c);
 
-	//	fgets (str, sizeof (str), file);
+		fgets (str, sizeof (str), file);
 
-	//	printf("My String: %s\n",str);
-
-//		execute_cmd (&sd, sd.line);
-//		if (sd.quit)
-//			break;
+		if (execute_cmd (&sd, str)) {
+			break;
+		}
 
 	} while (c != EOF);
 	
 }
 
 
-void * run_shell (void * arg)
+void * run_rpc_server (void * arg)
 {
 	char sockstr[SOCK_ADDR_BUFSIZE];
 	struct sockdata * sockdata;
@@ -793,7 +695,7 @@ void * run_shell (void * arg)
 	memset(&client,0,sizeof(client));
 	client_size=sizeof(client);
 
-	cw_dbg(DBG_INFO,"Starting shell, listening on: %s (sock fd: %d)",sockdata->name, sockdata->fd);
+	cw_dbg(DBG_INFO,"Starting RPC Service, listening on: %s (sock fd: %d)",sockdata->name, sockdata->fd);
 
 	while(1){
 		clientsock = accept (sockdata->fd, (struct sockaddr*) &client, &client_size);
@@ -805,10 +707,8 @@ void * run_shell (void * arg)
 		
 		if (clientsock > 0) {
 			sock_addr2str_p (&client, sockstr);
-			cw_dbg (DBG_INFO, "Acceptiong session from %s", sockstr);
-			cw_dbg (DBG_INFO, "Start shell");
-			shell_loop (fdopen (clientsock, "a+"));
-			cw_dbg (DBG_INFO, "Stop shell");
+			cw_dbg (DBG_INFO, "Accepting RPC session from %s", sockstr);
+			rpc_loop (fdopen (clientsock, "a+"),sockdata->global_cfg);
 			close (clientsock);
 		}
 		
@@ -876,20 +776,14 @@ static int create_unix_fd(const char *name)
 	return fd;
 }
 
-test_shell()
-{
-	shell_loop(NULL);
-	return 0;
-}
-
-int start_shell(cw_Cfg_t *global_cfg)
+int start_rpc(cw_Cfg_t *global_cfg)
 {
 	struct sockdata * sockdata;
 	const char *sockname;
 	int rc, type;
 	int fd;
 
-	rc = cw_cfg_get_bool(global_cfg,"actube/shell/enable",1);
+	rc = cw_cfg_get_bool(global_cfg,"actube/rpc/enable",1);
 	if (!rc)
 		return 1;
 
@@ -902,10 +796,10 @@ int start_shell(cw_Cfg_t *global_cfg)
 	sockdata->global_cfg = global_cfg;
 	sockdata->fd=-1;
 
-	sockname = cw_cfg_get(global_cfg,"actube/shell/listen",NULL);
+	sockname = cw_cfg_get(global_cfg,"actube/rpc/listen",NULL);
 	
 	if (sockname==NULL) {
-		cw_log (LOG_ERR, "Can't get shell listen address from global_cfg 'actube/shell/listen");
+		cw_log (LOG_ERR, "Can't get RPC listen address from global_cfg 'actube/rpc/listen");
 		goto errX;
 	}
 
@@ -937,7 +831,7 @@ int start_shell(cw_Cfg_t *global_cfg)
 	}
 	
 	pthread_t thread;
-	pthread_create (&thread, NULL, run_shell,
+	pthread_create (&thread, NULL, run_rpc_server,
 	                sockdata);
 	return 1;
 errX:

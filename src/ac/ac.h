@@ -17,7 +17,7 @@ enum {
 	AC_PROTO_UNKNOWN
 };
 
-int start_shell(cw_Cfg_t *global_cfg);
+int start_rpc(cw_Cfg_t *global_cfg);
 int test_shell();
 
 

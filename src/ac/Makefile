@@ -29,7 +29,7 @@ LIBS+=-ledit
 
 INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
-FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(ARCH)"'
+FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(KERNEL)/$(ARCH)"'
 
 
 
@@ -44,7 +44,7 @@ $(PRG): $(OBJS)
 	$(CC) $(OBJS) -o $(PRG) $(LIBPATH) $(LDFLAGS) $(LIBS) 
 
 $(ACTPRG): $(ACTOBJS)
-	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LDFLAGS) -ledit $(LIBS) 
+	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LDFLAGS) -ledit -lcw -lcrypto -lssl -lmavl -lnettle
 
 
 

@@ -92,7 +92,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	
 	bootcfg->cfgfilename = "config.ckv";
 	
-	while ( (c = getopt (argc, argv, "vc:d:p:")) != -1) {
+	while ( (c = getopt (argc, argv, "hvc:d:p:")) != -1) {
 		
 		switch (c) {
 			case 'c':
@@ -225,8 +225,6 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
-test_shell();
-
 	cw_log_name = "AC-Tube";
 
 /*
@@ -279,7 +277,7 @@ test_shell();
 
 	ac_conf_init(global_cfg);
 
-	if (!start_shell(global_cfg))
+	if (!start_rpc(global_cfg))
 		goto errX;
 
 
