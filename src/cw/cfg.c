@@ -495,6 +495,21 @@ int cw_cfg_load(const char *filename, cw_Cfg_t * cfg)
 	return errno;
 }
 
+int cw_cfg_read_from_string(const char *str, cw_Cfg_t *cfg)
+{
+	int errs;
+	FILE * f = fmemopen((void*)str,strlen(str),"rb");
+	if(!f)
+		return errno;
+	errs = cw_cfg_read_from_file(f, cfg);
+	fclose(f);
+
+	if (errs)
+		errno = EINVAL;
+	return errno;
+
+}
+
 int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg)
 {
 	mavliter_t it;

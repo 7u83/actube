@@ -612,7 +612,7 @@ static void copy(struct cw_ElemHandlerParams * params)
 //	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
 //	cw_dbg(DBG_X,"Now copying:");
 //	cw_cfg_copy(params->cfg,conn->local_cfg,0,"");
-        cw_cfg_copy(params->cfg, params->conn->local_cfg,DBG_CFG_UPDATES,"GlobalCfg");
+        cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"GlobalCfg");
 
 //	cw_dbg(DBG_X,"Copying done.");
 }

@@ -101,9 +101,10 @@ int cw_compose_message(struct cw_Conn *conn, uint8_t * rawout)
 	params.conn=conn;
 	params.rawmsg = rawout;
 	params.cfg_list[0]=conn->update_cfg;
-	params.cfg_list[1]=conn->local_cfg;
-	params.cfg_list[2]=conn->global_cfg;
-	params.cfg_list[3]=NULL;
+	params.cfg_list[1]=conn->remote_cfg;
+	params.cfg_list[2]=conn->local_cfg;
+	params.cfg_list[3]=conn->global_cfg;
+	params.cfg_list[4]=NULL;
 	params.msgset=conn->msgset;
 	params.msgdata=msg;
 	params.debug_details=details;

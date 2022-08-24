@@ -6,7 +6,7 @@
 #
 #capwap/ac-name
 #
-capwap/ac-name: actube
+capwap/ac-name: actube_X
 
 capwap/ssl-cipher: DHE-RSA:RSA:AES-256-CBC:AES-128-CBC:SHA1:PSK
 capwap/ssl-psk-enable: false
@@ -36,7 +36,7 @@ actube/ipv6: false
 #actube/mod.2: capwap80211
 #
 
-#actube/mod.0: cisco
+actube/mod.0: cisco
 actube/mod.1: capwap
 actube/mod.2: capwap80211
 
@@ -59,7 +59,7 @@ ac-descriptor/station-limit: 1000
 ac-descriptor/stations: 0
 
 
-capwap-control-ip-address/address.0: 192.168.0.14
+capwap-control-ip-address/address.0: 192.168.0.24
 
 
 

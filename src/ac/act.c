@@ -367,9 +367,16 @@ main(int argc , char *argv[])
 			}
 		} else if (el_parse(el, ac, av) == -1) {
 			char str[2000];
-
+			int i;
+			char * sp ="";
 			str[0]=0;
-			fprintf(act_f,"%s\n",av[0]);
+
+			for (i=0; i<ac; i++){
+				fprintf(act_f,"%s%s",sp,av[i]);
+				sp=" ";
+			}
+			fprintf(act_f,"\n");
+
 			fflush(act_f);
 			do {
 				int n;

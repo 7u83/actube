@@ -104,7 +104,9 @@ static void finish_cmd(FILE *f)
 
 int prompt_cmd(struct rpcdata *sd, const char *cmd)
 {
-	fprintf(sd->out,"actube[%s]:>\n","*");
+	const char *acname = cw_cfg_get(sd->global_cfg,"capwap/ac-name","actube");
+
+	fprintf(sd->out,"%s[%s]:>\n",acname,sd->prompt);
 	finish_cmd(sd->out);
 	return 0;
 }
@@ -123,11 +125,14 @@ int select_cmd(struct rpcdata *sd, const char *cmd)
 	char ap [CAPWAP_MAX_WTP_NAME_LEN];
 	sscanf(cmd,"%s",ap);
 	strcpy(sd->prompt,ap);
+	finish_cmd(sd->out);
+	return 0;
 }
 
 int list_cmd(struct rpcdata *sd, const char *cmd)
 {
 	show_aps(sd->out);
+	finish_cmd(sd->out);
 	return 0;
 }
 
@@ -152,9 +157,9 @@ int cfg_cmd(struct rpcdata *sd, const char *cmd)
 		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
 	}
 	else {
-		stop();
-//		show_cfg(sd->out,conn->remote_cfg);
+		cw_cfg_fdump(sd->out,conn->remote_cfg);
 	}
+	finish_cmd(sd->out);
 	wtplist_unlock();
 	return 0;
 }
@@ -209,20 +214,24 @@ wlan0_cmd(struct rpcdata * sd, const char *cmd)
 
 int set_cmd(struct rpcdata *sd, const char *str)
 {
-/*	struct cw_Conn * conn;
-	struct cw_Val_Reader r;
-	char key[CW_CFG_MAX_KEY_LEN];
-	char type[CW_CFG_MAX_KEY_LEN];
-	char val[2048];
-*/
-	stop();
+
+	cw_Cfg_t *cfg;
+	cfg = cw_cfg_create();
+
+	cw_cfg_read_from_string(str,cfg);
+
+	cw_cfg_fdump(sd->out,cfg);
+
+	cw_cfg_destroy(cfg);
+
+	finish_cmd(sd->out);
 
 //	cw_ktv_init_str_reader(&r,str,strlen(str));
 	
 //	cw_ktv_parse_string(&r,key,type,val);
 	/*cw_ktv_parse_string(key,type,val, 2048);*/
 	
-//	fprintf(sd->out,"%s :%s: %s\n",key,type,val);
+//	fprintf(sd->out,"%s %s\n",key,val);
 //	cw_ktv_add(sd->update_cfg,key,CW_TYPE_STR,NULL,val,strlen(val));
 	return 0;
 }
@@ -264,8 +273,7 @@ void show_cfg (FILE *out, mavl_t ktv)
 
 int  show_aps (FILE *out)
 {
-	stop();
-/*	struct connlist * cl;
+	struct connlist * cl;
 	mavliter_t it;
 	wtplist_lock();
 	
@@ -275,29 +283,18 @@ int  show_aps (FILE *out)
 	mavliter_init (&it, cl->by_addr);
 	fprintf (out, "IP\t\t\twtp-name\n");
 	mavliter_foreach (&it) {
-		cw_Val_t * result;
 		char addr[SOCK_ADDR_BUFSIZE];
-		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
+		const char * wtp_name;
 		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
 		sock_addr2str_p (&conn->addr, addr);
 
-		stop();		
-//		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
-		
-		if (result == NULL) {
-			strcpy (wtp_name, "");
-			
-		} else {
-			result->type->to_str (result, wtp_name, CAPWAP_MAX_WTP_NAME_LEN);
-		}
-		
+		wtp_name = cw_cfg_get (conn->remote_cfg, "wtp-name", "unknown");
 		
 		fprintf (out, "%s\t\t%s\n", addr, wtp_name);
 	}
 	wtplist_unlock();
-	*/
 	return 0;
 }
 
@@ -305,40 +302,30 @@ int  show_aps (FILE *out)
 
 struct cw_Conn * find_ap(const char *name)
 {
-stop();
-/*	
+	
 	struct connlist * cl;
 	mavliter_t it;
 
 	cl = wtplist_get_connlist();
 	
-	
 	mavliter_init (&it, cl->by_addr);
 	mavliter_foreach (&it) {
-		cw_Val_t * result;
-		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
+		const char *wtpname;
 		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
-		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
+		wtpname = cw_cfg_get (conn->remote_cfg, "wtp-name", NULL);
 		
-		if (result == NULL) {
-			strcpy (wtp_name, "");
-			
-		} else {
-			result->type->to_str (result, wtp_name, CAPWAP_MAX_WTP_NAME_LEN);
-		}
-	
-		printf("cmp '%s' : '%s'\n",wtp_name,name);
+		if (wtpname == NULL)
+			continue;
 		
-		if(strcmp(wtp_name,name)==0){
+		if(strcmp(wtpname,name)==0){
 			return conn;
 		}
 
 	}
 	return NULL;
-	*/
-	/*wtplist_unlock();*/
+	
 }
 
 
@@ -506,147 +493,8 @@ struct esc_strings estr[] = {
 
 };
 
-static int cmpansi(char * str,char * ansistr)
-{
-	int sl,al;
-	sl = strlen(str);
-	al = strlen(ansistr);
 
 
-	if(sl>al){
-		return 0;
-	}
-	if (sl<al){
-		if (strncmp(str,ansistr,sl)==0)
-			return -1;
-	}
-
-	if (strcmp(str,ansistr)==0)
-		return 1;
-
-	return 0;
-}
-
-
-
-
-
-static void get_line_char_mode(FILE * file, struct rpcdata *sd)
-{
-	int c;
-	struct esc_strings * es;
-
-	es = NULL;
-	sd->line[0]=0;
-	sd->pos=0;
-	sd->esc[0]=0;
-	sd->escpos=0;
-
-//	fprintf (file, "\xff\xfc\22");
-
-	/* Put telnet into char mode */
-	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_ECHO );
-	fprintf (file,"%c%c%c",IAC,WILL,TELOPT_SGA );
-	fprintf (file,"%c%c%c",IAC,DONT,TELOPT_LINEMODE );
-
-
-	fprintf (file, "actube[%s]:>", sd->prompt);
-	fflush (file);
-
-	while ( (c=fgetc(file))!= EOF){
-		printf ("%02x\n",c);
-		if (sd->escpos){
-			int i;
-			int a=0;
-
-			sd->esc[sd->escpos++]=c;
-			sd->esc[sd->escpos]=0;
-
-			for (i=0; estr[i].str != NULL; i++){
-				int rc;
-				rc = cmpansi(sd->esc,estr[i].str);
-				if (rc==1){
-					sd->esc[0]=0;
-					sd->escpos=0;
-					es = &estr[i];
-					break;
-				}
-				a |= rc;
-					
-			}
-			if (a==0){
-				sd->esc[0]=0;
-				sd->escpos=0;
-			}else{
-				continue;
-			}
-
-
-		}
-		if (c==0x1b){
-			sd->esc[sd->escpos++]=c;
-			sd->esc[sd->escpos]=0;
-			printf("ESC start\n");
-			continue;
-		}
-
-
-		if (!es){
-			if (c=='\r'){
-				printf("CMD: %s\n",sd->line);
-				fprintf (file, "\n\r");
-				fflush(file);
-				//fprintf (file, "\n\ractube[%s]:>", sd->prompt);
-				return;
-				sd->pos=0;
-				sd->line[0]=0;
-				continue;
-			}
-			if (c=='\x7f'){
-				if (sd->pos==0)
-					continue;
-
-				printf("Backspace\n");
-				fprintf(file,"%c %c",8,8);
-				sd->line[--sd->pos]=0;
-				continue;
-
-			}
-			if (c>240 || c<30){
-				continue;
-			}
-
-
-			sd->line[sd->pos++]=c;
-			sd->line[sd->pos]=0;
-			printf("putout: %c %02X\n",c,c);
-			fprintf(file,"\x1b[1@%c",c);
-			continue;
-		}
-
-		printf ("ES: %s\n",es->result);
-
-		if (strcmp(es->result,"left")==0){
-			if (sd->pos>0){
-				sd->pos--;
-				fprintf(file,"%s",es->str);
-			}
-		}
-		if (strcmp(es->result,"right")==0){
-			if (sd->line[sd->pos]!=0){
-				sd->pos++;
-				fprintf(file,"%s",es->str);
-			}
-		}
-
-//		fprintf(file,es->str);
-
-		es = NULL;
-//		fflush(file);
-
-
-	}
-}
 
 
 void rpc_loop (FILE *file, cw_Cfg_t *global_cfg)
@@ -666,7 +514,6 @@ void rpc_loop (FILE *file, cw_Cfg_t *global_cfg)
 	sd.quit=0;
 
 	do {
-		int c;
 
 		str[0]=0;
 		
@@ -722,13 +569,11 @@ void * run_rpc_server (void * arg)
 
 int create_tcp_fd(const char *name)
 {
-	struct sockaddr_storage server, client;
-	socklen_t client_size;
-	char sockstr[SOCK_ADDR_BUFSIZE];
+	struct sockaddr_storage server; //, client;
 	
 	int rc;
 	const char * addr = name;
-	int sockfd, clientsock;
+	int sockfd;
 	int yes;
 	
 	rc = sock_strtoaddr (addr, (struct sockaddr*) &server);
@@ -756,8 +601,8 @@ int create_tcp_fd(const char *name)
 }
 static int create_unix_fd(const char *name)
 {
-        struct sockaddr_storage client;
-	socklen_t client_size;
+        //struct sockaddr_storage client;
+	//socklen_t client_size;
 	struct sockaddr_un addr;
 	int rc,fd;
 
@@ -771,7 +616,7 @@ static int create_unix_fd(const char *name)
 		cw_log (LOG_ERR, "Can't bind socket 'unix:%s', %s", name, strerror (errno));
 		return -1;
 	}
-	int clientsock = accept (fd, (struct sockaddr*) &client, &client_size);
+	//int clientsock = accept (fd, (struct sockaddr*) &client, &client_size);
 
 	return fd;
 }
@@ -780,7 +625,7 @@ int start_rpc(cw_Cfg_t *global_cfg)
 {
 	struct sockdata * sockdata;
 	const char *sockname;
-	int rc, type;
+	int rc; //, type;
 	int fd;
 
 	rc = cw_cfg_get_bool(global_cfg,"actube/rpc/enable",1);

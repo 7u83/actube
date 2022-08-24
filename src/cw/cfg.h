@@ -57,6 +57,7 @@ int cw_cfg_save(const char *filename, cw_Cfg_t *cfg, const char *format, ...);
 
 uint16_t cw_cfg_get_word_l(cw_Cfg_t ** cfg, char *key, uint16_t def);
 void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg);
+int cw_cfg_read_from_string(const char *str, cw_Cfg_t *cfg);
 
 
 
