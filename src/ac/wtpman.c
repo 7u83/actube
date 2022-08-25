@@ -730,7 +730,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 	wtpman->global_cfg = global_cfg;
 
-	wtpman->conn = cw_conn_create(sockfd, srcaddr, 5);
+	wtpman->conn = cw_conn_create(sockfd, srcaddr, 100);
 	if (!wtpman->conn) {
 		wtpman_destroy(wtpman);
 		return NULL;
