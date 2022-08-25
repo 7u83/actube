@@ -371,6 +371,7 @@ static cw_ValStruct_t cisco_antenna_payload70[]={
 	{CW_TYPE_BYTE,"diversity-selection",1,-1},
 	{CW_TYPE_BYTE,"antenna-mode",1,-1},
 	{CW_TYPE_BYTE,"number-of-antennas",1,-1},
+	{CW_TYPE_BYTE,"unknown",1,-1},
 	{CW_TYPE_BYTE,"802-11n-tx-antennas",1,-1},
 	{CW_TYPE_BYTE,"802-11n-rx-antennas",1,-1},
 	{CW_TYPE_BYTE,"unknown",1,-1},
@@ -432,7 +433,7 @@ static cw_ValStruct_t cisco_wtp_radio_config75[]={
 
 
 static cw_ValStruct_t cisco_tx_power[]={
-	{CW_TYPE_BYTE,"cfg-type",1,-1,cfg_type},
+	{CW_TYPE_BYTE,"@cisco/cfg-type",1,-1,cfg_type},
 	{CW_TYPE_WORD,"current-tx-power",2,-1},
 	{NULL,NULL,0,0}
 };
@@ -878,17 +879,17 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic			/* put */
 	}
 	,
-	{
-		"80211 WTP Radio Information - Cisco",		/* name */
-		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
-		0, 0,						/* Vendor / Proto */
-		0, 0,						/* min/max length */
-		CW_TYPE_DWORD,					/* type */
-		"wtp-radio-information",			/* Key */
-		cw_in_radio_generic,				/* get */
-		cw_out_radio_generic				/* put */
-	}
-	,
+//	{
+//		"80211 WTP Radio Information - Cisco",		/* name * /
+//		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID * /
+//		0, 0,						/* Vendor / Proto * /
+//		0, 0,						/* min/max length * /
+//		CW_TYPE_DWORD,					/* type * /
+//		"wtp-radio-information",			/* Key * /
+//		cw_in_radio_generic,				/* get * /
+//		cw_out_radio_generic				/* put * /
+//	}
+//	,
 	{ 
 		"Session ID (Cisco min len = 4)",	/* name */
 		CAPWAP_ELEM_SESSION_ID,			/* Element ID */
@@ -1357,7 +1358,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		4,4,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/tx-power",			/* Key */
+		"capwap80211/tx-power",			/* Key */
 		cw_in_radio_generic,			/* get */
 		cw_out_radio_generic,			/* put */
 		NULL,
