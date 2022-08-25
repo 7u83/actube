@@ -15,14 +15,27 @@
 			uint8_t * data,	 int len);
 */
 
+
+char x[] = {'a','b'};
+
+static cw_ValStruct_t capwap80211_antenna_stru[]={
+	{CW_TYPE_BOOL,"diversity",1,-1},
+	{CW_TYPE_BYTE,"combiner",1,-1},
+	{CW_TYPE_BYTE,"antenna-count",1,-1},
+	{NULL,"xxx",1,-1,x},
+//	{NULL,"xxx",1,-1,"a",}
+	{NULL,NULL,0,0}
+};
+
+
 static struct cw_ElemHandler handlers[] = {
 	{
-		"IEEE 802.11 WTP Radio Information",			/* name */
+		"IEEE 802.11 WTP Radio Information",		/* name */
 		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		0, 0,						/* min/max length */
 		CW_TYPE_DWORD,					/* type */
-		"wtp-radio-information",			/* Key */
+		"capwap80211/wtp-radio-information",		/* Key */
 		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic				/* put */
 	}
@@ -33,9 +46,24 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		3, 0,						/* min/max length */
 		CW_TYPE_BSTR16,					/* type */
-		"rate_set",					/* Key */
+		"capwap80211/rate-set",				/* Key */
 		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic				/* put */
+	}
+	,
+	{
+		"IEEE 802.11 Antenna",				/* name */
+		CAPWAP80211_ELEM_ANTENNA,				/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		3, 0,						/* min/max length */
+		CW_TYPE_STRUCT,					/* type */
+		"capwap80211/antenna",				/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,				/* put */
+		NULL,
+		NULL,
+		capwap80211_antenna_stru
+
 	}
 	,
 	{NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL}
