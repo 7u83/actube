@@ -271,6 +271,25 @@ void show_cfg (FILE *out, mavl_t ktv)
 }
 */
 
+
+void print_mw(FILE *f, int w, const char * str)
+{
+	int n,i;
+	fprintf(f, "%.*s",w,str);
+	n=strlen(str);
+
+	if ( n>w ){
+		fprintf(f,"> ");
+		return;
+	}
+	n = w-n;
+
+	for(i=0;i<(n+2);i++){
+		fprintf(f,"%c",' ');
+	}
+}
+
+
 int  show_aps (FILE *out)
 {
 	struct connlist * cl;
@@ -281,18 +300,27 @@ int  show_aps (FILE *out)
 	
 	
 	mavliter_init (&it, cl->by_addr);
-	fprintf (out, "IP\t\t\twtp-name\n");
+	print_mw (out, 16, "AP Name");
+	print_mw (out, 16, "AP Model");
+	print_mw (out, 14, "Vendor");
+	print_mw (out, 16, "IP ");
+	fprintf(out,"\n");
+
 	mavliter_foreach (&it) {
 		char addr[SOCK_ADDR_BUFSIZE];
-		const char * wtp_name;
+		const char *vendor;
+
 		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
-		
-		sock_addr2str_p (&conn->addr, addr);
 
-		wtp_name = cw_cfg_get (conn->remote_cfg, "wtp-name", "unknown");
-		
-		fprintf (out, "%s\t\t%s\n", addr, wtp_name);
+		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "wtp-name", "Unknown"));
+		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "wtp-board-data/model-no", "Unknown"));
+		vendor = cw_cfg_get(conn->remote_cfg, "wtp-board-data/vendor", "0");
+		print_mw(out,14,vendor);	
+		sock_addr2str_p (&conn->addr, addr);
+		print_mw(out,16,addr);
+		fprintf(out,"\n");
+
 	}
 	wtplist_unlock();
 	return 0;
@@ -387,16 +415,20 @@ void con (FILE *out)
 
 struct command * find_cmd(const char *cmd)
 {
-	struct command * search;
+	struct command * search,*result;
 	
+	result=NULL;
 	search = cmdlist;
 	while (search->cmd!=NULL){
 		if (strncmp(cmd,search->cmd,strlen(cmd))==0){
-			return search;
+			if (result==NULL)
+				result = search;
+			else 
+				return NULL;
 		}
 		search ++;
 	}
-	return NULL;
+	return result;
 }
 
 
