@@ -6,8 +6,8 @@ ac-name-with-index.0:
 ac-name-with-index.1: 
 ac-name-with-index.2: 
 capwap-local-ip-address: 192.168.0.13
-capwap-timers/echo-interval: 0
-capwap-timers/max-discovery-interval: 0
+capwap-timers/echo-interval: 30
+capwap-timers/max-discovery-interval: 10
 capwap/ac-name: 
 cisco-8011-assoc-limit/enable: false
 cisco-8011-assoc-limit/interval: 500
@@ -60,7 +60,7 @@ cisco/ap-username-and-password/login-credentials/password: $1$MX4t$F19wCuY8yN5jB
 cisco/ap-username-and-password/login-credentials/username: admin
 cisco/cisco-discovery-protocol/data: 513
 cisco/cisco-discovery-protocol/enabled: false
-cisco/elem132: .x0100000000
+cisco/elem132: .x0000000000
 cisco/loghost-config/last-joined-ap: None
 cisco/loghost-config/loghost: 255.255.255.255
 cisco/lw-path-mtu/len: 1095
@@ -97,15 +97,19 @@ idle-timeout: 300
 location-data: default location
 maximum-message-length: 14000
 radio.0/admin-state: 1 - enabled
+radio.0/capwap80211/rate-set: .x82848b960c1218243048606c
+radio.0/capwap80211/tx-power/@cisco/cfg-type: 2 - custom
+radio.0/capwap80211/tx-power/current-tx-power: 1
+radio.0/capwap80211/wtp-radio-information: 1
 radio.0/cisco/air-space-capability: 0
-radio.0/cisco/antenna-payload/802-11n-rx-antennas: 7
-radio.0/cisco/antenna-payload/802-11n-tx-antennas: 0
+radio.0/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio.0/cisco/antenna-payload/802-11n-tx-antennas: 7
 radio.0/cisco/antenna-payload/antenna-1: 1
 radio.0/cisco/antenna-payload/antenna-2: 1
 radio.0/cisco/antenna-payload/antenna-mode: 3
 radio.0/cisco/antenna-payload/diversity-selection: 255
 radio.0/cisco/antenna-payload/number-of-antennas: 2
-radio.0/cisco/antenna-payload/unknown: 3
+radio.0/cisco/antenna-payload/unknown: 1
 radio.0/cisco/channel-power: .x08080d0108221c16100a04fefe0208221c16100a04fefe0308221c16100a04fefe0408221c16100a04fefe0508221c16100a04fefe0608221c16100a04fefe0708221c16100a04fefe0808221c16100a04fefe0908221c16100a04fefe0a08221c16100a04fefe0b08221c16100a04fefe0c08221c16100a04fefe0d08221c16100a04fefe
 radio.0/cisco/direct-sequence-control/cfg-type: 1 - global
 radio.0/cisco/direct-sequence-control/current-cca-mode: 0
@@ -120,6 +124,7 @@ radio.0/cisco/elem16: .x02040b0c
 radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
 radio.0/cisco/elem22: .x0d00b400320102030405060708090a0b0c0d
 radio.0/cisco/elem24: .x003c000c
+radio.0/cisco/elem39: .x0078
 radio.0/cisco/elem47: .x0100000000000000000000000000000000
 radio.0/cisco/elem48: .x00
 radio.0/cisco/elem81: .x00000000010101010a001e0a02051cbfffbfff0a00
@@ -143,7 +148,7 @@ radio.0/cisco/multi-domain-capability/number-of-channels: 13
 radio.0/cisco/multi-domain-capability/reserved: 1
 radio.0/cisco/tx-power-levels: .x070011000e000b000800050002ffff0000
 radio.0/cisco/tx-power/cfg-type: 1 - global
-radio.0/cisco/tx-power/current-tx-power: 1
+radio.0/cisco/tx-power/current-tx-power: 5
 radio.0/cisco/wtp-radio-config/beacon-period: 100
 radio.0/cisco/wtp-radio-config/bss-id: .x04fe7f499b90
 radio.0/cisco/wtp-radio-config/cfg-period: 4
@@ -170,7 +175,7 @@ radio.0/wlan.1/add-wlan/scan-defer-time: 100
 radio.0/wlan.1/add-wlan/session-timout: 1800
 radio.0/wlan.1/add-wlan/ssid: tubeC
 radio.0/wlan.1/add-wlan/wep-encryption: false
-radio.0/wlan.1/add-wlan/wep-key: .x31772582ab25934f97c565949f
+radio.0/wlan.1/add-wlan/wep-key: .x1994f9d6d5f332f6531f532803
 radio.0/wlan.1/add-wlan/wep-key-index: 1
 radio.0/wlan.1/add-wlan/wlan-capability: 1073
 radio.0/wlan.1/add-wlan/wlan-id: 1
@@ -187,32 +192,42 @@ radio.0/wlan.13/add-wlan/scan-defer-time: 100
 radio.0/wlan.13/add-wlan/session-timout: 1800
 radio.0/wlan.13/add-wlan/ssid: SuperSSID
 radio.0/wlan.13/add-wlan/wep-encryption: false
-radio.0/wlan.13/add-wlan/wep-key: .x31772582ab25934f97c565949f
+radio.0/wlan.13/add-wlan/wep-key: .x1994f9d6d5f332f6531f532803
 radio.0/wlan.13/add-wlan/wep-key-index: 1
 radio.0/wlan.13/add-wlan/wlan-capability: 1057
 radio.0/wlan.13/add-wlan/wlan-id: 13
-radio.0/wtp-radio-information: 1
 radio.1/admin-state: 1 - enabled
+radio.1/capwap80211/rate-set: .x8c129824b048606c
+radio.1/capwap80211/tx-power/@cisco/cfg-type: 2 - custom
+radio.1/capwap80211/tx-power/current-tx-power: 1
+radio.1/capwap80211/wtp-radio-information: 2
 radio.1/cisco/air-space-capability: 0
-radio.1/cisco/antenna-payload/802-11n-rx-antennas: 7
-radio.1/cisco/antenna-payload/802-11n-tx-antennas: 0
+radio.1/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio.1/cisco/antenna-payload/802-11n-tx-antennas: 7
 radio.1/cisco/antenna-payload/antenna-1: 1
-radio.1/cisco/antenna-payload/antenna-2: 1
+radio.1/cisco/antenna-payload/antenna-2: 0
 radio.1/cisco/antenna-payload/antenna-mode: 3
-radio.1/cisco/antenna-payload/diversity-selection: 255
+radio.1/cisco/antenna-payload/diversity-selection: 0
 radio.1/cisco/antenna-payload/number-of-antennas: 2
-radio.1/cisco/antenna-payload/unknown: 3
+radio.1/cisco/antenna-payload/unknown: 1
 radio.1/cisco/channel-power: .x0808102408221c16100a04fefe2808221c16100a04fefe2c08221c16100a04fefe3008221c16100a04fefe3408221c16100a04fefe3808221c16100a04fefe3c08221c16100a04fefe4008221c16100a04fefe6408221c16100a04fefe6808221c16100a04fefe6c08221c16100a04fefe7008221c16100a04fefe7408221c16100a04fefe8408221c16100a04fefe8808221c16100a04fefe8c08221c16100a04fefe
+radio.1/cisco/direct-sequence-control/cfg-type: 1 - global
+radio.1/cisco/direct-sequence-control/current-cca-mode: 0
+radio.1/cisco/direct-sequence-control/current-channel: 1
+radio.1/cisco/direct-sequence-control/energy-detect-threshold: -50
+radio.1/cisco/direct-sequence-control/unknown: 1
 radio.1/cisco/elem145: .x01
+radio.1/cisco/elem146: .x690f
 radio.1/cisco/elem15/cfg-type: 1 - global
-radio.1/cisco/elem15/channel: 140
-radio.1/cisco/elem15/rest: .x07ffffffce010101
+radio.1/cisco/elem15/channel: 52
+radio.1/cisco/elem15/rest: .x07ffffffce010001
 radio.1/cisco/elem153: .x00
 radio.1/cisco/elem156: .x020100
 radio.1/cisco/elem16: .x0c121824
 radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
 radio.1/cisco/elem22: .x1000b4003224282c3034383c4064686c707484888c
 radio.1/cisco/elem24: .x003c000c
+radio.1/cisco/elem39: .x0078
 radio.1/cisco/elem47: .x0100000000000000000000000000000000
 radio.1/cisco/elem48: .x00
 radio.1/cisco/elem81: .x00000000010101010a001e0a02050fbfffbfff0a00
@@ -236,7 +251,7 @@ radio.1/cisco/multi-domain-capability/number-of-channels: 4
 radio.1/cisco/multi-domain-capability/reserved: 1
 radio.1/cisco/tx-power-levels: .x070011000e000b000800050002ffff0000
 radio.1/cisco/tx-power/cfg-type: 1 - global
-radio.1/cisco/tx-power/current-tx-power: 1
+radio.1/cisco/tx-power/current-tx-power: 5
 radio.1/cisco/wtp-radio-config/beacon-period: 100
 radio.1/cisco/wtp-radio-config/bss-id: .x04fe7f499b90
 radio.1/cisco/wtp-radio-config/cfg-period: 4
@@ -263,7 +278,7 @@ radio.1/wlan.1/add-wlan/scan-defer-time: 100
 radio.1/wlan.1/add-wlan/session-timout: 1800
 radio.1/wlan.1/add-wlan/ssid: tubeC
 radio.1/wlan.1/add-wlan/wep-encryption: false
-radio.1/wlan.1/add-wlan/wep-key: .x4b0706ccd5d0a8b98b0b4084f1
+radio.1/wlan.1/add-wlan/wep-key: .xef86466b27791853131dd3073c
 radio.1/wlan.1/add-wlan/wep-key-index: 1
 radio.1/wlan.1/add-wlan/wlan-capability: 17
 radio.1/wlan.1/add-wlan/wlan-id: 1
@@ -280,16 +295,15 @@ radio.1/wlan.13/add-wlan/scan-defer-time: 100
 radio.1/wlan.13/add-wlan/session-timout: 1800
 radio.1/wlan.13/add-wlan/ssid: SuperSSID
 radio.1/wlan.13/add-wlan/wep-encryption: false
-radio.1/wlan.13/add-wlan/wep-key: .x4b0706ccd5d0a8b98b0b4084f1
+radio.1/wlan.13/add-wlan/wep-key: .xef86466b27791853131dd3073c
 radio.1/wlan.13/add-wlan/wep-key-index: 1
 radio.1/wlan.13/add-wlan/wlan-capability: 1
 radio.1/wlan.13/add-wlan/wlan-id: 13
-radio.1/wtp-radio-information: 2
 radio.2/cisco/lwelem33: .x00
 radio.255/admin-state: 1 - enabled
 radio.255/operational-state/cause: Normal
 radio.255/operational-state/state: enabled
-session-id: .x4a230869
+session-id: .x5a230869
 statistics-timer: 180
 wtp-board-data/board-id: .x0000
 wtp-board-data/mac-address: .x0800276edf58

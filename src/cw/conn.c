@@ -61,6 +61,7 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->update_cfg = cw_cfg_create();
 	conn->remote_cfg = cw_cfg_create();
 	conn->local_cfg = cw_cfg_create();
+	conn->cfg_list[0]=NULL;
 }
 
 int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun)
@@ -489,10 +490,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 	params.cfg->dbg_level = DBG_ELEM_DETAIL_IN;
 	params.cfg->dbg_prefix = "    ";
 
-	params.cfg_list[0]=params.cfg;
-	params.cfg_list[1]=conn->local_cfg;
-	params.cfg_list[2]=conn->global_cfg;
-	params.cfg_list[3]=NULL;
+	params.cfg_list=conn->cfg_list;
 
 	params.from = from;
 	params.msgdata = message;

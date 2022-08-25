@@ -743,6 +743,13 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	wtpman->conn->role = CW_ROLE_AC;
 	wtpman->conn->data=wtpman;
 
+	wtpman->conn->cfg_list[0]=wtpman->conn->update_cfg;
+	wtpman->conn->cfg_list[1]=wtpman->conn->remote_cfg;
+	wtpman->conn->cfg_list[2]=wtpman->conn->local_cfg;
+	wtpman->conn->cfg_list[3]=wtpman->conn->global_cfg;
+	wtpman->conn->cfg_list[4]=NULL;
+
+
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr,
 		      (struct sockaddr *) &wtpman->conn->addr);

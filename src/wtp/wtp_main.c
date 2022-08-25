@@ -142,6 +142,10 @@ int main (int argc, char **argv)
 	conn->dtls_mtu = 1200;
 	conn->msgset=msgset;
 	conn->global_cfg = global_cfg;
+
+	conn->cfg_list[0]=conn->local_cfg;
+	conn->cfg_list[1]=conn->global_cfg;
+	conn->cfg_list[2]=NULL;
 	
 	conn->role = CW_ROLE_WTP;
 	conn->wbid=1;
@@ -172,13 +176,18 @@ int main (int argc, char **argv)
 /*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
 
 	struct cw_DiscoveryResulsts * results;
-//	cw_run_discovery(conn, "192.168.0.162","192.168.0.14", &dis);
-	//cw_run_discovery(conn, "255.255.255.255","192.168.0.14", &dis);
+	//cw_run_discovery(conn, "192.168.0.24","192.168.0.14", &dis);
+	//
+
+	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 //	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
 	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+//	results = cw_run_discovery(conn, "192.168.0.24","192.168.0.14");
 //	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.119");
 //	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.185");
-	results = cw_run_discovery(conn, "172.16.67.255","172.16.67.185");
+//	results = cw_run_discovery(conn, "172.16.67.255","172.16.67.185");
+
+
 
 	if (!join(conn,results)){
 		cw_discovery_results_destroy(results); 

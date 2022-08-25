@@ -374,7 +374,7 @@ static cw_ValStruct_t cisco_antenna_payload70[]={
 	{CW_TYPE_BYTE,"unknown",1,-1},
 	{CW_TYPE_BYTE,"802-11n-tx-antennas",1,-1},
 	{CW_TYPE_BYTE,"802-11n-rx-antennas",1,-1},
-	{CW_TYPE_BYTE,"unknown",1,-1},
+//	{CW_TYPE_BYTE,"unknown",1,-1},
 	{CW_TYPE_BYTE,"antenna-1",1,-1},
 	{CW_TYPE_BYTE,"antenna-2",1,-1},
 	{NULL,NULL,0,0}

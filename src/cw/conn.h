@@ -86,6 +86,8 @@ struct cw_Conn {
 				     configuration status request.  */
 
 	cw_Cfg_t * update_cfg;
+
+	cw_Cfg_t * cfg_list[10];
 	
 	bstr16_t session_id;
 

@@ -36,7 +36,7 @@ struct cw_ElemHandlerParams {
 	char * debug_details;
 	uint32_t dbg_level;
 	cw_Cfg_t * cfg;
-	cw_Cfg_t * cfg_list[10];
+	cw_Cfg_t ** cfg_list;
 	int len;
 };
 
