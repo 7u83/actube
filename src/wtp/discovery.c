@@ -214,7 +214,8 @@ struct cw_DiscoveryResults * cw_run_discovery(struct cw_Conn *conn, const char *
 			if (brc < 0) {
 				cw_log(LOG_ERR, "Can't bind to %s",
 				       sock_addr2str(&bind_address, sock_buf));
-				return 0;
+				results = 0;
+				goto errX;
 			}
 		}
 
@@ -233,6 +234,7 @@ struct cw_DiscoveryResults * cw_run_discovery(struct cw_Conn *conn, const char *
 
 
 	}
+errX:
 
 	freeaddrinfo(res0);
 
