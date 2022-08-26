@@ -24,7 +24,6 @@ CWSRC=\
 	cw_in_generic_indexed_enum.c\
 	cw_out_generic_indexed_enum.c\
 	cw_in_generic_enum.c\
-	cw_out_generic_struct.c\
 	cw_out_idx_generic_struct.c\
 	cw_init_data_keep_alive_msg.c\
 	cw_inline.c\
@@ -77,6 +76,7 @@ CWSRC=\
 #	cw_out_generic.c\
 #	
 #	cw_process_element.c\
+#	cw_out_generic_struct.c\
 
 KTVSRC=\
 	cfg.c\

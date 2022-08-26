@@ -374,44 +374,6 @@ static void *wtpman_main(void *arg)
 		}
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/* dtls is established, goto join state */
-/*
-	conn->capwap_state = CAPWAP_STATE_JOIN;
-	if (!wtpman_join(wtpman)) {
-		wtpman_remove(wtpman);
-		return NULL;
-	}
-
-
-
-	cw_dbg(DBG_INFO, "WTP from %s has joined with session id: %s",
-	       sock_addr2str_p(&conn->addr, sock_buf),
-	       format_bin2hex(conn->session_id, 16));
-
-*/
-
 	exit(0);
 
 	return NULL;
@@ -433,20 +395,7 @@ void wtpman_destroy(struct wtpman *wtpman)
 
 static void copy(struct cw_ElemHandlerParams * params)
 {
-//	struct wtpman * wtpman;
-	//struct cw_Conn * conn;
-	//wtpman = (struct wtpman*)params->conn->data;
-	//conn = (struct cw_Conn*)params->conn;
-
-
-//	cw_dbg(DBG_X,"-------------  Here is the config we ve got from WTP ---------------- ");
-//	cw_cfg_dump(params->cfg);
-//	cw_dbg(DBG_X,"-------------  This was the config we ve got from WTP ---------------- ");
-//	cw_dbg(DBG_X,"Now copying:");
-//	cw_cfg_copy(params->cfg,conn->local_cfg,0,"");
         cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"GlobalCfg");
-
-//	cw_dbg(DBG_X,"Copying done.");
 }
 
 static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
@@ -499,6 +448,8 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	struct wtpman * wtpman = (struct wtpman *)conn->data;
+
 	char filename[200];
 
 
@@ -507,9 +458,8 @@ static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, i
 	copy(params);
 
 	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
-	sprintf(filename,"wtp-event-%s.ckv",wtpname);
-	cw_cfg_save(filename,conn->remote_cfg,NULL);
-//stop();	
+	sprintf(filename,"wtp-event-%d-%s.ckv",wtpman->ctr++,wtpname);
+	cw_cfg_save(filename,params->cfg,NULL);
 	return 0;
 }
 
@@ -529,6 +479,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	wtpman = malloc(sizeof(struct wtpman));
 	if (!wtpman)
 		return 0;
+
+	wtpman->ctr=0;
 
 	if (socklist[socklistindex].type != SOCKLIST_UNICAST_SOCKET) {
 

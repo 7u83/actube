@@ -233,6 +233,10 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 
 	/* check the length of the message */
 	if (len < handler->min_len) {
+		if (!handler->flags || cw_dbg_is_level(DBG_ELEM_VNDR))
+			cw_dbg_elem(params->dbg_level, NULL, params->msgdata->type, handler,
+				    data, len);
+		
 		cw_dbg(DBG_ELEM_ERR,
 		       "%d (%s) message element too short, len=%d, min len=%d",
 		       handler->id, handler->name, len, handler->min_len);
@@ -246,6 +250,10 @@ int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,
 
 
 	if (len > handler->max_len && handler->max_len) {
+		if (!handler->flags || cw_dbg_is_level(DBG_ELEM_VNDR))
+			cw_dbg_elem(params->dbg_level, NULL, params->msgdata->type, handler,
+				    data, len);
+			
 		cw_dbg(DBG_ELEM_ERR,
 		       "%d (%s) message element too big, len=%d, max len=%d",
 		       handler->id, handler->name, len, handler->max_len);
