@@ -144,9 +144,10 @@ int main (int argc, char **argv)
 	conn->msgset=msgset;
 	conn->global_cfg = global_cfg;
 
-	conn->cfg_list[0]=conn->local_cfg;
-	conn->cfg_list[1]=conn->global_cfg;
-	conn->cfg_list[2]=NULL;
+	conn->cfg_list[0]=conn->update_cfg;
+	conn->cfg_list[1]=conn->local_cfg;
+	conn->cfg_list[2]=conn->global_cfg;
+	conn->cfg_list[3]=NULL;
 	
 	conn->role = CW_ROLE_WTP;
 	conn->wbid=1;

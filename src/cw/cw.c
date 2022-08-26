@@ -118,7 +118,7 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	int radios;
 	len =0;
 	
-	radios = cw_cfg_get_byte_l(params->cfg_list,"wtp-descriptor/max-radios",0);
+	radios = cw_cfg_get_byte_l(params->cfg_list,"capwap/wtp-descriptor/max-radios",0);
 	for(i=0;i<radios;i++){
 
 		type = (struct cw_Type*)handler->type;

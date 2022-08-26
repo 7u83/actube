@@ -69,7 +69,7 @@ void cw_discovery_results_add(struct cw_DiscoveryResults *dis,
 	} else {
 		/* Get priority for AC from 
 		 * ac-name-with-priority list */
-		sprintf(key, "ac-name-with-priority/%s", acname);
+		sprintf(key, "capwap/ac-name-with-priority/%s", acname);
 		e.prio = cw_cfg_get_byte(wtp_cfg, key, 255);
 	}
 
@@ -78,7 +78,7 @@ void cw_discovery_results_add(struct cw_DiscoveryResults *dis,
 	do {
 		const char *ipval;
 
-		sprintf(key, "capwap-control-ip-address.%d/wtps", i);
+		sprintf(key, "capwap/control-ip-address.%d/wtps", i);
 		e.wtps = cw_cfg_get_word(ac_cfg, key, 65535);
 
 
@@ -86,7 +86,7 @@ void cw_discovery_results_add(struct cw_DiscoveryResults *dis,
 		if (e.wtps == 65535)
 			break;
 
-		sprintf(key, "capwap-control-ip-address.%d/address", i);
+		sprintf(key, "capwap/control-ip-address.%d/address", i);
 		ipval = cw_cfg_get(ac_cfg, key, "");
 
 		sprintf(key, "%04d%05d%04d", e.prio, e.wtps, dis->nr);

@@ -534,7 +534,7 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 
 			cw_send_error_response(conn, rawmsg, result_code);
 		} else if (result_code == 0) {
-			cw_cfg_set_int(conn->update_cfg, "result-code",
+			cw_cfg_set_int(conn->update_cfg, "capwap/result-code",
 					 result_code);
 			if (ui->next) {
 				conn->capwap_prevstate = conn->capwap_state;

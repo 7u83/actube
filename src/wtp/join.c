@@ -110,8 +110,8 @@ static int run_join_d(struct cw_Conn * conn, struct sockaddr *sa,cw_Cfg_t * cfg)
 	int rc;
 
 	/* Check if we support the same auth methods as the AC */
-	lsec = cw_cfg_get_byte(conn->global_cfg,"ac-descriptor/security",255);
-	rsec = cw_cfg_get_byte(cfg,"ac-descriptor/security",0);
+	lsec = cw_cfg_get_byte(conn->global_cfg,"capwap/ac-descriptor/security",255);
+	rsec = cw_cfg_get_byte(cfg,"capwap/ac-descriptor/security",0);
 	if ((lsec & rsec) == 0){
 		cw_log(LOG_ERR, "Can't establish DTLS with AC, my sec: %d, remote sec %d",lsec,rsec);
 		return 0;

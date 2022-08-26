@@ -140,8 +140,9 @@ int exit_cmd(struct rpcdata *sd, const char *cmd)
 {
 		//fprintf(sd->out,"Unknown command: '%s'\n\r\n\r",cmd);
 
-	printf("Exitcmd %s\n",cmd);
-	fprintf(sd->out,"END: %s\n\r",cmd);
+//	printf("Exitcmd %s\n",cmd);
+	//fprintf(sd->out,"END: %s\n\r",cmd);
+	finish_cmd(sd->out);
 	fflush(sd->out);
 	return 1;
 }
@@ -453,7 +454,6 @@ int execute_cmd (struct rpcdata * sd, const char *str)
 		}
 	}
 	else{
-		printf("unknow command\n");
 		fprintf(sd->out,"Unknown command: '%s'\n",cmd);
 		finish_cmd(sd->out);
 	}

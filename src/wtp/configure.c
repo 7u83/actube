@@ -32,6 +32,9 @@ int configure(struct cw_Conn * conn)
 	
 	int rc;
 	cw_cfg_copy(conn->global_cfg,conn->update_cfg,0,"");
+
+cw_cfg_dump(conn->update_cfg);
+
 	rc = cw_send_request(conn, CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST);
 	cw_cfg_clear(conn->update_cfg);
 

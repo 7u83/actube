@@ -301,7 +301,7 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 	
 
 	type = NULL;
-	result = cw_cfg_get_val_l(params->cfg_list,"wtp-descriptor/software/version",CW_TYPE_BSTR16);
+	result = cw_cfg_get_val_l(params->cfg_list,"capwap/wtp-descriptor/software/version",CW_TYPE_BSTR16);
 	if (result!=NULL){
 		if(result->type->len(result)==4){
 			uint32_t rv;
@@ -1824,7 +1824,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		1,513,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"ac-name-with-index",			/* Key */
+		"capwap/ac-name-with-priority",		/* Key */
 		cw_in_generic_with_index,		/* get */
 		cw_out_generic_with_index		/* put */
 	}

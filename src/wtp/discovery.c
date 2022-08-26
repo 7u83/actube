@@ -45,9 +45,9 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 	results = cw_discovery_results_create();
 
 	
-	min = cw_cfg_get_byte(conn->global_cfg,"capwap-timers/min-discovery-interval",
+	min = cw_cfg_get_byte(conn->global_cfg,"capwap/timers/min-discovery-interval",
 					CAPWAP_MIN_DISCOVERY_INTERVAL);
-	max = cw_cfg_get_byte(conn->global_cfg,"capwap-timers/max-discovery-interval",
+	max = cw_cfg_get_byte(conn->global_cfg,"capwap/timers/max-discovery-interval",
 					CAPWAP_MAX_DISCOVERY_INTERVAL);
 
 	delay = cw_randint(min,max);

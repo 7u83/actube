@@ -442,7 +442,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,513,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"capwap/ac-name-with-index",		/* Key */
+		"capwap/ac-name-with-priority",		/* Key */
 		cw_in_generic_with_index,		/* get */
 		cw_out_generic_with_index		/* put */
 	}

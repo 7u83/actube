@@ -451,9 +451,17 @@ static void copy(struct cw_ElemHandlerParams * params)
 
 static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
+	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	char filename[200];
+
 	cw_dbg(DBG_X,"DISCOVERY Callback");
 	copy(params);
+
+	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
+	sprintf(filename,"wtp-discovery-%s.ckv",wtpname);
+	cw_cfg_save(filename,params->cfg,NULL);
 	cw_cfg_clear(params->cfg);
+		
 	return 0;
 }
 
@@ -464,7 +472,7 @@ static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, in
 
 	cw_dbg(DBG_X,"JOIN Callback");
 	copy(params);
-	const char * wtpname = cw_cfg_get(conn->local_cfg,"capwap/wtp-name","default");
+	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
 	sprintf(filename,"wtp-join-%s.ckv",wtpname);
 	cw_cfg_save(filename,params->cfg,NULL);
 	cw_cfg_clear(params->cfg);
@@ -481,7 +489,7 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 	cw_dbg(DBG_X,"UPDATE Callback");
 	copy(params);
 
-	const char * wtpname = cw_cfg_get(conn->local_cfg,"capwap/wtp-name","default");
+	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
 	sprintf(filename,"wtp-status-%s.ckv",wtpname);
 	cw_cfg_save(filename,params->cfg,NULL);
 //stop();	
@@ -498,9 +506,9 @@ static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, i
 	cw_dbg(DBG_X,"WTP EVENT Callback");
 	copy(params);
 
-	const char * wtpname = cw_cfg_get(conn->local_cfg,"capwap/wtp-name","default");
+	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
 	sprintf(filename,"wtp-event-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg,NULL);
+	cw_cfg_save(filename,conn->remote_cfg,NULL);
 //stop();	
 	return 0;
 }
