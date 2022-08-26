@@ -32,8 +32,8 @@ int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 {
 	if (! (params->msgdata->type & 1) ){
 		int start = params->msgset->header_len(handler);
-		cw_put_byte(dst+start,0);
-		cw_put_dword(dst+start+1,7);
+		cw_set_byte(dst+start,0);
+		cw_set_dword(dst+start+1,7);
 		return params->msgset->write_header(handler,dst,5);
 	}
 	return cw_out_radio_generic(handler,params,dst);	

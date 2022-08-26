@@ -451,6 +451,13 @@ static cw_ValStruct_t cisco_lw_radio_module_info_stru[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_ValStruct_t cisco_rrm_load_stru[]={
+	{CW_TYPE_BYTE,"rx-load",1,-1},
+	{CW_TYPE_BYTE,"tx-load",1,-1},
+	{CW_TYPE_BYTE,"cca-load",1,-1},
+	{NULL,NULL,0,0}
+};
+
 
 
 static cw_ValStruct_t cisco_ap_qos[]={
@@ -1462,6 +1469,22 @@ static struct cw_ElemHandler handlers70[] = {
 
 	},
 
+	{ 
+		"Cisco Elem 25 ",		/* name */
+		CISCO_ELEM_RRM_LOAD,				/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		4,4,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"cisco/rrm",				/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
+		NULL,
+		cisco_rrm_load_stru,
+
+	},
+
+
 
 
 	{ 
@@ -2194,6 +2217,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_33,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_47,				0, 0},	
@@ -2278,6 +2302,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_33,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_47,				0, 0},	
@@ -2341,6 +2366,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_33,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_47,				0, 0},	
@@ -2438,6 +2464,8 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 static struct cw_ElemDef wtp_event_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RADIO_MODULE_INFO,	0, 0},

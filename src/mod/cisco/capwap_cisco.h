@@ -55,6 +55,9 @@
 #define CISCO_ELEM_22				22					/* 22 */
 #define CISCO_ELEM_24				24					/* 24 */
 
+#define CISCO_ELEM_RRM_LOAD			25					/* 25 */
+
+
 #define CW_CISCO_80211_DELETE_WLAN		LW_ELEM_80211_DELETE_WLAN		/* 28 */
 
 #define CW_CISCO_MWAR_NAME			LW_ELEM_AC_NAME				/* 31 */
