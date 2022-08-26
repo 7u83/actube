@@ -35,7 +35,6 @@ CWSRC=\
 	cw_put_elem_radio_operational_state.c\
 	cw_put_image_data.c\
 	cw_put_local_ip_address.c\
-	cw_radio_set_admin_state.c\
 	cw_rand.c\
 	cw_randint.c\
 	cw_read_ac_descriptor.c\
@@ -77,44 +76,10 @@ CWSRC=\
 #	cw_out_generic_struct.c\
 	cw_in_radio_generic_struct.c\
 	cw_in_generic_struct.c\
+	cw_radio_set_admin_state.c\
 
 KTVSRC=\
 	cfg.c\
-
-
-#	cw_ktv_add.c\
-	cw_ktv_idx_get.c\
-	cw_ktv_mavlcmp.c\
-	cw_ktv_mavlcmp_type_by_name.c\
-	cw_ktv_mavldel.c\
-
-
-#	cw_ktv_parser.c\
-#	cw_ktv_del_sub.c\
-#	cw_ktv_base_exists.c\
-	cw_ktv_add_from_str.c\
-	cw_ktv_read_file.c\
-	cw_ktv_readline.c\
-	cw_ktv_save.c\
-	cw_ktv_std_types.c\
-	cw_ktv_read_struct.c\
-	cw_ktv_write_struct.c\
-
-#	cw_ktv_get_byte.c\
-	cw_ktv_get_bool.c\
-	cw_ktv_get_bstr16.c\
-	cw_ktv_set_byte.c\
-	cw_ktv_set_word.c\
-	cw_ktv_set_dword.c\
-
-#	cw_ktv_get_word.c\
-	cw_ktv_get_dword.c\
-	cw_ktv_get_sysptr.c\
-	cw_ktv_get_str.c\
-
-#	cw_ktv_cast.c\
-	cw_ktv_replace.c\
-	cw_ktv_get.c\
 
 
 LWSRC=\
