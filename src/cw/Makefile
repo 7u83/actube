@@ -18,7 +18,6 @@ CWSRC=\
 	cw_in_capwap_local_ipv4_address.c\
 	cw_in_capwap_local_ipv6_address.c\
 	cw_in_generic_with_index.c\
-	cw_in_radio_generic_struct.c\
 	cw_in_idx_generic.c\
 	cw_in_idx_generic_struct.c\
 	cw_in_generic_indexed_enum.c\
@@ -77,6 +76,7 @@ CWSRC=\
 #	
 #	cw_process_element.c\
 #	cw_out_generic_struct.c\
+	cw_in_radio_generic_struct.c\
 
 KTVSRC=\
 	cfg.c\

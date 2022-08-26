@@ -18,7 +18,7 @@ static int init()
 }
 
 
-static int detect(struct conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
+static int detect(struct cw_Conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
 		  struct sockaddr *from, int mode)
 {
 	int wbid;

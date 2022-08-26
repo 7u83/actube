@@ -7,7 +7,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 {
 
 	stop();
-
+/*
 	char key[CW_CFG_MAX_KEY_LEN];
 	struct cw_Val * elem, search;
 	int i;
@@ -26,7 +26,7 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 		
 		sprintf(key,handler->key,i);
 		search.key=key;
-		/*elem = mavl_get(params->conn->local_cfg, &search);*/
+		/ * elem = mavl_get(params->conn->local_cfg, &search); * /
 		elem = mavl_get_first(params->cfg,&search);
 		if(elem != NULL){
 			printf("Elem key: %s\n",elem->key);
@@ -55,14 +55,16 @@ int cw_out_idx_generic_struct(struct cw_ElemHandler * handler, struct cw_ElemHan
 	
 
 	
-/*	radios = cw_ktv_get_byte(params->conn->local_cfg,"wtp-descriptor/max-radios",0);
+/ *	radios = cw_ktv_get_byte(params->conn->local_cfg,"wtp-descriptor/max-radios",0);
 
 	for(i=1;i<radios+1;i++){
 		l = cw_write_radio_element(handler,params,i,dst+len);
 		cw_dbg_elem(DBG_ELEM_OUT,params->conn,params->msgdata->type,handler,dst,l);
 		len+=l;
 	}
-*/
+* /
+
 	return mdst-dst;
+	*/ return 0;
 }
 

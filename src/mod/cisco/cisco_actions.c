@@ -1833,10 +1833,13 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_ELEM_AP_QOS,			/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		52,52,					/* min/max length */
-		cisco_ap_qos,				/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/ap-qos",				/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,		/* get */
+		cw_out_radio_generic, /* put */
+		NULL,
+		NULL,
+		cisco_ap_qos,
 	},
 
 	{ 
@@ -2092,10 +2095,13 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_LWELEM_RAD_EXTENDED_CONFIG,	/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		13,13,					/* min/max length */
-		cisco_rad_extended_config,		/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/rad-extended-config",		/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,		/* get */
+		cw_out_radio_generic,		/* put */
+		NULL,
+		NULL,
+		cisco_rad_extended_config,
 	},
 
 	{
@@ -2732,10 +2738,13 @@ static struct cw_ElemHandler handlers73[] = {
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		27,27,					/* min/max length */
-		cisco_wtp_radio_config73,		/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/wtp-radio-config",		/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,		/* get */
+		cw_out_radio_generic,		/* put */
+		NULL,
+		NULL,
+		cisco_wtp_radio_config73,
 	}
 	,
 
@@ -2765,10 +2774,13 @@ static struct cw_ElemHandler handlers75[] = {
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		28,28,					/* min/max length */
-		cisco_wtp_radio_config75,		/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/wtp-radio-config",		/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
+		NULL,
+		cisco_wtp_radio_config75,
 	}
 	,
 	{ 
@@ -2776,10 +2788,13 @@ static struct cw_ElemHandler handlers75[] = {
 		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		17,17,					/* min/max length */
-		cisco_mac_operation75,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/mac-operation",			/* Key */
-		cw_in_radio_generic_struct,		/* get */
-		cw_out_radio_generic_struct		/* put */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
+		NULL,
+		NULL,
+		cisco_mac_operation75,
 	},
 
 	{0,0,0,0,0,0,0,0}

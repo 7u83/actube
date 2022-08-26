@@ -9,7 +9,7 @@
 
 #include "mod_capwap.h"
 
-static int init(struct cw_Mod * mod, mavl_t global_cfg, int role)
+static int init(struct cw_Mod * mod, cw_Cfg_t * global_cfg, int role)
 {
 	cw_dbg(DBG_INFO,"CAPWAP: Inititalizing mod_capwap.");
 	
@@ -51,7 +51,7 @@ int static setup_cfg(struct cw_Conn  * conn)
 
 
 //	stop();
-//	cw_ktv_set_byte(conn->local_cfg,"ac-descriptor/security",security);
+	cw_cfg_set_int(conn->local_cfg,"ac-descriptor/security",security);
 
 	return 0;
 }

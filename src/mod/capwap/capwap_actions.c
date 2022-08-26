@@ -429,10 +429,13 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
 		3, 3,						/* min/max length */
-		radio_operational_state,			/* type */
+		CW_TYPE_STRUCT,					/* type */
 		"capwap/operational-state",			/* Key */
-		cw_in_radio_generic_struct,			/* get */
-		cw_out_radio_generic_struct			/* put */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,				/* put */
+		NULL,
+		NULL,
+		radio_operational_state
 	}
 	,
 
