@@ -9,6 +9,7 @@ capwap-local-ip-address: 192.168.0.13
 capwap-timers/echo-interval: 30
 capwap-timers/max-discovery-interval: 10
 capwap/ac-name: 
+capwap/discovery-type: 1
 cisco-8011-assoc-limit/enable: false
 cisco-8011-assoc-limit/interval: 500
 cisco-8011-assoc-limit/limit: 25
@@ -60,7 +61,7 @@ cisco/ap-username-and-password/login-credentials/password: $1$MX4t$F19wCuY8yN5jB
 cisco/ap-username-and-password/login-credentials/username: admin
 cisco/cisco-discovery-protocol/data: 513
 cisco/cisco-discovery-protocol/enabled: false
-cisco/elem132: .x0000000000
+cisco/elem132: .x0100000000
 cisco/loghost-config/last-joined-ap: None
 cisco/loghost-config/loghost: 255.255.255.255
 cisco/lw-path-mtu/len: 1095
@@ -121,7 +122,7 @@ radio.0/cisco/elem146: .x690f
 radio.0/cisco/elem153: .x00
 radio.0/cisco/elem156: .x020100
 radio.0/cisco/elem16: .x02040b0c
-radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
+radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
 radio.0/cisco/elem22: .x0d00b400320102030405060708090a0b0c0d
 radio.0/cisco/elem24: .x003c000c
 radio.0/cisco/elem39: .x0078
@@ -175,7 +176,7 @@ radio.0/wlan.1/add-wlan/scan-defer-time: 100
 radio.0/wlan.1/add-wlan/session-timout: 1800
 radio.0/wlan.1/add-wlan/ssid: tubeC
 radio.0/wlan.1/add-wlan/wep-encryption: false
-radio.0/wlan.1/add-wlan/wep-key: .x1994f9d6d5f332f6531f532803
+radio.0/wlan.1/add-wlan/wep-key: .x4568d9877819af1f317267e3b7
 radio.0/wlan.1/add-wlan/wep-key-index: 1
 radio.0/wlan.1/add-wlan/wlan-capability: 1073
 radio.0/wlan.1/add-wlan/wlan-id: 1
@@ -192,7 +193,7 @@ radio.0/wlan.13/add-wlan/scan-defer-time: 100
 radio.0/wlan.13/add-wlan/session-timout: 1800
 radio.0/wlan.13/add-wlan/ssid: SuperSSID
 radio.0/wlan.13/add-wlan/wep-encryption: false
-radio.0/wlan.13/add-wlan/wep-key: .x1994f9d6d5f332f6531f532803
+radio.0/wlan.13/add-wlan/wep-key: .x4568d9877819af1f317267e3b7
 radio.0/wlan.13/add-wlan/wep-key-index: 1
 radio.0/wlan.13/add-wlan/wlan-capability: 1057
 radio.0/wlan.13/add-wlan/wlan-id: 13
@@ -219,12 +220,12 @@ radio.1/cisco/direct-sequence-control/unknown: 1
 radio.1/cisco/elem145: .x01
 radio.1/cisco/elem146: .x690f
 radio.1/cisco/elem15/cfg-type: 1 - global
-radio.1/cisco/elem15/channel: 52
+radio.1/cisco/elem15/channel: 132
 radio.1/cisco/elem15/rest: .x07ffffffce010001
 radio.1/cisco/elem153: .x00
 radio.1/cisco/elem156: .x020100
 radio.1/cisco/elem16: .x0c121824
-radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
+radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
 radio.1/cisco/elem22: .x1000b4003224282c3034383c4064686c707484888c
 radio.1/cisco/elem24: .x003c000c
 radio.1/cisco/elem39: .x0078
@@ -278,7 +279,7 @@ radio.1/wlan.1/add-wlan/scan-defer-time: 100
 radio.1/wlan.1/add-wlan/session-timout: 1800
 radio.1/wlan.1/add-wlan/ssid: tubeC
 radio.1/wlan.1/add-wlan/wep-encryption: false
-radio.1/wlan.1/add-wlan/wep-key: .xef86466b27791853131dd3073c
+radio.1/wlan.1/add-wlan/wep-key: .xe541d298736af873037ee6e44b
 radio.1/wlan.1/add-wlan/wep-key-index: 1
 radio.1/wlan.1/add-wlan/wlan-capability: 17
 radio.1/wlan.1/add-wlan/wlan-id: 1
@@ -295,7 +296,7 @@ radio.1/wlan.13/add-wlan/scan-defer-time: 100
 radio.1/wlan.13/add-wlan/session-timout: 1800
 radio.1/wlan.13/add-wlan/ssid: SuperSSID
 radio.1/wlan.13/add-wlan/wep-encryption: false
-radio.1/wlan.13/add-wlan/wep-key: .xef86466b27791853131dd3073c
+radio.1/wlan.13/add-wlan/wep-key: .xe541d298736af873037ee6e44b
 radio.1/wlan.13/add-wlan/wep-key-index: 1
 radio.1/wlan.13/add-wlan/wlan-capability: 1
 radio.1/wlan.13/add-wlan/wlan-id: 13

@@ -102,7 +102,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		"discovery-type",			/* Key */
+		"capwap/discovery-type",		/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic,				/* put */
 		NULL,

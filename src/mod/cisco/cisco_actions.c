@@ -34,6 +34,10 @@ static int postprocess_discovery();
 static int preprocess_join_request();
 static int postprocess_join_request();
 
+int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
+
+
 static cw_ValValRange_t cfg_type[]={
 	{1,1,"1 - global"},
 	{2,2,"2 - custom"},
@@ -879,17 +883,17 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic			/* put */
 	}
 	,
-//	{
-//		"80211 WTP Radio Information - Cisco",		/* name * /
-//		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID * /
-//		0, 0,						/* Vendor / Proto * /
-//		0, 0,						/* min/max length * /
-//		CW_TYPE_DWORD,					/* type * /
-//		"wtp-radio-information",			/* Key * /
-//		cw_in_radio_generic,				/* get * /
-//		cw_out_radio_generic				/* put * /
-//	}
-//	,
+	{
+		"80211 WTP Radio Information - Cisco",		/* name */
+		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		0, 0,						/* min/max length */
+		CW_TYPE_DWORD,					/* type */
+		"capwap80211/wtp-radio-information",		/* Key */
+		cw_in_radio_generic,				/* get */
+		cisco_out_radio_info				/* put */ 
+	}
+	,
 	{ 
 		"Session ID (Cisco min len = 4)",	/* name */
 		CAPWAP_ELEM_SESSION_ID,			/* Element ID */
@@ -2123,13 +2127,12 @@ static struct cw_ElemHandler handlers70[] = {
 };
 
 
-/*static uint16_t discovery_request_states[] = {CAPWAP_STATE_DISCOVERY,0};*/
 static struct cw_ElemDef discovery_request_elements[] ={
 /*	{0,0,			CAPWAP_ELEM_WTP_DESCRIPTOR,	1, 0},*/
 	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,	0, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_RAD_NAME,		1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CW_CISCO_BOARD_DATA_OPTIONS,	0, 0},
-	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	0, 0},
+	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	1, 0},
 	{0,0,0,00}
 	
 };
@@ -2138,7 +2141,7 @@ static struct cw_ElemDef discovery_request_elements[] ={
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,			0, 0},
-	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	0, 0},
+	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	1, 0},
 	{0,0,0,00}
 	
 };

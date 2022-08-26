@@ -125,6 +125,8 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 		start = params->msgset->header_len(handler)+len;
 
 		sprintf(key,"radio.%d/%s",i,handler->key);
+//printf("RADIO KEY: %s\n",key);
+		
 //		cw_dbg(DBG_X,"KEY: %s",key);
 
 		l = type->write(params->cfg_list, key,dst+start+1,handler->param);

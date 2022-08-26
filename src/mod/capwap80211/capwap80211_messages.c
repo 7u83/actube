@@ -68,32 +68,33 @@ static struct cw_ElemHandler handlers[] = {
 	,
 	{NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL}
 
-
 };
 
-/*static int discovery_request_states[] = { CAPWAP_STATE_DISCOVERY, 0 };*/
 static struct cw_ElemDef discovery_request_elements[] = {
 	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 1, 0},
 	{0, 0, 0, 0, 0}
 
 };
 
+static struct cw_ElemDef discovery_response_elements[] = {
+	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 1, 0},
+	{0, 0, 0, 0, 0}
 
-/*static int join_request_states[] = { CAPWAP_STATE_JOIN, 0 };*/
+};
+
+
 static struct cw_ElemDef join_request_elements[] = {
 	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 1, 0},
 	{0, 0, 0, 0, 0}
 
 };
 
-/*static int join_response_states[] = { CAPWAP_STATE_JOIN, 0 };*/
 static struct cw_ElemDef join_response_elements[] = {
-	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	1, 0},
+	{0, 0, CAPWAP80211_ELEM_WTP_RADIO_INFORMATION, 1, 0},
 	{0, 0, 0, 0, 0}
 
 };
 
-/*static int configuration_status_response_states[] = { CAPWAP_STATE_JOIN, 0 };*/
 static struct cw_ElemDef configuration_status_response_elements[] = {
 	{0, 0, CAPWAP80211_ELEM_RATE_SET		, 1, 0},
 	{0, 0, 0, 0, 0}
@@ -106,6 +107,14 @@ static struct cw_MsgDef messages[] = {
 		CW_ROLE_AC,
 		NULL,				/* states */
 		discovery_request_elements
+	}
+	,
+	{
+		NULL,
+		CAPWAP_MSG_DISCOVERY_RESPONSE,
+		CW_ROLE_WTP,
+		NULL,				/* states */
+		discovery_response_elements
 	}
 	,
 	{

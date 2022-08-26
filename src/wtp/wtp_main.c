@@ -84,11 +84,12 @@ int main (int argc, char **argv)
 	struct cw_Mod * mod;
 	struct cw_MsgSet * msgset=NULL;
 	struct cw_Conn * conn=NULL;
-	FILE * file;
+	//FILE * file;
 	cw_Cfg_t * global_cfg =NULL;
-	const cw_Type_t ** ti;
+	//const cw_Type_t ** ti;
 	int i;
-	int rc;	
+	int rc=EXIT_FAILURE;	
+	struct cw_DiscoveryResults * results;
 	
 	
 	bootcfg.nmods=0;
@@ -175,11 +176,13 @@ int main (int argc, char **argv)
 /*cw_run_discovery(conn, "255.255.255.255","192.168.56.1", &dis);*/
 /*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
 
-	struct cw_DiscoveryResulsts * results;
 	//cw_run_discovery(conn, "192.168.0.24","192.168.0.14", &dis);
 	//
 
-	results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
+	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.24");
+	results = cw_run_discovery(conn, "192.168.0.161","192.168.0.24");
+//	results = cw_run_discovery(conn, "255.255.255.255","0.0.0.0");
 //	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
 	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
 //	results = cw_run_discovery(conn, "192.168.0.24","192.168.0.14");
@@ -187,6 +190,8 @@ int main (int argc, char **argv)
 //	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.185");
 //	results = cw_run_discovery(conn, "172.16.67.255","172.16.67.185");
 
+	if (!results)
+		goto errX;
 
 
 	if (!join(conn,results)){

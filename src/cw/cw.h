@@ -557,6 +557,8 @@ int cw_put_descriptor_subelem (uint8_t *dst, cw_Cfg_t ** cfg_list,
                                  int subelem_id, const char * parent_key );
 
 
+int cw_send_request(struct cw_Conn *conn,int msg_id);
+
 /**
  *@}
  */

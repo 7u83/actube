@@ -17,6 +17,9 @@
 #include "wtp.h"
 
 
+int run_join(struct cw_Conn *conn);
+
+
 /*
 #define acinfo_log acinfo_log_
 
