@@ -64,7 +64,6 @@ CWSRC=\
 	cw_write_radio_element.c\
 	cw_detect_nat.c\
 	cw_read_from.c \
-	cw_in_generic_struct.c\
 
 #	cw_in_check_disc_req.c\
 #	cw_in_check_img_data_req_ac.c\
@@ -77,6 +76,7 @@ CWSRC=\
 #	cw_process_element.c\
 #	cw_out_generic_struct.c\
 	cw_in_radio_generic_struct.c\
+	cw_in_generic_struct.c\
 
 KTVSRC=\
 	cfg.c\

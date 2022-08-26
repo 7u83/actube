@@ -1993,12 +1993,13 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		7,1117,					/* min/max length */
-		cisco_add_lwwlan,			/* type */
+		CW_TYPE_STRUCT,				/* type */
 		"radio/wlan/add-lw-wlan",		/* Key */
-		cw_in_generic_struct,			/* get */
+		cw_in_generic,				/* get */
 		cw_out_traverse,			/* put */
 		cisoc_add_lwwlan_mkkey,
-		cisco_patch_add_lwwlan
+		cisco_patch_add_lwwlan,
+		cisco_add_lwwlan,
 	}
 	,
 
