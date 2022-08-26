@@ -31,7 +31,7 @@
 
 
 static void readsubelems_wtp_board_data(cw_Cfg_t * cfg, uint8_t * msgelem,
-					int len)
+					int len,const char *pkey)
 {
 	int i = 0;
 	uint32_t val;
@@ -56,11 +56,7 @@ static void readsubelems_wtp_board_data(cw_Cfg_t * cfg, uint8_t * msgelem,
 			return;
 		}
 
-/*		cw_dbg(DBG_SUBELEM, "WTP board data sub-element, type=%d, len=%d",
-		       subtype, sublen);*/
-
 		switch (subtype) {
-
 			
 			case CW_BOARDDATA_MODELNO:
 				key = "model-no";
@@ -83,7 +79,7 @@ static void readsubelems_wtp_board_data(cw_Cfg_t * cfg, uint8_t * msgelem,
 		}
 		if (key != NULL){
 			char add_key[CW_CFG_MAX_KEY_LEN];
-			sprintf(add_key,"wtp-board-data/%s",key);
+			sprintf(add_key,"%s/%s",pkey,key);
 			cw_cfg_set_val(cfg,add_key,CW_TYPE_BSTR16,NULL,msgelem+i,sublen);
 			
 		}
@@ -107,7 +103,7 @@ int capwap_in_wtp_board_data(struct cw_ElemHandler *eh, struct cw_ElemHandlerPar
 	sprintf(vendor_key,"%s/%s",eh->key,"vendor");
 	cw_cfg_set_val(params->cfg,vendor_key,CW_TYPE_DWORD,NULL,data,len);
 
-	readsubelems_wtp_board_data(params->cfg, data + 4, len - 4);
+	readsubelems_wtp_board_data(params->cfg, data + 4, len - 4,eh->key);
 	return 1;
 }
 

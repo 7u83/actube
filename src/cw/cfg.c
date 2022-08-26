@@ -640,7 +640,7 @@ uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def)
 
 
 
-uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def)
+uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, const char *key, uint16_t def)
 {
 	struct cw_Val v;
 	const char *s = cw_cfg_get(cfg,key,NULL);
@@ -650,7 +650,7 @@ uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, char *key, uint16_t def)
 	return v.val.word;
 }
 
-uint16_t cw_cfg_get_word_l(cw_Cfg_t ** cfg, char *key, uint16_t def)
+uint16_t cw_cfg_get_word_l(cw_Cfg_t ** cfg, const char *key, uint16_t def)
 {
 	struct cw_Val v;
 	const char *s = cw_cfg_get_l(cfg,key,NULL);

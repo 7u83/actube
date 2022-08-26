@@ -131,7 +131,7 @@ struct mavl * cw_statemachine_load_states (struct mavl * statemachine_states, cw
                         cw_strstate(s->state));
                 s++;
         }
-        return 1;
+        return NULL;
 }
 
 

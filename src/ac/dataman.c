@@ -114,8 +114,10 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 
 			((uint16_t*)sessid)[0]=sessid_len;
 			memcpy(bstr16_data(sessid),cw_get_elem_data(elem),sessid_len);
-
-			struct wtpman * wtpman = wtplist_get_by_session_id(sessid);
+			
+			stop();
+			struct wtpman * wtpman =NULL;
+//			struct wtpman * wtpman = wtplist_get_by_session_id(sessid);
 			if (wtpman){
 				if (!dm->wtpman)
 					dm->wtpman=wtpman;

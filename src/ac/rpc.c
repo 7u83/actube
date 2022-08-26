@@ -313,9 +313,9 @@ int  show_aps (FILE *out)
 		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 
-		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "wtp-name", "Unknown"));
-		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "wtp-board-data/model-no", "Unknown"));
-		vendor = cw_cfg_get(conn->remote_cfg, "wtp-board-data/vendor", "0");
+		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "capwap/wtp-name", "Unknown"));
+		print_mw(out,16,cw_cfg_get(conn->remote_cfg, "capwap/wtp-board-data/model-no", "Unknown"));
+		vendor = cw_cfg_get(conn->remote_cfg, "capwap/wtp-board-data/vendor", "0");
 		print_mw(out,14,vendor);	
 		sock_addr2str_p (&conn->addr, addr);
 		print_mw(out,16,addr);
@@ -342,7 +342,7 @@ struct cw_Conn * find_ap(const char *name)
 		struct cw_Conn * conn;
 		conn = mavliter_get_ptr (&it);
 		
-		wtpname = cw_cfg_get (conn->remote_cfg, "wtp-name", NULL);
+		wtpname = cw_cfg_get (conn->remote_cfg, "capwap/wtp-name", NULL);
 		
 		if (wtpname == NULL)
 			continue;

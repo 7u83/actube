@@ -78,7 +78,7 @@ struct wtpman * wtplist_get(const struct sockaddr * addr)
 
 }
 
-struct wtpman * wtplist_get_by_session_id(bstr16_t *session_id)
+struct wtpman * wtplist_get_by_session_id(bstr16_t session_id)
 {
 	struct cw_Conn  search;
 	struct cw_Conn * conn;

@@ -203,7 +203,7 @@ int discovery_cache_get(struct cw_DiscoveryCache * cache,struct sockaddr *addr,
 	{
 	cw_dbg(DBG_X,"DISCOVERY CACHE ---------------------------- DOUND BY ADDR");
 	char str[128];
-	sock_addrtostr(&elem->addr,str,128,1);
+	sock_addrtostr((struct sockaddr*)&elem->addr,str,128,1);
 	printf("ELEM addr: %s\n",str);
 	}
 

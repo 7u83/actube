@@ -815,7 +815,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
 		NULL,				/* type */
-		CW_KEY_WTP_DESCRIPTOR,		/* Key */
+		"capwap/wtp-descriptor",	/* Key */
 		cisco_in_wtp_descriptor, 	/* get */
 		cisco_out_wtp_descriptor	/* put */
 	}
@@ -826,7 +826,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,				/* Vendor / Proto */
 		4,128,				/* min/max length */
 		NULL,				/* type */
-		"ac-descriptor",		/* Key */
+		"capwap/ac-descriptor",		/* Key */
 		cisco_in_ac_descriptor, 	/* get */
 		cisco_out_ac_descriptor		/* put */
 	}
@@ -837,7 +837,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		1,512,				/* min/max length */
 		CW_TYPE_BSTR16,			/* type */
-		CW_KEY_WTP_NAME,		/* Key */
+		"capwap/wtp-name",		/* Key */
 		cw_in_generic,			/* get */
 		cw_out_generic			/* put */
 	}
@@ -900,7 +900,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,					/* Vendor / Proto */
 		4,CAPWAP_SESSION_ID_LEN,		/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"session-id",				/* Key */
+		"capwap/session-id",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -925,8 +925,8 @@ static struct cw_ElemHandler handlers70[] = {
 		7,7,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/mwar-addr",			/* Key */
-		cw_in_generic,			/* get */
-		cw_out_generic,			/* put */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
 		NULL,
 		NULL,
 		mwar_addr
@@ -938,7 +938,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,					/* Vendor / Proto */
 		4,4,					/* min/max length */
 		CW_TYPE_IPADDRESS,			/* type */
-		"capwap-local-ip-address",		/* Key */
+		"capwap/local-ip-address",		/* Key */
 		cw_in_generic,				/* get */
 		cisco_out_capwap_local_ip_address	/* put */
 	}
@@ -950,7 +950,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,					/* Vendor / Proto */
 		16,16,					/* min/max length */
 		CW_TYPE_IPADDRESS,			/* type */
-		"capwap-local-ip-address",		/* Key */
+		"capwap/local-ip-address",		/* Key */
 		cw_in_generic,				/* get */
 		cisco_out_capwap_local_ip_address	/* put */
 	}
@@ -1786,7 +1786,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		0,1024,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"location-data",			/* Key */
+		"capwap/location-data",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
@@ -1812,7 +1812,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		2,2,					/* min/max length */
 		CW_TYPE_WORD,				/* type */
-		"statistics-timer",			/* Key */
+		"capwap/statistics-timer",		/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -1943,12 +1943,12 @@ static struct cw_ElemHandler handlers70[] = {
 	,
 
 	{ 
-		"SSC Hash",					/* name */
+		"SSC Hash",				/* name */
 		CISCO_LWELEM_SSC_HASH,			/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		1,331,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/hash",				/* Key */
+		"cisco/ssc-hash",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic,				/* put */
 		NULL,
@@ -1976,7 +1976,7 @@ static struct cw_ElemHandler handlers70[] = {
 		0,0,					/* Vendor / Proto */
 		3,3,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"operational-state",			/* Key */
+		"capwap/operational-state",		/* Key */
 		cw_in_radio_generic,			/* get */
 		cw_out_radio_generic,			/* put */
 		NULL,					/* mkkey */
@@ -2034,7 +2034,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO, 0,			/* Vendor / Proto */
 		2, 2,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"capwap-timers",			/* Key */
+		"capwap/timers",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic,				/* put */
 		NULL,
@@ -2049,7 +2049,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO, 0,						/* Vendor / Proto */
 		4, 4,						/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco-8011-assoc-limit",			/* Key */
+		"cisco/8011-assoc-limit",			/* Key */
 		cw_in_generic,					/* get */
 		cw_out_generic,					/* put */
 		NULL,
@@ -2762,15 +2762,15 @@ static void set_ac_version(struct cw_ElemHandlerParams * params)
 {
 	bstr16_t wtpver;
 	char verstr[512];
-	wtpver = cw_cfg_get_bstr16(params->cfg,"wtp-descriptor/software/version",NULL);
+	wtpver = cw_cfg_get_bstr16(params->cfg,"capwap/wtp-descriptor/software/version",NULL);
 	if (wtpver==NULL)
 		return;
 
 	cw_format_version(verstr,bstr16_data(wtpver),bstr16_len(wtpver));
 	cw_dbg(DBG_INFO, "Cisco - Setting AC software version to: %s", verstr);
 	
-	cw_cfg_set_bstr16(params->conn->local_cfg,"ac-descriptor/software/version",wtpver);
-	cw_cfg_set_int(params->conn->local_cfg,"ac-descriptor/software/vendor",CW_VENDOR_ID_CISCO);
+	cw_cfg_set_bstr16(params->conn->local_cfg,"capwap/ac-descriptor/software/version",wtpver);
+	cw_cfg_set_int(params->conn->local_cfg,"capwap/ac-descriptor/software/vendor",CW_VENDOR_ID_CISCO);
 
 	if(bstr16_len(wtpver)==4){
 		uint32_t rv;
@@ -2818,9 +2818,9 @@ static int preprocess_join_request(struct cw_Conn *conn)
 
 	use_ac_version = cw_cfg_get_bool(conn->global_cfg,"cisco/wtp-use-ac-version",0);
 	if (use_ac_version){
-		ver = cw_cfg_get_bstr16(conn->remote_cfg,"ac-descriptor/software/version",NULL );
+		ver = cw_cfg_get_bstr16(conn->remote_cfg,"capwap/ac-descriptor/software/version",NULL );
 		if (ver != NULL){
-			cw_cfg_set_bstr16(conn->local_cfg,"wtp-descriptor/software/version",ver);
+			cw_cfg_set_bstr16(conn->local_cfg,"capwap/wtp-descriptor/software/version",ver);
 			cw_format_version(verstr,bstr16_data(ver),bstr16_len(ver));
 			cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
 			free(ver);

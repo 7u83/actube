@@ -97,10 +97,8 @@ prompt(EditLine *el )
 		rc=get_result(act_f,str2,64);
 	}
 
-	static char a[] = "\1\033[7m\1Edit$\1\033[0m\1 ";
-	static char b[] = "> ";
 
-	return (continuation ? b : str);
+	return (continuation ? "> " : str);
 }
 
 static void

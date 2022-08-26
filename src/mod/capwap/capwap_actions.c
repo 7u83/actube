@@ -117,7 +117,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		"wtp-mac-type",				/* Key */
+		"capwap/wtp-mac-type",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic,				/* put */
 		NULL,
@@ -131,18 +131,18 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		14,1024,				/* min/max length */
 		NULL,					/* type */
-		CW_KEY_WTP_BOARD_DATA,			/* Key */
+		"capwap/wtp-board-data",			/* Key */
 		capwap_in_wtp_board_data,		/* get */
 		capwap_out_wtp_board_data		/* put */
 	}
 	,
 	{ 
 		"WTP Descriptor",			/* name */
-		CAPWAP_ELEM_WTP_DESCRIPTOR,		/* Element ID */
+		CAPWAP_ELEM_WTP_DESCRIPTOR,		/* #Element ID */
 		0,0,					/* Vendor / Proto */
 		33,1024,				/* min/max length */
 		NULL,					/* type */
-		CW_KEY_WTP_DESCRIPTOR,			/* Key */
+		"capwap/wtp-descriptor",		/* Key */
 		capwap_in_wtp_descriptor,		/* get */
 		capwap_out_wtp_descriptor,		/* put */
 	}
@@ -153,7 +153,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		CW_KEY_WTP_FRAME_TUNNEL_MODE,		/* Key */
+		"capwap/wtp-frame-tunnel-mode",		/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -193,7 +193,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		0,0,					/* min/max length */
 		NULL,					/* type */
-		CW_KEY_AC_DESCRIPTOR,			/* Key */
+		"capwap/ac-descriptor",			/* Key */
 		capwap_in_ac_descriptor,		/* get */
 		capwap_out_ac_descriptor		/* put */
 	}
@@ -205,7 +205,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,CAPWAP_MAX_AC_NAME_LEN,		/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"ac-name",				/* Key */
+		"capwap/ac-name",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -217,7 +217,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		6,6,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"capwap-control-ip-address",		/* Key */
+		"capwap/control-ip-address",		/* Key */
 		capwap_in_capwap_control_ip_address,	/* get */
 		capwap_out_capwap_control_ip_address	/* put */
 	},
@@ -228,7 +228,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		18,18,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"capwap-control-ip-address",		/* Key */
+		"capwap/control-ip-address",		/* Key */
 		capwap_in_capwap_control_ip_address,	/* get */
 		capwap_out_capwap_control_ip_address	/* put */
 	}
@@ -241,7 +241,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,CAPWAP_MAX_LOCATION_DATA_LEN,		/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"location-data",			/* Key */
+		"capwap/location-data",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -253,7 +253,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,CAPWAP_MAX_WTP_NAME_LEN,		/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"wtp-name",				/* Key */
+		"capwap/wtp-name",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -264,7 +264,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		CAPWAP_SESSION_ID_LEN,CAPWAP_SESSION_ID_LEN,	/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"session-id",				/* Key */
+		"capwap/session-id",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -276,7 +276,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		4,4,					/* min/max length */
 		CW_TYPE_DWORD,				/* type */
-		"result-code",				/* Key */
+		"capwap/result-code",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -288,7 +288,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
 		CW_TYPE_BYTE,				/* type */
-		"ecn-support",				/* Key */
+		"capwap/ecn-support",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -300,7 +300,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		2,2,					/* min/max length */
 		CW_TYPE_WORD,				/* type */
-		"maximum-message-length",		/* Key */
+		"capwap/maximum-message-length",	/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -312,7 +312,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		4,4,					/* min/max length */
 		CW_TYPE_IPADDRESS,			/* type */
-		"capwap-local-ip-address",		/* Key */
+		"capwap/local-ip-address",		/* Key */
 		cw_in_generic,				/* get */
 		capwap_out_capwap_local_ip_address	/* put */
 	}
@@ -323,7 +323,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		16,16,					/* min/max length */
 		CW_TYPE_IPADDRESS,			/* type */
-		"capwap-local-ip-address",		/* Key */
+		"capwap/local-ip-address",		/* Key */
 		cw_in_generic,				/* get */
 		capwap_out_capwap_local_ip_address	/* put */
 	}
@@ -336,7 +336,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		2,2,					/* min/max length */
 		CW_TYPE_WORD,				/* type */
-		"statistics-timer",			/* Key */
+		"capwap/statistics-timer",		/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	}
@@ -348,7 +348,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		15,15,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"wtp-reboot-statistics",		/* Key */
+		"capwap/wtp-reboot-statistics",		/* Key */
 		cw_in_generic,				/* handler */
 		cw_out_generic,				/* put */
 		NULL,
@@ -364,7 +364,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		2, 2,						/* min/max length */
 		CW_TYPE_STRUCT,					/* type */
-		"admin-state",					/* Key */
+		"capwap/admin-state",				/* Key */
 		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic,				/* put */
 		NULL,
@@ -380,7 +380,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,					/* Vendor / Proto */
 		2, 2,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"capwap-timers",			/* Key */
+		"capwap/timers",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic,				/* put */
 		NULL,
@@ -395,7 +395,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		3, 3,						/* min/max length */
 		CW_TYPE_WORD,					/* type */
-		"decryption-error-report-period",		/* Key */
+		"capwap/decryption-error-report-period",	/* Key */
 		cw_in_radio_generic,				/* get */
 		cw_out_radio_generic				/* put */
 	}
@@ -407,7 +407,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		4, 4,						/* min/max length */
 		CW_TYPE_DWORD,					/* type */
-		"idle-timeout",					/* Key */
+		"capwap/idle-timeout",				/* Key */
 		cw_in_generic,					/* get */
 		cw_out_generic					/* put */
 	}
@@ -419,7 +419,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		1, 1,						/* min/max length */
 		CW_TYPE_BYTE,					/* type */
-		"wtp-fallback",					/* Key */
+		"capwap/wtp-fallback",				/* Key */
 		cw_in_generic,					/* get */
 		cw_out_generic					/* put */
 	}
@@ -430,7 +430,7 @@ static struct cw_ElemHandler handlers[] = {
 		0, 0,						/* Vendor / Proto */
 		3, 3,						/* min/max length */
 		radio_operational_state,			/* type */
-		"operational-state",				/* Key */
+		"capwap/operational-state",			/* Key */
 		cw_in_radio_generic_struct,			/* get */
 		cw_out_radio_generic_struct			/* put */
 	}
@@ -442,7 +442,7 @@ static struct cw_ElemHandler handlers[] = {
 		0,0,					/* Vendor / Proto */
 		1,513,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
-		"ac-name-with-index",			/* Key */
+		"capwap/ac-name-with-index",		/* Key */
 		cw_in_generic_with_index,		/* get */
 		cw_out_generic_with_index		/* put */
 	}

@@ -289,13 +289,13 @@ int init_bcast_addrs(cw_Cfg_t *cfg)
 
 
 		if (ifa->ifa_broadaddr) {
-			char *s,*sr;
+			char *s; //,*sr;
 			sock_addrtostr(ifa->ifa_broadaddr, str, 100,1);
 			*strchr(str, ':') = 0;
 
 
 			s = cw_strdup(str);
-			sr = mavl_add_str(t, s);
+			mavl_add_str(t, s);
 
 
 //			printf("BCAST = %p --- %p: %s\n",str,s,str);

@@ -1,7 +1,7 @@
 #ifndef __KEYS_H
 #define __KEYS_H
 
-#define CW_KEY_WTP_DESCRIPTOR "wtp-descriptor"
+//#define CW_KEY_WTP_DESCRIPTOR "capwap/wtp-descriptor"
 
 #define CW_SKEY_HARDWARE "hardware"
 #define CW_SKEY_SOFTWARE "software"
@@ -15,8 +15,8 @@
 #define CW_SKEY_RADIOS_IN_USE	"radios-in-use"
 
 
-#define CW_KEY_WTP_NAME		"wtp-name"
-#define CW_KEY_DISCOVERY_TYPE	"discovery-type"
+//#define CW_KEY_WTP_NAME		"wtp-name"
+//#define CW_KEY_DISCOVERY_TYPE	"discovery-type"
 #define CW_KEY_WTP_MAC_TYPE	"wtp-mac-type"
 #define CW_KEY_WTP_FRAME_TUNNEL_MODE	"wtp-frame-tunnel-mode"
 

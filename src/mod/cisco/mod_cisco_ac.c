@@ -232,7 +232,7 @@ int static setup_cfg(struct cw_Conn  * conn)
 	security = cw_setup_dtls(conn,conn->global_cfg,"cisco",CAPWAP_CIPHER);
 
 	if (conn->role == CW_ROLE_AC){
-		cw_cfg_set_int(conn->local_cfg,"ac-descriptor/security",security);
+		cw_cfg_set_int(conn->local_cfg,"capwap/ac-descriptor/security",security);
 	
 //		if (conn->default_cfg==NULL){
 //			conn->default_cfg=cw_cfg_create();

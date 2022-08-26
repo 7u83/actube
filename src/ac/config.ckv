@@ -45,31 +45,31 @@ actube/rpc/listen: tcp:127.0.0.1:5000
 actube/rpc/enable: true
 
 
-ac-descriptor/dtls-policy:  1
-ac-descriptor/hardware/vendor: 4232704
-ac-descriptor/hardware/version: .x01000001
-ac-descriptor/max-wtps : 200
-ac-descriptor/active-wtps:  2
-ac-descriptor/r-mac-field: 1
-ac-descriptor/reserved1 : 0
-ac-descriptor/security : 2
-ac-descriptor/software/vendor : 0
-ac-descriptor/software/version: v0.0.1
-ac-descriptor/station-limit: 1000
-ac-descriptor/stations: 0
+capwap/ac-descriptor/dtls-policy:  1
+capwap/ac-descriptor/hardware/vendor: 4232704
+capwap/ac-descriptor/hardware/version: .x01000001
+capwap/ac-descriptor/max-wtps : 200
+capwap/ac-descriptor/active-wtps:  2
+capwap/ac-descriptor/r-mac-field: 1
+cawpap/ac-descriptor/reserved1 : 0
+capwap/ac-descriptor/security : 2
+capwap/ac-descriptor/software/vendor : 0
+capwap/ac-descriptor/software/version: v0.0.1
+capwap/ac-descriptor/station-limit: 1000
+capwap/ac-descriptor/stations: 0
 
 
-capwap-control-ip-address/address.0: 192.168.0.24
+capwap/control-ip-address/address.0: 192.168.0.24
 
 
 
 #
 # CAPWAP Timers
 #
-capwap-timers/change-state-pending-timer: Word: 3
-capwap-timers/data-check-timer: Word: 10
-capwap-timers/echo-interval :Byte: 30
-capwap-timers/max-discovery-interval :Byte: 10
+capwap/timers/change-state-pending-timer: Word: 3
+capwap/timers/data-check-timer: Word: 10
+capwap/timers/echo-interval :Byte: 30
+capwap/timers/max-discovery-interval :Byte: 10
 
 
 
