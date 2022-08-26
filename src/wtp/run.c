@@ -6,7 +6,6 @@
 #include "cw/cw.h"
 #include "cw/capwap.h"
 #include "cw/conn.h"
-#include "cw/radioinfo.h"
 #include "cw/log.h"
 #include "cw/dtls.h"
 #include "cw/sock.h"
