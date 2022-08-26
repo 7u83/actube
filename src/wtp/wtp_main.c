@@ -90,6 +90,7 @@ int main (int argc, char **argv)
 	int i;
 	int rc=EXIT_FAILURE;	
 	struct cw_DiscoveryResults * results;
+	const char *bind_addr, *disc_addr;
 	
 	
 	bootcfg.nmods=0;
@@ -174,22 +175,12 @@ int main (int argc, char **argv)
 	conn->base_rmac = get_base_rmac();
 
 
-/*cw_run_discovery(conn, "255.255.255.255","192.168.56.1", &dis);*/
-/*	cw_run_discovery(conn, "255.255.255.255",NULL, &dis);*/
+	bind_addr = cw_cfg_get(global_cfg,"wfat/bind-addr","0.0.0.0");
+	disc_addr = cw_cfg_get(global_cfg,"wfat/discovery-addr","255.255.255.255");
 
-	//cw_run_discovery(conn, "192.168.0.24","192.168.0.14", &dis);
-	//
 
-	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
-	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.24");
-	results = cw_run_discovery(conn, "192.168.0.161","192.168.0.24");
-//	results = cw_run_discovery(conn, "255.255.255.255","0.0.0.0");
-//	cw_run_discovery(conn, "192.168.0.255","192.168.0.14", &dis);
-	//results = cw_run_discovery(conn, "255.255.255.255","192.168.0.14");
-//	results = cw_run_discovery(conn, "192.168.0.24","192.168.0.14");
-//	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.119");
-//	results = cw_run_discovery(conn, "255.255.255.255","172.16.67.185");
-//	results = cw_run_discovery(conn, "172.16.67.255","172.16.67.185");
+	results = cw_run_discovery(conn,disc_addr,bind_addr);
+
 
 	if (!results)
 		goto errX;

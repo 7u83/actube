@@ -140,7 +140,7 @@ radio.0/cisco/elem146: .x690f
 radio.0/cisco/elem153: .x00
 radio.0/cisco/elem156: .x020100
 radio.0/cisco/elem16: .x02040b0c
-radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
+radio.0/cisco/elem19: .xc0a800a10001000cc0a800a103000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000001060b010101
 radio.0/cisco/elem22: .x0d00b400320102030405060708090a0b0c0d
 radio.0/cisco/elem24: .x003c000c
 radio.0/cisco/elem47: .x0100000000000000000000000000000000
@@ -190,7 +190,7 @@ radio.0/wlan.1/add-wlan/scan-defer-time: 100
 radio.0/wlan.1/add-wlan/session-timout: 1800
 radio.0/wlan.1/add-wlan/ssid: tubeC
 radio.0/wlan.1/add-wlan/wep-encryption: false
-radio.0/wlan.1/add-wlan/wep-key: .xfeded530fa8b8949e048495d86
+radio.0/wlan.1/add-wlan/wep-key: .x1978b2c072f90ff26e4e24c806
 radio.0/wlan.1/add-wlan/wep-key-index: 1
 radio.0/wlan.1/add-wlan/wlan-capability: 1073
 radio.0/wlan.1/add-wlan/wlan-id: 1
@@ -207,7 +207,7 @@ radio.0/wlan.13/add-wlan/scan-defer-time: 100
 radio.0/wlan.13/add-wlan/session-timout: 1800
 radio.0/wlan.13/add-wlan/ssid: SuperSSID
 radio.0/wlan.13/add-wlan/wep-encryption: false
-radio.0/wlan.13/add-wlan/wep-key: .xfeded530fa8b8949e048495d86
+radio.0/wlan.13/add-wlan/wep-key: .x1978b2c072f90ff26e4e24c806
 radio.0/wlan.13/add-wlan/wep-key-index: 1
 radio.0/wlan.13/add-wlan/wlan-capability: 1057
 radio.0/wlan.13/add-wlan/wlan-id: 13
@@ -217,7 +217,7 @@ radio.1/capwap/operational-state/cause: Normal
 radio.1/capwap/operational-state/state: enabled
 radio.1/capwap80211/rate-set: .x8c129824b048606c
 radio.1/capwap80211/tx-power/@cisco/cfg-type: 1 - global
-radio.1/capwap80211/tx-power/current-tx-power: 1
+radio.1/capwap80211/tx-power/current-tx-power: 6
 radio.1/capwap80211/wtp-radio-information: 2
 radio.1/cisco/air-space-capability: 0
 radio.1/cisco/antenna-payload/802-11n-rx-antennas: 3
@@ -236,7 +236,7 @@ radio.1/cisco/elem15/rest: .x07ffffffce010001
 radio.1/cisco/elem153: .x00
 radio.1/cisco/elem156: .x020100
 radio.1/cisco/elem16: .x0c121824
-radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101003ccd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
+radio.1/cisco/elem19: .xc0a800a10001000bc0a800a110000101001ecd774fc43bd27db633509934957d3acb000000000000000052464d000000000000000000000000000000000000000000000000000000000024282c3034383c4064686c707484888c01010101010101010101010101010101
 radio.1/cisco/elem22: .x1000b4003224282c3034383c4064686c707484888c
 radio.1/cisco/elem24: .x003c000c
 radio.1/cisco/elem47: .x0100000000000000000000000000000000
@@ -287,7 +287,7 @@ radio.1/wlan.1/add-wlan/scan-defer-time: 100
 radio.1/wlan.1/add-wlan/session-timout: 1800
 radio.1/wlan.1/add-wlan/ssid: tubeC
 radio.1/wlan.1/add-wlan/wep-encryption: false
-radio.1/wlan.1/add-wlan/wep-key: .x65b5f32dd6ccbf71ed95894438
+radio.1/wlan.1/add-wlan/wep-key: .x166ad266a0adea9f140cadf37f
 radio.1/wlan.1/add-wlan/wep-key-index: 1
 radio.1/wlan.1/add-wlan/wlan-capability: 17
 radio.1/wlan.1/add-wlan/wlan-id: 1
@@ -304,7 +304,7 @@ radio.1/wlan.13/add-wlan/scan-defer-time: 100
 radio.1/wlan.13/add-wlan/session-timout: 1800
 radio.1/wlan.13/add-wlan/ssid: SuperSSID
 radio.1/wlan.13/add-wlan/wep-encryption: false
-radio.1/wlan.13/add-wlan/wep-key: .x65b5f32dd6ccbf71ed95894438
+radio.1/wlan.13/add-wlan/wep-key: .x166ad266a0adea9f140cadf37f
 radio.1/wlan.13/add-wlan/wep-key-index: 1
 radio.1/wlan.13/add-wlan/wlan-capability: 1
 radio.1/wlan.13/add-wlan/wlan-id: 13
@@ -316,3 +316,5 @@ radio.255/cisco/radio-module-info/descr: Cisco Aironet 1140 Series (IEEE 802.11n
 radio.255/cisco/radio-module-info/name: AIR-LAP1142N-E-K9 A0
 radio.255/cisco/radio-module-info/serial: FCZ1406W232
 radio.255/cisco/radio-module-info/type: AP1140
+wfat-rem/bind-addr: 0.0.0.0
+wfat-rem/discovery-addr: 255.255.255.255
