@@ -5,27 +5,52 @@
 #include "val.h"
 #include "bstr.h"
 
-#define CW_CFG_MAX_KEY_LEN 1024
 
+/**
+ *@file
+ *@brief
+ *@defgroup CFG SOCK
+ *@{
+ */
+
+
+/** Maximum size of a key used in cfg objects */
+#define CW_CFG_MAX_KEY_LEN 1024	
+
+/** Default name for fresh cfg's created by #cw_cfg_create */ 
+#define CW_CFG_DEFAULT_NAME "[anonymous]"
+
+
+/**
+ * A Cfg object 
+ */
 struct cw_Cfg {
-	struct mavl * cfg;
-	const char *name;
+	struct mavl * cfg;	/**< The AVL-tree containig the keys 
+				     and vals */
+	const char *name;	/**< A name for this config object */
 	int dbg_level;
 	const char *dbg_prefix;
 };
 
 typedef struct cw_Cfg cw_Cfg_t;
 
+
+/**
+ * An antry for a Cfg object
+ */
+struct cw_Cfg_entry{
+	const char *key;	/**< A string representing the key 
+				     of this entry */
+	const char *val;	/**< The value, represented by a string */
+};
+
+
+
 cw_Cfg_t * cw_cfg_create();
 int cw_cfg_set(cw_Cfg_t *cfg,const char *key, const char *val);
 void cw_cfg_dump(cw_Cfg_t *cfg);
 int cw_cfg_read_from_file(FILE * file, cw_Cfg_t * cfg);
 int cw_cfg_load(const char *filename,cw_Cfg_t * cfg);
-
-struct cw_Cfg_entry{
-	const char *key;
-	const char *val;
-};
 
 
 struct cw_Cfg_iter{
@@ -73,4 +98,7 @@ int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *t, con
 
 
 #endif
+
+
+/**@}*/
 

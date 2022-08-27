@@ -80,7 +80,13 @@ static void del(void *ptr)
 	free((void *) e->val);
 }
 
-
+/**
+ * Create an empty cfg
+ * @return A pointer to the cfg or NULL if an error has accoured.
+ *
+ * In case of an error consult errno to find out the reason.
+ * The created config must be freed by #cw_cfg_destroy.
+ */
 cw_Cfg_t *cw_cfg_create()
 {
 	cw_Cfg_t * cfg;
@@ -88,6 +94,7 @@ cw_Cfg_t *cw_cfg_create()
 	if (cfg == NULL)
 		return NULL;
 	memset(cfg,0,sizeof(cw_Cfg_t));
+	cfg->name = CW_CFG_DEFAULT_NAME;
 	cfg->cfg = mavl_create(cmp, del, sizeof(struct cw_Cfg_entry));
 	if (cfg->cfg==NULL){
 		cw_cfg_destroy(cfg);
@@ -680,7 +687,6 @@ void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val)
 	sprintf(a,"%d",val);
 	cw_cfg_set(cfg,key,a);
 }
-
 
 
 int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
