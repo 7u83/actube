@@ -117,11 +117,13 @@ static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
 	capwap_mod = cw_mod_load("capwap",global_cfg,role);
 	if (capwap_mod == NULL){
 		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap");
+		return 0;
 	}
 
 	capwap80211_mod = cw_mod_load("capwap80211", global_cfg,role);
 	if (capwap_mod == NULL){
 		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap80211");
+		return 0;
 	}
 	
 	/*cisco_config = mbag_create();*/

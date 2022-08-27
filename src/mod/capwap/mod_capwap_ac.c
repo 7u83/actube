@@ -30,7 +30,7 @@ static int init(struct cw_Mod * mod, cw_Cfg_t * global_cfg, int role)
 	}
 	
 
-	return 0;
+	return 1;
 }
 
 

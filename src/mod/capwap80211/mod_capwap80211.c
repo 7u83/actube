@@ -14,7 +14,7 @@
 static int init()
 {
 	cw_dbg(DBG_INFO, "Initialiazing mod_capwap80211 ...");
-	return 0;
+	return 1;
 }
 
 

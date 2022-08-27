@@ -190,7 +190,10 @@ struct cw_Mod *cw_mod_load(const char *mod_name, cw_Cfg_t * global_cfg, int role
 	}
 
 	cw_dbg(DBG_MOD, "MOD: %s sucessfull loaded, calling init now.", filename);
-	mod->init(mod, global_cfg, role);
+	if (!mod->init(mod, global_cfg, role)){
+		dlclose(handle);
+		mod=NULL;
+	}		
 	
       errX:
 	free(filename);
