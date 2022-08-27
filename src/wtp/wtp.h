@@ -27,7 +27,8 @@ struct bootcfg{
 	const char * modnames[MAX_MODS];
 	int nmods;
 	const char * modpath;
-	const char * cfgfilename;
+	const char * config_file;
+	const char * startup_file;
 };
 
 extern struct bootcfg bootcfg;
