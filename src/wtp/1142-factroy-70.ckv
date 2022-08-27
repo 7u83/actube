@@ -1,44 +1,51 @@
 #
-# Join Request
+# 1142 startup
 #
-capwap-local-ip-address: 192.168.0.13
+
+capwap/location-data: default location
+capwap/maximum-message-length: 14000
+capwap/session-id: .x45e59826
+capwap/wtp-board-data/board-id: .x0000
+capwap/wtp-board-data/mac-address: .xc47d4f3af8a6
+capwap/wtp-board-data/model-no: "AIR-LAP1142N-E-K9   "
+capwap/wtp-board-data/revision: A0
+capwap/wtp-board-data/serial-no: FCZ1406W232
+capwap/wtp-board-data/vendor: 4232704
+capwap/wtp-descriptor/bootloader/vendor: 4232704
+capwap/wtp-descriptor/bootloader/version: .x0c041200
+capwap/wtp-descriptor/hardware/vendor: 4232704
+capwap/wtp-descriptor/hardware/version: .x01000000
+capwap/wtp-descriptor/max-radios: 2
+capwap/wtp-descriptor/radios-in-use: 2
+capwap/wtp-descriptor/software/vendor: 4232704
+capwap/wtp-descriptor/software/version: .x07007400
+capwap/wtp-frame-tunnel-mode: 4
+capwap/wtp-mac-type: 1 - Split MAC
+capwap/wtp-name: APc47d.4f3a.f8a6
 cisco/ap-group-name: default-group
 cisco/lw-path-mtu/len: 1095
 cisco/lw-path-mtu/max: 1485
-cisco/mwar-addr/address: 192.168.0.14
+cisco/mwar-addr/address: 192.168.0.161
 cisco/mwar-addr/mwar-type: 0
 cisco/mwar-addr/unknown: 0
 cisco/wtp-board-data/options/ant-type: 1
 cisco/wtp-board-data/options/ap-type: 0
 cisco/wtp-board-data/options/failover-priority: 1
 cisco/wtp-board-data/options/flex-connect: 0
-location-data: default location
-maximum-message-length: 14000
-radio.0/wtp-radio-information: 1
-radio.1/wtp-radio-information: 2
-session-id: .x4a230869
-wtp-board-data/board-id: .x0000
-wtp-board-data/mac-address: .xc47d4f3af8a6
-wtp-board-data/model-no: "AIR-LAP1142N-E-K9   "
-wtp-board-data/revision: A0
-wtp-board-data/serial-no: FCZ1406W232
-wtp-board-data/vendor: 4232704
-wtp-descriptor/bootloader/vendor: 4232704
-wtp-descriptor/bootloader/version: .x0c041200
-wtp-descriptor/hardware/vendor: 4232704
-wtp-descriptor/hardware/version: .x01000000
-wtp-descriptor/max-radios: 2
-wtp-descriptor/radios-in-use: 2
-wtp-descriptor/software/vendor: 4232704
-wtp-descriptor/software/version: .x07007400
-wtp-frame-tunnel-mode: 4
-wtp-mac-type: 1 - Split MAC
-wtp-name: APc47d.4f3a.f8a6
+radio.0/capwap80211/wtp-radio-information: 1
+radio.1/capwap80211/wtp-radio-information: 2
 
-#
-# Configuration Status Request
-#
+
 capwap/ac-name: 
+capwap/statistics-timer: 180
+capwap/wtp-reboot-statistics/ac-initiated-count: 1
+capwap/wtp-reboot-statistics/hw-failure-count: 0
+capwap/wtp-reboot-statistics/last-failure-type: 1
+capwap/wtp-reboot-statistics/link-failure-count: 0
+capwap/wtp-reboot-statistics/other-failure-count: 17
+capwap/wtp-reboot-statistics/reboot-count: 0
+capwap/wtp-reboot-statistics/sw-failure-count: 0
+capwap/wtp-reboot-statistics/unknown-failure-count: 0
 cisco/ap-backup-software-version: .x00000000
 cisco/ap-dtls-data-cfg/cabable: true
 cisco/ap-dtls-data-cfg/enabled: false
@@ -70,11 +77,11 @@ cisco/ap-static-ip-addr/unknown: 0.0.0.0
 cisco/ap-sub-mode: 0
 cisco/ap-telnet-ssh/ssh: false
 cisco/ap-telnet-ssh/telnet: false
-cisco/ap-uptime/current-uptime: 84
+cisco/ap-uptime/current-uptime: 291
 cisco/ap-uptime/last-uptime: 1
-cisco/ap-username-and-password/login-credentials/enable-password: $1$.q2F$Fkcs06gZJpIE3LnX8oxmN.
+cisco/ap-username-and-password/login-credentials/enable-password: $1$AmeO$sVDsj.7u2p72.6OD7ZxEo.
 cisco/ap-username-and-password/login-credentials/option: 1
-cisco/ap-username-and-password/login-credentials/password: $1$ZFkU$zIX6UG1NozXk2.V1lZNIV.
+cisco/ap-username-and-password/login-credentials/password: $1$5oz2$kFPn2Dsy576Q50Z3XwVVx.
 cisco/ap-username-and-password/login-credentials/username: Cisco
 cisco/cisco-discovery-protocol/data: 513
 cisco/cisco-discovery-protocol/enabled: false
@@ -97,7 +104,9 @@ cisco/wtp-board-data/options/flex-connect: 1
 cisco/wtp-board-data/wtp-model-hi: 0
 cisco/wtp-board-data/wtp-model-lo: 0
 cisco/wtp-board-data/wtp-serial-number: FCZ1406W232
-radio.0/admin-state: 1 - enabled
+radio.0/capwap/admin-state: 1 - enabled
+radio.0/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.0/capwap80211/tx-power/current-tx-power: 0
 radio.0/cisco/antenna-payload/802-11n-rx-antennas: 0
 radio.0/cisco/antenna-payload/802-11n-tx-antennas: 0
 radio.0/cisco/antenna-payload/antenna-1: 1
@@ -106,14 +115,9 @@ radio.0/cisco/antenna-payload/antenna-mode: 3
 radio.0/cisco/antenna-payload/diversity-selection: 255
 radio.0/cisco/antenna-payload/number-of-antennas: 2
 radio.0/cisco/antenna-payload/unknown: 0
+radio.0/cisco/ap-mfp-cap-subtype: 515
 radio.0/cisco/channel-power: .x08080d0108221c16100a04fefe0208221c16100a04fefe0308221c16100a04fefe0408221c16100a04fefe0508221c16100a04fefe0608221c16100a04fefe0708221c16100a04fefe0808221c16100a04fefe0908221c16100a04fefe0a08221c16100a04fefe0b08221c16100a04fefe0c08221c16100a04fefe0d08221c16100a04fefe
 radio.0/cisco/elem16: .x02040b0c
-radio.0/cisco/elem47: .x0100000000000000000000000000000000
-radio.0/cisco/elem48: .x00
-radio.0/cisco/lwelem11: .x00000203
-radio.0/cisco/lwelem27: .x00000000000000000000000000000000000000000000000000
-radio.0/cisco/lwelem28: .x0303020202000000000000000000000000000000000000000000313f01
-radio.0/cisco/lwelem29: .x00010000000000000200001400
 radio.0/cisco/mac-operation/fragmentation-threshold: 0
 radio.0/cisco/mac-operation/long-retry: 0
 radio.0/cisco/mac-operation/reserved: 1
@@ -125,9 +129,27 @@ radio.0/cisco/multi-domain-capability/first-channel: 1
 radio.0/cisco/multi-domain-capability/max-tx-power-level: 65535
 radio.0/cisco/multi-domain-capability/number-of-channels: 13
 radio.0/cisco/multi-domain-capability/reserved: 1
+radio.0/cisco/phy-ht-cap/extendend-ht-cap-info: 0
+radio.0/cisco/phy-ht-cap/ht-cap-info: 0
+radio.0/cisco/phy-ht-cap/rest: .x000000000000000000000000000000000000000000
+radio.0/cisco/phy-ht-control/cfg-type: 1 - global
+radio.0/cisco/phy-ht-control/current-freq: 0
+radio.0/cisco/phy-ht-control/enable-ht: 0
+radio.0/cisco/phy-ht-control/rest: .x00000000000200001400
+radio.0/cisco/proformance-profile/bytes-per-sec: 0
+radio.0/cisco/proformance-profile/cfg-type: 1 - global
+radio.0/cisco/proformance-profile/excpection-level: 0
+radio.0/cisco/proformance-profile/foreigh-threshold: 0
+radio.0/cisco/proformance-profile/min-num-clients: 0
+radio.0/cisco/proformance-profile/min-perf-snr: 0
+radio.0/cisco/proformance-profile/num-clients-threshold: 0
+radio.0/cisco/proformance-profile/rf-busy-threshold: 0
+radio.0/cisco/proformance-profile/rssi-threshold: 0
+radio.0/cisco/spam-cfp-status: false
+radio.0/cisco/station-cfg/cfg-type: 3
+radio.0/cisco/station-cfg/current-freq: 3
+radio.0/cisco/station-cfg/rest: .x020202000000000000000000000000000000000000000000313f01
 radio.0/cisco/tx-power-levels: .x070011000e000b000800050002ffff0000
-radio.0/cisco/tx-power/cfg-type: 1 - global
-radio.0/cisco/tx-power/current-tx-power: 0
 radio.0/cisco/wtp-radio-config/beacon-period: 0
 radio.0/cisco/wtp-radio-config/bss-id: .x04fe7f499b90
 radio.0/cisco/wtp-radio-config/cfg-period: 0
@@ -137,7 +159,9 @@ radio.0/cisco/wtp-radio-config/country-str1:
 radio.0/cisco/wtp-radio-config/country-str2: 
 radio.0/cisco/wtp-radio-config/occupancy-limit: 0
 radio.0/cisco/wtp-radio-config/reg: 256
-radio.1/admin-state: 1 - enabled
+radio.1/capwap/admin-state: 1 - enabled
+radio.1/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.1/capwap80211/tx-power/current-tx-power: 0
 radio.1/cisco/antenna-payload/802-11n-rx-antennas: 0
 radio.1/cisco/antenna-payload/802-11n-tx-antennas: 0
 radio.1/cisco/antenna-payload/antenna-1: 1
@@ -146,14 +170,9 @@ radio.1/cisco/antenna-payload/antenna-mode: 3
 radio.1/cisco/antenna-payload/diversity-selection: 255
 radio.1/cisco/antenna-payload/number-of-antennas: 2
 radio.1/cisco/antenna-payload/unknown: 0
+radio.1/cisco/ap-mfp-cap-subtype: 66051
 radio.1/cisco/channel-power: .x0808102408221c16100a04fefe2808221c16100a04fefe2c08221c16100a04fefe3008221c16100a04fefe3408221c16100a04fefe3808221c16100a04fefe3c08221c16100a04fefe4008221c16100a04fefe6408221c16100a04fefe6808221c16100a04fefe6c08221c16100a04fefe7008221c16100a04fefe7408221c16100a04fefe8408221c16100a04fefe8808221c16100a04fefe8c08221c16100a04fefe
 radio.1/cisco/elem16: .x0c121824
-radio.1/cisco/elem47: .x0100000000000000000000000000000000
-radio.1/cisco/elem48: .x00
-radio.1/cisco/lwelem11: .x00010203
-radio.1/cisco/lwelem27: .x00000000000000000000000000000000000000000000000000
-radio.1/cisco/lwelem28: .x0303020202000000000000000000000000000000000000000000313f01
-radio.1/cisco/lwelem29: .x00010003000000000200001400
 radio.1/cisco/mac-operation/fragmentation-threshold: 0
 radio.1/cisco/mac-operation/long-retry: 0
 radio.1/cisco/mac-operation/reserved: 1
@@ -165,9 +184,27 @@ radio.1/cisco/multi-domain-capability/first-channel: 36
 radio.1/cisco/multi-domain-capability/max-tx-power-level: 65535
 radio.1/cisco/multi-domain-capability/number-of-channels: 16
 radio.1/cisco/multi-domain-capability/reserved: 1
+radio.1/cisco/phy-ht-cap/extendend-ht-cap-info: 0
+radio.1/cisco/phy-ht-cap/ht-cap-info: 0
+radio.1/cisco/phy-ht-cap/rest: .x000000000000000000000000000000000000000000
+radio.1/cisco/phy-ht-control/cfg-type: 1 - global
+radio.1/cisco/phy-ht-control/current-freq: 0
+radio.1/cisco/phy-ht-control/enable-ht: 0
+radio.1/cisco/phy-ht-control/rest: .x03000000000200001400
+radio.1/cisco/proformance-profile/bytes-per-sec: 0
+radio.1/cisco/proformance-profile/cfg-type: 1 - global
+radio.1/cisco/proformance-profile/excpection-level: 0
+radio.1/cisco/proformance-profile/foreigh-threshold: 0
+radio.1/cisco/proformance-profile/min-num-clients: 0
+radio.1/cisco/proformance-profile/min-perf-snr: 0
+radio.1/cisco/proformance-profile/num-clients-threshold: 0
+radio.1/cisco/proformance-profile/rf-busy-threshold: 0
+radio.1/cisco/proformance-profile/rssi-threshold: 0
+radio.1/cisco/spam-cfp-status: false
+radio.1/cisco/station-cfg/cfg-type: 3
+radio.1/cisco/station-cfg/current-freq: 3
+radio.1/cisco/station-cfg/rest: .x020202000000000000000000000000000000000000000000313f01
 radio.1/cisco/tx-power-levels: .x070011000e000b000800050002ffff0000
-radio.1/cisco/tx-power/cfg-type: 1 - global
-radio.1/cisco/tx-power/current-tx-power: 0
 radio.1/cisco/wtp-radio-config/beacon-period: 0
 radio.1/cisco/wtp-radio-config/bss-id: .x04fe7f499b90
 radio.1/cisco/wtp-radio-config/cfg-period: 0
@@ -177,25 +214,22 @@ radio.1/cisco/wtp-radio-config/country-str1:
 radio.1/cisco/wtp-radio-config/country-str2: 
 radio.1/cisco/wtp-radio-config/occupancy-limit: 0
 radio.1/cisco/wtp-radio-config/reg: 256
-radio.255/admin-state: 1 - enabled
-statistics-timer: 180
-wtp-reboot-statistics/ac-initiated-count: 1
-wtp-reboot-statistics/hw-failure-count: 0
-wtp-reboot-statistics/last-failure-type: 1
-wtp-reboot-statistics/link-failure-count: 0
-wtp-reboot-statistics/other-failure-count: 15
-wtp-reboot-statistics/reboot-count: 0
-wtp-reboot-statistics/sw-failure-count: 0
-wtp-reboot-statistics/unknown-failure-count: 0
+radio.255/capwap/admin-state: 1 - enabled
 
-#
-# Local
-#
-wtp-name: Soft-WTP
+
+
 cisco/ssl-certfile: ../../ssl/certs/wtpc.crt
 cisco/ssl-cipher: SHA1
 cisco/ssl-keyfile: ../../ssl/certs/wtpc.key
 cisco/wtp-use-ac-version: true
-wtp-board-data/mac-address: .x0800276edf58
+capwap/wtp-board-data/mac-address: .x0800276edf58
+capwap/local-ip-address: 192.168.0.14
+
+
+
+
+
+
+
 
 
