@@ -163,6 +163,17 @@ int main (int argc, char **argv)
 
 	cw_cfg_destroy(cfg);
 
+/*	{
+struct cw_Cfg_iter cfi;
+struct cw_Cfg_entry *e;
+int i;
+for (i=0; (i=cw_cfg_get_first_index(global_cfg,"radio",i))!=-1; i++){
+	printf("Inedx: %d\n", i);
+}
+goto errX;
+	}
+*/
+
 
 /*	conn->mod=mod;*/
 	conn->detected = 1;

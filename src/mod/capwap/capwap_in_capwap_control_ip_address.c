@@ -34,7 +34,7 @@ int capwap_in_capwap_control_ip_address(struct cw_ElemHandler *eh,
 	int idx;
 	
 	sprintf(key,"%s/address",eh->key);
-	idx = cw_cfg_get_next_index(params->cfg,key);
+	idx = cw_cfg_get_new_index(params->cfg,key);
 	
 /*	printf("SKEY is %s , idx: %d\n",key,idx);*/
 

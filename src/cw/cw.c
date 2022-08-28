@@ -47,6 +47,17 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 //	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 //	cw_cfg_dump(params->cfg);
 //	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!! ENDDUMP");
+//
+//
+	if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
+			cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (skip)", 
+					params->elemdata->proto, 
+					params->elemdata->vendor, 
+					params->elemdata->id, 
+					handler->name, handler->key);
+				return 0;
+	}
+
 
 	start = params->msgset->header_len(handler);
 	len = ((const cw_Type_t*)(handler->type))->
@@ -117,6 +128,41 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	int len,i,l,start;
 	int radios;
 	len =0;
+
+	for (i=0; (i=cw_cfg_get_first_index_l(params->cfg_list,"radio",i))!=-1; i++){
+		sprintf(key,"radio.%d/%s",i,handler->key);
+		if (!params->elemdata->mand){
+			if (!cw_cfg_base_exists(params->cfg_list[0],key)){
+				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (skip)", 
+						params->elemdata->proto, 
+						params->elemdata->vendor, 
+						params->elemdata->id, 
+						handler->name, key);
+				continue;
+			}
+		}
+
+		type = (struct cw_Type*)handler->type;
+		start = params->msgset->header_len(handler)+len;
+
+		
+
+		l = type->write(params->cfg_list, key,dst+start+1,handler->param);
+		if (l==-1)
+			continue;
+
+		l += cw_put_byte(dst+start,i);
+
+		l = params->msgset->write_header(handler,dst+len,l);
+		len+=l;
+		
+
+	}
+
+	return len;
+
+
+
 	
 	radios = cw_cfg_get_byte_l(params->cfg_list,"capwap/wtp-descriptor/max-radios",0);
 	for(i=0;i<radios;i++){

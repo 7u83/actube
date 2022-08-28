@@ -267,7 +267,7 @@ int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh,
 	int idx;
 	void * type;
 
-	idx = cw_cfg_get_next_index(params->cfg,eh->key);
+	idx = cw_cfg_get_new_index(params->cfg,eh->key);
 
 	sprintf(key,"%s.%d",eh->key,idx);
 	
@@ -2520,7 +2520,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MIN_IOS_VERSION,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_BACKUP_SOFTWARE_VERSION,	0, 0},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_REGULATORY_DOMAIN,	0, 0},
+/*	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_REGULATORY_DOMAIN,	0, 0},*/
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_MODEL,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RESET_BUTTON_STATE,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	0, 0},

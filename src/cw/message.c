@@ -38,7 +38,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 			}
 			continue;
 		}
-
+/*
 		if (!data->mand){
 			if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
 				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (skip)", 
@@ -47,7 +47,7 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 				continue;
 			}
 		}
-
+*/
 
 		l = handler->put(handler,params,dst+len);
 		cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s - (%d bytes)", 

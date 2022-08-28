@@ -139,7 +139,7 @@ int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams
 
 	//current[0]=0;
 
-	stop();
+	//stop();
 	return 0;
 	
 //	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);

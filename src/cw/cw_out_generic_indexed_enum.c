@@ -25,6 +25,8 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 	ob = dst;
 	
 	e = ie->type;
+
+
 	
 	for(i=0; e[i].name!=NULL; i++) {
 		int b;
@@ -32,7 +34,7 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 
 cw_dbg(DBG_X,"Her is the Key: %s %s\n",key,e[i].name);
 
-		b = cw_cfg_base_exists_l(params->cfg_list,handler->key);
+		b = cw_cfg_base_exists(params->cfg_list[0],handler->key);
 		if (!b){
 			//stop();
 			continue;

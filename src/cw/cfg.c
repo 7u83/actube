@@ -595,13 +595,13 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 	const char *d;
 
 	e = mavliter_get(&(cfi->it));
-	if (e == NULL)
+	if (e == NULL){
 		return NULL;
+	}
 
 
 	bl = strlen(cfi->base);
 	kl = strlen(e->key);
-
 	if (bl > kl)
 		return NULL;
 
@@ -617,7 +617,6 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 	d = strchr(e->key, '.');
 	if (d == NULL)
 		return NULL;
-
 	if (d - e->key != bl)
 		return NULL;
 
@@ -706,7 +705,7 @@ void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val)
 }
 
 
-int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
+int cw_cfg_get_new_index(cw_Cfg_t * cfg, const char *key)
 {
 	char ikey[CW_CFG_MAX_KEY_LEN];
 	struct cw_Cfg_entry search, * result;
@@ -722,7 +721,7 @@ int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
 		return 0;
 	}
 	
-	d = strchr(result->key,'.');
+	d = strrchr(result->key,'.');
 	if (d==NULL){
 		return 0;
 	}
@@ -732,6 +731,46 @@ int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key)
 	
 	return atoi(d+1)+1;
 }
+
+
+int cw_cfg_get_first_index(cw_Cfg_t * cfg, const char *key, int n)
+{
+	char ikey[CW_CFG_MAX_KEY_LEN];
+	struct cw_Cfg_entry search, * result;
+	char *d;
+	
+	sprintf(ikey,"%s.%d",key,n);
+		
+	search.key=ikey;
+	
+	result = mavl_get_first(cfg->cfg,&search);
+	if (result == NULL){
+		return -1;
+	}
+	
+	d = strrchr(result->key,'.');
+	if (d==NULL){
+		return -1;
+	}
+	
+	if (strncmp(result->key,ikey,d-result->key)!=0)
+		return -1;
+	
+	return atoi(d+1);
+}
+
+int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n)
+{
+	int r;
+	while(*cfgs != NULL){
+		r = cw_cfg_get_first_index(*cfgs,key,n);
+		if (r!=-1)
+			return r;
+		cfgs++;
+	}
+	return -1;
+}
+
 
 int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *type, const void * valguard, const uint8_t * data, int len)
 {

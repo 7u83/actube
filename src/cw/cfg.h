@@ -69,7 +69,7 @@ void cw_cfg_set_int(cw_Cfg_t * cfg, const char * key, int val);
 uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def);
 bstr16_t cw_cfg_get_bstr16(cw_Cfg_t * cfg, const char * key, const char *def);
 int cw_cfg_set_bstr16(cw_Cfg_t * cfg, const char * key, bstr16_t str);
-int cw_cfg_get_next_index(cw_Cfg_t * cfg, const char *key);
+int cw_cfg_get_new_index(cw_Cfg_t * cfg, const char *key);
 const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def);
 void cw_cfg_copy(cw_Cfg_t *src, cw_Cfg_t *dst,int dbg_level,const char *dbg_prefix);
 void cw_cfg_destroy(cw_Cfg_t *cfg);
@@ -86,6 +86,8 @@ void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg, const char *filter);
 int cw_cfg_read_from_string(const char *str, cw_Cfg_t *cfg);
 void cw_cfg_del(cw_Cfg_t * cfg, const char *key);
 
+int cw_cfg_get_first_index(cw_Cfg_t * cfg, const char *key, int n);
+int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n);
 
 
 
