@@ -1,0 +1,5 @@
+#
+# Managed by acTube
+#
+
+cisco/ap-led-state-config/led-state: 1
