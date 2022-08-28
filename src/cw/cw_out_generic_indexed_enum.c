@@ -32,7 +32,6 @@ int cw_out_generic_indexed_enum(struct cw_ElemHandler * handler, struct cw_ElemH
 		int b;
 		sprintf(key,"%s/%s",handler->key,e[i].name);
 
-cw_dbg(DBG_X,"Her is the Key: %s %s\n",key,e[i].name);
 
 		b = cw_cfg_base_exists(params->cfg_list[0],handler->key);
 		if (!b){

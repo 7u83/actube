@@ -83,7 +83,7 @@
 #define CW_CISCO_AC_IPV4_LIST			LW_ELEM_AC_IPV4_LIST			/* 59 */
 
 #define CISCO_ELEM_CAPWAP_TIMERS		LW_ELEM_LWAPP_TIMERS			/* 68 */
-#define CISCO_ELEM_72				72					/* 72 */
+#define CISCO_ELEM_CLIENT_AUTO_HANDOFF		72					/* 72 */
 #define CISCO_ELEM_81				81					/* 81 */
 
 #define CISCO_ELEM_AP_STATIC_IP_ADDR		83
@@ -105,7 +105,7 @@
 #define CISCO_ELEM_RESET_BUTTON_STATE		128
 
 
-#define CISCO_ELEM_132				132					/* 132 */
+#define CISCO_ELEM_AP_DOT11H			132					/* 132 */
 
 #define CISCO_ELEM_CHANNEL_POWER		134
 #define CISCO_ELEM_AP_CORE_DUMP			135

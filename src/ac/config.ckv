@@ -76,7 +76,7 @@ wlan.0/capwap80211/auth-type: 1
 wlan.0/capwap80211/mac-mode: 1
 wlan.0/capwap80211/tunnel-mode: 1
 wlan.0/capwap80211/suppress-ssid: false
-wlan.0/capwap80211/ssid
+wlan.0/capwap80211/ssid: ssid
 
 
 #

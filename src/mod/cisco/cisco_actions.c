@@ -258,6 +258,15 @@ static cw_ValStruct_t cisco_ap_power_injector_config[]={
 	{NULL,NULL,0,0}
 };
 
+static cw_ValStruct_t cisco_ap_dot11h[]={
+	{CW_TYPE_BYTE,"enable",1,-1},
+	{CW_TYPE_BYTE,"count",1,-1},
+	{CW_TYPE_BYTE,"mode",1,-1},
+	{CW_TYPE_BYTE,"power",1,-1},
+	{NULL,NULL,0,0}
+};
+
+
 
 int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
@@ -521,8 +530,14 @@ static cw_ValStruct_t cisco_performance_profile_stru[]={
 
 static cw_ValStruct_t cisco_phy_ht_cap_stru[]={
 	{CW_TYPE_WORD,"ht-cap-info",2,-1},
-	{CW_TYPE_WORD,"extendend-ht-cap-info",2,-1},
-	{CW_TYPE_BSTR16,"rest",-1,-1},
+/*	{CW_TYPE_WORD,"extendend-ht-cap-info",2,-1},*/
+	{CW_TYPE_BSTR16,"mcsrates-1",4,-1},
+	{CW_TYPE_BSTR16,"mcsrates-2",4,-1},
+	{CW_TYPE_BSTR16,"mcsrates-3",4,-1},
+	{CW_TYPE_BSTR16,"mcsrates-4",4,-1},
+	{CW_TYPE_BSTR16,"extended-ht-cap-info",2,-1},
+	{CW_TYPE_BSTR16,"tx-bf-cap",4,-1},
+	{CW_TYPE_BYTE,"asel-cap",1,-1},
 	{NULL,NULL,0,0}
 };
 
@@ -530,7 +545,13 @@ static cw_ValStruct_t cisco_phy_ht_control_stru[]={
 	{CW_TYPE_BYTE,"enable-ht",1,-1},
 	{CW_TYPE_BYTE,"cfg-type",1,-1,cfg_type},
 	{CW_TYPE_BYTE,"current-freq",1,-1},
-	{CW_TYPE_BSTR16,"rest",-1,-1},
+	{CW_TYPE_BSTR16,"rest",4,-1},
+	{CW_TYPE_BYTE,"frequency-bands-support",1,-1},
+	{CW_TYPE_BYTE,"ti-threshold",1,-1},
+	{CW_TYPE_BYTE,"flash-commit",1,-1},	//byte2
+	{CW_TYPE_BYTE,"cur-freq-is-dfs-channel",1,-1},
+	{CW_TYPE_BYTE,"channel-width",1,-1},
+	{CW_TYPE_BYTE,"ext-channel",1,-1},
 	{NULL,NULL,0,0}
 };
 
@@ -1509,14 +1530,18 @@ static struct cw_ElemHandler handlers70[] = {
 
 
 	{ 
-		"Cisco Elem 132",			/* name */
-		CISCO_ELEM_132,				/* Element ID */
+		"Cisco AP 802.11h",				/* name */
+		CISCO_ELEM_AP_DOT11H,				/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		1,1024,					/* min/max length */
-		CW_TYPE_BSTR16,				/* type */
-		"cisco/elem132",				/* Key */
-		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		5,5,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"cisco/80211h",				/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,				/* put */
+		NULL,
+		NULL,
+		cisco_ap_dot11h
+
 	},
 	{ 
 		"Cisco Boradcast SSID Mode",		/* name */
@@ -1541,12 +1566,12 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic				/* put */
 	},
 	{ 
-		"Cisco Elem 72",			/* name */
-		CISCO_ELEM_72,				/* Element ID */
+		"Cisco - Client Auto Hand-Off",		/* name */
+		CISCO_ELEM_CLIENT_AUTO_HANDOFF,			/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		1,1024,					/* min/max length */
-		CW_TYPE_BSTR16,				/* type */
-		"cisco/elemi72",				/* Key */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/client-auto-handoff",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
@@ -1715,7 +1740,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_LWELEM_PHY_HT_CAP,				/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		
-		1,1024,					/* min/max length */
+		26,26,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/phy-ht-cap",			/* Key */
 		cw_in_radio_generic,			/* get */
@@ -2370,9 +2395,9 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CLIENT_AUTO_HANDOFF,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_DOT11H,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_146,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_153,				0, 0},	
@@ -2457,9 +2482,9 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CLIENT_AUTO_HANDOFF,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_DOT11H,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_146,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_153,				0, 0},	
@@ -2529,9 +2554,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CLIENT_AUTO_HANDOFF,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_DOT11H,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_146,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_153,				0, 0},	
