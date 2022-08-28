@@ -69,6 +69,8 @@ int global_cfg_cmd(struct rpcdata *sd, const char * cmd);
 int status_cmd(struct rpcdata *sd, const char * cmd);
 void print_mw(FILE *f, int w, const char * str);
 int clear_cmd(struct rpcdata *sd, const char *cmd);
+int load_cmd(struct rpcdata *sd, const char *cmd);
+int save_cmd(struct rpcdata *sd, const char *cmd);
 
 //void show_cfg (FILE *out, mavl_t ktv);
 int show_aps (FILE *out);
@@ -95,6 +97,8 @@ static struct command cmdlist[]={
 	{"global_cfg", global_cfg_cmd},
 	{"status",status_cmd},
 	{"clear",clear_cmd},
+	{"load",load_cmd},
+	{"save",save_cmd},
 
 
 	{"@prompt",prompt_cmd},
@@ -319,6 +323,7 @@ int set_cmd(struct rpcdata *sd, const char *str)
 {
 
 	cw_Cfg_t *cfg;
+
 	cfg = cw_cfg_create();
 
 	cw_cfg_read_from_string(str,cfg);
@@ -331,6 +336,45 @@ int set_cmd(struct rpcdata *sd, const char *str)
 	finish_cmd(sd->out);
 	return 0;
 }
+
+int load_cmd(struct rpcdata *sd, const char *str)
+{
+	char fn[CW_CFG_MAX_KEY_LEN];
+	int rc;
+	const char * dir=cw_cfg_get(sd->global_cfg,"actube/rpc/macros-dir","./rpc-macros");
+
+	sprintf(fn,"%s/%s.ckv",dir,str);
+	rc= cw_cfg_load(fn,sd->update_cfg);
+
+	if (rc){
+		fprintf(sd->out,"Error loading %s: %s\n",fn,strerror(rc));
+	}
+
+
+	finish_cmd(sd->out);
+	return 0;
+}
+
+int save_cmd(struct rpcdata *sd, const char *str)
+{
+	char fn[CW_CFG_MAX_KEY_LEN];
+	int rc;
+	const char * dir=cw_cfg_get(sd->global_cfg,"actube/rpc/macros-dir","./rpc-macros");
+
+	sprintf(fn,"%s/%s.ckv",dir,str);
+	rc= cw_cfg_save(fn,sd->update_cfg,"#\n# Managed by acTube\n#\n\n");
+
+	if (rc){
+		fprintf(sd->out,"Error saving %s: %s\n",fn,strerror(rc));
+	}
+
+
+	finish_cmd(sd->out);
+	return 0;
+}
+
+
+
 
 int del_cmd(struct rpcdata *sd, const char *str)
 {
@@ -553,7 +597,19 @@ int execute_cmd (struct rpcdata * sd, const char *str)
 	searchcmd = find_cmd(cmd);
 	if (searchcmd!=NULL){
 		if (searchcmd->fun != NULL){
-			return searchcmd->fun(sd, str+strlen(cmd));
+			char *args;
+			int n;
+		      	args = (char*)(str+strlen(cmd));
+			while( isspace( *args ) )  
+				 args++; 
+			n = strlen(args);
+			n--;
+
+			while (n>=0 && isspace(args[n]))
+				n--;
+			args[n+1]=0;
+
+			return searchcmd->fun(sd, args);
 		}
 	}
 	else{

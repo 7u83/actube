@@ -511,6 +511,7 @@ int cw_cfg_load(const char *filename, cw_Cfg_t * cfg)
 	FILE *f = fopen(filename, "rb");
 	if (!f)
 		return errno;
+	errno=0;
 	errs = cw_cfg_read_from_file(f, cfg);
 	fclose(f);
 
