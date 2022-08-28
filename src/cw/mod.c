@@ -139,14 +139,14 @@ struct cw_Mod *cw_mod_load(const char *mod_name, cw_Cfg_t * global_cfg, int role
 	/* Search for the module in mods_loaded, to see if it is
 	 * already loaded or was statically linked */
 
-	cw_dbg(DBG_MOD, "MOD: Load module '%s'", mod_name);
+	cw_dbg(DBG_MOD, "Loading module '%s'.", mod_name);
 
 	memset(&search, 0, sizeof(search));
 	search.name = mod_name;
 
 	mod = mavl_get_ptr(mods_loaded, &search);
 	if (mod) {
-		cw_dbg(DBG_MOD, "MOD: Module already loaded '%s'", mod_name);
+		cw_dbg(DBG_MOD, "Module already loaded: '%s'.", mod_name);
 		return mod;
 	}
 
@@ -165,7 +165,7 @@ struct cw_Mod *cw_mod_load(const char *mod_name, cw_Cfg_t * global_cfg, int role
 	if (filename == NULL)
 		return NULL;
 
-	cw_dbg(DBG_MOD, "MOD: loading module from file: %s", filename);
+	cw_dbg(DBG_MOD, "Loading module from file: %s", filename);
 
 	/* Open the DLL */
 	handle = dlopen(filename, RTLD_NOW);
@@ -189,7 +189,7 @@ struct cw_Mod *cw_mod_load(const char *mod_name, cw_Cfg_t * global_cfg, int role
 		goto errX;
 	}
 
-	cw_dbg(DBG_MOD, "MOD: %s sucessfull loaded, calling init now.", filename);
+	cw_dbg(DBG_MOD, "Module %s sucessfull loaded, calling init now.", filename);
 	if (!mod->init(mod, global_cfg, role)){
 		dlclose(handle);
 		mod=NULL;

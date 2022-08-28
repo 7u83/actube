@@ -108,7 +108,10 @@ int main (int argc, char **argv)
 		bootcfg.nmods=2;
 	}
 
-	cw_dbg_set_level(DBG_X,0);
+	/* 
+	 * set ths for production
+	 * cw_dbg_set_level(DBG_X,0); 
+	 * */
 	
 
 	/* create an empty message set */

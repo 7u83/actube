@@ -81,6 +81,7 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 	int pos, i;
 	const char * result;
 	int wrlen;
+	int rc;
 
 	cw_Val_t val;
 	memset(&val,0,sizeof(cw_Val_t));
@@ -100,7 +101,9 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 		else	
 			sprintf(key,"%s",pkey);
 
-		result = cw_cfg_get_l(cfgs,key,NULL);
+	//	result = cw_cfg_get_l(cfgs,key,NULL);
+		rc = cw_cfg_base_exists_l(cfgs,key);
+//		printf("Base? :%s, %d\n",key,rc);
 		if(result) {
 //			char s[2048];
 //			result->type->to_str(result,s,2048);
@@ -108,9 +111,14 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 		}	
 
 		
-		if (result == NULL){
+		if (!rc){
+			int l;
 			cw_log(LOG_ERR,"Can't put %s, no value found, filling wth zeros.",key);
-			memset(dst+pos,0,stru[i].len);
+			l = stru[i].len;
+			if (l==-1)
+				l = 0;
+
+			memset(dst+pos,0,l);
 		}
 		else{
 			struct cw_Type * type;

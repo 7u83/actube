@@ -90,7 +90,8 @@ static struct cw_StrListElem theme0[] = {
 	{DBG_RFC, ANSI_BRED},
 	{DBG_X, "\x1b[31m"},
 	{DBG_WARN, ANSI_CYAN},
-	{DBG_MOD, ANSI_WHITE},
+	{DBG_MOD_DETAIL, ANSI_WHITE},
+	{DBG_MOD, ANSI_BBLACK ANSI_BOLD },
 //	{DBG_CFG_DMP, ANSI_BCYAN }, 
 	{DBG_CFG_UPDATES,ANSI_GREEN},	
 
@@ -117,23 +118,24 @@ static struct cw_StrListElem color_off[] = {
 */
 
 static struct cw_StrListElem prefix[] = {
-	{DBG_INFO, 		"Info -"},
-	{DBG_PKT_IN, 		"Pkt In  -"},
-	{DBG_PKT_OUT, 		"Pkt Out -"},
+	{DBG_INFO, 		"Info - "},
+	{DBG_PKT_IN, 		"Pkt In  - "},
+	{DBG_PKT_OUT, 		"Pkt Out - "},
 	{DBG_MSG_IN, 		"Msg In  - "},
 	{DBG_MSG_OUT,		"Msg Out - "},
 
-	{DBG_ELEM_IN, 		"  Msg Element -"},
-	{DBG_ELEM_OUT,		"  Msg Element -"},
+	{DBG_ELEM_IN, 		"  Msg Element - "},
+	{DBG_ELEM_OUT,		"  Msg Element - "},
 	
-	{DBG_MSG_ERR, 		"  Msg Error -"},
-	{DBG_PKT_ERR, 		"  Pkt Error -"},
-	{DBG_ELEM_ERR, 		"  Elem Error -"},
-	{DBG_RFC, 		"  RFC -"},
+	{DBG_MSG_ERR, 		"  Msg Error - "},
+	{DBG_PKT_ERR, 		"  Pkt Error - "},
+	{DBG_ELEM_ERR, 		"  Elem Error - "},
+	{DBG_RFC, 		"  RFC - "},
 	{DBG_DTLS, 		"DTLS - "},
 	{DBG_DTLS_DETAIL,	 "DTLS - "},
 	{DBG_WARN,	 	"  Warning - "},
 	{DBG_MOD, 		"Mod - "},
+	{DBG_MOD_DETAIL,	"Mod - "},
 	{DBG_STATE, 		"STATEMACHINE - "},
 	{DBG_CFG_UPDATES,	"Cfg - "},
 

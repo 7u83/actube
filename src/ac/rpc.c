@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <ctype.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -16,6 +17,7 @@
 #include "cw/log.h"
 #include "cw/dbg.h"
 
+#include "wtpman.h"
 
 #include "cw/connlist.h"
 
@@ -64,6 +66,9 @@ int wlan0_cmd(struct rpcdata *sd, const char * cmd);
 int exit_cmd(struct rpcdata *sd, const char * cmd);
 int prompt_cmd(struct rpcdata *sd, const char * cmd);
 int global_cfg_cmd(struct rpcdata *sd, const char * cmd);
+int status_cmd(struct rpcdata *sd, const char * cmd);
+void print_mw(FILE *f, int w, const char * str);
+int clear_cmd(struct rpcdata *sd, const char *cmd);
 
 //void show_cfg (FILE *out, mavl_t ktv);
 int show_aps (FILE *out);
@@ -88,6 +93,9 @@ static struct command cmdlist[]={
 	{"set", set_cmd },
 	{"wlan0",wlan0_cmd},
 	{"global_cfg", global_cfg_cmd},
+	{"status",status_cmd},
+	{"clear",clear_cmd},
+
 
 	{"@prompt",prompt_cmd},
 
@@ -112,9 +120,18 @@ int prompt_cmd(struct rpcdata *sd, const char *cmd)
 }
 
 
-int global_cfg_cmd(struct rpcdata *sd, const char *cmd)
+int global_cfg_cmd(struct rpcdata *sd, const char *str)
 {
-	cw_cfg_fdump(sd->out,sd->global_cfg);
+	char *s;
+	while( isspace( *str ) )  
+		 str++; 
+	s=(char*)str;
+	while (!isspace(*s) && *s!=0)
+		s++;
+	*s=0;
+
+
+	cw_cfg_fdump(sd->out,sd->global_cfg,str);
 	finish_cmd(sd->out);
 	return 0;
 }
@@ -149,8 +166,18 @@ int exit_cmd(struct rpcdata *sd, const char *cmd)
 
 
 
-int cfg_cmd(struct rpcdata *sd, const char *cmd)
+int cfg_cmd(struct rpcdata *sd, const char *str)
 {
+	char *s;
+	while( isspace( *str ) )  
+		 str++; 
+	s=(char*)str;
+	while (!isspace(*s) && *s!=0)
+		s++;
+	*s=0;
+
+
+
 	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
@@ -158,37 +185,112 @@ int cfg_cmd(struct rpcdata *sd, const char *cmd)
 		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
 	}
 	else {
-		cw_cfg_fdump(sd->out,conn->remote_cfg);
+		cw_cfg_fdump(sd->out,conn->remote_cfg,str);
 	}
 	finish_cmd(sd->out);
 	wtplist_unlock();
 	return 0;
 }
 
-int ucfg_cmd(struct rpcdata *sd, const char *cmd)
+
+int status_cmd(struct rpcdata *sd, const char *cmd)
 {
-//	struct cw_Conn * conn;
-	stop();
-//	show_cfg(sd->out,sd->update_cfg);
+	struct cw_Conn * conn;
+	int i;
+	char key[CW_CFG_MAX_KEY_LEN];
+
+	wtplist_lock();
+	print_mw(sd->out,8,"Radio");
+	print_mw(sd->out,15,"Admin State");
+	print_mw(sd->out,15,"Oper State");
+	print_mw(sd->out,13,"Cause");
+	fprintf(sd->out,"\n");
+
+	conn = find_ap(sd->prompt);
+	if (conn==NULL){
+		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
+		goto errX;
+	}
+
+	i=0;
+	do {
+		char tmp[128];
+		sprintf(key,"radio.%d",i);
+		if (!cw_cfg_base_exists(conn->remote_cfg,key))
+			break;
+
+		sprintf(tmp,"%d",i);
+		print_mw(sd->out,8,tmp);
+
+		sprintf(key,"radio.%d/capwap/admin-state",i);
+		print_mw(sd->out,15, cw_cfg_get(conn->remote_cfg,key,"?"));
+		sprintf(key,"radio.%d/capwap/operational-state/state",i);
+		print_mw(sd->out,15, cw_cfg_get(conn->remote_cfg,key,"?"));
+		sprintf(key,"radio.%d/capwap/operational-state/cause",i);
+		print_mw(sd->out,13, cw_cfg_get(conn->remote_cfg,key,"?"));
+		fprintf(sd->out,"\n");
+
+		i++;	
+	}while(1);
+
+errX:	
+	finish_cmd(sd->out);
+	wtplist_unlock();
 	return 0;
 }
 
-#include "wtpman.h"
+
+
+
+
+int ucfg_cmd(struct rpcdata *sd, const char *str)
+{
+	char *s;
+	while( isspace( *str ) )  
+		 str++; 
+	s=(char*)str;
+	while (!isspace(*s) && *s!=0)
+		s++;
+	*s=0;
+
+
+	cw_cfg_fdump(sd->out,sd->update_cfg,str);
+	finish_cmd(sd->out);
+	return 0;
+}
+
+int clear_cmd(struct rpcdata *sd, const char *cmd)
+{
+	cw_cfg_clear(sd->update_cfg);
+	fprintf(sd->out,"ucfg cleard\n");
+	finish_cmd(sd->out);
+	return 0;
+}
+
 
 int
 send_cmd(struct rpcdata * sd, const char *cmd)
 {
-
+	struct wtpman * wtpman;
 	struct cw_Conn * conn;
 	wtplist_lock();
 	conn = find_ap(sd->prompt);
 	if (conn==NULL){
 		fprintf(sd->out,"WTP '%s' not found\n",sd->prompt);
+		goto errX;
 	}
 	else {
-		conn->update_cfg=sd->update_cfg;
+		wtpman=conn->data;
+		cw_cfg_copy(sd->update_cfg,conn->update_cfg,0,NULL);
+		wtpman->update=1;
+
+		fprintf(sd->out, "Sending update cmd\n");
+
+//		conn->update_cfg=sd->update_cfg;
 	}
+errX:	
 	wtplist_unlock();
+	finish_cmd(sd->out);
 	return 0;
 }
 
@@ -221,29 +323,30 @@ int set_cmd(struct rpcdata *sd, const char *str)
 
 	cw_cfg_read_from_string(str,cfg);
 
-	cw_cfg_fdump(sd->out,cfg);
+	cw_cfg_fdump(sd->out,cfg,NULL);
+	cw_cfg_copy(cfg,sd->update_cfg,DBG_CFG_UPDATES,"rpc ucfg");
 
 	cw_cfg_destroy(cfg);
 
 	finish_cmd(sd->out);
-
-//	cw_ktv_init_str_reader(&r,str,strlen(str));
-	
-//	cw_ktv_parse_string(&r,key,type,val);
-	/*cw_ktv_parse_string(key,type,val, 2048);*/
-	
-//	fprintf(sd->out,"%s %s\n",key,val);
-//	cw_ktv_add(sd->update_cfg,key,CW_TYPE_STR,NULL,val,strlen(val));
 	return 0;
 }
 
 int del_cmd(struct rpcdata *sd, const char *str)
 {
-	char key[CW_CFG_MAX_KEY_LEN];
-	sscanf(str,"%s",key);
-	stop();
-//	cw_ktv_del_sub(sd->update_cfg,key);
-//
+	char *s;
+
+	while( isspace( *str ) )  
+		 str++; 
+	s=(char*)str;
+	while (!isspace(*s) && *s!=0)
+		s++;
+	*s=0;
+
+
+	fprintf(sd->out,"DEL: '%s'\n",str);
+	cw_cfg_del(sd->update_cfg,str);
+	finish_cmd(sd->out);
 	return 0;
 }
 
@@ -540,6 +643,7 @@ void rpc_loop (FILE *file, cw_Cfg_t *global_cfg)
 	sd.in = file;
 	sd.out = file;	
 	sd.global_cfg=global_cfg;
+	sd.update_cfg=cw_cfg_create();
 
 
 	sprintf(sd.prompt,"%s","*");

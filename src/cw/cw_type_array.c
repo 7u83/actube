@@ -20,6 +20,7 @@
 
 #include "cw.h"
 #include "val.h"
+#include "dbg.h"
 
 static cw_Val_t *get(cw_Val_t * data, const uint8_t * src, int len)
 {
@@ -126,38 +127,47 @@ static int cast(cw_Val_t * data)
 
 static int bread(cw_Cfg_t *cfg, const char * key, const uint8_t *src, int len, const void *param)
 {
-	uint8_t n,l;
-	char skey[MAX_KEY_LEN];
+	uint8_t n,i;
+	int l;
+	char skey[CW_CFG_MAX_KEY_LEN];
+	const struct cw_ValArrayDef * def = param;
 
-	n = cw_get_byte(src);
-	l=1;
-	for (i=0; i<n; i++){
-//		struct cw_Type *type=(struct cw_Type*)param;
+	
+	const int (*fun)(cw_Cfg_t*,const char *k,const uint8_t *s,int len,const void *p,int *l) = def->get_count;
+
+	n = fun(cfg,key,src,len,param,&l);
+
+	for (i=0; i<n && l<len; i++){
 		sprintf(skey,"%s.%d",key,i);
-		l+=CW_TYPE_STRUCT->read(cfg,skey,src,len,param);
+//		printf("SKEY: %s\n",skey);
+		l+=def->type->read(cfg,skey,src,len,def->param);
 	}
 
 	return l;
 
-/*
-	uint8_t	val;
-	cw_ValValRange_t * valrange = (cw_ValValRange_t *) param;
-	const char *str;
-	
-      	val = cw_get_byte(src);
-	str = get_guardstr(val, valrange);
-	if (str != NULL)
-		cw_cfg_set(cfg,key,str);
-	else
-		cw_cfg_set_int(cfg,key,val);
-
-	return 1;
-*/
 }
 
 static 	int bwrite(cw_Cfg_t ** cfgs, const char *key, uint8_t *dst, const void * param)
 {
-	return cw_generic_write_l(cfgs,CW_TYPE_BYTE,key,dst,param);
+	int i,l;
+	char skey[CW_CFG_MAX_KEY_LEN];
+	const struct cw_ValArrayDef * def = param;
+	const int (*fun)(cw_Cfg_t**,const char *k, uint8_t *s,const void *p,int l) = def->put_count;
+
+
+	i=0,l=0;
+	do {
+		sprintf(skey,"%s.%d",key,i);
+		i++;
+		if (cw_cfg_get_l(cfgs,skey,NULL)==NULL){
+			break;
+		}
+		l+=def->type->write(cfgs,skey,dst,def->param);
+	}while(1);
+
+//	printf("LEN: %d pl: %d\n",l,n);
+	fun(cfgs,key,dst,param,l);
+	return l;
 }
 
 const struct cw_Type cw_type_array = {

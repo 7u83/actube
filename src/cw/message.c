@@ -41,8 +41,8 @@ int cw_encode_elements(struct cw_ElemHandlerParams *params, mlist_t elements_lis
 
 		if (!data->mand){
 			if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
-				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s - (skip)", 
-						data->proto, data->vendor, data->id, handler->name);
+				cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (skip)", 
+						data->proto, data->vendor, data->id, handler->name, handler->key);
 
 				continue;
 			}

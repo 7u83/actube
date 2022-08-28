@@ -298,6 +298,18 @@ int cw_run_state_machine(struct cw_Conn *conn, time_t * timer)
 
 /*#define CW_TRANSITION(prestate,state) (prestate<<16|state)*/
 
+
+int run_update(struct wtpman *wtpman)
+{
+	int rc;
+	if (!wtpman->update)
+		return EAGAIN;
+	rc = cw_send_request(wtpman->conn, CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST);
+        cw_cfg_clear(wtpman->conn->update_cfg);
+	wtpman->update=0;
+	return rc;
+}
+
 static void *wtpman_main(void *arg)
 {
 	//mavl_t r;
@@ -343,6 +355,7 @@ static void *wtpman_main(void *arg)
 	conn->capwap_prevstate = CAPWAP_STATE_DTLS_SETUP;
 	conn->capwap_state = CAPWAP_STATE_JOIN;
 	rc = 0;
+	wtpman->update=0;
 
 	while (1) {
 
@@ -359,15 +372,19 @@ static void *wtpman_main(void *arg)
 
 
 		while (!cw_timer_timeout(timer)) {
+			rc = run_update(wtpman);
+			if (rc !=EAGAIN)
+				break;
 
 			rc = cw_read_messages(wtpman->conn);
+			
 			if (rc < 0) {
-				if (errno == EAGAIN)
+				if (errno == EAGAIN){
 					continue;
+				}
 			}
 			break;
 		}
-
 		if (rc < 0) {
 			conn->capwap_prevstate = conn->capwap_state;
 			conn->capwap_state = CAPWAP_STATE_TIMEOUT;
@@ -463,6 +480,24 @@ static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, i
 	return 0;
 }
 
+static int change_state_event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+{
+	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
+	struct wtpman * wtpman = (struct wtpman *)conn->data;
+
+	char filename[200];
+
+
+	
+	cw_dbg(DBG_X,"WTP EVENT Callback");
+	copy(params);
+
+	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
+	sprintf(filename,"wtp-change-event-%d-%s.ckv",wtpman->ctr++,wtpname);
+	cw_cfg_save(filename,params->cfg,NULL);
+	return 0;
+}
+
 
 
 
@@ -551,6 +586,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	cw_conn_set_msg_cb(wtpman->conn,
 			CAPWAP_MSG_WTP_EVENT_REQUEST,
 			event_cb);
+
+	cw_conn_set_msg_cb(wtpman->conn,
+			CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
+			change_state_event_cb);
 
 
 

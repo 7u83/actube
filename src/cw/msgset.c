@@ -223,7 +223,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 				break;
 				continue;
 			case CW_DELETE:
-				cw_dbg(DBG_MOD, "  deleting message element %d %d %d - %s",
+				cw_dbg(DBG_MOD_DETAIL, "  deleting message element %d %d %d - %s",
 				       elemdef->proto,
 				       elemdef->vendor, elemdef->id, handler->name);
 				
@@ -248,11 +248,11 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 		result = mavl_replace(msgdata->elements_tree, &ed, &replaced);
 
 		if (!replaced) {
-			cw_dbg(DBG_MOD, "  adding message element %d %d %d - %s",
+			cw_dbg(DBG_MOD_DETAIL, "  adding message element %d %d %d - %s",
 			       elemdef->proto,
 			       elemdef->vendor, elemdef->id, handler->name);
 		} else {
-			cw_dbg(DBG_MOD, "  replacing message element %d %d %d - %s",
+			cw_dbg(DBG_MOD_DETAIL, "  replacing message element %d %d %d - %s",
 			       elemdef->proto,
 			       elemdef->vendor, elemdef->id, handler->name);
 		}
@@ -275,7 +275,7 @@ static int update_msgdata(struct cw_MsgSet *set, struct cw_MsgData *msgdata,
 						    result->vendor, result->id);
 		if (result->mand){
 			mlist_append_ptr(msgdata->mand_keys,(void*)handler->key);
-			cw_dbg(DBG_MOD,"    Add mandatory key: %s",handler->key);
+			cw_dbg(DBG_MOD_DETAIL,"    Add mandatory key: %s",handler->key);
 		}
 		/*//printf("Have Result %d %d - %s\n",result->id,result->mand, handler->key);*/
 	}
@@ -294,7 +294,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 	struct cw_MsgDef *msgdef;
 	/* Create mavl for all handlers */
 	for (handler = handlers; handler->id; handler++) {
-		cw_dbg(DBG_MOD, "Adding handler for element %d - %s - with key: %s",
+		cw_dbg(DBG_MOD_DETAIL, "Adding handler for element %d - %s - with key: %s",
 		       handler->id, handler->name, handler->key);
 		mavl_replace(set->handlers_by_id, handler, NULL);
 		mavl_replace(set->handlers_by_key, handler, NULL);
@@ -339,7 +339,7 @@ int cw_msgset_add(struct cw_MsgSet *set,
 		msg->receiver = msgdef->receiver;
 
 
-		cw_dbg(DBG_MOD, "Add message Type:%d - %s ", msgdef->type, msgdef->name);
+		cw_dbg(DBG_MOD_DETAIL, "Add message Type:%d - %s ", msgdef->type, msgdef->name);
 
 
 		update_msgdata(set, msg, msgdef);
@@ -376,7 +376,7 @@ int cw_msgset_add_states(struct cw_MsgSet * set, cw_StateMachineState_t * states
 		else{
 			repstr = "Adding";
 		}
-		cw_dbg(DBG_MOD,"%s machine state : [%s->%s]",repstr,
+		cw_dbg(DBG_MOD_DETAIL,"%s machine state : [%s->%s]",repstr,
 			cw_strstate(s->prevstate),
 			cw_strstate(s->state));
 		s++;

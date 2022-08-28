@@ -34,7 +34,7 @@ cw_dbg(DBG_X,"Her is the Key: %s %s\n",key,e[i].name);
 
 		b = cw_cfg_base_exists_l(params->cfg_list,handler->key);
 		if (!b){
-			stop();
+			//stop();
 			continue;
 		}
 		start = params->msgset->header_len(handler);

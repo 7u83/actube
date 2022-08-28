@@ -28,6 +28,20 @@ static cw_ValStruct_t capwap80211_antenna_stru[]={
 };
 
 
+static cw_ValStruct_t capwap80211_wtp_radio_cfg_stru[]={
+	{CW_TYPE_BYTE,"short-preamble",1,-1},
+	{CW_TYPE_BYTE,"num-of-bssids",1,-1},
+	{CW_TYPE_BYTE,"dtim-period",1,-1},
+	{CW_TYPE_BSTR16,"bssid",6,-1},
+	{CW_TYPE_WORD,"beacon-period",2,-1},
+	{CW_TYPE_STR,"country-string",2,-1,},
+	{CW_TYPE_BSTR16,"country-string-attr",1,-1,},
+	{CW_TYPE_BYTE,"country-string-reserved",1,-1,},
+	{NULL,NULL,0,0}
+};
+	
+
+
 static struct cw_ElemHandler handlers[] = {
 	{
 		"IEEE 802.11 WTP Radio Information",		/* name */
@@ -66,6 +80,22 @@ static struct cw_ElemHandler handlers[] = {
 
 	}
 	,
+
+	{
+		"IEEE 802.11 WTP Radio Configuration",		/* name */
+		CAPWAP80211_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		16, 16,						/* min/max length */
+		CW_TYPE_STRUCT,					/* type */
+		"capwap80211/wtp-radio-config",				/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,				/* put */
+		NULL,
+		NULL,
+		capwap80211_wtp_radio_cfg_stru
+
+	},
+		
 	{NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL}
 
 };

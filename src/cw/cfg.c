@@ -129,6 +129,16 @@ int cw_cfg_set(cw_Cfg_t * cfg, const char *key, const char *val)
 	return -1;
 }
 
+
+void cw_cfg_del(cw_Cfg_t * cfg, const char *key)
+{
+	struct cw_Cfg_entry e;
+	e.key = key;
+	e.val=NULL;
+	mavl_del(cfg->cfg,&e);
+}
+
+
 const char *cw_cfg_get(cw_Cfg_t * cfg, const char *key, const char *def)
 {
 	struct cw_Cfg_entry e, *r;
@@ -193,7 +203,7 @@ void cw_cfg_dump(cw_Cfg_t * cfg)
 	}
 }
 
-void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg)
+void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg, const char *filter)
 {
 	mavliter_t it;
 	struct cw_Cfg_entry *e;
@@ -201,6 +211,13 @@ void cw_cfg_fdump(FILE *f, cw_Cfg_t * cfg)
 	mavliter_foreach(&it) {
 
 		e = mavliter_get(&it);
+		if (filter != NULL){
+			if (strlen(filter)){
+				if (strstr(e->key,filter)==NULL){
+					continue;
+				}
+			}
+		}
 		fprintf(f,"%s: '%s'\n", e->key, e->val);
 	}
 }
@@ -814,22 +831,43 @@ void cw_cfg_clear(cw_Cfg_t *cfg)
 int cw_cfg_base_exists(cw_Cfg_t * cfg, const char *key)
 {
         struct cw_Cfg_entry e, *result;
-//cw_dbg(DBG_X,"LOOX FOR: %s",key);
-        e.key=key;
-        result = mavl_get_first(cfg->cfg,&e);
-        if (result == NULL)
-                return 0;
-//cw_dbg(DBG_X,"BASEXXX: %s",result->key);
+	int rl,kl;
+	char skey[CW_CFG_MAX_KEY_LEN];
+	char * delimiters = "/.";
+	char * d;
 
-	if (strlen(result->key)<strlen(key))
-		return 0;		
-//cw_dbg(DBG_X,"BASEXXX1: %d",strlen(key));
-	if (result->key[strlen(key)]!='/' && result->key[strlen(key)]!='.')
-		return 0;
-//cw_dbg(DBG_X,"BASEXXX2: ");
-	if (strncmp(result->key,key,strlen(key))==0)
+	/* can we find the base exactly ?*/
+	if (cw_cfg_get(cfg,key,NULL)!=NULL)
 		return 1;
-cw_dbg(DBG_X,"BASEXXX3: ");
+
+
+	for(d=delimiters; *d!=0; d++){
+		sprintf(skey,"%s%c",key,*d);
+
+	        e.key=skey;
+	        result = mavl_get_first(cfg->cfg,&e);
+
+	
+		/* if we've found nothing, we can't check more */
+	        if (result == NULL)
+	                continue;
+
+		rl = strlen(result->key);
+		kl = strlen(skey);
+
+		/* if result key is shorter than key */
+		if (rl<kl)
+			continue;
+
+		/* both keys are identical in length */
+		if (rl==kl){
+			if (strcmp(result->key,key)==0)
+				return 1;
+		}
+	
+		if (strncmp(result->key,skey,kl)==0)
+			return 1;
+	}
 
 	return 0;
 }

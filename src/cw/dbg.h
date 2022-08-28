@@ -125,6 +125,9 @@ enum cw_dbg_levels{
 	
 
 	DBG_X		= (1<<30),
+
+	DBG_MOD_DETAIL	= (1<<31),
+
 	DBG_ALL 	= (0x7fffffff),
 
 

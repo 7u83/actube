@@ -40,7 +40,7 @@ struct wtpman {
 
 	cw_Cfg_t * wtp_cfg;
 
-	
+	int update;	
 	int ctr;
 };
 

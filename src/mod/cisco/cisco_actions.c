@@ -306,8 +306,10 @@ int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh,
 		if(result->type->len(result)==4){
 			uint32_t rv;
 			rv = cw_get_dword(result->type->data(result));
-//cw_dbg(DBG_X,"Version is %08X",rv);			
-			if (rv >= 0x07056600){
+cw_dbg(DBG_X,"Version is %08X",rv);			
+//stop();
+//			if (rv >= 0x07056600){
+			if (rv > 0x07036500){
 				type = cisco_ap_regulatory_domain5;
 			}
 			else{
@@ -371,7 +373,47 @@ static cw_ValStruct_t cisco_direct_sequence_control70[]={
 	{NULL,NULL,0,0}
 };
 
+
+static int get_num_antennas70(cw_Cfg_t *cfg, 
+		const char * key, const uint8_t *src, int len, const void *param, int *l)
+{
+	*l=0;
+	return cw_get_byte(src-4);
+};
+
+static int put_num_antennas70(cw_Cfg_t *cfg, 
+		const char * key, uint8_t *dst, const void *param, int l)
+{
+	return cw_put_byte((dst-4),l);
+};
+
+static cw_ValValRange_t antenna_type[]={
+	{1,1,"1 - Internal Antenna"},
+	{2,2,"2 - External Antenna"},
+	{0,0,NULL}
+};
+
+
+struct cw_ValArrayDef ant_array = {
+	get_num_antennas70,
+	put_num_antennas70,
+	CW_TYPE_BYTE,
+	&antenna_type
+};
+
 static cw_ValStruct_t cisco_antenna_payload70[]={
+	{CW_TYPE_BYTE,"diversity-selection",1,-1},
+	{CW_TYPE_BYTE,"antenna-mode",1,-1},
+	{CW_TYPE_BYTE,"antenna-cnt",1,-1},
+	{CW_TYPE_BYTE,"unknown",1,-1},
+	{CW_TYPE_BYTE,"802-11n-tx-antennas",1,-1},
+	{CW_TYPE_BYTE,"802-11n-rx-antennas",1,-1},
+	{CW_TYPE_ARRAY,"antenna",-1,-1,&ant_array},
+	{NULL,NULL,0,0}
+};
+
+/*
+static cw_ValStruct_t cisco_antenna_payload73[]={
 	{CW_TYPE_BYTE,"diversity-selection",1,-1},
 	{CW_TYPE_BYTE,"antenna-mode",1,-1},
 	{CW_TYPE_BYTE,"number-of-antennas",1,-1},
@@ -383,6 +425,11 @@ static cw_ValStruct_t cisco_antenna_payload70[]={
 	{CW_TYPE_BYTE,"antenna-2",1,-1},
 	{NULL,NULL,0,0}
 };
+*/
+
+
+
+
 
 
 static cw_ValStruct_t cisco_wtp_radio_config70[]={
@@ -390,7 +437,7 @@ static cw_ValStruct_t cisco_wtp_radio_config70[]={
 	{CW_TYPE_WORD,"occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"cfg-period",1,-1},
 	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
-	{CW_TYPE_BSTR16,"bss-id",6,-1},
+	{CW_TYPE_BSTR16,"bssid",6,-1},
 	{CW_TYPE_WORD,"beacon-period",2,-1},
 	{CW_TYPE_STR,"country-str1",3,-1},
 	{CW_TYPE_STR,"country-str2",3,-1},
@@ -403,17 +450,18 @@ static cw_ValStruct_t cisco_wtp_radio_config70[]={
 
 
 static cw_ValStruct_t cisco_wtp_radio_config73[]={
-	{CW_TYPE_BYTE,"cfg-type",1,-1},
-	{CW_TYPE_WORD,"occupancy-limit",2,-1},
-	{CW_TYPE_BYTE,"cfg-period",1,-1},
-	{CW_TYPE_WORD,"cfp-maximum-duration",2,-1},
-	{CW_TYPE_BSTR16,"bss-id",6,-1},
+	{CW_TYPE_BYTE,"@cisco/cfg-type",1,-1,cfg_type},
+	{CW_TYPE_WORD,"@cisco/occupancy-limit",2,-1},
+	{CW_TYPE_BYTE,"@cisco/cfg-period",1,-1},
+	{CW_TYPE_WORD,"@cisco/cfp-maximum-duration",2,-1},
+	{CW_TYPE_BSTR16,"bssid",6,-1},
 	{CW_TYPE_WORD,"beacon-period",2,-1},
-	{CW_TYPE_STR,"country-str1",3,-1},
-	{CW_TYPE_STR,"country-str2",3,-1},
-	{CW_TYPE_BYTE,"gpr-period",1,-1},
-	{CW_TYPE_DWORD,"reg",4,-1},
-	{CW_TYPE_BYTE,"max-stations",1,-1},
+	{CW_TYPE_STR,"@cisco/country-string",3,-1},
+	{CW_TYPE_STR,"country-string",2,-1},
+	{CW_TYPE_BSTR16,"country-string-attr",1,-1},
+	{CW_TYPE_BYTE,"@cisco/gpr-period",1,-1},
+	{CW_TYPE_DWORD,"@cisco/reg",4,-1},
+	{CW_TYPE_BYTE,"@cisco/max-stations",1,-1},
 	{NULL,NULL,0,0}
 };
 
@@ -1326,7 +1374,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		25,25,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/wtp-radio-config",		/* Key */
+		"capwap80211/wtp-radio-config",		/* Key */
 		cw_in_radio_generic,			/* get */
 		cw_out_radio_generic,			/* put */
 		NULL,
@@ -1358,7 +1406,7 @@ static struct cw_ElemHandler handlers70[] = {
 		"Antenna Payload (v7.0)",		/* name */
 		CW_CISCO_ANTENNA_PAYLOAD,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		9,9,					/* min/max length */
+		9,100,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/antenna-payload",		/* Key */
 		cw_in_radio_generic,			/* get */
@@ -1480,7 +1528,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		1,1024,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/elem15",				/* Key */
+		"cisco/channel-setting",				/* Key */
 		cw_in_radio_generic,			/* get */
 		cw_out_radio_generic,			/* put */
 		NULL,
@@ -2413,6 +2461,10 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 
 /*static uint16_t configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};*/
 static struct cw_ElemDef configuration_update_request_elements[] ={
+
+	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
+	{0, 0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	0, 0},
+
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
@@ -2740,9 +2792,9 @@ static struct cw_ElemHandler handlers73[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		27,27,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/wtp-radio-config",		/* Key */
-		cw_in_radio_generic,		/* get */
-		cw_out_radio_generic,		/* put */
+		"capwap80211/wtp-radio-config",		/* Key */
+		cw_in_radio_generic,			/* get */
+		cw_out_radio_generic,			/* put */
 		NULL,
 		NULL,
 		cisco_wtp_radio_config73,
@@ -2776,7 +2828,7 @@ static struct cw_ElemHandler handlers75[] = {
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		28,28,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
-		"cisco/wtp-radio-config",		/* Key */
+		"capwap80211/wtp-radio-config",		/* Key */
 		cw_in_radio_generic,			/* get */
 		cw_out_radio_generic,			/* put */
 		NULL,
@@ -2848,6 +2900,24 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
         return set;
 }
 
+static void update_msgset(struct cw_MsgSet *msgset, bstr_t version)
+{
+	if(bstr16_len(version)==4){
+		uint32_t rv;
+		rv = cw_get_dword(bstr16_data(version));
+		
+		if (rv >= 0x07030000){
+			cw_dbg(DBG_MOD, "CISCO - Loading messages for 0x%08X >= 0x07030000", rv);
+			cw_msgset_add(msgset,messages73, handlers73);
+		}
+		if (rv >= 0x07056600){
+			cw_dbg(DBG_MOD, "CISCO - Loading messages for 0x.x%08X >= 0x07056600", rv);
+			cw_msgset_add(msgset,messages75, handlers75);
+		}
+	}
+
+
+}
 
 
 static void set_ac_version(struct cw_ElemHandlerParams * params)
@@ -2864,23 +2934,11 @@ static void set_ac_version(struct cw_ElemHandlerParams * params)
 	cw_cfg_set_bstr16(params->conn->local_cfg,"capwap/ac-descriptor/software/version",wtpver);
 	cw_cfg_set_int(params->conn->local_cfg,"capwap/ac-descriptor/software/vendor",CW_VENDOR_ID_CISCO);
 
-	if(bstr16_len(wtpver)==4){
-		uint32_t rv;
-		rv = cw_get_dword(bstr16_data(wtpver));
-		
-		if (rv >= 0x07030000){
-			cw_msgset_add(params->msgset,messages73, handlers73);
-		}
-		if (rv >= 0x07056600){
-			cw_msgset_add(params->msgset,messages75, handlers75);
-		}
-	}
-
+	update_msgset(params->msgset,wtpver);
 	free(wtpver);
 }
 
 static int postprocess_discovery(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
-//static int postprocess_discovery(struct cw_Conn *conn)
 {
 	if (params->conn->role == CW_ROLE_AC ){
 		set_ac_version(params);
@@ -2890,7 +2948,6 @@ static int postprocess_discovery(struct cw_ElemHandlerParams * params, uint8_t *
 }
 
 static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
-//static int postprocess_join_request(struct cw_Conn *conn)
 {
 	if (postprocess_join_request_parent!=NULL){
 		postprocess_join_request_parent(params,elems_ptr,elems_len);
@@ -2908,13 +2965,14 @@ static int preprocess_join_request(struct cw_Conn *conn)
 	if (conn->role != CW_ROLE_WTP)
 		return 0;
 
-	use_ac_version = cw_cfg_get_bool(conn->global_cfg,"cisco/wtp-use-ac-version",0);
+	use_ac_version = cw_cfg_get_bool(conn->global_cfg,"mod/cisco/wtp-use-ac-version",0);
 	if (use_ac_version){
 		ver = cw_cfg_get_bstr16(conn->remote_cfg,"capwap/ac-descriptor/software/version",NULL );
 		if (ver != NULL){
 			cw_cfg_set_bstr16(conn->local_cfg,"capwap/wtp-descriptor/software/version",ver);
 			cw_format_version(verstr,bstr16_data(ver),bstr16_len(ver));
-			cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
+			cw_dbg(DBG_MOD, "CISCO WTP - Using AC's software version: %s", verstr);
+			update_msgset(conn->msgset,ver);
 			free(ver);
 		}
 		else{
@@ -2922,33 +2980,5 @@ static int preprocess_join_request(struct cw_Conn *conn)
 		}
 
 	}
-
-//	stop();
-
-/*		
-
-	if (use_ac_version){
-		ver = cw_ktv_get(conn->remote_cfg,"ac-descriptor/software/version", CW_TYPE_BSTR16);
-		cw_ktv_replace(conn->local_cfg,"wtp-descriptor/software/version",CW_TYPE_BSTR16, NULL,
-			ver->type->data(ver),ver->type->len(ver));
-			
-		cw_format_version(verstr,ver->type->data(ver),ver->type->len(ver));
-		cw_dbg(DBG_INFO, "Cisco WTP - Using AC's software version: %s", verstr);
-		
-	}
-	else{
-		ver = cw_ktv_get(conn->local_cfg,"wtp-descriptor/software/version", CW_TYPE_BSTR16);
-		cw_format_version(verstr,ver->type->data(ver),ver->type->len(ver));
-		cw_dbg(DBG_INFO, "Cisco - WTP Using own software version: %s", verstr);
-	}
-	
-	if(ver->type->len(ver)==4){
-		uint32_t rv;
-		rv = cw_get_dword(ver->type->data(ver));
-		if (rv >= 0x07056600){
-			cw_msgset_add(conn->msgset,messages75, handlers75);
-		}
-	}
-*/	
 	return 1;
 }

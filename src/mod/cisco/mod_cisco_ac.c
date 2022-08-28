@@ -100,8 +100,8 @@ static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
 static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
 {
 /*	uint8_t * str;*/
-	static char * hardware_version; /*strdup(".x01000001");*/
-	static char * software_version; /* = NULL; */
+//	static char * hardware_version; /*strdup(".x01000001");* /
+//	static char * software_version; /* = NULL; * /
 /*	cfg_t *cfg;*/
 	
 	int rc = 1;
@@ -120,12 +120,15 @@ static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
 		return 0;
 	}
 
+	cw_dbg(DBG_MOD, "CISCO: Loading base module: capwap80211");
 	capwap80211_mod = cw_mod_load("capwap80211", global_cfg,role);
 	if (capwap_mod == NULL){
 		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap80211");
 		return 0;
 	}
-	
+
+	cw_dbg(DBG_MOD, "CISCO: All base modules are sucessfully loaded.");
+
 	/*cisco_config = mbag_create();*/
 
 
@@ -164,10 +167,10 @@ static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
 	}
 */
 /*errX:*/
-	if (hardware_version)
+/*	if (hardware_version)
 		free (hardware_version);
 	if (software_version)
-		free(software_version);
+		free(software_version);*/
 	return rc;
 }
 

@@ -7,7 +7,7 @@ then
 fi
 
 
-#echo clock set $(date "+%H:%M:%S %d %b %Y")
+echo clock set $(date "+%H:%M:%S %d %b %Y")
 echo debug capwap console cli
 echo configure terminal
 echo crypto ca profile enrollment ACTube

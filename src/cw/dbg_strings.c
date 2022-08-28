@@ -65,6 +65,7 @@ struct cw_StrListElem cw_dbg_strings[] = {
 	{ DBG_DTLS_DETAIL, 	"dtls_detail"},
 
 	{ DBG_CFG_UPDATES, 	"cfg_updates" },
+	{ DBG_X,		"x" },
 
 	
 //	{DBG_CFG_DMP, "cfg_dmp" },
