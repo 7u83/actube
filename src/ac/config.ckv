@@ -66,6 +66,18 @@ capwap/ac-descriptor/stations: 0
 capwap/control-ip-address/address.0: 192.168.0.14
 
 
+wlan.0/capwap80211/capability: 0
+wlan.0/capwap80211/key-index: 0
+wlan.0/capwap80211/key-status: 0
+wlan.0/capwap80211/key: 1234
+wlan.0/capwap80211/group-tcs: 123
+wlan.0/capwap80211/qos: 0
+wlan.0/capwap80211/auth-type: 1
+wlan.0/capwap80211/mac-mode: 1
+wlan.0/capwap80211/tunnel-mode: 1
+wlan.0/capwap80211/suppress-ssid: false
+wlan.0/capwap80211/ssid
+
 
 #
 # CAPWAP Timers

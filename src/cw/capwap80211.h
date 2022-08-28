@@ -86,6 +86,9 @@ enum radioelems {
 };
 
 
+
+/** IEEE 802.11 Add WLAN Message element */
+#define	CAPWAP80211_ELEM_ADD_WLAN			1024
 /** IEEE 802.11 Antenna Message element */
 #define CAPWAP80211_ELEM_ANTENNA			1025
 /** IEEE 802.11 WTP Radio Configuration */

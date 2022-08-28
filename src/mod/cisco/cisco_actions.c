@@ -670,25 +670,25 @@ static cw_ValStruct_t cisco_add_wlan[]={
 
 static cw_ValStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
-	{CW_TYPE_WORD,"wlan-capability",2,-1},
+	{CW_TYPE_WORD,"capwap80211/capability",2,-1},
 	{CW_TYPE_BYTE,"wlan-id",1,4},
-	{CW_TYPE_DWORD,"encryption-policy",4,5},
+	{CW_TYPE_DWORD,"cisco/encryption-policy",4,5},
 
-	{CW_TYPE_BSTR16,"wep-key",13,9},
-	{CW_TYPE_BYTE,"wep-key-index",1,41},
-	{CW_TYPE_BOOL,"wep-encryption",1,42},
+	{CW_TYPE_BSTR16,"cisco/wep-key",13,9},
+	{CW_TYPE_BYTE,"cisco/wep-key-index",1,41},
+	{CW_TYPE_BOOL,"cisco/wep-encryption",1,42},
 
-	{CW_TYPE_BYTE,"qos",1,324},
-	{CW_TYPE_WORD,"scan-defer-period",1,328},
-	{CW_TYPE_WORD,"scan-defer-time",1,330},
-	{CW_TYPE_BOOL,"broadcast-ssid",1,332},
-	{CW_TYPE_BOOL,"aironet-ie",1,333},
-	{CW_TYPE_BYTE,"hreap-local-switch",1,378},
-	{CW_TYPE_WORD,"session-timout",2,381},
+	{CW_TYPE_BYTE,"capwap80211/qos",1,324},
+	{CW_TYPE_WORD,"cisco/scan-defer-period",1,328},
+	{CW_TYPE_WORD,"cisco/scan-defer-time",1,330},
+	{CW_TYPE_BOOL,"cisco/broadcast-ssid",1,332},
+	{CW_TYPE_BOOL,"cisco/aironet-ie",1,333},
+	{CW_TYPE_BYTE,"cisco/hreap-local-switch",1,378},
+	{CW_TYPE_WORD,"cisco/session-timout",2,381},
 
-	{CW_TYPE_BYTE, "dtim-period",1,440},
-	{CW_TYPE_STR,"profile-name",30,441},
-	{CW_TYPE_STR, "ssid",33,474},
+	{CW_TYPE_BYTE, "cisco/dtim-period",1,440},
+	{CW_TYPE_STR,"cisco/profile-name",30,441},
+	{CW_TYPE_STR, "capwap80211/ssid",33,474},
 
 	
 	{NULL,NULL,0,0}
@@ -743,8 +743,16 @@ static int cisco_add_wlan_mkkey70(const char *pkey, uint8_t*data, int len, char 
         int wlan_id,radio_id;
         radio_id = cw_get_byte(data);
         wlan_id = cw_get_byte(data+4);
-        sprintf(dst,"radio.%d/wlan.%d/add-wlan",radio_id,wlan_id);
+        sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
         return 1;
+}
+
+static int mkkey_sig_payload(const char *pkey, uint8_t*data, int len, char *dst)
+{
+        int id;
+        id = cw_get_byte(data+4);
+        sprintf(dst,"%s.%d",pkey,id);
+        return 0;
 }
 
 
@@ -1510,6 +1518,17 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
+	{ 
+		"Cisco Boradcast SSID Mode",		/* name */
+		CISCO_ELEM_BCAST_SSID_MODE,		/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BYTE,				/* type */
+		"cisco/bcast-ssid-mode",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
 
 	{ 
 		"Cisco Elem 33",			/* name */
@@ -1521,6 +1540,17 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
+	{ 
+		"Cisco Elem 72",			/* name */
+		CISCO_ELEM_72,				/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		1,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/elemi72",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
 
 	{ 
 		"Cisco Elem 15 - Channel Setting (?)",	/* name */
@@ -2194,6 +2224,21 @@ static struct cw_ElemHandler handlers70[] = {
 		cw_out_generic					/* put */
 	}
 	,
+	{
+		"CISCO Sig Payload",				/* name */
+		CISCO_ELEM_SIG_PAYLOAD,				/* Element ID */
+		CW_VENDOR_ID_CISCO, 0,				/* Vendor / Proto */
+		1, 1024,					/* min/max length */
+		CW_TYPE_BSTR16,					/* type */
+		"cisco/sig-payload",				/* Key */
+		cw_in_generic,					/* get */
+		cw_out_generic,					/* put */
+		mkkey_sig_payload,				/* mkkey */
+		NULL,
+
+	}
+	,
+
 
 	{
 		"Dot11r WLC Mac And IP (Cisco)",		/* name */
@@ -2322,8 +2367,10 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_33,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
@@ -2399,6 +2446,7 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 static struct cw_ElemDef configuration_status_response_elements[] ={
 
 
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SUPPORTED_RATES,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
@@ -2409,6 +2457,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
@@ -2459,11 +2508,14 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 };
 
 
-/*static uint16_t configuration_update_request_states[] = {CAPWAP_STATE_RUN,0};*/
 static struct cw_ElemDef configuration_update_request_elements[] ={
 
 	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
 	{0, 0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	0, 0},
+
+
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,				0, 0},	
+
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
@@ -2477,6 +2529,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_PERFORMANCE_PROFILE,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_CFP_STATUS,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_72,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_132,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, 0},	
@@ -2532,6 +2585,8 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 //	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_80211_ASSOC_LIMIT,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_TOGGLE,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_PAYLOAD,			0, 0},
+
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	

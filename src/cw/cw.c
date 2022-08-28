@@ -145,8 +145,6 @@ int cw_out_radio_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 		type = (struct cw_Type*)handler->type;
 		start = params->msgset->header_len(handler)+len;
 
-		
-
 		l = type->write(params->cfg_list, key,dst+start+1,handler->param);
 		if (l==-1)
 			continue;

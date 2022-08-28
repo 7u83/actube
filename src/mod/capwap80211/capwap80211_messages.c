@@ -44,6 +44,21 @@ static cw_ValStruct_t capwap80211_wtp_radio_cfg_stru[]={
 
 static struct cw_ElemHandler handlers[] = {
 	{
+		"IEEE 802.11 Add WLAN",				/* name */
+		CAPWAP80211_ELEM_ADD_WLAN,			/* Element ID */
+		0, 0,						/* Vendor / Proto */
+		3, 0,						/* min/max length */
+		CW_TYPE_STRUCT,					/* type */
+		"capwap80211",					/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic,				/* put */
+		NULL,
+		NULL,
+		capwap80211_antenna_stru
+
+	}
+	,
+	{
 		"IEEE 802.11 WTP Radio Information",		/* name */
 		CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,		/* Element ID */
 		0, 0,						/* Vendor / Proto */
