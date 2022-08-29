@@ -305,7 +305,10 @@ static unsigned int psk_server_cb(SSL *ssl,const char *identity, unsigned char *
 */
 
 
-
+static unsigned int timer_cb(SSL *s, unsigned int timer_us)
+{
+	return 5000000;
+}
 
 struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const SSL_METHOD * method, BIO_METHOD * bio)
 {
@@ -322,7 +325,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const
 		return NULL;
 	}
 
-	rc = SSL_CTX_get_security_level(d->ctx);
+//	rc = SSL_CTX_get_security_level(d->ctx);
 
 	SSL_CTX_set_security_level(d->ctx,0);
 
@@ -337,6 +340,8 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const
 		dtls_openssl_data_destroy(d);	
 		return 0;
 	}
+
+
 
 	/* set dtls psk if exists */
 /*	if (conn->dtls_psk)
@@ -456,6 +461,7 @@ struct dtls_openssl_data * dtls_openssl_data_create(struct cw_Conn * conn, const
 		return 0;
 	}
 
+	DTLS_set_timer_cb(d->ssl,timer_cb);
 	
 	d->bio = BIO_new(bio);
 /*	d->bio->ptr = conn;*/
