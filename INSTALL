@@ -31,5 +31,27 @@ bmake
 
 
 
+RUN 
+---
+
+Test start the ac with some debugging:
+
+cd src/ac
+export LD_LIBRARY_PATH=../../lib/<os name>/<arch>
+./actube -d std -d info
+
+Connect shell to the running AC:
+cd src/ac
+./act -s 127.0.0.1:5000
+
+Some shell cmds:
+list - list joined APs
+select <name> - select an AP
+cfg - show cfg  of selected AC
+ucfg - show current update cfg
+set <key:bal> - set value in ucfg
+send - send ucfg to AC
+clear - clear ucfg
+ 
 
 
