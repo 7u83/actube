@@ -154,7 +154,6 @@ const char *cw_cfg_get_l(cw_Cfg_t ** cfg, const char * key, const char *def)
 	int i;
 	struct cw_Cfg_entry e, *r;
 	for(i=0; cfg[i]!=NULL; i++){
-//		cw_dbg(DBG_X,"GET_L IN: %p",cfg[i]);
 		e.key = key;
 		r = mavl_get(cfg[i]->cfg, &e);
 		if (r!=NULL)
@@ -177,9 +176,27 @@ bstr16_t cw_cfg_get_bstr16(cw_Cfg_t * cfg, const char * key, const char *def)
 
 	s = cw_cfg_get(cfg,key,def);
 	if(s==NULL)
+		s=def;
+	if (s==NULL)
 		return NULL;
 
 	return bstr16_create_from_str(s);
+}
+
+bstr16_t cw_cfg_get_bstr16_l(cw_Cfg_t **cfgs, const char * key, const char *def)
+{
+	bstr16_t s;
+	int i;
+
+	for(i=0; cfgs[i]!=NULL; i++){
+		s = cw_cfg_get_bstr16(cfgs[i],key,NULL);
+		if (s!=NULL)
+			return s;
+	}
+	if (def == NULL)
+		return NULL;
+	return bstr16_create_from_str(def);
+
 }
 
 int cw_cfg_set_bstr16(cw_Cfg_t * cfg, const char * key, bstr16_t str)

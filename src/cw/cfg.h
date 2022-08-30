@@ -93,6 +93,7 @@ int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n);
 
 
 int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *t, const void * valguard, const uint8_t * data, int len);
+bstr16_t cw_cfg_get_bstr16_l(cw_Cfg_t **cfgs, const char * key, const char *def);
 
 #define cw_cfg_get_word2(cfg1,cfg2,key,def) \
 	cw_cfg_get_word(cfg1,key,cw_cfg_get_word(cfg2,key,def))
