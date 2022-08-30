@@ -584,7 +584,12 @@ void cw_cfg_iter_init(cw_Cfg_t * cfg, struct cw_Cfg_iter *cfi, const char *base)
 	search.key = base;
 
 	mavliter_init(&(cfi->it), cfg->cfg);
-	mavliter_seek(&(cfi->it), &search, 0);
+	if (base == NULL){
+		mavliter_seek_set(&(cfi->it));
+		mavliter_next(&(cfi->it));
+	}
+	else
+		mavliter_seek(&(cfi->it), &search, 0);
 	cfi->base = base;
 }
 
@@ -594,12 +599,12 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 	struct cw_Cfg_entry *e;
 	int bl, kl;
 	const char *d;
-
 	e = mavliter_get(&(cfi->it));
 	if (e == NULL){
 		return NULL;
 	}
-
+	if (cfi->base ==NULL)
+		goto eeX;
 
 	bl = strlen(cfi->base);
 	kl = strlen(e->key);
@@ -623,7 +628,7 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 
 	if (strncmp(cfi->base, e->key, bl) != 0)
 		return NULL;
-
+eeX:
 	mavliter_next(&(cfi->it));
 	return e;
 }
@@ -739,25 +744,25 @@ int cw_cfg_get_first_index(cw_Cfg_t * cfg, const char *key, int n)
 	char ikey[CW_CFG_MAX_KEY_LEN];
 	struct cw_Cfg_entry search, * result;
 	char *d;
+	int l;
 	
 	sprintf(ikey,"%s.%d",key,n);
-		
 	search.key=ikey;
 	
 	result = mavl_get_first(cfg->cfg,&search);
 	if (result == NULL){
 		return -1;
 	}
-	
-	d = strrchr(result->key,'.');
+
+	d = strrchr(ikey,'.');
 	if (d==NULL){
 		return -1;
 	}
-	
-	if (strncmp(result->key,ikey,d-result->key)!=0)
+	l = d-ikey;
+	if (strncmp(result->key,ikey,l)!=0)
 		return -1;
 	
-	return atoi(d+1);
+	return atoi(result->key+l+1);
 }
 
 int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n)

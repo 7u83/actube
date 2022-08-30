@@ -31,8 +31,12 @@ INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
 FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(KERNEL)/$(ARCH)"'
 
+all: act actube
 
+act: act.c
+	$(CC) act.c $(INCL_DIRS) $(LIBPATH) -DSYS_ARCH='"$(KERNEL)/$(ARCH)"' -o act -l:libcw.a -lasan -lcrypto -ledit
 
+	
 
 .c.o:
 	@echo "  $(CC) "$<
@@ -43,8 +47,8 @@ all: $(PRG) $(ACTPRG)
 $(PRG): $(OBJS) 
 	$(CC) $(OBJS) -o $(PRG) $(LIBPATH) $(LDFLAGS) $(LIBS) 
 
-$(ACTPRG): $(ACTOBJS)
-	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LIBS) -ledit  
+#$(ACTPRG): $(ACTOBJS)
+#	$(CC) $(ACTOBJS) -o $(ACTPRG) $(LIBPATH) $(LIBS) -ledit  
 	#$(CC) $(ACTOBJS) $(ACTPRG) $(LIBPATH) $(LDFLAGS) $(LIBS) -ledit  
 
 

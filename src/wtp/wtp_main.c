@@ -34,8 +34,9 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 	
 	bootcfg->config_file = "config.ckv";
 	bootcfg->startup_file = "startup.ckv";
+	bootcfg->local_startup_file ="startup-local.ckv";
 	
-	while ( (c = getopt (argc, argv, "s:p:d:vc:m:h")) != -1) {
+	while ( (c = getopt (argc, argv, "l:s:p:d:vc:m:h")) != -1) {
 		
 		switch (c) {
 			case 'v':
@@ -65,6 +66,9 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 			case 's':
 				bootcfg->startup_file = optarg;
 				break;
+			case 'l':
+				bootcfg->local_startup_file = optarg;
+				break;
 			case '?':
 				exit(EXIT_FAILURE);
 			default:
@@ -78,6 +82,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 }
 
 #include "cw/rand.h"
+
 
 
 struct bootcfg bootcfg;
@@ -136,6 +141,18 @@ int main (int argc, char **argv)
 		cw_log(LOG_ERR,"Can't open file '%s':%s",bootcfg.startup_file, strerror(errno));
 		goto errX;
 	}
+	cw_dbg(DBG_INFO,"Startup '%s' loaded.",bootcfg.startup_file);
+
+	if (access(bootcfg.local_startup_file,F_OK)==0){
+		rc = cw_cfg_load(bootcfg.local_startup_file,global_cfg);
+		if (rc){
+			cw_log(LOG_ERR,"Can't open file '%s':%s",bootcfg.local_startup_file, strerror(errno));
+			goto errX;
+		}
+		cw_dbg(DBG_INFO,"Local startup '%s' loaded.",bootcfg.local_startup_file);
+	}
+
+	cw_cfg_dump(global_cfg);
 
 	/* Create a temp. cfg */
 	cfg = cw_cfg_create();
@@ -162,18 +179,6 @@ int main (int argc, char **argv)
 	}
 
 	cw_cfg_destroy(cfg);
-
-/*	{
-struct cw_Cfg_iter cfi;
-struct cw_Cfg_entry *e;
-int i;
-for (i=0; (i=cw_cfg_get_first_index(global_cfg,"radio",i))!=-1; i++){
-	printf("Inedx: %d\n", i);
-}
-goto errX;
-	}
-*/
-
 
 /*	conn->mod=mod;*/
 	conn->detected = 1;

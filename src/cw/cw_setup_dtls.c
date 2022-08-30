@@ -49,6 +49,8 @@ int cw_setup_dtls(struct cw_Conn *conn, cw_Cfg_t * cfg, const char *prefix,
 	sprintf(key, "%s/%s", prefix, "ssl-cipher");
 	conn->dtls_cipher = cw_cfg_get(cfg, key, default_cipher);
 
+	cw_dbg(DBG_DTLS,"Using cipher: %s",conn->dtls_cipher);
+
 	sprintf(key, "%s/%s", prefix, "ssl-psk");
 	conn->dtls_psk = (bstr16_t)cw_cfg_get(cfg, key, NULL);
 

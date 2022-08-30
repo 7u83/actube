@@ -445,6 +445,32 @@ static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, in
 	return 0;
 }
 
+static int fill_update_cfg(struct cw_Conn * conn)
+{
+	struct cw_Cfg_iter cfi;
+	struct cw_Cfg_entry *e;
+	cw_Cfg_t * u;
+	u=cw_cfg_create();
+	if( cw_cfg_load("status_response.ckv",u)){
+		cw_log(LOG_ERR,"Cant load file");
+		stop();
+	};
+	cw_cfg_dump(conn->remote_cfg);
+        cw_cfg_iter_init(u, &cfi, NULL);
+	while ((e = cw_cfg_iter_next(&cfi, NULL))!=NULL){
+		const char * r;
+		r = cw_cfg_get(conn->remote_cfg, e->key, "[]");
+	//	cw_dbg(DBG_CFG_UPDATES,"check: %s: %s",e->key,e->val);
+		if (strcmp(r,e->val)==0)
+			continue;
+
+		cw_dbg(DBG_CFG_UPDATES,"Status reps: %s: %s -> %s",e->key,r,e->val);
+	}
+
+	return 0;
+}
+
+
 static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
@@ -454,6 +480,7 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 	
 	cw_dbg(DBG_X,"UPDATE Callback");
 	copy(params);
+	fill_update_cfg(params->conn);
 
 	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
 	sprintf(filename,"wtp-status-%s.ckv",wtpname);

@@ -36,10 +36,9 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 
 
 
-int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
-			, uint8_t * dst)
+int cw_out_generic0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst,const char *key)
 {
-
 	int start, len, l;
 	
 //	cw_dbg(DBG_X,"cw_out_generic (%s)%s",((struct cw_Type*)handler->type)->name,handler->key);
@@ -49,19 +48,21 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 //	cw_dbg(DBG_X,"Generic out!!!!!!!!!!!!!!!!!!!!!!!!!!!! ENDDUMP");
 //
 //
-	if (!cw_cfg_base_exists(params->cfg_list[0],handler->key)){
-			cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (skip)", 
-					params->elemdata->proto, 
-					params->elemdata->vendor, 
-					params->elemdata->id, 
-					handler->name, handler->key);
-				return 0;
-	}
+	if (!params->elemdata->mand){
+		if (!cw_cfg_base_exists(params->cfg_list[0],key)){
+			cw_dbg(DBG_MSG_COMPOSE,"    Add Elem: %d %d %d %s %s - (bskip)", 
+				params->elemdata->proto, 
+				params->elemdata->vendor, 
+				params->elemdata->id, 
+				handler->name, key);
+			return 0;
+		}
+	}	
 
 
 	start = params->msgset->header_len(handler);
 	len = ((const cw_Type_t*)(handler->type))->
-		write(params->cfg_list,handler->key,dst+start,handler->param);
+		write(params->cfg_list,key,dst+start,handler->param);
 //	cw_dbg(DBG_X, "Type result is %d",len);
 
 	if (len == -1) {
@@ -73,7 +74,7 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 			cw_log(LOG_ERR,
 			       "Can't put mandatory element %s %d-(%s) into %s. No value for '%s' found.",
 				vendor, handler->id, handler->name, params->msgdata->name
-			       , handler->key
+			       , key
 			    );
 		}
 		else{
@@ -90,6 +91,15 @@ int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams 
 	l = params->msgset->write_header(handler,dst,len);
 
 	return l;
+
+
+}
+
+
+int cw_out_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst)
+{
+	return cw_out_generic0(handler,params,dst,handler->key);
 }
 
 
@@ -314,3 +324,148 @@ cw_put_descriptor_subelem (uint8_t *dst, cw_Cfg_t ** cfg_list,
 	
 	return d-dst;
 }
+
+
+
+/*
+int cw_out_traverse0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst, int i, const char *current, const char * next, 
+			int * stack)
+{
+	char *sl;
+	int l;
+	char key[CW_CFG_MAX_KEY_LEN];
+	int len;
+	len = 0;
+
+printf("Next: %s\n", next);
+
+	sl = strchr(next,'/');
+	if (sl==NULL){
+		cw_Val_t * result;
+		sprintf(key,"%s/%s",current,next);
+		result = cw_ktv_base_exists(params->cfg,key);
+		if (result != NULL){
+			int offset;
+			int i,l;
+			offset = params->msgset->header_len(handler);
+			printf("Yea! We can do it: %s\n",result->key);
+			for (i=0;i<stack[0];i++){
+				printf("I=%i\n",stack[i+1]);
+			}
+			l= cw_ktv_write_struct(params->cfg,params->cfg, 
+				handler->type,key,dst+offset);
+			
+			printf("Write struct len %i\n",l);
+			
+			l=params->msgset->write_header(handler,dst,l);
+			printf("header wr len %d\n",l);
+			if (handler->patch){
+				handler->patch(dst+offset,stack);
+			}
+			
+			return l;
+		}
+		
+		return 0;
+	}
+	
+	strcpy(key,current);
+
+printf("current is %s\n", current);	
+
+	if (key[0!=0])
+		strcat(key,"/");
+	l = sl - next;
+	strncat(key,next,l);
+	
+	
+	printf("Here we are %s\n",key);
+	cw_dbg_ktv_dump(params->cfg,DBG_INFO,"start"," ", "end" );
+	i=-1;
+	while(1){
+		char basekey[CW_CFG_MAX_KEY_LEN];
+		cw_Val_t * result;
+		
+		i = cw_ktv_idx_get_next(params->cfg,key,i+1);
+		
+		if (i==-1)
+			break;
+		sprintf(basekey,"%s.%d",key,i);
+		printf("Our basekey is %s\n",basekey);
+		result = cw_ktv_base_exists(params->cfg,basekey);
+		if (result == NULL){
+			continue;
+		}
+
+		stack[0]++;
+		stack[stack[0]]=i;
+		len += cw_out_traverse0(handler,params,dst+len,-1,basekey,next+l+1, stack);
+		printf("Len is now %d\n", len);
+	}
+
+
+	return len;
+	
+	return 0;
+}
+*/
+int cw_out_traverse(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst)
+
+{
+/*	char current[CW_CFG_MAX_KEY_LEN];
+	int stack[10];
+	stack[0]=0;
+	current[0]=0;
+//	return cw_out_traverse0(handler,params,dst,-1,current,handler->key, stack);*/
+	return 0;
+}
+
+
+
+int walk0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+		, uint8_t * dst, const char *current, const char * next)
+{
+        char key[CW_CFG_MAX_KEY_LEN];
+        const char *sl;
+	int rc;
+        int len=0;
+
+        /* Is this the last key ? */
+        sl = strchr(next,'/');
+        if (sl){
+                char basekey[CW_CFG_MAX_KEY_LEN+13];
+                int i,l;
+                strcpy(key,current);
+                l = sl - next;
+                strncat(key,next,l);
+
+                for (i=0; (i=cw_cfg_get_first_index_l(params->cfg_list,key,i))!=-1; i++){
+                        sprintf(basekey,"%s.%d%c",key,i, *(sl+1) ?'/':'\0');
+                        rc = walk0(handler,params,dst,basekey,next+l+1);
+			if (rc>0)
+				len+=rc;
+                }
+                return len;
+
+        }
+
+        printf("Final %s [%s]\n",current,next);
+	return cw_out_generic0(handler,params,dst,current);
+
+        return 0;
+
+}
+
+int cw_out_generic_walk(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst)
+{
+        char current[CW_CFG_MAX_KEY_LEN];
+//        int stack[10];
+ //       stack[0]=0;
+        current[0]=0;
+
+	return walk0(handler,params,dst,current,handler->key);
+}
+

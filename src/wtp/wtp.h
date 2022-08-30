@@ -29,6 +29,7 @@ struct bootcfg{
 	const char * modpath;
 	const char * config_file;
 	const char * startup_file;
+	const char * local_startup_file;
 };
 
 extern struct bootcfg bootcfg;

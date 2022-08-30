@@ -158,6 +158,7 @@ static 	int bwrite(cw_Cfg_t ** cfgs, const char *key, uint8_t *dst, const void *
 	i=0,l=0;
 	do {
 		sprintf(skey,"%s.%d",key,i);
+//		printf("iSKEY %s\n",skey);
 		i++;
 		if (cw_cfg_get_l(cfgs,skey,NULL)==NULL){
 			break;
@@ -165,7 +166,7 @@ static 	int bwrite(cw_Cfg_t ** cfgs, const char *key, uint8_t *dst, const void *
 		l+=def->type->write(cfgs,skey,dst,def->param);
 	}while(1);
 
-//	printf("LEN: %d pl: %d\n",l,n);
+//	printf("LEN: %d (K: %s)\n",l,key);
 	fun(cfgs,key,dst,param,l);
 	return l;
 }

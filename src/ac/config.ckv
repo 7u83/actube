@@ -17,7 +17,8 @@ capwap/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
 
 cisco/ssl-keyfile:  "../../ssl/intermediate-ca/int-ca.key"
 cisco/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
-cisco/ssl-cipher: DEFAULT
+#cisco/ssl-cipher: DEFAULT
+cisco/ssl-cipher: RSA
 cisco/ssl-dhbits: 2048
 
 

@@ -558,6 +558,8 @@ int cw_put_descriptor_subelem (uint8_t *dst, cw_Cfg_t ** cfg_list,
 
 
 int cw_send_request(struct cw_Conn *conn,int msg_id);
+int cw_out_generic_walk(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
+			, uint8_t * dst);
 
 /**
  *@}

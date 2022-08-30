@@ -81,12 +81,6 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 	while (!cw_timer_timeout(timer)
 	       && conn->capwap_state == CAPWAP_STATE_DISCOVERY) {
 		int rc;
-//		conn->remote_cfg = cw_ktv_create();
-//		if (conn->remote_cfg == NULL) {
-//			cw_log_errno("Can't allocate memory for remote_cfg");
-//			break;
-//		}
-
 		rc = cw_read_from(conn, &from);
 		if (rc < 0) {
 			if (errno == EAGAIN)

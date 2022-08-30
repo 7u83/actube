@@ -122,7 +122,7 @@ struct cw_dbg_cfgstrs cw_dbg_cfgstrs[] = {
 	{"elem_err",DBG_ELEM_ERR},
 
 	{"dtls",DBG_DTLS},
-	{"dtls_dietail",DBG_DTLS_DETAIL},
+	{"dtls_detail",DBG_DTLS_DETAIL},
 	{"dtls_bio",DBG_DTLS_BIO},
 	{"dtls_bio_dmp",DBG_DTLS_BIO_DMP},
 

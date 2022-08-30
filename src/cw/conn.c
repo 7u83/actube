@@ -554,7 +554,6 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		 * Put further actions here, if needed.
 		 */
 	}
-
 	if (params.unrecognized)
 		mlist_destroy(params.unrecognized);
 	cw_cfg_destroy(params.cfg);

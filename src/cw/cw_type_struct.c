@@ -113,12 +113,13 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 		
 		if (!rc){
 			int l;
-			cw_log(LOG_ERR,"Can't put %s, no value found, filling wth zeros.",key);
+			cw_log(LOG_ERR,"Can't put %s, no value found, filling with zeros.",key);
 			l = stru[i].len;
 			if (l==-1)
 				l = 0;
 
 			memset(dst+pos,0,l);
+			wrlen=l;
 		}
 		else{
 			struct cw_Type * type;
