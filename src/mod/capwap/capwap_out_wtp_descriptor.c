@@ -37,10 +37,12 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_MAX_RADIOS);
 	val = cw_cfg_get_byte_l(params->cfg_list,key, 0);
-	d+=cw_put_byte(d,val);
-	if (val<=0){
+	if (val<0){
 		cw_dbg(DBG_WARN,"Cannot get value for %s, setting to 0", CW_SKEY_MAX_RADIOS);
 		d+=cw_put_byte(d,0);
+	}
+	else{
+		d+=cw_put_byte(d,val);
 	}
 		
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_RADIOS_IN_USE);
@@ -51,8 +53,6 @@ int capwap_out_wtp_descriptor(struct cw_ElemHandler * eh,
 /*	d+=cw_put_encryption_subelems(d,params->conn->capwap_mode);*/
 	d+=cw_put_encryption_subelems(d,0);
 
-
-/*cw_ktv_dump(params->conn->local_cfg,DBG_INFO,"*** ktv dump ***","","*** end of dump ***");*/
 
 	/* hardware version sub element */
 	sprintf(key,"%s/%s",eh->key,CW_SKEY_HARDWARE);
