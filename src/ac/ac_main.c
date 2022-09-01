@@ -225,6 +225,10 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
+//const char *ttt = cw_cfg_get(global_cfg,"cisco/ssl-cipher",NULL);
+//printf("CFG: %s\n",ttt);
+//stop();
+
 	cw_log_name = "AC-Tube";
 
 /*

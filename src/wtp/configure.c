@@ -10,7 +10,7 @@
 #include "wtp.h"
 
 
-static int config_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int config_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 	cw_dbg(DBG_X,"*** Configurations Status Response received ****");
 	cw_cfg_copy(params->cfg, params->conn->global_cfg,DBG_CFG_UPDATES,"GlbalCfg");

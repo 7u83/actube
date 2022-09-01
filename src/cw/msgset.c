@@ -405,7 +405,9 @@ struct cw_MsgData *cw_msgset_get_msgdata(struct cw_MsgSet *set, int type)
 	return NULL;
 }
 
-typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
+//typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
+//
+/*
 cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
 	cw_MsgCallbackFun fun)
 
@@ -420,5 +422,5 @@ cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
 	return old_callback;
 }
 
-
+*/
 

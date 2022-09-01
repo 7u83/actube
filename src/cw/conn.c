@@ -24,11 +24,12 @@
 
 #include "dtls.h"
 
-
+#define MAX_MSG_CBS 5
 
 struct msg_callback{
-	int type; /**< message type */
-	cw_MsgCallbackFun fun;
+	int type; 			/**< message type */
+	struct cw_MsgCb_data data[MAX_MSG_CBS];
+	int count;
 };
 
 int msg_callback_cmp(const void *v1,const void *v2)
@@ -62,19 +63,55 @@ void cw_conn_init(struct cw_Conn * conn)
 	conn->remote_cfg = cw_cfg_create();
 	conn->local_cfg = cw_cfg_create();
 	conn->cfg_list[0]=NULL;
+
+	conn->remote_addr[0]=0;
 }
 
-int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun)
+
+/**
+ * Register a message callback function. 
+ * @param conn the connection the registered cb functions belongs to
+ * @param type The associated msg type. Whenever a message of this type is 
+ *             received, the callback function will be called
+ * @param fun  A pinter to the callback function          
+ *
+ */
+int cw_conn_register_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun)
 {
-	struct msg_callback cb;
+	struct msg_callback cb, *result;
 	int exists;
 
 	cb.type = type;
-	cb.fun = fun;
-	mavl_insert(conn->msg_callbacks,&cb,&exists);
+	cb.data[0].fun = fun;
+	cb.data[0].parent = NULL;
+	cb.count = 0;
+
+
+	result = mavl_insert(conn->msg_callbacks,&cb,&exists);
+
+	cw_dbg(DBG_X, "Registering msg callback: %d %p",type,result);
+
+	if (result==NULL)
+		return 0;
+
+	if (exists){
+		if (result->count>=MAX_MSG_CBS){
+			cw_log(LOG_ERROR,"Too many msg callback registrations for msg id %d",type);
+			return 0;
+		}
+		result->count++;
+		result->data[result->count].fun=fun;
+		result->data[result->count].parent=&(result->data[result->count-1]);
+		cw_dbg(DBG_X,"The result exists: %p %p %d %p",result,&cb,result->count,
+				result->data[result->count].parent
+				);
+		
+	}
+
 	return 1;
 }
 
+/*
 cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type)
 {
 	struct msg_callback cb,*result;
@@ -83,7 +120,21 @@ cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type)
 	if (result == NULL)
 		return NULL;
 	return result->fun;
+}*/
+
+
+int cw_conn_run_msg_cbs(struct cw_Conn * conn, int type, struct cw_ElemHandlerParams *params)
+{
+	struct msg_callback cb,*result;
+	cb.type=type;
+	result = mavl_get(conn->msg_callbacks,&cb);
+	if (result == NULL)
+		return -1;
+	return result->data[result->count].fun(params,&(result->data[result->count]));
+
 }
+
+
 
 /**
  * Create a conn object
@@ -106,8 +157,10 @@ struct cw_Conn * cw_conn_create(int sock, struct sockaddr * addr, int qsize)
 
 	conn->sock=sock;
 
-	if (addr)
+	if (addr){
 		sock_copyaddr(&conn->addr,addr);
+		sock_addr2str_p(addr, conn->remote_addr);	
+	}
 
 
 	conn->fragman = fragman_create();
@@ -516,12 +569,12 @@ static int process_elements(struct cw_Conn *conn, uint8_t * rawmsg, int len,
 		message->postprocess(&params,elems_ptr, elems_len);
 	}
 
-	cw_MsgCallbackFun cb_fun = cw_conn_get_msg_cb(conn,message->type);
-	if (cb_fun != NULL){
-		result_code = cb_fun(&params,elems_ptr, elems_len);
-	}
-	else{
+	result_code = cw_conn_run_msg_cbs(conn,message->type,&params);
+
+//	cw_MsgCallbackFun cb_fun = cw_conn_get_msg_cb(conn,message->type);
+	if (result_code==-1){
 		cw_cfg_clear(conn->update_cfg);
+		result_code=0;
 	}
 
 //	conn->remote_cfg=params.cfg;

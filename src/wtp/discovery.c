@@ -22,7 +22,7 @@
 
 
 
-static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int discovery_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 	struct cw_DiscoveryResults *results = (struct cw_DiscoveryResults *)params->conn->data;
 //	cw_Cfg_t * cfg = cw_cfg_create();

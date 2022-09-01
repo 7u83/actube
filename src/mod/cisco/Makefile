@@ -3,8 +3,7 @@ include ../../Defs.mak
 
 
 SOURCES=\
-	mod_cisco_ac.c \
-	cisco_actions.c \
+	mod_cisco.c \
 	cisco_in_wtp_descriptor.c \
 	cisco_out_wtp_descriptor.c \
 	cisco_in_ac_descriptor.c\

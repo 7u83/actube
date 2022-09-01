@@ -2,7 +2,7 @@ include ../../Defs.mak
 
 
 SOURCES=\
-	mod_capwap_ac.c \
+	mod_capwap.c \
 	capwap_actions.c \
 	capwap_in_wtp_board_data.c \
 	capwap_in_ac_descriptor.c \

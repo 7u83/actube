@@ -415,7 +415,7 @@ static void copy(struct cw_ElemHandlerParams * params)
         cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"GlobalCfg");
 }
 
-static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int discovery_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data * d)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
 	char filename[200];
@@ -431,10 +431,16 @@ static int discovery_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_pt
 	return 0;
 }
 
-static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+/*
+static int join_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
 	char filename[200];
+	int rc;
+
+	rc = 0;
+	if (d->parent)
+		rc =d->parent->fun(params,d->parent);
 
 	cw_dbg(DBG_X,"JOIN Callback");
 	copy(params);
@@ -442,9 +448,11 @@ static int join_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, in
 	sprintf(filename,"wtp-join-%s.ckv",wtpname);
 	cw_cfg_save(filename,params->cfg,NULL);
 	cw_cfg_clear(params->cfg);
-	return 0;
+	return rc;
 }
+*/
 
+/*
 static int fill_update_cfg(struct cw_Conn * conn)
 {
 	struct cw_Cfg_iter cfi;
@@ -469,18 +477,21 @@ static int fill_update_cfg(struct cw_Conn * conn)
 
 	return 0;
 }
+*/
 
-
-static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int update_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
 	char filename[200];
 
+	int rc = 0;
+	if (d->parent)
+		rc =d->parent->fun(params,d->parent);
+
 
 	
 	cw_dbg(DBG_X,"UPDATE Callback");
-	copy(params);
-	fill_update_cfg(params->conn);
+	//fill_update_cfg(params->conn);
 
 	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
 	sprintf(filename,"wtp-status-%s.ckv",wtpname);
@@ -489,7 +500,7 @@ static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, 
 	return 0;
 }
 
-static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int event_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
 	struct wtpman * wtpman = (struct wtpman *)conn->data;
@@ -507,7 +518,7 @@ static int event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, i
 	return 0;
 }
 
-static int change_state_event_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int change_state_event_cb(struct cw_ElemHandlerParams * params,struct cw_MsgCb_data * d)
 {
 	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
 	struct wtpman * wtpman = (struct wtpman *)conn->data;
@@ -579,6 +590,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 		wtpman_destroy(wtpman);
 		return NULL;
 	}
+
+
 	wtpman->conn->global_cfg = global_cfg;
 	wtpman->conn->local_cfg = cw_cfg_create();
 	wtpman->wtp_cfg = cw_cfg_create();
@@ -597,27 +610,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 	wtpman->conn->data_sock = socklist[socklistindex].data_sockfd;
 	sock_copyaddr(&wtpman->conn->data_addr,
 		      (struct sockaddr *) &wtpman->conn->addr);
-
-	cw_conn_set_msg_cb(wtpman->conn,
-			CAPWAP_MSG_DISCOVERY_REQUEST,
-			discovery_cb);
-
-	cw_conn_set_msg_cb(wtpman->conn,
-			CAPWAP_MSG_JOIN_REQUEST,
-			join_cb);
-
-	cw_conn_set_msg_cb(wtpman->conn,
-			CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-			update_cb);
-
-	cw_conn_set_msg_cb(wtpman->conn,
-			CAPWAP_MSG_WTP_EVENT_REQUEST,
-			event_cb);
-
-	cw_conn_set_msg_cb(wtpman->conn,
-			CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
-			change_state_event_cb);
-
 
 
 
@@ -658,8 +650,32 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 //        	                wtpman->conn->setup_complete(wtpman->conn);
 
 
+			cw_conn_register_msg_cb(wtpman->conn,
+				CAPWAP_MSG_DISCOVERY_REQUEST,
+				discovery_cb);
+
+/*		cw_conn_set_msg_cb(wtpman->conn,
+				CAPWAP_MSG_JOIN_REQUEST,
+				join_cb);*/
+
+/*		cw_conn_register_msg_cb(wtpman->conn,
+				CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
+				update_cb);*/
+
+		cw_conn_register_msg_cb(wtpman->conn,
+				CAPWAP_MSG_WTP_EVENT_REQUEST,
+				event_cb);
+
+/*		cw_conn_register_msg_cb(wtpman->conn,
+				CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST,
+				change_state_event_cb);*/
+
+
+
 		}
 	}
+
+
 
 	cw_dbg(DBG_X,"WTPMAN_CREATED: %p",wtpman);
 

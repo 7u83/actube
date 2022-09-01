@@ -465,9 +465,9 @@ enum cw_reboot_failure_types {
 /** 
  * The Missing AC List Result Code is sent by the 
  * WTP to the AC when the AC List is missing */
-#define CW_RESULT_MISSING_AC_LIST				1
-#define CAPWAP_RESULT_SUCCESS_NAT				2
-#define CW_RESULT_JOIN_FAILURE					3
+#define CW_RESULT_MISSING_AC_LIST					1
+#define CAPWAP_RESULT_SUCCESS_NAT					2
+#define CAPWAP_RESULT_JOIN_FAILURE					3
 #define CW_RESULT_JOIN_RESOURCE_DEPLETION			4
 #define CW_RESULT_JOIN_UNKNOWN_SOURCE				5
 #define CW_RESULT_JOIN_INCORRECT_DATA				6
@@ -491,7 +491,7 @@ enum cw_reboot_failure_types {
       13 Configuration Failure (Unable to Apply Requested Configuration
          - Service Not Provided)
 */
-#define CAPWAP_RESULT_CONFIGURATION_FAILURE_SERVICE_NOT PROVIDED	13
+#define CAPWAP_RESULT_CONFIGURATION_FAILURE_SERVICE_NOT_PROVIDED	13
 /** 
  * Image Data Error (Invalid Checksum)
  */

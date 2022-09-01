@@ -146,9 +146,8 @@ struct cw_ElemHandler * cw_msgset_get_elemhandler(struct cw_MsgSet * set,
 #define CW_MSGSET_POSTPROCESS	1
 #define CW_MSGSET_PREPROCESS	2
 
-typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
-cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
-	cw_MsgCallbackFun fun);
+//cw_MsgCallbackFun cw_msgset_set_postprocess(struct cw_MsgSet * set,int msg_id,
+//	cw_MsgCallbackFun fun);
 
 
 #endif

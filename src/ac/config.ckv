@@ -90,3 +90,38 @@ capwap/timers/max-discovery-interval: 10
 capwap/decryption-error-report-period: 120
 capwap/idle-timeout: 300
 
+
+
+
+radio-cfg-a/capwap80211/wtp-radio-config/beacon-period: 100
+radio-cfg-a/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
+radio-cfg-a/capwap80211/wtp-radio-config/cfg-period: 4
+radio-cfg-a/capwap80211/wtp-radio-config/beacon-period: 100
+radio-cfg-a/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
+radio-cfg-a/capwap80211/wtp-radio-config/cfg-period: 4
+radio-cfg-a/capwap80211/wtp-radio-config/cfg-type: 1
+radio-cfg-a/capwap80211/wtp-radio-config/cfp-maximum-duration: 60
+radio-cfg-a/capwap80211/wtp-radio-config/country-str1: "DE "
+radio-cfg-a/capwap80211/wtp-radio-config/country-str2: "DE "
+radio-cfg-a/capwap80211/wtp-radio-config/occupancy-limit: 100
+radio-cfg-a/capwap80211/wtp-radio-config/reg: 167772416
+
+radio-cfg-b/capwap80211/wtp-radio-config/beacon-period: 100
+radio-cfg-b/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
+radio-cfg-b/capwap80211/wtp-radio-config/cfg-period: 4
+radio-cfg-b/capwap80211/wtp-radio-config/beacon-period: 100
+radio-cfg-b/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
+radio-cfg-b/capwap80211/wtp-radio-config/cfg-period: 4
+radio-cfg-b/capwap80211/wtp-radio-config/cfg-type: 1
+radio-cfg-b/capwap80211/wtp-radio-config/cfp-maximum-duration: 60
+radio-cfg-b/capwap80211/wtp-radio-config/country-str1: "DE "
+radio-cfg-b/capwap80211/wtp-radio-config/country-str2: "DE "
+radio-cfg-b/capwap80211/wtp-radio-config/occupancy-limit: 100
+radio-cfg-b/capwap80211/wtp-radio-config/reg: 167772416
+
+
+
+
+
+
+

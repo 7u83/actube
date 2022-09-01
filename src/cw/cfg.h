@@ -89,6 +89,7 @@ void cw_cfg_del(cw_Cfg_t * cfg, const char *key);
 int cw_cfg_get_first_index(cw_Cfg_t * cfg, const char *key, int n);
 int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n);
 
+uint16_t cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def);
 
 
 

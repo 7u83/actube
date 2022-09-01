@@ -56,7 +56,7 @@ struct cw_Mod {
 		int elems_len, struct sockaddr * from, int mode);
 
 
-	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet * set, int mode);
+	struct cw_MsgSet * (*register_messages)(struct cw_MsgSet * set, int mode );
 	
 	/** 
 	 * Handle returned by dlopen, if this module was loaded 

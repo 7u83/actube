@@ -637,11 +637,15 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 		}
 
 	}
-	d = strchr(e->key, '.');
+
+	if (e->key[bl]!='.' && e->key[bl]!='/')
+		return NULL;
+
+/*	d = strchr(e->key, '.');
 	if (d == NULL)
 		return NULL;
 	if (d - e->key != bl)
-		return NULL;
+		return NULL;*/
 
 	if (strncmp(cfi->base, e->key, bl) != 0)
 		return NULL;
@@ -684,6 +688,14 @@ uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def)
 	return v.val.byte;
 }
 
+uint16_t cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def)
+{
+	const char *s = cw_cfg_get(cfg,key,NULL);
+	if (s==NULL)
+		return def;
+	return atoi(s);
+}
+
 
 
 uint16_t cw_cfg_get_word(cw_Cfg_t * cfg, const char *key, uint16_t def)
@@ -705,7 +717,6 @@ uint16_t cw_cfg_get_word_l(cw_Cfg_t ** cfg, const char *key, uint16_t def)
 	CW_TYPE_WORD->from_str(&v,s);
 	return v.val.word;
 }
-
 
 
 

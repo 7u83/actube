@@ -58,6 +58,8 @@ struct cw_action_in;
 struct cw_Conn {
 	int sock;
 	struct sockaddr_storage addr;
+	char remote_addr[64];	/* Contains a printfable string, of the connections
+				   peer address */
 
 	struct connlist * connlist;
 
@@ -71,19 +73,19 @@ struct cw_Conn {
 	int recv_timeout;
 
 
-	cw_Cfg_t * global_cfg;	/**< This should set the global cfg of the program
+	cw_Cfg_t * global_cfg;	/**< This should set to the global cfg of the program
 				     which is using this conn object.
 				     Teh global_cfg has to be treated read-only. */
 
 	cw_Cfg_t * local_cfg;	/**< local_cfg contains overrides for global_cfg 
-				     wich are related to this conn object. */
+				     wich are related to this conniection. */
 	
 	cw_Cfg_t * remote_cfg;	/**< contains the configuration we now from the 
 				     device this conn object ist connected to.
 				     Typically this is what we have got from discovery
 				     response or join response in WTP mode. 
-				     And in AC mode this contains date receive from 
-				     configuration status request.  */
+				     And in AC mode this contains datia received by 
+				     configuration status and join request.  */
 
 	cw_Cfg_t * update_cfg;
 
@@ -311,7 +313,18 @@ int conn_send_msg(struct cw_Conn *conn, uint8_t * rawmsg);
 void conn_clear_upd(struct cw_Conn*conn, int merge);
 
 
-int cw_conn_set_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun);
+
+struct cw_MsgCb_data;
+//typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len, 
+//		struct cw_MsgCb_data *d);
+typedef int (*cw_MsgCallbackFun)(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d);
+
+struct cw_MsgCb_data{
+	cw_MsgCallbackFun fun;
+	struct cw_MsgCb_data * parent;
+};
+
+int cw_conn_register_msg_cb(struct cw_Conn *conn, int type, cw_MsgCallbackFun fun);
 cw_MsgCallbackFun cw_conn_get_msg_cb(struct cw_Conn *conn, int type);
 
 int cw_decode_element(struct cw_ElemHandlerParams *params, int proto,

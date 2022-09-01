@@ -133,7 +133,7 @@ static struct cw_StrListElem prefix[] = {
 	{DBG_RFC, 		"  RFC - "},
 	{DBG_DTLS, 		"DTLS - "},
 	{DBG_DTLS_DETAIL,	 "DTLS - "},
-	{DBG_WARN,	 	"  Warning - "},
+	{DBG_WARN,	 	"Warning - "},
 	{DBG_MOD, 		"Mod - "},
 	{DBG_MOD_DETAIL,	"Mod - "},
 	{DBG_STATE, 		"STATEMACHINE - "},

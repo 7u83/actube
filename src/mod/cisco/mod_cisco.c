@@ -1,22 +1,10 @@
-/*
-    This file is part of actube.
 
-    actube is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    actube is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-
-
+#include "cw/cw.h"
+#include "cw/mod.h"
+#include "cw/log.h"
+#include "cw/dbg.h"
+#include "cw/dtls.h"
+#include "cw/cfg.h"
 #include "cw/capwap.h"
 #include "cw/capwap80211.h"
 #include "cw/msgset.h"
@@ -30,9 +18,31 @@
 #include "cw/dbg.h"
 #include "cw/format.h"
 
+
+/*#include "mod_cisco.h"*/
+/*#include "../modload.h"*/
+
+#include "cw/vendors.h"
+
+#include "mod_cisco.h"
+#include "capwap_cisco.h"
+
+/*
+extern int cisco_register_actions80211_ac(struct cw_actiondef *def);
+extern int cisco_register_actions_ac(struct cw_actiondef *def);
+*/
+
+/*mbag_t cisco_config = NULL;*/
+
+static struct cw_Mod * capwap_mod = NULL;
+static struct cw_Mod * capwap80211_mod = NULL; 
+
+
+
+
 static int postprocess_discovery();
 static int preprocess_join_request();
-static int postprocess_join_request();
+//static int postprocess_join_request();
 
 int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst);
@@ -1010,7 +1020,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_TYPE_DWORD,					/* type */
 		"capwap80211/wtp-radio-information",		/* Key */
 		cw_in_radio_generic,				/* get */
-		cisco_out_radio_info				/* put */ 
+		cw_out_radio_generic				/* put */ 
 	}
 	,
 	{ 
@@ -2681,15 +2691,15 @@ static struct cw_ElemDef wtp_event_response_elements[] ={
 
 
 static struct cw_ElemDef change_state_event_request_elements[] ={
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,	1, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,	0, CW_IGNORE},
 	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			1, CW_IGNORE},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	1, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_OPER_STATE_DETAIL_CAUSE,	0, CW_IGNORE},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_105,	0, 0},	
 
-	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	1, 0},
+	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,	0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RADIO_MODULE_INFO,	0, 0},
 
 
@@ -2759,7 +2769,8 @@ static struct cw_MsgDef messages70[] = {
 		NULL,				/* states, taken from mod_capwap*/
 		join_request_elements,
 		preprocess_join_request,	/* preprocess fun */
-		postprocess_join_request	/* postprocess */
+		NULL, 
+		//ostprocess_join_request	/* postprocess * /
 	},
 	{
 		NULL,				/* name */
@@ -2970,8 +2981,6 @@ static cw_StateMachineState_t statemachine_states[]={
 };
 
 
-//static int (*postprocess_join_request_parent)(struct cw_Conn * conn);
-static int (*postprocess_join_request_parent)(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 
 struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 
@@ -2982,7 +2991,7 @@ struct cw_MsgSet * cisco_register_msg_set(struct cw_MsgSet * set, int mode){
 		
 	md = cw_msgset_get_msgdata(set,CAPWAP_MSG_JOIN_REQUEST);
 	if (md != NULL){
-		postprocess_join_request_parent = md->postprocess;
+//		postprocess_join_request_parent = md->postprocess;
 	}
 	
         cw_msgset_add(set,messages70, handlers70);
@@ -3036,6 +3045,7 @@ static int postprocess_discovery(struct cw_ElemHandlerParams * params, uint8_t *
 	return 1;
 }
 
+/*
 static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
 {
 	if (postprocess_join_request_parent!=NULL){
@@ -3044,7 +3054,7 @@ static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_
 	}
 	postprocess_discovery(params,elems_ptr,elems_len);
 	return 1;
-}
+}*/
 
 static int preprocess_join_request(struct cw_Conn *conn)
 {
@@ -3072,3 +3082,390 @@ static int preprocess_join_request(struct cw_Conn *conn)
 	}
 	return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static int write_header(struct cw_ElemHandler * handler, uint8_t * dst, int len)
+{
+	if (handler->proto == 0){
+		if (handler->vendor)
+			return len + cw_put_elem_vendor_hdr(dst, handler->vendor, handler->id, len);
+
+		return  len + cw_put_elem_hdr(dst, handler->id, len);
+	}
+	/* put the lwap elem header */
+	lw_set_dword(dst + 10, handler->vendor);
+	lw_set_word(dst + 14, handler->id);
+	return len + 6 + cw_put_elem_vendor_hdr(dst, handler->vendor, 
+		CISCO_ELEM_SPAM_VENDOR_SPECIFIC, len+6);	
+	
+}
+
+static int header_len(struct cw_ElemHandler * handler)
+{
+	if (handler->proto==0) 
+		return handler->vendor ? 10 : 4;
+	
+	return 16;
+}
+
+
+static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
+{
+	cw_dbg(DBG_INFO,"CISCO: Register messages");
+	switch (mode) {
+		case CW_MOD_MODE_CAPWAP:
+		{
+			capwap_mod->register_messages(set, CW_MOD_MODE_CAPWAP);
+			
+			capwap80211_mod->register_messages(set, CW_MOD_MODE_BINDINGS);
+			cisco_register_msg_set(set,CW_MOD_MODE_CAPWAP);
+
+			set->write_header = write_header;
+		      	set->header_len = header_len;	
+			break;
+		}
+		case CW_MOD_MODE_BINDINGS:
+		{
+			/* We do not register bindings, because all bindings are 
+			 * part of mode CAPWAP here */
+			break;
+		}
+	}
+
+	cw_dbg(DBG_INFO,"CISCO: Done register messages");
+	return 0;
+}
+
+/*
+static void errfunc(cfg_t *cfg, const char *fmt, va_list ap){
+	
+	if (cfg && cfg->filename && cfg->line)
+		cw_log(LOG_ERR, "MOD Cisco cfg file in %s:%d: ", 
+			cfg->filename, cfg->line);
+	else if (cfg && cfg->filename)
+		cw_log(LOG_ERR, "MOD Cisco cfg file in %s:", cfg->filename);
+}
+*/
+
+static int init(struct cw_Mod *mod, cw_Cfg_t * global_cfg, int role)
+{
+/*	uint8_t * str;*/
+//	static char * hardware_version; /*strdup(".x01000001");* /
+//	static char * software_version; /* = NULL; * /
+/*	cfg_t *cfg;*/
+	
+	int rc = 1;
+/*	cfg_opt_t opts[] = {
+		CFG_SIMPLE_STR("hardware_version", &hardware_version),
+		CFG_SIMPLE_STR("software_version",&software_version),
+		CFG_END()
+	};
+*/
+	cw_dbg(DBG_INFO, "CISCO: Initialiazing mod_cisco ...");
+	cw_dbg(DBG_MOD, "CISCO: Loading base module: capwap");
+	
+	capwap_mod = cw_mod_load("capwap",global_cfg,role);
+	if (capwap_mod == NULL){
+		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap");
+		return 0;
+	}
+
+	cw_dbg(DBG_MOD, "CISCO: Loading base module: capwap80211");
+	capwap80211_mod = cw_mod_load("capwap80211", global_cfg,role);
+	if (capwap_mod == NULL){
+		cw_log(LOG_ERR, "CISCO: failed to load base module 'capwap80211");
+		return 0;
+	}
+
+	cw_dbg(DBG_MOD, "CISCO: All base modules are sucessfully loaded.");
+
+	/*cisco_config = mbag_create();*/
+
+
+/*
+	cfg = cfg_init(opts, CFGF_NONE);
+	
+	cfg_set_error_function(cfg, errfunc);
+	
+	char *filename = "cisco.conf";
+	FILE * f = fopen(filename,"r");
+	if (f){
+		fclose(f);
+		if (cfg_parse(cfg, filename)){
+			rc = 0;
+			goto errX;
+		}
+	}
+*/
+
+
+/*	
+	str = bstr_create_from_cfgstr(hardware_version);
+	mbag_set_bstrv(cisco_config, CW_ITEM_AC_HARDWARE_VERSION, 
+		CW_VENDOR_ID_CISCO, 
+		bstr_data(str),bstr_len(str)
+		);
+	free(str);
+
+	if (software_version){
+		str = bstr_create_from_cfgstr(software_version);
+		mbag_set_bstrv(cisco_config, CW_ITEM_AC_SOFTWARE_VERSION, 
+			CW_VENDOR_ID_CISCO, 
+			bstr_data(str),bstr_len(str)
+			);
+		free(str);
+	}
+*/
+/*errX:*/
+/*	if (hardware_version)
+		free (hardware_version);
+	if (software_version)
+		free(software_version);*/
+	return rc;
+}
+
+static int detect(struct cw_Conn *conn, const uint8_t * rawmsg, int rawlen, int elems_len,
+		  struct sockaddr *from, int mode)
+{
+
+	int offset = cw_get_hdr_msg_offset(rawmsg);
+	const uint8_t *msg_ptr = rawmsg + offset;
+
+	const uint8_t *elems_ptr = cw_get_msg_elems_ptr(msg_ptr);
+	const uint8_t *elem;
+
+
+	/* To detect a Cisco AP we look for any vendor 
+	 * specific payload Cisco identifier */
+	cw_foreach_elem(elem, elems_ptr, elems_len) {
+		int id = cw_get_elem_id(elem);
+		if (id == CAPWAP_ELEM_VENDOR_SPECIFIC_PAYLOAD) {
+			uint32_t vendor_id = cw_get_dword(cw_get_elem_data(elem));
+			if (vendor_id == CW_VENDOR_ID_CISCO) {
+/*				//              conn->actions = &actions;*/
+				if (mode == CW_MOD_MODE_CAPWAP) {
+					cw_dbg(DBG_MOD, "CISCO capwap detected: yes");
+				} else {
+					cw_dbg(DBG_MOD, "CISCO bindings detected: yes");
+				}
+
+				return 1;
+
+			}
+
+		}
+
+	}
+
+	if (mode == CW_MOD_MODE_CAPWAP) {
+		cw_dbg(DBG_MOD, "CISCO capwap detected: no");
+	} else {
+		cw_dbg(DBG_MOD, "CISCO bindings detected: no");
+	}
+
+	return 0;
+}
+
+
+/*
+ * Callback function, when in AC mode a Join Reques has been received
+ */
+static int join_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_data *d)
+{
+	int i,ri;
+	char key [CW_CFG_MAX_KEY_LEN];
+	cw_dbg(DBG_X,"Join Request from %s",params->conn->remote_addr);
+
+	/* Put all data fomr Join Request into remote_cfg. */
+	cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"Remote CFG");
+
+	/* Find out our radio types from AC's global_cfg*/
+	ri=0;
+	for (i=1; i<16; i=i<<1){
+		char ri_str[3];
+		cw_format_radio_information(ri_str,i);
+		sprintf(key,"radio-%s",ri_str);
+		if (cw_cfg_base_exists(params->conn->global_cfg,key))
+			ri|=i;
+	}
+
+	cw_dbg(DBG_X,"My Radio Information: %d",ri);
+	/* Send our radio information as "radio id 0" to the WTP */
+	cw_cfg_set_int(params->conn->update_cfg,"radio.0/capwap80211/wtp-radio-information",ri);
+
+
+/*	for (i=0; (i=cw_cfg_get_first_index(params->cfg,"radio",i))!=-1; i++){
+		int ri;
+		char ri_str[6];
+		sprintf(key,"radio.%d/capwap80211/wtp-radio-information",i);
+		ri = cw_cfg_get_int(params->cfg,key,-1);
+		if (ri==-1)
+			continue;
+
+		cw_dbg(DBG_X,"Radio %d %d: %s",i,ri,cw_format_radio_information(ri_str,ri));
+
+
+	}*/
+
+	return 0;
+}
+
+
+
+static int copy_diff_cfg(cw_Cfg_t * new, cw_Cfg_t *old , cw_Cfg_t *dst)
+{
+        struct cw_Cfg_iter cfi;
+        struct cw_Cfg_entry *e;
+
+	cw_cfg_dump(new);
+
+        cw_cfg_iter_init(new, &cfi, NULL);
+        while ((e = cw_cfg_iter_next(&cfi, NULL))!=NULL){
+                const char * r;
+                r = cw_cfg_get(old, e->key, "[]");
+//		cw_dbg(DBG_CFG_UPDATES,"check: %s: %s",e->key,e->val);
+                if (strcmp(r,e->val)==0)
+                        continue;
+
+                cw_dbg(DBG_CFG_UPDATES,"Status reps: %s: %s -> %s",e->key,r,e->val);
+
+        }
+        return 0;
+}
+
+
+
+void cw_cfg_copy_sub(cw_Cfg_t *src,const char *src_prefix, cw_Cfg_t *dst, const char *dst_prefix)
+{
+        struct cw_Cfg_entry *e;
+        struct cw_Cfg_iter cfi;
+	int i;
+	char dkey[CW_CFG_MAX_KEY_LEN];
+
+
+        cw_cfg_iter_init(src, &cfi, src_prefix);
+        for (i=0; (e = cw_cfg_iter_next(&cfi, NULL)) != NULL; i++){
+		const char *key;
+		key=e->key+strlen(src_prefix);
+		if (*key=='/')
+			key++;
+		sprintf(dkey,"%s%s",dst_prefix,key);
+		cw_cfg_set(dst,dkey,e->val);
+	}
+}
+
+/* 
+ * Callback for WTP Configuarion Status Request 
+ */
+static int status_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_data *d)
+{
+	cw_Cfg_t * tmp_cfg;
+	int i;
+
+	tmp_cfg = cw_cfg_create();
+	if (tmp_cfg==NULL){
+		cw_log(LOG_ERROR, "Can't allocat memory for tmp_cfg");
+		return CAPWAP_RESULT_CONFIGURATION_FAILURE_SERVICE_NOT_PROVIDED;
+	}
+
+	/* first merge all we have got from WTP into remote_cfg */
+	cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"Remote CFG");
+
+	/* Now merge for each radio the radio specific cfg*/
+	for (i=0; (i=cw_cfg_get_first_index(params->conn->remote_cfg,"radio",i))!=-1; i++){
+		char dst[64],src[64];
+		char key[CW_CFG_MAX_KEY_LEN];
+		int ri;
+		char ri_str[6];
+
+		/* Merge default radio information for current radio */
+		sprintf(dst,"radio.%d/",i);
+		cw_cfg_copy_sub(params->conn->global_cfg,"radio-cfg-default",tmp_cfg,dst);
+
+
+		/* Get capwap radio radio information */
+		sprintf(key,"radio.%d/capwap80211/wtp-radio-information",i);
+		ri = cw_cfg_get_int(params->cfg,key,-1);
+		if (ri==-1)
+			continue;
+
+		/* Merge cfg for each radio type this AP supports */
+		ri=0;
+		for (ri=1; ri<16; ri=ri<<1){
+			cw_format_radio_information(ri_str,ri);
+			sprintf(src,"radio-%s",ri_str);
+			if (cw_cfg_base_exists(params->conn->global_cfg,key))
+				ri|=i;
+		}
+
+
+		sprintf(src,"radio-cfg-%s",ri_str);
+		cw_cfg_copy_sub(params->conn->global_cfg,src,tmp_cfg,dst);
+
+	}
+
+	copy_diff_cfg(tmp_cfg,params->conn->remote_cfg, params->conn->update_cfg);
+	cw_cfg_destroy(tmp_cfg);
+
+	return 0;
+}
+
+static int change_state_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_data *d)
+{
+	cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"EventUpdate");
+	return 0;
+}
+
+
+static int setup_cfg(struct cw_Conn  * conn)
+{
+	int security;
+	
+	security = cw_setup_dtls(conn,conn->global_cfg,"cisco",CAPWAP_CIPHER);
+
+	if (conn->role == CW_ROLE_AC){
+		cw_cfg_set_int(conn->local_cfg,"capwap/ac-descriptor/security",security);
+
+		cw_conn_register_msg_cb(conn, CAPWAP_MSG_JOIN_REQUEST, join_cb_ac);
+		cw_conn_register_msg_cb(conn, CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST, status_cb_ac);
+		cw_conn_register_msg_cb(conn, CAPWAP_MSG_CHANGE_STATE_EVENT_REQUEST, change_state_cb_ac);
+
+	}
+	
+
+	return 0;
+}
+
+
+struct cw_Mod mod_cisco = {
+	"cisco",			/* name */
+	init,				/* init */
+	detect,				/* detect */
+	register_messages,		/* register_messages */
+	NULL,				/* dll_handle */
+	NULL,				/* data */
+	setup_cfg			/* setup_cfg */
+};
+
+
+
+
+
+/*
+struct cw_Mod *mod_cisco()
+{
+	return &cisco_data;
+}
+*/

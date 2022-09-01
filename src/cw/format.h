@@ -112,6 +112,9 @@ int cw_format_pkt_hdr(char *dst, int incomming, uint8_t * packet, int len,
 		      struct sockaddr *from);
 int cw_format_version(char *s, const uint8_t * version, int len);
 
+char * cw_format_radio_information(char * dst, int ri);
+
+
 /**@}*/
 
 #endif

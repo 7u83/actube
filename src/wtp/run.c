@@ -30,7 +30,7 @@ int update =1;
 
 
 
-static int update_cb(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len)
+static int update_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
 //	cw_dbg(DBG_X," **** Configuration Update Request Received ***");
 //	cw_cfg_dump(params->conn->global_cfg);

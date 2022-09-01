@@ -27,7 +27,6 @@
 
 #include "mod_capwap.h"
 
-#include "cw/mavltypes.h"
 
 static int postprocess_join_request(struct cw_ElemHandlerParams * params, uint8_t * elems_ptr, int elems_len);
 

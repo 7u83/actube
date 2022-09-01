@@ -26,7 +26,7 @@ cw_dbg(DBG_X,"NUM RADIOS: %d",radios);
 }
 
 
-
+/*
 int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst)
 {
@@ -39,6 +39,6 @@ int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 	return cw_out_radio_generic(handler,params,dst);	
 }
 
-
+*/
 
 

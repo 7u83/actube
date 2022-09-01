@@ -27,6 +27,8 @@
 
 #include "cw.h"
 
+#include "capwap80211.h"
+
 /**
  * Format bytes as hex string.
  * @param dst Destination buffer
@@ -87,4 +89,18 @@ int format_hdr_flags(char *dst, uint8_t * th)
 
 }
 
+char * cw_format_radio_information(char * dst, int ri)
+{
+	char *d = dst;	
+	if (ri & CW_80211_RADIO_TYPE_A)
+		*d++='a';
+	if (ri & CW_80211_RADIO_TYPE_B)
+		*d++='b';
+	if (ri & CW_80211_RADIO_TYPE_G)
+		*d++='g';
+	if (ri & CW_80211_RADIO_TYPE_N)
+		*d++='n';
 
+	*d=0;
+	return dst;
+}
