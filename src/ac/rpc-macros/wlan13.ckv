@@ -1,0 +1,18 @@
+radio.0/wlan.13/capwap80211/capability: 1057
+radio.0/wlan.13/capwap80211/qos: 0
+radio.0/wlan.13/capwap80211/ssid: SuperSSID
+radio.0/wlan.13/cisco/aironet-ie: true
+radio.0/wlan.13/cisco/broadcast-ssid: true
+radio.0/wlan.13/cisco/dtim-period: 19
+radio.0/wlan.13/cisco/encryption-policy: 1
+radio.0/wlan.13/cisco/hreap-local-switch: 16
+radio.0/wlan.13/cisco/profile-name: SuerWLAN
+radio.0/wlan.13/cisco/scan-defer-period: 15420
+radio.0/wlan.13/cisco/scan-defer-time: 100
+radio.0/wlan.13/cisco/session-timout: 1800
+radio.0/wlan.13/cisco/wep-encryption: false
+radio.0/wlan.13/cisco/wep-key: .x55d80f0e2bf5223dd10f82407b
+radio.0/wlan.13/cisco/wep-key-index: 1
+radio.0/wlan.13/radio-id: 0
+radio.0/wlan.13/wlan-id: 13
+
