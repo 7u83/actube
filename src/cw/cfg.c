@@ -615,7 +615,7 @@ struct cw_Cfg_entry *cw_cfg_iter_next(struct cw_Cfg_iter *cfi, const char *nnkey
 {
 	struct cw_Cfg_entry *e;
 	int bl, kl;
-	const char *d;
+//	const char *d;
 	e = mavliter_get(&(cfi->it));
 	if (e == NULL){
 		return NULL;
@@ -688,7 +688,7 @@ uint8_t cw_cfg_get_byte_l(cw_Cfg_t ** cfgs, char *key, uint8_t def)
 	return v.val.byte;
 }
 
-uint16_t cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def)
+int cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def)
 {
 	const char *s = cw_cfg_get(cfg,key,NULL);
 	if (s==NULL)

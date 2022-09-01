@@ -75,7 +75,7 @@ static struct cw_DiscoveryResults * run_discovery(struct cw_Conn *conn)
 	/*discovery_results = mlist_create(NULL, NULL, sizeof(void *));*/
 
 	conn->data = results;
-	cw_conn_set_msg_cb(conn,CAPWAP_MSG_DISCOVERY_RESPONSE,discovery_cb);
+	cw_conn_register_msg_cb(conn,CAPWAP_MSG_DISCOVERY_RESPONSE,discovery_cb);
 
 	
 	while (!cw_timer_timeout(timer)

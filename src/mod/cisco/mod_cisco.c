@@ -2530,7 +2530,7 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	1, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_WTP_RADIO_CONFIGURATION,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_DIRECT_SEQUENCE_CONTROL,	0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CW_CISCO_ANTENNA_PAYLOAD,		0, 0},
 	
@@ -3339,7 +3339,8 @@ static int copy_diff_cfg(cw_Cfg_t * new, cw_Cfg_t *old , cw_Cfg_t *dst)
                 if (strcmp(r,e->val)==0)
                         continue;
 
-                cw_dbg(DBG_CFG_UPDATES,"Status reps: %s: %s -> %s",e->key,r,e->val);
+                cw_dbg(DBG_CFG_UPDATES,"Configuration Status Response: %s: %s -> %s",e->key,r,e->val);
+		cw_cfg_set(dst,e->key,e->val);
 
         }
         return 0;
@@ -3372,11 +3373,11 @@ void cw_cfg_copy_sub(cw_Cfg_t *src,const char *src_prefix, cw_Cfg_t *dst, const 
 static int status_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_data *d)
 {
 	cw_Cfg_t * tmp_cfg;
-	int i;
+	int i,wtp_ri;
 
 	tmp_cfg = cw_cfg_create();
 	if (tmp_cfg==NULL){
-		cw_log(LOG_ERROR, "Can't allocat memory for tmp_cfg");
+		cw_log(LOG_ERROR, "Can't allocate memory for tmp_cfg");
 		return CAPWAP_RESULT_CONFIGURATION_FAILURE_SERVICE_NOT_PROVIDED;
 	}
 
@@ -3388,7 +3389,12 @@ static int status_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_dat
 		char dst[64],src[64];
 		char key[CW_CFG_MAX_KEY_LEN];
 		int ri;
-		char ri_str[6];
+
+		/* Ignore radio config for AP */
+		if (i==255){
+			cw_dbg(DBG_X, "Ignore Radio 2555");
+			continue;
+		}
 
 		/* Merge default radio information for current radio */
 		sprintf(dst,"radio.%d/",i);
@@ -3397,27 +3403,46 @@ static int status_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_dat
 
 		/* Get capwap radio radio information */
 		sprintf(key,"radio.%d/capwap80211/wtp-radio-information",i);
-		ri = cw_cfg_get_int(params->cfg,key,-1);
-		if (ri==-1)
+		wtp_ri = cw_cfg_get_int(params->conn->remote_cfg,key,-1);
+		if (wtp_ri==-1)
 			continue;
 
-		/* Merge cfg for each radio type this AP supports */
-		ri=0;
+		cw_dbg(DBG_X,"Radio %d: %d",i,wtp_ri);
+
+		/* Merge cfg for each radio type of this AP supports */
 		for (ri=1; ri<16; ri=ri<<1){
+			char ri_str[6];
+			if (!(ri&wtp_ri))
+				continue;
+
 			cw_format_radio_information(ri_str,ri);
 			sprintf(src,"radio-%s",ri_str);
-			if (cw_cfg_base_exists(params->conn->global_cfg,key))
-				ri|=i;
+
+			sprintf(src,"radio-cfg-%s",ri_str);
+			cw_dbg(DBG_X,"TRY COPY %d %s",i,src);
+
+			if (!cw_cfg_base_exists(params->conn->global_cfg,src))
+				continue;
+				
+			cw_dbg(DBG_X,"Do copy");
+			cw_cfg_copy_sub(params->conn->global_cfg,src,tmp_cfg,dst);
 		}
 
 
-		sprintf(src,"radio-cfg-%s",ri_str);
-		cw_cfg_copy_sub(params->conn->global_cfg,src,tmp_cfg,dst);
 
 	}
 
+	printf("----\n");
+	cw_cfg_dump(tmp_cfg);
+	printf("----\n");
+//	stop();
+
 	copy_diff_cfg(tmp_cfg,params->conn->remote_cfg, params->conn->update_cfg);
+
+	cw_cfg_dump(params->conn->update_cfg);
+
 	cw_cfg_destroy(tmp_cfg);
+	
 
 	return 0;
 }

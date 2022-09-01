@@ -79,7 +79,7 @@ int run(struct cw_Conn * conn)
 {
 
 
-	cw_conn_set_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,update_cb);
+	cw_conn_register_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,update_cb);
 
 	conn->capwap_state = CAPWAP_STATE_RUN;
 

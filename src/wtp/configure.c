@@ -28,7 +28,7 @@ int configure(struct cw_Conn * conn)
 	char sockbuff[SOCK_ADDR_BUFSIZE];
 	
 	
-	cw_conn_set_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,config_cb);
+	cw_conn_register_msg_cb(conn,CAPWAP_MSG_CONFIGURATION_STATUS_RESPONSE,config_cb);
 	
 	int rc;
 	cw_cfg_copy(conn->global_cfg,conn->update_cfg,0,"");

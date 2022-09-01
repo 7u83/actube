@@ -37,7 +37,7 @@
 #define CISCO_ELEM_RAD_NAME			LWAPP_ELEM_WTP_NAME			/* 5 */
 #define	CW_CISCO_MWAR				LW_ELEM_AC_DESCRIPTOR			/* 6 */
 #define CISCO_ELEM_ADD_WLAN			LW_ELEM_80211_ADD_WLAN			/* 7 */
-#define CISCO_ELEM_WTP_RADIO_CONFIGURATION	8					/* 9 */
+#define CISCO_ELEM_WTP_RADIO_CONFIGURATION	8					/* 8 */
 
 #define CISCO_ELEM_9				9					/* 9 */
 

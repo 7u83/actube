@@ -106,6 +106,42 @@ radio-cfg-a/capwap80211/wtp-radio-config/country-str2: "DE "
 radio-cfg-a/capwap80211/wtp-radio-config/occupancy-limit: 100
 radio-cfg-a/capwap80211/wtp-radio-config/reg: 167772416
 
+radio-cfg-a/cisco/direct-sequence-control/cfg-type: 1 - global
+radio-cfg-a/cisco/direct-sequence-control/current-cca-mode: 0
+radio-cfg-a/cisco/direct-sequence-control/current-channel: 1
+radio-cfg-a/cisco/direct-sequence-control/energy-detect-threshold: -50
+
+#mode-802.11g support
+radio-cfg-a/cisco/direct-sequence-control/unknown: 1     
+
+
+radio-cfg-a/cisco/mac-operation/fragmentation-threshold: 2346
+radio-cfg-a/cisco/mac-operation/long-retry: 4
+radio-cfg-a/cisco/mac-operation/reserved: 1
+radio-cfg-a/cisco/mac-operation/rts-threshold: 2347
+radio-cfg-a/cisco/mac-operation/rx-msdu-lifetime: 512
+radio-cfg-a/cisco/mac-operation/short-retry: 7
+radio-cfg-a/cisco/mac-operation/tx-msdu-lifetime: 512
+
+
+radio-cfg-a/cisco/multi-domain-capability/first-channel: 1
+radio-cfg-a/cisco/multi-domain-capability/max-tx-power-level: 65535
+radio-cfg-a/cisco/multi-domain-capability/number-of-channels: 13
+radio-cfg-a/cisco/multi-domain-capability/reserved: 1
+
+radio-cfg-a/capwap80211/rate-set: .x82848b960c1218243048606c
+
+radio-cfg-a/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio-cfg-a/cisco/antenna-payload/802-11n-tx-antennas: 7
+radio-cfg-a/cisco/antenna-payload/antenna-cnt: 2
+radio-cfg-a/cisco/antenna-payload/antenna-mode: 3
+radio-cfg-a/cisco/antenna-payload/antenna.0: 1 - Internal Antenna
+radio-cfg-a/cisco/antenna-payload/antenna.1: 1 - Internal Antenna
+radio-cfg-a/cisco/antenna-payload/diversity-selection: 255
+radio-cfg-a/cisco/antenna-payload/unknown: 0
+
+
+
 radio-cfg-b/capwap80211/wtp-radio-config/beacon-period: 100
 radio-cfg-b/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
 radio-cfg-b/capwap80211/wtp-radio-config/cfg-period: 4
