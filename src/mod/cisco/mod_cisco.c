@@ -388,7 +388,7 @@ static cw_ValStruct_t cisco_direct_sequence_control70[]={
 	{CW_TYPE_BYTE,"current-channel",1,-1},
 	{CW_TYPE_BYTE,"current-cca-mode",1,-1},
 	{CW_TYPE_DWORD,"energy-detect-threshold",4,-1},
-	{CW_TYPE_BYTE,"unknown",1,-1},
+	{CW_TYPE_BOOL,"802.11g-support",1,-1},
 	{NULL,NULL,0,0}
 };
 
@@ -3329,8 +3329,6 @@ static int copy_diff_cfg(cw_Cfg_t * new, cw_Cfg_t *old , cw_Cfg_t *dst)
         struct cw_Cfg_iter cfi;
         struct cw_Cfg_entry *e;
 
-	cw_cfg_dump(new);
-
         cw_cfg_iter_init(new, &cfi, NULL);
         while ((e = cw_cfg_iter_next(&cfi, NULL))!=NULL){
                 const char * r;
@@ -3432,14 +3430,7 @@ static int status_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_dat
 
 	}
 
-	printf("----\n");
-	cw_cfg_dump(tmp_cfg);
-	printf("----\n");
-//	stop();
-
 	copy_diff_cfg(tmp_cfg,params->conn->remote_cfg, params->conn->update_cfg);
-
-	cw_cfg_dump(params->conn->update_cfg);
 
 	cw_cfg_destroy(tmp_cfg);
 	
@@ -3458,7 +3449,7 @@ static int setup_cfg(struct cw_Conn  * conn)
 {
 	int security;
 	
-	security = cw_setup_dtls(conn,conn->global_cfg,"cisco",CAPWAP_CIPHER);
+	security = cw_setup_dtls(conn,conn->global_cfg,"mod/cisco",CAPWAP_CIPHER);
 
 	if (conn->role == CW_ROLE_AC){
 		cw_cfg_set_int(conn->local_cfg,"capwap/ac-descriptor/security",security);

@@ -15,11 +15,15 @@ capwap/ssl-dhbits: 1024
 capwap/ssl-keyfile:  "../../ssl/intermediate-ca/int-ca.key"
 capwap/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
 
-cisco/ssl-keyfile:  "../../ssl/intermediate-ca/int-ca.key"
-cisco/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
+#mod/cisco/ssl-keyfile:  "../../ssl/intermediate-ca/int-ca.key"
+#mod/cisco/ssl-certfile: "../../ssl/intermediate-ca/int-ca.crt"
+#
+mod/cisco/ssl-keyfile:  "../../ssl/certs/ac-cisco.key"
+mod/cisco/ssl-certfile: "../../ssl/certs/ac-cisco.pem"
+
 #cisco/ssl-cipher: DEFAULT
-cisco/ssl-cipher: RSA
-cisco/ssl-dhbits: 2048
+mod/cisco/ssl-cipher: RSA
+mod/cisco/ssl-dhbits: 2048
 
 
 
@@ -112,7 +116,7 @@ radio-cfg-a/cisco/direct-sequence-control/current-channel: 1
 radio-cfg-a/cisco/direct-sequence-control/energy-detect-threshold: -50
 
 #mode-802.11g support
-radio-cfg-a/cisco/direct-sequence-control/unknown: 1     
+#radio-cfg-a/cisco/direct-sequence-control/unknown: 1     
 
 
 radio-cfg-a/cisco/mac-operation/fragmentation-threshold: 2346
