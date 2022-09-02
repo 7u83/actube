@@ -40,6 +40,11 @@ struct wtpman {
 
 	cw_Cfg_t * wtp_cfg;
 
+	cw_Cfg_t * discovery_cfg;
+	cw_Cfg_t * join_cfg;
+	cw_Cfg_t * config_status_cfg;
+
+
 	int update;	
 	int ctr;
 };

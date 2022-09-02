@@ -90,6 +90,7 @@ int cw_cfg_get_first_index(cw_Cfg_t * cfg, const char *key, int n);
 int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n);
 
 int cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def);
+int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg);
 
 
 

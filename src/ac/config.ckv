@@ -53,6 +53,13 @@ actube/rpc/listen: tcp:127.0.0.1:5000
 actube/rpc/enable: true
 actube/rpc/macros-dir: ./rpc-macros
 
+#
+# This catches the initial config af a connecting WTP
+# From Discovery to CFG Update
+# The config is saved to a file named
+# wtp-<wtpname-or-ip>.cfg
+#
+actube/save-initial-wtp-config: true
 
 capwap/ac-descriptor/dtls-policy:  1
 capwap/ac-descriptor/hardware/vendor: 4232704

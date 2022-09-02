@@ -678,26 +678,26 @@ static cw_ValStruct_t dtls_data_cfg[]={
 
 
 
-/*
+
 static cw_ValStruct_t cisco_add_wlan[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
-	{CW_TYPE_WORD,"wlan-capability",2,-1},
+	{CW_TYPE_WORD,"capwap80211/capability",2,-1},
 	{CW_TYPE_BYTE,"wlan-id",1,-1},
-	{CW_TYPE_DWORD,"encryption-policy",4,-1},
+	{CW_TYPE_DWORD,"cisco/encryption-policy",4,-1},
 
-	{CW_TYPE_BSTR16,"wep-key",13,9},
-	{CW_TYPE_BYTE,"encryption",1,42},
+	{CW_TYPE_BSTR16,"cisco/wep-key",13,9},
+	{CW_TYPE_BYTE,"cisco/wep-encryption",1,42},
 	
-	{CW_TYPE_BOOL,"broadcast-ssid",1,426},
-	{CW_TYPE_WORD,"session-timout",2,475},
-	{CW_TYPE_BYTE, "dtim-period",1,541},
-	{CW_TYPE_STR, "ssid-a",30,545},
-	{CW_TYPE_BYTE, "allow-aaa-override",1,578},
-	{CW_TYPE_BYTE, "max-stations",1,580},
+	{CW_TYPE_BOOL,"cisco/broadcast-ssid",1,426},
+	{CW_TYPE_WORD,"cisco/session-timout",2,475},
+	{CW_TYPE_BYTE, "cisco/dtim-period",1,541},
+	{CW_TYPE_STR, "cisco/ssid-a",30,545},
+	{CW_TYPE_BYTE, "cisco/allow-aaa-override",1,578},
+	{CW_TYPE_BYTE, "cisco/max-stations",1,580},
 	
 	{NULL,NULL,0,0}
 };
-*/
+
 
 static cw_ValStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
@@ -966,7 +966,7 @@ static struct cw_ElemHandler handlers70[] = {
 		CW_VENDOR_ID_CISCO,0,		/* Vendor / Proto */
 		1,512,				/* min/max length */
 		CW_TYPE_BSTR16,			/* type */
-		"cisco/rad-name",		/* Key */
+		"capwap/wtp-name",		/* Key */
 		cw_in_generic,			/* get */
 		cw_out_generic			/* put */
 	}
@@ -2479,9 +2479,10 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_AP_DTLS_DATA_CFG,		0, 0},
-//	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,			0, 0},
 
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RAD_EXTENDED_CONFIG,	0, 0},
 	{0,0,0,00}
 	
 };

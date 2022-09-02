@@ -415,42 +415,70 @@ static void copy(struct cw_ElemHandlerParams * params)
         cw_cfg_copy(params->cfg, params->conn->remote_cfg,DBG_CFG_UPDATES,"GlobalCfg");
 }
 
+static void catch_cfg(struct cw_ElemHandlerParams * params, int create, const char *format, ...)
+{
+	const char *wtpname;
+	char filename[200];
+	FILE *f;
+	cw_Cfg_t * cfg_list[3];
+
+	if (!cw_cfg_get_bool(params->conn->global_cfg,"actube/save-initial-wtp-config",0))
+		return;
+
+	cfg_list[0]=params->cfg;
+	cfg_list[1]=params->conn->remote_cfg;
+	cfg_list[2]=NULL;
+
+	wtpname = cw_cfg_get_l(cfg_list,"capwap/wtp-name","default");
+	sprintf(filename,"wtp-initial-%s.ckv",wtpname);
+
+	if (create)		
+		f = fopen(filename,"w");
+	else
+		f = fopen(filename,"a");
+	if (f==NULL)
+		return;
+
+	if (create)
+		fprintf(f,"#\n# Initial config for WTP '%s' - catched by ACTube\n#\n\n",wtpname);
+
+        if (format !=NULL){
+                va_list args;
+                va_start(args,format);
+                vfprintf(f,format,args);
+                va_end(args);
+        }
+	cw_cfg_write_to_file(f, params->cfg);
+	fclose(f);
+
+
+
+}
+
+
+
 static int discovery_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data * d)
 {
-	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
-	char filename[200];
 
 	cw_dbg(DBG_X,"DISCOVERY Callback");
 	copy(params);
+	catch_cfg(params,1,"\n#\n# Discovery Request\n#\n");
 
-	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
-	sprintf(filename,"wtp-discovery-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg,NULL);
 	cw_cfg_clear(params->cfg);
-		
+	if (d->parent)
+		return d->parent->fun(params,d->parent);
+
 	return 0;
 }
 
-/*
 static int join_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
-	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
-	char filename[200];
-	int rc;
-
-	rc = 0;
+	catch_cfg(params,0,"\n#\n# Join Request\n#\n");
 	if (d->parent)
-		rc =d->parent->fun(params,d->parent);
-
-	cw_dbg(DBG_X,"JOIN Callback");
-	copy(params);
-	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
-	sprintf(filename,"wtp-join-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg,NULL);
-	cw_cfg_clear(params->cfg);
-	return rc;
+		return d->parent->fun(params,d->parent);
+	return 0;
 }
-*/
+
 
 /*
 static int fill_update_cfg(struct cw_Conn * conn)
@@ -479,24 +507,11 @@ static int fill_update_cfg(struct cw_Conn * conn)
 }
 */
 
-static int update_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
+static int cfg_status_cb(struct cw_ElemHandlerParams * params, struct cw_MsgCb_data *d)
 {
-	struct cw_Conn * conn = (struct cw_Conn*)params->conn;
-	char filename[200];
-
-	int rc = 0;
+	catch_cfg(params,0,"\n#\n# Configuration Status Request\n#\n");
 	if (d->parent)
-		rc =d->parent->fun(params,d->parent);
-
-
-	
-	cw_dbg(DBG_X,"UPDATE Callback");
-	//fill_update_cfg(params->conn);
-
-	const char * wtpname = cw_cfg_get(conn->remote_cfg,"capwap/wtp-name","default");
-	sprintf(filename,"wtp-status-%s.ckv",wtpname);
-	cw_cfg_save(filename,params->cfg,NULL);
-//stop();	
+		return d->parent->fun(params,d->parent);
 	return 0;
 }
 
@@ -591,6 +606,10 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 		return NULL;
 	}
 
+	cw_conn_register_msg_cb(wtpman->conn,
+		CAPWAP_MSG_DISCOVERY_REQUEST,
+		discovery_cb);
+
 
 	wtpman->conn->global_cfg = global_cfg;
 	wtpman->conn->local_cfg = cw_cfg_create();
@@ -651,16 +670,12 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 
 			cw_conn_register_msg_cb(wtpman->conn,
-				CAPWAP_MSG_DISCOVERY_REQUEST,
-				discovery_cb);
-
-/*		cw_conn_set_msg_cb(wtpman->conn,
 				CAPWAP_MSG_JOIN_REQUEST,
-				join_cb);*/
+				join_cb);
 
-/*		cw_conn_register_msg_cb(wtpman->conn,
+		cw_conn_register_msg_cb(wtpman->conn,
 				CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,
-				update_cb);*/
+				cfg_status_cb);
 
 		cw_conn_register_msg_cb(wtpman->conn,
 				CAPWAP_MSG_WTP_EVENT_REQUEST,
@@ -685,7 +700,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-//	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
+	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
 	conn_q_add_packet(wtpman->conn, packet, len);
 }
 
