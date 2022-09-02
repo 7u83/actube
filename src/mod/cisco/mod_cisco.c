@@ -2876,7 +2876,7 @@ static struct cw_ElemHandler handlers73[] = {
 		"AP LED State Config (>= v7.3)",	/* name */
 		CISCO_ELEM_AP_LED_STATE_CONFIG,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		1,1,					/* min/max length */
+		2,2,					/* min/max length */
 		CW_TYPE_STRUCT,				/* type */
 		"cisco/ap-led-state-config",		/* Key */
 		cw_in_generic,				/* get */
@@ -3304,6 +3304,7 @@ static int join_cb_ac(struct cw_ElemHandlerParams *params, struct cw_MsgCb_data 
 	cw_dbg(DBG_X,"My Radio Information: %d",ri);
 	/* Send our radio information as "radio id 0" to the WTP */
 	cw_cfg_set_int(params->conn->update_cfg,"radio.0/capwap80211/wtp-radio-information",ri);
+	set_ac_version(params);
 
 
 /*	for (i=0; (i=cw_cfg_get_first_index(params->cfg,"radio",i))!=-1; i++){
