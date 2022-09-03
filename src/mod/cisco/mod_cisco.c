@@ -220,7 +220,7 @@ static cw_ValStruct_t cisco_ap_static_domain[]={
 
 
 
-static cw_ValStruct_t cisco_ap_regulatory_domain4[]={
+static cw_ValStruct_t cisco_ap_regulatory_domain70[]={
 	{CW_TYPE_BOOL,"set",1,-1},
 	{CW_TYPE_BYTE,"slot",1,-1},
 	{CW_TYPE_BYTE,"code0",1,-1},
@@ -228,7 +228,14 @@ static cw_ValStruct_t cisco_ap_regulatory_domain4[]={
 	{NULL,NULL,0,0}
 };
 
-static cw_ValStruct_t cisco_ap_regulatory_domain5[]={
+static int mkkey_domain70(const char *pkey, uint8_t*data, int len, char *dst)
+{
+	sprintf(dst,"radio.%d/%s",cw_get_byte(data+1),pkey);
+	return 0;
+}
+
+
+static cw_ValStruct_t cisco_ap_regulatory_domain75[]={
 	{CW_TYPE_BYTE,"band-id",1,-1},
 	{CW_TYPE_BOOL,"set",1,-1},
 	{CW_TYPE_BYTE,"slot",1,-1},
@@ -236,6 +243,12 @@ static cw_ValStruct_t cisco_ap_regulatory_domain5[]={
 	{CW_TYPE_BYTE,"code1",1,-1},
 	{NULL,NULL,0,0}
 };
+
+static int mkkey_domain75(const char *pkey, uint8_t*data, int len, char *dst)
+{
+	sprintf(dst,"radio.%d/%s",cw_get_byte(data+2),pkey);
+	return 0;
+}
 
 
 static cw_ValStruct_t cisco_mac_operation70[]={
@@ -277,7 +290,7 @@ static cw_ValStruct_t cisco_ap_dot11h[]={
 };
 
 
-
+/*
 int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
@@ -300,80 +313,28 @@ int cisco_in_ap_regulatory_domain(struct cw_ElemHandler *eh,
 	return 1;
 }
 
+*/
+
+
 
 int cisco_out_ap_regulatory_domain(struct cw_ElemHandler * eh, 
 		struct cw_ElemHandlerParams * params, uint8_t * dst)
 
 {
 	char key[CW_CFG_MAX_KEY_LEN];
-//	char testkey[CW_CFG_MAX_KEY_LEN];
-	int idx;
-	void * type;
-	cw_Val_t * result;
-	int len,start;
-	uint8_t * ob;
-
-
-
-	idx = 0;
-	ob = dst;
-	
-
-	type = NULL;
-	result = cw_cfg_get_val_l(params->cfg_list,"capwap/wtp-descriptor/software/version",CW_TYPE_BSTR16);
-	if (result!=NULL){
-		if(result->type->len(result)==4){
-			uint32_t rv;
-			rv = cw_get_dword(result->type->data(result));
-cw_dbg(DBG_X,"Version is %08X",rv);			
-//stop();
-//			if (rv >= 0x07056600){
-			if (rv > 0x07036500){
-				type = cisco_ap_regulatory_domain5;
-			}
-			else{
-				type = cisco_ap_regulatory_domain4;
-			}
-		}
-		
+	int l,i;
+	int len=0;
+	for (i=0; (i=cw_cfg_get_first_index_l(params->cfg_list,"radio",i))!=-1; i++){
+		if (i==255)
+			continue;
+		sprintf(key,"radio.%d/%s",i,eh->key);
+		l=cw_out_generic0(eh,params,dst+len,key);
+		if (l>0)
+			len+=l;
 	}
-	else {
-		stop();
-	}
-
-	cw_val_destroy(result);
-
-	do {
-		sprintf(key,"%s.%d",eh->key,idx);
-		if (!cw_cfg_base_exists_l(params->cfg_list,key))
-			break;
-	
-		if(type == NULL){
-//			sprintf(testkey,"%s/%s",key,"band-id");
-			stop();
-//			result = cw_ktv_get_val_l(params->cfg_list,key,CW_TYPE_BYTE);
-			if (result==NULL){
-				type = cisco_ap_regulatory_domain4;
-			}
-			else{
-				type = cisco_ap_regulatory_domain5;
-				cw_val_destroy(result);
-			}
-		}
-		
-		start = params->msgset->header_len(eh);
-		len = CW_TYPE_STRUCT->write(params->cfg_list,key,ob+start,type);
-//		len = cw_ktv_write_struct(params->cfg,NULL,type,key,ob+start);
-		ob += params->msgset->write_header(eh,ob,len);
-		
-		idx++;
-		
-	}while(1);
-
-
-	sprintf(key,"%s.%d",eh->key,idx+1);
-	return ob-dst;
+	return len;
 }
+
 
 static cw_ValStruct_t cisco_ap_model[]={
 	{CW_TYPE_STR,"model",30,-1},
@@ -679,26 +640,6 @@ static cw_ValStruct_t dtls_data_cfg[]={
 
 
 
-static cw_ValStruct_t cisco_add_wlan[]={
-	{CW_TYPE_BYTE,"radio-id",1,-1},
-	{CW_TYPE_WORD,"capwap80211/capability",2,-1},
-	{CW_TYPE_BYTE,"wlan-id",1,-1},
-	{CW_TYPE_DWORD,"cisco/encryption-policy",4,-1},
-
-	{CW_TYPE_BSTR16,"cisco/wep-key",13,9},
-	{CW_TYPE_BYTE,"cisco/wep-encryption",1,42},
-	
-	{CW_TYPE_BOOL,"cisco/broadcast-ssid",1,426},
-	{CW_TYPE_WORD,"cisco/session-timout",2,475},
-	{CW_TYPE_BYTE, "cisco/dtim-period",1,541},
-	{CW_TYPE_STR, "cisco/ssid-a",30,545},
-	{CW_TYPE_BYTE, "cisco/allow-aaa-override",1,578},
-	{CW_TYPE_BYTE, "cisco/max-stations",1,580},
-	
-	{NULL,NULL,0,0}
-};
-
-
 static cw_ValStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BYTE,"radio-id",1,-1},
 	{CW_TYPE_WORD,"capwap80211/capability",2,-1},
@@ -724,6 +665,43 @@ static cw_ValStruct_t cisco_add_wlan70[]={
 	
 	{NULL,NULL,0,0}
 };
+static int cisco_add_wlan_mkkey70(const char *pkey, uint8_t*data, int len, char *dst)
+{
+        int wlan_id,radio_id;
+        radio_id = cw_get_byte(data);
+        wlan_id = cw_get_byte(data+4);
+        sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+        return 1;
+}
+
+
+static cw_ValStruct_t cisco_add_wlan73[]={
+	{CW_TYPE_BYTE,"radio-id",1,-1},
+	{CW_TYPE_WORD,"capwap80211/capability",2,-1},
+	{CW_TYPE_WORD,"wlan-id",1,-1},
+	{CW_TYPE_DWORD,"cisco/encryption-policy",4,-1},
+
+	{CW_TYPE_BSTR16,"cisco/wep-key",13,9},
+	{CW_TYPE_BYTE,"cisco/wep-encryption",1,42},
+	
+	{CW_TYPE_BOOL,"cisco/broadcast-ssid",1,426},
+	{CW_TYPE_WORD,"cisco/session-timout",2,475},
+	{CW_TYPE_BYTE, "cisco/dtim-period",1,541},
+	{CW_TYPE_STR, "cisco/profile-name",30,545},
+	{CW_TYPE_BYTE, "cisco/allow-aaa-override",1,578},
+	{CW_TYPE_BYTE, "cisco/max-stations",1,580},
+	{CW_TYPE_STR, "capwap80211/ssid", 512 , 583},
+	{NULL,NULL,0,0}
+};
+static int cisco_add_wlan_mkkey73(const char *pkey, uint8_t*data, int len, char *dst)
+{
+        int wlan_id,radio_id;
+        radio_id = cw_get_byte(data);
+        wlan_id = cw_get_byte(data+4);
+        sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
+        return 1;
+}
+
 
 
 
@@ -733,17 +711,16 @@ static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh,
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
-	stop();
-/*
 	int wlan_id, radio_id;
 	char key[CW_CFG_MAX_KEY_LEN];
 	
 	radio_id=cw_get_byte(data);
-	wlan_id=cw_get_word(data+1);
-	sprintf(key,"radio.%d/wlan.%d",radio_id,wlan_id);
-	cw_ktv_del_sub(params->cfg,key);
+	wlan_id=cw_get_word(data+2);
+	sprintf(key,"radio.%d/wlan.%d/@actube/enable",radio_id,wlan_id);
+	cw_cfg_set(params->cfg,key,"false");
+
 	cw_dbg(DBG_INFO,"Del WLAN rid=%d, id=%d",wlan_id);
-	return 0;*/
+	return 0;
 }
 
 
@@ -769,15 +746,6 @@ static int cisoc_add_wlan_mkkey(const char *pkey, uint8_t*data, int len, char *d
 */
 
 
-static int cisco_add_wlan_mkkey70(const char *pkey, uint8_t*data, int len, char *dst)
-{
-        int wlan_id,radio_id;
-        radio_id = cw_get_byte(data);
-        wlan_id = cw_get_byte(data+4);
-        sprintf(dst,"radio.%d/wlan.%d",radio_id,wlan_id);
-        return 1;
-}
-
 static int mkkey_sig_payload(const char *pkey, uint8_t*data, int len, char *dst)
 {
         int id;
@@ -799,12 +767,26 @@ static int cisco_patch_add_wlan70(uint8_t * data, void * st)
 
 */
 
-static cw_ValStruct_t cisco_add_lwwlan[]={
+static cw_ValStruct_t cisco_add_lwwlan73[]={
 	{CW_TYPE_BSTR16, "misc", 8, 2},
 	{CW_TYPE_STR, "ssid",-1,10},
 	{CW_TYPE_WORD, "misc2", 2, 48 },
 	{NULL,NULL,0,0}
 };
+
+static int cisoc_add_lwwlan_mkkey73(const char *pkey, uint8_t*data, int len, char *dst)
+{
+	int wlan_id,radio_id;
+	return 0;
+	stop();	
+	radio_id = cw_get_byte(data);
+	wlan_id = cw_get_byte(data+1);
+	sprintf(dst,"radio.%d/wlan.%d/add-lw-wlan",radio_id,wlan_id);
+	return 1;
+}
+
+
+
 
 static cw_ValValRange_t oper_val_state[]={
 	{1,1,"disabled"},
@@ -834,16 +816,6 @@ static cw_ValStruct_t cisco_capwap_timers[] = {
 
 
 
-
-static int cisoc_add_lwwlan_mkkey(const char *pkey, uint8_t*data, int len, char *dst)
-{
-	int wlan_id,radio_id;
-	stop();	
-	radio_id = cw_get_byte(data);
-	wlan_id = cw_get_byte(data+1);
-	sprintf(dst,"radio.%d/wlan.%d/add-lw-wlan",radio_id,wlan_id);
-	return 1;
-}
 
 static int cisco_patch_add_lwwlan(uint8_t * data, void * st)
 {
@@ -1374,11 +1346,15 @@ static struct cw_ElemHandler handlers70[] = {
 		"AP Regulatory Domain",			/* name */
 		CISCO_ELEM_AP_REGULATORY_DOMAIN,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
-		4,5,					/* min/max length */
-		cisco_ap_regulatory_domain4,		/* type */
+		4,4,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
 		"cisco/ap-regulatory-domain",		/* Key */
-		cisco_in_ap_regulatory_domain,		/* get */
-		cisco_out_ap_regulatory_domain		/* put */
+		cw_in_generic,				/* get */
+		cisco_out_ap_regulatory_domain,		/* put */
+		mkkey_domain70,
+		NULL,
+		cisco_ap_regulatory_domain70
+
 	},
 	
 	{ 
@@ -1804,8 +1780,8 @@ static struct cw_ElemHandler handlers70[] = {
 		1,1024,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"cisco/lwelem33",			/* Key */
-		cw_in_radio_generic,			/* get */
-		cw_out_radio_generic			/* put */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
 	},
 
 	{ 
@@ -2101,21 +2077,6 @@ static struct cw_ElemHandler handlers70[] = {
 	}
 	,
 	
-	{ 
-		"Add Cisco WLAN (LWAPP)",		/* name */
-		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
-		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
-		7,1117,					/* min/max length */
-		CW_TYPE_STRUCT,				/* type */
-		"radio/wlan/add-lw-wlan",		/* Key */
-		cw_in_generic,				/* get */
-		cw_out_traverse,			/* put */
-		cisoc_add_lwwlan_mkkey,
-		cisco_patch_add_lwwlan,
-		cisco_add_lwwlan,
-	}
-	,
-
 
 	{ 
 		"SSC Hash Validation",			/* name */
@@ -2386,6 +2347,9 @@ static struct cw_ElemDef join_response_elements[] ={
 
 	{0,0,			CAPWAP_ELEM_ECN_SUPPORT,	0, CW_DELETE},
 
+	{0,0,			CAPWAP_ELEM_WTP_IPV4_IP_ADDRESS,	0, 0},
+	{0,0,			CAPWAP_ELEM_WTP_IPV6_IP_ADDRESS,	0, 0},
+
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PATH_MTU,	1, 0},
 	{0,0,0,00}
 	
@@ -2400,8 +2364,10 @@ static cw_State_t configuration_status_request_states[] = {
 	{0,0}
 };
 
-static struct cw_ElemDef configuration_status_request_elements[] ={
+static struct cw_ElemDef configuration_status_request_elements70[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
+
+
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SUPPORTED_RATES,				0, 0},	
@@ -2460,7 +2426,6 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, CW_IGNORE},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MAC_OPERATION,		0, 0},
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_TX_POWER,			0, 0},	
@@ -2487,7 +2452,6 @@ static struct cw_ElemDef configuration_status_request_elements[] ={
 	
 };
 
-/*static uint16_t configuration_status_response_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef configuration_status_response_elements[] ={
 
 
@@ -2545,9 +2509,8 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_DOMAIN_SECRET,		0, 0},	
 
-	
-
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,		1, 0},
 
 	{0,0,0,0}
 };
@@ -2628,7 +2591,6 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_CORE_DUMP,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_STATISTICS_TIMER,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AC_NAME_WITH_INDEX,		0, 0},
-//	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_80211_ASSOC_LIMIT,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_TOGGLE,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SIG_PAYLOAD,			0, 0},
@@ -2656,7 +2618,6 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	0, 0},
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DELETE_WLAN,		0, 0},
 	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,		0, 0},
@@ -2667,17 +2628,15 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	
 };
 
-/*static uint16_t wtp_event_request_states[] = {CAPWAP_STATE_JOIN,0};*/
 static struct cw_ElemDef wtp_event_request_elements[] ={
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,			0, CW_IGNORE},
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, 			CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_ADD_WLAN,					0, CW_IGNORE},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,					0, 0},	
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,			0, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,			0, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RADIO_MODULE_INFO,	0, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CONTROL,	0, 0},	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_HARDWARE_INFO,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_RADIO_MODULE_INFO,		0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CONTROL,		0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,			0, 0},	
 
 	{0,0,0,0,0}
 };
@@ -2723,6 +2682,8 @@ static struct cw_ElemDef wtp_echo_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
 	{0,0,0,0,0}
 };
+
+
 
 
 static struct cw_MsgDef messages70[] = {
@@ -2787,7 +2748,7 @@ static struct cw_MsgDef messages70[] = {
 		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* type */
 		CW_ROLE_AC,
 		configuration_status_request_states,		/* states */
-		configuration_status_request_elements,
+		configuration_status_request_elements70,
 		NULL					/* postprocess */
 	},
 
@@ -2856,6 +2817,8 @@ static struct cw_MsgDef messages70[] = {
 
 };
 
+
+
 static struct cw_ElemHandler handlers73[] = {
 	{ 
 		"Rouge Detection (>=7.3)",				/* name */
@@ -2917,15 +2880,80 @@ static struct cw_ElemHandler handlers73[] = {
 		cisco_ap_venue_settings,
 	}
 	,
-	
+
+	{ 
+		"Add Cisco WLAN (LWAPP)",		/* name */
+		CISCO_LWELEM_ADD_WLAN,			/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		7,1117,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"radio/wlan/",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_traverse,			/* put */
+		cisoc_add_lwwlan_mkkey73,
+		cisco_patch_add_lwwlan,
+		cisco_add_lwwlan73,
+	}
+	,
+
+	{ 
+		"Add Cisco WLAN",			/* name */
+		CISCO_ELEM_ADD_WLAN,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		7,1117,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"radio/wlan/",				/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic_walk,			/* put */
+		cisco_add_wlan_mkkey73,
+		NULL, //		cisco_patch_add_wlan70
+		cisco_add_wlan73
+	}
+	,
+		
 	{0,0,0,0,0,0,0,0}
 };
 
 
+static struct cw_ElemDef configuration_status_request_elements73[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,			0, 0},
+	{0,0,0,0,0}
+};
+
+static struct cw_ElemDef configuration_update_request_elements73[] ={
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,		0, 0},
+
+	{0,0,0,0,0}
+};
+
+
+
+static struct cw_MsgDef messages73[] = {
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* type */
+		CW_ROLE_AC,
+		NULL, //configuration_status_request_states,		/* states * /
+		configuration_status_request_elements73,
+		NULL					/* postprocess */
+	},
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_UPDATE_REQUEST,	/* type */
+		CW_ROLE_WTP,
+		NULL,
+		configuration_update_request_elements73,
+		NULL					/* postprocess */
+	},
+
+
+	{0,0,0,0}
+};
+
 
 static struct cw_ElemHandler handlers75[] = {
 	{ 
-		"WTP Radio Configuration  (Version >= 7.5)",/* name */
+		"WTP Radio Configuration  (>=7.5)",/* name */
 		CISCO_ELEM_WTP_RADIO_CONFIGURATION,	/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		28,28,					/* min/max length */
@@ -2939,7 +2967,7 @@ static struct cw_ElemHandler handlers75[] = {
 	}
 	,
 	{ 
-		"Mac Operation (Version >= 7.5)",	/* name */
+		"Mac Operation (Version >=7.5)",	/* name */
 		CISCO_ELEM_MAC_OPERATION,		/* Element ID */
 		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
 		17,17,					/* min/max length */
@@ -2951,6 +2979,20 @@ static struct cw_ElemHandler handlers75[] = {
 		NULL,
 		cisco_mac_operation75,
 	},
+	{ 
+	 
+		"AP Regulatory Domain (>=7.5)",		/* name */
+		CISCO_ELEM_AP_REGULATORY_DOMAIN,	/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		5,5,					/* min/max length */
+		CW_TYPE_STRUCT,			/* type */
+		"cisco/ap-regulatory-domain",		/* Key */
+		cw_in_generic,				/* get */
+		cisco_out_ap_regulatory_domain,		/* put */
+		mkkey_domain75,
+		NULL,
+		cisco_ap_regulatory_domain75
+	},
 
 	{0,0,0,0,0,0,0,0}
 };
@@ -2958,13 +3000,43 @@ static struct cw_ElemHandler handlers75[] = {
 
 
 
-static struct cw_MsgDef messages73[] = {
+static struct cw_MsgDef messages75[] = {
 	{0,0,0,0}
 };
 
 
+static struct cw_ElemHandler handlers80[] = {
+	{0,0,0,0,0,0,0,0}
+};
 
-static struct cw_MsgDef messages75[] = {
+static struct cw_ElemDef configuration_status_request_elements80[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, CW_DELETE}, /* RRM_NEIGHBOR_CTRL_PAYLOAD */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, CW_DELETE}, /* RRM_INTERFERENCE_CTRL_PAYLOAD*/	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, CW_DELETE}, /* RRM_LOAD_CTRL_PAYLOAD*/
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, CW_DELETE}, /* DECRYPT_ERR_REPORT_PERIOD*/
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,		0, CW_DELETE}, /* 51 */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CAPWAP_TIMERS,		0, CW_DELETE}, /* 68 */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CLIENT_AUTO_HANDOFF,		0, CW_DELETE}, /* 72 */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_81,				0, CW_DELETE}, /* 81 */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_DOT11H,			0, CW_DELETE}, /* 132 */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_145,				0, CW_DELETE}, /* AP_DTPC_PAYLOAD */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_146,				0, CW_DELETE}, /* AP_CISCO_7920_VSIE_PAYLOAD */	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_153,				0, CW_DELETE}, /* AP_TSM_CONFIG_PAYLOAD */
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_156,				0, CW_DELETE}, /* AP_CAC_CONFIG_PAYLOAD */
+
+	{0,0,0,0,0}
+};
+
+static struct cw_MsgDef messages80[] = {
+	{
+		NULL,						/* name */
+		CAPWAP_MSG_CONFIGURATION_STATUS_REQUEST,	/* type */
+		CW_ROLE_AC,
+		NULL,						/* states */
+		configuration_status_request_elements80,
+		NULL						/* postprocess */
+	},
+
 	{0,0,0,0}
 };
 
@@ -3014,9 +3086,11 @@ static void update_msgset(struct cw_MsgSet *msgset, bstr_t version)
 			cw_dbg(DBG_MOD, "CISCO - Loading messages for 0x.x%08X >= 0x07056600", rv);
 			cw_msgset_add(msgset,messages75, handlers75);
 		}
+		if (rv >= 0x08000000){
+			cw_dbg(DBG_MOD, "CISCO - Loading messages for 0x.x%08X >= 0x08000000", rv);
+			cw_msgset_add(msgset,messages80, handlers80);
+		}
 	}
-
-
 }
 
 

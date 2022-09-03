@@ -37,12 +37,13 @@ static int read_struct(cw_Cfg_t * cfg,const cw_ValStruct_t * stru, const char *p
 				break;
 			default:
 				l = stru[i].len;
+				cw_dbg(DBG_X,"pos: %d, l:%d. len: %d",pos,l,len); 
 				if (pos+l > len){
-					l = len-pos;
+					l = pos<len ? len-pos : 0 ;
 				}
 			
 		}
-
+		cw_dbg(DBG_X,"This is l %d",l);
 		l=stru[i].type->read(cfg,key,data+pos,l,stru[i].valguard);
 
 		
@@ -102,8 +103,9 @@ static int write_struct(cw_Cfg_t ** cfgs,  const cw_ValStruct_t * stru, const ch
 			sprintf(key,"%s",pkey);
 
 	//	result = cw_cfg_get_l(cfgs,key,NULL);
+	
 		rc = cw_cfg_base_exists_l(cfgs,key);
-//		printf("Base? :%s, %d\n",key,rc);
+//		cw_dbg(DBG_X,"Base? :'%s', %d\n",key,rc);
 		if(result) {
 //			char s[2048];
 //			result->type->to_str(result,s,2048);

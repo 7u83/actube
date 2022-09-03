@@ -100,7 +100,21 @@ int main (int argc, char **argv)
 	int rc=EXIT_FAILURE;	
 	struct cw_DiscoveryResults * results;
 	const char *bind_addr, *disc_addr;
-	
+
+/*
+{
+	struct cw_ValBit bits[] = {
+		{0,"burtstag"},
+		{10,"windows"},
+		{2,NULL}
+	};
+	uint16_t x;
+	cw_set_word(&x,65534);
+
+	CW_TYPE_BITS->read(global_cfg,"hello",(uint8_t*)(&x),2,bits);
+	exit(0);
+}	
+*/	
 	
 	bootcfg.nmods=0;
 	

@@ -86,9 +86,7 @@ struct cw_StrListElem cw_dbg_strings[] = {
 		DBG_ELEM_IN | DBG_ELEM_OUT |
 		DBG_MSG_ERR | DBG_ELEM_ERR |
 		DBG_PKT_ERR | DBG_RFC | DBG_WARN
-
-
-		| DBG_STATE), 			"std" },
+		| DBG_STATE | DBG_INFO), 			"std" },
 
 	{ DBG_ALL, 		"all"},
 

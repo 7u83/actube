@@ -24,7 +24,7 @@ int cisco_out_lw_path_mtu(struct cw_ElemHandler * eh,
 
 	int wl = 1400-cl-hl;
 
-printf("HL:%d CL:%d WL: %d\n",hl,cl,wl);
+//printf("HL:%d CL:%d WL: %d\n",hl,cl,wl);
 	if (wl<=40)
 		return 0;
 

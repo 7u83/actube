@@ -52,6 +52,7 @@ typedef struct cw_Val cw_Val_t;
 
 
 
+
 /**
  * @class cw_Type
  * @author 7u83
@@ -117,7 +118,10 @@ struct cw_ValStruct {
 typedef struct cw_ValStruct cw_ValStruct_t;
 
 
-
+struct cw_ValBit {
+	uint16_t bit;
+	const char *key;
+};
 
 
 
@@ -147,6 +151,7 @@ struct cw_ValIndexed{
 typedef struct cw_ValIndexed cw_ValIndexed_t;
 
 
+extern const struct cw_Type cw_type_bits;
 extern const struct cw_Type cw_type_byte;
 extern const struct cw_Type cw_type_word;
 extern const struct cw_Type cw_type_dword;
@@ -159,6 +164,7 @@ extern const struct cw_Type cw_type_bool;
 extern const struct cw_Type cw_type_struct;
 extern const struct cw_Type cw_type_array;
 
+#define CW_TYPE_BITS (&cw_type_bits)
 #define CW_TYPE_BYTE (&cw_type_byte)
 #define CW_TYPE_WORD (&cw_type_word)
 #define CW_TYPE_DWORD (&cw_type_dword)

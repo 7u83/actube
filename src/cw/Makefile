@@ -60,6 +60,7 @@ CWSRC=\
 	cw_type_word.c\
 	cw_type_sysptr.c\
 	cw_type_array.c\
+	cw_type_bits.c\
 	cw_write_descriptor_subelem.c\
 	cw_write_radio_element.c\
 	cw_detect_nat.c\

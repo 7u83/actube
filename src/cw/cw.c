@@ -11,7 +11,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 	char mkey[CW_CFG_MAX_KEY_LEN];
 	const char *key;
 
-
+//	cw_dbg(DBG_X,"HK: %s",handler->key,);
 
 	if (!type){
 		cw_log(LOG_ERR,"Can't handle element: %s, no type defined",handler->name);
@@ -25,11 +25,7 @@ int cw_in_generic(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams *
 	else{
 		key = handler->key;
 	}
-
-
-	
-
-/*	cw_dbg(DBG_X, "READ: %s / %s",type->name,key);*/
+//	cw_dbg(DBG_X, "READ: %s / %s",type->name,key);
 	type->read(params->cfg, key,elem_data,elem_len,handler->param);
 	return CAPWAP_RESULT_SUCCESS;
 }
