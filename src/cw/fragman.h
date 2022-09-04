@@ -19,9 +19,9 @@
 
 /**
  *@defgroup Fragman FRAGMAN
- *@breif Frgaman functions
+ *@brief Frgaman functions
  *
- * Detailed esription
+ * Detailed desription
  *@{
  */
 
@@ -33,18 +33,18 @@
 #include <time.h>
 #include <unistd.h>
 
-#ifndef FRAG_MAXSIZE
-	/** maximaum size of a fragment */
-	#define FRAG_MAXSIZE (65536+4)
-#endif
 
-#ifndef FRAG_MAXIDS
-	#define FRAG_MAXIDS 10
-#endif
+#define MAX_PKT_HDR_LEN 64
 
-#ifndef FRAG_TTL
-	#define FRAG_TTL 5
-#endif
+/** maximaum size of a fragment */
+#define FRAG_MAXSIZE (65536+MAX_PKT_HDR_LEN)
+
+#define FRAG_MAXIDS 10
+
+/**
+ * TTL of received fragment in seconds
+ */
+#define FRAG_TTL 5 
 
 
 struct frag {
@@ -57,7 +57,7 @@ struct frag {
 	int bytesreceived;
 	int bytesneeded;
 	struct timespec t;
-	uint8_t * header;
+//	uint8_t * header;
 };
 
 typedef struct frag frag_t; /*FRAGMAN;*/

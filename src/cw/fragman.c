@@ -54,6 +54,7 @@
 
 
 #include "capwap.h"
+#include "cw.h"
 #include "fragman.h"
 
 /**
@@ -101,20 +102,6 @@ static struct frag * frag_new(struct frag * frags, int fragid)
 	return NULL;
 }
 
-/*
-void fragman_free(frag_t * frags,struct frag * f)
-{
-	int i;
-	for (i=0; i<FRAG_MAXIDS; i++){
-		if (frags[i]->fragid==f->fragid){
-			frags[i]=NULL;
-			break;
-		}
-	}
-	free(f);
-}
-*/
-
 /**
  * Add a fragment
  * @pram frags Fragman object
@@ -129,12 +116,10 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 	uint32_t val0,val1;
 	int fragid,fragoffset;
 	int dst;
-	int ti;
 	
 	/* read the transport header dword 0,
 	 * contains hlen*/	
 	val0 = ntohl(*((uint32_t*)packet));
-/*	int hlen = (val0 >> 19) & 0x1f;*/
 
 	/* read the transport header dword 1,
 	 * contains fragid and fragoffset */	
@@ -142,33 +127,30 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 	fragid = val1>>16;
 	fragoffset=(val1 >>3) & 0x1fff;
 
-/*//	printf("Fragid = %i, offset = %i\n",fragid,fragoffset);*/
-	
-	/* determine size of payload */
-/*	int payloadlen = len - hlen*4;
-	if (payloadlen<0){
-		errno = EINVAL;
-		return NULL;
-	}
-*/
 	/* find / create cfragment */
 	f = frag_get(frags,fragid);
 	if (!f){
 		f = frag_new(frags,fragid);
+		if (!f){
+			errno = ENOMEM;
+			/* out of fragmentation space */
+			return NULL;
+		}
 	}
-	if (!f){
-		errno = ENOMEM;
-		/* out of fragmentation space */
-		return NULL;
-	}
-
 	errno = 0;
 
 	dst = fragoffset*8;
 
 	/* copy fragment*/
 	if (dst + payloadlen < FRAG_MAXSIZE) {
-		memcpy( f->buffer+4+dst,packet+hlen,payloadlen);
+		if (fragoffset==0){
+			/* preserve header of 1st fragment */
+			memset(f->buffer,0,MAX_PKT_HDR_LEN);
+			memcpy(f->buffer,packet,hlen);
+			cw_set_hdr_hlen(f->buffer,MAX_PKT_HDR_LEN/4);
+			cw_set_hdr_flags(f->buffer, CAPWAP_FLAG_HDR_F, 0);
+		}
+		memcpy( f->buffer+MAX_PKT_HDR_LEN+4+dst,packet+hlen,payloadlen);
 		f->bytesreceived+=payloadlen;
 	}
 
@@ -176,22 +158,14 @@ uint8_t * fragman_add(frag_t * frags, uint8_t *packet, int hlen, int payloadlen)
 		f->bytesneeded=dst+payloadlen;
 	}
 
-	
-	for (ti=0; ti<16; ti++){
-/*//		printf("%02X ",(f->buffer+4)[ti]);*/
-
-	}
-
 
 	if (f->bytesneeded>0 && f->bytesneeded<=f->bytesreceived){
 		uint8_t * r=f->buffer;
 		f->buffer=0;
-/*//		printf("last bytes need %i\n",f->bytesneeded);*/
-		*((uint32_t*)(r))=f->bytesneeded;
+		*((uint32_t*)(r+MAX_PKT_HDR_LEN))=f->bytesneeded;
 		return r; 
 	}
 
-/*//	printf("Fragman bytes needed: %i, received  %i\n",f->bytesneeded,f->bytesreceived);*/
 	return NULL;
 }
 
