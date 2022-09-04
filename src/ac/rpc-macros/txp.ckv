@@ -1,0 +1,3 @@
+radio.0/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.0/capwap80211/tx-power/current-tx-power: 1
+

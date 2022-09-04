@@ -1,0 +1,5 @@
+radio.255/capwap/operational-state/state: enabled
+radio.255/capwap/admin-state: 1
+radio.0/capwap/operational-state/state: enabled
+radio.0/capwap/admin-state: 1
+

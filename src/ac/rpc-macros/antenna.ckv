@@ -1,0 +1,10 @@
+radio.0/cisco/air-space-capability: 0
+radio.0/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio.0/cisco/antenna-payload/802-11n-tx-antennas: 7
+radio.0/cisco/antenna-payload/antenna-cnt: 2
+radio.0/cisco/antenna-payload/antenna-mode: 3
+radio.0/cisco/antenna-payload/antenna.0: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/antenna.1: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/diversity-selection: 255
+radio.0/cisco/antenna-payload/unknown: 0
+

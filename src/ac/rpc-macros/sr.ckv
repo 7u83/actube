@@ -1,0 +1,89 @@
+capwap/timers/echo-interval: 30
+capwap/timers/max-discovery-interval: 10
+
+radio.255/capwap/admin-state: 1 - enabled
+radio.0/capwap/admin-state: 1 - enabled
+radio.1/capwap/admin-state: 1 - enabled
+
+radio.0/capwap/decryption-error-report-period: 120
+radio.1/capwap/decryption-error-report-period: 120
+
+capwap/idle-timeout: 300
+
+capwap/wtp-fallback: 1
+
+cisco/spam-domain-secret: .xe1ffd18a8f15b3b59c0a47a7f17a96e7cb36174f00
+
+radio.0/capwap80211/wtp-radio-config/beacon-period: 100
+radio.0/capwap80211/wtp-radio-config/bssid: .x003a9902fac0
+radio.0/capwap80211/wtp-radio-config/cfg-period: 4
+radio.0/capwap80211/wtp-radio-config/cfg-type: 1
+radio.0/capwap80211/wtp-radio-config/cfp-maximum-duration: 60
+radio.0/capwap80211/wtp-radio-config/country-str1: "DE "
+radio.0/capwap80211/wtp-radio-config/country-str2: "DE "
+radio.0/capwap80211/wtp-radio-config/occupancy-limit: 100
+radio.0/capwap80211/wtp-radio-config/reg: 167772416
+radio.0/capwap80211/wtp-radio-information: 1
+
+radio.0/capwap80211/rate-set: .x82848b960c1218243048606c
+
+radio.0/cisco/multi-domain-capability/first-channel: 1
+radio.0/cisco/multi-domain-capability/max-tx-power-level: 65535
+radio.0/cisco/multi-domain-capability/number-of-channels: 13
+radio.0/cisco/multi-domain-capability/reserved: 1
+
+radio.0/cisco/mac-operation/fragmentation-threshold: 2346
+radio.0/cisco/mac-operation/long-retry: 4
+radio.0/cisco/mac-operation/reserved: 1
+radio.0/cisco/mac-operation/rts-threshold: 2347
+radio.0/cisco/mac-operation/rx-msdu-lifetime: 512
+radio.0/cisco/mac-operation/short-retry: 7
+radio.0/cisco/mac-operation/tx-msdu-lifetime: 512
+
+radio.1/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.1/capwap80211/tx-power/current-tx-power: 1
+
+radio.0/cisco/direct-sequence-control/cfg-type: 1 - global
+radio.0/cisco/direct-sequence-control/current-cca-mode: 0
+radio.0/cisco/direct-sequence-control/current-channel: 1
+radio.0/cisco/direct-sequence-control/energy-detect-threshold: -50
+radio.0/cisco/direct-sequence-control/unknown: 1
+
+radio.0/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio.0/cisco/antenna-payload/802-11n-tx-antennas: 7
+radio.0/cisco/antenna-payload/antenna-cnt: 2
+radio.0/cisco/antenna-payload/antenna-mode: 3
+radio.0/cisco/antenna-payload/antenna.0: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/antenna.1: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/diversity-selection: 255
+radio.0/cisco/antenna-payload/unknown: 0
+
+radio.0/cisco/air-space-capability: 0
+
+radio.0/capwap/operational-state/cause: Normal
+radio.0/capwap/operational-state/state: enabled
+
+radio.0/cisco/80211h/count: 0
+radio.0/cisco/80211h/enable: 0
+radio.0/cisco/80211h/mode: 0
+radio.0/cisco/80211h/power: 0
+
+radio.0/cisco/elem153: .x00
+radio.0/cisco/elem156: .x020100
+radio.0/cisco/lwelem48: .x01055a0101a6c405b06432b03232
+radio.1/cisco/lwelem33: .x00
+radio.0/cisco/elem146: .x690f
+
+radio.255/capwap/operational-state/cause: Normal
+radio.255/capwap/operational-state/state: enabled
+
+cisco/bcast-ssid-mode: 1
+capwap/timers/max-discovery-interval: 10
+capwap/timers/echo-interval: 30
+
+cisco/client-auto-handoff: 0
+
+cisco/lwelem14: .x000001000000000000000000000000000000
+
+
+

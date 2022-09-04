@@ -1,0 +1,13 @@
+radio.0/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.0/capwap80211/tx-power/current-tx-power: 1
+radio.0/capwap80211/wtp-radio-config/beacon-period: 100
+radio.0/capwap80211/wtp-radio-config/bssid: .x04fe7f499b90
+radio.0/capwap80211/wtp-radio-config/cfg-period: 4
+radio.0/capwap80211/wtp-radio-config/cfg-type: 1
+radio.0/capwap80211/wtp-radio-config/cfp-maximum-duration: 60
+radio.0/capwap80211/wtp-radio-config/country-str1: "DE "
+radio.0/capwap80211/wtp-radio-config/country-str2: "DE "
+radio.0/capwap80211/wtp-radio-config/occupancy-limit: 100
+radio.0/capwap80211/wtp-radio-config/reg: 167772416
+radio.0/capwap80211/wtp-radio-information: 1
+

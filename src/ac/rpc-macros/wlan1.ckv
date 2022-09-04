@@ -1,0 +1,14 @@
+radio.0/wlan.1/capwap80211/capability: 1057
+radio.0/wlan.1/capwap80211/ssid: actube
+radio.0/wlan.1/cisco/allow-aaa-override: 0
+radio.0/wlan.1/cisco/broadcast-ssid: true
+radio.0/wlan.1/cisco/dtim-period: 1
+radio.0/wlan.1/cisco/encryption-policy: 16777216
+radio.0/wlan.1/cisco/max-stations: 200
+radio.0/wlan.1/cisco/profile-name: ACTUBE
+radio.0/wlan.1/cisco/session-timout: 1800
+radio.0/wlan.1/cisco/wep-encryption: 0
+radio.0/wlan.1/cisco/wep-key: .x00000000000000000000000000
+radio.0/wlan.1/radio-id: 0
+radio.0/wlan.1/wlan-id: 1
+

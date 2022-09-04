@@ -1,0 +1,60 @@
+
+radio.0/cisco/air-space-capability: 0
+radio.0/cisco/antenna-payload/802-11n-rx-antennas: 3
+radio.0/cisco/antenna-payload/802-11n-tx-antennas: 7
+radio.0/cisco/antenna-payload/antenna-cnt: 2
+radio.0/cisco/antenna-payload/antenna-mode: 3
+radio.0/cisco/antenna-payload/antenna.0: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/antenna.1: 1 - Internal Antenna
+radio.0/cisco/antenna-payload/diversity-selection: 255
+radio.0/cisco/antenna-payload/unknown: 0
+
+radio.0/cisco/channel-power: .x08080d0108221c16100a04fefe0208221c16100a04fefe0308221c16100a04fefe0408221c16100a04fefe0508221c16100a04fefe0608221c16100a04fefe0708221c16100a04fefe0808221c16100a04fefe0908221c16100a04fefe0a08221c16100a04fefe0b08221c16100a04fefe0c08221c16100a04fefe0d08221c16100a04fefe
+
+radio.0/capwap80211/rate-set: .x82848b960c1218243048606c
+radio.0/capwap80211/tx-power/@cisco/cfg-type: 1 - global
+radio.0/capwap80211/tx-power/current-tx-power: 1
+radio.0/capwap80211/wtp-radio-config/beacon-period: 100
+radio.0/capwap80211/wtp-radio-config/bssid: .x04fe7f499b90
+radio.0/capwap80211/wtp-radio-config/cfg-period: 4
+radio.0/capwap80211/wtp-radio-config/cfg-type: 1
+radio.0/capwap80211/wtp-radio-config/cfp-maximum-duration: 60
+radio.0/capwap80211/wtp-radio-config/country-str1: "DE "
+radio.0/capwap80211/wtp-radio-config/country-str2: "DE "
+radio.0/capwap80211/wtp-radio-config/occupancy-limit: 100
+radio.0/capwap80211/wtp-radio-config/reg: 167772416
+radio.0/capwap80211/wtp-radio-information: 1
+
+
+radio.0/cisco/mac-operation/long-retry: 4
+radio.0/cisco/mac-operation/reserved: 1
+radio.0/cisco/mac-operation/rts-threshold: 2347
+radio.0/cisco/mac-operation/rx-msdu-lifetime: 512
+radio.0/cisco/mac-operation/short-retry: 7
+radio.0/cisco/mac-operation/tx-msdu-lifetime: 512
+radio.0/cisco/multi-domain-capability/first-channel: 1
+radio.0/cisco/multi-domain-capability/max-tx-power-level: 65535
+radio.0/cisco/multi-domain-capability/number-of-channels: 13
+radio.0/cisco/multi-domain-capability/reserved: 1
+
+radio.0/cisco/phy-ht-cap/asel-cap: 0
+radio.0/cisco/phy-ht-cap/extended-ht-cap-info: .x0000
+radio.0/cisco/phy-ht-cap/ht-cap-info: 6
+radio.0/cisco/phy-ht-cap/mcsrates-1: .x00000000
+radio.0/cisco/phy-ht-cap/mcsrates-2: .x00000000
+radio.0/cisco/phy-ht-cap/mcsrates-3: .x00000000
+radio.0/cisco/phy-ht-cap/mcsrates-4: .x0000ffff
+radio.0/cisco/phy-ht-cap/tx-bf-cap: .x00000000
+radio.0/cisco/phy-ht-control/cfg-type: 1 - global
+radio.0/cisco/phy-ht-control/channel-width: 20
+radio.0/cisco/phy-ht-control/cur-freq-is-dfs-channel: 0
+radio.0/cisco/phy-ht-control/current-freq: 1
+radio.0/cisco/phy-ht-control/enable-ht: 3
+radio.0/cisco/phy-ht-control/ext-channel: 0
+radio.0/cisco/phy-ht-control/flash-commit: 0
+radio.0/cisco/phy-ht-control/frequency-bands-support: 206
+radio.0/cisco/phy-ht-control/rest: .x00ffffff
+radio.0/cisco/phy-ht-control/ti-threshold: 0
+
+
+

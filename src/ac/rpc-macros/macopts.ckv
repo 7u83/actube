@@ -1,0 +1,8 @@
+radio.0/cisco/mac-operation/fragmentation-threshold: 2346
+radio.0/cisco/mac-operation/long-retry: 4
+radio.0/cisco/mac-operation/reserved: 1
+radio.0/cisco/mac-operation/rts-threshold: 2347
+radio.0/cisco/mac-operation/rx-msdu-lifetime: 512
+radio.0/cisco/mac-operation/short-retry: 7
+radio.0/cisco/mac-operation/tx-msdu-lifetime: 512
+
