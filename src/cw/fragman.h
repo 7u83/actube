@@ -35,7 +35,7 @@
 
 #ifndef FRAG_MAXSIZE
 	/** maximaum size of a fragment */
-	#define FRAG_MAXSIZE 65536+4
+	#define FRAG_MAXSIZE (65536+4)
 #endif
 
 #ifndef FRAG_MAXIDS
