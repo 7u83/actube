@@ -171,7 +171,6 @@ MISCSRC=\
 	msgset.c\
 	send.c\
 	strheap.c\
-	netconn.c\
 	conn.c \
 	val.c \
 	discovery.c\
@@ -188,6 +187,7 @@ MISCSRC=\
 #	cw_put_msg.c\
 #	conn_process_packet.c\
 #	conn_destroy.c\
+	netconn.c\
 
 DTLSSRC+=\
 	dtls_bio.c\
