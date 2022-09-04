@@ -679,8 +679,19 @@ static cw_ValStruct_t cisco_ap_venue_settings[]={
 	
 };
 
+
+static cw_ValValRange_t cisco_ap_modes[]={
+	{0,0,"0 - local"},
+	{1,1,"1 - monitor"},
+	{2,2,"2 - FlexConnect"},
+	{3,3,"3 - Rouge Detector"},
+	{4,4,"4 - Sniffer"},
+	{5,5,"5 - Bridge"},
+	{0,0,NULL}
+};
+
 static cw_ValStruct_t cisco_ap_mode_and_type[]={
-	{CW_TYPE_BYTE,"mode",1,-1},
+	{CW_TYPE_BYTE,"mode",1,-1,cisco_ap_modes},
 	{CW_TYPE_BYTE,"type",1,-1},
 	{NULL,NULL,0,0}
 };
