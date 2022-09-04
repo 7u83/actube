@@ -79,6 +79,10 @@ static const char * dbg_level_elem[]={
 static const char * dbg_level_elem_detail[] = {
 	"elem_detail_in", "elem_detail_out", NULL
 };
+	
+static const char * dbg_level_elem_all[] = {
+	"elem", "elem_dmp", "elem_detail",NULL
+};
 
 static const char * dbg_level_std[] = {
 	"msg","elem","msg_err", "elem_err", "pkt_err", "rfc", "warn", "state", "info", NULL
@@ -96,62 +100,56 @@ static const char * dbg_level_std[] = {
  * Debug strings
  */
 struct cw_DbgStr cw_dbg_strings[] = {
-	{ DBG_INFO,		"info", NULL, "Infos" },
-	{ DBG_PKT_IN,		"pkt_in",NULL, "Headers of incomming packets."  },
-	{ DBG_PKT_OUT,		"pkt_out",NULL, "Headers out outgoing packets." },
-	{ DBG_PKT_ERR,		"pkt_err", NULL, "Packets with errors which are usually discard" },
-	{ DBG_PKT_DMP_IN,	"pkt_dmp_in",NULL, "Hexdump incomming packets" },
-	{ DBG_PKT_DMP_OUT,	"pkt_dmp_out",NULL, "Hexdump outgoing packets"  },
+	{ 0, 			"std", dbg_level_std, "some useful standard options to debug CAPWAP"},
+	{ 0,			"msg", dbg_level_msg, "messages headers" },
+	{ 0,			"pkt", dbg_level_pkt, "packet headers" },
+	{ 0,			"elem", dbg_level_elem, "message elemenst" },
+	{ 0, 			"elem_detail", dbg_level_elem_detail, "details for message elements"},
+	{ 0, 			"elem_all", dbg_level_elem_all,"all possible elem options"},
 
-	{ DBG_MSG_IN,		"msg_in"  },
-	{ DBG_MSG_OUT,		"msg_out" },
-	{ DBG_MSG_DMP_IN,	"msg_dmp_in"  },
-	{ DBG_MSG_DMP_OUT,	"msg_dmp_out" },
+	{ DBG_WARN,		"warn", NULL, "warnings" },
+
+	{ DBG_ELEM_ERR, 	"elem_err", NULL, "errors in elements" },
+	{ DBG_PKT_ERR,		"pkt_err", NULL, "packets with errors which are usually would be discard" },
+	{ DBG_MSG_ERR,		"msg_err", NULL, "message errors"},
+	{ DBG_RFC,		"rfc", NULL, "errors related to RFC5415/RFC5416 viloations" },
+	{ DBG_CFG_UPDATES, 	"cfg_updates",NULL, "show configuration aupdates" },
+	{ DBG_MOD,		"mod",NULL, "module related"},
+	{ DBG_MOD_DETAIL,	"mod_detail",NULL, "module related details"},
+	{ DBG_STATE,		"state",NULL, "CAWPAP states" },
+	{ DBG_MSG_COMPOSE,	"msg_compose",NULL,"message composing details" },
+
+
+	{ DBG_INFO,		"info", NULL, "several infos are displayed" },
+	{ DBG_PKT_IN,		"pkt_in",NULL, "headers of incomming packets."  },
+	{ DBG_PKT_OUT,		"pkt_out",NULL, "headers out outgoing packets." },
+	{ DBG_PKT_DMP_IN,	"pkt_dmp_in",NULL, "hex-dump incomming packets" },
+	{ DBG_PKT_DMP_OUT,	"pkt_dmp_out",NULL, "hex-dump outgoing packets"  },
+
+	{ DBG_MSG_IN,		"msg_in", NULL, "incomming messages" },
+	{ DBG_MSG_OUT,		"msg_out", NULL, "outgoing messages" },
+	{ DBG_MSG_DMP_IN,	"msg_dmp_in", NULL, "hex-dump incomming messages" },
+	{ DBG_MSG_DMP_OUT,	"msg_dmp_out", NULL,"hex-dump of outgong messages"  },
 	
-	{ DBG_MSG_ERR,		"msg_err"},
 
-	{ DBG_RFC,		"rfc", 	 },
-
-	{ DBG_ELEM_IN,  	"elem_in"},
-	{ DBG_ELEM_OUT, 	"elem_out"},
-	{ DBG_ELEM_DMP, 	"elem_dmp"},
-	{ DBG_ELEM_ERR, 	"elem_err" },
-	{ DBG_ELEM_DETAIL_IN, 	"elem_detail_in" },
-	{ DBG_ELEM_DETAIL_OUT, 	"elem_detail_out" },
-	{ DBG_ELEM_VNDR,	"elem_vndr"},	
+	{ DBG_ELEM_IN,  	"elem_in", NULL, "elements of incomming messages"},
+	{ DBG_ELEM_OUT, 	"elem_out", NULL, "elements of outgoing messages"},
+	{ DBG_ELEM_DETAIL_IN, 	"elem_detail_in", NULL, "details of incomming message elements" },
+	{ DBG_ELEM_DETAIL_OUT, 	"elem_detail_out",NULL, "details of outgoing message elememnts" },
+	{ DBG_ELEM_DMP, 	"elem_dmp", NULL, "hex-dump of each message element"},
+	{ DBG_ELEM_VNDR,	"elem_vndr", NULL, "expand vendor specific payloads"},	
 	
-	{ DBG_DTLS, 		"dtls" },
-	{ DBG_DTLS_BIO,		"dtls_bio" },
-	{ DBG_DTLS_BIO_DMP,	"dtls_bio_dmp"},
-	{ DBG_DTLS_DETAIL, 	"dtls_detail"},
+	{ DBG_DTLS, 		"dtls",NULL, "DTLS related stuff"},
+	{ DBG_DTLS_BIO,		"dtls_bio",NULL, "DTLS BIO releated" },
+	{ DBG_DTLS_BIO_DMP,	"dtls_bio_dmp",NULL, "hex-dump dtls packets" },
+	{ DBG_DTLS_DETAIL, 	"dtls_detail",NULL, "DTLS detailed messages"},
 
-	{ DBG_CFG_UPDATES, 	"cfg_updates" },
-	{ DBG_X,		"x" },
+	{ DBG_X,		"x", NULL, "only for developers" },
 
-	
-//	{DBG_CFG_DMP, "cfg_dmp" },
-	
-	{ DBG_WARN,		"warn" },
-		
-	{ DBG_MOD,		"mod"},
-	{ DBG_STATE,		"state" },
-	{ DBG_MSG_COMPOSE,	"msg_compose" },
-
-
-
-	{ 0, 			"std", dbg_level_std, "Standard options"},
-	{ 0,			"msg", dbg_level_msg, "Same as" },
-	{ 0,			"pkt", dbg_level_pkt, "Same as" },
-	{ 0,			"elem", dbg_level_elem, "elem" },
-	{ 0, 			"elem_detail", dbg_level_elem_detail, "elem datail"},
-
-	{ (DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_detail" },
-	{ (DBG_ELEM_IN | DBG_ELEM_OUT | DBG_ELEM_DMP | DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_all" },
-
-	{ DBG_ALL, 		"all"},
+	{ DBG_ALL, 		"all", NULL, "all debug levels at once"},
 
 	
-	{ CW_STR_STOP, NULL } 
+	{ 0, NULL } 
 };
 
 /**
@@ -586,10 +584,11 @@ void cw_dbg_set_level (int level, int on)
 
 int cw_dbg_set_level_from_str0(const char *level,int on)
 {
-	int i;
+	int i,all;
+	all = strcmp(level,"all")==0 ? 1: 0;
 	
 	for(i=0; cw_dbg_strings[i].str != NULL; i++){
-		if (strcmp(cw_dbg_strings[i].str,level)==0){
+		if (strcmp(cw_dbg_strings[i].str,level)==0 || all){
 			if (cw_dbg_strings[i].str_list==NULL)
 				cw_dbg_set_level(cw_dbg_strings[i].level,on);
 			else {
@@ -600,9 +599,12 @@ int cw_dbg_set_level_from_str0(const char *level,int on)
 					}
 				}
 			}
-			return 1;
+			if (!all)
+				return 1;
 		}
 	}	
+	if (all)
+		return 1;
 /*	blevel = cw_strlist_get_id(cw_dbg_strings, slevel);
 	if (blevel==-1)
 		return 0;
@@ -636,6 +638,26 @@ int cw_dbg_set_level_from_str(const char *level)
 	return cw_dbg_set_level_from_str0(slevel,on);
 }
 
+void cw_dbg_print_help(FILE *out, const char * prefix)
+{
+	struct cw_DbgStr *s;
+	for (s=cw_dbg_strings; s->str != NULL; s++){
+		const char * descr = s->descr!=NULL ? s->descr : "";
+		fprintf(out,"%s%s: %s",prefix,s->str,descr);
+		if (s->str_list != NULL){
+			const char **l;
+			char *sp="";
+			fprintf(out," (");
+			for(l = s->str_list; *l!=NULL; l++){
+				fprintf(out,"%s%s",sp,*l);
+				sp=" ";
+			}
+			fprintf(out,")");
+		}
+		fprintf(out,"\n");
+	}
+
+}
 
 /*
 void dbg_istore_dmp(mbag_t s)

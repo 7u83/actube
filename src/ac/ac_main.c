@@ -124,10 +124,21 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 			case '?':
 				exit(EXIT_FAILURE);
 			default:
-			case 'h':
-				printf("%s: -vcmh\n",argv[0]);
+			case 'h': 
+			{
+				FILE *out = stdout;
+				fprintf(out, "Usage:");
+				fprintf(out, "%s [ options ] ",argv[0]);
+				fprintf(out, "\nOptions are:\n");
+				fprintf(out, "  -c <file>:  specify a config file\n");
+				fprintf(out, "  -p <path>:  specify a ipath where to search for modules\n");
+				fprintf(out, "  -v:         print version information\n");
+				fprintf(out, "  -d <level>: set debug level, multiple -d's are possible\n"); 
+				fprintf(out, "    <level> can be one of these:\n");
+				cw_dbg_print_help(out,"    ");
 				exit(EXIT_SUCCESS);
 				break;
+			}
 		}
 	}
 	return 0;

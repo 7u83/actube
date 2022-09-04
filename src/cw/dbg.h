@@ -243,6 +243,8 @@ void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel,
 */
 int cw_dbg_is_level(int level);
 
+void cw_dbg_print_help(FILE *out, const char * prefix);
+
 
 #define stop() printf("STOP IN %s:%d - %s\n", __FILE__, __LINE__, __FUNCTION__); exit(1)
 
