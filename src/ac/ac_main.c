@@ -131,7 +131,7 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 				fprintf(out, "%s [ options ] ",argv[0]);
 				fprintf(out, "\nOptions are:\n");
 				fprintf(out, "  -c <file>:  specify a config file\n");
-				fprintf(out, "  -p <path>:  specify a ipath where to search for modules\n");
+				fprintf(out, "  -p <path>:  specify a path where to search for modules\n");
 				fprintf(out, "  -v:         print version information\n");
 				fprintf(out, "  -d <level>: set debug level, multiple -d's are possible\n"); 
 				fprintf(out, "    <level> can be one of these:\n");
