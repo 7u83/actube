@@ -159,10 +159,6 @@ int list_cmd(struct rpcdata *sd, const char *cmd)
 
 int exit_cmd(struct rpcdata *sd, const char *cmd)
 {
-		//fprintf(sd->out,"Unknown command: '%s'\n\r\n\r",cmd);
-
-//	printf("Exitcmd %s\n",cmd);
-	//fprintf(sd->out,"END: %s\n\r",cmd);
 	finish_cmd(sd->out);
 	fflush(sd->out);
 	return 1;
@@ -290,7 +286,6 @@ send_cmd(struct rpcdata * sd, const char *cmd)
 
 		fprintf(sd->out, "Sending update cmd\n");
 
-//		conn->update_cfg=sd->update_cfg;
 	}
 errX:	
 	wtplist_unlock();
@@ -311,8 +306,6 @@ wlan0_cmd(struct rpcdata * sd, const char *cmd)
 	}
 	else {
 		FILE *f=fopen("wlan0.ktv","r");
-//		cw_ktv_read_file(f,sd->update_cfg,conn->msgset->types_tree);
-		//conn->update_cfg=sd->update_cfg;
 		fclose(f);
 	}
 	wtplist_unlock();
@@ -393,31 +386,6 @@ int del_cmd(struct rpcdata *sd, const char *str)
 	finish_cmd(sd->out);
 	return 0;
 }
-
-
-/*
-void show_cfg (FILE *out, mavl_t ktv)
-{
-	char value[500];
-	struct cw_Val * data;
-	mavliter_t it;
-	const struct cw_Type * type;
-	
-	
-	mavliter_init(&it,ktv);
-
-	mavliter_foreach(&it){
-		
-		data = mavliter_get(&it);
-		type = data->type;
-		type->to_str(data,value,0);
-		
-		fprintf(out,"%s :%s: %s\n",data->key,type->get_type_name(data), value);
-	}
-	
-	
-}
-*/
 
 
 void print_mw(FILE *f, int w, const char * str)
@@ -505,62 +473,6 @@ struct cw_Conn * find_ap(const char *name)
 }
 
 
-void con (FILE *out)
-{
-	stop();
-
-/*	
-	struct connlist * cl;
-	mavliter_t it;
-	
-	
-	
-	wtplist_lock();
-	
-	cl = wtplist_get_connlist();
-	
-	
-	mavliter_init (&it, cl->by_addr);
-	fprintf (out, "IP\t\t\twtp-name\n");
-	mavliter_foreach (&it) {
-		cw_Val_t * result;
-		char addr[SOCK_ADDR_BUFSIZE];
-		char wtp_name[CAPWAP_MAX_WTP_NAME_LEN];
-		struct cw_Conn * conn;
-		conn = mavliter_get_ptr (&it);
-		
-		sock_addr2str_p (&conn->addr, addr);
-		
-		result = cw_ktv_get (conn->remote_cfg, "wtp-name", NULL);
-		
-		if (result == NULL) {
-			strcpy (wtp_name, "");
-			
-		} else {
-			result->type->to_str (result, wtp_name, CAPWAP_MAX_WTP_NAME_LEN);
-		}
-		
-		
-		fprintf (out, "Con!! %s\t\t%s\n", addr, wtp_name);
-		
-		{
-			stop();
-
-			mavl_t update;
-//			update = cw_ktv_create();
-//			cw_ktv_set_byte(update,"radio.255/admin-state",1);
-//			conn->update_cfg=update;
-		}
-
-
-		fprintf(out,"\n");
-
-	}
-	wtplist_unlock();
-	*/
-}
-
-
 struct command * find_cmd(const char *cmd)
 {
 	struct command * search,*result;
@@ -585,7 +497,6 @@ int execute_cmd (struct rpcdata * sd, const char *str)
 	char cmd[1024];
 	char args[1024];
 	int n;
-	struct cw_Val_Reader reader;
 	struct command * searchcmd;
 
 	args[0]=0;
@@ -619,72 +530,7 @@ int execute_cmd (struct rpcdata * sd, const char *str)
 
 	return 0;
 	
-	
-	char key[CW_CFG_MAX_KEY_LEN];
-	char type[128];
-	char val[2048];
-
-	key[0]=0;
-	type[0]=0;
-	val[0]=0;
-
-	stop();
-//	cw_ktv_init_str_reader(&reader,str, strlen(str));
-//	n = cw_ktv_parse_string(&reader, key,type,val);
-	
-	if (n==-1){
-		int i;
-		fprintf(sd->out,"Error on pos %d\n",reader.pos);
-		fprintf(sd->out,"%s",str);
-		for(i=0;i<reader.pos;i++){
-			fprintf(sd->out," ");
-		}
-		fprintf(sd->out,"^\n");
-		fprintf(sd->out,"%s\n",reader.error);
-	}
-	else{
-		fprintf(sd->out,"%s :%s: %s\n", key,type,val);
-	}
-	return 0;
-	
-	
-	n = sscanf (str, "%s%s", cmd, args);
-
-	if (n<=0)
-		return 0;
-	/*printf("CMD: %s, ARGS:\n",cmd);*/
-	
-	if (strcmp (cmd, "s") == 0) {
-		show_aps (sd->out);
-		return 0;
-	}
-	
-	if (strcmp (cmd, "con")==0){
-		con(sd->out);
-		return 0;
-	}
-	
-	return 0;
 }
-
-struct esc_strings {
-	char *str;
-	char * result;
-};
-
-struct esc_strings estr[] = {
-	{"\x1b[H", "home"},
-	{"\x1b[F", "end"},
-	{"\x1b[A", "up"},
-	{"\x1b[B", "donw"},
-	{"\x1b[D", "left"},
-	{"\x1b[C", "right"},
-
-	{NULL,NULL}
-
-};
-
-
 
 
 
@@ -751,9 +597,6 @@ void * run_rpc_server (void * arg)
 			close (clientsock);
 		}
 		
-		
-		
-		//cw_dbg (DBG_INFO,"Accepting shell session %i, %s", rc, strerror (errno));
 	}	
 	
 	return NULL;
@@ -793,8 +636,6 @@ int create_tcp_fd(const char *name)
 }
 static int create_unix_fd(const char *name)
 {
-        //struct sockaddr_storage client;
-	//socklen_t client_size;
 	struct sockaddr_un addr;
 	int rc,fd;
 
@@ -808,7 +649,6 @@ static int create_unix_fd(const char *name)
 		cw_log (LOG_ERR, "Can't bind socket 'unix:%s', %s", name, strerror (errno));
 		return -1;
 	}
-	//int clientsock = accept (fd, (struct sockaddr*) &client, &client_size);
 
 	return fd;
 }
@@ -817,7 +657,7 @@ int start_rpc(cw_Cfg_t *global_cfg)
 {
 	struct sockdata * sockdata;
 	const char *sockname;
-	int rc; //, type;
+	int rc; 
 	int fd;
 
 	rc = cw_cfg_get_bool(global_cfg,"actube/rpc/enable",1);
