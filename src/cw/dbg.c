@@ -47,7 +47,116 @@ uint32_t cw_dbg_opt_display = DBG_DISP_COLORS;
 /**
  * Current debug level
  */
-uint32_t cw_dbg_opt_level = 0;
+//static uint32_t cw_dbg_opt_level = 0;
+//
+static struct mavl * cw_dbg_opt_level = NULL;
+static int dbg_cmp(const void *a, const void*b)
+{
+	return (*((int*)a)-*((int*)b));
+}
+
+
+struct cw_DbgStr {
+	int level;
+	const char *str;
+	const char ** str_list;
+	const char *descr;
+};
+
+
+static const char * dbg_level_msg[] = {
+	"msg_in", "msg_out", NULL
+};
+
+static const char * dbg_level_pkt[] = {
+	"pkt_in", "pkt_out",  NULL
+};
+
+static const char * dbg_level_elem[]={
+	"elem_in","elem_out",NULL
+};
+
+static const char * dbg_level_elem_detail[] = {
+	"elem_detail_in", "elem_detail_out", NULL
+};
+
+static const char * dbg_level_std[] = {
+	"msg","elem","msg_err", "elem_err", "pkt_err", "rfc", "warn", "state", "info", NULL
+/*		
+	DBG_MSG_IN, DBG_MSG_OUT,
+	DBG_ELEM_IN, DBG_ELEM_OUT,
+	DBG_MSG_ERR, DBG_ELEM_ERR,
+	DBG_PKT_ERR, DBG_RFC, DBG_WARN,
+	DBG_STATE, DBG_INFO,
+	0*/
+};
+
+
+/**
+ * Debug strings
+ */
+struct cw_DbgStr cw_dbg_strings[] = {
+	{ DBG_INFO,		"info", NULL, "Infos" },
+	{ DBG_PKT_IN,		"pkt_in",NULL, "Headers of incomming packets."  },
+	{ DBG_PKT_OUT,		"pkt_out",NULL, "Headers out outgoing packets." },
+	{ DBG_PKT_ERR,		"pkt_err", NULL, "Packets with errors which are usually discard" },
+	{ DBG_PKT_DMP_IN,	"pkt_dmp_in",NULL, "Hexdump incomming packets" },
+	{ DBG_PKT_DMP_OUT,	"pkt_dmp_out",NULL, "Hexdump outgoing packets"  },
+
+	{ DBG_MSG_IN,		"msg_in"  },
+	{ DBG_MSG_OUT,		"msg_out" },
+	{ DBG_MSG_DMP_IN,	"msg_dmp_in"  },
+	{ DBG_MSG_DMP_OUT,	"msg_dmp_out" },
+	
+	{ DBG_MSG_ERR,		"msg_err"},
+
+	{ DBG_RFC,		"rfc", 	 },
+
+	{ DBG_ELEM_IN,  	"elem_in"},
+	{ DBG_ELEM_OUT, 	"elem_out"},
+	{ DBG_ELEM_DMP, 	"elem_dmp"},
+	{ DBG_ELEM_ERR, 	"elem_err" },
+	{ DBG_ELEM_DETAIL_IN, 	"elem_detail_in" },
+	{ DBG_ELEM_DETAIL_OUT, 	"elem_detail_out" },
+	{ DBG_ELEM_VNDR,	"elem_vndr"},	
+	
+	{ DBG_DTLS, 		"dtls" },
+	{ DBG_DTLS_BIO,		"dtls_bio" },
+	{ DBG_DTLS_BIO_DMP,	"dtls_bio_dmp"},
+	{ DBG_DTLS_DETAIL, 	"dtls_detail"},
+
+	{ DBG_CFG_UPDATES, 	"cfg_updates" },
+	{ DBG_X,		"x" },
+
+	
+//	{DBG_CFG_DMP, "cfg_dmp" },
+	
+	{ DBG_WARN,		"warn" },
+		
+	{ DBG_MOD,		"mod"},
+	{ DBG_STATE,		"state" },
+	{ DBG_MSG_COMPOSE,	"msg_compose" },
+
+
+
+	{ 0, 			"std", dbg_level_std, "Standard options"},
+	{ 0,			"msg", dbg_level_msg, "Same as" },
+	{ 0,			"pkt", dbg_level_pkt, "Same as" },
+	{ 0,			"elem", dbg_level_elem, "elem" },
+	{ 0, 			"elem_detail", dbg_level_elem_detail, "elem datail"},
+
+	{ (DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_detail" },
+	{ (DBG_ELEM_IN | DBG_ELEM_OUT | DBG_ELEM_DMP | DBG_ELEM_DETAIL_IN | DBG_ELEM_DETAIL_OUT), "elem_all" },
+
+	{ DBG_ALL, 		"all"},
+
+	
+	{ CW_STR_STOP, NULL } 
+};
+
+/**
+ *@}
+ */
 
 
 
@@ -185,13 +294,19 @@ const char *get_dbg_color_ontext(int level)
 
 int cw_dbg_is_level(int level)
 {
-	if (level > 1 && (level &1))
+	if (cw_dbg_opt_level == NULL)
+		return 0;
+
+	return mavl_get(cw_dbg_opt_level,&level) == NULL ? 0:1;
+
+
+//	if (level > 1 && (level &1))
 		return 1;
 
 /*	if (level >= DBG_ALL ){
 		return 1;
 	}*/
-	return (cw_dbg_opt_level & (level));
+//	return (cw_dbg_opt_level & (level));
 }
 
 
@@ -428,9 +543,98 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 
 
 
+/**
+  * Set debug level
+  * @param level debug level to set, allowed values are enumberated in #cw_dbg_levels structure.
+  * @param on 1: turns the specified debug level on, 0: turns the specified debug level off.
+  */
+
+void cw_dbg_set_level (int level, int on)
+{
+	int exists;
+
+	if (cw_dbg_opt_level == NULL){
+		cw_dbg_opt_level = mavl_create(dbg_cmp,NULL,sizeof(int));
+		if (cw_dbg_opt_level == NULL)
+			return;
+	}
+
+	if (on){
+		mavl_insert(cw_dbg_opt_level,&level,&exists);
+	}
+	else 
+		mavl_del(cw_dbg_opt_level,&level);
 
 
+/*
+	switch (level) {
+		case DBG_ALL:
+			if (on)
+				cw_dbg_opt_level = 0xffffffff;
+			else
+				cw_dbg_opt_level = 0;
+			break;
+		default:
+			if (on)
+				cw_dbg_opt_level |= (level);
+			else 
+				cw_dbg_opt_level &= (0xffffffff) ^ (level);
+	}
+	*/
+}
 
+
+int cw_dbg_set_level_from_str0(const char *level,int on)
+{
+	int i;
+	
+	for(i=0; cw_dbg_strings[i].str != NULL; i++){
+		if (strcmp(cw_dbg_strings[i].str,level)==0){
+			if (cw_dbg_strings[i].str_list==NULL)
+				cw_dbg_set_level(cw_dbg_strings[i].level,on);
+			else {
+				const char **l;
+				for (l=cw_dbg_strings[i].str_list; *l; l++){
+					if (!cw_dbg_set_level_from_str0(*l,on)){
+						stop();
+					}
+				}
+			}
+			return 1;
+		}
+	}	
+/*	blevel = cw_strlist_get_id(cw_dbg_strings, slevel);
+	if (blevel==-1)
+		return 0;
+*/		
+//	cw_dbg_set_level(blevel,on);
+//	return 1;
+	return 0;
+}
+
+
+int cw_dbg_set_level_from_str(const char *level)
+{
+	int on;
+	const char *slevel;
+	
+	switch(*level){
+		case '-':
+		case '!':
+		case '~':
+			on =0;
+			slevel=level+1;
+			break;
+		case '+':
+			slevel=level+1;
+			on=1;
+			break;
+		default:
+			slevel=level;
+			on=1;
+	}
+	return cw_dbg_set_level_from_str0(slevel,on);
+}
 
 
 /*

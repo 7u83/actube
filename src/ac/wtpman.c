@@ -700,7 +700,6 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len)
 {
-	cw_dbg(DBG_X,"ADD PACKET DETECTED %d",wtpman->conn->detected);
 	conn_q_add_packet(wtpman->conn, packet, len);
 }
 

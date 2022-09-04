@@ -101,21 +101,29 @@ int main (int argc, char **argv)
 	struct cw_DiscoveryResults * results;
 	const char *bind_addr, *disc_addr;
 
-/*
+
+/*	
+
 {
 	struct cw_ValBit bits[] = {
-		{0,"burtstag"},
-		{10,"windows"},
-		{2,NULL}
+		{0,"ess"},
+		{1,"ibss"},
+		{2,"cf-pollable"},
+		{3,"cf-poll-request"},
+		{4,"privacy"},
+		{5,"short-preamble"},
+		{2,"pbcc"},
+		{3,"cf-poll-request"},
+		{2,NULL}	
 	};
 	uint16_t x;
-	cw_set_word(&x,65534);
+	cw_set_word(&x,1057);
 
 	CW_TYPE_BITS->read(global_cfg,"hello",(uint8_t*)(&x),2,bits);
 	exit(0);
-}	
-*/	
-	
+}
+*/
+
 	bootcfg.nmods=0;
 	
 	/* read command line args, results are in bootcfg */
@@ -165,8 +173,6 @@ int main (int argc, char **argv)
 		}
 		cw_dbg(DBG_INFO,"Local startup '%s' loaded.",bootcfg.local_startup_file);
 	}
-
-	cw_cfg_dump(global_cfg);
 
 	/* Create a temp. cfg */
 	cfg = cw_cfg_create();

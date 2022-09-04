@@ -48,91 +48,91 @@
  */ 
 enum cw_dbg_levels{
 	/** Show headers of incomming/outgoing CAPWAP packets */
-	DBG_PKT_IN 	= (1<<0), 
-	DBG_PKT_OUT 	= (1<<1),	
+	DBG_PKT_IN 	= 1, 
+	DBG_PKT_OUT,	
 
 	/** Hex-dump incomming/outgoing CAPWAP packets */
-	DBG_PKT_DMP_IN	= (1<<3),
-	DBG_PKT_DMP_OUT = (1<<4),
+	DBG_PKT_DMP_IN,
+	DBG_PKT_DMP_OUT,
 
 	/** Incomming CAPWAP packets with errors, wich would
 	    usually silently discarded */ 
-	DBG_PKT_ERR	= (1<<5),
+	DBG_PKT_ERR,
 	
 
 	/** Display incomming/outgoing CAPWAP/LWAPP messages */
-	DBG_MSG_IN	= (1<<6),
-	DBG_MSG_OUT	= (1<<7),
+	DBG_MSG_IN,
+	DBG_MSG_OUT,
 
 	/** Show hex-dump of messages */
-	DBG_MSG_DMP_IN	= (1<<8),
-	DBG_MSG_DMP_OUT	= (1<<9),
+	DBG_MSG_DMP_IN,
+	DBG_MSG_DMP_OUT,
 
 	/** Message errors */
-	DBG_MSG_ERR	= (1<<10),
+	DBG_MSG_ERR,
 
 	/** Show message elements in incomming/outgoing messages */
-	DBG_ELEM_IN	= (1<<11),
-	DBG_ELEM_OUT	= (1<<12),
+	DBG_ELEM_IN,
+	DBG_ELEM_OUT,
 
 	/** Show message element details  */
-	DBG_ELEM_DETAIL_IN = (1<<13),
-	DBG_ELEM_DETAIL_OUT = (1<<14),
+	DBG_ELEM_DETAIL_IN,
+	DBG_ELEM_DETAIL_OUT,
 
 	/** Error in msg elements */
-	DBG_ELEM_ERR	= (1<<15),
+	DBG_ELEM_ERR,
 
 	/** hex dump elements */	
-	DBG_ELEM_DMP	= (1<<16),
+	DBG_ELEM_DMP,
 
 	/** General infos, like CAPWAP state */
-	DBG_INFO	= (1<<17),	
+	DBG_INFO,	
 
 	/** Misc. warnings */
-	DBG_WARN	= (1<<18),
+	DBG_WARN,
 
 	/** RFC related */
-	DBG_RFC		= (1<<19),
+	DBG_RFC,
 
 	/** DTLS related messages */
-	DBG_DTLS	= (1<<20),
+	DBG_DTLS,
 
 	/** DTLS BIOs in/out */
-	DBG_DTLS_BIO	= (1<<21),
+	DBG_DTLS_BIO,
 
 	/** Dump DTLS BIO i/o */
-	DBG_DTLS_BIO_DMP = (1<<22),
+	DBG_DTLS_BIO_DMP,
 
 	/** Show DTLS Details */
-	DBG_DTLS_DETAIL	= (1<<23),
+	DBG_DTLS_DETAIL,
 	
-//	DBG_CFG_DMP	= (1<<20),
+//	DBG_CFG_DMP,
 
-//	DBG_CFG_SET	= (1<<21),
+//	DBG_CFG_SET,
 
 	/** Debug Mods */
-	DBG_MOD		= (1<<24),
+	DBG_MOD,
 	
        	/**Debug State machine */
-	DBG_STATE	= (1<<25),
+	DBG_STATE,
 	
 	
-	DBG_MSG_COMPOSE	= (1<<26),
+	DBG_MSG_COMPOSE,
 
-	DBG_CFG_UPDATES	= (1<<27),
+	DBG_CFG_UPDATES,
 
-	DBG_ELEM_VNDR	= (1<<28),
+	DBG_ELEM_VNDR,
 	
 
-	DBG_X		= (1<<30),
+	DBG_X,
 
-	DBG_MOD_DETAIL	= (1<<31),
+	DBG_MOD_DETAIL,
 
-	DBG_ALL 	= (0x7fffffff),
+	DBG_ALL,
 
 
-	DBG_ELEM_DMP_IN	= 7,
-	DBG_ELEM_DMP_OUT = 9,
+	DBG_ELEM_DMP_IN,
+	DBG_ELEM_DMP_OUT,
 
 
 };
@@ -192,8 +192,8 @@ void cw_dbg_dmp(int level, const uint8_t * data, int len, const char *format, ..
 
 
 extern uint32_t cw_dbg_opt_display;
-extern uint32_t cw_dbg_opt_level;
-extern struct cw_StrListElem cw_dbg_strings[];
+//extern uint32_t cw_dbg_opt_level;
+//extern struct cw_StrListElem cw_dbg_strings[];
 
 /*
 #define cw_dbg cw_dbg_colored

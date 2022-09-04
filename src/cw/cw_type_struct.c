@@ -37,16 +37,13 @@ static int read_struct(cw_Cfg_t * cfg,const cw_ValStruct_t * stru, const char *p
 				break;
 			default:
 				l = stru[i].len;
-				cw_dbg(DBG_X,"pos: %d, l:%d. len: %d",pos,l,len); 
 				if (pos+l > len){
 					l = pos<len ? len-pos : 0 ;
 				}
 			
 		}
-		cw_dbg(DBG_X,"This is l %d",l);
 		l=stru[i].type->read(cfg,key,data+pos,l,stru[i].valguard);
 
-		
 //		printf("READ STRUCT (%d): %s: %s\n",pos,key,dbstr);
 		
 		if (stru[i].len==-1){

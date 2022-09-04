@@ -7,8 +7,6 @@ CWSRC=\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
 	cw_dbg_elem.c\
-	cw_dbg_set_level.c\
-	cw_dbg_set_level_from_str.c\
 	cw_filename.c\
 	cw_format_dump.c\
 	cw_format_pkt_hdr.c\
@@ -136,7 +134,8 @@ LOGSRC=\
 	log_errno.c\
 	log_syslog.c\
 	dbg.c\
-	dbg_strings.c\
+
+#	dbg_strings.c\
 
 MISCSRC=\
 	bstr16_create.c\

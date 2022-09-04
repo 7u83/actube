@@ -434,7 +434,7 @@ static cw_ValStruct_t cisco_wtp_radio_config73[]={
 	{CW_TYPE_WORD,"@cisco/occupancy-limit",2,-1},
 	{CW_TYPE_BYTE,"@cisco/cfg-period",1,-1},
 	{CW_TYPE_WORD,"@cisco/cfp-maximum-duration",2,-1},
-	{CW_TYPE_BSTR16,"bssid",6,-1},
+	{CW_TYPE_BSTR16,"capwap80211/bssid",6,-1},
 	{CW_TYPE_WORD,"beacon-period",2,-1},
 	{CW_TYPE_STR,"@cisco/country-string",3,-1},
 	{CW_TYPE_STR,"country-string",2,-1},
@@ -535,6 +535,53 @@ static cw_ValStruct_t cisco_station_cfg_stru[]={
 
 
 
+static cw_ValStruct_t cisco_ap_qos73[]={
+	{CW_TYPE_BYTE,"tag-packets",1,-1},
+
+	{CW_TYPE_BYTE,"uranium-queue-depth",1,-1},
+	{CW_TYPE_WORD,"uranium-cwmin",2,-1},
+	{CW_TYPE_WORD,"uranium-cwmax",2,-1},
+	{CW_TYPE_BYTE,"uranium-aifs",1,-1},
+	{CW_TYPE_WORD,"uranium-cbr",2,-1},
+	{CW_TYPE_BYTE,"uranium-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"uranium-dscp-tag",1,-1},
+	
+	{CW_TYPE_BYTE,"platinum-queue-depth",1,-1},
+	{CW_TYPE_WORD,"platinum-cwmin",2,-1},
+	{CW_TYPE_WORD,"platinum-cwmax",2,-1},
+	{CW_TYPE_BYTE,"platinum-aifs",1,-1},
+	{CW_TYPE_WORD,"platinum-cbr",2,-1},
+	{CW_TYPE_BYTE,"platinum-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"platinum-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"gold-queue-depth",1,-1},
+	{CW_TYPE_WORD,"gold-cwmin",2,-1},
+	{CW_TYPE_WORD,"gold-cwmax",2,-1},
+	{CW_TYPE_BYTE,"gold-aifs",1,-1},
+	{CW_TYPE_WORD,"gold-cbr",2,-1},
+	{CW_TYPE_BYTE,"gold-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"gold-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"silver-queue-depth",1,-1},
+	{CW_TYPE_WORD,"silver-cwmin",2,-1},
+	{CW_TYPE_WORD,"silver-cwmax",2,-1},
+	{CW_TYPE_BYTE,"silver-aifs",1,-1},
+	{CW_TYPE_WORD,"silver-cbr",2,-1},
+	{CW_TYPE_BYTE,"silver-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"silver-dscp-tag",1,-1},
+
+	{CW_TYPE_BYTE,"bronze-queue-depth",1,-1},
+	{CW_TYPE_WORD,"bronze-cwmin",2,-1},
+	{CW_TYPE_WORD,"bronze-cwmax",2,-1},
+	{CW_TYPE_BYTE,"bronze-aifs",1,-1},
+	{CW_TYPE_WORD,"bronze-cbr",2,-1},
+	{CW_TYPE_BYTE,"bronze-dot1p-tag",1,-1},
+	{CW_TYPE_BYTE,"bronze-dscp-tag",1,-1},
+
+	{CW_TYPE_BSTR16, "rest", -1, -1},
+	{NULL,NULL,0,0}
+};
+
 static cw_ValStruct_t cisco_ap_qos[]={
 	{CW_TYPE_BYTE,"tag-packets",1,-1},
 	{CW_TYPE_BYTE,"uranium-queue-depth",1,-1},
@@ -580,6 +627,12 @@ static cw_ValStruct_t cisco_ap_qos[]={
 	{NULL,NULL,0,0}
 };
 
+
+
+
+
+
+
 static cw_ValStruct_t cisco_ap_core_dump[]={
 	{CW_TYPE_IPADDRESS,"tftp-server",4,-1},
 	{CW_TYPE_BOOL,"compression",1,16},
@@ -613,6 +666,9 @@ static cw_ValStruct_t cisco_rouge_detections[]={
 	{CW_TYPE_BSTR16,"rest",6,-1},
 	{NULL,NULL,0,0}
 };
+
+
+
 
 static cw_ValStruct_t cisco_ap_venue_settings[]={
 	{CW_TYPE_WORD,"group",2,-1},
@@ -661,7 +717,6 @@ static cw_ValStruct_t cisco_add_wlan70[]={
 	{CW_TYPE_BYTE, "cisco/dtim-period",1,440},
 	{CW_TYPE_STR,"cisco/profile-name",30,441},
 	{CW_TYPE_STR, "capwap80211/ssid",33,474},
-
 	
 	{NULL,NULL,0,0}
 };
@@ -690,7 +745,7 @@ static cw_ValStruct_t cisco_add_wlan73[]={
 	{CW_TYPE_STR, "cisco/profile-name",30,545},
 	{CW_TYPE_BYTE, "cisco/allow-aaa-override",1,578},
 	{CW_TYPE_BYTE, "cisco/max-stations",1,580},
-	{CW_TYPE_STR, "capwap80211/ssid", 512 , 583},
+	{CW_TYPE_STR, "capwap80211/ssid", -1 , 583},
 	{NULL,NULL,0,0}
 };
 static int cisco_add_wlan_mkkey73(const char *pkey, uint8_t*data, int len, char *dst)
@@ -702,12 +757,7 @@ static int cisco_add_wlan_mkkey73(const char *pkey, uint8_t*data, int len, char 
         return 1;
 }
 
-
-
-
-
-
-static int cisco_in_lw_del_wlan(struct cw_ElemHandler *eh, 
+static int cisco_in_del_wlan(struct cw_ElemHandler *eh, 
 		struct cw_ElemHandlerParams *params, 
 			uint8_t * data,	 int len)
 {
@@ -777,6 +827,7 @@ static cw_ValStruct_t cisco_add_lwwlan73[]={
 static int cisoc_add_lwwlan_mkkey73(const char *pkey, uint8_t*data, int len, char *dst)
 {
 	int wlan_id,radio_id;
+	sprintf(dst,"update-wlan");
 	return 0;
 	stop();	
 	radio_id = cw_get_byte(data);
@@ -1769,6 +1820,19 @@ static struct cw_ElemHandler handlers70[] = {
 		cisco_phy_ht_control_stru
 	},
 
+	{ 
+		"Cisco LWAP Elem 15",			/* name */
+
+		CISCO_LWELEM_15,				/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		
+		1,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/lwelem15",			/* Key */
+		cw_in_radio_generic,				/* get */
+		cw_out_radio_generic				/* put */
+	},
+
 
 
 	{ 
@@ -1780,6 +1844,19 @@ static struct cw_ElemHandler handlers70[] = {
 		1,1024,					/* min/max length */
 		CW_TYPE_BSTR16,				/* type */
 		"cisco/lwelem33",			/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic				/* put */
+	},
+
+	{ 
+		"Cisco LWAPP Elem 37 (Diagnostic Channel?)",			/* name */
+
+		CISCO_LWELEM_37,				/* Element ID */
+		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
+		
+		1,1024,					/* min/max length */
+		CW_TYPE_BSTR16,				/* type */
+		"cisco/lwelem37",			/* Key */
 		cw_in_generic,				/* get */
 		cw_out_generic				/* put */
 	},
@@ -2109,15 +2186,27 @@ static struct cw_ElemHandler handlers70[] = {
 		CISCO_LWELEM_DELETE_WLAN,		/* Element ID */
 		CW_VENDOR_ID_CISCO,CW_PROTO_LWAPP,	/* Vendor / Proto */
 		4,4,					/* min/max length */
-		NULL,					/* type */
+		CW_TYPE_BSTR16,				/* type */
 		"cisco-del-wlan",			/* Key */
-		cisco_in_lw_del_wlan,			/* get */
-		NULL,					/* put */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
 		NULL
 	}
 	,
 	
-	
+	{ 
+		"Cisco Delete WLAN ",			/* name */
+		CISCO_ELEM_DELETE_WLAN,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		3,3,					/* min/max length */
+		NULL,					/* type */
+		"cisco-del-wlan",			/* Key */
+		cisco_in_del_wlan,			/* get */
+		NULL,					/* put */
+		NULL
+	}
+	,
+		
 	{ 
 		"Radio Operational State (Draft 7)",	/* name */
 		CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	/* Element ID */
@@ -2302,6 +2391,8 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	 * requests and no WTP Board Data element, so we make them 
 	 * non-mandatory here */
 	{0,0,			CAPWAP80211_ELEM_WTP_RADIO_INFORMATION,	0, 0},
+
+
 	{0,0,			CAPWAP_ELEM_WTP_BOARD_DATA,		0, 0},
 
 	/* Instead of WTP Board Data we get Board Data Options from 
@@ -2312,7 +2403,6 @@ static struct cw_ElemDef discovery_request_elements[] ={
 	
 };
 
-/*static uint16_t discovery_response_states[] = {CAPWAP_STATE_DISCOVERY,0};*/
 static struct cw_ElemDef discovery_response_elements[] ={
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_TIMESYNC,			1, 0},
 	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_MWAR_TYPE,			0, 0},
@@ -2393,16 +2483,19 @@ static struct cw_ElemDef configuration_status_request_elements70[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CAP,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_28,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CONTROL,	0, 0},	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_33,	0, 0},	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_48,	0, 0},	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,	0, 0},	
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_105,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_15,			0, 0},	/* 15 */
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_33,			0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_37,			0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_48,			0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,			0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_105,			0, 0},	
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_CAPWAP_TIMERS,		0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_DIRECT_SEQUENCE_CONTROL,	0, 0},
 
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_QOS,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
@@ -2480,7 +2573,9 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CAP,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_28,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CONTROL,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_15,			0, 0},	/* 15 */
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_33,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_37,			0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_48,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_105,	0, 0},	
@@ -2509,8 +2604,8 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_DOMAIN_SECRET,		0, 0},	
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	1, 0},
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,		1, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH_VALIDATION,	0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_MWAR_HASH_VALUE,		0, 0},
 
 	{0,0,0,0}
 };
@@ -2518,21 +2613,26 @@ static struct cw_ElemDef configuration_status_response_elements[] ={
 
 static struct cw_ElemDef configuration_update_request_elements[] ={
 
-	{0, 0,			CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,	0, 0},
-	{0, 0,			CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,	0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,			0, CW_IGNORE},
 
-	{0,CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_GROUP_NAME,	0, 0},
+	{0, 		 CW_VENDOR_ID_CISCO,	CISCO_ELEM_DELETE_WLAN,			0, 0},
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DELETE_WLAN,		0, 0},
+
+
+	{0, 0,	CAPWAP_ELEM_RADIO_ADMINISTRATIVE_STATE,					0, 0},
+	{0, 0,	CAPWAP_ELEM_RADIO_OPERATIONAL_STATE,					0, 0},
+
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_GROUP_NAME,				0, 0},
 
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_BCAST_SSID_MODE,				0, 0},	
 
 
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SPAM_VENDOR_SPECIFIC,0, CW_IGNORE},
 
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_15,						0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_SUPPORTED_RATES,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,				0, 0},	
-	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,				0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_19,						0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_22,						0, 0},	
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_24,						0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_RRM_LOAD,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_33,				0, 0},	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_39,				0, 0},	
@@ -2551,7 +2651,9 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CAP,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_28,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_PHY_HT_CONTROL,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_15,			0, 0},	/* 15 */
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_33,	0, 0},	
+	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_37,			0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_48,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_55,	0, 0},	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_105,	0, 0},	
@@ -2566,6 +2668,7 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	
 	
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_UPTIME,			0, 0},
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_QOS,			0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LED_STATE_CONFIG,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_LOG_FACILITY,		0, 0},
 	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_MULTI_DOMAIN_CAPABILITY,	0, 0},
@@ -2618,7 +2721,6 @@ static struct cw_ElemDef configuration_update_request_elements[] ={
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_SSC_HASH,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DISCOVERY_PROTOCOL,	0, 0},
 
-	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_DELETE_WLAN,		0, 0},
 	
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_TCP_ADJUST_MSS,		0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ROUGE_DETECTION,		0, 0},
@@ -2865,7 +2967,22 @@ static struct cw_ElemHandler handlers73[] = {
 		cisco_wtp_radio_config73,
 	}
 	,
+	{ 
+		"AP Quality of Service (>=v7.3)",		/* name */
+		CISCO_ELEM_AP_QOS,			/* Element ID */
+		CW_VENDOR_ID_CISCO,0,			/* Vendor / Proto */
+		67,67,					/* min/max length */
+		CW_TYPE_STRUCT,				/* type */
+		"cisco/ap-qos",				/* Key */
+		cw_in_radio_generic,		/* get */
+		cw_out_radio_generic, /* put */
+		NULL,
+		NULL,
+		cisco_ap_qos73,
+	},
 
+
+		
 	{ 
 		"AP Venue Settings",				/* name */
 		CISCO_ELEM_AP_VENUE_SETTINGS,			/* Element ID */
@@ -2921,6 +3038,7 @@ static struct cw_ElemDef configuration_status_request_elements73[] ={
 };
 
 static struct cw_ElemDef configuration_update_request_elements73[] ={
+	{0, CW_VENDOR_ID_CISCO,	CISCO_ELEM_AP_VENUE_SETTINGS,			0, 0},
 	{CW_PROTO_LWAPP, CW_VENDOR_ID_CISCO,	CISCO_LWELEM_ADD_WLAN,		0, 0},
 
 	{0,0,0,0,0}
