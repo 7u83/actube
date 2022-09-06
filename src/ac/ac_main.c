@@ -509,7 +509,7 @@ void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 	
 	dataman_list_unlock();
 	
-	//dataman_add_packet (dm, buffer, len);
+	dataman_add_packet (dm, buffer, len);
 	
 	return;
 	

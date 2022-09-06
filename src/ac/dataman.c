@@ -5,10 +5,12 @@
 #include "cw/timer.h"
 #include "cw/cw.h"
 #include "cw/format.h"
-#include "cw/netconn.h"
+#include "cw/conn.h"
 
 #include "cw/log.h"
 #include "cw/dbg.h"
+#include "cw/file.h"
+#include "cw/dot11.h"
 
 #include "wtplist.h"
 #include "dataman.h"
@@ -19,8 +21,8 @@ pthread_mutex_t dataman_list_mutex;
 
 static int cmp(const void *d1, const void *d2)
 {
-	struct netconn *nc1 = ((struct dataman *) d1)->nc;
-	struct netconn *nc2 = ((struct dataman *) d1)->nc;
+	struct cw_Conn *nc1 = ((struct dataman *) d1)->nc;
+	struct cw_Conn *nc2 = ((struct dataman *) d1)->nc;
 
 	int r = nc1->sock - nc2->sock;
 	if (r != 0)
@@ -52,7 +54,7 @@ void dataman_destroy(struct dataman *dm)
 {
 	if (!dm)
 		return;
-	netconn_destroy(dm->nc);
+	conn_destroy(dm->nc);
 }
 
 struct dataman *dataman_create(int sock, struct sockaddr *addr)
@@ -60,15 +62,15 @@ struct dataman *dataman_create(int sock, struct sockaddr *addr)
 	struct dataman *dm = malloc(sizeof(struct dataman));
 	if (!dm)
 		return NULL;
-
-	dm->nc = netconn_create(sock, addr, 100);
+	memset(dm,0,sizeof(struct dataman));
+	dm->nc = cw_conn_create(sock, addr, 100);
 	return dm;
 }
 
 
 struct dataman *dataman_list_get(int sock, struct sockaddr *addr)
 {
-	struct netconn search_nc;
+	struct cw_Conn search_nc;
 	struct dataman search_dm;
 
 	search_nc.sock = sock;
@@ -91,7 +93,7 @@ struct dataman *dataman_list_add(struct dataman *dm)
 
 
 
-int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
+int dataman_process_keep_alive(struct cw_Conn *nc, uint8_t *rawmsg, int len)
 {
 	struct dataman * dm = (struct dataman *)(nc->data);
 
@@ -133,7 +135,7 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 				printf("len len %d\n",l);
 				printf("Total len = %d\n",total_len);
 
-				netconn_send_capwap_msg(nc,buffer,total_len);
+				cw_send_msg(nc,buffer,total_len);
 				return len;
 					
 
@@ -167,26 +169,47 @@ int dataman_process_keep_alive(struct netconn *nc, uint8_t *rawmsg, int len)
 	return -1;	
 }
 
-int dataman_process_message0(struct netconn *nc, uint8_t * rawmsg, int len,
+int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 			struct sockaddr *from)
 {
+
+	static int c=0;
+	char fn[100];
+	sprintf(fn,"wificap-%03d",c++);
+///	cw_save_file(fn,(char*)rawmsg,len);
+///	cw_dbg(DBG_X,"saving %d bytes",len);
+
+	uint8_t * dot11frame = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+
+	cw_dbg(DBG_X,"802.11 - %s",dot11_get_frame_name(dot11frame));
+	
 	/* The very first data message MUST be a keep-alive message */
 	if (!cw_get_hdr_flag_k(rawmsg)){
+
+		cw_dbg(DBG_X,"No K Flag founde");
 		errno = EAGAIN;
 		return -1;
 	}
 
+	cw_dbg(DBG_X, "Goto Keep Alive Pack");
 	return dataman_process_keep_alive(nc,rawmsg,len);
 }
 
-int dataman_process_message(struct netconn *nc, uint8_t * rawmsg, int len,
+int dataman_process_message(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 			struct sockaddr *from)
 {
 	if (cw_get_hdr_flag_k(rawmsg)){
 		return dataman_process_keep_alive(nc,rawmsg,len);
 	}
+	static int c=0;
+
+	char fn[100];
+	sprintf(fn,"wificap-%03d",c++);
+	cw_save_file(fn,(char*)rawmsg,len);
+
 
 	cw_dbg(DBG_X,"There was someting else than dataman");
+
 	return 1;
 
 }
@@ -195,12 +218,22 @@ void dataman_run(struct dataman *dm)
 {
 	time_t timer = cw_timer_start(2);
 
-	dm->nc->process_packet=netconn_process_packet;
+	dm->nc->process_packet=conn_process_packet;
 	dm->nc->process_message=dataman_process_message0;
 	dm->nc->data = dm;
 
+
+	while (1){
+		time_t timer = cw_timer_start(2);
+		while (!cw_timer_timeout(timer)){
+			cw_read_messages(dm->nc);
+		}
+	}
+
+	
+
 	while (!cw_timer_timeout(timer)){
-		netconn_read_messages(dm->nc);
+		cw_read_messages(dm->nc);
 	}
 
 	if (!dm->wtpman){
@@ -215,7 +248,7 @@ void dataman_run(struct dataman *dm)
 	while (1){
 		time_t timer = cw_timer_start(2);
 		while (!cw_timer_timeout(timer)){
-			netconn_read_messages(dm->nc);
+			cw_read_messages(dm->nc);
 		}
 	}
 

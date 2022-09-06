@@ -48,6 +48,16 @@ int cisco_out_radio_info(struct cw_ElemHandler * handler, struct cw_ElemHandlerP
 			, uint8_t * dst);
 
 
+
+
+struct cw_ValBit frame_tunnel_bits_draft7[] = {
+	{2,"native"},
+	{1,"802-3"},
+	{0,"local-bridging"},
+	{1, NULL}        
+};
+
+
 static cw_ValValRange_t cfg_type[]={
 	{1,1,"1 - global"},
 	{2,2,"2 - custom"},
@@ -957,6 +967,20 @@ static int cisco_data(struct cw_ElemHandler *eh,
 */
 
 static struct cw_ElemHandler handlers70[] = {
+	{ 
+		"WTP Frame Tunnel Mode (Draft 7)",		/* name */
+		CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID */
+		0,0,					/* Vendor / Proto */
+		1,1,					/* min/max length */
+		CW_TYPE_BITS,				/* type */
+		"capwap/wtp-frame-tunnel-mode",		/* Key */
+		cw_in_generic,				/* get */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		frame_tunnel_bits_draft7
+	}
+	,
 	
 	{ 
 		"AC Name - (zero-length allowed)",	/* name */

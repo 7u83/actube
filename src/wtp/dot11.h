@@ -322,6 +322,9 @@ struct beacon_data{
 int dot11_get_beacon_data(struct apdata *ap,struct beacon_data *bd);
 
 
+#define cw_dot11_get_version(frame) ( (frame)[1] & 3)
+#define cw_dot11_get_type(frame) ( ( (frame)[1] & 0x0c) >> 2)
+#define cw_dot11_get_subtype(frame)  ( (frame)[1] >> 4)
 
 
 #endif

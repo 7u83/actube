@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
-\
+
 
 #include "cw/val.h"
 #include "cw/dbg.h"
@@ -88,6 +88,40 @@ static int parse_args (int argc, char *argv[], struct bootcfg * bootcfg)
 struct bootcfg bootcfg;
 
 
+#include "cw/file.h"
+#include <libwifi.h>
+
+#include "cw/dot11.h"
+
+int test()
+{
+	int rc;
+	char *f;
+	size_t len;
+	f=cw_load_file("wificap-005",&len);
+	cw_dbg(DBG_X, "Loaded %d bytes",len);
+
+//	static int got_radiotap = 0;
+//	struct libwifi_frame frame = {0};
+ //	rc = libwifi_get_wifi_frame(&frame, (unsigned char*)(f+16), len-16, got_radiotap);
+
+
+
+   // 	if (rc != 0) {
+     //   	printf("[!] Error getting libwifi_frame: %d\n", rc);
+    //	}
+
+//	cw_dbg(DBG_X,"Frame CTL:%d,%d",frame.frame_control.type, frame.frame_control.subtype);
+
+	cw_dbg(DBG_X,"MY RESULT: Type %d, SubType %d",cw_dot11_get_type(f+16), cw_dot11_get_subtype(f+16));
+	cw_dbg(DBG_X,"FRAME: %s",dot11_get_frame_name(f+16+1));
+
+	free(f);
+	return 0;
+}
+
+
+
 int main (int argc, char **argv)
 {
 	struct cw_Mod * mod;
@@ -100,6 +134,7 @@ int main (int argc, char **argv)
 	int rc=EXIT_FAILURE;	
 	struct cw_DiscoveryResults * results;
 	const char *bind_addr, *disc_addr;
+
 
 
 /*	
@@ -134,6 +169,10 @@ int main (int argc, char **argv)
 		bootcfg.modnames[1]="capwap80211";
 		bootcfg.nmods=2;
 	}
+
+//	test();
+//	stop();
+
 
 	/* 
 	 * set ths for production

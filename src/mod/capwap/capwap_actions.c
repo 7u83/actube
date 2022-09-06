@@ -85,7 +85,26 @@ static cw_ValValRange_t mac_types[]={
 	{0,0,NULL}
 };
 
-
+/*
+struct cw_ValBit xx[] = {
+                {0,"ess"},
+                {1,"ibss"},
+                {2,"cf-pollable"},
+                {3,"cf-poll-request"},
+                {4,"privacy"},
+                {5,"short-preamble"},
+                {2,"pbcc"},
+                {3,"cf-poll-request"},
+                {2,NULL}        
+        };
+*/
+struct cw_ValBit frame_tunnel_bits[] = {
+	{3,"native"},
+	{2,"802-3"},
+	{1,"local-bridging"},
+	{0,"reserved"},
+	{1, NULL}        
+};
 
 
 static cw_ValStruct_t radio_admin_state[] = {
@@ -151,10 +170,13 @@ static struct cw_ElemHandler handlers[] = {
 		CAPWAP_ELEM_WTP_FRAME_TUNNEL_MODE,	/* Element ID */
 		0,0,					/* Vendor / Proto */
 		1,1,					/* min/max length */
-		CW_TYPE_BYTE,				/* type */
+		CW_TYPE_BITS,				/* type */
 		"capwap/wtp-frame-tunnel-mode",		/* Key */
 		cw_in_generic,				/* get */
-		cw_out_generic				/* put */
+		cw_out_generic,				/* put */
+		NULL,
+		NULL,
+		frame_tunnel_bits
 	}
 	,
 	{ 

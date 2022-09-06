@@ -3,12 +3,11 @@
 
 #include <pthread.h>
 
-/*#include "cw/netconn.h"*/
 
 #include "wtpman.h"
 
 struct dataman {
-	struct netconn *nc;
+	struct cw_Conn *nc;
 	pthread_t thread;
 	struct wtpman * wtpman;
 
@@ -28,6 +27,6 @@ extern pthread_mutex_t dataman_list_mutex;
 #define dataman_list_lock() pthread_mutex_lock(&dataman_list_mutex)
 #define dataman_list_unlock() pthread_mutex_unlock(&dataman_list_mutex)
 
-#define dataman_add_packet(dm,data,len) (netconn_q_add_packet(dm->nc,data,len))
+#define dataman_add_packet(dm,data,len) (conn_q_add_packet(dm->nc,data,len))
 
 #endif

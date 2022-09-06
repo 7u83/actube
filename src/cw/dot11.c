@@ -38,3 +38,25 @@ const char * dot11_type_strings[]=
 	"Probe Req",
 	"Probe Resp"
 };
+
+
+struct dot11_name{
+	uint8_t val;
+	const char * str;
+};
+
+struct cw_StrListElem dot11_names[]={
+	{DOT11_ASSOC_REQ, "Assoc Req"},
+	{DOT11_ASSOC_RESP, "Assoc Resp"},
+	{DOT11_REASSOC_REQ, "Reassoc Req"},
+	{DOT11_REASSOC_RESP, "Reassoc Resp"},
+	{DOT11_PROBE_REQ, "Probe Req"},	
+	{DOT11_PROBE_RESP, "Probe Resp"},
+	{DOT11_TIMING_ADV, "Timing Adv"},
+	{DOT11_MGM_RES111, "MGMRES111"},
+	{DOT11_BEACON, "Beacon"},
+	{CW_STR_STOP,"Unknown"},
+};
+
+
+

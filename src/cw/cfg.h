@@ -92,6 +92,8 @@ int cw_cfg_get_first_index_l(cw_Cfg_t ** cfgs, const char *key, int n);
 int cw_cfg_get_int(cw_Cfg_t * cfg, const char *key, int def);
 int cw_cfg_write_to_file(FILE *f, cw_Cfg_t * cfg);
 
+#define cw_cfg_set_bool(cfg,key,val) \
+		cw_cfg_set(cfg,key,(val) ? "true":"false")
 
 
 int cw_cfg_set_val(cw_Cfg_t * cfg, const char *key, const struct cw_Type *t, const void * valguard, const uint8_t * data, int len);

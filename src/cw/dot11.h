@@ -20,6 +20,7 @@
 #include <endian.h>
 #endif
 
+#include "strlist.h"
 
 /**
  * @defgroup DOT11_FRAME_TYPES Frame Types
@@ -47,17 +48,17 @@
  *
  * @{
  */
-#define DOT11_FC_ASSOC_REQ	dot11_fc_mgm(0b0000)
-#define DOT11_FC_ASSOC_RESP	dot11_fc_mgm(0b0001)
-#define DOT11_FC_REASSOC_REQ	dot11_fc_mgm(0b0010)
-#define DOT11_FC_REASSOC_RESP	dot11_fc_mgm(0b0011)
-#define DOT11_FC_PROBE_REQ	dot11_fc_mgm(0b0100)
-#define DOT11_FC_PROBE_RESP	dot11_fc_mgm(0b0101)
-#define DOT11_FC_TIMING_ADV	dot11_fc_mgm(0b0110)
-#define DOT11_FC_MGM_RES111	dot11_fc_mgm(0b0111)
-#define DOT11_FC_BEACON		dot11_fc_mgm(0b1000)
+#define DOT11_ASSOC_REQ		dot11_fc_mgm(0b0000)
+#define DOT11_ASSOC_RESP	dot11_fc_mgm(0b0001)
+#define DOT11_REASSOC_REQ	dot11_fc_mgm(0b0010)
+#define DOT11_REASSOC_RESP	dot11_fc_mgm(0b0011)
+#define DOT11_PROBE_REQ		dot11_fc_mgm(0b0100)
+#define DOT11_PROBE_RESP	dot11_fc_mgm(0b0101)
+#define DOT11_TIMING_ADV	dot11_fc_mgm(0b0110)
+#define DOT11_MGM_RES111	dot11_fc_mgm(0b0111)
+#define DOT11_BEACON		dot11_fc_mgm(0b1000)
 
-#define DOT11_FC_DATA		dot11_fc_dta(0b0000)
+#define DOT11_DATA		dot11_fc_dta(0b0000)
 
 /**
  * @}
@@ -125,9 +126,9 @@ extern const uint8_t dot11_tab_br[256];
 
 #define dot11_get_byte(ptr) (*(ptr))
 
-#define dot11_put_byte(ptr,b) (*(ptr) = b)
+#define dot11_put_byte(ptr,b) (*(ptr) = b,1)
 #define dot11_put_word(dst,v) ((*((uint16_t*)(dst))=htobe16(v)),2)
-#define dot11_put_dword(dst,v) ((*((uint16_t*)(dst))=htobe16(v)),4)
+#define dot11_put_dword(dst,v) ((*((uint32_t*)(dst))=htobe32(v)),4)
 #define dot11_put_qword(dst,v) ((*((uint64_t*)(dst))=htobe64(v)),8)
 
 
@@ -135,9 +136,11 @@ uint16_t dot11_get_word(uint8_t * ptr);
 
 
 
-#define dot11_get_version(frame) ((frame[1])&0x03)
-#define dot11_get_type(frame) (((frame[1])&0x0c) >> 2)
-#define dot11_get_subtype(frame) (((frame[1])&0xf0) >> 4)
+#define cw_dot11_get_version(frame) ( (frame)[1] & 0x03)
+#define cw_dot11_get_type(frame)    ( ((frame)[1] & 0x0c) >> 2)
+#define cw_dot11_get_subtype(frame) ( (frame)[1] >> 4 )
+
+
 /** 
  * Get Frame Control field 
  * @param frame
@@ -235,6 +238,9 @@ extern uint8_t dot11_broadcast_address[6];
 
 
 
+extern struct cw_StrListElem dot11_names[];
+
+#define dot11_get_frame_name(data) cw_strlist_get_str(dot11_names,(data)[1])
 
 
 

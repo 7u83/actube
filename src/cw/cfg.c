@@ -665,7 +665,13 @@ int cw_cfg_get_bool(cw_Cfg_t * cfg, const char * key, int def)
 	return v.val.boolean;
 }
 
+/*
+int cw_cfg_set_bool(cw_Cfg_t * cfg, const char * key, int val)
+{
+	return cw_cfg_set(cfg,key,val ? "true":"false");
+}
 
+*/
 uint8_t cw_cfg_get_byte(cw_Cfg_t * cfg, char *key, uint8_t def)
 {
 	struct cw_Val v;

@@ -765,24 +765,22 @@ int conn_process_packet2(struct cw_Conn *conn, uint8_t * packet, int len,
 
 	if (cw_get_hdr_flag_f(packet)) {
 		/* fragmented, add the packet to fragman */
-		uint8_t *f;
+		uint8_t *f,*fp;
 		int rc;
 
-		f = fragman_add(conn->fragman, packet, offs, payloadlen);
-		if (f == NULL) {
+		fp = fragman_add(conn->fragman, packet, offs, payloadlen);
+		if (fp == NULL) {
 			errno = EAGAIN;
 			return -1;
 		}
 
+		f =fp+MAX_PKT_HDR_LEN;
 
-		cw_dbg_pkt(DBG_PKT_IN, conn, f + 4, *(uint32_t *) f, from);
-/*//		cw_dbg_msg(DBG_MSG_IN, conn, f + 4, *(uint32_t *) f, from);*/
-
-/*		// XXX: Modify fragman to not throw away CAPWAP headers*/
+		cw_dbg_pkt(DBG_PKT_IN, conn, fp, *(uint32_t *) f+MAX_PKT_HDR_LEN, from);
 
 		rc = conn->process_message(conn, f + 4, *(uint32_t *) f, from);
 
-		free(f);
+		free(fp);
 		return rc;
 	}
 
