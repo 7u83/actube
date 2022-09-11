@@ -109,9 +109,14 @@ char *cw_format_dump(const uint8_t * data, int len,
 void cw_format_get_dump_defaults(struct cw_FormatDumpSettings * settings);
 int cw_format_pkt_hdr(char *dst, int incomming, uint8_t * packet, int len,
 		      struct sockaddr *from);
+int cw_format_pkt_hdr_7(char *dst, int incomming, uint8_t * packet, int len,
+		      struct sockaddr *from);
+
 int cw_format_version(char *s, const uint8_t * version, int len);
 
 char * cw_format_radio_information(char * dst, int ri);
+int cw_format_dot11_hdr(char * dst, uint8_t *packet, int len);
+int cw_format_dot11_elem(char *dst, uint8_t id, const uint8_t *src, int len);
 
 
 /**@}*/

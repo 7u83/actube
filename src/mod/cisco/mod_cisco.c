@@ -3362,6 +3362,7 @@ static struct cw_MsgSet * register_messages(struct cw_MsgSet *set, int mode)
 
 			set->write_header = write_header;
 		      	set->header_len = header_len;	
+			set->format_pkt_hdr = cw_format_pkt_hdr_7;
 			break;
 		}
 		case CW_MOD_MODE_BINDINGS:

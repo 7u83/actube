@@ -6,7 +6,6 @@ CWSRC=\
 	cw.c\
 	cw_check_missing_mand.c\
 	cw_clock_lap.c\
-	cw_dbg_elem.c\
 	cw_filename.c\
 	cw_format_dump.c\
 	cw_format_pkt_hdr.c\
@@ -77,6 +76,7 @@ CWSRC=\
 	cw_in_radio_generic_struct.c\
 	cw_in_generic_struct.c\
 	cw_radio_set_admin_state.c\
+	cw_dbg_elem.c\
 
 KTVSRC=\
 	cfg.c\

@@ -110,11 +110,19 @@
  * @defgroup DOT11_ELEMS 
  * @{
  */
-#define DOT11_ELEM_SSID			0
-#define DOT11_ELEM_SUPPORTED_RATES	1
-#define DOT11_ELEM_FH_PARAM_SET		2
-#define DOT11_ELEM_DSSS_PARAM_SET	3
-#define DOT11_ELEM_CF_PARAM_SET		4
+#define DOT11_ELEM_SSID				0
+#define DOT11_ELEM_SUPPORTED_RATES		1
+#define DOT11_ELEM_FH_PARAM_SET			2
+#define DOT11_ELEM_DSSS_PARAM_SET		3
+#define DOT11_ELEM_CF_PARAM_SET			4
+#define DOT11_ELEM_POWER_CAPABILITY		33
+#define DOT11_ELEM_SUPPORTED_CHANNELS		36
+#define DOT11_ELEM_EXTENDED_SUPPORTED_RATES	50
+#define DOT11_ELEM_AP_CHANNEL_REPORT		51
+#define DOT11_ELEM_SUPPORTED_OPERATING_CLASSES	59
+#define DOT11_ELEM_VENDOR_SPECIFIC		221
+
+
 /**
  * @}
  */
@@ -131,15 +139,16 @@ extern const uint8_t dot11_tab_br[256];
 #define dot11_put_dword(dst,v) ((*((uint32_t*)(dst))=htobe32(v)),4)
 #define dot11_put_qword(dst,v) ((*((uint64_t*)(dst))=htobe64(v)),8)
 
+#define dot11_set_byte(ptr,b) (*(ptr) = b)
 
 uint16_t dot11_get_word(uint8_t * ptr);
 
 
 
-#define cw_dot11_get_version(frame) ( (frame)[1] & 0x03)
-#define cw_dot11_get_type(frame)    ( ((frame)[1] & 0x0c) >> 2)
-#define cw_dot11_get_subtype(frame) ( (frame)[1] >> 4 )
-
+#define dot11_get_version(frame) ( (frame)[1] & 0x03)
+#define dot11_get_type(frame)    ( ((frame)[1] & 0x0c) >> 2)
+#define dot11_get_subtype(frame) ( (frame)[1] >> 4 )
+#define dot11_get_type_and_subtype( frame) ((frame)[1])
 
 /** 
  * Get Frame Control field 
@@ -241,6 +250,24 @@ extern uint8_t dot11_broadcast_address[6];
 extern struct cw_StrListElem dot11_names[];
 
 #define dot11_get_frame_name(data) cw_strlist_get_str(dot11_names,(data)[1])
+
+#define dot11_get_da(frame) ((frame)+2+2)
+#define dot11_get_sa(frame) ((frame)+2+2+6)
+#define dot11_get_bssid(frame) ((frame)+2+2+12)
+#define dot11_get_seq(frame) dot11_get_word((frame)+2+2+12+6)
+
+#define dot11_assoc_req_get_cap(frame) \
+		dot11_get_word((frame)+2+2+12+6+2)
+#define dot11_assoc_req_get_listen_interval(frame) \
+			dot11_get_word((frame)+2+2+12+6+4)
+
+
+#define dot11_assoc_req_get_ssid_len(frame)\
+			((frame)[29])
+#define dot11_assoc_req_get_ssid(frame)\
+			(frame+30)
+
+
 
 
 

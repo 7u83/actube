@@ -17,6 +17,7 @@ struct wtpman {
 	pthread_t thread;
 
 	struct cw_Conn *conn;
+	struct cw_Conn *dconn;
 
 
 	/* wtp data */
@@ -67,6 +68,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 extern void wtpman_addpacket(struct wtpman *wtpman, uint8_t * packet, int len);
 extern void wtpman_destroy(struct wtpman *wtpman);
 extern void wtpman_start(struct wtpman *wtpman, int dtlsmode);
+void wtpman_datapacket(struct wtpman *wtpman, uint8_t * packet, int len);
 
 
 

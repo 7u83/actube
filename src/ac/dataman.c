@@ -80,7 +80,7 @@ struct dataman *dataman_list_get(int sock, struct sockaddr *addr)
 
 	struct dataman *dm = mavl_get(dataman_list, &search_dm);
 
-	cw_dbg(DBG_X,"Getting dataman %p",dm); 
+//	cw_dbg(DBG_X,"Getting dataman %p",dm); 
 	return dm;
 }
 
@@ -169,6 +169,8 @@ int dataman_process_keep_alive(struct cw_Conn *nc, uint8_t *rawmsg, int len)
 	return -1;	
 }
 
+#include <libwifi.h>
+
 int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 			struct sockaddr *from)
 {
@@ -178,20 +180,75 @@ int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 	sprintf(fn,"wificap-%03d",c++);
 ///	cw_save_file(fn,(char*)rawmsg,len);
 ///	cw_dbg(DBG_X,"saving %d bytes",len);
+	int offs =  cw_get_hdr_msg_offset(rawmsg);
+	int rc;
+	uint8_t * dot11frame = rawmsg + offs;
+	int dot11len = len-offs;
 
-	uint8_t * dot11frame = rawmsg + cw_get_hdr_msg_offset(rawmsg);
+//	cw_dbg(DBG_X,"802.11 - %s",dot11_get_frame_name(dot11frame));
+//	extern void ppacket(uint8_t * p, int len);
 
-	cw_dbg(DBG_X,"802.11 - %s",dot11_get_frame_name(dot11frame));
+	
+//	ppacket (dot11frame,len-cw_get_hdr_msg_offset(rawmsg));
+
+
+	struct libwifi_frame frame = {0};
+	struct libwifi_frame resp={0};
+
+//	cw_dbg(DBG_X,"802.11 - %s",dot11_get_frame_name(dot11frame));
+//	cw_dbg(DBG_X,"802.11 - T&S: %d %d",dot11_get_type(dot11frame),dot11_get_subtype(dot11frame));
+
+	rc = libwifi_get_wifi_frame(&frame, (unsigned char*)(dot11frame+1), dot11len-1, 0);
+
+//	cw_dbg(DBG_X,"Frame CTL:%d,%d",frame.frame_control.type, frame.frame_control.subtype);
+
+
+
+//	cw_dbg(DBG_X,"CMP???CTL:%d,%d (%d,%d)",frame.frame_control.type, frame.frame_control.subtype,
+//			TYPE_MANAGEMENT,SUBTYPE_ASSOC_REQ);
+	
+//	char ffr[1024];
+//	cw_format_dot11_hdr(ffr,dot11frame,dot11len);	
+//	cw_dbg(DBG_X,ffr);
+//
+//
+
+	if (frame.frame_control.type == TYPE_MANAGEMENT &&
+		frame.frame_control.subtype == SUBTYPE_ASSOC_REQ){
+//		cw_dbg(DBG_X,"ASSOC REQ RECEIVED");
+/*		libwifi_create_assoc_resp(&resp,
+				frame.frame_control.transmitter,
+				frame.frame_control.receiver,
+				frame.frame_control.transmitter,
+				1
+				);*/
+
+
+
+
+//		stop();
+	}
+
+
+
+
+
+
+
+
+
+
+
 	
 	/* The very first data message MUST be a keep-alive message */
 	if (!cw_get_hdr_flag_k(rawmsg)){
 
-		cw_dbg(DBG_X,"No K Flag founde");
+//		cw_dbg(DBG_X,"No K Flag founde");
 		errno = EAGAIN;
 		return -1;
 	}
 
-	cw_dbg(DBG_X, "Goto Keep Alive Pack");
+//	cw_dbg(DBG_X, "Goto Keep Alive Pack");
 	return dataman_process_keep_alive(nc,rawmsg,len);
 }
 
@@ -207,6 +264,9 @@ int dataman_process_message(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 	sprintf(fn,"wificap-%03d",c++);
 	cw_save_file(fn,(char*)rawmsg,len);
 
+	extern void ppacket(uint8_t * p, int len);
+
+	ppacket (rawmsg,len);
 
 	cw_dbg(DBG_X,"There was someting else than dataman");
 

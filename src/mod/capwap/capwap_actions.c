@@ -24,6 +24,7 @@
 
 #include "cw/msgset.h"
 #include "cw/keys.h"
+#include "cw/format.h"
 
 #include "mod_capwap.h"
 
@@ -941,6 +942,7 @@ struct cw_MsgSet * capwap_register_msg_set(struct cw_MsgSet * set, int mode){
 	
 	set->write_header = write_header;
 	set->header_len = header_len;
+	set->format_pkt_hdr = cw_format_pkt_hdr;
 
 	cw_dbg(DBG_INFO,"CAPWAP: Done register messages");
 	return set;

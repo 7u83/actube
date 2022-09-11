@@ -310,6 +310,36 @@ int run_update(struct wtpman *wtpman)
 	return rc;
 }
 
+
+
+static int dataman_process_msg(struct cw_Conn *nc, uint8_t * rawmsg, int len,
+			struct sockaddr *from)
+{
+	int offs =  cw_get_hdr_msg_offset(rawmsg);
+	uint8_t * dot11frame = rawmsg + offs;
+	int dot11len = len-offs;
+	cw_dbg_dot11_frame(dot11frame,dot11len);
+	return 0;
+}
+
+static void *wtpman_data_main(void *arg)
+{
+	struct wtpman * wtpman = arg;
+	struct cw_Conn * nc = wtpman->dconn;
+	nc->process_packet=conn_process_packet;
+	nc->process_message=dataman_process_msg;
+
+
+	while (1){
+		time_t timer = cw_timer_start(2);
+		while (!cw_timer_timeout(timer)){
+			cw_read_messages(nc);
+		}
+	}
+
+	
+}
+
 static void *wtpman_main(void *arg)
 {
 	//mavl_t r;
@@ -560,7 +590,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 {
 	struct sockaddr dbgaddr;
 	socklen_t dbgaddrl;
-	int sockfd, replyfd;
+	int sockfd, replyfd, data_sockfd,data_replyfd;
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 
 	struct wtpman *wtpman;
@@ -574,6 +604,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 		int port = sock_getport(&socklist[socklistindex].addr);
 		replyfd = socklist_find_reply_socket(srcaddr, port);
+		data_replyfd=replyfd;
 
 		if (replyfd == -1) {
 			cw_log(LOG_ERR,
@@ -584,10 +615,11 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 		}
 	} else {
 		replyfd = socklist[socklistindex].sockfd;
+		data_replyfd = socklist[socklistindex].data_sockfd;
 	}
 
 	sockfd = replyfd;	/*//socklist[socklistindex].reply_sockfd; */
-
+	data_sockfd = data_replyfd;
 
 	dbgaddrl = sizeof(dbgaddr);
 	getsockname(sockfd, &dbgaddr, &dbgaddrl);
@@ -606,6 +638,15 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 		return NULL;
 	}
 
+	wtpman->dconn = cw_conn_create(data_sockfd, srcaddr, 100);
+	if (!wtpman->dconn) {
+		wtpman_destroy(wtpman);
+		return NULL;
+	}
+
+
+
+
 	cw_conn_register_msg_cb(wtpman->conn,
 		CAPWAP_MSG_DISCOVERY_REQUEST,
 		discovery_cb);
@@ -618,6 +659,7 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 
 	wtpman->conn->role = CW_ROLE_AC;
 	wtpman->conn->data=wtpman;
+	wtpman->dconn->data=wtpman;
 
 	wtpman->conn->cfg_list[0]=wtpman->conn->update_cfg;
 	wtpman->conn->cfg_list[1]=wtpman->conn->remote_cfg;
@@ -663,6 +705,8 @@ struct wtpman *wtpman_create(int socklistindex, struct sockaddr *srcaddr,
 			       cmod->name, bmod->name);
 			wtpman->conn->msgset =
 			    cw_mod_get_msg_set(wtpman->conn, cmod, bmod);
+
+			wtpman->dconn->msgset=wtpman->conn->msgset;
 			wtpman->conn->detected = 1;
 			cmod->setup_cfg(wtpman->conn);
 //	               if (wtpman->conn->setup_complete)
@@ -708,5 +752,14 @@ void wtpman_start(struct wtpman *wtpman, int dtlsmode)
 	cw_dbg(DBG_INFO, "Starting wtpman, DTLS mode = %d", dtlsmode);
 	wtpman->dtlsmode = dtlsmode;
 	pthread_create(&wtpman->thread, NULL, wtpman_main, (void *) wtpman);
+	pthread_create(&wtpman->thread, NULL, wtpman_data_main, (void *) wtpman);
 	return;
 }
+
+void wtpman_datapacket(struct wtpman *wtpman, uint8_t * packet, int len)
+{
+	conn_q_add_packet(wtpman->dconn, packet, len);
+}
+
+
+

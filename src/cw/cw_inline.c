@@ -15,6 +15,25 @@ int cw_get_hdr_ws_len(uint8_t * th)
 	return *(th + 9 + cw_get_hdr_rmac_len(th));
 }
 
+
+/** 
+ * Get length of wireless specific data for CAPWAP packet draft 7
+ * @param th Pointer to packet
+ * @return length of wireless specific data
+ *
+ * Call this function only if the W flag is set
+ */
+int cw_get_hdr_ws_len_7(uint8_t * th)
+{
+	if (!cw_get_hdr_flag_m(th)){
+		return *(th + 9);
+	}
+	return *(th + 10 + cw_get_hdr_rmac_len(th));
+}
+
+
+
+
 /** 
  * Get pointer to wireless specific data
  * @param th Pointer to packet

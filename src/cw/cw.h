@@ -146,8 +146,10 @@
 
 
 int cw_get_hdr_ws_len(uint8_t * th);
-uint8_t *cw_get_hdr_ws_data(uint8_t * th);
+int cw_get_hdr_ws_len_7(uint8_t * th);
 
+uint8_t *cw_get_hdr_ws_data(uint8_t * th);
+#define cw_get_hdr_ws_data_7(th) (cw_get_hdr_ws_data(th)+1)
 
 
 #define cw_get_hdr_msg_offset(th) (4*cw_get_hdr_hlen(th))

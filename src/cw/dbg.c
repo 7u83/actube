@@ -31,6 +31,7 @@
 #include "format.h"
 #include "ansi_colors.h"
 
+#include "dot11.h"
 
 /**
  *@addtogroup DBG
@@ -371,16 +372,26 @@ void cw_dbg_pkt(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
 {
 
-/*	int hlen;*/
 	char buf[1024];
+	int (*fmt_pkt_hdr)(char *dst, int incomming, uint8_t * packet, int len,
+		      struct sockaddr *from);
+	fmt_pkt_hdr = NULL;
+	if (conn){
+		if (conn->msgset)
+			fmt_pkt_hdr = conn->msgset->format_pkt_hdr;
+	}
+	if (fmt_pkt_hdr==NULL){
+		fmt_pkt_hdr = cw_format_pkt_hdr;
+	}
+
 
 	if (!cw_dbg_is_level(level))
 		return;
 	
 	if (level == DBG_PKT_IN)
-		cw_format_pkt_hdr(buf, 1,  packet, len, from);
+		fmt_pkt_hdr(buf, 1,  packet, len, from);
 	else
-		cw_format_pkt_hdr(buf, 0,  packet, len, from);
+		fmt_pkt_hdr(buf, 0,  packet, len, from);
 		
 /*	hlen = cw_get_hdr_msg_offset(packet);*/
 
@@ -638,6 +649,9 @@ int cw_dbg_set_level_from_str(const char *level)
 	return cw_dbg_set_level_from_str0(slevel,on);
 }
 
+
+
+
 void cw_dbg_print_help(FILE *out, const char * prefix)
 {
 	struct cw_DbgStr *s;
@@ -656,32 +670,45 @@ void cw_dbg_print_help(FILE *out, const char * prefix)
 		}
 		fprintf(out,"\n");
 	}
-
 }
 
-/*
-void dbg_istore_dmp(mbag_t s)
+
+
+void cw_dbg_dot11_elems(const uint8_t *src,int len)
 {
-	DEFINE_AVLITER(it,s);
-	avliter_foreach(&it) {
-
-		mbag_item_t *i = avliter_get(&it);
-
-		char buffer[1000];
-
-		struct cw_str * strings = cw_item_strings;
-		
-		const char * in = cw_strlist_get_str(strings,i->id);
-		
-		cw_format_item(buffer,i);
-		printf("Item ID %d-%s: %s\n",i->id,in,buffer);
-				
-
+	uint8_t id,l;
+	int p;
+	char str[1024];
+	
+	for(p=0; p<len; p+=l+2){
+		if (len-p<3){
+			cw_dbg(DBG_X,"Error in dot11 element");
+			return;
+		}
+		id=src[p];
+		l=src[p+1];
+		cw_format_dot11_elem(str,id,src+p+2,l);
+		cw_dbg_dmp(DBG_X,src+p+2,l,"");
+		cw_dbg(DBG_X,str);
 	}
 
-
 }
-*/
+
+void cw_dbg_dot11_frame(uint8_t * frame,int len)
+{
+	char hdr[1024];
+	cw_format_dot11_hdr(hdr, frame, len);
+	cw_dbg(DBG_X,"%s",hdr);
+
+	int type =dot11_get_type_and_subtype(frame);
+
+	switch (type){
+		case DOT11_ASSOC_REQ:
+			cw_dbg_dot11_elems(frame+28,len-28);
+			break;
+			
+	}
+}
 
 
 /**@}*/

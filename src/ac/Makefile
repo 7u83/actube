@@ -9,6 +9,7 @@ OBJS = \
 	discovery_cache.o\
 	rpc.o\
 	statemachine.o\
+	hapd.o
 
 ACTOBJS = \
 	act.o 
@@ -26,8 +27,10 @@ LIBS+=-lnettle
 LIBS+=-lssl
 LIBS+=-lcrypto
 LIBS+=-ledit
+LIBS+=-lwifi
+#LIBS+=-l:libhapd.a
 
-INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include
+INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include -I../../include/hostapd -I../../include/hostapd/utils
 #FLAGS=-DWITH_IPV6 -DWITH_OPENSSL -DSYS_ARCH="$(ARCH)" -DSYS_ARCH="XXX"
 FLAGS=-DWITH_IPV6 -DUSE_OPENSSL -DSYS_ARCH='"$(KERNEL)/$(ARCH)"'
 

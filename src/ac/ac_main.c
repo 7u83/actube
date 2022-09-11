@@ -211,6 +211,7 @@ return 0;
 */
 
 static cw_Cfg_t * global_cfg = NULL;
+void process_wtp_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len, int dta);
 
 
 int main (int argc, char *argv[])
@@ -236,6 +237,8 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
+hapd_run(); // init
+//stop();
 //const char *ttt = cw_cfg_get(global_cfg,"cisco/ssl-cipher",NULL);
 //printf("CFG: %s\n",ttt);
 //stop();
@@ -455,7 +458,7 @@ int ac_run(cw_Cfg_t * cfg)
 				                        (struct sockaddr *) &srcaddr,
 				                        &srcaddrlen);
 				                        
-				process_cw_data_packet (i, (struct sockaddr *) &srcaddr, buffer, len);
+				process_wtp_packet (i, (struct sockaddr *) &srcaddr, buffer, len,1);
 				
 			}
 			
@@ -468,7 +471,7 @@ int ac_run(cw_Cfg_t * cfg)
 				                        (struct sockaddr *) &srcaddr,
 				                        &srcaddrlen);
 				                        
-				process_ctrl_packet (i, (struct sockaddr *) &srcaddr, buffer, len);
+				process_wtp_packet (i, (struct sockaddr *) &srcaddr, buffer, len,0);
 			}
 			
 		}
@@ -482,14 +485,14 @@ int ac_run(cw_Cfg_t * cfg)
 void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
-	cw_dbg (DBG_X, "There is a data packet now");
+//	cw_dbg (DBG_X, "There is a data packet now");
 	
 	dataman_list_lock();
-	cw_dbg (DBG_X, "Dataman list locked, now getting");
+//	cw_dbg (DBG_X, "Dataman list locked, now getting");
 	struct dataman * dm = dataman_list_get (socklist[index].data_sockfd, addr);
-	cw_dbg (DBG_X, "Dataman list locked, now gotted");
+//	cw_dbg (DBG_X, "Dataman list locked, now gotted");
 	
-	cw_dbg (DBG_INFO, "Packet for dataman %s,%d", sock_addr2str_p (addr, sock_buf), socklist[index].data_sockfd);
+//	cw_dbg (DBG_INFO, "Packet for dataman %s,%d", sock_addr2str_p (addr, sock_buf), socklist[index].data_sockfd);
 	
 	if (!dm) {
 		cw_dbg (DBG_INFO, "No dataman %s,%d", sock_addr2str_p (addr, sock_buf), socklist[index].data_sockfd);
@@ -501,10 +504,7 @@ void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 		}
 		
 		dataman_list_add (dm);
-		
 		dataman_start (dm);
-		
-		
 	}
 	
 	dataman_list_unlock();
@@ -532,7 +532,7 @@ void process_cw_data_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 }
 
 
-void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len)
+void process_wtp_packet (int index, struct sockaddr *addr, uint8_t * buffer, int len, int dta)
 {
 	char sock_buf[SOCK_ADDR_BUFSIZE];
 	
@@ -552,6 +552,10 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 
 
 	if (!wtpman) {
+		if (dta){
+			cw_dbg(DBG_PKT_ERR,"Data packet w/o wtpman received, ignoring");
+			return;
+		}
 	
 		wtpman = wtpman_create (index, addr, preamble & 0xf, global_cfg);
 		
@@ -573,9 +577,12 @@ void process_cw_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer,
 		wtpman_start (wtpman, preamble & 0xf);
 	}
 	
-	//printf("Got Packet with len: %d\n",len);
-
-	wtpman_addpacket (wtpman, buffer, len);
+	if(!dta)
+		wtpman_addpacket (wtpman, buffer, len);
+	else{
+//		cw_dbg(DBG_X,"Data packet received");
+		wtpman_datapacket (wtpman, buffer, len);
+	}
 	wtplist_unlock();
 }
 
@@ -646,7 +653,7 @@ void process_ctrl_packet (int index, struct sockaddr *addr, uint8_t * buffer, in
 {
 	switch (socklist[index].ac_proto) {
 		case AC_PROTO_CAPWAP:
-			process_cw_ctrl_packet (index, addr, buffer, len);
+//			process_cw_ctrl_packet (index, addr, buffer, len);
 			return;
 			
 		/*case AC_PROTO_LWAPP:

@@ -72,6 +72,9 @@ struct cw_MsgSet {
 	mavl_t statemachine_states;
 	int (*write_header)(struct cw_ElemHandler * handler, uint8_t * dst, int len);
 	int (*header_len)(struct cw_ElemHandler *handler);
+	int (*format_pkt_hdr)(char *dst, int incomming, uint8_t * packet, int len,
+		      struct sockaddr *from);
+	
 };
 
 

@@ -20,6 +20,7 @@ enum {
 int start_rpc(cw_Cfg_t *global_cfg);
 int test_shell();
 
+void hapd_run();
 
 #endif
 
