@@ -44,6 +44,8 @@
 
 #include "actube.h"
 
+#include "cw/dot11.h"
+
 
 static void wtpman_remove(struct wtpman *wtpman)
 {
@@ -319,6 +321,15 @@ static int dataman_process_msg(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 	uint8_t * dot11frame = rawmsg + offs;
 	int dot11len = len-offs;
 	cw_dbg_dot11_frame(dot11frame,dot11len);
+
+	char frame[1000];
+	dot11_init_assoc_resp(frame);
+	dot11_copy_mac(dot11_get_sa(dot11frame),dot11_get_da(frame));
+	dot11_copy_mac(dot11_get_bssid(dot11frame),dot11_get_bssid(frame));
+	dot11_copy_mac(dot11_get_da(dot11frame),dot11_get_sa(frame));
+	
+	
+
 	return 0;
 }
 

@@ -148,16 +148,11 @@ uint16_t dot11_get_word(uint8_t * ptr);
 #define dot11_get_version(frame) ( (frame)[1] & 0x03)
 #define dot11_get_type(frame)    ( ((frame)[1] & 0x0c) >> 2)
 #define dot11_get_subtype(frame) ( (frame)[1] >> 4 )
-#define dot11_get_type_and_subtype( frame) ((frame)[1])
 
-/** 
- * Get Frame Control field 
- * @param frame
- * @return Frame Control field
- */
-#define dot11_get_fc(frame) dot11_get_word(frame)
+#define dot11_get_type_and_subtype(frame) ((frame)[1])
+#define dot11_set_type_and_subtype(frame,val) ((frame)[1]=val)
 
-#define dot11_get_duration(frame) dot11_get_word(frame+2)
+
 
 
 void dot11_get_address(uint8_t * dst, uint8_t * frame);
@@ -251,10 +246,18 @@ extern struct cw_StrListElem dot11_names[];
 
 #define dot11_get_frame_name(data) cw_strlist_get_str(dot11_names,(data)[1])
 
-#define dot11_get_da(frame) ((frame)+2+2)
-#define dot11_get_sa(frame) ((frame)+2+2+6)
-#define dot11_get_bssid(frame) ((frame)+2+2+12)
-#define dot11_get_seq(frame) dot11_get_word((frame)+2+2+12+6)
+/** 
+ * Get Frame Control field 
+ * @param frame uint8_t pointer to the frame
+ * @return uint16_t Frame Control field
+ */
+#define dot11_get_fc(frame) dot11_get_word(frame)
+#define dot11_get_duration(frame) dot11_get_word(frame+2)
+#define dot11_get_da(frame) ((frame)+4)
+#define dot11_get_sa(frame) ((frame)+10)
+#define dot11_get_bssid(frame) ((frame)+16)
+#define dot11_get_seq(frame) dot11_get_word((frame)+22)
+#define dot11_get_body(frame) ((frame)+24)
 
 #define dot11_assoc_req_get_cap(frame) \
 		dot11_get_word((frame)+2+2+12+6+2)
@@ -267,6 +270,10 @@ extern struct cw_StrListElem dot11_names[];
 #define dot11_assoc_req_get_ssid(frame)\
 			(frame+30)
 
+
+
+#define dot11_copy_mac(src,dst)\
+	memcpy(dst,src,6);
 
 
 

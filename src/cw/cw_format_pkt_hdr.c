@@ -7,7 +7,7 @@
 
 int cw_format_dot11_fc_flags(char *dst, uint8_t *frame){
 	char *s = dst;
-	uint8_t f = frame[2];
+	uint8_t f = frame[0];
 	s+=sprintf(s,"ToDS:%d ", f&1 ? 1:0);
 	s+=sprintf(s,"FromDS:%d ", f&2 ? 1:0);
 	s+=sprintf(s,"More Frgs:%d ", f&4 ? 1:0);
@@ -88,6 +88,7 @@ int cw_format_dot11_hdr(char * dst, uint8_t * packet, int len)
 	s+=format_mac(s,dot11_get_bssid(packet),6);
 	s+=sprintf(s," seq: %d\n",dot11_get_seq(packet));
 	s+=cw_format_dot11_fc_flags(s,packet);
+	s+=sprintf(s,"\nDuration: %d",dot11_get_duration(packet));
 //
 /*	switch (type){
 		case DOT11_ASSOC_REQ:

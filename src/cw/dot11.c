@@ -61,6 +61,5 @@ struct cw_StrListElem dot11_names[]={
 
 int dot11_init_assoc_resp(uint8_t * dst)
 {
-	dst[0]=0;
-
+	dot11_set_type_and_subtype(dst,DOT11_ASSOC_RESP);
 }
