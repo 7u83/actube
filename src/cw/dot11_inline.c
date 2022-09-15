@@ -71,11 +71,7 @@ int dot11_put_dsss_param_set(uint8_t *dst,int ch) {
 }
 
 
-#define DOT11_INLINE
+#define DOT11_INLINE 
 
 
-DOT11_INLINE 
-uint8_t * dot11_get_body(uint8_t * frame)
-{
-	
-}
+

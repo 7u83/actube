@@ -140,6 +140,13 @@ extern const uint8_t dot11_tab_br[256];
 #define dot11_put_qword(dst,v) ((*((uint64_t*)(dst))=htobe64(v)),8)
 
 #define dot11_set_byte(ptr,b) (*(ptr) = b)
+#define dot11_set_word(dst,v) ((*((uint16_t*)(dst))=htobe16(v)))
+#define dot11_set_dword(dst,v) ((*((uint32_t*)(dst))=htobe32(v)))
+#define dot11_set_qword(dst,v) ((*((uint64_t*)(dst))=htobe64(v)))
+
+
+
+#define dot11_set_byte(ptr,b) (*(ptr) = b)
 
 uint16_t dot11_get_word(uint8_t * ptr);
 
@@ -208,6 +215,9 @@ void dot11_timer_set(uint64_t val);
 #define dot11_put_address(dst,addr) (memcpy(dst,addr,6),6)
 #define dot11_put_sequence_control(dst,v) (dot11_put_word(dst,v))
 #define dot11_put_capability(dst,v) dot11_put_word(dst,v)
+
+
+
 int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len);
 
 
@@ -252,6 +262,8 @@ extern struct cw_StrListElem dot11_names[];
  * @return uint16_t Frame Control field
  */
 #define dot11_get_fc(frame) dot11_get_word(frame)
+ /** Get duration/aid field 
+  * @param frame uint8_t pointer to frame */
 #define dot11_get_duration(frame) dot11_get_word(frame+2)
 #define dot11_get_da(frame) ((frame)+4)
 #define dot11_get_sa(frame) ((frame)+10)
@@ -259,16 +271,34 @@ extern struct cw_StrListElem dot11_names[];
 #define dot11_get_seq(frame) dot11_get_word((frame)+22)
 #define dot11_get_body(frame) ((frame)+24)
 
+
+
+#define dot11_set_duration(frame,d) dot11_set_word(frame+2,d)
+#define dot11_set_seq(frame,s) dot11_set_word((frame)+22,s)
+
+
 #define dot11_assoc_req_get_cap(frame) \
-		dot11_get_word((frame)+2+2+12+6+2)
+		dot11_get_word((frame)+24)
 #define dot11_assoc_req_get_listen_interval(frame) \
-			dot11_get_word((frame)+2+2+12+6+4)
+			dot11_get_word((frame)+24+2)
 
 
+
+/*
 #define dot11_assoc_req_get_ssid_len(frame)\
 			((frame)[29])
 #define dot11_assoc_req_get_ssid(frame)\
 			(frame+30)
+*/
+#define dot11_assoc_resp_set_cap(frame,cap)\
+	dot11_set_word(dot11_get_body(frame),cap)
+#define dot11_assoc_resp_set_status_code(frame,code)\
+	dot11_set_word(dot11_get_body(frame)+2,code)
+#define dot11_assoc_resp_set_assoc_id(frame,id)\
+	dot11_set_word(dot11_get_body(frame)+4,id)
+
+//#define dot11_assoce_resp_get_var_body(frame) 
+//	(get_frame_body(frame)+6)
 
 
 

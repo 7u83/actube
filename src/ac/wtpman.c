@@ -324,9 +324,11 @@ static int dataman_process_msg(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 
 	char frame[1000];
 	dot11_init_assoc_resp(frame);
+
 	dot11_copy_mac(dot11_get_sa(dot11frame),dot11_get_da(frame));
 	dot11_copy_mac(dot11_get_bssid(dot11frame),dot11_get_bssid(frame));
 	dot11_copy_mac(dot11_get_da(dot11frame),dot11_get_sa(frame));
+	dot11_set_seq(frame,0);
 	
 	
 

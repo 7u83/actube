@@ -96,23 +96,23 @@ struct bootcfg bootcfg;
 int test()
 {
 	int rc;
-	char *f;
+	uint8_t  *f,*frame;
 	size_t len;
-	f=cw_load_file("wificap-002",&len);
+	f=(uint8_t*)cw_load_file("wificap-002",&len);
 	cw_dbg(DBG_X, "Loaded %d bytes",len);
 
 //	static int got_radiotap = 0;
-	struct libwifi_frame frame = {0};
-	rc = libwifi_get_wifi_frame(&frame, (unsigned char*)(f+16+1), len-16-1, 0);
+//	struct libwifi_frame frame = {0};
+///	rc = libwifi_get_wifi_frame(&frame, (unsigned char*)(f+16+1), len-16-1, 0);
 
- struct libwifi_frame_ctrl *frame_control = (struct libwifi_frame_ctrl *) (f+16);
- printf("SO: %d\n",frame_control->type);
+// struct libwifi_frame_ctrl *frame_control = (struct libwifi_frame_ctrl *) (f+16);
+// printf("SO: %d\n",frame_control->type);
 
-    	if (rc != 0) {
-        	printf("[!] Error getting libwifi_frame: %d\n", rc);
-    	}
+  //  	if (rc != 0) {
+   //     	printf("[!] Error getting libwifi_frame: %d\n", rc);
+   // 	}
 
-	cw_dbg(DBG_X,"Frame CTL:%d,%d",frame.frame_control.type, frame.frame_control.subtype);
+//	cw_dbg(DBG_X,"Frame CTL:%d,%d",frame.frame_control.type, frame.frame_control.subtype);
 
 //	cw_dbg(DBG_X,"MY RESULT: Type %d, SubType %d",cw_dot11_get_type(f+16), cw_dot11_get_subtype(f+16));
 //	cw_dbg(DBG_X,"FRAME: %s",dot11_get_frame_name(f+16+1));
@@ -126,7 +126,29 @@ int test()
 
 	cw_dbg(DBG_X,"R:\n%s",dstr);
 
+	
+
 	cw_dbg_dot11_frame(f+16,len-16);
+
+	frame = f+16;
+
+	uint8_t  rframe[1000];
+
+
+        dot11_init_assoc_resp(rframe);
+	dot11_set_duration(rframe,100);
+
+        dot11_copy_mac(dot11_get_sa(frame),dot11_get_da(rframe));
+        dot11_copy_mac(dot11_get_bssid(frame),dot11_get_bssid(rframe));
+        dot11_copy_mac(dot11_get_da(frame),dot11_get_sa(rframe));
+	dot11_set_seq(rframe,0);
+	dot11_assoc_resp_set_cap(rframe,dot11_assoc_req_get_cap(frame));
+	dot11_assoc_resp_set_status_code(rframe,0);
+	dot11_assoc_resp_set_assoc_id(rframe,17);
+
+	cw_dbg_dot11_frame(rframe,24+6);
+
+
 
 	free(f);
 	return 0;

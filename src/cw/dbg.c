@@ -706,6 +706,9 @@ void cw_dbg_dot11_frame(uint8_t * frame,int len)
 		case DOT11_ASSOC_REQ:
 			cw_dbg_dot11_elems(frame+28,len-28);
 			break;
+		case DOT11_ASSOC_RESP:
+			cw_dbg_dot11_elems((frame),len-6);
+			break;
 			
 	}
 }
