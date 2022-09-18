@@ -150,34 +150,51 @@ cw_init_capwap_packet( uint8_t * buf, int wbid ,int rid, bstr_t rmac, bstr_t wd)
 	return hlen*4;
 }
 
+/**
+ * Send a CAPWAP packet and fragment it if nececerry
+ * @param conn connection where to send packet over
+ * @param buf pointer to a buffer initialized with #cw_init_capwap_packet
+ * @param hlen length of header, which is the value returned by #cw_init_capwap_packet
+ * @param data payload
+ * @param len length of payload 
+ */
 int cw_send_capwap_packet(struct cw_Conn * conn, uint8_t * buf, int hlen, uint8_t * data, int len)
 {
 	int fragoffset,mtu;
+	int fragid;
 
 	/* get mtu and align it to 8 */
 	mtu = conn->mtu;
 	mtu &= ~3;
 
+	/* initialize fragid and fragoffset */
 	fragoffset = 0;
+	if (len + hlen > mtu)
+		fragid = conn->fragid++;
+	else
+		fragid = 0;
 
-
+	/* create all fragments */
 	while (len + hlen > mtu){
 		memcpy(buf+hlen,data+(fragoffset*8),mtu-hlen);
 		len -= (mtu - hlen);
 
 		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_F,1);
-		cw_set_dword(buf+4, conn->fragid<<16 | fragoffset<<3 );
+		cw_set_dword(buf+4, fragid<<16 | fragoffset<<3 );
 
 		cw_dbg_pkt(DBG_PKT_OUT,conn,buf,mtu,(struct sockaddr*)&conn->addr);
 		if (conn->write(conn,buf,mtu)<0)
 			return -1;
-
+	
 		fragoffset+=(mtu-hlen)/8;
-		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_M,0);
-		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_W,0);
-		hlen = 8;
-		cw_set_hdr_hlen(buf,hlen/4);
 
+		/* put rmac and wireless data only into the 1st fragment */
+		if (hlen!=8){
+			cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_M,0);
+			cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_W,0);
+			hlen = 8;
+			cw_set_hdr_hlen(buf,hlen/4);
+		}
 	}
 
 	if (fragoffset)
@@ -187,13 +204,11 @@ int cw_send_capwap_packet(struct cw_Conn * conn, uint8_t * buf, int hlen, uint8_
 
 	memcpy(buf+hlen,data+(fragoffset*8),mtu-hlen);
 
-	cw_set_dword(buf+4, conn->fragid<<16 | fragoffset<<3 );
-
+	cw_set_dword(buf+4, fragid<<16 | fragoffset<<3 );
 
 	cw_dbg_pkt(DBG_PKT_OUT,conn,buf,len+hlen,(struct sockaddr*)&conn->addr);
 
 	return conn->write(conn,buf,len + hlen);
-
 }
 
 int 
@@ -201,7 +216,6 @@ cw_send_msg( struct cw_Conn * conn, uint8_t *msg)
 {
 	uint8_t buf[MAX_MTU];
 	int hlen,msglen;
-
 	hlen = cw_init_capwap_packet(buf,1,0,NULL,NULL);
 	msglen = cw_get_msg_elems_len(msg) + 8;
 	return cw_send_capwap_packet(conn,buf,hlen,msg,msglen);
