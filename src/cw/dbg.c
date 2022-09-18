@@ -80,6 +80,10 @@ static const char * dbg_level_elem[]={
 static const char * dbg_level_elem_detail[] = {
 	"elem_detail_in", "elem_detail_out", NULL
 };
+
+static const char * dbg_level_elem_dmp[] = {
+	"elem_dmp_in", "elem_dmp_out", NULL
+};
 	
 static const char * dbg_level_elem_all[] = {
 	"elem", "elem_dmp", "elem_detail",NULL
@@ -106,6 +110,7 @@ struct cw_DbgStr cw_dbg_strings[] = {
 	{ 0,			"pkt", dbg_level_pkt, "packet headers" },
 	{ 0,			"elem", dbg_level_elem, "message elemenst" },
 	{ 0, 			"elem_detail", dbg_level_elem_detail, "details for message elements"},
+	{ 0, 			"elem_dmp", dbg_level_elem_dmp,"hexdump element"},
 	{ 0, 			"elem_all", dbg_level_elem_all,"all possible elem options"},
 
 	{ DBG_WARN,		"warn", NULL, "warnings" },
@@ -137,7 +142,8 @@ struct cw_DbgStr cw_dbg_strings[] = {
 	{ DBG_ELEM_OUT, 	"elem_out", NULL, "elements of outgoing messages"},
 	{ DBG_ELEM_DETAIL_IN, 	"elem_detail_in", NULL, "details of incomming message elements" },
 	{ DBG_ELEM_DETAIL_OUT, 	"elem_detail_out",NULL, "details of outgoing message elememnts" },
-	{ DBG_ELEM_DMP, 	"elem_dmp", NULL, "hex-dump of each message element"},
+	{ DBG_ELEM_DMP_IN, 	"elem_dmp_in", NULL, "hex-dump of incoming elements"},
+	{ DBG_ELEM_DMP_OUT, 	"elem_dmp_out", NULL, "hex-dump of outgoing elements"},
 	{ DBG_ELEM_VNDR,	"elem_vndr", NULL, "expand vendor specific payloads"},	
 	
 	{ DBG_DTLS, 		"dtls",NULL, "DTLS related stuff"},
@@ -538,7 +544,7 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 	cw_dbg(level,"%s %d (%s), len=%d ",vendorname,handler->id,
 			handler->name,len);
 	
-	if (cw_dbg_is_level(DBG_ELEM_DMP)) {
+	if (cw_dbg_is_level(DBG_ELEM_DMP_OUT) || cw_dbg_is_level(DBG_ELEM_DMP_IN)) {
 		if (level == DBG_ELEM_OUT)
 			cw_dbg_dmp(DBG_ELEM_DMP_OUT,msgbuf,len,"");
 		else 
@@ -707,6 +713,9 @@ void cw_dbg_dot11_frame(uint8_t * frame,int len)
 			cw_dbg_dot11_elems(frame+28,len-28);
 			break;
 		case DOT11_ASSOC_RESP:
+			cw_dbg(DBG_X,"  Capapility info: %04X",dot11_assoc_resp_get_cap(frame)); 
+			cw_dbg(DBG_X,"  Status CodeCapapility info: %04X",dot11_assoc_resp_get_status_code(frame));
+			cw_dbg(DBG_X,"  Assoc ID: %04X",dot11_assoc_resp_get_assoc_id(frame)); 
 
 			cw_dbg_dot11_elems((frame+DOT11_BODY_POS+DOT11_ASSOC_RESP_BODY_LEN),
 					len-DOT11_BODY_POS-DOT11_ASSOC_RESP_BODY_LEN);
