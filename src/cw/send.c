@@ -202,7 +202,7 @@ int cw_send_capwap_packet(struct cw_Conn * conn, uint8_t * buf, int hlen, uint8_
 	else
 		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_F,0);
 
-	memcpy(buf+hlen,data+(fragoffset*8),mtu-hlen);
+	memcpy(buf+hlen,data+(fragoffset*8),len);
 
 	cw_set_dword(buf+4, fragid<<16 | fragoffset<<3 );
 
