@@ -219,7 +219,7 @@ void cw_set_hdr_rid(uint8_t * th, int rid);
  * @see #cw_is_request
  */
 
-#define cw_is_response(msg_id) (!is_response(msg_id))
+#define cw_is_response(msg_id) (!cw_is_resquest(msg_id))
 
 
 uint8_t *cw_get_hdr_msg_elems_ptr(uint8_t * m);

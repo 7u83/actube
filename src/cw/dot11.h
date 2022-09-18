@@ -271,11 +271,14 @@ extern struct cw_StrListElem dot11_names[];
 #define dot11_get_seq(frame) dot11_get_word((frame)+22)
 #define dot11_get_body(frame) ((frame)+24)
 
+#define DOT11_BODY_POS 24
 
 
 #define dot11_set_duration(frame,d) dot11_set_word(frame+2,d)
 #define dot11_set_seq(frame,s) dot11_set_word((frame)+22,s)
 
+
+#define DOT11_ASSOC_RESP_BODY_LEN 6
 
 #define dot11_assoc_req_get_cap(frame) \
 		dot11_get_word((frame)+24)

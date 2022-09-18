@@ -679,7 +679,7 @@ void cw_dbg_dot11_elems(const uint8_t *src,int len)
 	uint8_t id,l;
 	int p;
 	char str[1024];
-	
+
 	for(p=0; p<len; p+=l+2){
 		if (len-p<3){
 			cw_dbg(DBG_X,"Error in dot11 element");
@@ -707,7 +707,9 @@ void cw_dbg_dot11_frame(uint8_t * frame,int len)
 			cw_dbg_dot11_elems(frame+28,len-28);
 			break;
 		case DOT11_ASSOC_RESP:
-			cw_dbg_dot11_elems((frame),len-6);
+
+			cw_dbg_dot11_elems((frame+DOT11_BODY_POS+DOT11_ASSOC_RESP_BODY_LEN),
+					len-DOT11_BODY_POS-DOT11_ASSOC_RESP_BODY_LEN);
 			break;
 			
 	}

@@ -90,10 +90,129 @@ int conn_send_data_msg(struct cw_Conn * conn, uint8_t *rawmsg,int len)
 	return 0;
 }
 
-
 #define MAX_MTU 9500
+
+
+/**
+ * Initialize a capwap header
+ *
+ * @param buf	Buffer to be initialized
+ * @param wbid  Wireless Binding ID 
+ * @param rid 	Radio ID
+ * @param rmac	Radio MAC, NULL if not present
+ * @param wd	Wireless Data, NULL if not present
+ *
+ * @return Length of the header that was initialized
+ */
+int 
+cw_init_capwap_packet( uint8_t * buf, int wbid ,int rid, bstr_t rmac, bstr_t wd)
+{
+	int len,hlen;
+
+	/* header len */
+	len = 8;
+
+	/* zero the first 8 bytes */
+	cw_set_dword(buf + 0, 0);
+	cw_set_dword(buf + 4, 0);
+
+	/* capwap version/unencrypted */
+	#if CAPWAP_VERSION != 0 
+		cw_set_hdr_preamble(buf, CAPWAP_VERSION << 4 | 0);
+	#endif
+
+	/* set wbid and rid */
+	cw_set_hdr_wbid(buf, wbid);
+	cw_set_hdr_rid(buf, rid);
+
+	/* add rmac if present */
+	if (rmac != NULL){
+		int rmac_len = bstr_len(rmac);
+		memcpy(cw_get_hdr_rmac(buf), rmac, rmac_len + 1);
+		cw_set_hdr_flags(buf, CAPWAP_FLAG_HDR_M, 1);
+		len+=rmac_len+1;
+	}
+
+	/* Add wireless data if present */
+	if (wd!=NULL){
+		int wd_len = bstr_len(wd);
+		memcpy(buf+len, wd, wd_len + 1);
+		cw_set_hdr_flags(buf, CAPWAP_FLAG_HDR_M, 1);
+		len+=wd_len;
+	}
+	
+	hlen = len / 4;
+	if (len % 4 != 0) {
+		hlen++;
+	}
+	cw_set_hdr_hlen(buf, hlen);
+
+	return hlen*4;
+}
+
+int cw_send_capwap_packet(struct cw_Conn * conn, uint8_t * buf, int hlen, uint8_t * data, int len)
+{
+	int fragoffset,mtu;
+
+	/* get mtu and align it to 8 */
+	mtu = conn->mtu;
+	mtu &= ~3;
+
+	fragoffset = 0;
+
+
+	while (len + hlen > mtu){
+		memcpy(buf+hlen,data+(fragoffset*8),mtu-hlen);
+		len -= (mtu - hlen);
+
+		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_F,1);
+		cw_set_dword(buf+4, conn->fragid<<16 | fragoffset<<3 );
+
+		cw_dbg_pkt(DBG_PKT_OUT,conn,buf,mtu,(struct sockaddr*)&conn->addr);
+		if (conn->write(conn,buf,mtu)<0)
+			return -1;
+
+		fragoffset+=(mtu-hlen)/8;
+		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_M,0);
+		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_W,0);
+		hlen = 8;
+		cw_set_hdr_hlen(buf,hlen/4);
+
+	}
+
+	if (fragoffset)
+		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_F | CAPWAP_FLAG_HDR_L,1);
+	else
+		cw_set_hdr_flags(buf,CAPWAP_FLAG_HDR_F,0);
+
+	memcpy(buf+hlen,data+(fragoffset*8),mtu-hlen);
+
+	cw_set_dword(buf+4, conn->fragid<<16 | fragoffset<<3 );
+
+
+	cw_dbg_pkt(DBG_PKT_OUT,conn,buf,len+hlen,(struct sockaddr*)&conn->addr);
+
+	return conn->write(conn,buf,len + hlen);
+
+}
+
 int 
 cw_send_msg( struct cw_Conn * conn, uint8_t *msg)
+{
+	uint8_t buf[MAX_MTU];
+	int hlen,msglen;
+
+	hlen = cw_init_capwap_packet(buf,1,0,NULL,NULL);
+	msglen = cw_get_msg_elems_len(msg) + 8;
+	return cw_send_capwap_packet(conn,buf,hlen,msg,msglen);
+}
+
+
+
+
+
+int 
+cw_send_msg_old( struct cw_Conn * conn, uint8_t *msg)
 {
 	uint8_t buf[MAX_MTU];
 	int fragoffset,hlen,mtu;

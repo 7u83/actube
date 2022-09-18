@@ -136,7 +136,7 @@ int cw_set_hdr_rmac(uint8_t * th, bstr_t rmac)
 		hlen++;
 	}
 	cw_set_hdr_hlen(th, hlen);
-	return 1;
+	return rmac_len;
 }
 
 

@@ -53,10 +53,10 @@ int conn_send_msg(struct cw_Conn * conn, uint8_t *rawmsg)
 
 
 
-	/* Zyxel doesn't count msg element length from
-	   behind seqnum */
+	//  Zyxel doesn't count msg element length from
+//	   behind seqnum * /
 //	if (conn->capwap_mode == CW_MODE_ZYXEL){
-/*		// XXX val-=3; */
+// *		// XXX val-=3; * /
 //	}
 
 
@@ -75,7 +75,7 @@ mtu = 9440;
 	 int offset = cw_get_hdr_msg_offset(rawmsg);
 	return cw_send_msg(conn,rawmsg+offset);
 
-
+/*
 	if (packetlen>mtu){
 		cw_set_hdr_flags(ptr,CAPWAP_FLAG_HDR_F,1);
 		cw_set_dword(ptr+4, conn->fragid<<16 | fragoffset<<3 );
@@ -103,7 +103,7 @@ mtu = 9440;
 		if (conn->write(conn,ptr,mtu)<0)
 			return -1;
 
-/*		// XXX Fragmentation stuff.. */
+/ *		// XXX Fragmentation stuff.. * /
 		ptr +=mtu-hlen;
 		fragoffset+=(mtu-hlen)/8;
 
@@ -122,6 +122,6 @@ mtu = 9440;
 
 	cw_dbg_pkt(DBG_PKT_OUT,conn,ptr,packetlen,(struct sockaddr*)&conn->addr);
 
-	return conn->write(conn,ptr,packetlen-0);
+	return conn->write(conn,ptr,packetlen-0); */
 }
 
