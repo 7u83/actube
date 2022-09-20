@@ -45,7 +45,9 @@ int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len){
 	return len;
 }
 
-int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates){
+
+
+int dot11_convert_supported_rates(uint8_t *dst, float *basic, float *rates){
 	uint8_t *d = dst+2;
 	while(*basic != 0.0){
 		*d++ = 0x80 | dot11_float2rate(*basic);
@@ -59,6 +61,15 @@ int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates){
 	*(dst+1) = d-(dst+2);
 
 	return d-dst;
+}
+
+
+int dot11_put_supported_rates(uint8_t * dst, bstr_t src)
+{
+	int l = bstr_len(src);
+	dot11_set_byte(dst,DOT11_ELEM_SUPPORTED_RATES);
+	memcpy(dst+1, src,l+1);
+	return l+2;
 }
 
 

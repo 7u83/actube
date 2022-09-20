@@ -38,19 +38,14 @@
  *@{
  */
 
- /*
-  * @defgroup DebugFunctions Debug Functions
-  * @{
-  */
-
 uint32_t cw_dbg_opt_display = DBG_DISP_COLORS;
 
 /**
- * Current debug level
+ * Contains all debuglevels currently set
  */
-//static uint32_t cw_dbg_opt_level = 0;
-//
 static struct mavl * cw_dbg_opt_level = NULL;
+
+
 static int dbg_cmp(const void *a, const void*b)
 {
 	return (*((int*)a)-*((int*)b));
@@ -91,13 +86,6 @@ static const char * dbg_level_elem_all[] = {
 
 static const char * dbg_level_std[] = {
 	"msg","elem","msg_err", "elem_err", "pkt_err", "rfc", "warn", "state", "info", NULL
-/*		
-	DBG_MSG_IN, DBG_MSG_OUT,
-	DBG_ELEM_IN, DBG_ELEM_OUT,
-	DBG_MSG_ERR, DBG_ELEM_ERR,
-	DBG_PKT_ERR, DBG_RFC, DBG_WARN,
-	DBG_STATE, DBG_INFO,
-	0*/
 };
 
 
@@ -159,14 +147,6 @@ struct cw_DbgStr cw_dbg_strings[] = {
 	{ 0, NULL } 
 };
 
-/**
- *@}
- */
-
-
-
-
-
 
 
 static struct cw_StrListElem theme0[] = {
@@ -217,7 +197,6 @@ static struct cw_StrListElem * color_on = theme0;
 
 struct cw_StrListElem color_ontext[] = {
 
-/*	{DBG_ELEM_DMP, "\x1b[37m"},*/
 	{DBG_ELEM_DMP_OUT, ANSI_BBLACK ANSI_ITALIC},
 	{DBG_ELEM_DMP_IN,  ANSI_BBLACK},
 
@@ -296,22 +275,36 @@ const char *get_dbg_color_ontext(int level)
  * @param level Level to check
  * @return 0 if leveln is not set, otherwise level is set
  */
-
 int cw_dbg_is_level(int level)
 {
 	if (cw_dbg_opt_level == NULL)
 		return 0;
 
 	return mavl_get(cw_dbg_opt_level,&level) == NULL ? 0:1;
+}
 
+/**
+  * Set debug level
+  * @param level debug level to set, allowed values are enumberated in #cw_dbg_levels structure.
+  * @param on 1: turns the specified debug level on, 0: turns the specified debug level off.
+  *
+  * To check if a specific debug level is set, call #cw_dbg_is_level.
+  */
+void cw_dbg_set_level (int level, int on)
+{
+	int exists;
 
-//	if (level > 1 && (level &1))
-		return 1;
+	if (cw_dbg_opt_level == NULL){
+		cw_dbg_opt_level = mavl_create(dbg_cmp,NULL,sizeof(int));
+		if (cw_dbg_opt_level == NULL)
+			return;
+	}
 
-/*	if (level >= DBG_ALL ){
-		return 1;
-	}*/
-//	return (cw_dbg_opt_level & (level));
+	if (on){
+		mavl_insert(cw_dbg_opt_level,&level,&exists);
+	}
+	else 
+		mavl_del(cw_dbg_opt_level,&level);
 }
 
 
@@ -331,48 +324,12 @@ static void cw_dbg_vlog_line(struct cw_LogWriter * writer,
 				
 	}
 	writer->write(LOG_DEBUG,fbuf,args,writer);
-
 }
 
 
 
 /**
- * Put a list of missing mandatory message elements to debug output
- */
-void cw_dbg_missing_mand(int level, struct cw_Conn *conn, int ** ml, int n,
-			 int  * a)
-{
-	/*
-//      if (!cw_dbg_is_level(DBG_MSG_ERR) || n == 0)
-//              return;
-*/
-
-
-	char buffer[2000];
-/*	char *p = buffer; */
-	int i;
-/*	char *delim = "";*/
-	
-	if (!cw_dbg_is_level(level) || n == 0)
-		return;
-	
-/*
-	// TODO XXXX
-*/
-	for (i = 0; i < n; i++) {
-/*		p += sprintf(p, "%s", delim);
-		delim = ", ";
-		p += sprintf(p, "%s", cw_strelemp(conn->actions, ml[i]->elem_id));
-*/
-	}
-	cw_dbg(level, "Missing mandatory elements: [%s]", buffer);
-}
-
-
-
-
-/**
- * Display a packet on for debugger
+ * Display a packet on debugger
  */
 void cw_dbg_pkt(int level, struct cw_Conn *conn, uint8_t * packet, int len,
 		struct sockaddr *from)
@@ -558,46 +515,6 @@ void cw_dbg_elem(int level, struct cw_Conn *conn, int msg,
 
 
 
-/**
-  * Set debug level
-  * @param level debug level to set, allowed values are enumberated in #cw_dbg_levels structure.
-  * @param on 1: turns the specified debug level on, 0: turns the specified debug level off.
-  */
-
-void cw_dbg_set_level (int level, int on)
-{
-	int exists;
-
-	if (cw_dbg_opt_level == NULL){
-		cw_dbg_opt_level = mavl_create(dbg_cmp,NULL,sizeof(int));
-		if (cw_dbg_opt_level == NULL)
-			return;
-	}
-
-	if (on){
-		mavl_insert(cw_dbg_opt_level,&level,&exists);
-	}
-	else 
-		mavl_del(cw_dbg_opt_level,&level);
-
-
-/*
-	switch (level) {
-		case DBG_ALL:
-			if (on)
-				cw_dbg_opt_level = 0xffffffff;
-			else
-				cw_dbg_opt_level = 0;
-			break;
-		default:
-			if (on)
-				cw_dbg_opt_level |= (level);
-			else 
-				cw_dbg_opt_level &= (0xffffffff) ^ (level);
-	}
-	*/
-}
-
 
 int cw_dbg_set_level_from_str0(const char *level,int on)
 {
@@ -728,4 +645,3 @@ void cw_dbg_dot11_frame(uint8_t * frame,int len)
 /**@}*/
 
 
-/**@}*/

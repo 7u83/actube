@@ -39,7 +39,7 @@
 
 
 /**
- *@addtogroup LOGDBG
+ *@addtogroup DBG
  *@{
  */
 
@@ -82,9 +82,6 @@ enum cw_dbg_levels{
 	/** Error in msg elements */
 	DBG_ELEM_ERR,
 
-	/** hex dump elements */	
-	DBG_ELEM_DMP,
-
 	/** General infos, like CAPWAP state */
 	DBG_INFO,	
 
@@ -116,24 +113,26 @@ enum cw_dbg_levels{
        	/**Debug State machine */
 	DBG_STATE,
 	
-	
+	/** Infos about nessage composing */	
 	DBG_MSG_COMPOSE,
 
+	/** Debug Configuration updates */
 	DBG_CFG_UPDATES,
 
+	/** Debug Vendor elements */
 	DBG_ELEM_VNDR,
 	
-
+	
 	DBG_X,
 
 	DBG_MOD_DETAIL,
 
 	DBG_ALL,
 
-
+	/** Hexdump incoming msg elemenets */
 	DBG_ELEM_DMP_IN,
+	/** Hexdump outgoing msg elemenst */
 	DBG_ELEM_DMP_OUT,
-
 
 };
 
@@ -220,8 +219,6 @@ void cw_dbg_msg(int level,struct cw_Conn *conn, uint8_t * packet, int len,struct
 char * cw_dbg_mkdmp(const uint8_t * data, int len);
 //void cw_dbg_version_subelem(int level, const char *context, int subtype, 
 //		uint32_t vendor_id, const uint8_t * vstr, int len);
-void cw_dbg_ktv_dump(mavl_t ktv, uint32_t dbglevel, 
-		const char *header, const char *prefix, const char *footer );
 
 /**
   * Set debug level

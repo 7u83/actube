@@ -100,6 +100,11 @@ int test()
 	size_t len;
 	f=(uint8_t*)cw_load_file("wificap-002",&len);
 	cw_dbg(DBG_X, "Loaded %d bytes",len);
+	int l;
+
+	uint8_t rates[] = {
+		12,0x82,0x84,0x8b,0x96,0x0c,0x12,0x18,0x24,0x30,0x48,0x60,0x6c	
+	}; 
 
 //	static int got_radiotap = 0;
 //	struct libwifi_frame frame = {0};
@@ -145,8 +150,12 @@ int test()
 	dot11_assoc_resp_set_cap(rframe,dot11_assoc_req_get_cap(frame));
 	dot11_assoc_resp_set_status_code(rframe,0);
 	dot11_assoc_resp_set_assoc_id(rframe,17);
+	l=24+6;
 
-	cw_dbg_dot11_frame(rframe,24+6);
+
+	l+=dot11_put_supported_rates(rframe+l,rates);
+
+	cw_dbg_dot11_frame(rframe,l);
 
 
 
@@ -205,6 +214,7 @@ int main (int argc, char **argv)
 	}
 
 	test();
+	nlt_test();
 	stop();
 
 

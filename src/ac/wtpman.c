@@ -317,19 +317,51 @@ int run_update(struct wtpman *wtpman)
 static int dataman_process_msg(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 			struct sockaddr *from)
 {
+	char rframe[1000];
 	int offs =  cw_get_hdr_msg_offset(rawmsg);
-	uint8_t * dot11frame = rawmsg + offs;
-	int dot11len = len-offs;
-	cw_dbg_dot11_frame(dot11frame,dot11len);
+	uint8_t * frame = rawmsg + offs;
+	int frame_len = len-offs;
+	cw_dbg_dot11_frame(frame,frame_len);
 
-	char frame[1000];
-	dot11_init_assoc_resp(frame);
+/*	dot11_init_assoc_resp(frame);
 
 	dot11_copy_mac(dot11_get_sa(dot11frame),dot11_get_da(frame));
 	dot11_copy_mac(dot11_get_bssid(dot11frame),dot11_get_bssid(frame));
 	dot11_copy_mac(dot11_get_da(dot11frame),dot11_get_sa(frame));
 	dot11_set_seq(frame,0);
-	
+*/
+	if ( dot11_get_type_and_subtype(frame) == DOT11_ASSOC_REQ){
+		int l;
+		uint8_t rates[] = {
+			12,0x82,0x84,0x8b,0x96,0x0c,0x12,0x18,0x24,0x30,0x48,0x60,0x6c	
+		}; 
+		cw_dbg(DBG_X, "there is an assoc request!");
+
+		uint8_t  rframe[1000];
+		nc->mtu=800;
+
+
+        	dot11_init_assoc_resp(rframe);
+		dot11_set_duration(rframe,100);
+
+		dot11_copy_mac(dot11_get_sa(frame),dot11_get_da(rframe));
+		dot11_copy_mac(dot11_get_bssid(frame),dot11_get_bssid(rframe));
+		dot11_copy_mac(dot11_get_da(frame),dot11_get_sa(rframe));
+		dot11_set_seq(rframe,dot11_get_seq(frame));
+		dot11_assoc_resp_set_cap(rframe,dot11_assoc_req_get_cap(frame));
+		dot11_assoc_resp_set_status_code(rframe,0);
+		dot11_assoc_resp_set_assoc_id(rframe,17);
+		l=24+6;
+		l+=dot11_put_supported_rates(rframe+l,rates);
+		cw_dbg_dot11_frame(rframe,l);
+
+		uint8_t buf[1024];
+		int hlen;
+		hlen = cw_init_capwap_packet(buf,1,0,NULL,NULL);
+		cw_set_hdr_flags(buf, CAPWAP_FLAG_HDR_T, 1);
+		cw_send_capwap_packet(nc,buf,hlen,rframe,l);
+		
+	}
 	
 
 	return 0;

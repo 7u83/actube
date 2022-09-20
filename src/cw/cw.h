@@ -565,6 +565,14 @@ int cw_out_generic_walk(struct cw_ElemHandler * handler, struct cw_ElemHandlerPa
 int cw_out_generic0(struct cw_ElemHandler * handler, struct cw_ElemHandlerParams * params
 			, uint8_t * dst,const char *key);
 
+
+
+
+int cw_init_capwap_packet( uint8_t * buf, int wbid ,int rid, bstr_t rmac, bstr_t wd);
+int cw_send_capwap_packet(struct cw_Conn * conn, uint8_t * buf, int hlen, uint8_t * data, int len);
+
+
+
 /**
  *@}
  */

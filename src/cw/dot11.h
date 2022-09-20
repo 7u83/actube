@@ -21,6 +21,7 @@
 #endif
 
 #include "strlist.h"
+#include "bstr.h"
 
 /**
  * @defgroup DOT11_FRAME_TYPES Frame Types
@@ -238,7 +239,9 @@ int  dot11_put_ssid(uint8_t *dst,uint8_t * ssid,int len);
  */
 #define dot11_rate2float(rate) (((float)(rate))/2.0)
 
-int dot11_put_supported_rates(uint8_t *dst, float *basic, float *rates);
+int dot11_put_supported_rates(uint8_t *dst, bstr_t src);
+
+//		float *basic, float *rates);
 int dot11_put_dsss_param_set(uint8_t *dst,int ch);
 
 
@@ -295,10 +298,22 @@ extern struct cw_StrListElem dot11_names[];
 */
 #define dot11_assoc_resp_set_cap(frame,cap)\
 	dot11_set_word(dot11_get_body(frame),cap)
+#define dot11_assoc_resp_get_cap(frame)\
+	dot11_get_word(dot11_get_body(frame))
+
+
 #define dot11_assoc_resp_set_status_code(frame,code)\
 	dot11_set_word(dot11_get_body(frame)+2,code)
+#define dot11_assoc_resp_get_status_code(frame)\
+	dot11_get_word(dot11_get_body(frame)+2)
+
+
 #define dot11_assoc_resp_set_assoc_id(frame,id)\
 	dot11_set_word(dot11_get_body(frame)+4,id)
+#define dot11_assoc_resp_get_assoc_id(frame)\
+	dot11_get_word(dot11_get_body(frame)+4)
+
+
 
 //#define dot11_assoce_resp_get_var_body(frame) 
 //	(get_frame_body(frame)+6)
@@ -309,6 +324,12 @@ extern struct cw_StrListElem dot11_names[];
 	memcpy(dst,src,6);
 
 
+struct cw_Dot11Elemenst {
+
+	bstr_t supportet_rates;
+};
+
+int dot11_init_assoc_resp(uint8_t * dst);
 
 
 /**

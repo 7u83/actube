@@ -1,16 +1,17 @@
-#include "netlink/netlink.h"
-#include "netlink/genl/genl.h"
-#include "netlink/genl/ctrl.h"
+#include <netlink/netlink.h>
+#include <netlink/genl/genl.h>
+#include <netlink/genl/ctrl.h>
 #include <netlink/msg.h>
 
 #include "cw/log.h"
 #include "cw/dbg.h"
-#include "cw/avltree.h"
+
+#include <mavl.h>
 
 #include "nlt.h"
 
 
-/*
+
 
 static int error_handler(struct sockaddr_nl *nla, struct nlmsgerr *err, void *arg)
 {
@@ -32,21 +33,22 @@ static int wiphylist_cmp(const void * d1,const void *d2)
 }
 
 
-struct avltree * wiphylist_create()
+struct mavl * wiphylist_create()
 {
-	return avltree_create(wiphylist_cmp,0);
+	return mavl_create(wiphylist_cmp,0,sizeof(struct nlt_wiphyinfo));
 }
 
 
-struct nlt_wiphyinfo * wiphylist_get( struct avltree * l,int idx)
+struct nlt_wiphyinfo * wiphylist_get( struct mavl * l,int idx)
 {
 	//return avltree_get(l);
 }
 
 
-struct nlt_wiphyinfo * nlt_wiphylist_add(struct avltree * t, struct nlt_wiphyinfo * wi)
+struct nlt_wiphyinfo * nlt_wiphylist_add(struct mavl * t, struct nlt_wiphyinfo * wi)
 {
-	return avltree_add(t,wi);
+	int exists;
+	return mavl_insert(t,wi,exists);
 }
 
 
@@ -258,7 +260,7 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 		       genlmsg_attrlen(ghdr, 0), NULL);
 
 	if (rc < 0) {
-		cw_dbg(DBG_DRV_ERR, "nla_parse failed: %d %d", rc, nl_geterror(rc));
+		cw_dbg(DBG_X, "nla_parse failed: %d %d", rc, nl_geterror(rc));
 		return NL_SKIP;
 	}
 
@@ -267,7 +269,7 @@ static int nlCallback(struct nl_msg *msg, void *arg)
 
 	switch (cmd) {
 		case NL80211_CMD_NEW_WIPHY:
-			add_wiphy_data(msgattribs, arg);
+			//add_wiphy_data(msgattribs, arg);
 			break;
 //              case NL80211_CMD_NEW_INTERFACE:
 //                      add_interface_data(msgattribs);
@@ -337,7 +339,6 @@ static int get_wiphy_info_cb(struct nl_msg * msg,void * arg)
 
 int nlt_get_wiphy_list(struct nl_sock *sk)
 {
-
 	struct nlt_wiphyinfo ** wi = malloc (sizeof(struct nlt_wiphyinfo *)*NLT_MAX_WIPHYINDEX);
 	if (wi==0)
 		return 0;
@@ -347,9 +348,9 @@ int nlt_get_wiphy_list(struct nl_sock *sk)
 	struct nl_msg * msg = nlt_nl_msg_new(sk,NL80211_CMD_GET_WIPHY,NLM_F_DUMP);
 	nl_send_auto(sk, msg);
 	struct nl_cb *nl_cb = get_nl_cb(get_wiphy_info_cb,wi);
-//	while(1){
+	while(1){
 		int nlr = nl_recvmsgs(sk, nl_cb);
-//	}
+	}
 
 
 	int i;
@@ -364,4 +365,15 @@ int nlt_get_wiphy_list(struct nl_sock *sk)
 }
 
 
-*/
+nlt_test()
+{
+	struct nl_sock *nl;
+	nl = nl_socket_alloc();
+	if (!nl) {
+		fprintf(stderr, "Failed to allocate netlink socket.\n");
+		return -ENOMEM;
+	}
+
+	nlt_get_wiphy_list(nl);
+
+}
