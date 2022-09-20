@@ -89,7 +89,6 @@ struct bootcfg bootcfg;
 
 
 #include "cw/file.h"
-#include <libwifi.h>
 
 #include "cw/dot11.h"
 

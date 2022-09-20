@@ -237,7 +237,7 @@ int main (int argc, char *argv[])
 		goto errX;
 	};
 
-hapd_run(); // init
+//hapd_run(); // init
 //stop();
 //const char *ttt = cw_cfg_get(global_cfg,"cisco/ssl-cipher",NULL);
 //printf("CFG: %s\n",ttt);

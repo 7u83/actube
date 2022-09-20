@@ -9,7 +9,7 @@ OBJS = \
 	discovery_cache.o\
 	rpc.o\
 	statemachine.o\
-	hapd.o
+	#hapd.o
 
 ACTOBJS = \
 	act.o 
@@ -27,7 +27,6 @@ LIBS+=-lnettle
 LIBS+=-lssl
 LIBS+=-lcrypto
 LIBS+=-ledit
-LIBS+=-lwifi
 #LIBS+=-l:libhapd.a
 
 INCL_DIRS=-I../ -I/usr/local/include -I./ -I../../include -I../../include/hostapd -I../../include/hostapd/utils

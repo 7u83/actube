@@ -169,7 +169,6 @@ int dataman_process_keep_alive(struct cw_Conn *nc, uint8_t *rawmsg, int len)
 	return -1;	
 }
 
-#include <libwifi.h>
 
 int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 			struct sockaddr *from)
@@ -192,13 +191,10 @@ int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 //	ppacket (dot11frame,len-cw_get_hdr_msg_offset(rawmsg));
 
 
-	struct libwifi_frame frame = {0};
-	struct libwifi_frame resp={0};
 
 //	cw_dbg(DBG_X,"802.11 - %s",dot11_get_frame_name(dot11frame));
 //	cw_dbg(DBG_X,"802.11 - T&S: %d %d",dot11_get_type(dot11frame),dot11_get_subtype(dot11frame));
 
-	rc = libwifi_get_wifi_frame(&frame, (unsigned char*)(dot11frame+1), dot11len-1, 0);
 
 //	cw_dbg(DBG_X,"Frame CTL:%d,%d",frame.frame_control.type, frame.frame_control.subtype);
 
@@ -212,22 +208,6 @@ int dataman_process_message0(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 //	cw_dbg(DBG_X,ffr);
 //
 //
-
-	if (frame.frame_control.type == TYPE_MANAGEMENT &&
-		frame.frame_control.subtype == SUBTYPE_ASSOC_REQ){
-//		cw_dbg(DBG_X,"ASSOC REQ RECEIVED");
-/*		libwifi_create_assoc_resp(&resp,
-				frame.frame_control.transmitter,
-				frame.frame_control.receiver,
-				frame.frame_control.transmitter,
-				1
-				);*/
-
-
-
-
-//		stop();
-	}
 
 
 
@@ -266,7 +246,7 @@ int dataman_process_message(struct cw_Conn *nc, uint8_t * rawmsg, int len,
 
 	extern void ppacket(uint8_t * p, int len);
 
-	ppacket (rawmsg,len);
+//	ppacket (rawmsg,len);
 
 	cw_dbg(DBG_X,"There was someting else than dataman");
 
